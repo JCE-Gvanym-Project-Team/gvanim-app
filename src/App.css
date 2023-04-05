@@ -12,7 +12,13 @@
     margin: auto;
     justify-content: center;
 
-    background-color: rgb(255, 253, 251);
+    /* Glassmorpiom it */
+    background: rgba(52, 113, 49, 0.05);
+    border-radius: 20px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(14.3px);
+    -webkit-backdrop-filter: blur(14.3px);
+    border: 1px solid rgba(94, 194, 88, 0.4);
 
 }
 
@@ -38,7 +44,7 @@
     direction: rtl;
 
     /* Glassmorphism each card */
-    background: rgba(223, 255, 254, 0.64);
+    background: rgba(223, 255, 254, 0.84);
     border-radius: 16px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(14.3px);
@@ -61,6 +67,11 @@
 }
 
 /* Job Card Text */
+.job .jobTextContainer {
+
+    flex-grow: 1;
+}
+
 .job .jobText {
     color: rgb(0, 0, 0);
     text-decoration: none;
@@ -73,7 +84,7 @@
 
 /* Job Card ID Text */
 .job .jobID {
-    flex-grow: 1;
+    text-align: left;
     color: rgb(22, 18, 51);
 }
 
