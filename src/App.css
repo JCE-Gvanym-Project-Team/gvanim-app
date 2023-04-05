@@ -1,0 +1,130 @@
+/*Color Palette
+- Cyan: #5AC3F2
+- Blue: #153C7C
+- Orange: #D8491C
+- Purple: #B31C6B
+*/
+
+#jobListContainer {
+    width: 90%;
+    display: flex;
+    flex-wrap: wrap;
+    margin: auto;
+    justify-content: center;
+
+    background-color: rgb(255, 253, 251);
+
+}
+
+/* Job Card */
+.job {
+    /*display and location*/
+    display: flex;
+    flex-direction: column;
+    padding-right: 30px;
+    padding-left: 60px;
+    padding-top: 30px;
+
+    margin-left: 30px;
+    margin-top: 60px;
+
+    /* Max of 3 in a row at max width */
+    width: calc(33.33% - 160px);
+    margin-bottom: 16px;
+    min-width: 300px;
+    min-height: 150px;
+    max-width: 30%;
+    max-height: 20%;
+    direction: rtl;
+
+    /* Glassmorphism each card */
+    background: rgba(223, 255, 254, 0.64);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(14.3px);
+    -webkit-backdrop-filter: blur(10.3px);
+    border: 1px solid rgba(21, 60, 124, 0.4);
+
+    /* font */
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.6;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+
+    /* Add a transition effect */
+    transition: all 0.2s ease-in-out;
+}
+
+.job:hover {
+    background-color: #e8fcff;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* Job Card Text */
+.job .jobText {
+    color: rgb(0, 0, 0);
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+}
+
+.job .jobText:hover {
+    color: rgb(52, 44, 85);
+}
+
+/* Job Card ID Text */
+.job .jobID {
+    flex-grow: 1;
+    color: rgb(22, 18, 51);
+}
+
+/* Job Card Button */
+.job .viewJobButtonContainer {
+    border-top: black;
+    border-top: 0.3px black solid;
+    border-bottom-left-radius: inherit;
+    border-bottom-right-radius: inherit;
+}
+
+.job .viewJobButton {
+    color: #153C7C;
+    width: 50px;
+    height: 50px;
+    padding: 12px 24px;
+    font-weight: 600;
+    margin-top: 16px;
+
+    /* Transition */
+    transition: all 0.2s ease-in-out;
+}
+
+.job .viewJobButton::after {
+    color: #153C7C
+}
+
+/* On hover, change the button background color to Orange */
+.job .viewJobButton:hover {
+    cursor: pointer;
+    color: rgb(0, 158, 167);
+}
+
+/* Gradually change the amount of jobs on each row as the screen decreases */
+@media screen and (max-width: 1200px) {
+    .job {
+        width: calc(50% - 100px);
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .job {
+        width: calc(100% - 100px);
+        margin-right: 0;
+    }
+
+    .job:nth-child(3n) {
+        margin-right: 0;
+    }
+
+    .job:nth-child(n+4) {
+        margin-top: 16px;
+    }
+}
