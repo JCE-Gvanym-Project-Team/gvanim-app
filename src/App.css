@@ -13,12 +13,12 @@
     justify-content: center;
 
     /* Glassmorpiom it */
-    background: rgba(52, 113, 49, 0.05);
-    border-radius: 20px;
+    background: rgba(147, 147, 147, 0.14);
+    border-radius: 16px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(14.3px);
     -webkit-backdrop-filter: blur(14.3px);
-    border: 1px solid rgba(94, 194, 88, 0.4);
+    border: 1px solid rgba(147, 147, 147, 0.4);
 
 }
 
@@ -50,6 +50,7 @@
     backdrop-filter: blur(14.3px);
     -webkit-backdrop-filter: blur(10.3px);
     border: 1px solid rgba(21, 60, 124, 0.4);
+
 
     /* font */
     font-size: 24px;
