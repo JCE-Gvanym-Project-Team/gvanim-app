@@ -9,4 +9,3 @@ I used `npx create-react-app .` <br> From here each of us will create a branch a
 * Execute `npm install` (this will install all the dependencies you need in order to run the app).
 * Change the code inside the src folder as you wish
 * Execute `npm start` to run your app
-* test
