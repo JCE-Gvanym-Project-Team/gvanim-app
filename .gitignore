@@ -2,6 +2,7 @@
 
 #remove vscode folder
 .vscode/
+#test
 
 # dependencies
 /node_modules
