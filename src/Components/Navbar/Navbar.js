@@ -25,9 +25,11 @@ export default function Navbar() {
     return (
         <nav className={isSticky ? 'sticky' : ''}>
             <ul>
+                <li><a href="/#">לא יודע 4</a></li>
+                <li><a href="/#">לא יודע 3</a></li>
+                <li><a href="/#">לא יודע 2</a></li>
+                <li><a href="/#">לא יודע 1</a></li>
                 <li><a href="/#">משרות לפי אזור</a></li>
-                <li><a href="/#">Services</a></li>
-                <li><a href="/#">Contact</a></li>
                 <li><a href="https://www.gvanim.org.il">ראשי</a></li>
             </ul>
             <div class="logo">
