@@ -1,0 +1,99 @@
+/* Navbar */
+
+body {
+    padding: 0;
+    margin: 0;
+}
+
+nav {
+    /* display */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+
+
+    /* Position */
+    position: relative;
+    top: 0;
+    left: 0;
+    width: calc(100%);
+    height: 150px;
+
+    z-index: 1;
+
+    /* Glassmorphism it */
+
+    /* background: rgb(21, 60, 124, 0.90); */
+    /* background: rgba(217, 217, 217, 0.9); */
+    /* ff 3.6+ */
+    background: -moz-radial-gradient(circle at 100% 50%, rgba(90, 168, 242, 0.38) 0%, rgba(98, 94, 255, 1) 41%);
+
+    /* safari 5.1+,chrome 10+ */
+    background: -webkit-radial-gradient(circle at 100% 50%, rgba(90, 168, 242, 0.38) 0%, rgba(98, 94, 255, 1) 41%);
+
+    /* opera 11.10+ */
+    background: -o-radial-gradient(circle at 100% 50%, rgba(90, 168, 242, 0.38) 0%, rgba(98, 94, 255, 1) 41%);
+
+    /* ie 10+ */
+    background: -ms-radial-gradient(circle at 100% 50%, rgba(90, 168, 242, 0.38) 0%, rgba(98, 94, 255, 1) 41%);
+
+    /* global 92%+ browsers support */
+    background: radial-gradient(circle at 100% 50%, rgba(90, 168, 242, 0.38) 0%, rgba(98, 94, 255, 1) 41%);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(3.2px);
+    -webkit-backdrop-filter: blur(3.2px);
+    border-bottom: 2px solid #153C7C;
+
+    /* Add a transition */
+    transition: all 0.2s ease-in-out;
+
+}
+
+nav.sticky {
+    position: fixed;
+    height: 90px;
+}
+
+/* Nav list of elements */
+nav ul {
+    flex: 5;
+    list-style: none;
+    margin-left: 20px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+
+/* Nav element */
+nav li {
+    margin-right: 1rem;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+}
+
+nav li:last-child {
+    margin-right: 0;
+}
+
+/* Nav button */
+nav a {
+    font-weight: bold;
+    font-size: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-decoration: none;
+    color: var(--color-navbar-text);
+}
+
+nav a:hover {
+    color: #ff9800;
+}
+
+/* Logo */
+nav .logo {
+    flex: 1;
+}
+
+nav.sticky .logo img {
+    transform: scale(0.7, 0.7);
+}
