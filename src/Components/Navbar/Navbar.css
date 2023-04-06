@@ -1,16 +1,9 @@
 /* Navbar */
 
-body {
-    padding: 0;
-    margin: 0;
-}
-
 nav {
     /* display */
     display: flex;
     align-items: center;
-    gap: 20px;
-
 
     /* Position */
     position: sticky;
@@ -22,7 +15,6 @@ nav {
     z-index: 1;
 
     /* Glassmorphism it */
-
     /* background: rgb(21, 60, 124, 0.90); */
     /* background: rgba(217, 217, 217, 0.9); */
     background: -moz-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 1) 0%, rgba(28, 25, 120, 1) 23%);
@@ -37,7 +29,7 @@ nav {
 
     /* Add a transition */
 
-    transition: all 0.5s ease-in-out;
+    transition: all 1s ease-in-out;
 }
 
 nav.sticky {
@@ -54,7 +46,6 @@ nav ul {
     gap: 30px;
     flex: 5;
     list-style: none;
-    margin-left: 20px;
     padding: 0;
     display: flex;
     justify-content: center;
@@ -62,13 +53,7 @@ nav ul {
 
 /* Nav element */
 nav li {
-    margin-right: 1rem;
-    font-size: 1.2rem;
     text-transform: uppercase;
-}
-
-nav li:last-child {
-    margin-right: 0;
 }
 
 /* Nav button */
@@ -90,6 +75,47 @@ nav .logo {
     flex: 1;
 }
 
-nav.sticky .logo img {
-    /* transform: scale(0.7, 0.7); */
+/* Remove gap for smaller screens */
+@media screen and (max-width: 900px) {
+    nav ul {
+        gap: 10px;
+    }
+
+    nav {
+        background: -moz-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 1) 0%, rgba(28, 25, 120, 1) 33%);
+        background: -webkit-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 1) 0%, rgba(28, 25, 120, 1) 33%);
+        background: -o-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 1) 0%, rgba(28, 25, 120, 1) 33%);
+        background: -ms-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 1) 0%, rgba(28, 25, 120, 1) 33%);
+        background: radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 1) 0%, rgba(28, 25, 120, 1) 33%);
+    }
+
+    nav.sticky {
+        background: -moz-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 0.9) 0%, rgba(28, 25, 120, 0.9) 33%);
+        background: -webkit-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 0.9) 0%, rgba(28, 25, 120, 0.9) 33%);
+        background: -o-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 0.9) 0%, rgba(28, 25, 120, 0.9) 33%);
+        background: -ms-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 0.9) 0%, rgba(28, 25, 120, 0.9) 33%);
+        background: radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 0.9) 0%, rgba(28, 25, 120, 0.9) 33%);
+    }
+}
+
+@media screen and (max-width: 650px) {
+    nav ul {
+        gap: 0px;
+    }
+
+    nav {
+        background: -moz-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 1) 0%, rgba(28, 25, 120, 1) 33%);
+        background: -webkit-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 1) 0%, rgba(28, 25, 120, 1) 33%);
+        background: -o-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 1) 0%, rgba(28, 25, 120, 1) 33%);
+        background: -ms-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 1) 0%, rgba(28, 25, 120, 1) 33%);
+        background: radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 1) 0%, rgba(28, 25, 120, 1) 33%);
+    }
+
+    nav.sticky {
+        background: -moz-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 0.9) 0%, rgba(28, 25, 120, 0.9) 33%);
+        background: -webkit-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 0.9) 0%, rgba(28, 25, 120, 0.9) 33%);
+        background: -o-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 0.9) 0%, rgba(28, 25, 120, 0.9) 33%);
+        background: -ms-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 0.9) 0%, rgba(28, 25, 120, 0.9) 33%);
+        background: radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 0.9) 0%, rgba(28, 25, 120, 0.9) 33%);
+    }
 }

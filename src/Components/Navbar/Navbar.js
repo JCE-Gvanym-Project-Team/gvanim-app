@@ -25,7 +25,6 @@ export default function Navbar() {
     return (
         <nav className={isSticky ? 'sticky' : ''}>
             <ul>
-                <li><a href="/#">לא יודע 4</a></li>
                 <li><a href="/#">לא יודע 3</a></li>
                 <li><a href="/#">לא יודע 2</a></li>
                 <li><a href="/#">לא יודע 1</a></li>
