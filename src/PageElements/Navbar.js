@@ -24,12 +24,16 @@ export default function Navbar() {
     return (
         <nav className={isSticky ? 'sticky' : ''}>
             <ul>
-                <li><a href="">Home</a></li>
-                <li><a href="">About</a></li>
-                <li><a href="">Services</a></li>
-                <li><a href="">Contact</a></li>
-                <li><a href="" class="logo"></a></li>
+                <li><a href="https://www.gvanim.org.il">ראשי</a></li>
+                <li><a href="localhost">About</a></li>
+                <li><a href="localhost">Services</a></li>
+                <li><a href="localhost">Contact</a></li>
             </ul>
+            <div class="logo">
+                <a href="https://www.gvanim.org.il">
+                    <img src={require('../Sources/gvanim-logo.png')} alt="Logo" />
+                </a>
+            </div>
         </nav>
     );
 }
