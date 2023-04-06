@@ -15,30 +15,26 @@ nav {
     z-index: 1;
 
     /* Glassmorphism it */
-    /* background: rgb(21, 60, 124, 0.90); */
     /* background: rgba(217, 217, 217, 0.9); */
-    background: -moz-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 1) 0%, rgba(28, 25, 120, 1) 23%);
-    background: -webkit-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 1) 0%, rgba(28, 25, 120, 1) 23%);
-    background: -o-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 1) 0%, rgba(28, 25, 120, 1) 23%);
-    background: -ms-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 1) 0%, rgba(28, 25, 120, 1) 23%);
-    background: radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 1) 0%, rgba(28, 25, 120, 1) 23%);
+    background: -moz-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 1) 0%, rgb(21, 60, 124, 0.98) 23%);
+    background: -webkit-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 1) 0%, rgb(21, 60, 124, 0.98) 23%);
+    background: -o-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 1) 0%, rgb(21, 60, 124, 0.98) 23%);
+    background: -ms-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 1) 0%, rgb(21, 60, 124, 0.98) 23%);
+    background: radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 1) 0%, rgb(21, 60, 124, 0.98) 23%);
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(5.2px);
     -webkit-backdrop-filter: blur(5.2px);
     border-bottom: 2px solid #153C7C;
 
-    /* Add a transition */
 
-    transition: all 1s ease-in-out;
 }
 
 nav.sticky {
-
-    background: -moz-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 0.9) 0%, rgba(28, 25, 120, 0.9) 23%);
-    background: -webkit-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 0.9) 0%, rgba(28, 25, 120, 0.9) 23%);
-    background: -o-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 0.9) 0%, rgba(28, 25, 120, 0.9) 23%);
-    background: -ms-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 0.9) 0%, rgba(28, 25, 120, 0.9) 23%);
-    background: radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 0.9) 0%, rgba(28, 25, 120, 0.9) 23%);
+    background: -moz-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 1) 0%, rgb(21, 60, 124, 0.9) 23%);
+    background: -webkit-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 1) 0%, rgb(21, 60, 124, 0.9) 23%);
+    background: -o-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 1) 0%, rgb(21, 60, 124, 0.9) 23%);
+    background: -ms-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 1) 0%, rgb(21, 60, 124, 0.9) 23%);
+    background: radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 1) 0%, rgb(21, 60, 124, 0.9) 23%);
 }
 
 /* Nav list of elements */
