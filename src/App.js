@@ -1,11 +1,15 @@
 import React, { useState } from "react";
-import JobList from "./JobList";
+import JobList from "./PageElements/JobList";
 import jobsDB from './tempJobsDB'
+import Navbar from "./PageElements/Navbar";
 
 let App = function () {
     const [jobs] = useState(jobsDB);
     return (
-        <JobList jobs={jobs} />
+        <>
+            <Navbar />
+            <JobList jobs={jobs} />
+        </>
     );
 };
 
