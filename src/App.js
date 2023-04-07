@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { HomePage, JobList, Navbar } from './Components'
+import { HomePage, JobList, Navbar, Search } from './Components'
 import jobsDB from './tempJobsDB'
+
 
 let App = function () {
     const [jobs] = useState(jobsDB);
@@ -8,6 +9,7 @@ let App = function () {
         <>
             <Navbar />
             <HomePage />
+            <Search num_of_jobs={jobs.length} />
             <JobList jobs={jobs} />
         </>
     );

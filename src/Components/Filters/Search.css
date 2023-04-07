@@ -1,0 +1,9 @@
+#searchBar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+input {
+    direction: rtl;
+}
