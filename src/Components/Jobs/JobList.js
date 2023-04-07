@@ -7,7 +7,7 @@ export default function JobList({ jobs }) {
     return (
         <div id="jobListContainer">
             {jobs.map(job => {
-                return <JobTwo job={job} key={job.id} />
+                return <Job job={job} key={job.id} />
             })}
         </div>
     );

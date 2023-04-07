@@ -9,9 +9,11 @@ let App = function () {
     return (
         <>
             <Navbar />
-            <HomePage />
-            <Search num_of_jobs={jobs.length} />
-            <JobList jobs={jobs} />
+            <main>
+                <HomePage />
+                <Search num_of_jobs={jobs.length} />
+                <JobList jobs={jobs} />
+            </main>
         </>
     );
 };

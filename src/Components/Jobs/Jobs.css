@@ -1,6 +1,6 @@
 /* Job List */
 #jobListContainer {
-    width: 60%;
+    width: var(--job-list-width);
     display: flex;
     flex-wrap: wrap;
     margin: auto;

@@ -1,9 +1,16 @@
 #searchBar {
+    width: var(--job-list-width);
     display: flex;
     justify-content: center;
     align-items: center;
+    margin: 0 auto;
 }
 
-input {
+.MuiInputLabel-outlined.MuiInputLabel-shrink {
+    transform: translate(14px, -6px) scale(0.75) !important;
+    text-align: right;
+}
+
+#search {
     direction: rtl;
 }
