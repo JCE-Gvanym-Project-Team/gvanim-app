@@ -24,6 +24,11 @@ export default function Navbar() {
 
     return (
         <nav className={isSticky ? 'sticky' : ''}>
+            <div className="logo">
+                <a href="https://www.gvanim.org.il">
+                    <img src={require('../../Sources/gvanim-logo.png')} alt="Logo" />
+                </a>
+            </div>
             <ul>
                 <li><a href="/#">לא יודע 3</a></li>
                 <li><a href="/#">לא יודע 2</a></li>
@@ -31,11 +36,6 @@ export default function Navbar() {
                 <li><a href="/#">משרות לפי אזור</a></li>
                 <li><a href="https://www.gvanim.org.il">ראשי</a></li>
             </ul>
-            <div class="logo">
-                <a href="https://www.gvanim.org.il">
-                    <img src={require('../../Sources/gvanim-logo.png')} alt="Logo" />
-                </a>
-            </div>
         </nav>
     );
 }

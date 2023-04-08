@@ -68,6 +68,7 @@ nav a:hover {
 
 /* Logo */
 nav .logo {
+    padding-right: 5%;
     flex: 1;
 }
 
@@ -76,42 +77,10 @@ nav .logo {
     nav ul {
         gap: 10px;
     }
-
-    nav {
-        background: -moz-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 1) 0%, rgba(28, 25, 120, 1) 33%);
-        background: -webkit-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 1) 0%, rgba(28, 25, 120, 1) 33%);
-        background: -o-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 1) 0%, rgba(28, 25, 120, 1) 33%);
-        background: -ms-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 1) 0%, rgba(28, 25, 120, 1) 33%);
-        background: radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 1) 0%, rgba(28, 25, 120, 1) 33%);
-    }
-
-    nav.sticky {
-        background: -moz-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 0.9) 0%, rgba(28, 25, 120, 0.9) 33%);
-        background: -webkit-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 0.9) 0%, rgba(28, 25, 120, 0.9) 33%);
-        background: -o-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 0.9) 0%, rgba(28, 25, 120, 0.9) 33%);
-        background: -ms-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 0.9) 0%, rgba(28, 25, 120, 0.9) 33%);
-        background: radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 0.9) 0%, rgba(28, 25, 120, 0.9) 33%);
-    }
 }
 
 @media screen and (max-width: 650px) {
     nav ul {
         gap: 0px;
-    }
-
-    nav {
-        background: -moz-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 1) 0%, rgba(28, 25, 120, 1) 33%);
-        background: -webkit-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 1) 0%, rgba(28, 25, 120, 1) 33%);
-        background: -o-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 1) 0%, rgba(28, 25, 120, 1) 33%);
-        background: -ms-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 1) 0%, rgba(28, 25, 120, 1) 33%);
-        background: radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 1) 0%, rgba(28, 25, 120, 1) 33%);
-    }
-
-    nav.sticky {
-        background: -moz-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 0.9) 0%, rgba(28, 25, 120, 0.9) 33%);
-        background: -webkit-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 0.9) 0%, rgba(28, 25, 120, 0.9) 33%);
-        background: -o-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 0.9) 0%, rgba(28, 25, 120, 0.9) 33%);
-        background: -ms-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 0.9) 0%, rgba(28, 25, 120, 0.9) 33%);
-        background: radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 0.9) 0%, rgba(28, 25, 120, 0.9) 33%);
     }
 }
