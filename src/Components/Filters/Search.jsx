@@ -1,22 +1,21 @@
 import React from 'react'
-import './Search.css'
-import { TextField, FormLabel } from '@mui/material';
+import { TextField, Container, InputAdornment } from '@mui/material';
+import searchStyles from "./SearchStyle";
 
 export default function Search({ num_of_jobs }) {
     let placeholder = "חפשו מתוך " + num_of_jobs + " משרות";
+    const classes = searchStyles();
     return (
         <>
-            <div id="searchBar">
+            <Container>
                 <TextField
                     id="search"
                     label={placeholder}
                     variant="outlined"
-                    inputProps={{ dir: 'rtl' }}
-                    InputLabelProps={{
-                        style: { textAlign: 'right' },
-                    }}
+                    align="right"
+                    className={classes.searchBar}
                     fullWidth />
-            </div>
+            </Container>
         </>
     )
 }

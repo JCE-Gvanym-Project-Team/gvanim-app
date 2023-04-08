@@ -1,7 +1,17 @@
 import { makeStyles } from '@mui/styles'
 import colors from '../../indexStyle'
 
-const jobTwoStyles = makeStyles(theme => ({
+const jobStyles = makeStyles(theme => ({
+
+    // section location text
+    sectionContainer: {
+        marginTop: '70px'
+    },
+    sectionLocation: {
+        textDecoration: 'none',
+        color: colors.colorOrange
+    },
+
     // card and card containers
     cardContainer: {
         display: 'flex',
@@ -17,7 +27,7 @@ const jobTwoStyles = makeStyles(theme => ({
         flexGrow: 1,
         display: 'flex',
         flexDirection: 'column',
-        border: '1px solid black',
+        border: '1px solid grey',
         borderTopWidth: '3px',
         borderTopStyle: 'solid',
         borderTopColor: '#153C7C',
@@ -32,6 +42,8 @@ const jobTwoStyles = makeStyles(theme => ({
 
     // Job Description
     jobDescription: {
+        fontFamily: colors.fontFamily,
+        fontWeight: 'bold',
         flexGrow: 1,
         fontVariant: 'h2'
     },
@@ -49,6 +61,7 @@ const jobTwoStyles = makeStyles(theme => ({
         alignItems: 'flex-start'
     },
     jobLocation: {
+        fontWeight: 'bold',
         color: colors.colorBlue,
         flexGrow: 1,
         flexShrink: 1,
@@ -61,7 +74,7 @@ const jobTwoStyles = makeStyles(theme => ({
 
     // Job Scope
     jobScope: {
-
+        color: 'black'
     },
 
     // Button and job ID
@@ -70,12 +83,14 @@ const jobTwoStyles = makeStyles(theme => ({
         borderTop: '1px solid grey'
     },
     viewButton: {
+        fontWeight: 'bold',
         flex: 1,
         '&:hover': {
             color: colors.colorOrange,
         }
     },
     jobID: {
+        color: 'black',
         flex: 4,
         textAlign: 'left',
         paddingLeft: '5%'
@@ -83,4 +98,4 @@ const jobTwoStyles = makeStyles(theme => ({
 }));
 
 
-export default jobTwoStyles;
+export default jobStyles;

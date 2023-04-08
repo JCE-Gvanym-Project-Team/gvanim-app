@@ -2,10 +2,10 @@ import React from 'react'
 import { Typography, Card, CardActions, CardContent, ToolBar, Grid, Button } from '@mui/material'
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 
-import jobTwoStyles from './JobStyle';
+import jobStyles from './JobStyle';
 
 export default function Job({ job }) {
-    const classes = jobTwoStyles();
+    const classes = jobStyles();
     return (
         <Grid item className={classes.cardContainer} xs={12} sm={6} md={4}>
             <Card className={classes.card}>
