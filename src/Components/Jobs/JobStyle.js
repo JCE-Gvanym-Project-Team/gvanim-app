@@ -5,6 +5,8 @@ const jobStyles = makeStyles(theme => ({
 
     // section location text
     sectionContainer: {
+        display: 'flex',
+        flexDirection: 'row',
         marginTop: '70px'
     },
     sectionLocation: {
@@ -37,6 +39,8 @@ const jobStyles = makeStyles(theme => ({
         }
     },
     cardContent: {
+        display: 'flex',
+        flexDirection: 'column',
         flexGrow: 1
     },
 
@@ -48,6 +52,7 @@ const jobStyles = makeStyles(theme => ({
         fontVariant: 'h2'
     },
     jobDescriptionLink: {
+        flexGrow: 1,
         color: colors.colorText,
         textDecoration: 'none',
         transition: 'all 0.2s ease-in-out',

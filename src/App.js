@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { HomePage, JobsSection, Navbar, Search } from './Components'
 import DBs from './tempJobsDB'
 import Filters from "./Components/Filters/Filters";
-
+import Sort from "./Components/Filters/Sort"
 
 let App = function () {
     const [databases] = useState(DBs);
@@ -13,9 +13,8 @@ let App = function () {
             <Navbar />
             <main>
                 <HomePage />
-                <Search num_of_jobs={jobs.length} />
-                <Filters />
-                {/* <JobsSection jobs={jobs} locations={locations} /> */}
+                {/* <Filters jobs={jobs} locations={locations} /> */}
+                <JobsSection jobs={jobs} locations={locations} />
             </main>
         </>
     );

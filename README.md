@@ -6,6 +6,6 @@ I used `npx create-react-app .` <br> From here each of us will create a branch a
 ## How To Branch And Run On Your PC
 * Create a new branch
 * Open your terminal and navigate to the project's folder
-* Execute `npm install` (this will install all the dependencies you need in order to run the app).
+* Execute `npm install --force` (this will install all the dependencies you need in order to run the app).
 * Change the code inside the src folder as you wish
 * Execute `npm start` to run your app

@@ -1,17 +1,10 @@
 import React, { useState } from 'react';
-import { TextField, Select, MenuItem } from '@mui/material';
-import { DatePicker } from '@mui/'
+import { TextField, Select, MenuItem, Container, Typography } from '@mui/material';
 import JobList from '../Jobs/JobList';
+import JobsSection from '../Jobs/JobsSection';
+import Search from './Search'
 
-// Define your job data
-const jobs = [
-    { title: 'Job 1', location: 'New York', scope: 50, datePosted: new Date('2022-03-01') },
-    { title: 'Job 2', location: 'Los Angeles', scope: 80, datePosted: new Date('2022-02-15') },
-    { title: 'Job 3', location: 'Chicago', scope: 30, datePosted: new Date('2022-03-05') },
-    // add more job objects as needed
-];
-
-const Filters = () => {
+const Filters = ({ jobs, locations }) => {
     // Set up state to store the selected filter options and search query
     const [filters, setFilters] = useState({
         location: '',
@@ -54,8 +47,11 @@ const Filters = () => {
 
     // Render the filter options and the filtered job data using the JobList component
     return (
-        <div>
-            <TextField name="jobTitle" label="Job Title" onChange={handleFilterChange} />
+        <Container>
+            <Search num_of_jobs={filterJobs.length} />
+            <Typography name="jobTitle" label="Job Title" onChange={handleFilterChange} >
+                חפשו לפי:
+            </Typography>
             <Select name="location" value={filters.location} onChange={handleFilterChange}>
                 <MenuItem value="">All Locations</MenuItem>
                 <MenuItem value="New York">New York</MenuItem>
@@ -64,16 +60,14 @@ const Filters = () => {
                 {/* add more menu items as needed */}
             </Select>
             <TextField name="scope" label="Job Scope" onChange={handleFilterChange} />
-            <DatePicker
-                name="datePosted"
-                label="Date Posted"
-                value={filters.datePosted}
-                onChange={handleDateChange('datePosted')}
-                format="MM/dd/yyyy"
-            />
+            <Select>
+                <MenuItem value="">Sort by Scope</MenuItem>
+                <MenuItem value="newest">Newest to Oldest</MenuItem>
+                <MenuItem value="oldest">Oldest to Newest</MenuItem>
+            </Select>
             <TextField name="searchQuery" label="Search" onChange={handleFilterChange} />
-            <JobList jobs={filteredJobs} />
-        </div>
+            <JobsSection jobs={filteredJobs} locations={locations} />
+        </Container>
     );
 };
 
