@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { TextField, Select, MenuItem, Container, Typography } from '@mui/material';
 import JobList from '../Jobs/JobList';
-import JobsSection from '../Jobs/JobsSection';
+import JobsSection from '../Jobs/JobsSectionGrid';
 import Search from './Search'
 
 const Filters = ({ jobs, locations }) => {
