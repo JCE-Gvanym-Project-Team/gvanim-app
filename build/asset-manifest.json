@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/static/css/main.92504894.css",
+    "main.js": "/static/js/main.77ec7f3b.js",
+    "static/media/banner1.png": "/static/media/banner1.b5a3774ea120adc3706c.png",
+    "static/media/gvanim-logo.png": "/static/media/gvanim-logo.d0116d7c208df7cdd280.png",
+    "index.html": "/index.html",
+    "main.92504894.css.map": "/static/css/main.92504894.css.map",
+    "main.77ec7f3b.js.map": "/static/js/main.77ec7f3b.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.92504894.css",
+    "static/js/main.77ec7f3b.js"
+  ]
+}
