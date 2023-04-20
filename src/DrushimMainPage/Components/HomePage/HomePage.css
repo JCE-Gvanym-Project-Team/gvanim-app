@@ -1,0 +1,22 @@
+/* Promo image */
+.promo img {
+    width: 100%;
+}
+
+/* Promo text */
+.promo .description {
+    width: 50%;
+    margin: 0 auto;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: 26px;
+    direction: rtl;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+@media screen and (max-width: 600px) {
+    .promo p {
+        font-size: 20px;
+        width: 90%;
+    }
+}

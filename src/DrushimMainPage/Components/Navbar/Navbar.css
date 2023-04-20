@@ -1,0 +1,86 @@
+/* Navbar */
+
+nav {
+    /* display */
+    display: flex;
+    align-items: center;
+
+    /* Position */
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: calc(100%);
+    height: 115px;
+
+    z-index: 1;
+
+    /* Glassmorphism it */
+    /* background: rgba(217, 217, 217, 0.9); */
+    background: -moz-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 1) 0%, rgb(21, 60, 124, 0.98) 23%);
+    background: -webkit-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 1) 0%, rgb(21, 60, 124, 0.98) 23%);
+    background: -o-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 1) 0%, rgb(21, 60, 124, 0.98) 23%);
+    background: -ms-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 1) 0%, rgb(21, 60, 124, 0.98) 23%);
+    background: radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 1) 0%, rgb(21, 60, 124, 0.98) 23%);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5.2px);
+    -webkit-backdrop-filter: blur(5.2px);
+    border-bottom: 2px solid #153C7C;
+
+
+}
+
+nav.sticky {
+    background: -moz-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 1) 0%, rgb(21, 60, 124, 0.9) 23%);
+    background: -webkit-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 1) 0%, rgb(21, 60, 124, 0.9) 23%);
+    background: -o-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 1) 0%, rgb(21, 60, 124, 0.9) 23%);
+    background: -ms-radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 1) 0%, rgb(21, 60, 124, 0.9) 23%);
+    background: radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 1) 0%, rgb(21, 60, 124, 0.9) 23%);
+}
+
+/* Nav list of elements */
+nav ul {
+    gap: 30px;
+    flex: 5;
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+
+/* Nav element */
+nav li {
+    text-transform: uppercase;
+}
+
+/* Nav button */
+nav a {
+    font-weight: bold;
+    font-size: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-decoration: none;
+    color: var(--color-navbar-text);
+    transition: all 0.3s ease-in-out;
+}
+
+nav a:hover {
+    color: #ff9800;
+}
+
+/* Logo */
+nav .logo {
+    padding-right: 5%;
+    flex: 1;
+}
+
+/* Remove gap for smaller screens */
+@media screen and (max-width: 900px) {
+    nav ul {
+        gap: 10px;
+    }
+}
+
+@media screen and (max-width: 650px) {
+    nav ul {
+        gap: 0px;
+    }
+}
