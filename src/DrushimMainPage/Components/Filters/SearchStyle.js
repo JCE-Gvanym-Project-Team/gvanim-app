@@ -1,5 +1,5 @@
 import { makeStyles } from '@mui/styles'
-import colors from '../../indexStyle'
+import colors from '../../../indexStyle'
 
 const searchStyles = makeStyles(theme => ({
     searchBar: {
