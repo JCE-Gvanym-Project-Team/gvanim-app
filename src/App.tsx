@@ -10,7 +10,7 @@ function App() {
   const currentUser = "recruiter";
   return (
     <>
-    
+
     {decidePage(currentUser)}
     </>
   );
@@ -19,7 +19,7 @@ function App() {
 function decidePage(currentUser: any){
   if (currentUser === Admin){
     return (<AdminMainPage />)
-  }else if (currentUser == Recruiter){
+  }else if (currentUser === Recruiter){
     return (
       <RecruiterMainPage />
     )
