@@ -1,26 +1,33 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import DrushimMainPage from './DrushimMainPage/DrushimMainPage';
+import AdminMainPage from './AdminMainPage/AdminMainPage';
+import RecruiterMainPage from './RecruiterMainPage/RecruiterMainPage';
+
+const Admin = "admin";
+const Recruiter = "recruiter";
 
 function App() {
+  const currentUser = "recruiter";
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+    
+    {decidePage(currentUser)}
+    </>
   );
+}
+
+function decidePage(currentUser: any){
+  if (currentUser === Admin){
+    return (<AdminMainPage />)
+  }else if (currentUser == Recruiter){
+    return (
+      <RecruiterMainPage />
+    )
+  }else{
+    return (
+      <DrushimMainPage />
+    )
+  }
 }
 
 export default App;
