@@ -13,7 +13,7 @@ const JobRow = ({ data, item_key, index }: Props) => {
     return (
         <tr>
             <td>
-                <div style={{ width: '100%', textAlign: 'start' }}>
+                <div style={{ width: '100%', textAlign: 'start'}}>
 
                     <ButtonGroup className="mb-2" size='lg'>
                         <a href='#' className='me-1' style={{ color: 'black' }}><DeletePopup id={item_key} /></a>
