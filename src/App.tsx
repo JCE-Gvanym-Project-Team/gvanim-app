@@ -11,8 +11,8 @@ function App() {
   const currentUser = "recruiter";
   return (
     <>
-
-    {decidePage(currentUser)}
+    <RecruiterMainPage />
+    {/* {decidePage(currentUser)} */}
     </>
   );
 }
