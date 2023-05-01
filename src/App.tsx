@@ -2,6 +2,7 @@ import React from 'react';
 import DrushimMainPage from './DrushimMainPage/DrushimMainPage';
 import AdminMainPage from './AdminMainPage/AdminMainPage';
 import RecruiterMainPage from './RecruiterMainPage/RecruiterMainPage';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Admin = "admin";
 const Recruiter = "recruiter";
@@ -10,8 +11,8 @@ function App() {
   const currentUser = "recruiter";
   return (
     <>
-
-    {decidePage(currentUser)}
+    <RecruiterMainPage />
+    {/* {decidePage(currentUser)} */}
     </>
   );
 }
