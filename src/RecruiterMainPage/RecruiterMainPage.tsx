@@ -7,8 +7,12 @@ import ReportsPage from "./ReportsPage/ReportsPage";
 import Buttons from "./Components/Buttons";
 import Circles from "./Components/Circles";
 import { Route, Link } from "react-router-dom";
-import { redirect as Redirect } from "react-router-dom";
-import { BrowserRouter as Router, Routes } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Routes,
+  Redirect,
+} from "react-router-dom";
 
 function RecruiterMainPage() {
   return (
@@ -16,17 +20,12 @@ function RecruiterMainPage() {
       <div className="recruiter-main-page">
         <Buttons />
         <Circles />
-        <Routes>
-          <Route
-            path="./ManageCandidatesPage/ManageCandidatesPage"
-            Component={ManageCandidatesPage}
-          />
-          <Route
-            path="./ManageJobsPage/ManageJobsPage"
-            Component={ManageJobsPage}
-          />
-          <Route path="/ReportsPage" Component={ReportsPage} />
-        </Routes>
+        <Switch>
+          <Route path="/manageCandidates" component={ManageCandidatesPage} />
+          <Route path="/manageJobs" component={ManageJobsPage} />
+          <Route path="/reports" component={ReportsPage} />
+          <Redirect from="/" to="/manageCandidates" />
+        </Switch>
       </div>
     </Router>
   );
