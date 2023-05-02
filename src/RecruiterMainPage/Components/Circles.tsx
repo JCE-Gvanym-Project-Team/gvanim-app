@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from "react";
 import firebase from "firebase/compat/app";
 import "firebase/database";
-
-const config = {
-  // Your Firebase config here
-};
-
-firebase.initializeApp(config);
+import { dataref } from "../../FirebaseConfig/firebase";
 
 const db = firebase.database();
 
