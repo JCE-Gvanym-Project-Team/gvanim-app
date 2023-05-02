@@ -1,88 +1,38 @@
 import React, { useState, useEffect } from "react";
-import firebase from "firebase/compat/app";
-import "firebase/database";
 import { dataref } from "../../FirebaseConfig/firebase";
 
-const db = firebase.database();
-
-const CircleGroup: React.FC = () => {
-  const [jobsOnSite, setJobsOnSite] = useState<number>(0);
-  const [unreadResumes, setUnreadResumes] = useState<number>(0);
+function Circles() {
+  const [jobsCount, setJobsCount] = useState(0);
+  const [unreadResumesCount, setUnreadResumesCount] = useState(0);
 
   useEffect(() => {
-    const jobsRef = db.ref("jobs");
-    jobsRef.on("value", (snapshot) => {
-      const jobsCount = snapshot.numChildren();
-      setJobsOnSite(jobsCount);
+    // Fetch jobs count from Firebase and update state
+    dataref.ref("jobs").on("value", (snapshot) => {
+      setJobsCount(snapshot.numChildren());
     });
 
-    const resumesRef = db.ref("resumes");
-    resumesRef
-      .orderByChild("read")
-      .equalTo(false)
+    // Fetch unread resumes count from Firebase and update state
+    dataref
+      .ref("resumes")
+      .orderByChild("status")
+      .equalTo("unread")
       .on("value", (snapshot) => {
-        const unreadResumesCount = snapshot.numChildren();
-        setUnreadResumes(unreadResumesCount);
+        setUnreadResumesCount(snapshot.numChildren());
       });
   }, []);
 
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        width: "50%",
-        margin: "0 auto",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <div
-          style={{
-            width: "50px",
-            height: "50px",
-            backgroundColor: "#ddd",
-            borderRadius: "50%",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            marginBottom: "10px",
-          }}
-        >
-          {jobsOnSite}
-        </div>
-        <div>Jobs on Site</div>
+    <div className="circle-group">
+      <div className="circle">
+        <p>{jobsCount}</p>
+        <span> - משרות באתר</span>
       </div>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <div
-          style={{
-            width: "50px",
-            height: "50px",
-            backgroundColor: "#ddd",
-            borderRadius: "50%",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            marginBottom: "10px",
-          }}
-        >
-          {unreadResumes}
-        </div>
-        <div>Unread Resumes</div>
+      <div className="circle">
+        <p>{unreadResumesCount}</p>
+        <span> - קו"ח חדשים</span>
       </div>
     </div>
   );
-};
+}
 
-export default CircleGroup;
+export default Circles;
