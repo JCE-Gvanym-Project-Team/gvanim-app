@@ -12,6 +12,7 @@ import "./NavBar.css";
 import { NavLink } from "react-router-dom";
 import { Link } from "react-bootstrap-icons";
 import ManageJobsPage from "../../RecruiterMainPage/ManageJobsPage/ManageJobsPage";
+import logo from "./logo.png";
 
 class NavBar extends Component {
   state = {
@@ -30,7 +31,7 @@ class NavBar extends Component {
         <React.Fragment>
           <nav className="navbar navbar-expand-lg navbar-dark bg-light-blue">
             <Link className="navbar-brand" to="/">
-              Navbar
+              Navbar <img src={logo} alt="Logo" className="logo" />
             </Link>
             <button
               className="navbar-toggler"
