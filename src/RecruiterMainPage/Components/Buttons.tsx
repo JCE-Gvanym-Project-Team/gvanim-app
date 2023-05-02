@@ -4,20 +4,20 @@ import ManageCandidatesPage from "../ManageCandidatesPage/ManageCandidatesPage";
 import ManageJobsPage from "../ManageJobsPage/ManageJobsPage";
 import ReportsPage from "../ReportsPage/ReportsPage";
 
-function Buttons() {
+function Buttons1() {
   return (
     <div className="button-group">
-      <Link to="/manage-candidates">
+      <Link to="ManageCandidatesPage">
         <button className="button">Manage Candidates</button>
       </Link>
-      <Link to="/manage-jobs">
+      <Link to="ManageJobsPage">
         <button className="button">Job Management</button>
       </Link>
-      <Link to="/reports">
+      <Link to="ReportsPage">
         <button className="button">Report</button>
       </Link>
     </div>
   );
 }
 
-export default Buttons;
+export default Buttons1;
