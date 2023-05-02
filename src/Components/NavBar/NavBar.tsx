@@ -29,9 +29,9 @@ class NavBar extends Component {
     return (
       <Router>
         <React.Fragment>
-          <nav className="navbar navbar-expand-lg navbar-dark bg-light-blue">
+          <nav className="navbar navbar-expand-lg navbar-dark navbar-light-blue">
             <Link className="navbar-brand" to="/">
-              Navbar <img src={logo} alt="Logo" className="logo" />
+              Navbar
             </Link>
             <button
               className="navbar-toggler"
@@ -83,6 +83,7 @@ class NavBar extends Component {
                   דו"ח
                 </NavLink>
               </div>
+              <img src={logo} alt="Logo" className="logo" />
             </div>
           </nav>
           <main className="container">
