@@ -7,13 +7,13 @@ import ReportsPage from "../ReportsPage/ReportsPage";
 function Buttons() {
   return (
     <div className="button-group">
-      <Link to="/ManageCandidatesPage">
+      <Link to="/manageCandidates">
         <button className="button">ניהול מועמדים</button>
       </Link>
-      <Link to="/ManageJobsPage">
+      <Link to="/manageJobs">
         <button className="button">ניהול משרות </button>
       </Link>
-      <Link to="/ReportsPage">
+      <Link to="/reports">
         <button className="button">דו"ח</button>
       </Link>
     </div>

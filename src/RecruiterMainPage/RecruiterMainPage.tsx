@@ -13,21 +13,15 @@ import {
   Routes,
   Redirect,
 } from "react-router-dom";
+import NavBar from "../Components/NavBar/NavBar";
 
 function RecruiterMainPage() {
   return (
-    <Router>
       <div className="recruiter-main-page">
+        <NavBar />
         <Buttons />
         <Circles />
-        <Switch>
-          <Route path="/manageCandidates" component={ManageCandidatesPage} />
-          <Route path="/manageJobs" component={ManageJobsPage} />
-          <Route path="/reports" component={ReportsPage} />
-          <Redirect from="/" to="/manageCandidates" />
-        </Switch>
       </div>
-    </Router>
   );
 }
 
