@@ -2,6 +2,7 @@ import { ButtonGroup } from 'react-bootstrap';
 import "./JobRow.css";
 import DeletePopup from '../DeletePopup/DeletePopup';
 import AddOrUpdateJobPopup from '../AddOrUpdateJobPopup/AddOrUpdateJobPopup';
+import React from "react";
 
 type Props = {
     item_key: string,

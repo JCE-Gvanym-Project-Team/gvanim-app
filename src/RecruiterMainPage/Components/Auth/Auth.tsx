@@ -3,6 +3,7 @@ import firebase1 from "../../../FirebaseConfig/firebase";
 import "firebase/compat/auth";
 import  { useEffect, useState } from "react"
 import RecruiterMainPage from "../../RecruiterMainPage";
+import React from "react";
 
 
 export default function Auth () {

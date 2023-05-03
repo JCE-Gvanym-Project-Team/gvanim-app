@@ -10,6 +10,7 @@ import Collapse from '@mui/material/Collapse';
 import { useState } from "react";
 import firebase1 from "../../../FirebaseConfig/firebase";
 import "firebase/compat/auth";
+import React from "react";
 
 const useStyles = makeStyles((theme) => ({
     paper: {
