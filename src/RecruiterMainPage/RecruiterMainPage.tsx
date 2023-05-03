@@ -7,12 +7,6 @@ import ReportsPage from "./ReportsPage/ReportsPage";
 import Buttons from "./Components/Buttons";
 import Circles from "./Components/Circles";
 import { Route, Link } from "react-router-dom";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Routes,
-  Redirect,
-} from "react-router-dom";
 import NavBar from "../Components/NavBar/NavBar";
 
 function RecruiterMainPage() {
