@@ -8,6 +8,7 @@ import ManageCandidatesPage from './RecruiterMainPage/ManageCandidatesPage/Manag
 import ManageJobsPage from './RecruiterMainPage/ManageJobsPage/ManageJobsPage';
 import ReportsPage from './RecruiterMainPage/ReportsPage/ReportsPage';
 import { Router } from 'express';
+import NavBar from './Components/NavBar/NavBar';
 
 const Admin = "admin";
 const Recruiter = "recruiter";
@@ -16,6 +17,7 @@ function App() {
   const currentUser = "recruiter";
   return (
     <>
+	<NavBar />
     <BrowserRouter>
 		<div>
 			<Route exact path="/" component={RecruiterMainPage} />

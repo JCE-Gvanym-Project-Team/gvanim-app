@@ -18,7 +18,6 @@ import NavBar from "../Components/NavBar/NavBar";
 function RecruiterMainPage() {
   return (
       <div className="recruiter-main-page">
-        <NavBar />
         <Buttons />
         <Circles />
       </div>
