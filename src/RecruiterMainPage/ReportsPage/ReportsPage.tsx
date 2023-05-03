@@ -1,5 +1,5 @@
 import React from 'react';
-import ReportPageComponents from './Components/ReportPageComponents'
+import ReportPageComponents from './Components/ReportPage/ReportPageComponents'
 
 
 
