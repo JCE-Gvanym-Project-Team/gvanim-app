@@ -5,6 +5,7 @@ import { Container, Form, Button, InputGroup } from "react-bootstrap";
 import { GeoFill, LayoutTextSidebar, PencilSquare, Percent } from 'react-bootstrap-icons';
 import { Component } from 'react';
 import { Search } from "react-bootstrap-icons";
+import './ReportPageComponents.css';
 
 
 interface Props {}
@@ -18,9 +19,11 @@ const HistoryTable = () => {
     return (
      <div>
       {/* button */}
-      <button style={{}} id="createReport" >צור דו"ח חדש<LayoutTextSidebar /></button>
+
+      <button style={{}} id="createReport" > צור דו"ח חדש <LayoutTextSidebar /></button>
       {/* ######### sort ############### */}
-      <Form.Group className="d-flex flex-column bd-highlight mb-3" dir="rtl" style={{ flex: '1', margin: '5px'}}>
+      <div id="navSortAndSearch">
+      <Form.Group id="sort" className="d-flex flex-column bd-highlight mb-3" dir="rtl" style={{ flex: '1', margin: '5px'}}>
             <div className="d-flex align-items-end" style={{ height: '100%' }}>
                 <Form.Label style={{ fontSize: 'smaller', fontWeight: 'bold' }}>מיין לפי:</Form.Label>
             </div>
@@ -58,8 +61,9 @@ const HistoryTable = () => {
             </InputGroup>
               </div>
           </Form.Group>
+          </div>
 
-
+     {/* ##### table ###### */}
       <table id="historyReports">
         <thead>
           <tr>
