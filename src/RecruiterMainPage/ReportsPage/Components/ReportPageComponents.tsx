@@ -11,27 +11,10 @@ interface Props {}
 interface State {}
 
 
-
-
-
-// const buttonToCreateNewReport = () => {
-  // const popup = document.createElement("div");
-  // popup.className = "popup";
-//  const createReportButton = document.createElement("button");
-//  createReportButton.textContent = "יצירת דוח חדש";
-// 
-//  createReportButton.addEventListener("click", () => {
-  //  });
-// 
-//  popup.appendChild(createReportButton);
-// 
-//  document.body.appendChild(popup);
-// }
-// 
-
 const HistoryTable = () => {
     return (
-      
+     <div>
+      <button style={{}} id="createReport" >צור דו"ח חדש <LayoutTextSidebar /></button>
       <table id="historyReports">
         <thead>
           <tr>
@@ -58,6 +41,7 @@ const HistoryTable = () => {
           </tr>       
         </tbody>
       </table>
+      </div>
     );
   }
 
