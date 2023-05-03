@@ -6,10 +6,14 @@ import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 import { ReactSVG } from "react-svg";
 import SvgLogo from "../../../Components/Logo/gvanim_logo_svg.svg"
-import { Alert, CssBaseline, TextField, createTheme } from "@mui/material";
+import { Alert, CssBaseline } from "@mui/material";
 import React from "react";
+import { KeyOutlined, MailOutlined } from '@ant-design/icons';
+import { Input } from 'antd';
+import { Typography } from "@material-ui/core";
 
 
+ 
 const useStyles = makeStyles((theme) => ({
     paper: {
         padding: theme.spacing(2),
@@ -55,82 +59,88 @@ const Login = (props: { email: any; setEmail: any; password: any; setPassword: a
 
                     <div className={classes.paper}>
                         <ReactSVG className="mt-3" src={SvgLogo} />
+                        
+                        <Typography
+                                className="mt-4"
+                                variant="h5"
+                                style={{ fontFamily: "'Noto Sans Hebrew', sans-serif", color: 'GrayText', textAlign: 'center' }}>
+                                כניסת משתמש 
+                            </Typography>
 
-                        <Form className={classes.form} noValidate onSubmit={handleLogin}>
+                        <form className={classes.form} noValidate onSubmit={handleLogin}>
 
                             <Alert className="mt-3" sx={{ fontSize: 'small' }} variant="outlined" severity="error" hidden={alertHidden}>
                                 אחד או יותר מפרטי ההזדהות שמסרת שגויים.
                             </Alert>
 
-
-                            <TextField
-                                className="mt-3"
-                                label={"כתובת אימייל"}
-                                variant="standard"
-                                required
-                                type="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                autoComplete="on"
-                                fullWidth
-                                error={emailError}
-                                helperText={emailError && 'הזן כתובת אימייל או מספר טלפון.'}
-                            />
-
-
-
-                            <TextField
-                                className="mt-3"
-                                label={"סיסמה"}
-                                variant="standard"
-                                required
-                                type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                fullWidth
-                                autoComplete="off"
-                                error={passwordError}
-                                helperText={passwordError && 'הזן סיסמה.'}
-                            />
+                                <Input
+                                    className="mt-3"
+                                    placeholder="כתובת אימייל"
+                                    onError={emailError}
+                                    style={{ width: '100%' }}
+                                    required
+                                    value={email}
+                                    type="email"
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    autoComplete="on"
+                                    status={emailError ? 'error' : ''}
+                                    prefix={<MailOutlined className="site-form-item-icon"
+                                    />}
+                                />
 
 
-                            <Grid container className="mt-2">
-                                <Grid item>
-                                    <Link type="submit" href={"/Recovery"} variant="caption">
-                                        שכחת את הסיסמה?
-                                    </Link>
+                                <Input
+                                    className="mt-3"
+                                    placeholder="סיסמה"
+                                    onError={passwordError}
+                                    style={{ width: '100%' }}
+                                    required
+                                    value={password}
+                                    type="password"
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    autoComplete="off"
+                                    status={passwordError ? 'error' : ''}
+                                    prefix={<KeyOutlined className="site-form-item-icon"
+                                    />}
+                                />
 
+
+                                <Grid container className="mt-2">
+                                    <Grid item>
+                                        <Link type="submit" href={"/Recovery"} variant="caption">
+                                            שכחת את הסיסמה?
+                                        </Link>
+                                    </Grid>
                                 </Grid>
-                            </Grid>
 
-                            <Grid container className="mt-4">
-                                <Grid item xs>
-                                    <div style={{ textAlign: 'start' }}>
-                                        <Form.Text style={{ fontSize: 'small', fontWeight: '500' }} muted>
-                                            זה לא המחשב שלך? מומלץ להשתמש במצב אורח כדי להיכנס לחשבון בפרטיות. <Link
-                                                href="https://support.google.com/chrome/answer/6130773?hl=iw"
-                                                variant="body2">
-                                                מידע נוסף
-                                            </Link>
-                                        </Form.Text>
-                                    </div>
+                                <Grid container className="mt-4">
+                                    <Grid item xs>
+                                        <div style={{ textAlign: 'start' }}>
+                                            <Form.Text style={{ fontSize: 'small', fontWeight: '500' }} muted>
+                                                זה לא המחשב שלך? מומלץ להשתמש במצב אורח כדי להיכנס לחשבון בפרטיות. <Link
+                                                    href="https://support.google.com/chrome/answer/6130773?hl=iw"
+                                                    variant="body2">
+                                                    מידע נוסף
+                                                </Link>
+                                            </Form.Text>
+                                        </div>
+                                    </Grid>
                                 </Grid>
-                            </Grid>
 
-                            <div dir='ltr'>
-                                <Button
-                                    size="medium"
-                                    variant="contained"
-                                    color="primary"
-                                    type={validated ? "submit" : "button"}
-                                    onClick={handleLogin}
-                                    className={classes.submit}
-                                >
-                                    התחבר
-                                </Button>
-                            </div>
+                                <div  style={{display: 'flex', justifyContent: 'center'}}>
+                                    <Button
+                                        size="medium"
+                                        variant="contained"
+                                        color="primary"
+                                        type={validated ? "submit" : "button"}
+                                        onClick={handleLogin}
+                                        className={classes.submit}
+                                    >
+                                        התחבר
+                                    </Button>
+                                </div>
 
-                        </Form>
+                        </form>
 
 
                     </div>

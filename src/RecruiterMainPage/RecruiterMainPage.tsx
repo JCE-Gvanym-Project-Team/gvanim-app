@@ -1,29 +1,24 @@
 import React from 'react'
-import ManageCandidatesPage from './ManageCandidatesPage/ManageCandidatesPage'
-import ManageJobsPage from './ManageJobsPage/ManageJobsPage'
-import ReportsPage from './ReportsPage/ReportsPage'
 import { Button } from 'react-bootstrap'
 
 
 
-const RecruiterMainPage = ({handlelogout}) => {
+const RecruiterMainPage = ({ handlelogout }) => {
 
-  
+
   return (
- <>
-   <ManageCandidatesPage />
-   <ManageJobsPage />
-   <ReportsPage />
+    <>
+      <section style={{ display: 'flex', justifyContent: 'center', borderStyle: 'solid' }}>
+        <nav>
+          <h2>Welcome User - this is the Header of RecruiterMainPage</h2>
+          <Button onClick={handlelogout}>התנתק</Button>
+        </nav>
+      </section>
 
 
-   <section>
-    <nav>
-    <h2>Welcome</h2>
-    <Button onClick={handlelogout}>התנתק</Button>
-    </nav>
 
-   </section>
- </>
+
+    </>
   )
 }
 

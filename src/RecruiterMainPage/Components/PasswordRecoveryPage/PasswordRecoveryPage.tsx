@@ -99,7 +99,7 @@ const PasswordRecover = () => {
                                     helperText={emailError && 'לא ניתן לאפס סיסמה למשתמש זה.'}
                                 />
 
-                                <div dir='ltr'>
+                                <div style={{ display: 'flex', justifyContent: 'center' }}>
                                     <Button
                                         size="medium"
                                         variant="contained"
