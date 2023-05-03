@@ -1,5 +1,5 @@
 body{
-    padding: 5%;
+    padding: 5%; /** this creates collisions with other css code*/
 }
 
 #navSortAndSearch{
