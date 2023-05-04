@@ -45,9 +45,10 @@ export default function Auth () {
   };
 
 
-  const handleLogin = () => {
+  const handleLogin = (event) => {
     clearInputs();
     clearErrors();
+    event.preventDefault();
 
     if (email.length === 0 && password.length === 0) {
       setEmailError(true);

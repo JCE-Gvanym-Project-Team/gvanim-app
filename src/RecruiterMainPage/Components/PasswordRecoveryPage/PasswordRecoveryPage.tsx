@@ -1,16 +1,30 @@
-import { Form } from "react-bootstrap";
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import SvgLogo from "../../../Components/Logo/gvanim_logo_svg.svg"
-import { ReactSVG } from 'react-svg';
 import { Alert, CssBaseline, TextField } from "@mui/material";
-import { Typography } from "@material-ui/core";
+import { FormHelperText, Typography } from "@material-ui/core";
 import Collapse from '@mui/material/Collapse';
 import { useState } from "react";
 import firebase1 from "../../../FirebaseConfig/firebase";
 import "firebase/compat/auth";
-import React from "react";
+
+// svg importer
+import { ReactSVG } from "react-svg";
+import SvgLogo from "../../../Components/Logo/gvanim_logo_svg.svg"
+
+// plugin rtl (right to left) for specific widget (input form) of MUI
+import rtlPlugin from 'stylis-plugin-rtl';
+import { CacheProvider } from '@emotion/react';
+import createCache from '@emotion/cache';
+import { prefixer } from 'stylis';
+// -----------------------------------------------------------------
+
+// setup the plugin RTL
+const cacheRtl = createCache({
+    key: 'muirtl',
+    stylisPlugins: [prefixer, rtlPlugin],
+});
+
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -32,18 +46,26 @@ const PasswordRecover = () => {
     const [email, setEmail] = useState('');
     const [emailError, setEmailError] = useState(false);
     const [validated, setValidated] = useState(false);
+    const [invalidEmail,setInvalidEmail] = useState(false);
 
     const classes = useStyles();
 
 
-    const handleResetPassword = () => {
+    const handleResetPassword = (event) => {
+        setValidated(false);
+        setEmailError(false);
+
+        event.preventDefault();
+        event.stopPropagation();
+
         if (email.length === 0) { setEmailError(true); }
         else {
             firebase1.auth().sendPasswordResetEmail(email)
-                .then(function () { alert("check youre email"); setValidated(true); })
+                .then(function () { setEmailError(false); setInvalidEmail(false); setValidated(true); })
                 .catch(error => {
-                    setEmailError(true);
-                    alert(error.code);
+                    setInvalidEmail(true);
+                 
+                   // alert(error.code);
                 });
         }
     };
@@ -59,7 +81,7 @@ const PasswordRecover = () => {
                     <div className={classes.paper}>
                         <ReactSVG className="mt-3" src={SvgLogo} />
 
-                        <Form className={classes.form} noValidate onSubmit={handleResetPassword}>
+                        <form className={classes.form} noValidate onSubmit={handleResetPassword}>
 
 
                             <Typography
@@ -70,9 +92,17 @@ const PasswordRecover = () => {
                             </Typography>
 
 
-                            <Alert className="mt-3" sx={{ fontSize: 'small' }} variant="outlined" severity="success" hidden={!validated}>
-                                נשלח לכם אל כתובת האימייל שבה השתמשתם ליצירת החשבון, הוראות ליצירת סיסמה חדשה.
-                            </Alert>
+                            <CacheProvider value={cacheRtl}>
+                                <Alert  className="mt-3" sx={{ fontSize: 'small' }} variant="outlined" severity="success" hidden={!validated}>
+                                בדוק את תיבת האימייל שלך, נשלח לך הוראות ליצירת סיסמה חדשה.
+                                </Alert>
+                            </CacheProvider>
+                            
+                            <CacheProvider value={cacheRtl}>
+                                <Alert  className="mt-3" sx={{ fontSize: 'small' }} variant="outlined" severity="error" hidden={!invalidEmail}>
+                                לא ניתן לאפס סיסמה לאימייל זה.
+                                </Alert>
+                            </CacheProvider>
 
 
                             <Collapse className="mt-3" in={!validated}>
@@ -87,7 +117,7 @@ const PasswordRecover = () => {
                                 <TextField
                                     size="small"
                                     className="mt-3"
-                                    label={"כתובת אימייל"}
+                                    placeholder="אימייל"
                                     variant="outlined"
                                     required
                                     type="email"
@@ -96,16 +126,17 @@ const PasswordRecover = () => {
                                     autoComplete="on"
                                     fullWidth
                                     error={emailError}
-                                    helperText={emailError && 'לא ניתן לאפס סיסמה למשתמש זה.'}
                                 />
+
+                                <FormHelperText hidden={!emailError} security="invalid" style={{ color: '#ef5350', textAlign: 'right' }}>זהו שדה חובה.</FormHelperText>
 
                                 <div style={{ display: 'flex', justifyContent: 'center' }}>
                                     <Button
+                                        dir="ltr"
                                         size="medium"
                                         variant="contained"
                                         color="primary"
-                                        type={validated ? "submit" : "button"}
-                                        onClick={handleResetPassword}
+                                        type={"submit"}
                                         className={classes.submit}
                                     >
                                         המשך
@@ -113,7 +144,8 @@ const PasswordRecover = () => {
                                 </div>
 
                             </Collapse>
-                        </Form>
+
+                        </form>
 
 
                     </div>
