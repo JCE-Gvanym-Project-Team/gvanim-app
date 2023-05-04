@@ -87,7 +87,7 @@ export default function Auth () {
         }
         else {
           setUser('');
-          return <RecruiterMainPage handlelogout={handlelogout} />;
+          return <RecruiterMainPage />; //handlelogout={handlelogout} />
         }
       });
     };
@@ -99,7 +99,7 @@ export default function Auth () {
   return (
     <>
       {user ? (
-        <RecruiterMainPage handlelogout={handlelogout} />
+        <RecruiterMainPage /> //handlelogout={handlelogout} />
       ) : (
 
             <Login
