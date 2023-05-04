@@ -27,24 +27,6 @@ import SvgLogo from "../../../Components/Logo/gvanim_logo_svg.svg"
 // -----------------------------------------------------------------
 
 
-
-// setup the plugin RTL
-// const useStyles = makeStyles((theme) => ({
-//     paper: {
-//         padding: theme.spacing(2),
-//         display: 'flex',
-//         flexDirection: 'column',
-//         alignItems: 'center',
-//     },
-//     form: {
-//         width: '100%', // Fix IE 11 issue.
-//         marginTop: theme.spacing(1),
-//     },
-//     submit: {
-//         margin: theme.spacing(3, 0, 2),
-//     },
-// }));
-
 const Form = styled('form')(({ theme }) => ({
     width: '100%',
     marginTop: theme.spacing(1),
