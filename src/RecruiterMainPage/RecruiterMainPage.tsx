@@ -5,7 +5,6 @@ import { Button } from 'react-bootstrap'
 
 const RecruiterMainPage = ({ handlelogout }) => {
 
-
   return (
     <>
       <section style={{ display: 'flex', justifyContent: 'center', borderStyle: 'solid' }}>
@@ -14,10 +13,6 @@ const RecruiterMainPage = ({ handlelogout }) => {
           <Button onClick={handlelogout}>התנתק</Button>
         </nav>
       </section>
-
-
-
-
     </>
   )
 }
