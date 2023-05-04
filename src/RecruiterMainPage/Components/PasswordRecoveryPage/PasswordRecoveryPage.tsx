@@ -1,55 +1,76 @@
-import Button from '@material-ui/core/Button';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import { Alert, CssBaseline, TextField } from "@mui/material";
-import { FormHelperText, Typography } from "@material-ui/core";
-import Collapse from '@mui/material/Collapse';
-import { useState } from "react";
+// components
+import {
+    Button,
+    Container,
+    FormHelperText,
+    Typography,
+    Alert,
+    CssBaseline,
+    TextField,
+    Collapse,
+    Paper
+} from '@mui/material'
+
+import AlertIcon from '@mui/icons-material/Info';
+import { styled } from '@mui/material/styles'
+
+//firebase
 import firebase1 from "../../../FirebaseConfig/firebase";
 import "firebase/compat/auth";
+
+//react
+import { useState } from "react";
 
 // svg importer
 import { ReactSVG } from "react-svg";
 import SvgLogo from "../../../Components/Logo/gvanim_logo_svg.svg"
-
-// plugin rtl (right to left) for specific widget (input form) of MUI
-import rtlPlugin from 'stylis-plugin-rtl';
-import { CacheProvider } from '@emotion/react';
-import createCache from '@emotion/cache';
-import { prefixer } from 'stylis';
 // -----------------------------------------------------------------
 
+
+
 // setup the plugin RTL
-const cacheRtl = createCache({
-    key: 'muirtl',
-    stylisPlugins: [prefixer, rtlPlugin],
+// const useStyles = makeStyles((theme) => ({
+//     paper: {
+//         padding: theme.spacing(2),
+//         display: 'flex',
+//         flexDirection: 'column',
+//         alignItems: 'center',
+//     },
+//     form: {
+//         width: '100%', // Fix IE 11 issue.
+//         marginTop: theme.spacing(1),
+//     },
+//     submit: {
+//         margin: theme.spacing(3, 0, 2),
+//     },
+// }));
+
+const Form = styled('form')(({ theme }) => ({
+    width: '100%',
+    marginTop: theme.spacing(1),
+}));
+
+const SubmitButton = styled(Button)(({ theme }) => ({
+    margin: theme.spacing(3, 0, 2),
+}));
+
+const StyledIcon = styled(AlertIcon)({
+    flexShrink: 0,
+    marginLeft: '8px',
 });
 
-
-const useStyles = makeStyles((theme) => ({
-    paper: {
-        padding: theme.spacing(2),
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
-    form: {
-        width: '100%', // Fix IE 11 issue.
-        marginTop: theme.spacing(1),
-    },
-    submit: {
-        margin: theme.spacing(3, 0, 2),
-    },
+const StyledPaper = styled(Paper)(({ theme }) => ({
+    padding: theme.spacing(2),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
 }));
 
 const PasswordRecover = () => {
     const [email, setEmail] = useState('');
     const [emailError, setEmailError] = useState(false);
     const [validated, setValidated] = useState(false);
-    const [invalidEmail,setInvalidEmail] = useState(false);
-
-    const classes = useStyles();
-
+    const [invalidEmail, setInvalidEmail] = useState(false);
 
     const handleResetPassword = (event) => {
         setValidated(false);
@@ -64,8 +85,8 @@ const PasswordRecover = () => {
                 .then(function () { setEmailError(false); setInvalidEmail(false); setValidated(true); })
                 .catch(error => {
                     setInvalidEmail(true);
-                 
-                   // alert(error.code);
+
+                    // alert(error.code);
                 });
         }
     };
@@ -78,10 +99,10 @@ const PasswordRecover = () => {
 
                 <Container maxWidth="xs" className="shadow-sm border rounded">
 
-                    <div className={classes.paper}>
+                    <StyledPaper>
                         <ReactSVG className="mt-3" src={SvgLogo} />
 
-                        <form className={classes.form} noValidate onSubmit={handleResetPassword}>
+                        <Form>
 
 
                             <Typography
@@ -92,17 +113,17 @@ const PasswordRecover = () => {
                             </Typography>
 
 
-                            <CacheProvider value={cacheRtl}>
-                                <Alert  className="mt-3" sx={{ fontSize: 'small' }} variant="outlined" severity="success" hidden={!validated}>
+
+                            <Alert className="mt-3" sx={{ fontSize: 'small' }} variant="outlined" severity="success" hidden={!validated}>
                                 בדוק את תיבת האימייל שלך, נשלח לך הוראות ליצירת סיסמה חדשה.
-                                </Alert>
-                            </CacheProvider>
-                            
-                            <CacheProvider value={cacheRtl}>
-                                <Alert  className="mt-3" sx={{ fontSize: 'small' }} variant="outlined" severity="error" hidden={!invalidEmail}>
+                            </Alert>
+
+
+
+                            <Alert className="mt-3" sx={{ fontSize: 'small' }} variant="outlined" severity="error" hidden={!invalidEmail}>
                                 לא ניתן לאפס סיסמה לאימייל זה.
-                                </Alert>
-                            </CacheProvider>
+                            </Alert>
+
 
 
                             <Collapse className="mt-3" in={!validated}>
@@ -131,25 +152,25 @@ const PasswordRecover = () => {
                                 <FormHelperText hidden={!emailError} security="invalid" style={{ color: '#ef5350', textAlign: 'right' }}>זהו שדה חובה.</FormHelperText>
 
                                 <div style={{ display: 'flex', justifyContent: 'center' }}>
-                                    <Button
-                                        dir="ltr"
-                                        size="medium"
-                                        variant="contained"
-                                        color="primary"
-                                        type={"submit"}
-                                        className={classes.submit}
-                                    >
-                                        המשך
-                                    </Button>
+                                    <SubmitButton>
+                                        <Button
+                                            dir="ltr"
+                                            size="medium"
+                                            variant="contained"
+                                            color="primary"
+                                            type={"submit"}
+                                        >
+                                            המשך
+                                        </Button>
+                                    </SubmitButton>
                                 </div>
 
                             </Collapse>
 
-                        </form>
+                        </Form>
 
 
-                    </div>
-
+                    </StyledPaper>
                 </Container>
 
             </div>

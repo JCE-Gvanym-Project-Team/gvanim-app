@@ -1,64 +1,89 @@
 import React from "react";
-import Link from '@material-ui/core/Link';
-import { Button } from "@material-ui/core";
-import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import Container from '@material-ui/core/Container';
-import { Alert, CssBaseline } from "@mui/material";
-import { FormHelperText, TextField, Typography } from "@material-ui/core";
-import { withStyles } from "@material-ui/core/styles";
+
+import {
+    Alert,
+    CssBaseline,
+    Button,
+    Link,
+    Grid,
+    Container,
+    FormHelperText,
+    TextField,
+    Typography,
+    Paper
+} from "@mui/material";
+
+import {styled, createTheme, ThemeProvider } from "@mui/material/styles";
+import AlertIcon from '@mui/icons-material/Info';
 
 // svg importer
 import { ReactSVG } from "react-svg";
 import SvgLogo from "../../../Components/Logo/gvanim_logo_svg.svg"
-
-// plugin rtl (right to left) for specific widget (input form) of MUI
-import rtlPlugin from 'stylis-plugin-rtl';
-import { CacheProvider } from '@emotion/react';
-import createCache from '@emotion/cache';
-import { prefixer } from 'stylis';
 // -----------------------------------------------------------------
 
 
-// setup the plugin RTL
-const cacheRtl = createCache({
-    key: 'muirtl',
-    stylisPlugins: [prefixer, rtlPlugin],
+const theme = createTheme({
+    direction: 'rtl',
+    // Other theme options...
 });
 
 
+
 // override TextField style of MUI
-const StyledTextField = withStyles({
-    root: {
-        "& label": {
-            transformOrigin: "top right",
-            right: 0,
-            left: "auto"
-        }
+
+const StyledTextField = styled(TextField)({
+    '& label': {
+        transformOrigin: 'top right',
+        right: 0,
+        left: 'auto'
     }
-})(TextField);
+});
+
 
 
 // create theme
-const useStyles = makeStyles((theme) => ({
-    paper: {
-        padding: theme.spacing(2),
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
-    form: {
-        width: '100%', // Fix IE 11 issue.
-        marginTop: theme.spacing(1),
-    },
-    submit: {
-        margin: theme.spacing(3, 0, 2),
-    },
+// const useStyles = makeStyles((theme) => ({
+//     paper: {
+//         padding: theme.spacing(2),
+//         display: 'flex',
+//         flexDirection: 'column',
+//         alignItems: 'center',
+//     },
+//     form: {
+//         width: '100%', // Fix IE 11 issue.
+//         marginTop: theme.spacing(1),
+//     },
+//     submit: {
+//         margin: theme.spacing(3, 0, 2),
+//     },
+// }));
+
+
+
+const StyledPaper = styled(Paper)(({ theme }) => ({
+    borderStyle: 'solid',
+    padding: theme.spacing(2),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
 }));
 
+const Form = styled('form')(({ theme }) => ({
+    width: '100%',
+    marginTop: theme.spacing(1),
+}));
+
+const SubmitButton = styled(Button)(({ theme }) => ({
+    margin: theme.spacing(3, 0, 2),
+}));
+
+const StyledIcon = styled(AlertIcon)({
+    flexShrink: 0,
+    marginLeft: '8px',
+});
 
 const Login = (props: { email: any; setEmail: any; password: any; setPassword: any; handleLogin: any; handleSignup: any; hasAccount: any; setHasAccount: any; emailError: any; passwordError: any; validated: any; alertHidden: any; }) => {
-    const classes = useStyles();
+
 
     const {
         email,
@@ -78,13 +103,18 @@ const Login = (props: { email: any; setEmail: any; password: any; setPassword: a
 
     return (
 
-        <>
+
+
+        <ThemeProvider theme={theme}>
+            {/* Your app content... */}
+
             <CssBaseline />
             <div className='d-flex' dir='rtl' style={{ alignItems: 'center', height: '100vh' }}>
 
                 <Container maxWidth="xs" className="shadow-sm border rounded">
+                    
+                    <StyledPaper>
 
-                    <div className={classes.paper}>
                         <ReactSVG className="mt-3" src={SvgLogo} />
 
                         <Typography
@@ -94,17 +124,23 @@ const Login = (props: { email: any; setEmail: any; password: any; setPassword: a
                             כניסת משתמש
                         </Typography>
 
+                        <Form noValidate={true} onSubmit={handleLogin}>
 
-                        <form className={classes.form} noValidate={true} onSubmit={handleLogin}>
 
                             {/* the CacheProvider set the RTL plugin all components inside tag*/}
-                            <CacheProvider value={cacheRtl}>
 
-                                <Alert className="mt-3" sx={{ fontSize: 'small' }} variant="outlined" severity="error" hidden={alertHidden}>
-                                    אחד או יותר מפרטי ההזדהות שמסרת שגויים.
+
+                            <Alert  className="mt-3" 
+                            sx={{display: 'flex', justifyContent: 'start'}}
+                             variant="outlined" severity="error" hidden={alertHidden}
+                             icon={<StyledIcon/>}
+                             >
+                                לא ניתן לאפס סיסמה לאימייל זה.
                                 </Alert>
+                               
+                          
 
-                            </CacheProvider>
+
 
                             <StyledTextField
                                 className="mt-3"
@@ -158,23 +194,25 @@ const Login = (props: { email: any; setEmail: any; password: any; setPassword: a
                             </Grid>
 
                             <div style={{ display: 'flex', justifyContent: 'center' }}>
-                                <Button
-                                    size="medium"
-                                    variant="contained"
-                                    color="primary"
-                                    type={"submit"}
-                                    className={classes.submit}
-                                >
-                                    התחבר
-                                </Button>
+                                <SubmitButton>
+                                    <Button
+                                        size="medium"
+                                        variant="contained"
+                                        color="primary"
+                                        type={"submit"}
+                                    >
+                                        התחבר
+                                    </Button>
+                                </SubmitButton>
                             </div>
-                        </form>
 
-                    </div>
+                        </Form>
 
+                    </StyledPaper>
                 </Container>
             </div>
-        </>
+
+        </ThemeProvider >
     );
 }
 
