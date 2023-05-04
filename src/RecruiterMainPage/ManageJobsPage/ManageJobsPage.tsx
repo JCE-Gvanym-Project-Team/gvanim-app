@@ -8,29 +8,29 @@ import { Search } from "react-bootstrap-icons";
 import AddOrUpdateJobPopup from "./Components/AddOrUpdateJobPopup/AddOrUpdateJobPopup";
 
 const TableContainer = () => {
-  const [data, setData] = useState({});
-  const [search, setSearch] = useState('');
-  const [filter, setFilter] = useState('');
-  const [sortOrder, setSortOrder] = useState('');
+    const [data, setData] = useState({});
+    const [search, setSearch] = useState('');
+    const [filter, setFilter] = useState('');
+    const [sortOrder, setSortOrder] = useState('');
 
-  useEffect(() => {
-    dataref.ref().child('jobs').on('value', (snapshot) => {
-      if (snapshot.val() !== null) {
-        setData({ ...snapshot.val() });
-      }
-      else {
-        setData({});
-      }
-    });
+    useEffect(() => {
+        dataref.ref().child('jobs').on('value', (snapshot) => {
+            if (snapshot.val() !== null) {
+                setData({ ...snapshot.val() });
+            }
+            else {
+                setData({});
+            }
+        });
 
-    return () => {
-      setData({});
-    };
-  }, []);
+        return () => {
+            setData({});
+        };
+    }, []);
 
 
   return (
-    <>
+      <>
 
       <Container className="mt-5">
 

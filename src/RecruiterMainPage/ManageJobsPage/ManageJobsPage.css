@@ -4,14 +4,16 @@ table {
     border-collapse: collapse;
     width: 98.7%;
   }
-  
+ 
   th, td {
     text-align: right;
     padding: 8px;
   }
-  
-  tr:nth-child(even){background-color: #f2f2f2}
-  
+
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+ 
   th {
     background-color: #4ca3af;
     color: white;

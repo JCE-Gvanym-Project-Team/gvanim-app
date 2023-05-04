@@ -1,7 +1,12 @@
-import React from 'react'
+import React from 'react';
+import ReportPageComponents from './Components/ReportPage/ReportPageComponents'
+
+
 
 export default function ReportsPage() {
   return (
-    <div>ReportsPage</div>
+    <>
+     <ReportPageComponents/>
+    </>
   )
 }

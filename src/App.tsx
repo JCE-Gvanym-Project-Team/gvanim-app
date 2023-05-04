@@ -3,36 +3,41 @@ import DrushimMainPage from './DrushimMainPage/DrushimMainPage';
 import AdminMainPage from './AdminMainPage/AdminMainPage';
 import RecruiterMainPage from './RecruiterMainPage/RecruiterMainPage';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import PasswordRecover from './RecruiterMainPage/Components/PasswordRecoveryPage/PasswordRecoveryPage';
-import Auth from './RecruiterMainPage/Components/Auth/Auth';
-import { Route, Routes } from 'react-router-dom';
+import {HashRouter, Route, Routes, Link } from "react-router-dom"
+
+import ManageCandidatesPage from './RecruiterMainPage/ManageCandidatesPage/ManageCandidatesPage';
+import ManageJobsPage from './RecruiterMainPage/ManageJobsPage/ManageJobsPage';
+import ReportsPage from './RecruiterMainPage/ReportsPage/ReportsPage';
+import NavBar from './Components/NavBar/NavBar';
 
 const Admin = "admin";
 const Recruiter = "recruiter";
 
 function App() {
-  // const currentUser = "recruiter";
-  return (
-    <Routes>
-      <Route path='/' element={<Auth />} />
-      <Route path='/Recovery' element={<PasswordRecover />} />
-      {/* <RecruiterMainPage handlelogout={undefined} /> */}
-      {/* {decidePage(currentUser)} */}
-    </Routes>
-
-
-
-  );
+	const currentUser = "recruiter";
+	return (
+		<>
+			<HashRouter>
+			<NavBar />
+				<Routes>
+					<Route path="/" element={<RecruiterMainPage />} />
+					<Route path="/manageCandidates" element={<ManageCandidatesPage />} />
+					<Route path="/manageJobs" element={<ManageJobsPage />} />
+					<Route path="/reports" element={<ReportsPage />} />
+				</Routes>
+			</HashRouter>
+		</>
+	);
 }
 
-function decidePage(currentUser: any) {
-  if (currentUser === Admin) {
+function decidePage(currentUser: any){
+  if (currentUser === Admin){
     return (<AdminMainPage />)
-  } else if (currentUser === Recruiter) {
+  }else if (currentUser === Recruiter){
     return (
-      <RecruiterMainPage handlelogout={undefined} />
+      <RecruiterMainPage />
     )
-  } else {
+  }else{
     return (
       <DrushimMainPage />
     )
