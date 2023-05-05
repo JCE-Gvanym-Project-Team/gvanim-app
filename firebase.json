@@ -18,11 +18,11 @@
     },
     "headers": [
       {
-        "source": "**/*.css",
+        "source": "**/*.@(js|css)",
         "headers": [
           {
-            "key": "Content-Type",
-            "value": "text/css"
+            "key": "Cache-Control",
+            "value": "max-age=31536000"
           }
         ]
       }
