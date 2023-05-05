@@ -5,16 +5,16 @@ import 'firebase/compat/database';
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    apiKey: "AIzaSyDEPcK1YMpgMMFkPMtI_netoT7V-w6o08A",
-    authDomain: "gvanim-391b9.firebaseapp.com",
-    databaseURL: "https://gvanim-391b9-default-rtdb.firebaseio.com",
-    projectId: "gvanim-391b9",
-    storageBucket: "gvanim-391b9.appspot.com",
-    messagingSenderId: "548216440326",
-    appId: "1:548216440326:web:945c0da4f5be515a5ee587",
-    measurementId: "G-Y0Z9S38RHJ"
-  };
-  
+	apiKey: process.env.REACT_APP_API_KEY,
+	authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+	databaseURL: process.env.REACT_APP_DATABASE_URL,
+	projectId: process.env.REACT_APP_PROJECT_ID,
+	storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+	messagingSenderId: process.env.REACT_APP_NESSAGING_SENDER_ID,
+	appId: process.env.REACT_APP_APP_ID,
+	measurementId: process.env.REACT_APP_MESUREMENT_ID
+};
+
 firebase.initializeApp(firebaseConfig);
 export const dataref = firebase.database();
 
