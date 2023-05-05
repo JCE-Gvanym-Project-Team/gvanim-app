@@ -6,7 +6,6 @@ import Circles from "./Components/Circles";
 function RecruiterMainPage() {
   return (
       <div className="recruiter-main-page">
-        <h1>this is test deploy</h1>
         <Buttons />
         <Circles />
       </div>
