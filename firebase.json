@@ -11,11 +11,22 @@
           "source": "**",
           "destination": "/index.html"
       }
-  ],
-  "mime": {
-    "type": "text/javascript",
-    "source": "**/*.js"
-  }
+    ],
+    "mime": {
+      "type": "text/javascript",
+      "source": "**/*.js"
+    },
+    "headers": [
+      {
+        "source": "**/*.css",
+        "headers": [
+          {
+            "key": "Content-Type",
+            "value": "text/css"
+          }
+        ]
+      }
+    ]
   },
   "storage": {
     "rules": "storage.rules"
