@@ -8,23 +8,8 @@
     ],
     "rewrites": [
       {
-          "source": "**",
-          "destination": "/index.html"
-      }
-    ],
-    "mime": {
-      "type": "text/javascript",
-      "source": "**/*.js"
-    },
-    "headers": [
-      {
-        "source": "**/*.@(js|css)",
-        "headers": [
-          {
-            "key": "Cache-Control",
-            "value": "max-age=31536000"
-          }
-        ]
+        "source": "**",
+        "destination": "/index.html"
       }
     ]
   },
