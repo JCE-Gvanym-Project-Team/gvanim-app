@@ -9,6 +9,14 @@ import ManageJobsPage from './RecruiterMainPage/ManageJobsPage/ManageJobsPage';
 import ReportsPage from './RecruiterMainPage/ReportsPage/ReportsPage';
 import { Router } from 'express';
 import NavBar from './Components/NavBar/NavBar';
+import firebase from "firebase/compat/app";
+import "firebase/database";
+import { firebaseConfig } from './FirebaseConfig/firebase';
+import { getAllDB, getData } from './func';
+
+firebase.initializeApp(firebaseConfig);
+
+getData("/Jobs");
 
 const Admin = "admin";
 const Recruiter = "recruiter";

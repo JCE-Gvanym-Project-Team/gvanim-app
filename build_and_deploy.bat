@@ -1,12 +1,14 @@
 @echo off
-npm run build
+call npm run build
 setlocal enabledelayedexpansion
 
 set search=/gvanim-app/
 set replacement=
 
-set inputfile=build/index.html
-set outputfile=build/index_modified.html
+cd build
+
+set inputfile=index.html
+set outputfile=index_modified.html
 
 if exist %outputfile% del %outputfile%
 
@@ -19,7 +21,9 @@ for /f "tokens=*" %%a in ('type "%inputfile%" ^| find /v ""') do (
 del %inputfile%
 ren %outputfile% %inputfile%
 
-firebase deploy
+cd ..
+
+call firebase deploy
 
 echo deployed!
 pause

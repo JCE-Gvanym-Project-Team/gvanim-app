@@ -4,7 +4,7 @@ import 'firebase/compat/database';
 
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
+export const firebaseConfig = {
 	apiKey: process.env.REACT_APP_API_KEY,
 	authDomain: process.env.REACT_APP_AUTH_DOMAIN,
 	databaseURL: process.env.REACT_APP_DATABASE_URL,
