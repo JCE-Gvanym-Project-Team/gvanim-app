@@ -11,7 +11,7 @@ function RecruiterMainPage({ handlelogout }) {
     <>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <div>
-          <Typography>ברוך הבא חנון</Typography>
+          <Typography>ברוך הבא</Typography>
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             <Button type="submit" variant="outlined" onClick={handlelogout}>התנתק</Button>
           </div>
