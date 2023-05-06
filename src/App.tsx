@@ -9,6 +9,8 @@ import ManageCandidatesPage from './RecruiterMainPage/ManageCandidatesPage/Manag
 import ManageJobsPage from './RecruiterMainPage/ManageJobsPage/ManageJobsPage';
 import ReportsPage from './RecruiterMainPage/ReportsPage/ReportsPage';
 import NavBar from './Components/NavBar/NavBar';
+import LoginPage from './RecruiterMainPage/LoginPage/LoginPage';
+import PasswordRecover from './RecruiterMainPage/LoginPage/PasswordRecoveryPage/PasswordRecoveryPage';
 
 const Admin = "admin";
 const Recruiter = "recruiter";
@@ -20,6 +22,8 @@ function App() {
 			<HashRouter>
 			<NavBar />
 				<Routes>
+				<Route path="/recovery" element={<PasswordRecover />} />
+					<Route path="/login" element={<LoginPage />} />
 					<Route path="/" element={<RecruiterMainPage />} />
 					<Route path="/manageCandidates" element={<ManageCandidatesPage />} />
 					<Route path="/manageJobs" element={<ManageJobsPage />} />

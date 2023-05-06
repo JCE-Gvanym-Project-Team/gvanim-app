@@ -42,6 +42,7 @@ const StyledIcon = styled(AlertIcon)({
 });
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
+    boxShadow: 'unset',
     padding: theme.spacing(2),
     display: 'flex',
     flexDirection: 'column',
@@ -84,7 +85,7 @@ const PasswordRecover = () => {
                     <StyledPaper>
                         <ReactSVG className="mt-3" src={SvgLogo} />
 
-                        <Form>
+                        <Form noValidate={true} onSubmit={handleResetPassword}>
 
 
                             <Typography
@@ -96,14 +97,19 @@ const PasswordRecover = () => {
 
 
 
-                            <Alert className="mt-3" sx={{ fontSize: 'small' }} variant="outlined" severity="success" hidden={!validated}>
-                                בדוק את תיבת האימייל שלך, נשלח לך הוראות ליצירת סיסמה חדשה.
+                            <Alert className="mt-3" sx={{ fontSize: 'small' }} style={{ padding: '5px' }} variant="outlined" severity="success" hidden={!validated}>
+
+                                <div style={{ marginRight: '10px' }}>
+                                    בדוק את תיבת האימייל שלך, נשלח לך הוראות ליצירת סיסמה חדשה.
+                                </div>
                             </Alert>
 
 
 
-                            <Alert className="mt-3" sx={{ fontSize: 'small' }} variant="outlined" severity="error" hidden={!invalidEmail}>
-                                לא ניתן לאפס סיסמה לאימייל זה.
+                            <Alert className="mt-3" sx={{ fontSize: 'small' }} style={{ padding: '5px' }} variant="outlined" severity="error" hidden={!invalidEmail}>
+                                <div style={{ marginRight: '10px' }}>
+                                    לא ניתן לאפס סיסמה לאימייל זה.
+                                </div>
                             </Alert>
 
 
@@ -134,8 +140,8 @@ const PasswordRecover = () => {
                                 <FormHelperText hidden={!emailError} security="invalid" style={{ color: '#ef5350', textAlign: 'right' }}>זהו שדה חובה.</FormHelperText>
 
                                 <div style={{ display: 'flex', justifyContent: 'center' }}>
-                                    <SubmitButton>
-                                        <Button
+                                    
+                                        <SubmitButton
                                             dir="ltr"
                                             size="medium"
                                             variant="contained"
@@ -143,8 +149,7 @@ const PasswordRecover = () => {
                                             type={"submit"}
                                         >
                                             המשך
-                                        </Button>
-                                    </SubmitButton>
+                                        </SubmitButton>
                                 </div>
 
                             </Collapse>

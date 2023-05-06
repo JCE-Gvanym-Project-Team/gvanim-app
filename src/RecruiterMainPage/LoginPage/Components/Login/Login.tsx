@@ -18,7 +18,7 @@ import AlertIcon from '@mui/icons-material/Info';
 
 // svg importer
 import { ReactSVG } from "react-svg";
-import SvgLogo from "../../../Components/Logo/gvanim_logo_svg.svg"
+import SvgLogo from "../../../../Components/Logo/gvanim_logo_svg.svg"
 // -----------------------------------------------------------------
 
 
@@ -61,7 +61,7 @@ const StyledTextField = styled(TextField)({
 
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
-    borderStyle: 'solid',
+    boxShadow: 'unset',
     padding: theme.spacing(2),
     display: 'flex',
     flexDirection: 'column',
@@ -105,8 +105,8 @@ const Login = (props: { email: any; setEmail: any; password: any; setPassword: a
 
 
 
-        <ThemeProvider theme={theme}>
-            {/* Your app content... */}
+        <div>
+      
 
             <CssBaseline />
             <div className='d-flex' dir='rtl' style={{ alignItems: 'center', height: '100vh' }}>
@@ -129,15 +129,12 @@ const Login = (props: { email: any; setEmail: any; password: any; setPassword: a
 
                             {/* the CacheProvider set the RTL plugin all components inside tag*/}
 
-
-                            <Alert  className="mt-3" 
-                            sx={{display: 'flex', justifyContent: 'start'}}
-                             variant="outlined" severity="error" hidden={alertHidden}
-                             icon={<StyledIcon/>}
-                             >
-                                לא ניתן לאפס סיסמה לאימייל זה.
-                                </Alert>
-                               
+                            <Alert className="mt-3" sx={{ fontSize: 'small' }} style={{ padding: '5px' }} variant="outlined" severity="error" hidden={alertHidden}>
+                                <div style={{ marginRight: '10px' }}>
+                                    אחד או יותר מפרטי ההזדהות שמסרת שגויים.
+                                </div>
+                            </Alert>
+                            
                           
 
 
@@ -173,7 +170,7 @@ const Login = (props: { email: any; setEmail: any; password: any; setPassword: a
 
                             <Grid container className="mt-2">
                                 <Grid item>
-                                    <Link type="submit" href={"/Recovery"} variant="caption">
+                                    <Link type="submit" href={"/#/recovery"} variant="caption">
                                         שכחת את הסיסמה?
                                     </Link>
                                 </Grid>
@@ -194,16 +191,14 @@ const Login = (props: { email: any; setEmail: any; password: any; setPassword: a
                             </Grid>
 
                             <div style={{ display: 'flex', justifyContent: 'center' }}>
-                                <SubmitButton>
-                                    <Button
+                                    <SubmitButton
                                         size="medium"
                                         variant="contained"
                                         color="primary"
                                         type={"submit"}
                                     >
                                         התחבר
-                                    </Button>
-                                </SubmitButton>
+                                    </SubmitButton>
                             </div>
 
                         </Form>
@@ -212,7 +207,7 @@ const Login = (props: { email: any; setEmail: any; password: any; setPassword: a
                 </Container>
             </div>
 
-        </ThemeProvider >
+        </div >
     );
 }
 
