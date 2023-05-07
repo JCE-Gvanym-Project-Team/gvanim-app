@@ -12,7 +12,6 @@ const AppBar = styled(MuiAppBar)({
   "& .active": {
     fontWeight: "bold",
   },
-  // make it stick to the top of the page
   position: "fixed",
   top: 0,
   left: 0,
@@ -53,11 +52,9 @@ export default function NavBarDe({ activePage, handleClick }: NavBarDeProps) {
   return (
     <AppBar position="static">
       {" "}
-      // make it stick to the top of the page
       <Toolbar sx={{ justifyContent: "space-between" }}>
         <NavLink to="/">
           {" "}
-          // make the logo clickable and redirect to the main page
           <img src={logo} className="logo" alt="Logo" height={100} />
         </NavLink>
         <div>
