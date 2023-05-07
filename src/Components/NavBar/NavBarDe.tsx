@@ -59,11 +59,11 @@ export default function NavBarDe({ activePage, handleClick }: NavBarDeProps) {
         </NavLink>
         <div>
           <NavItem // make the buttons clickable and redirect to the relevant page
-            to="/reportsPage"
+            to="/reports"
             className={`nav-item nav-link ${
-              activePage === "reportsPage" ? "active" : ""
+              activePage === "reports" ? "active" : ""
             }`}
-            onClick={() => handleClick("reportsPage")}
+            onClick={() => handleClick("reports")}
           >
             דוחות
           </NavItem>
