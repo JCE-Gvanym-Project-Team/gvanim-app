@@ -1,7 +1,10 @@
 import React from 'react'
+import { Container } from 'react-bootstrap'
 
 export default function ViewCandidatesPage() {
-  return (
-    <div>ViewCandidatesPage</div>
-  )
+	return (
+		<Container>
+			
+		</Container>
+	)
 }
