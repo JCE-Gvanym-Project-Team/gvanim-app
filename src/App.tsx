@@ -3,7 +3,7 @@ import DrushimMainPage from './DrushimMainPage/DrushimMainPage';
 import AdminMainPage from './AdminMainPage/AdminMainPage';
 import RecruiterMainPage from './RecruiterMainPage/RecruiterMainPage';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {HashRouter, Route, Routes, Link } from "react-router-dom"
+import { HashRouter, Route, Routes, Link } from "react-router-dom"
 import ManageCandidatesPage from './RecruiterMainPage/ManageCandidatesPage/ManageCandidatesPage';
 import ManageJobsPage from './RecruiterMainPage/ManageJobsPage/ManageJobsPage';
 import ReportsPage from './RecruiterMainPage/ReportsPage/ReportsPage';
@@ -12,12 +12,16 @@ import NavBar from './Components/NavBar/NavBar';
 import firebase from "firebase/compat/app";
 import "firebase/database";
 import { firebaseConfig } from './FirebaseConfig/firebase';
-import { getAllDB, getData } from './func';
+import { main } from './DBfuncs';
 
 firebase.initializeApp(firebaseConfig);
-
-getData("/Jobs");
-
+main();
+/*
+get_job_number();
+getHeapArray();
+get_job_number();
+getHeapArray();
+*/
 const Admin = "admin";
 const Recruiter = "recruiter";
 
@@ -26,7 +30,7 @@ function App() {
 	return (
 		<>
 			<HashRouter>
-			<NavBar />
+				<NavBar />
 				<Routes>
 					<Route path="/" element={<RecruiterMainPage />} />
 					<Route path="/manageCandidates" element={<ManageCandidatesPage />} />
@@ -34,6 +38,7 @@ function App() {
 					<Route path="/reports" element={<ReportsPage />} />
 				</Routes>
 			</HashRouter>
+			
 		</>
 	);
 }
