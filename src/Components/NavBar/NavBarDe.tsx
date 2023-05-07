@@ -3,46 +3,65 @@ import MuiAppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import { NavLink } from "react-router-dom";
 import logo from "./logo.png";
+import React, { Component } from "react";
 
+// design for the navbar
 const AppBar = styled(MuiAppBar)({
   color: "black",
   backgroundColor: "#ADD8E6",
   "& .active": {
     fontWeight: "bold",
   },
-  position: "fixed", // add this line
-  top: 0, // add this line
-  left: 0, // add this line
-  right: 0, // add this line
+  // make it stick to the top of the page
+  position: "fixed",
+  top: 0,
+  left: 0,
+  right: 0,
 });
 
+// design for the navbar items (links and the written on the buttons)
 const NavItem = styled(NavLink)(({ theme }) => ({
   fontSize: "1.2rem",
-  display: "inline-block",
+  display: "inline-block", // make the buttons appear in one line
   marginRight: "1rem",
   color: "white",
   backgroundColor: "#silver",
   textDecoration: "none",
   "&.active": {
+    // when the button is active (clicked) make it bold and change the color
     fontWeight: "bold",
+    color: "#00008b",
   },
-  "&:hover": {
-    color: "blue",
-  },
+
   [theme.breakpoints.down("sm")]: {
+    // when the screen is small (mobile) make the buttons appear in a column
     marginRight: 0,
   },
 }));
 
-export default function NavBarDe({ activePage, handleClick }) {
+interface NavBarDeProps {
+  // interface for the navbar
+  activePage: string;
+  handleClick: (page: string) => void;
+}
+
+// The NavBarDe component is a functional component
+// that receives the activePage and handleClick
+// props from the NavBar component.
+// It renders the AppBar and Toolbar components as well
+export default function NavBarDe({ activePage, handleClick }: NavBarDeProps) {
   return (
     <AppBar position="static">
+      {" "}
+      // make it stick to the top of the page
       <Toolbar sx={{ justifyContent: "space-between" }}>
         <NavLink to="/">
+          {" "}
+          // make the logo clickable and redirect to the main page
           <img src={logo} className="logo" alt="Logo" height={100} />
         </NavLink>
         <div>
-          <NavItem
+          <NavItem // make the buttons clickable and redirect to the relevant page
             to="/reportsPage"
             className={`nav-item nav-link ${
               activePage === "reportsPage" ? "active" : ""
