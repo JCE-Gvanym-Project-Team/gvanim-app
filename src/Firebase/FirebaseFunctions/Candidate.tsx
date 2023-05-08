@@ -1,4 +1,6 @@
 import { dataref } from "../FirebaseConfig/firebase";
+import { getFilteredCandidateJobStatuses } from "./CandidateJobStatus";
+import { getFilteredJobs, Job } from "./Job";
 const database = dataref;
 export class Candidate {
     public _id: string;
@@ -15,6 +17,13 @@ export class Candidate {
         this._phone = phone;
         this._eMail = eMail;
         this._generalRating = generalRating;
+    }
+    public async getAppliedJobs(): Promise<Job[]>{
+        let jobs;
+        let statArr = await getFilteredCandidateJobStatuses(["candidateID"],[this._id]);
+        let jobIds = statArr.map((stat)=>stat._jobNumber);
+        jobIds.forEach((id)=>jobs.push(getFilteredJobs(["jobNumber"],[id.toString()])));
+        return jobs;
     }
 }
 async function getCandidatesFromDatabase(): Promise<Candidate[]> {
@@ -33,7 +42,7 @@ async function getCandidatesFromDatabase(): Promise<Candidate[]> {
         throw new Error("Failed to fetch candidates from database.");
     }
 }
-export async function getFilteredCandidates(attributes: string[] = [], values: string[] = [], sortBy: string = "") {
+export async function getFilteredCandidates(attributes: string[] = [], values: string[] = [], sortBy: string = ""): Promise<Candidate[]>{
     if (attributes.length !== values.length) {
         console.log("the attributes length not match to values length")
         return [];

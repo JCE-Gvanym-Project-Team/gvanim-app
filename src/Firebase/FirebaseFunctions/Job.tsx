@@ -1,4 +1,6 @@
+import { CandidateJobStatus, getFilteredCandidateJobStatuses } from "./CandidateJobStatus";
 import { dataref } from "../FirebaseConfig/firebase";
+import { Candidate, getFilteredCandidates } from "./Candidate";
 const database = dataref;
 
 export class Job {
@@ -41,9 +43,9 @@ export class Job {
         this._creationDate = new Date();
         this._jobNumber = jobNumber;
         if (jobNumber === -1)
-            this.get_job_number().then((num) => this._jobNumber = num);
+            this.generateJobNumber().then((num) => this._jobNumber = num);
     }
-    private async get_job_number(): Promise<number> {
+    private async generateJobNumber(): Promise<number> {
         const jobs = await getFilteredJobs();
         const len = jobs.length;
         const jobNumber: number[] = jobs.map((job) => job._jobNumber);
@@ -54,6 +56,17 @@ export class Job {
             num = Math.floor(Math.random() * (max - min + 1)) + min;
         }
         return num;
+    }
+    public async getCandidatures(): Promise<CandidateJobStatus[]> {
+        let candidatures = await getFilteredCandidateJobStatuses(["jobNumber"],[this._jobNumber.toString()]);
+        return candidatures;
+    }
+    public async getCandidates(): Promise<Candidate[]> {
+        let candidates;
+        let candidtesId = (await this.getCandidatures()).map((obj)=>obj._candidateId);
+        candidtesId = Array.from(new Set(candidtesId));
+        candidtesId.forEach((id)=>candidates.push(getFilteredCandidates(["id"],[id])[0]))
+        return candidates;
     }
 }
 /* Jobs functions */
