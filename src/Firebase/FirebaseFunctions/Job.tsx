@@ -1,6 +1,7 @@
-import { CandidateJobStatus, getFilteredCandidateJobStatuses } from "./CandidateJobStatus";
+import { CandidateJobStatus, getFilteredCandidateJobStatuses,removeCandidateJobStatus } from "./CandidateJobStatus";
 import { dataref } from "../FirebaseConfig/firebase";
 import { Candidate, getFilteredCandidates } from "./Candidate";
+import { getFirebaseIdsAtPath, getObjectAtPath, removeObjectAtPath } from "./DBfuncs";
 const database = dataref;
 
 export class Job{
@@ -99,7 +100,22 @@ async function getJobsFromDatabase(): Promise<Job[]> {
 async function getJobs() {
     return getJobsFromDatabase();
 }
-
+export async function removeJob(jobNumber: number){
+    removeCandidateJobStatus("", jobNumber);
+    let jobIds = await getFirebaseIdsAtPath("/Jobs");
+    jobIds.forEach(async (id)=>{
+        if((await getObjectAtPath("/Jobs/"+id))._jobNumber===jobNumber) removeObjectAtPath("/Jobs/"+id);
+    });
+}
+export async function getCandidatePath(jobNumber: number){
+    let firebaseId = "";
+    let jobIds = await getFirebaseIdsAtPath("/Jobs");
+    jobIds.forEach(async (id)=>{
+        if(((await getObjectAtPath("/Jobs/"+id))._jobNumber===jobNumber)) 
+            firebaseId = id;
+    });
+    return "/Jobs/"+firebaseId;
+}
 /**
  * Filters the list of jobs based on the given attributes and values, and sorts the result
  * @param {string[]} [attributes=[]] - An array of attributes name to filter by.

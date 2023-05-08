@@ -1,5 +1,6 @@
 import { dataref } from "../FirebaseConfig/firebase";
 import { Recomendation } from './Recomendation';
+import { getObjectAtPath, removeObjectAtPath, getFirebaseIdsAtPath, replaceData } from "./DBfuncs";
 import { Candidate } from './Candidate';
 import { Job } from './Job';
 const database = dataref;
@@ -35,13 +36,13 @@ export class CandidateJobStatus{
         this._about=about;
         this._recomendations = recomendations;
     }
-    public addRecomendation(fullName: string, phone: string, eMail: string, recomendation: string){
+    public async addRecomendation(fullName: string, phone: string, eMail: string, recomendation: string){
         if(this._recomendations.length>=10)
             return;
         if(this._recomendations.map((rec)=>rec._phone).includes(phone))
             return;
         this._recomendations.push(new Recomendation(fullName, phone, eMail, recomendation));
-
+        replaceData((await getCandidateJobStatusPath(this._candidateId,this._jobNumber)),this);
     }
     public getNumOfInterviews(){
         return this._interviewsSummery.length;
@@ -67,6 +68,24 @@ async function getCandidateJobStatusFromDatabase(): Promise<CandidateJobStatus[]
         console.error(error);
         throw new Error("Failed to fetch candidate job statuses from database.");
     }
+}
+export async function getCandidateJobStatusPath(candId: string, jobNumber: number){
+    let firebaseId = "";
+    let candidateIds = await getFirebaseIdsAtPath("/CandidatesJobStatus");
+    candidateIds.forEach(async (id)=>{
+        if(((await getObjectAtPath("/CandidatesJobStatus/"+id))._candidateId===candId)&& 
+        ((await getObjectAtPath("/CandidatesJobStatus/"+id))._jobNumber===jobNumber)) 
+            firebaseId = id;
+    });
+    return "/CandidatesJobStatus/"+firebaseId;
+}
+export async function removeCandidateJobStatus(candId: string="",jobNumber: number = -1){
+    let candidateIds = await getFirebaseIdsAtPath("/CandidatesJobStatus");
+    candidateIds.forEach(async (id)=>{
+        if(((await getObjectAtPath("/CandidatesJobStatus/"+id))._candidateId===candId || candId==="")&& 
+        ((await getObjectAtPath("/CandidatesJobStatus/"+id))._jobNumber===jobNumber || jobNumber===-1)) 
+        removeObjectAtPath("/CandidatesJobStatus/"+id);
+    });
 }
 export async function getFilteredCandidateJobStatuses(attributes: string[] = [], values: string[] = [], sortBy: string = "") {
     if (attributes.length !== values.length) {

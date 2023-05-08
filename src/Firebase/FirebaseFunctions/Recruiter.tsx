@@ -1,4 +1,5 @@
 import { dataref } from "../FirebaseConfig/firebase";
+import { getObjectAtPath, removeObjectAtPath, getFirebaseIdsAtPath } from "./DBfuncs";
 const database = dataref;
 
 export class Recruiter {
@@ -13,6 +14,12 @@ export class Recruiter {
 		this._lastName = lastName;
 		this._sectors = sectors;
 	}
+}
+export async function removeRecruiter(userName: Number){
+    let recruitersIds = await getFirebaseIdsAtPath("/Recruiters");
+    recruitersIds.forEach(async (id)=>{
+        if((await getObjectAtPath("/Recruiters/"+id))._userName===userName) removeObjectAtPath("/Recruiters/"+id);
+    });
 }
 async function getRecruitersFromDatabase(): Promise<Recruiter[]> {
 	const database = dataref;

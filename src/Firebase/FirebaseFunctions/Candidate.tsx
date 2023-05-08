@@ -1,5 +1,6 @@
 import { dataref } from "../FirebaseConfig/firebase";
-import { CandidateJobStatus, getFilteredCandidateJobStatuses } from "./CandidateJobStatus";
+import { CandidateJobStatus, getFilteredCandidateJobStatuses,removeCandidateJobStatus } from "./CandidateJobStatus";
+import { getObjectAtPath, removeObjectAtPath, getFirebaseIdsAtPath } from "./DBfuncs";
 import { getFilteredJobs, Job } from "./Job";
 const database = dataref;
 export class Candidate {
@@ -33,6 +34,15 @@ export class Candidate {
         return candidatures;
     }
 }
+export async function getCandidatePath(candId: string){
+    let firebaseId = "";
+    let candidateIds = await getFirebaseIdsAtPath("/Candidates");
+    candidateIds.forEach(async (id)=>{
+        if(((await getObjectAtPath("/Candidates/"+id))._id===candId)) 
+            firebaseId = id;
+    });
+    return "/Candidates/"+firebaseId;
+}
 async function getCandidatesFromDatabase(): Promise<Candidate[]> {
     try {
         const snapshot = await database.ref("/Candidates").once("value");
@@ -47,6 +57,13 @@ async function getCandidatesFromDatabase(): Promise<Candidate[]> {
         console.error(error);
         throw new Error("Failed to fetch candidates from database.");
     }
+}
+export async function removeCandidate(candId: string){
+    removeCandidateJobStatus(candId);
+    let candidateIds = await getFirebaseIdsAtPath("/Candidates");
+    candidateIds.forEach(async (id)=>{
+        if((await getObjectAtPath("/Candidates/"+id))._userName===candId) removeObjectAtPath("/Candidates/"+id);
+    });
 }
 export async function getFilteredCandidates(attributes: string[] = [], values: string[] = [], sortBy: string = ""): Promise<Candidate[]>{
     if (attributes.length !== values.length) {

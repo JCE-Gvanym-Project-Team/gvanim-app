@@ -11,13 +11,17 @@ const database = dataref;
  * @param {string} path - The path to the data in the database.
  * @returns None
  */
-export function printData(path: string) {
-	const database = dataref;
-	const ref = database.ref(path);
-	ref.on("value", (snapshot) => {
-		const data = snapshot.val();
-		console.log(data);
-	});
+export async function getObjectAtPath(path: string): Promise<any> {
+	const snapshot = await database.ref(path).once('value');
+	return snapshot.val();
+}
+export async function removeObjectAtPath(path: string) {
+	try {
+		const ref = database.ref(path);
+		await ref.remove();
+	} catch (error) {
+		console.error("Error removing object:", error);
+	}
 }
 /**
  * Deletes data from the Firebase Realtime Database at the specified path.
@@ -35,7 +39,7 @@ function deleteData(path: string) {
  * @param {any} data - The data to replace the existing data with.
  * @returns None
  */
-function replaceData(path: string, data: any) {
+export function replaceData(path: string, data: any) {
 	const database = dataref;
 	const addRef = database.ref(path);
 	addRef.set(data);
