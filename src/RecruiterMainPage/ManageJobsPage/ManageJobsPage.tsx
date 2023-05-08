@@ -7,6 +7,7 @@ import JobRow from "./Components/JobRow/JobRow";
 import { Search } from "react-bootstrap-icons";
 import AddOrUpdateJobPopup from "./Components/AddOrUpdateJobPopup/AddOrUpdateJobPopup";
 
+
 const TableContainer = () => {
     const [data, setData] = useState({});
     const [search, setSearch] = useState('');
@@ -31,7 +32,6 @@ const TableContainer = () => {
 
     return (
         <>
-
             <Container className="mt-5">
                 <div className="d-flex flex-row bd-highlight" style={{ marginLeft: '10px' }}>
                     <div className="d-flex justify-content-start">
