@@ -53,13 +53,19 @@ export default function NavBarDe({ activePage, handleClick }: NavBarDeProps) {
 		<AppBar position="sticky">
 			{" "}
 			<Toolbar sx={{ justifyContent: "flex-start" }}>
-				<Box sx={{flex: 1}}>
+				<Box sx={{ flex: 1 }}>
 					<NavLink to="/" >
 						{" "}
-						<img src={logo} className="logo" alt="Logo" height={100} />
+						<img
+							src={logo}
+							className="logo"
+							alt="Logo"
+							height={90}
+							onClick={() => handleClick("recruiterMainPage")}
+						/>
 					</NavLink>
 				</Box>
-				<Box sx={{flex: 2}}>
+				<Box sx={{ flex: 2 }}>
 					<NavItem // make the buttons clickable and redirect to the relevant page
 						to="/reports"
 						className={`nav-item nav-link ${activePage === "reports" ? "active" : ""
