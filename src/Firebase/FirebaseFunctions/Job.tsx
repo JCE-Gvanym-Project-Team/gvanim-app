@@ -3,7 +3,7 @@ import { dataref } from "../FirebaseConfig/firebase";
 import { Candidate, getFilteredCandidates } from "./Candidate";
 const database = dataref;
 
-export class Job {
+export class Job{
     public _title: string;
     public _jobNumber: number;
     public _role: string;

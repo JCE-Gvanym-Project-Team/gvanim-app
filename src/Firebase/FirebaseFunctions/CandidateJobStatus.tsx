@@ -3,7 +3,7 @@ import { Recomendation } from './Recomendation';
 import { Candidate } from './Candidate';
 import { Job } from './Job';
 const database = dataref;
-export class CandidateJobStatus {
+export class CandidateJobStatus{
     public _jobNumber: number;
     public _candidateId: string;
     public _status: string;
@@ -35,16 +35,13 @@ export class CandidateJobStatus {
         this._about=about;
         this._recomendations = recomendations;
     }
-
-    public linkJobCandidate(job: Job, candidate: Candidate) {
-        this._jobNumber = job._jobNumber;
-        this._candidateId = candidate._id;
-        this._status = 'הוגשה  מועמדות';
-        this._applyDate = new Date();
-        this._lastUpdate = new Date();
-    }
     public addRecomendation(fullName: string, phone: string, eMail: string, recomendation: string){
+        if(this._recomendations.length>=10)
+            return;
+        if(this._recomendations.map((rec)=>rec._phone).includes(phone))
+            return;
         this._recomendations.push(new Recomendation(fullName, phone, eMail, recomendation));
+
     }
     public getNumOfInterviews(){
         return this._interviewsSummery.length;

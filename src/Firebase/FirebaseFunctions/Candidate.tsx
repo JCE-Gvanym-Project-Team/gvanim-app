@@ -9,13 +9,15 @@ export class Candidate {
     public _phone: string;
     public _eMail: string;
     public _generalRating: number;
+    public _firebaseId: string;
 
-    constructor(firstName: string = "", lastName: string = "", phone: string = "", eMail: string = "", generalRating: number = -1) {
+    constructor(firstName: string = "", lastName: string = "", phone: string = "", eMail: string = "", generalRating: number = -1, firebaseId: string="") {
         this._id = eMail + phone;
         this._firstName = firstName;
         this._lastName = lastName;
         this._phone = phone;
         this._eMail = eMail;
+        this._firebaseId=firebaseId;
         this._generalRating = generalRating;
     }
     public async getAppliedJobs(): Promise<Job[]>{
