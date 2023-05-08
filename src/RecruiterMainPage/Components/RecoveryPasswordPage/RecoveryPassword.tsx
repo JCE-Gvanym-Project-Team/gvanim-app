@@ -14,7 +14,7 @@ import {
 import { styled } from '@mui/material/styles'
 
 //firebase
-import firebase1 from "../../../../FirebaseConfig/firebase";
+import firebase1 from "../../../FirebaseConfig/firebase";
 import "firebase/compat/auth";
 
 //react
@@ -22,7 +22,7 @@ import { useState } from "react";
 
 // svg importer
 import { ReactSVG } from "react-svg";
-import SvgLogo from "../../../../Components/Logo/Logo.svg"
+import SvgLogo from "../../../Components/Logo/Logo.svg"
 // -----------------------------------------------------------------
 
 

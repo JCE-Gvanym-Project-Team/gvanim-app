@@ -7,7 +7,6 @@ import JobRow from "./Components/JobRow/JobRow";
 import { Search } from "react-bootstrap-icons";
 import AddOrUpdateJobPopup from "./Components/AddOrUpdateJobPopup/AddOrUpdateJobPopup";
 
-
 const TableContainer = () => {
     const [data, setData] = useState({});
     const [search, setSearch] = useState('');
