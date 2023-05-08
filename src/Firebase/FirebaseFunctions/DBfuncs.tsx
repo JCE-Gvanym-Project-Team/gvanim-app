@@ -264,6 +264,6 @@ export async function main() {	//for debugging dont use
 	cjs1.link_job_candidate(j1, c1);
 	const r1 = new Recruiter("user123", "israel", "israeli", ["jerusalem"]);
 	*/
-	//let res = await getFilteredJob(["title"],["title"],"title");
-	//console.log(res);
+	let res = await getFilteredJobs(["title"],["title"],"title");
+	console.log(res);
 }

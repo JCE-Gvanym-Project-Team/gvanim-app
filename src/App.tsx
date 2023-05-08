@@ -9,6 +9,9 @@ import ManageJobsPage from './RecruiterMainPage/ManageJobsPage/ManageJobsPage';
 import ReportsPage from './RecruiterMainPage/ReportsPage/ReportsPage';
 import { Router } from 'express';
 import NavBar from './Components/NavBar/NavBar';
+import { main } from './Firebase/FirebaseFunctions/DBfuncs'
+
+main()
 
 const Admin = "admin";
 const Recruiter = "recruiter";

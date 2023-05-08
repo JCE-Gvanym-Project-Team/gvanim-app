@@ -42,8 +42,6 @@ export class Job {
 		if (jobNumber === -1)
 			this.get_job_number().then((num) => this._jobNumber = num);
 	}
-
-
 	private async get_job_number(): Promise<number> {
 		const jobs = await getFilteredJobs();
 		const len = jobs.length;
@@ -73,52 +71,6 @@ export class Candidate {
 		this._eMail = eMail;
 		this._generalRating = generalRating;
 	}
-
-	get id(): string {
-		return this._id;
-	}
-
-	get firstName(): string {
-		return this._firstName;
-	}
-
-	set firstName(value: string) {
-		this._firstName = value;
-	}
-
-	get lastName(): string {
-		return this._lastName;
-	}
-
-	set lastName(value: string) {
-		this._lastName = value;
-	}
-
-	get phone(): string {
-		return this._phone;
-	}
-
-	set phone(value: string) {
-		this._phone = value;
-		this._id = this._eMail + this._phone;
-	}
-
-	get eMail(): string {
-		return this._eMail;
-	}
-
-	set eMail(value: string) {
-		this._eMail = value;
-		this._id = this._eMail + this._phone;
-	}
-
-	get generalRating(): number {
-		return this._generalRating;
-	}
-
-	set generalRating(value: number) {
-		this._generalRating = value;
-	}
 }
 export class CandidateJobStatus {
 	public _jobNumber: number;
@@ -128,6 +80,7 @@ export class CandidateJobStatus {
 	public _applyDate: Date;
 	public _lastUpdate: Date;
 	public _interviewsSummery: Array<string>;
+	public _recomendations: Array<Recomendation>;
 
 	constructor(
 		jobNumber: number = -1,
@@ -136,7 +89,8 @@ export class CandidateJobStatus {
 		matchingRate: number = -1,
 		applyDate: Date = new Date(0, 0, 0),
 		lastUpdate: Date = new Date(0, 0, 0),
-		interviewsSummery: Array<string> = ["", ""]
+		interviewsSummery: Array<string> = ["", ""],
+		recomendations: Array<Recomendation>=[]
 	) {
 		this._jobNumber = jobNumber;
 		this._candidateId = candidateId;
@@ -145,66 +99,12 @@ export class CandidateJobStatus {
 		this._applyDate = applyDate;
 		this._lastUpdate = lastUpdate;
 		this._interviewsSummery = interviewsSummery;
+		this._recomendations = recomendations;
 	}
 
-	get jobNumber(): number {
-		return this._jobNumber;
-	}
-
-	set jobNumber(value: number) {
-		this._jobNumber = value;
-	}
-
-	get candidateId(): string {
-		return this._candidateId;
-	}
-
-	set candidateId(value: string) {
-		this._candidateId = value;
-	}
-
-	get status(): string {
-		return this._status;
-	}
-
-	set status(value: string) {
-		this._status = value;
-	}
-
-	get matchingRate(): number {
-		return this._matchingRate;
-	}
-
-	set matchingRate(value: number) {
-		this._matchingRate = value;
-	}
-
-	get applyDate(): Date {
-		return this._applyDate;
-	}
-
-	set applyDate(value: Date) {
-		this._applyDate = value;
-	}
-
-	get lastUpdate(): Date {
-		return this._lastUpdate;
-	}
-
-	set lastUpdate(value: Date) {
-		this._lastUpdate = value;
-	}
-
-	get interviewsSummery(): Array<string> {
-		return this._interviewsSummery;
-	}
-
-	set interviewsSummery(value: Array<string>) {
-		this._interviewsSummery = value;
-	}
 	public link_job_candidate(job: Job, candidate: Candidate) {
 		this._jobNumber = job._jobNumber;
-		this.candidateId = candidate.id;
+		this._candidateId = candidate._id;
 		this._status = 'הוגשה  מועמדות';
 		this._applyDate = new Date();
 		this._lastUpdate = new Date();
@@ -222,36 +122,17 @@ export class Recruiter {
 		this._lastName = lastName;
 		this._sectors = sectors;
 	}
+}
+export class Recomendation{
+	public _fullName: string;
+	public _phone: string;
+	public _eMail: string;
+	public _recomendation: string;
 
-	get userName(): string {
-		return this._userName;
-	}
-
-	set userName(value: string) {
-		this._userName = value;
-	}
-
-	get firstName(): string {
-		return this._firstName;
-	}
-
-	set firstName(value: string) {
-		this._firstName = value;
-	}
-
-	get lastName(): string {
-		return this._lastName;
-	}
-
-	set lastName(value: string) {
-		this._lastName = value;
-	}
-
-	get sectors(): Array<string> {
-		return this._sectors;
-	}
-
-	set sectors(value: Array<string>) {
-		this._sectors = value;
+	constructor(fullName: string, phone: string, eMail: string, recomendation: string){
+		this._fullName=fullName;
+		this._phone=phone;
+		this._eMail=eMail;
+		this._recomendation=recomendation;
 	}
 }
