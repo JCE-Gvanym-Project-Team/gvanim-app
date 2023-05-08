@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Grid, Container, Typography, Box, Stack } from '@mui/material'
+import { Button, Grid, Container, Typography, Box, Stack, Input, TextField } from '@mui/material'
 import EditIcon from '@mui/icons-material/Edit';
 import { editButtonStyle, textStyle, titleStyle, mainStackStyle } from './ViewCandidatesPageStyle';
 
@@ -9,7 +9,7 @@ export default function ViewCandidatesPage() {
 	return (
 		<>
 			<Container>
-				<Stack direction={'column'} sx={mainStackStyle} spacing={2}>
+				<Stack direction={'column'} sx={mainStackStyle} spacing={6}>
 					{/* Title */}
 					<Typography sx={titleStyle} variant='h2'>
 						ניהול משרות
@@ -19,7 +19,7 @@ export default function ViewCandidatesPage() {
 					 /* edit button to make them on the same line */}
 					<Box sx={{ display: 'flex', justifyContent: 'space-between', justifySelf: 'stretch', flexGrow: '1'}}>
 						{/* Candidate Name */}
-						<Typography sx={textStyle}>
+						<Typography sx={textStyle} variant='h4'>
 							שם: {candidateName}
 						</Typography>
 
@@ -34,6 +34,7 @@ export default function ViewCandidatesPage() {
 					<Typography sx={textStyle}>
 						משרות:
 					</Typography>
+					<TextField id="outlined-basic" label="היי" variant="outlined" />
 				</Stack>
 			</Container>
 		</>

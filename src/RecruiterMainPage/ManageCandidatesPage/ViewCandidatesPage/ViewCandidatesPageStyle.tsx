@@ -7,7 +7,7 @@ const editButtonStyle: SxProps = {
 }
 
 const textStyle: SxProps = {
-    color: 'blue'
+    color: 'black'
 }
 
 const titleStyle: SxProps = {
@@ -17,7 +17,7 @@ const titleStyle: SxProps = {
 
 const mainStackStyle: SxProps = {
     marginTop: '1rem',
-    justifyContent: 'flex-end'
+    justifyContent: 'space-between',
 }
 
 export {
