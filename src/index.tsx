@@ -12,7 +12,6 @@ import { CacheProvider } from '@emotion/react';
 import createCache from '@emotion/cache';
 
 // take care of RTL stuff
-
 const cacheRtl = createCache({
   key: 'muirtl',
   stylisPlugins: [prefixer, rtlPlugin],
