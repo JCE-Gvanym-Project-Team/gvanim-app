@@ -1,17 +1,18 @@
-import { getJobsFromDatabase } from "./DBfuncs";
+import { getFilteredJobs } from "./DBfuncs";
 
 export class Job {
-	private _title: string;
-	private _jobNumber: number;
-	private _role: string;
-	private _scope: Array<number>;
-	private _region: string;
-	private _sector: string;
-	private _description: string;
-	private _requirements: string;
-	private _open: boolean;
-	private _highPriority: boolean;
-	private _views: number;
+	public _title: string;
+	public _jobNumber: number;
+	public _role: string;
+	public _scope: Array<number>;
+	public _region: string;
+	public _sector: string;
+	public _description: string;
+	public _requirements: string;
+	public _open: boolean;
+	public _highPriority: boolean;
+	public _views: number;
+	public _creationDate: Date
 
 	constructor(
 		title: string = "",
@@ -36,121 +37,33 @@ export class Job {
 		this._open = open;
 		this._highPriority = highPriority;
 		this._views = views;
+		this._creationDate = new Date();
 		this._jobNumber = jobNumber;
 		if (jobNumber === -1)
 			this.get_job_number().then((num) => this._jobNumber = num);
 	}
 
-	// Getters
-	get title(): string {
-		return this._title;
-	}
-
-	get jobNumber(): number {
-		return this._jobNumber;
-	}
-
-	get role(): string {
-		return this._role;
-	}
-
-	get scope(): Array<number> {
-		return this._scope;
-	}
-
-	get region(): string {
-		return this._region;
-	}
-
-	get sector(): string {
-		return this._sector;
-	}
-
-	get description(): string {
-		return this._description;
-	}
-
-	get requirements(): string {
-		return this._requirements;
-	}
-
-	get open(): boolean {
-		return this._open;
-	}
-
-	get high_priority(): boolean {
-		return this._highPriority;
-	}
-
-	get views(): number {
-		return this._views;
-	}
-
-	// Setters
-	set title(value: string) {
-		this._title = value;
-	}
-
-	set role(value: string) {
-		this._role = value;
-	}
-
-	set scope(value: Array<number>) {
-		this._scope = value;
-	}
-
-	set region(value: string) {
-		this._region = value;
-	}
-
-	set sector(value: string) {
-		this._sector = value;
-	}
-
-	set description(value: string) {
-		this._description = value;
-	}
-
-	set requirements(value: string) {
-		this._requirements = value;
-	}
-
-	set open(value: boolean) {
-		this._open = value;
-	}
-
-	set high_priority(value: boolean) {
-		this._highPriority = value;
-	}
-
-	set jobNumber(value: number) {
-		this._jobNumber = value;
-	}
-
-	set views(value: number) {
-		this._views = value;
-	}
 
 	private async get_job_number(): Promise<number> {
-		const jobs = await getJobsFromDatabase();
+		const jobs = await getFilteredJobs();
 		const len = jobs.length;
-		const jobNumber: number[] = jobs.map((job) => job.jobNumber);
+		const jobNumber: number[] = jobs.map((job) => job._jobNumber);
 		const min = 10; // minimum number in range
 		const max = len + 100; // maximum number in range
 		let num = Math.floor(Math.random() * (max - min + 1)) + min; // generates a random number between 1 and 10
-		while (jobs.some(job => job.jobNumber === num)) {
+		while (jobs.some(job => job._jobNumber === num)) {
 			num = Math.floor(Math.random() * (max - min + 1)) + min;
 		}
 		return num;
 	}
 }
 export class Candidate {
-	private _id: string;
-	private _firstName: string;
-	private _lastName: string;
-	private _phone: string;
-	private _eMail: string;
-	private _generalRating: number;
+	public _id: string;
+	public _firstName: string;
+	public _lastName: string;
+	public _phone: string;
+	public _eMail: string;
+	public _generalRating: number;
 
 	constructor(firstName: string = "", lastName: string = "", phone: string = "", eMail: string = "", generalRating: number = -1) {
 		this._id = eMail + phone;
@@ -208,13 +121,13 @@ export class Candidate {
 	}
 }
 export class CandidateJobStatus {
-	private _jobNumber: number;
-	private _candidateId: string;
-	private _status: string;
-	private _matchingRate: number;
-	private _applyDate: Date;
-	private _lastUpdate: Date;
-	private _interviewsSummery: Array<string>;
+	public _jobNumber: number;
+	public _candidateId: string;
+	public _status: string;
+	public _matchingRate: number;
+	public _applyDate: Date;
+	public _lastUpdate: Date;
+	public _interviewsSummery: Array<string>;
 
 	constructor(
 		jobNumber: number = -1,
@@ -290,7 +203,7 @@ export class CandidateJobStatus {
 		this._interviewsSummery = value;
 	}
 	public link_job_candidate(job: Job, candidate: Candidate) {
-		this._jobNumber = job.jobNumber;
+		this._jobNumber = job._jobNumber;
 		this.candidateId = candidate.id;
 		this._status = 'הוגשה  מועמדות';
 		this._applyDate = new Date();
@@ -298,10 +211,10 @@ export class CandidateJobStatus {
 	}
 }
 export class Recruiter {
-	private _userName: string;
-	private _firstName: string;
-	private _lastName: string;
-	private _sectors: Array<string>;
+	public _userName: string;
+	public _firstName: string;
+	public _lastName: string;
+	public _sectors: Array<string>;
 
 	constructor(userName: string = "", firstName: string = "", lastName: string = "", sectors: Array<string> = []) {
 		this._userName = userName;

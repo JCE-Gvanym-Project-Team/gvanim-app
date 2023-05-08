@@ -16,12 +16,6 @@ import { main } from './DBfuncs';
 
 firebase.initializeApp(firebaseConfig);
 main();
-/*
-get_job_number();
-getHeapArray();
-get_job_number();
-getHeapArray();
-*/
 const Admin = "admin";
 const Recruiter = "recruiter";
 
