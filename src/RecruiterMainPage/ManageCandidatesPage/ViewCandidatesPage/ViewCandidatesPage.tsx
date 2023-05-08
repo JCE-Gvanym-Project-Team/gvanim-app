@@ -12,16 +12,23 @@ export default function ViewCandidatesPage() {
 				<Stack direction={'column'} sx={mainStackStyle} spacing={6}>
 					{/* Title */}
 					<Typography sx={titleStyle} variant='h2'>
-						ניהול משרות
+						צפייה במועמד
 					</Typography>
 
 					{/* Box for candidate name and 
 					 /* edit button to make them on the same line */}
-					<Box sx={{ display: 'flex', justifyContent: 'space-between', justifySelf: 'stretch', flexGrow: '1'}}>
+					<Box sx={{ display: 'flex', justifyContent: 'space-between', justifySelf: 'stretch', flexGrow: '1' }}>
+
 						{/* Candidate Name */}
-						<Typography sx={textStyle} variant='h4'>
-							שם: {candidateName}
-						</Typography>
+						<Box sx={{ display: 'flex', alignItems: 'baseline' }}>
+							<Typography sx={textStyle} variant='h4'>
+								שם:
+							</Typography>
+
+							<Typography sx={{ textDecoration: 'underline', marginLeft: '1rem' }} variant='h4' >
+								{candidateName}
+							</Typography>
+						</Box>
 
 						{/* Edit Button */}
 						<Button sx={editButtonStyle} variant="contained" startIcon={<EditIcon />}>
@@ -31,10 +38,12 @@ export default function ViewCandidatesPage() {
 
 
 					{/* Candidate Info Table */}
-					<Typography sx={textStyle}>
-						משרות:
-					</Typography>
-					<TextField id="outlined-basic" label="היי" variant="outlined" />
+					<Box>
+						<Typography sx={textStyle} variant='h4'>
+							משרות
+						</Typography>
+						
+					</Box>
 				</Stack>
 			</Container>
 		</>
