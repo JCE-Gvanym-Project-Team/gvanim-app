@@ -17,7 +17,7 @@ import {styled} from "@mui/material/styles";
 
 // svg importer
 import { ReactSVG } from "react-svg";
-import SvgLogo from "../../../../Components/Logo/Logo.svg"
+import SvgLogo from "../../Components/Logo/Logo.svg"
 // -----------------------------------------------------------------
 
 

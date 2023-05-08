@@ -1,8 +1,8 @@
-import Login from "../LoginPage/Login";
-import firebase1 from "../../../../FirebaseConfig/firebase";
+import Login from "../../LoginPage/LoginPage";
+import firebase1 from "../../../FirebaseConfig/firebase";
 import "firebase/compat/auth";
 import  { useEffect, useState } from "react"
-import RecruiterMainPageDemo from "../RecruiterMainPageDemo";
+import RecruiterMainPageDemo from "../../LoginPage/RecruiterMainPageDemo";
 
 
 export default function Auth () {
