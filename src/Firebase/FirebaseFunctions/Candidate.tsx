@@ -1,5 +1,5 @@
 import { dataref } from "../FirebaseConfig/firebase";
-import { getFilteredCandidateJobStatuses } from "./CandidateJobStatus";
+import { CandidateJobStatus, getFilteredCandidateJobStatuses } from "./CandidateJobStatus";
 import { getFilteredJobs, Job } from "./Job";
 const database = dataref;
 export class Candidate {
@@ -20,14 +20,18 @@ export class Candidate {
     }
     public async getAppliedJobs(): Promise<Job[]>{
         let jobs;
-        let statArr = await getFilteredCandidateJobStatuses(["candidateID"],[this._id]);
+        let statArr = await this.getCandidatures();
         let jobIds = statArr.map((stat)=>stat._jobNumber);
         jobIds.forEach((id)=>jobs.push(getFilteredJobs(["jobNumber"],[id.toString()])));
         return jobs;
     }
+    public async getCandidatures(): Promise<CandidateJobStatus[]>{
+        let candidatures;
+        candidatures = await getFilteredCandidateJobStatuses(["candidateID"],[this._id]);
+        return candidatures;
+    }
 }
 async function getCandidatesFromDatabase(): Promise<Candidate[]> {
-    const database = dataref;
     try {
         const snapshot = await database.ref("/Candidates").once("value");
         const candidatesData = snapshot.val();

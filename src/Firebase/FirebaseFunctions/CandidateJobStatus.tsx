@@ -33,12 +33,24 @@ export class CandidateJobStatus {
         this._recomendations = recomendations;
     }
 
-    public link_job_candidate(job: Job, candidate: Candidate) {
+    public linkJobCandidate(job: Job, candidate: Candidate) {
         this._jobNumber = job._jobNumber;
         this._candidateId = candidate._id;
         this._status = 'הוגשה  מועמדות';
         this._applyDate = new Date();
         this._lastUpdate = new Date();
+    }
+    public addRecomendation(fullName: string, phone: string, eMail: string, recomendation: string){
+        this._recomendations.push(new Recomendation(fullName, phone, eMail, recomendation));
+    }
+    public getNumOfInterviews(){
+        return this._interviewsSummery.length;
+    }
+    public editInterviewSummery(summery: string, index: number){
+        if(index>this.getNumOfInterviews())
+            this._interviewsSummery.push(summery);
+        else
+            this._interviewsSummery[index]=summery;
     }
 }
 async function getCandidateJobStatusFromDatabase(): Promise<CandidateJobStatus[]> {
