@@ -3,7 +3,6 @@ import MuiAppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import { NavLink } from "react-router-dom";
 import logo from "./logo.png";
-import React, { Component } from "react";
 
 // design for the navbar
 const AppBar = styled(MuiAppBar)({
