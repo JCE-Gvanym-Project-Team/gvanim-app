@@ -1,6 +1,6 @@
 import firebase from "firebase/app";
 import "firebase/database";
-import { dataref } from "./FirebaseConfig/firebase";
+import { dataref } from "../FirebaseConfig/firebase";
 import { Job, Candidate, CandidateJobStatus, Recruiter } from "./types";
 
 /**
