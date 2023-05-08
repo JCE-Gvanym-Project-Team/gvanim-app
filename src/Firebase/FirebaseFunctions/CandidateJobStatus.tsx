@@ -7,6 +7,7 @@ export class CandidateJobStatus {
     public _jobNumber: number;
     public _candidateId: string;
     public _status: string;
+    public _about: string;
     public _matchingRate: number;
     public _applyDate: Date;
     public _lastUpdate: Date;
@@ -17,6 +18,7 @@ export class CandidateJobStatus {
         jobNumber: number = -1,
         candidateId: string = "",
         status: string = "",
+        about:string="",
         matchingRate: number = -1,
         applyDate: Date = new Date(0, 0, 0),
         lastUpdate: Date = new Date(0, 0, 0),
@@ -30,6 +32,7 @@ export class CandidateJobStatus {
         this._applyDate = applyDate;
         this._lastUpdate = lastUpdate;
         this._interviewsSummery = interviewsSummery;
+        this._about=about;
         this._recomendations = recomendations;
     }
 

@@ -52,7 +52,7 @@ async function appendToDatabase(obj: any, path: string) {
 		console.error("Error adding object to database:", error);
 	}
 }
-
+export async function applyToJob(firstName: string, lastName: string, )
 export async function main() {	//for debugging dont use
 	/*
 	const j1 = new Job("title", "role", [0, 0], "region", "sector", "description", "req", true, false, 0, 23);
