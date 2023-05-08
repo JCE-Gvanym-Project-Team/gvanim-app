@@ -65,7 +65,7 @@ export default function NavBarDe({ activePage, handleClick }: NavBarDeProps) {
 						/>
 					</NavLink>
 				</Box>
-				<Box sx={{ flex: 2 }}>
+				<Box sx={{ flex: 2, display: 'flex'}}>
 					<NavItem // make the buttons clickable and redirect to the relevant page
 						to="/reports"
 						className={`nav-item nav-link ${activePage === "reports" ? "active" : ""
@@ -90,14 +90,17 @@ export default function NavBarDe({ activePage, handleClick }: NavBarDeProps) {
 					>
 						ניהול משרות
 					</NavItem>
-					<NavItem
-						to="/"
-						className={`nav-item nav-link ${activePage === "recruiterMainPage" ? "active" : ""
-							}`}
-						onClick={() => handleClick("recruiterMainPage")}
-					>
-						ראשי
-					</NavItem>
+					<Box sx={{ display: {xs: 'none', md: 'inherit'} }}>
+						<NavItem
+							to="/"
+							className={`nav-item nav-link ${activePage === "recruiterMainPage" ? "active" : ""
+								}`}
+							onClick={() => handleClick("recruiterMainPage")}
+
+						>
+							ראשי
+						</NavItem>
+					</Box>
 				</Box>
 			</Toolbar>
 		</AppBar>
