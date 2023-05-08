@@ -12,7 +12,7 @@ const AppBar = styled(MuiAppBar)({
   "& .active": {
     fontWeight: "bold",
   },
-  position: "fixed",
+  position: "sticky",
   top: 0,
   left: 0,
   right: 0,
