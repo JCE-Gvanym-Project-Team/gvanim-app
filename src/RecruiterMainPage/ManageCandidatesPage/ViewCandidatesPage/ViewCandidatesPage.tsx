@@ -1,31 +1,40 @@
 import React from 'react'
-import { Button, Grid, Container, Typography } from '@mui/material'
+import { Button, Grid, Container, Typography, Box, Stack } from '@mui/material'
 import EditIcon from '@mui/icons-material/Edit';
-import { editButtonStyle, nameStyle, mainGridStyle } from './ViewCandidatesPageStyle';
+import { editButtonStyle, textStyle, titleStyle, mainStackStyle } from './ViewCandidatesPageStyle';
 
 export default function ViewCandidatesPage() {
 	//TODO: replace this with real info
 	let candidateName = "ישראל ישראלי"
 	return (
 		<>
-			<Container sx={mainGridStyle}>
-				<Grid direction={'column'} sx={mainGridStyle} container spacing={2}>
-
-					{/* Edit Button */}
-					<Button sx={editButtonStyle} variant="contained" endIcon={<EditIcon />}>
-						ערוך פרטים
-					</Button>
-
-					{/* Candidate Name */}
-					<Typography sx={nameStyle}>
-						שם: {candidateName}
+			<Container>
+				<Stack direction={'column'} sx={mainStackStyle} spacing={2}>
+					{/* Title */}
+					<Typography sx={titleStyle} variant='h2'>
+						ניהול משרות
 					</Typography>
+
+					{/* Box for candidate name and 
+					 /* edit button to make them on the same line */}
+					<Box sx={{ display: 'flex', justifyContent: 'space-between', justifySelf: 'stretch', flexGrow: '1'}}>
+						{/* Candidate Name */}
+						<Typography sx={textStyle}>
+							שם: {candidateName}
+						</Typography>
+
+						{/* Edit Button */}
+						<Button sx={editButtonStyle} variant="contained" startIcon={<EditIcon />}>
+							ערוך פרטים
+						</Button>
+					</Box>
+
 
 					{/* Candidate Info Table */}
-					<Typography sx={nameStyle}>
-						:משרות
+					<Typography sx={textStyle}>
+						משרות:
 					</Typography>
-				</Grid>
+				</Stack>
 			</Container>
 		</>
 	)

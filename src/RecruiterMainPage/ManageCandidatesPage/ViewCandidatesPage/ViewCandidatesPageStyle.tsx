@@ -2,20 +2,27 @@ import React from 'react'
 import { SxProps } from '@mui/material';
 
 const editButtonStyle: SxProps = {
-    backgroundColor: 'green'
+    backgroundColor: 'green',
+    alignSelf: 'end'
 }
 
-const nameStyle: SxProps = {
-
+const textStyle: SxProps = {
+    color: 'blue'
 }
 
-const mainGridStyle: SxProps = {
-    justifyContent:'flex-end',
-    alignItems: 'flex-end',
+const titleStyle: SxProps = {
+    color: 'blue',
+    alignSelf: 'center'
+}
+
+const mainStackStyle: SxProps = {
+    marginTop: '1rem',
+    justifyContent: 'flex-end'
 }
 
 export {
     editButtonStyle,
-    nameStyle,
-    mainGridStyle
+    textStyle,
+    titleStyle,
+    mainStackStyle
 }
