@@ -42,7 +42,7 @@ export class CandidateJobStatus {
         if (this._recomendations.map((rec) => rec._phone).includes(phone))
             return;
         this._recomendations.push(new Recomendation(fullName, phone, eMail, recomendation));
-        replaceData((await getCandidateJobStatusPath(this._candidateId, this._jobNumber)), this);
+        replaceData((await this.getPath()), this);
     }
     public getNumOfInterviews() {
         return this._interviewsSummery.length;
@@ -60,10 +60,10 @@ export class CandidateJobStatus {
             this._about = about;
         if (matchingRate >= 0)
             this._matchingRate = matchingRate;
-        replaceData((await this.getPath()),this);
-        
+        replaceData((await this.getPath()), this);
+
     }
-    public async getPath() {
+    private async getPath() {
         let firebaseId = "";
         let candidateIds = await getFirebaseIdsAtPath("/CandidatesJobStatus");
         candidateIds.forEach(async (id) => {
@@ -72,6 +72,14 @@ export class CandidateJobStatus {
                 firebaseId = id;
         });
         return "/CandidatesJobStatus/" + firebaseId;
+    }
+    public async remove() {
+        let candidateIds = await getFirebaseIdsAtPath("/CandidatesJobStatus");
+        candidateIds.forEach(async (id) => {
+            if (((await getObjectAtPath("/CandidatesJobStatus/" + id))._candidateId === this._candidateId) &&
+                ((await getObjectAtPath("/CandidatesJobStatus/" + id))._jobNumber === this._jobNumber))
+                removeObjectAtPath("/CandidatesJobStatus/" + id);
+        });
     }
 }
 async function getCandidateJobStatusFromDatabase(): Promise<CandidateJobStatus[]> {
@@ -89,17 +97,7 @@ async function getCandidateJobStatusFromDatabase(): Promise<CandidateJobStatus[]
         throw new Error("Failed to fetch candidate job statuses from database.");
     }
 }
-export async function getCandidateJobStatusPath(candId: string, jobNumber: number) {
-    let firebaseId = "";
-    let candidateIds = await getFirebaseIdsAtPath("/CandidatesJobStatus");
-    candidateIds.forEach(async (id) => {
-        if (((await getObjectAtPath("/CandidatesJobStatus/" + id))._candidateId === candId) &&
-            ((await getObjectAtPath("/CandidatesJobStatus/" + id))._jobNumber === jobNumber))
-            firebaseId = id;
-    });
-    return "/CandidatesJobStatus/" + firebaseId;
-}
-export async function removeCandidateJobStatus(candId: string = "", jobNumber: number = -1) {
+async function removeCandidateJobStatus(candId: string = "", jobNumber: number = -1) {
     let candidateIds = await getFirebaseIdsAtPath("/CandidatesJobStatus");
     candidateIds.forEach(async (id) => {
         if (((await getObjectAtPath("/CandidatesJobStatus/" + id))._candidateId === candId || candId === "") &&

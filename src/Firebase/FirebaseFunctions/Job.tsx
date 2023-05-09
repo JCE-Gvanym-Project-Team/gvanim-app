@@ -1,4 +1,4 @@
-import { CandidateJobStatus, getFilteredCandidateJobStatuses, removeCandidateJobStatus } from "./CandidateJobStatus";
+import { CandidateJobStatus, getFilteredCandidateJobStatuses } from "./CandidateJobStatus";
 import { dataref } from "../FirebaseConfig/firebase";
 import { Candidate, getFilteredCandidates } from "./Candidate";
 import { getFirebaseIdsAtPath, getObjectAtPath, removeObjectAtPath } from "./DBfuncs";
@@ -70,13 +70,14 @@ export class Job {
         return candidates;
     }
     public async remove() {
-        removeCandidateJobStatus("", this._jobNumber);
+        let candidatures = await this.getCandidatures();
+        candidatures.forEach((c)=>c.remove())
         let jobIds = await getFirebaseIdsAtPath("/Jobs");
         jobIds.forEach(async (id) => {
             if ((await getObjectAtPath("/Jobs/" + id))._jobNumber === this._jobNumber) removeObjectAtPath("/Jobs/" + id);
         });
     }
-    public async getPath() {
+    private async getPath() {
         let firebaseId = "";
         let jobIds = await getFirebaseIdsAtPath("/Jobs");
         jobIds.forEach(async (id) => {
@@ -132,13 +133,6 @@ async function getJobsFromDatabase(): Promise<Job[]> {
     }
 }
 /**
- * Retrieves a list of all jobs from the database.
- * @returns {Promise<Array>} A promise that resolves to an array of job objects.
- */
-async function getJobs() {
-    return getJobsFromDatabase();
-}
-/**
  * Filters the list of jobs based on the given attributes and values, and sorts the result
  * @param {string[]} [attributes=[]] - An array of attributes name to filter by.
  * @param {string[]} [values=[]] - An array of values to filter by,
@@ -152,7 +146,7 @@ export async function getFilteredJobs(attributes: string[] = [], values: string[
         console.log("the attributes length not match to values length")
         return [];
     }
-    let jobs = await getJobs();
+    let jobs = await getJobsFromDatabase();
     //filtering
     let i = attributes.indexOf("jobNumber");
     if (i >= 0) {

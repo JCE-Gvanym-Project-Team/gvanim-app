@@ -1,6 +1,5 @@
-import { Email } from "@mui/icons-material";
 import { dataref } from "../FirebaseConfig/firebase";
-import { CandidateJobStatus, getFilteredCandidateJobStatuses, removeCandidateJobStatus } from "./CandidateJobStatus";
+import { CandidateJobStatus, getFilteredCandidateJobStatuses } from "./CandidateJobStatus";
 import { getObjectAtPath, removeObjectAtPath, getFirebaseIdsAtPath, replaceData } from "./DBfuncs";
 import { getFilteredJobs, Job } from "./Job";
 const database = dataref;
@@ -44,7 +43,8 @@ export class Candidate {
         return "/Candidates/" + firebaseId;
     }
     public async removeCandidate() {
-        removeCandidateJobStatus(this._id);
+        let candidatures = await this.getCandidatures();
+        candidatures.forEach((c)=>c.remove());
         removeObjectAtPath((await this.getPath()));
     }
     public async edit(firstName: string = "", lastName: string = "", phone: string = "", eMail: string = "", generalRating: number = -1) {

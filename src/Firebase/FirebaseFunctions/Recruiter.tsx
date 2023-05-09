@@ -14,7 +14,7 @@ export class Recruiter {
 		this._lastName = lastName;
 		this._sectors = sectors;
 	}
-	public async getPath() {
+	private async getPath() {
 		let firebaseId = "";
 		let jobIds = await getFirebaseIdsAtPath("/Recruiters");
 		jobIds.forEach(async (id) => {
@@ -61,7 +61,7 @@ export class Recruiter {
 	}
 }
 
-async function getRecruitersFromDatabase(): Promise<Recruiter[]> {
+export async function getRecruitersFromDatabase(): Promise<Recruiter[]> {
 	const database = dataref;
 	try {
 		const snapshot = await database.ref("/Recruiters").once("value");
