@@ -1,7 +1,7 @@
 import { CandidateJobStatus, getFilteredCandidateJobStatuses } from "./CandidateJobStatus";
 import { dataref } from "../FirebaseConfig/firebase";
 import { Candidate, getFilteredCandidates } from "./Candidate";
-import { getFirebaseIdsAtPath, getObjectAtPath, removeObjectAtPath } from "./DBfuncs";
+import { appendToDatabase, getFirebaseIdsAtPath, getObjectAtPath, removeObjectAtPath } from "./DBfuncs";
 const database = dataref;
 
 export class Job {
@@ -107,6 +107,18 @@ export class Job {
             this._requirements = requirements;
         this._open=open;
         this._highPriority=highPriority;
+    }
+    public async add(title: string = "",
+    role: string = "",
+    scope: Array<number> = [0, 0],
+    region: string = "",
+    sector: string = "",
+    description: string = "",
+    requirements: string = "",
+    open: boolean = true,
+    highPriority: boolean = false){
+        let job = new Job(title,role,scope,region,sector,description,requirements,open,highPriority);
+        appendToDatabase(job, "/Jobs");
     }
 }
 /* Jobs functions */
