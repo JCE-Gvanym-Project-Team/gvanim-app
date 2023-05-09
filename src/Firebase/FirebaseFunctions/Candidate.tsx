@@ -1,6 +1,7 @@
+import { Email } from "@mui/icons-material";
 import { dataref } from "../FirebaseConfig/firebase";
-import { CandidateJobStatus, getFilteredCandidateJobStatuses,removeCandidateJobStatus } from "./CandidateJobStatus";
-import { getObjectAtPath, removeObjectAtPath, getFirebaseIdsAtPath } from "./DBfuncs";
+import { CandidateJobStatus, getFilteredCandidateJobStatuses, removeCandidateJobStatus } from "./CandidateJobStatus";
+import { getObjectAtPath, removeObjectAtPath, getFirebaseIdsAtPath, replaceData } from "./DBfuncs";
 import { getFilteredJobs, Job } from "./Job";
 const database = dataref;
 export class Candidate {
@@ -12,37 +13,64 @@ export class Candidate {
     public _generalRating: number;
     public _firebaseId: string;
 
-    constructor(firstName: string = "", lastName: string = "", phone: string = "", eMail: string = "", generalRating: number = -1, firebaseId: string="") {
+    constructor(firstName: string = "", lastName: string = "", phone: string = "", eMail: string = "", generalRating: number = -1, firebaseId: string = "") {
         this._id = eMail + phone;
         this._firstName = firstName;
         this._lastName = lastName;
         this._phone = phone;
         this._eMail = eMail;
-        this._firebaseId=firebaseId;
+        this._firebaseId = firebaseId;
         this._generalRating = generalRating;
     }
-    public async getAppliedJobs(): Promise<Job[]>{
+    public async getAppliedJobs(): Promise<Job[]> {
         let jobs;
         let statArr = await this.getCandidatures();
-        let jobIds = statArr.map((stat)=>stat._jobNumber);
-        jobIds.forEach((id)=>jobs.push(getFilteredJobs(["jobNumber"],[id.toString()])));
+        let jobIds = statArr.map((stat) => stat._jobNumber);
+        jobIds.forEach((id) => jobs.push(getFilteredJobs(["jobNumber"], [id.toString()])));
         return jobs;
     }
-    public async getCandidatures(): Promise<CandidateJobStatus[]>{
+    public async getCandidatures(): Promise<CandidateJobStatus[]> {
         let candidatures;
-        candidatures = await getFilteredCandidateJobStatuses(["candidateID"],[this._id]);
+        candidatures = await getFilteredCandidateJobStatuses(["candidateID"], [this._id]);
         return candidatures;
     }
+    public async getPath() {
+        let firebaseId = "";
+        let candidateIds = await getFirebaseIdsAtPath("/Candidates");
+        candidateIds.forEach(async (id) => {
+            if (((await getObjectAtPath("/Candidates/" + id))._id === this._id))
+                firebaseId = id;
+        });
+        return "/Candidates/" + firebaseId;
+    }
+    public async removeCandidate() {
+        removeCandidateJobStatus(this._id);
+        removeObjectAtPath((await this.getPath()));
+    }
+    public async edit(firstName: string = "", lastName: string = "", phone: string = "", eMail: string = "", generalRating: number = -1) {
+        if (firstName.length > 0)
+            this._firstName = firstName;
+        if (lastName.length > 0)
+            this._lastName = firstName;
+        if (generalRating >= 0)
+            this._generalRating = generalRating;
+        if (phone.length > 0 || eMail.length > 0) {
+            if ((await getFilteredCandidates(["id"], [eMail + phone])).length === 0) {
+                let candidatures = await getFilteredCandidateJobStatuses(["candidateId"], [this._id]);
+                candidatures.forEach((c) => c.edit(eMail + phone));
+                this._id = eMail + phone;
+                if (eMail.length > 0)
+                    this._eMail = eMail;
+                if (phone.length > 0)
+                    this._phone = phone;
+            }
+            else
+                console.log("colision detected a candidate already exist with the same phone and eMail")
+        }
+        replaceData((await this.getPath()), this);
+    }
 }
-export async function getCandidatePath(candId: string){
-    let firebaseId = "";
-    let candidateIds = await getFirebaseIdsAtPath("/Candidates");
-    candidateIds.forEach(async (id)=>{
-        if(((await getObjectAtPath("/Candidates/"+id))._id===candId)) 
-            firebaseId = id;
-    });
-    return "/Candidates/"+firebaseId;
-}
+
 async function getCandidatesFromDatabase(): Promise<Candidate[]> {
     try {
         const snapshot = await database.ref("/Candidates").once("value");
@@ -58,14 +86,7 @@ async function getCandidatesFromDatabase(): Promise<Candidate[]> {
         throw new Error("Failed to fetch candidates from database.");
     }
 }
-export async function removeCandidate(candId: string){
-    removeCandidateJobStatus(candId);
-    let candidateIds = await getFirebaseIdsAtPath("/Candidates");
-    candidateIds.forEach(async (id)=>{
-        if((await getObjectAtPath("/Candidates/"+id))._userName===candId) removeObjectAtPath("/Candidates/"+id);
-    });
-}
-export async function getFilteredCandidates(attributes: string[] = [], values: string[] = [], sortBy: string = ""): Promise<Candidate[]>{
+export async function getFilteredCandidates(attributes: string[] = [], values: string[] = [], sortBy: string = ""): Promise<Candidate[]> {
     if (attributes.length !== values.length) {
         console.log("the attributes length not match to values length")
         return [];

@@ -4,7 +4,7 @@ import { getObjectAtPath, removeObjectAtPath, getFirebaseIdsAtPath, replaceData 
 import { Candidate } from './Candidate';
 import { Job } from './Job';
 const database = dataref;
-export class CandidateJobStatus{
+export class CandidateJobStatus {
     public _jobNumber: number;
     public _candidateId: string;
     public _status: string;
@@ -19,7 +19,7 @@ export class CandidateJobStatus{
         jobNumber: number = -1,
         candidateId: string = "",
         status: string = "",
-        about:string="",
+        about: string = "",
         matchingRate: number = -1,
         applyDate: Date = new Date(0, 0, 0),
         lastUpdate: Date = new Date(0, 0, 0),
@@ -33,25 +33,45 @@ export class CandidateJobStatus{
         this._applyDate = applyDate;
         this._lastUpdate = lastUpdate;
         this._interviewsSummery = interviewsSummery;
-        this._about=about;
+        this._about = about;
         this._recomendations = recomendations;
     }
-    public async addRecomendation(fullName: string, phone: string, eMail: string, recomendation: string){
-        if(this._recomendations.length>=10)
+    public async addRecomendation(fullName: string, phone: string, eMail: string, recomendation: string) {
+        if (this._recomendations.length >= 10)
             return;
-        if(this._recomendations.map((rec)=>rec._phone).includes(phone))
+        if (this._recomendations.map((rec) => rec._phone).includes(phone))
             return;
         this._recomendations.push(new Recomendation(fullName, phone, eMail, recomendation));
-        replaceData((await getCandidateJobStatusPath(this._candidateId,this._jobNumber)),this);
+        replaceData((await getCandidateJobStatusPath(this._candidateId, this._jobNumber)), this);
     }
-    public getNumOfInterviews(){
+    public getNumOfInterviews() {
         return this._interviewsSummery.length;
     }
-    public editInterviewSummery(summery: string, index: number){
-        if(index>this.getNumOfInterviews())
+    public editInterviewSummery(summery: string, index: number) {
+        if (index > this.getNumOfInterviews())
             this._interviewsSummery.push(summery);
         else
-            this._interviewsSummery[index]=summery;
+            this._interviewsSummery[index] = summery;
+    }
+    public async edit(candidateId: string = "", about: string = "", matchingRate: number = -1) {
+        if (candidateId.length > 0)
+            this._candidateId = candidateId;
+        if (about.length > 0)
+            this._about = about;
+        if (matchingRate >= 0)
+            this._matchingRate = matchingRate;
+        replaceData((await this.getPath()),this);
+        
+    }
+    public async getPath() {
+        let firebaseId = "";
+        let candidateIds = await getFirebaseIdsAtPath("/CandidatesJobStatus");
+        candidateIds.forEach(async (id) => {
+            if (((await getObjectAtPath("/CandidatesJobStatus/" + id))._candidateId === this._candidateId) &&
+                ((await getObjectAtPath("/CandidatesJobStatus/" + id))._jobNumber === this._jobNumber))
+                firebaseId = id;
+        });
+        return "/CandidatesJobStatus/" + firebaseId;
     }
 }
 async function getCandidateJobStatusFromDatabase(): Promise<CandidateJobStatus[]> {
@@ -69,22 +89,22 @@ async function getCandidateJobStatusFromDatabase(): Promise<CandidateJobStatus[]
         throw new Error("Failed to fetch candidate job statuses from database.");
     }
 }
-export async function getCandidateJobStatusPath(candId: string, jobNumber: number){
+export async function getCandidateJobStatusPath(candId: string, jobNumber: number) {
     let firebaseId = "";
     let candidateIds = await getFirebaseIdsAtPath("/CandidatesJobStatus");
-    candidateIds.forEach(async (id)=>{
-        if(((await getObjectAtPath("/CandidatesJobStatus/"+id))._candidateId===candId)&& 
-        ((await getObjectAtPath("/CandidatesJobStatus/"+id))._jobNumber===jobNumber)) 
+    candidateIds.forEach(async (id) => {
+        if (((await getObjectAtPath("/CandidatesJobStatus/" + id))._candidateId === candId) &&
+            ((await getObjectAtPath("/CandidatesJobStatus/" + id))._jobNumber === jobNumber))
             firebaseId = id;
     });
-    return "/CandidatesJobStatus/"+firebaseId;
+    return "/CandidatesJobStatus/" + firebaseId;
 }
-export async function removeCandidateJobStatus(candId: string="",jobNumber: number = -1){
+export async function removeCandidateJobStatus(candId: string = "", jobNumber: number = -1) {
     let candidateIds = await getFirebaseIdsAtPath("/CandidatesJobStatus");
-    candidateIds.forEach(async (id)=>{
-        if(((await getObjectAtPath("/CandidatesJobStatus/"+id))._candidateId===candId || candId==="")&& 
-        ((await getObjectAtPath("/CandidatesJobStatus/"+id))._jobNumber===jobNumber || jobNumber===-1)) 
-        removeObjectAtPath("/CandidatesJobStatus/"+id);
+    candidateIds.forEach(async (id) => {
+        if (((await getObjectAtPath("/CandidatesJobStatus/" + id))._candidateId === candId || candId === "") &&
+            ((await getObjectAtPath("/CandidatesJobStatus/" + id))._jobNumber === jobNumber || jobNumber === -1))
+            removeObjectAtPath("/CandidatesJobStatus/" + id);
     });
 }
 export async function getFilteredCandidateJobStatuses(attributes: string[] = [], values: string[] = [], sortBy: string = "") {
@@ -148,36 +168,36 @@ export async function getFilteredCandidateJobStatuses(attributes: string[] = [],
 }
 function sortByJobNumber(a: CandidateJobStatus, b: CandidateJobStatus): number {
     return a._jobNumber - b._jobNumber;
-  }
-  
-  function sortByCandidateId(a: CandidateJobStatus, b: CandidateJobStatus): number {
+}
+
+function sortByCandidateId(a: CandidateJobStatus, b: CandidateJobStatus): number {
     if (a._candidateId.toLowerCase() < b._candidateId.toLowerCase()) {
-      return -1;
+        return -1;
     }
     if (a._candidateId.toLowerCase() > b._candidateId.toLowerCase()) {
-      return 1;
+        return 1;
     }
     return 0;
-  }
-  
-  function sortByStatus(a: CandidateJobStatus, b: CandidateJobStatus): number {
+}
+
+function sortByStatus(a: CandidateJobStatus, b: CandidateJobStatus): number {
     if (a._status.toLowerCase() < b._status.toLowerCase()) {
-      return -1;
+        return -1;
     }
     if (a._status.toLowerCase() > b._status.toLowerCase()) {
-      return 1;
+        return 1;
     }
     return 0;
-  }
-  
-  function sortByMatchingRate(a: CandidateJobStatus, b: CandidateJobStatus): number {
+}
+
+function sortByMatchingRate(a: CandidateJobStatus, b: CandidateJobStatus): number {
     return b._matchingRate - a._matchingRate;
-  }
-  
-  function sortByApplyDate(a: CandidateJobStatus, b: CandidateJobStatus): number {
+}
+
+function sortByApplyDate(a: CandidateJobStatus, b: CandidateJobStatus): number {
     return a._applyDate.getTime() - b._applyDate.getTime();
-  }
-  
-  function sortByLastUpdate(a: CandidateJobStatus, b: CandidateJobStatus): number {
+}
+
+function sortByLastUpdate(a: CandidateJobStatus, b: CandidateJobStatus): number {
     return a._lastUpdate.getTime() - b._lastUpdate.getTime();
-  }
+}

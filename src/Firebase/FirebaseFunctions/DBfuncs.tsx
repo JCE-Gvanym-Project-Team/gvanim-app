@@ -51,7 +51,7 @@ export function replaceData(path: string, data: any) {
  * @returns None
  * @throws {Error} If there is an error adding the object to the database.
  */
-async function appendToDatabase(obj: any, path: string) {
+export async function appendToDatabase(obj: any, path: string) {
 	const database = dataref;
 	try {
 		await database.ref(path).push(obj);

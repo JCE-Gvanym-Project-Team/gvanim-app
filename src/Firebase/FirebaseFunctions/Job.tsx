@@ -1,10 +1,10 @@
-import { CandidateJobStatus, getFilteredCandidateJobStatuses,removeCandidateJobStatus } from "./CandidateJobStatus";
+import { CandidateJobStatus, getFilteredCandidateJobStatuses, removeCandidateJobStatus } from "./CandidateJobStatus";
 import { dataref } from "../FirebaseConfig/firebase";
 import { Candidate, getFilteredCandidates } from "./Candidate";
 import { getFirebaseIdsAtPath, getObjectAtPath, removeObjectAtPath } from "./DBfuncs";
 const database = dataref;
 
-export class Job{
+export class Job {
     public _title: string;
     public _jobNumber: number;
     public _role: string;
@@ -59,15 +59,53 @@ export class Job{
         return num;
     }
     public async getCandidatures(): Promise<CandidateJobStatus[]> {
-        let candidatures = await getFilteredCandidateJobStatuses(["jobNumber"],[this._jobNumber.toString()]);
+        let candidatures = await getFilteredCandidateJobStatuses(["jobNumber"], [this._jobNumber.toString()]);
         return candidatures;
     }
     public async getCandidates(): Promise<Candidate[]> {
         let candidates;
-        let candidtesId = (await this.getCandidatures()).map((obj)=>obj._candidateId);
+        let candidtesId = (await this.getCandidatures()).map((obj) => obj._candidateId);
         candidtesId = Array.from(new Set(candidtesId));
-        candidtesId.forEach((id)=>candidates.push(getFilteredCandidates(["id"],[id])[0]))
+        candidtesId.forEach((id) => candidates.push(getFilteredCandidates(["id"], [id])[0]))
         return candidates;
+    }
+    public async remove() {
+        removeCandidateJobStatus("", this._jobNumber);
+        let jobIds = await getFirebaseIdsAtPath("/Jobs");
+        jobIds.forEach(async (id) => {
+            if ((await getObjectAtPath("/Jobs/" + id))._jobNumber === this._jobNumber) removeObjectAtPath("/Jobs/" + id);
+        });
+    }
+    public async getPath() {
+        let firebaseId = "";
+        let jobIds = await getFirebaseIdsAtPath("/Jobs");
+        jobIds.forEach(async (id) => {
+            if (((await getObjectAtPath("/Jobs/" + id))._jobNumber === this._jobNumber))
+                firebaseId = id;
+        });
+        return "/Jobs/" + firebaseId;
+    }
+    public async edit(title: string = "",
+        role: string = "",
+        scope: Array<number> = [0, 0],
+        region: string = "",
+        sector: string = "",
+        description: string = "",
+        requirements: string = "",
+        open: boolean,
+        highPriority: boolean,) {
+        if (title.length > 0)
+            this._title = title;
+        if (role.length > 0)
+            this._role = role;
+        if (sector.length > 0)
+            this._sector = sector;
+        if (description.length > 0)
+            this._description = description;
+        if (requirements.length > 0)
+            this._requirements = requirements;
+        this._open=open;
+        this._highPriority=highPriority;
     }
 }
 /* Jobs functions */
@@ -99,22 +137,6 @@ async function getJobsFromDatabase(): Promise<Job[]> {
  */
 async function getJobs() {
     return getJobsFromDatabase();
-}
-export async function removeJob(jobNumber: number){
-    removeCandidateJobStatus("", jobNumber);
-    let jobIds = await getFirebaseIdsAtPath("/Jobs");
-    jobIds.forEach(async (id)=>{
-        if((await getObjectAtPath("/Jobs/"+id))._jobNumber===jobNumber) removeObjectAtPath("/Jobs/"+id);
-    });
-}
-export async function getCandidatePath(jobNumber: number){
-    let firebaseId = "";
-    let jobIds = await getFirebaseIdsAtPath("/Jobs");
-    jobIds.forEach(async (id)=>{
-        if(((await getObjectAtPath("/Jobs/"+id))._jobNumber===jobNumber)) 
-            firebaseId = id;
-    });
-    return "/Jobs/"+firebaseId;
 }
 /**
  * Filters the list of jobs based on the given attributes and values, and sorts the result
