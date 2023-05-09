@@ -6,23 +6,23 @@ all the class have the function:
     remove() - remove the object from database
     edit() - pass argument only to attributes you want to change leave empty for no change
     example of use:
-        import { Job } from "src/Firebase/FirebaseFunction/Job";
-        //create object
-        let job = new Job("title-example","role-example",[50,100],"region-example","sector-example",
-						"description-example","requirement-example",true, false);
-        //add the object to the database
-        job.add()
-        //edit the attributes description, requuirments, open and highPriority. update the database  
-        job.edit("","",[],"","","new-description","new-reqruirments",false,true); 
-        //remove the object from database
-        job.remove()
+        import { Job, generateJobNumber } from "src/Firebase/FirebaseFunction/Job";
+        // create objects
+        let job1 = new Job((await generateJobNumber()),"title1", "role1", [50, 100], "tel-aviv", "tel-aviv-meguorim", "desc1", "req1", true, false);
+	    let job2 = new Job((await generateJobNumber()),"title2", "role2", [25, 50], "jerusalem", "jerusalem-soldier", "desc2", "req2", false, false);
+	    //add to DB
+        job1.add();
+	    job2.add();
+        // remove from DB
+	    job1.remove();
+        
 you can get an Array of Job, Candidate, CandidatesJobStatus and Recruiter.
     syntax: getFiltered<type>s(string[], string[], attributes);
     how to pass arguments?
         first argument(optionally):
-            array of string, send attributes name you want to filter by
+            array of strings, send attributes name you want to filter by
         second arguments(optionally):
-            array of string, send the value you want to filter by, make sure to send the value at the same order of attributes name was passed
+            array of strings, send the value you want to filter by, make sure to send the value at the same order of attributes name was passed
         third argument(optionally):
             choose an attribute to sort by
 

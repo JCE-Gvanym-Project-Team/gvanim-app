@@ -19,6 +19,7 @@ export class Job {
     public _creationDate: Date
 
     constructor(
+        jobNumber: number,
         title: string = "",
         role: string = "",
         scope: Array<number> = [0, 0],
@@ -29,7 +30,6 @@ export class Job {
         open: boolean = true,
         highPriority: boolean = false,
         views: number = 0,
-        jobNumber = -1,
     ) {
         this._title = title;
         this._role = role;
@@ -42,21 +42,7 @@ export class Job {
         this._highPriority = highPriority;
         this._views = views;
         this._creationDate = new Date();
-        this._jobNumber = jobNumber;
-        if (jobNumber === -1)
-            this.generateJobNumber().then((num) => this._jobNumber = num);
-    }
-    private async generateJobNumber(): Promise<number> {
-        const jobs = await getFilteredJobs();
-        const len = jobs.length;
-        const jobNumber: number[] = jobs.map((job) => job._jobNumber);
-        const min = 10; // minimum number in range
-        const max = len + 100; // maximum number in range
-        let num = Math.floor(Math.random() * (max - min + 1)) + min; // generates a random number between 1 and 10
-        while (jobs.some(job => job._jobNumber === num)) {
-            num = Math.floor(Math.random() * (max - min + 1)) + min;
-        }
-        return num;
+        this._jobNumber=jobNumber;
     }
     public async getCandidatures(): Promise<CandidateJobStatus[]> {
         let candidatures = await getFilteredCandidateJobStatuses(["jobNumber"], [this._jobNumber.toString()]);
@@ -108,17 +94,8 @@ export class Job {
         this._open=open;
         this._highPriority=highPriority;
     }
-    public async add(title: string = "",
-    role: string = "",
-    scope: Array<number> = [0, 0],
-    region: string = "",
-    sector: string = "",
-    description: string = "",
-    requirements: string = "",
-    open: boolean = true,
-    highPriority: boolean = false){
-        let job = new Job(title,role,scope,region,sector,description,requirements,open,highPriority);
-        appendToDatabase(job, "/Jobs");
+    public async add(){
+        appendToDatabase(this, "/Jobs");
     }
 }
 /* Jobs functions */
@@ -143,6 +120,18 @@ async function getJobsFromDatabase(): Promise<Job[]> {
         console.error(error);
         throw new Error("Failed to fetch jobs from database.");
     }
+}
+export async function generateJobNumber(): Promise<number> {
+    const jobs = await getFilteredJobs();
+    const len = jobs.length;
+    const jobNumber: number[] = jobs.map((job) => job._jobNumber);
+    const min = 10; // minimum number in range
+    const max = len + 100; // maximum number in range
+    let num = Math.floor(Math.random() * (max - min + 1)) + min; // generates a random number between 1 and 10
+    while (jobs.some(job => job._jobNumber === num)) {
+        num = Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+    return num;
 }
 /**
  * Filters the list of jobs based on the given attributes and values, and sorts the result

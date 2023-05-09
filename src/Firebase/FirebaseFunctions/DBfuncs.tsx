@@ -1,7 +1,8 @@
 import firebase from "firebase/app";
 import "firebase/database";
 import { dataref } from "../FirebaseConfig/firebase";
-import { getFilteredJobs, Job } from "./Job";
+import { Job, generateJobNumber } from "./Job";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { getFilteredCandidates, Candidate } from "./Candidate";
 import { CandidateJobStatus, getFilteredCandidateJobStatuses } from "./CandidateJobStatus";
 import { Recomendation } from "./Recomendation";
@@ -77,5 +78,9 @@ export async function getFirebaseIdsAtPath(path: string): Promise<string[]> {
 	return values ? Object.keys(values) : [];
 }
 export async function main() {	//for debugging dont use
-	
+	let job1 = new Job((await generateJobNumber()),"title1", "role", [50, 100], "tel-aviv", "tel-aviv-meguorim", "desc", "req", true, false);
+	let job2 = new Job((await generateJobNumber()),"title2", "role", [50, 100], "tel-aviv", "tel-aviv-meguorim", "desc", "req", true, false);
+	job1.add();
+	job2.add();
+	job1.remove();
 }
