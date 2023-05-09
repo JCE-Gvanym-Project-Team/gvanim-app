@@ -69,12 +69,11 @@ export class Candidate {
         }
         replaceData((await this.getPath()), this);
     }
-    public async add(firstName: string, lastName: string, phone: string, eMail: string){
-        let candidate = new Candidate(firstName,lastName,phone,eMail);
-        if((await candidate.getPath())==="/Candidates/")
-            appendToDatabase(candidate,"/Candidate")
+    public async add(){
+        if((await this.getPath())==="/Candidates/")
+            appendToDatabase(this,"/Candidate");
         else
-            console.log("the candidate already exists")
+            console.log("the candidate already exists");
     }
 }
 
