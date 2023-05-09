@@ -1,13 +1,10 @@
 import React from 'react';
-import ReportPageComponents from './Components/ReportPage/ReportPageComponents'
-
-
+import ReportPageTable from "./Components/ReportPageTable/ReportPageTable";
 
 export default function ReportsPage() {
-  return (
+    return (
     <>
-    <h1>test</h1>
-     <ReportPageComponents/>
+        <ReportPageTable></ReportPageTable>
     </>
   )
 }
