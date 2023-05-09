@@ -1,6 +1,6 @@
 import { dataref } from "../FirebaseConfig/firebase";
 import { CandidateJobStatus, getFilteredCandidateJobStatuses } from "./CandidateJobStatus";
-import { getObjectAtPath, removeObjectAtPath, getFirebaseIdsAtPath, replaceData } from "./DBfuncs";
+import { getObjectAtPath, removeObjectAtPath, getFirebaseIdsAtPath, replaceData, appendToDatabase } from "./DBfuncs";
 import { getFilteredJobs, Job } from "./Job";
 const database = dataref;
 export class Candidate {
@@ -42,7 +42,7 @@ export class Candidate {
         });
         return "/Candidates/" + firebaseId;
     }
-    public async removeCandidate() {
+    public async remove() {
         let candidatures = await this.getCandidatures();
         candidatures.forEach((c)=>c.remove());
         removeObjectAtPath((await this.getPath()));
@@ -68,6 +68,13 @@ export class Candidate {
                 console.log("colision detected a candidate already exist with the same phone and eMail")
         }
         replaceData((await this.getPath()), this);
+    }
+    public async add(firstName: string, lastName: string, phone: string, eMail: string){
+        let candidate = new Candidate(firstName,lastName,phone,eMail);
+        if((await candidate.getPath())==="/Candidates/")
+            appendToDatabase(candidate,"/Candidate")
+        else
+            console.log("the candidate already exists")
     }
 }
 
