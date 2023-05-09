@@ -1,6 +1,6 @@
 import { dataref } from "../FirebaseConfig/firebase";
 import { Recomendation } from './Recomendation';
-import { getObjectAtPath, removeObjectAtPath, getFirebaseIdsAtPath, replaceData } from "./DBfuncs";
+import { getObjectAtPath, removeObjectAtPath, getFirebaseIdsAtPath, replaceData,appendToDatabase } from "./DBfuncs";
 import { Candidate } from './Candidate';
 import { Job } from './Job';
 const database = dataref;
@@ -80,6 +80,12 @@ export class CandidateJobStatus {
                 ((await getObjectAtPath("/CandidatesJobStatus/" + id))._jobNumber === this._jobNumber))
                 removeObjectAtPath("/CandidatesJobStatus/" + id);
         });
+    }
+    public async add(){
+        if((await this.getPath())==="/CandidatesJobStatus/")
+            appendToDatabase(this,"/CandidatesJobStatus");
+        else
+            console.log("the CandidatesJobStatus already exists");
     }
 }
 async function getCandidateJobStatusFromDatabase(): Promise<CandidateJobStatus[]> {

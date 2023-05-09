@@ -75,6 +75,12 @@ export class Candidate {
         else
             console.log("the candidate already exists");
     }
+    public async apply(jobNumber: number, about: string){
+        if((await this.getPath())==="/Candidates/")
+            this.add();
+        let candidatuers = new CandidateJobStatus(jobNumber,this._id,"הוגשה מועמדות",about,-1,new Date(),new Date());
+        candidatuers.add();
+    }
 }
 
 async function getCandidatesFromDatabase(): Promise<Candidate[]> {
