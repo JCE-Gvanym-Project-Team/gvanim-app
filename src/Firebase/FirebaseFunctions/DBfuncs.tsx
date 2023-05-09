@@ -83,4 +83,5 @@ export async function main() {	//for debugging dont use
 	job1.add();
 	job2.add();
 	job1.remove();
+	job2.remove();
 }
