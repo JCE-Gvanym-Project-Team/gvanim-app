@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { dataref } from "../FirebaseConfig/firebase";
+import { dataref } from "../Firebase/FirebaseConfig/firebase";
 import Circles from "./Components/CirclesRecruiterMainPage";
 
 // This component is the main page for the recruiter
