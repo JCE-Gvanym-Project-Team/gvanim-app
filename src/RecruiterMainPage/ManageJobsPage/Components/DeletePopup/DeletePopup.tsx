@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Trash } from 'react-bootstrap-icons';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { dataref } from '../../../../FirebaseConfig/firebase';
+import { dataref } from '../../../../Firebase/FirebaseConfig/firebase';
 
 
 type CardProps = {

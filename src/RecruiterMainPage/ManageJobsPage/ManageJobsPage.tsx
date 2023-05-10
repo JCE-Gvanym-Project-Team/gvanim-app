@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { dataref } from "../../FirebaseConfig/firebase";
+import { dataref } from "../../Firebase/FirebaseConfig/firebase";
 import { Container, Form, Button, InputGroup } from "react-bootstrap";
 import { GeoFill, LayoutTextSidebar, PeopleFill, Percent, Hammer } from "react-bootstrap-icons";
 import "./ManageJobsPage.css";
