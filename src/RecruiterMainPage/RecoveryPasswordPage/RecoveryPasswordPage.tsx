@@ -14,7 +14,7 @@ import {
 import { styled } from '@mui/material/styles'
 
 //firebase
-import firebase1 from "../../FirebaseConfig/firebase";
+import firebase1 from "../../Firebase/FirebaseConfig/firebase";
 import "firebase/compat/auth";
 
 //react

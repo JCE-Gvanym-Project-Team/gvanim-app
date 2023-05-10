@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
-import { dataref } from '../../../../FirebaseConfig/firebase';
+import { dataref } from '../../../../Firebase/FirebaseConfig/firebase';
 import "./AddOrUpdateJobPopup.css";
 import { GeoFill, LayoutTextSidebar, PencilSquare, Percent } from 'react-bootstrap-icons';
 
