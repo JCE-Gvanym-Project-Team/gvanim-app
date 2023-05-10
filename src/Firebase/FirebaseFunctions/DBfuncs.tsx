@@ -6,6 +6,7 @@ import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { getFilteredCandidates, Candidate } from "./Candidate";
 import { CandidateJobStatus, getFilteredCandidateJobStatuses } from "./CandidateJobStatus";
 import { Recomendation } from "./Recomendation";
+import { Recruiter } from "./Recruiter";
 const database = dataref;
 /**
  * Prints the data located at the given path in the Firebase Realtime Database.
@@ -80,8 +81,5 @@ export async function getFirebaseIdsAtPath(path: string): Promise<string[]> {
 export async function main() {	//for debugging dont use
 	let job1 = new Job((await generateJobNumber()),"title1", "role", [50, 100], "tel-aviv", "tel-aviv-meguorim", "desc", "req", true, false);
 	let job2 = new Job((await generateJobNumber()),"title2", "role", [50, 100], "tel-aviv", "tel-aviv-meguorim", "desc", "req", true, false);
-	job1.add();
-	job2.add();
-	job1.remove();
-	job2.remove();
+	let rec = new Recruiter()
 }

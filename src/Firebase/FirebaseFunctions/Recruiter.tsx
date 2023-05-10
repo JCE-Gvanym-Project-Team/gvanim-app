@@ -3,13 +3,13 @@ import { getObjectAtPath, removeObjectAtPath, getFirebaseIdsAtPath, appendToData
 const database = dataref;
 
 export class Recruiter {
-	public _userName: string;
+	public _email: string;
 	public _firstName: string;
 	public _lastName: string;
 	public _sectors: Array<string>;
 
-	constructor(userName: string = "", firstName: string = "", lastName: string = "", sectors: Array<string> = []) {
-		this._userName = userName;
+	constructor(email: string = "", firstName: string = "", lastName: string = "", sectors: Array<string> = []) {
+		this._email = email;
 		this._firstName = firstName;
 		this._lastName = lastName;
 		this._sectors = sectors;
@@ -18,7 +18,7 @@ export class Recruiter {
 		let firebaseId = "";
 		let jobIds = await getFirebaseIdsAtPath("/Recruiters");
 		jobIds.forEach(async (id) => {
-			if (((await getObjectAtPath("/Recruiters/" + id))._userName === this._userName))
+			if (((await getObjectAtPath("/Recruiters/" + id))._email === this._email))
 				firebaseId = id;
 		});
 		return "/Recruiters/" + firebaseId;
@@ -26,7 +26,7 @@ export class Recruiter {
 	public async remove() {
 		let recruitersIds = await getFirebaseIdsAtPath("/Recruiters");
 		recruitersIds.forEach(async (id) => {
-			if ((await getObjectAtPath("/Recruiters/" + id))._userName === this._userName) removeObjectAtPath("/Recruiters/" + id);
+			if ((await getObjectAtPath("/Recruiters/" + id))._email === this._email) removeObjectAtPath("/Recruiters/" + id);
 		});
 	}
 	public async add() {
@@ -35,15 +35,15 @@ export class Recruiter {
 		else
 			console.log("this user name already exists choose another");
 	}
-	public async edit(userName: string = "", firstName: string = "", lastName: string = "") {
+	public async edit(email: string = "", firstName: string = "", lastName: string = "") {
 		if (firstName.length > 0)
 			this._firstName = firstName;
 		if (firstName.length > 0)
 			this._lastName = lastName;
-		if (userName.length > 0) {
-			let tmp = new Recruiter(userName);
+		if (email.length > 0) {
+			let tmp = new Recruiter(email);
 			if ((await tmp.getPath()) === "/Recruiters/")
-				this._userName = userName;
+				this._email = email;
 			else
 				console.log("this user name already exists choose another");
 		}
