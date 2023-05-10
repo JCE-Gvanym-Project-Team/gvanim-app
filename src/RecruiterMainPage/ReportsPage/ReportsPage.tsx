@@ -18,16 +18,4 @@ function ReportsPage() {
 }
 
 
-function ManageReportsComponent(){
-  return ReportPageManageReports;
-}
-
-
-
-
-export { ReportsPage, ManageReportsComponent };
-
-// 
-// function ManageReportsComponent(){
-  // return <ReportPageManageReports></ReportPageManageReports>
-// }
+export default ReportsPage;
