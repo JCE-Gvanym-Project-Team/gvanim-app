@@ -6,7 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { HashRouter, Route, Routes, Link } from "react-router-dom"
 import ManageCandidatesPage from './RecruiterMainPage/ManageCandidatesPage/ManageCandidatesPage';
 import ManageJobsPage from './RecruiterMainPage/ManageJobsPage/ManageJobsPage';
-import ReportsPage from './RecruiterMainPage/ReportsPage/ReportsPage';
+import {ReportsPage} from './RecruiterMainPage/ReportsPage/ReportsPage';
 import { Router } from 'express';
 import NavBar from './Components/NavBar/NavBar';
 import { main } from './Firebase/FirebaseFunctions/DBfuncs'

@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import ManageCandidatesPage from "../ManageCandidatesPage/ManageCandidatesPage";
 import ManageJobsPage from "../ManageJobsPage/ManageJobsPage";
-import ReportsPage from "../ReportsPage/ReportsPage";
+import {ReportsPage} from "../ReportsPage/ReportsPage";
 
 function Buttons() {
   return (
