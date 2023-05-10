@@ -10,6 +10,7 @@ import ReportsPage from './RecruiterMainPage/ReportsPage/ReportsPage';
 import { Router } from 'express';
 import NavBar from './Components/NavBar/NavBar';
 import { main } from './Firebase/FirebaseFunctions/DBfuncs'
+import ManageReports from './RecruiterMainPage/ReportsPage/ManageReports/ManageReports';
 
 main()
 
@@ -27,6 +28,7 @@ function App() {
 					<Route path="/manageCandidates" element={<ManageCandidatesPage />} />
 					<Route path="/manageJobs" element={<ManageJobsPage />} />
 					<Route path="/reports" element={<ReportsPage />} />
+					<Route path="/manageReports" element={<ManageReports />} />
 				</Routes>
 			</HashRouter>
 			

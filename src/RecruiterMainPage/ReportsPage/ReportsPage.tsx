@@ -9,7 +9,7 @@ import ReportPageManageReports from './Components/ReportPageManageReports/Report
 function ReportsPage() {
     return (
     <>
-       <Link to="/ManageReports">
+       <Link to="/manageReports">
        <Button variant="contained" disableElevation >יצירת דו"ח</Button>
        </Link>
        <ReportPageTable></ReportPageTable>        
