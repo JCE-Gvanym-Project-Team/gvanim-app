@@ -10,7 +10,7 @@ import ReportsPage from './RecruiterMainPage/ReportsPage/ReportsPage';
 import { Router } from 'express';
 import NavBar from './Components/NavBar/NavBar';
 import { main } from './Firebase/FirebaseFunctions/DBfuncs'
-import ManageReports from './RecruiterMainPage/ReportsPage/ManageReports/ManageReports';
+import ManageReports from './RecruiterMainPage/ReportsPage/Components/ManageReports/ManageReports';
 
 main()
 
