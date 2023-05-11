@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
-import { dataref } from "../../FirebaseConfig/firebase";
-import { Container, Form, Button, InputGroup } from "react-bootstrap";
-import { GeoFill, LayoutTextSidebar, PeopleFill, Percent, Hammer } from "react-bootstrap-icons";
+import { dataref } from "../../Firebase/FirebaseConfig/firebase";
 import "./ManageJobsPage.css";
 import MyTable from "./Components/MyTable/MyTable";
 import { Box, Container } from "@mui/material";
