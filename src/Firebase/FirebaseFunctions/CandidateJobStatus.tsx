@@ -12,6 +12,7 @@ export class CandidateJobStatus {
     public _matchingRate: number;
     public _applyDate: Date;
     public _lastUpdate: Date;
+    public _interviewDate: Date;
     public _interviewsSummery: Array<string>;
     public _recomendations: Array<Recomendation>;
 
@@ -32,6 +33,7 @@ export class CandidateJobStatus {
         this._matchingRate = matchingRate;
         this._applyDate = applyDate;
         this._lastUpdate = lastUpdate;
+        this._interviewDate = new Date(0,0,0);
         this._interviewsSummery = interviewsSummery;
         this._about = about;
         this._recomendations = recomendations;
@@ -53,7 +55,7 @@ export class CandidateJobStatus {
         else
             this._interviewsSummery[index] = summery;
     }
-    public async edit(candidateId: string = "", about: string = "", matchingRate: number = -1) {
+    public async edit(candidateId: string = this._candidateId, about: string = this._about, matchingRate: number = this._matchingRate) {
         if (candidateId.length > 0)
             this._candidateId = candidateId;
         if (about.length > 0)
@@ -65,13 +67,22 @@ export class CandidateJobStatus {
     }
     private async getPath() {
         let firebaseId = "";
-        let candidateIds = await getFirebaseIdsAtPath("/CandidatesJobStatus");
-        candidateIds.forEach(async (id) => {
-            if (((await getObjectAtPath("/CandidatesJobStatus/" + id))._candidateId === this._candidateId) &&
-                ((await getObjectAtPath("/CandidatesJobStatus/" + id))._jobNumber === this._jobNumber))
-                firebaseId = id;
-        });
-        return "/CandidatesJobStatus/" + firebaseId;
+        let ids = await getFirebaseIdsAtPath("/CandidatesJobStatus");
+        for(let i=0;i<ids.length;i++){
+            let stat = await getObjectAtPath("/CandidatesJobStatus/"+ids[i]);
+            if(stat._candidateId===this._candidateId && stat._jobNumber===this._jobNumber){
+                firebaseId = ids[i];
+                break;
+            }
+        }
+        if(firebaseId.length>0)
+            return "/Candidates/" + firebaseId;
+        return ";"
+    }
+    public async exists(){
+        if((await this.getPath()).length>0)
+            return true;
+        return false;
     }
     public async remove() {
         let candidateIds = await getFirebaseIdsAtPath("/CandidatesJobStatus");
@@ -86,6 +97,15 @@ export class CandidateJobStatus {
             appendToDatabase(this,"/CandidatesJobStatus");
         else
             console.log("the CandidatesJobStatus already exists");
+    }
+    public async updateStatus(newStatus: string, interviewDate: Date = this._interviewDate){
+        if(!(await this.exists())){
+            console.log("candidate job status not found in the database");
+            return;
+        }
+        this._status = newStatus;
+        /* todo: notify() candidate via mail with the next interview date */
+        replaceData((await this.getPath()),this);
     }
 }
 async function getCandidateJobStatusFromDatabase(): Promise<CandidateJobStatus[]> {

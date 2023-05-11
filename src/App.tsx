@@ -11,7 +11,7 @@ import { Router } from 'express';
 import NavBar from './Components/NavBar/NavBar';
 import { main } from './Firebase/FirebaseFunctions/DBfuncs'
 
-main()
+//main();
 
 const Admin = "admin";
 const Recruiter = "recruiter";

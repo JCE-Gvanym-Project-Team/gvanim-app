@@ -1,11 +1,11 @@
 import firebase from "firebase/app";
 import "firebase/database";
 import { dataref } from "../FirebaseConfig/firebase";
-import { Job, generateJobNumber } from "./Job";
+import { Job, generateJobNumber, getFilteredJobs } from "./Job";
 import { getFilteredCandidates, Candidate } from "./Candidate";
 import { CandidateJobStatus, getFilteredCandidateJobStatuses } from "./CandidateJobStatus";
 import { Recomendation } from "./Recomendation";
-import { Recruiter } from "./Recruiter";
+import { Recruiter, getRecruitersFromDatabase } from "./Recruiter";
 import { registerRecruiter, loginRecruiter, loguotRecruiter } from "./Authentification";
 import { Logout } from "@mui/icons-material";
 const database = dataref;
@@ -54,13 +54,20 @@ export function replaceData(path: string, data: any) {
  * @returns None
  * @throws {Error} If there is an error adding the object to the database.
  */
-export async function appendToDatabase(obj: any, path: string) {
-	const database = dataref;
-	try {
-		await database.ref(path).push(obj);
-	} catch (error) {
-		console.error("Error adding object to database:", error);
+export async function appendToDatabase(obj: any, path: string, id: string="") {
+	const databaseRef = dataref.ref(`${path}/${id}`);
+	// Store the object at the database reference
+	if(id.length===0){
+		databaseRef.push(obj);
+		return;
 	}
+	databaseRef.set(obj)
+		.then(() => {
+			console.log(`Object stored successfully at path ${path}/${id}`);
+		})
+		.catch((error) => {
+			console.error(`Error storing object at path ${path}/${id}: ${error}`);
+		});
 }
 export async function getFirebaseIdsAtPath(path: string): Promise<string[]> {
 	const snapshot = await database.ref(path).once("value");
@@ -68,7 +75,18 @@ export async function getFirebaseIdsAtPath(path: string): Promise<string[]> {
 	return values ? Object.keys(values) : [];
 }
 export async function main() {	//for debugging dont use
-	/*
-	let job1 = new Job((await generateJobNumber()), "title1", "role", [50, 100], "tel-aviv", "tel-aviv-meguorim", "desc", "req", true, false);
-	let job2 = new Job((await generateJobNumber()), "title2", "role", [50, 100], "tel-aviv", "tel-aviv-meguorim", "desc", "req", true, false);
-}	*/
+	loginRecruiter("test1@gamil.com", "123456");
+	//let rec1 = new Recruiter("test1@gmail.com","is","ra",["sector1"]);
+	//rec1.add();
+	//registerRecruiter("test1@gmail.com","123456");
+	//console.log((await getFilteredJobs()));
+	//let job1 = new Job((await generateJobNumber()), "title1", "role", [50, 100], "tel-aviv", "sector1", "desc", "req", true, false);
+	//let job2 = new Job((await generateJobNumber()), "title2", "role", [50, 100], "tel-aviv", "sector2", "desc", "req", true, false);
+	//job1.add();
+	//job2.add();
+	const jobs = await getFilteredJobs();// as Job[];
+	if (jobs.length > 0)
+		console.log(jobs[0].getPath());
+		//jobs[0].edit("modified");
+	console.log((await getFilteredJobs()));
+}	
