@@ -80,7 +80,7 @@ export async function main() {	//for debugging dont use
 	//rec1.add();
 	//registerRecruiter("test1@gmail.com","123456");
 	//console.log((await getFilteredJobs()));
-	//let job1 = new Job((await generateJobNumber()), "title1", "role", [50, 100], "tel-aviv", "sector1", "desc", "req", true, false);
+	let job1 = new Job((await generateJobNumber()), "title1", "role", [50, 100], "tel-aviv", "sector1", "desc", "req", true, false);
 	//let job2 = new Job((await generateJobNumber()), "title2", "role", [50, 100], "tel-aviv", "sector2", "desc", "req", true, false);
 	//job1.add();
 	//job2.add();

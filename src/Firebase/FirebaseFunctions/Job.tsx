@@ -8,10 +8,10 @@ export class Job {
     public _title: string;
     public _jobNumber: number;
     public _role: string;
-    public _scope: Array<number>;
+    public _scope: Array<number>;//first is the the smallest
     public _region: string;
     public _sector: string;
-    public _description: string;
+    public _description: string;// todo make arrays of strings[]
     public _requirements: string;
     public _open: boolean;
     public _highPriority: boolean;

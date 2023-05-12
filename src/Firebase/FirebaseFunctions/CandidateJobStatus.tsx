@@ -39,7 +39,7 @@ export class CandidateJobStatus {
         this._recomendations = recomendations;
     }
     public async addRecomendation(fullName: string, phone: string, eMail: string, recomendation: string) {
-        if (this._recomendations.length >= 10)
+        if (this._recomendations.length >= 3)
             return;
         if (this._recomendations.map((rec) => rec._phone).includes(phone))
             return;
