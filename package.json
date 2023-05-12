@@ -64,6 +64,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/nodemailer": "^6.4.7",
     "gh-pages": "^5.0.0"
   }
 }
