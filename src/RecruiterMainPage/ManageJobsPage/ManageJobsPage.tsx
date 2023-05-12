@@ -6,30 +6,45 @@ import { Box, Container } from "@mui/material";
 import MyAvatar from "./Components/MyAvatar/MyAvatar";
 import MyBar from "./Components/MyBar/MyBar";
 import React from "react";
+import MyLoading from "../../Components/MyLoading/Loading";
 
 
 
 const ManageJobPageBody = () => {
     const [TableWidth, setTableWidth] = React.useState('lg');
+    const [loading, setLoading] = useState(true);
 
- return (
-    <Box className="ManageJobPage-Body" sx={{ width: "100%" }}>
-    <Container sx={{ display: 'flex', justifyContent: 'center' }}
-        style={{ left: 'auto', right: 'auto', padding: 0, marginTop: '30px', }} maxWidth="sm">
-        <MyAvatar />
-    </Container>
-    <Container
-        style={{
-            left: 'auto', right: 'auto', padding: 0, marginTop: '20px', width: '100%',
-        }} maxWidth="sm">
+    useEffect(() => {
+        setLoading(true);
+        setTimeout(() => {
+            setLoading(false);
+        }, 2500);
+    }, []);
 
-        <MyBar TableWidth={TableWidth} setTableWidth={setTableWidth} />
-    </Container>
- 
-    <MyTable TableWidth={TableWidth} />
-</Box>
- );
-};
+
+    if (loading) {
+        return (<MyLoading />);
+    }
+    else {
+        return (
+            <Box className="ManageJobPage-Body" sx={{ width: "100%" }}>
+                <Container sx={{ display: 'flex', justifyContent: 'center' }}
+                    style={{ left: 'auto', right: 'auto', padding: 0, marginTop: '30px', }} maxWidth="sm">
+                    <MyAvatar />
+                </Container>
+                <Container
+                    style={{
+                        left: 'auto', right: 'auto', padding: 0, marginTop: '20px', width: '100%',
+                    }} maxWidth="sm">
+
+                    <MyBar TableWidth={TableWidth} setTableWidth={setTableWidth} />
+                </Container>
+
+                <MyTable TableWidth={TableWidth} />
+            </Box>
+        );
+    }
+}
 
 const TableContainer = () => {
     const [data, setData] = useState({});
