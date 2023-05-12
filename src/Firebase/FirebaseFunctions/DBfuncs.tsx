@@ -1,12 +1,14 @@
 import firebase from "firebase/app";
 import "firebase/database";
-import { dataref } from "../FirebaseConfig/firebase";
-import { Job, generateJobNumber } from "./Job";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { realtimeDB, myFirestore } from "../FirebaseConfig/firebase";
+import { Job, generateJobNumber, getFilteredJobs } from "./Job";
 import { getFilteredCandidates, Candidate } from "./Candidate";
 import { CandidateJobStatus, getFilteredCandidateJobStatuses } from "./CandidateJobStatus";
 import { Recomendation } from "./Recomendation";
-const database = dataref;
+import { Recruiter, getRecruitersFromDatabase } from "./Recruiter";
+import { registerRecruiter, loginRecruiter, loguotRecruiter } from "./Authentification";
+import { uploadFileToFirestore, getDownloadUrlFromFirestorePath } from "./firestoreFunc";
+const database = realtimeDB;
 /**
  * Prints the data located at the given path in the Firebase Realtime Database.
  * @param {string} path - The path to the data in the database.
@@ -30,7 +32,7 @@ export async function removeObjectAtPath(path: string) {
  * @returns None
  */
 function deleteData(path: string) {
-	const database = dataref;
+	const database = realtimeDB;
 	const deleteRef = database.ref(path);
 	deleteRef.remove();
 }
@@ -41,7 +43,6 @@ function deleteData(path: string) {
  * @returns None
  */
 export function replaceData(path: string, data: any) {
-	const database = dataref;
 	const addRef = database.ref(path);
 	addRef.set(data);
 }
@@ -52,36 +53,34 @@ export function replaceData(path: string, data: any) {
  * @returns None
  * @throws {Error} If there is an error adding the object to the database.
  */
-export async function appendToDatabase(obj: any, path: string) {
-	const database = dataref;
-	try {
-		await database.ref(path).push(obj);
-	} catch (error) {
-		console.error("Error adding object to database:", error);
+export async function appendToDatabase(obj: any, path: string, id: string = "") {
+	const databaseRef = realtimeDB.ref(`${path}/${id}`);
+	// Store the object at the database reference
+	if (id.length === 0) {
+		databaseRef.push(obj);
+		return;
 	}
+	databaseRef.set(obj)
+		.then(() => {
+			console.log(`Object stored successfully at path ${path}/${id}`);
+		})
+		.catch((error) => {
+			console.error(`Error storing object at path ${path}/${id}: ${error}`);
+		});
 }
-/**
- * Submits a job application for a candidate with the given information.
- * @param {string} firstName - The first name of the candidate.
- * @param {string} lastName - The last name of the candidate.
- * @param {string} phone - The phone number of the candidate.
- * @param {string} eMail - The email address of the candidate.
- * @param {string} about - A brief description of the candidate's qualifications.
- * @param {number} jobNumber - The job number of the job the candidate is applying for.
- * @returns {Promise<CandidateJobStatus>} - A promise that resolves to the CandidateJobStatus object representing the application.
- * you can use addRecomendation() on returned value to add a new recomendation.
- * If the candidate has already applied to the job,
- */
 export async function getFirebaseIdsAtPath(path: string): Promise<string[]> {
 	const snapshot = await database.ref(path).once("value");
 	const values = snapshot.val();
 	return values ? Object.keys(values) : [];
 }
 export async function main() {	//for debugging dont use
-	let job1 = new Job((await generateJobNumber()),"title1", "role", [50, 100], "tel-aviv", "tel-aviv-meguorim", "desc", "req", true, false);
-	let job2 = new Job((await generateJobNumber()),"title2", "role", [50, 100], "tel-aviv", "tel-aviv-meguorim", "desc", "req", true, false);
-	job1.add();
-	job2.add();
-	job1.remove();
-	job2.remove();
-}
+	//loginRecruiter("test1@gamil.com", "123456");
+	//let rec1 = new Recruiter("test1@gmail.com","is","ra",["sector1"]);
+	//let job1 = new Job((await generateJobNumber()), "title1", "role", [50, 100], "tel-aviv", "sector1", "desc", "req", true, false);
+	//let job2 = new Job((await generateJobNumber()), "title2", "role", [50, 100], "tel-aviv", "sector2", "desc", "req", true, false);
+	const file = new File(["test"], "C:/Users/elyaa/Desktop/sandboxtest.txt", { type: "text/plain" });
+	const path = 'myCollection';
+	const name = 'hello.txt';
+	//uploadFileToFirestore(file, path, name);
+	//console.log((await getDownloadUrlFromFirestorePath(`${path}/${name}`)));	
+}	

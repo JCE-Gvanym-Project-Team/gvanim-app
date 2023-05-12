@@ -1,8 +1,9 @@
-import { dataref } from "../FirebaseConfig/firebase";
+import { realtimeDB } from "../FirebaseConfig/firebase";
 import { CandidateJobStatus, getFilteredCandidateJobStatuses } from "./CandidateJobStatus";
 import { getObjectAtPath, removeObjectAtPath, getFirebaseIdsAtPath, replaceData, appendToDatabase } from "./DBfuncs";
 import { getFilteredJobs, Job } from "./Job";
-const database = dataref;
+import { uploadFileToFirestore, getDownloadUrlFromFirestorePath, getFileExtensionsInFolder } from "./firestoreFunc";
+const database = realtimeDB;
 export class Candidate {
     public _id: string;
     public _firstName: string;
@@ -34,53 +35,62 @@ export class Candidate {
         return candidatures;
     }
     public async getPath() {
-        let firebaseId = "";
-        let candidateIds = await getFirebaseIdsAtPath("/Candidates");
-        candidateIds.forEach(async (id) => {
-            if (((await getObjectAtPath("/Candidates/" + id))._id === this._id))
-                firebaseId = id;
-        });
-        return "/Candidates/" + firebaseId;
+        if ((await getFirebaseIdsAtPath('/Canndidates')).includes(this._id.toString()))
+            return "/Jobs/" + this._id;
+        return "";
+    }
+    public async exists() {
+        if ((await this.getPath()).length > 0)
+            return true;
+        return false;
     }
     public async remove() {
-        let candidatures = await this.getCandidatures();
-        candidatures.forEach((c)=>c.remove());
-        removeObjectAtPath((await this.getPath()));
+        if (!(await this.exists()))
+            return;
+        const candidatures = await getFilteredCandidateJobStatuses(["candidateId"], [this._id]);
+        candidatures.forEach((c) => c.remove());
+        removeObjectAtPath("/Candidates/" + this._id);
     }
-    public async edit(firstName: string = "", lastName: string = "", phone: string = "", eMail: string = "", generalRating: number = -1) {
-        if (firstName.length > 0)
-            this._firstName = firstName;
-        if (lastName.length > 0)
-            this._lastName = firstName;
-        if (generalRating >= 0)
-            this._generalRating = generalRating;
-        if (phone.length > 0 || eMail.length > 0) {
-            if ((await getFilteredCandidates(["id"], [eMail + phone])).length === 0) {
-                let candidatures = await getFilteredCandidateJobStatuses(["candidateId"], [this._id]);
-                candidatures.forEach((c) => c.edit(eMail + phone));
-                this._id = eMail + phone;
-                if (eMail.length > 0)
-                    this._eMail = eMail;
-                if (phone.length > 0)
-                    this._phone = phone;
-            }
-            else
-                console.log("colision detected a candidate already exist with the same phone and eMail")
+    public async edit(firstName: string = this._firstName, lastName: string = this._lastName, phone: string = this._phone, eMail: string = this._eMail, generalRating: number = this._generalRating) {
+        this._firstName = firstName;
+        this._lastName = firstName;
+        this._generalRating = generalRating;
+        const newId = eMail + phone;
+        if ((this._id !== newId) && ((await getFilteredCandidates(["id"], [newId])).length === 0)) {
+            this._id = newId;
+            this._eMail = eMail;
+            this._phone = phone;
         }
+        else
+            console.log("colision detected a candidate already exist with the same phone and eMail");
         replaceData((await this.getPath()), this);
     }
-    public async add(){
-        if((await this.getPath())==="/Candidates/")
-            appendToDatabase(this,"/Candidate");
+    public async add() {
+        if ((await this.getPath()) === "/Candidates/")
+            appendToDatabase(this, "/Candidates", this._id);
         else
             console.log("the candidate already exists");
     }
-    public async apply(jobNumber: number, about: string){
-        if((await this.getPath())==="/Candidates/")
+    public async apply(jobNumber: number, about: string) {
+        if ((await this.getPath()) === "/Candidates/")
             this.add();
-        let candidatuers = new CandidateJobStatus(jobNumber,this._id,"הוגשה מועמדות",about,-1,new Date(),new Date());
+        let candidatuers = new CandidateJobStatus(jobNumber, this._id, "הוגשה מועמדות", about, -1, new Date(), new Date());
         candidatuers.add();
     }
+    public async uploadCv(cv: File) {
+        const extension = cv.name.split('.')[cv.name.split('.').length - 1];
+        await uploadFileToFirestore(cv, `CandidatesFiles/${this._id}`, `${this._firstName}_${this._lastName}_CV.${extension}`);
+    }
+    public async getCvUrl(): Promise<string> {
+        const extensions = await getFileExtensionsInFolder(`CandidatesFiles/${this._id}`);
+        for (let i = 0; i < extensions.length; i++) {
+          if ((await getDownloadUrlFromFirestorePath(`CandidatesFiles/${this._id}/${this._firstName}_${this._lastName}_CV.${extensions[i]}`)).length > 0){
+            const url = await getDownloadUrlFromFirestorePath(`CandidatesFiles/${this._id}/${this._firstName}_${this._lastName}_CV.${extensions[i]}`);
+            return url;
+          }
+        }
+        return "";
+      }
 }
 
 async function getCandidatesFromDatabase(): Promise<Candidate[]> {
