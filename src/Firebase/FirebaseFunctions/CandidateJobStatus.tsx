@@ -1,6 +1,7 @@
 import { dataref } from "../FirebaseConfig/firebase";
 import { Recomendation } from './Recomendation';
-import { getObjectAtPath, removeObjectAtPath, getFirebaseIdsAtPath, replaceData,appendToDatabase } from "./DBfuncs";
+import { getObjectAtPath, removeObjectAtPath, getFirebaseIdsAtPath, replaceData, appendToDatabase } from "./DBfuncs";
+import { uploadFileToFirestore, getDownloadUrlFromFirestorePath, getFileExtensionsInFolder } from "./firestoreFunc";
 import { Candidate } from './Candidate';
 import { Job } from './Job';
 const database = dataref;
@@ -33,18 +34,32 @@ export class CandidateJobStatus {
         this._matchingRate = matchingRate;
         this._applyDate = applyDate;
         this._lastUpdate = lastUpdate;
-        this._interviewDate = new Date(0,0,0);
+        this._interviewDate = new Date(0, 0, 0);
         this._interviewsSummery = interviewsSummery;
         this._about = about;
         this._recomendations = recomendations;
     }
-    public async addRecomendation(fullName: string, phone: string, eMail: string, recomendation: string) {
+    public async addRecomendation(fullName: string, phone: string, eMail: string, recomendation: File) {
         if (this._recomendations.length >= 3)
             return;
         if (this._recomendations.map((rec) => rec._phone).includes(phone))
             return;
-        this._recomendations.push(new Recomendation(fullName, phone, eMail, recomendation));
+        this._recomendations.push(new Recomendation(fullName, phone, eMail));
+        const extension = recomendation.name.split('.')[recomendation.name.split('.').length - 1];
+        await uploadFileToFirestore(recomendation, `CandidatesFiles/${this._candidateId}`, `${phone}_REC.${extension}`);
         replaceData((await this.getPath()), this);
+    }
+    public async getRecomendationsUrl(): Promise<string[]> {
+        let urls: string[] = [];
+        const extentions = await getFileExtensionsInFolder(`CandidatesFiles/${this._candidateId}`);
+        const phones = this._recomendations.map((rec) => rec._phone);
+        for (let i = 0; i < phones.length; i++)
+            for (let j = 0; j < extentions.length; j++)
+                if ((await getDownloadUrlFromFirestorePath(`CandidatesFiles/${this._candidateId}/${phones[i]}_REC.${extentions[j]}`)).length > 0) {
+                    let url = await getDownloadUrlFromFirestorePath(`CandidatesFiles/${this._candidateId}/${phones[i]}_REC.${extentions[j]}`);
+                    urls.push(url);
+                }
+        return urls;
     }
     public getNumOfInterviews() {
         return this._interviewsSummery.length;
@@ -68,19 +83,19 @@ export class CandidateJobStatus {
     private async getPath() {
         let firebaseId = "";
         let ids = await getFirebaseIdsAtPath("/CandidatesJobStatus");
-        for(let i=0;i<ids.length;i++){
-            let stat = await getObjectAtPath("/CandidatesJobStatus/"+ids[i]);
-            if(stat._candidateId===this._candidateId && stat._jobNumber===this._jobNumber){
+        for (let i = 0; i < ids.length; i++) {
+            let stat = await getObjectAtPath("/CandidatesJobStatus/" + ids[i]);
+            if (stat._candidateId === this._candidateId && stat._jobNumber === this._jobNumber) {
                 firebaseId = ids[i];
                 break;
             }
         }
-        if(firebaseId.length>0)
+        if (firebaseId.length > 0)
             return "/Candidates/" + firebaseId;
         return ";"
     }
-    public async exists(){
-        if((await this.getPath()).length>0)
+    public async exists() {
+        if ((await this.getPath()).length > 0)
             return true;
         return false;
     }
@@ -92,20 +107,20 @@ export class CandidateJobStatus {
                 removeObjectAtPath("/CandidatesJobStatus/" + id);
         });
     }
-    public async add(){
-        if((await this.getPath())==="/CandidatesJobStatus/")
-            appendToDatabase(this,"/CandidatesJobStatus");
+    public async add() {
+        if ((await this.getPath()) === "/CandidatesJobStatus/")
+            appendToDatabase(this, "/CandidatesJobStatus");
         else
             console.log("the CandidatesJobStatus already exists");
     }
-    public async updateStatus(newStatus: string, interviewDate: Date = this._interviewDate){
-        if(!(await this.exists())){
+    public async updateStatus(newStatus: string, interviewDate: Date = this._interviewDate) {
+        if (!(await this.exists())) {
             console.log("candidate job status not found in the database");
             return;
         }
         this._status = newStatus;
         /* todo: notify() candidate via mail with the next interview date */
-        replaceData((await this.getPath()),this);
+        replaceData((await this.getPath()), this);
     }
 }
 async function getCandidateJobStatusFromDatabase(): Promise<CandidateJobStatus[]> {
