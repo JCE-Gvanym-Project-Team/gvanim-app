@@ -1,17 +1,17 @@
 import { CandidateJobStatus, getFilteredCandidateJobStatuses } from "./CandidateJobStatus";
-import { dataref } from "../FirebaseConfig/firebase";
+import { realtimeDB } from "../FirebaseConfig/firebase";
 import { Candidate, getFilteredCandidates } from "./Candidate";
-import { appendToDatabase, getFirebaseIdsAtPath, getObjectAtPath, removeObjectAtPath } from "./DBfuncs";
-const database = dataref;
+import { appendToDatabase, getFirebaseIdsAtPath, getObjectAtPath, removeObjectAtPath, replaceData } from "./DBfuncs";
+const database = realtimeDB;
 
 export class Job {
     public _title: string;
     public _jobNumber: number;
     public _role: string;
-    public _scope: Array<number>;
+    public _scope: Array<number>;//first is the the smallest
     public _region: string;
     public _sector: string;
-    public _description: string;
+    public _description: string;// todo make arrays of strings[]
     public _requirements: string;
     public _open: boolean;
     public _highPriority: boolean;
@@ -42,60 +42,60 @@ export class Job {
         this._highPriority = highPriority;
         this._views = views;
         this._creationDate = new Date();
-        this._jobNumber=jobNumber;
+        this._jobNumber = jobNumber;
     }
     public async getCandidatures(): Promise<CandidateJobStatus[]> {
-        let candidatures = await getFilteredCandidateJobStatuses(["jobNumber"], [this._jobNumber.toString()]);
-        return candidatures;
+        return (await getFilteredCandidateJobStatuses(["jobNumber"], [this._jobNumber.toString()]));
     }
     public async getCandidates(): Promise<Candidate[]> {
         let candidates;
-        let candidtesId = (await this.getCandidatures()).map((obj) => obj._candidateId);
-        candidtesId = Array.from(new Set(candidtesId));
-        candidtesId.forEach((id) => candidates.push(getFilteredCandidates(["id"], [id])[0]))
+        let ids = (await this.getCandidatures()).map((obj) => obj._candidateId);
+        ids = Array.from(new Set(ids));
+        //candidtesId.forEach((id) => candidates.push(getFilteredCandidates(["id"], [id])[0]))
+        for(let i=0;i<ids.length;i++)
+            candidates.push((await getFilteredCandidates(["id"],[ids[i]])));
         return candidates;
     }
     public async remove() {
-        let candidatures = await this.getCandidatures();
-        candidatures.forEach((c)=>c.remove())
-        let jobIds = await getFirebaseIdsAtPath("/Jobs");
-        jobIds.forEach(async (id) => {
-            if ((await getObjectAtPath("/Jobs/" + id))._jobNumber === this._jobNumber) removeObjectAtPath("/Jobs/" + id);
-        });
+        const candidatures = await getFilteredCandidateJobStatuses(["jobNumber"],[this._jobNumber.toString()]);
+        candidatures.forEach((c)=>c.remove());
+        if((await this.exists()))
+            removeObjectAtPath("/Jobs/" + this._jobNumber);
+        
     }
-    private async getPath() {
-        let firebaseId = "";
-        let jobIds = await getFirebaseIdsAtPath("/Jobs");
-        jobIds.forEach(async (id) => {
-            if (((await getObjectAtPath("/Jobs/" + id))._jobNumber === this._jobNumber))
-                firebaseId = id;
-        });
-        return "/Jobs/" + firebaseId;
+    public async getPath() {
+        if((await getFirebaseIdsAtPath('/Jobs')).includes(this._jobNumber.toString()))
+            return "/Jobs/"+this._jobNumber;
+        return "";
     }
-    public async edit(title: string = "",
-        role: string = "",
-        scope: Array<number> = [0, 0],
-        region: string = "",
-        sector: string = "",
-        description: string = "",
-        requirements: string = "",
-        open: boolean,
-        highPriority: boolean,) {
-        if (title.length > 0)
-            this._title = title;
-        if (role.length > 0)
-            this._role = role;
-        if (sector.length > 0)
-            this._sector = sector;
-        if (description.length > 0)
-            this._description = description;
-        if (requirements.length > 0)
-            this._requirements = requirements;
-        this._open=open;
-        this._highPriority=highPriority;
+    public async exists(){
+        if((await this.getPath()).length>0)
+            return true;
+        return false;
     }
-    public async add(){
-        appendToDatabase(this, "/Jobs");
+    public async edit(title: string = this._title,
+        role: string = this._role,
+        scope: Array<number> = this._scope,
+        region: string = this._region,
+        sector: string = this._sector,
+        description: string = this._description,
+        requirements: string = this._requirements,
+        open: boolean = this._open,
+        highPriority: boolean = this._highPriority) {
+        this._title = title;
+        this._role = role;
+        this._sector = sector;
+        this._description = description;
+        this._requirements = requirements;
+        this._open = open;
+        this._highPriority = highPriority;
+        if (!(await this.exists()))
+            this.add();
+        replaceData((await this.getPath()), this);
+    }
+    public async add() {
+        if (!(await this.exists()))
+            appendToDatabase(this, "/Jobs", this._jobNumber.toString());
     }
 }
 /* Jobs functions */
@@ -142,7 +142,7 @@ export async function generateJobNumber(): Promise<number> {
  * @param {string} [sortBy=""] - The attribute to sort the jobs by.
  * @returns {Promise<Job[]>} - A promise that resolves to an array of Job objects that match the filter criteria and sorted by desired attribute.
  */
-export async function getFilteredJobs(attributes: string[] = [], values: string[] = [], sortBy: string = "") {
+export async function getFilteredJobs(attributes: string[] = [], values: string[] = [], sortBy: string = ""): Promise<Job[]> {
     if (attributes.length !== values.length) {
         console.log("the attributes length not match to values length")
         return [];
@@ -203,7 +203,9 @@ export async function getFilteredJobs(attributes: string[] = [], values: string[
         return jobs.sort(compareByCreationDate);
     if (sortBy === "views")
         return jobs.sort(compareByViews);
-    return jobs;
+    return jobs.map((job) => new Job(job._jobNumber, job._title, job._role, job._scope
+        , job._region, job._sector, job._description, job._requirements,
+        job._open, job._highPriority, job._views));
 }
 /* compare function for sort */
 function compareByTitle(a: Job, b: Job): number {
