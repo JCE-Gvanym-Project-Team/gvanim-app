@@ -1,4 +1,5 @@
 import { SxProps, createTheme } from '@mui/material';
+<<<<<<< HEAD
 import { CSSProperties } from '@mui/material/styles/createTypography';
 import { Theme } from '@mui/material/styles';
 import { ThermometerLow } from 'react-bootstrap-icons';
@@ -58,3 +59,28 @@ export const dataGridSx = (theme: Theme): SxProps => ({
 		borderRadius: 0,
 	}
 });
+=======
+import type { } from '@mui/x-data-grid/themeAugmentation';
+
+const theme = createTheme({
+	components: {
+		// Use `MuiDataGrid` on DataGrid, DataGridPro and DataGridPremium
+		MuiDataGrid: {
+			styleOverrides: {
+				root: {
+					backgroundColor: 'red',
+				},
+			},
+		},
+	},
+});
+
+const DataGridContainerSx: SxProps = {
+	border: 1, 
+	overflow: 'hidden'
+}
+
+const DataGridContainerStyle = {
+	
+}
+>>>>>>> 71b3b6d3360aa305c36809aaad67b91e7c8b5421
