@@ -1,6 +1,6 @@
-import { dataref } from "../FirebaseConfig/firebase";
+import { realtimeDB } from "../FirebaseConfig/firebase";
 import { getObjectAtPath, removeObjectAtPath, getFirebaseIdsAtPath, appendToDatabase, replaceData } from "./DBfuncs";
-const database = dataref;
+const database = realtimeDB;
 
 export class Recruiter {
 	public _email: string;
@@ -59,7 +59,7 @@ export class Recruiter {
 }
 
 export async function getRecruitersFromDatabase(): Promise<Recruiter[]> {
-	const database = dataref;
+	const database = realtimeDB;
 	try {
 		const snapshot = await database.ref("/Recruiters").once("value");
 		const recruitersData = snapshot.val();

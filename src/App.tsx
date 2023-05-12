@@ -10,8 +10,10 @@ import ReportsPage from './RecruiterMainPage/ReportsPage/ReportsPage';
 import { Router } from 'express';
 import NavBar from './Components/NavBar/NavBar';
 import { main } from './Firebase/FirebaseFunctions/DBfuncs'
-
-//main();
+import { initializeApp } from 'firebase/app';
+//import { firebaseConfig } from './Firebase/FirebaseConfig/firebase';
+//firebase.initializeApp(firebaseConfig)
+main();
 
 const Admin = "admin";
 const Recruiter = "recruiter";

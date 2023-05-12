@@ -1,8 +1,8 @@
 import { CandidateJobStatus, getFilteredCandidateJobStatuses } from "./CandidateJobStatus";
-import { dataref } from "../FirebaseConfig/firebase";
+import { realtimeDB } from "../FirebaseConfig/firebase";
 import { Candidate, getFilteredCandidates } from "./Candidate";
 import { appendToDatabase, getFirebaseIdsAtPath, getObjectAtPath, removeObjectAtPath, replaceData } from "./DBfuncs";
-const database = dataref;
+const database = realtimeDB;
 
 export class Job {
     public _title: string;
