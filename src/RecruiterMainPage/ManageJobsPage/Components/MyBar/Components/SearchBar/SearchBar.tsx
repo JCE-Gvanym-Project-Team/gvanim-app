@@ -4,7 +4,7 @@ import InputBase from '@mui/material/InputBase';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
-import { Tooltip } from '@mui/material';
+import { Box, Tooltip } from '@mui/material';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 
@@ -12,16 +12,16 @@ export default function MySearchBar(props: {handleClick: any,checked: any}) {
     const {handleClick, checked} = props;
     
     return (
-        <Paper
+        <Box
             component="form"
             sx={{
                 boxShadow: 3,
                 marginLeft: 'auto',
                 marginRight: 'auto',
-       
                 display: 'flex',
                 alignItems: 'center',
-                width: 450,
+                borderRadius: 2,
+                
             }}
         >
 
@@ -32,7 +32,7 @@ export default function MySearchBar(props: {handleClick: any,checked: any}) {
             </Tooltip>
 
             <InputBase
-                sx={{ ml: 1, flex: 1 }}
+                sx={{ ml: 1, flex: 1}}
                 placeholder="חיפוש"
                 inputProps={{ 'aria-label': 'חיפוש חופשי' }}
               
@@ -48,6 +48,6 @@ export default function MySearchBar(props: {handleClick: any,checked: any}) {
                 {checked ? <KeyboardArrowDown /> : <KeyboardArrowRight />}
             </IconButton>
 
-        </Paper>
+        </Box>
     );
 }

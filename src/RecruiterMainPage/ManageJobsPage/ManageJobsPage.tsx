@@ -20,11 +20,12 @@ const ManageJobPageBody = () => {
     </Container>
     <Container
         style={{
-            left: 'auto', right: 'auto', padding: 0, marginTop: '20px', width: 'fit-content',
+            left: 'auto', right: 'auto', padding: 0, marginTop: '20px', width: '100%',
         }} maxWidth="sm">
 
         <MyBar TableWidth={TableWidth} setTableWidth={setTableWidth} />
     </Container>
+ 
     <MyTable TableWidth={TableWidth} />
 </Box>
  );

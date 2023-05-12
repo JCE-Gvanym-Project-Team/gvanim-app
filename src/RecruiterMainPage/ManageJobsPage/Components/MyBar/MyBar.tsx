@@ -4,7 +4,7 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
-import { Box, Divider, Grow, Paper,Typography } from '@mui/material';
+import { Box, Container, Divider, Grow, Paper,Typography } from '@mui/material';
 import MySearchBar from './Components/SearchBar/SearchBar';
 
 export default function MyBar(props: {TableWidth: any,setTableWidth: any}) {
@@ -20,7 +20,7 @@ export default function MyBar(props: {TableWidth: any,setTableWidth: any}) {
         setTableWidth(event.target.value);
     };
     const MyRadioBar = (
-        <Paper sx={{boxShadow: 'unset',backgroundColor: 'transparent'}} className='mt-2'>
+        <Container sx={{boxShadow: 'unset',backgroundColor: 'transparent'}} className='mt-2'>
             <FormControl
                 sx={{
                     color: 'rgb(62, 80, 96)',
@@ -85,7 +85,7 @@ export default function MyBar(props: {TableWidth: any,setTableWidth: any}) {
 
                 </RadioGroup>
             </FormControl>
-        </Paper>
+        </Container>
     );
 
     return (
