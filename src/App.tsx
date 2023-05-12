@@ -3,7 +3,7 @@ import DrushimMainPage from './DrushimMainPage/DrushimMainPage';
 import AdminMainPage from './AdminMainPage/AdminMainPage';
 import RecruiterMainPage from './RecruiterMainPage/RecruiterMainPage';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { HashRouter, Route, Routes, Link } from "react-router-dom"
+import { HashRouter, Route, Routes, Link, BrowserRouter } from "react-router-dom"
 import ManageCandidatesPage from './RecruiterMainPage/ManageCandidatesPage/ManageCandidatesPage';
 import ManageJobsPage from './RecruiterMainPage/ManageJobsPage/ManageJobsPage';
 import ReportsPage from './RecruiterMainPage/ReportsPage/ReportsPage';
@@ -20,7 +20,7 @@ function App() {
 	const currentUser = "recruiter";
 	return (
 		<>
-			<HashRouter>
+			<BrowserRouter>
 				<NavBar />
 				<Routes>
 					<Route path="/" element={<RecruiterMainPage />} />
@@ -28,7 +28,7 @@ function App() {
 					<Route path="/manageJobs" element={<ManageJobsPage />} />
 					<Route path="/reports" element={<ReportsPage />} />
 				</Routes>
-			</HashRouter>
+			</BrowserRouter>
 			
 		</>
 	);
