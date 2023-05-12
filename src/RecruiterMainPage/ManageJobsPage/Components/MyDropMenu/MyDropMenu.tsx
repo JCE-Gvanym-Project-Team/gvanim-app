@@ -1,146 +1,255 @@
 import * as React from 'react';
+import Menu, { MenuActions } from '@mui/base/Menu';
+import MenuItem, { menuItemClasses } from '@mui/base/MenuItem';
+import Popper from '@mui/base/Popper';
+import { styled } from '@mui/system';
+import { ListActionTypes } from '@mui/base/useList';
+import { IconButton, ListItemIcon, Typography } from '@mui/material';
+import { Assignment, Edit, MoreVert, RemoveCircleOutline } from '@mui/icons-material';
 
-import MenuItem from '@mui/material/MenuItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import { StyledMenu } from './MyDropMenuStyle';
-import { Assignment, RemoveCircleOutline, Edit, MoreVert } from '@mui/icons-material';
-
-
-export default function MyDropMenu() {
-
-    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-    const open = Boolean(anchorEl);
-
-
-    // to open the drop menu
-    const handleClick = (event: React.MouseEvent<HTMLElement>) => { 
-        setAnchorEl(event.currentTarget);
-    };
-
-
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-
-    const handleItemClick = (event: React.MouseEvent<HTMLElement>) => {
-        const myValue  = event.currentTarget.title;
-        console.log(event.currentTarget.tabIndex);
-    };
+function MenuSection({ children, label }: MenuSectionProps) {
     return (
-        <React.Fragment>
-                <IconButton
-                    onClick={handleClick}
-                    size="small"
-                    sx={{
-                        p: '10px',
-                        "&:hover": {
-                            // backgroundColor: "white"
-                            backgroundColor: 'transparent'
-                        }
-                    }}
-                    aria-controls={open ? 'job-menu' : undefined}
-                    aria-haspopup="true"
-                    aria-expanded={open ? 'true' : undefined}
-                >
-                    <MoreVert sx={{fontSize: '17px', color: 'rgb(45, 56, 67)'}}  />
-                </IconButton>
-
-            <StyledMenu
-                anchorEl={anchorEl}
-                id="account-menu"
-                open={open}
-                onClose={handleClose}
-                onClick={handleClose}
-                PaperProps={{
-                    elevation: 0,
-                    sx: {
-                        overflow: 'visible',
-                        filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                        mt: 1.5,
-                        '&:before': {
-                            content: '""',
-                            display: 'block',
-                            position: 'absolute',
-                            top: 0,
-                            left: 14,
-                            width: 10,
-                            height: 10,
-                            bgcolor: 'background.paper',
-                            transform: 'translateY(-50%) rotate(45deg)',
-                            zIndex: 0,
-                        },
-                    },
-                }}
-                transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-                anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-
-            >
-
-
-                <MenuItem title="goToJobPage" tabIndex={1} onClickCapture={handleItemClick}>
-                    <ListItemIcon>
-                        <Assignment
-                            sx={{color: 'rgb(62, 80, 96)'}}
-                            fontSize="small" />
-                    </ListItemIcon>
-                    <Typography
-                        variant='caption'
-                        color='rgb(62, 80, 96)'
-                        fontFamily='"IBM Plex Sans", -apple-system, BlinkMacSystemFont, 
-                    "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "sans-serif", "Apple Color Emoji",
-                     "Segoe UI Emoji", "Segoe UI Symbol"'
-                    >
-                        לדף המשרה
-                    </Typography>
-                </MenuItem>
-
-
-          
-
-                <MenuItem title="editJob" tabIndex={2} onClickCapture={handleItemClick}>
-                    <ListItemIcon>
-                        <Edit 
-                        sx={{color: 'rgb(62, 80, 96)'}}
-                        fontSize="small" />
-                    </ListItemIcon>
-                    <Typography
-                        color='rgb(62, 80, 96)'
-                        variant='caption'
-                        fontFamily='"IBM Plex Sans", -apple-system, BlinkMacSystemFont, 
-                "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "sans-serif", "Apple Color Emoji",
-                 "Segoe UI Emoji", "Segoe UI Symbol"'
-                    >
-                        ערוך משרה
-                    </Typography>
-                </MenuItem>
-
-                <Divider style={{ margin: 0, height: '0px' }} />
-
-
-                <MenuItem title="deleteJob" tabIndex={3} onClickCapture={handleItemClick}>
-                    <ListItemIcon>
-                        <RemoveCircleOutline sx={{ color: 'error.main' }} fontSize="small" />
-                    </ListItemIcon>
-                    <Typography
-                        color={'error'}
-                        variant='caption'
-         
-                        fontFamily='"IBM Plex Sans", -apple-system, BlinkMacSystemFont, 
-                        "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "sans-serif", "Apple Color Emoji",
-                         "Segoe UI Emoji", "Segoe UI Symbol"'
-                    >
-                        הסר משרה
-                    </Typography>
-                </MenuItem>
-
-
-
-
-
-            </StyledMenu>
-        </React.Fragment>
+        <MenuSectionRoot>
+            <MenuSectionLabel>{label}</MenuSectionLabel>
+            {children}
+        </MenuSectionRoot>
     );
 }
+
+export default function WrappedMenuItems() {
+    const [buttonElement, setButtonElement] = React.useState<HTMLButtonElement | null>(
+        null,
+    );
+    const [isOpen, setOpen] = React.useState(false);
+    const menuActions = React.useRef<MenuActions>(null);
+    const preventReopen = React.useRef(false);
+
+    const updateAnchor = React.useCallback((node: HTMLButtonElement | null) => {
+        setButtonElement(node);
+    }, []);
+
+    const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        if (preventReopen.current) {
+            event.preventDefault();
+            preventReopen.current = false;
+            return;
+        }
+
+        setOpen((open) => !open);
+    };
+
+    const handleButtonMouseDown = () => {
+        if (isOpen) {
+            // Prevents the menu from reopening right after closing
+            // when clicking the button.
+            preventReopen.current = true;
+        }
+    };
+
+    const handleButtonKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+        if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+            event.preventDefault();
+            setOpen(true);
+            if (event.key === 'ArrowUp') {
+                // Focus the last item when pressing ArrowUp.
+                menuActions.current?.dispatch({
+                    type: ListActionTypes.keyDown,
+                    key: event.key,
+                    event,
+                });
+            }
+        }
+    };
+
+    const createHandleMenuClick = (menuItem: string) => {
+        return () => {
+            console.log(`Clicked on ${menuItem}`);
+            setOpen(false);
+            buttonElement?.focus();
+        };
+    };
+
+    return (
+        <div>
+            <IconButton
+                type="button"
+                onClick={handleButtonClick}
+                onKeyDown={handleButtonKeyDown}
+                onMouseDown={handleButtonMouseDown}
+                ref={updateAnchor}
+                aria-controls={isOpen ? 'wrapped-menu' : undefined}
+                aria-expanded={isOpen || undefined}
+                aria-haspopup="menu"
+            >
+                <MoreVert sx={{ fontSize: '17px', color: 'rgb(45, 56, 67)' }} />
+            </IconButton>
+
+            <Menu
+                actions={menuActions}
+                open={isOpen}
+                onOpenChange={(open) => {
+                    setOpen(open);
+                }}
+                anchorEl={buttonElement}
+                slots={{ root: StyledPopper, listbox: StyledListbox }}
+                slotProps={{ listbox: { id: 'simple-menu' } }}
+            >
+                <MenuSection label="אפשרויות">
+
+                    <StyledMenuItem onClick={createHandleMenuClick('GoToJobPage')}>
+                        <ListItemIcon>
+                            <Assignment 
+                                sx={{ color: 'rgb(62, 80, 96)', marginRight: 1,fontSize: 'large' }}
+                            />
+                            <Typography
+                             
+                             variant='caption'
+                             fontSize='small'
+                                color='rgb(62, 80, 96)'
+                                fontFamily='"IBM Plex Sans", -apple-system, BlinkMacSystemFont, 
+                                "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "sans-serif", "Apple Color Emoji",
+                                 "Segoe UI Emoji", "Segoe UI Symbol"'
+                            >
+                                לדף המשרה
+                            </Typography>
+                        </ListItemIcon>
+                    </StyledMenuItem>
+
+                    <StyledMenuItem onClick={createHandleMenuClick('Edit')}>
+                        <ListItemIcon>
+                            <Edit
+                          sx={{ color: 'rgb(62, 80, 96)', marginRight: 1,fontSize: 'large' }}
+                            />
+                            <Typography
+                               variant='caption'
+                               fontSize='small'
+                                color='rgb(62, 80, 96)'
+                                fontFamily='"IBM Plex Sans", -apple-system, BlinkMacSystemFont, 
+                                "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "sans-serif", "Apple Color Emoji",
+                                 "Segoe UI Emoji", "Segoe UI Symbol"'
+                            >
+                                ערוך משרה
+                            </Typography>
+                        </ListItemIcon>
+                    </StyledMenuItem>
+
+
+                    <StyledMenuItem onClick={createHandleMenuClick('Delete')}>
+                        <ListItemIcon>
+                            <RemoveCircleOutline
+                             sx={{ color: 'error.main',marginRight: 1,fontSize: 'large' }}
+                                />
+                            <Typography 
+                               variant='caption'
+                               fontSize='small'
+                                 color='error'
+                                 fontFamily='"IBM Plex Sans", -apple-system, BlinkMacSystemFont, 
+                                 "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "sans-serif", "Apple Color Emoji",
+                                  "Segoe UI Emoji", "Segoe UI Symbol"'
+                            >
+                               הסר משרה
+                            </Typography>
+                        </ListItemIcon>
+                    </StyledMenuItem>
+                </MenuSection>
+            </Menu>
+        </div>
+    );
+}
+
+const blue = {
+    100: '#DAECFF',
+    200: '#99CCF3',
+    400: '#3399FF',
+    500: '#007FFF',
+    600: '#0072E5',
+    900: '#003A75',
+};
+
+const grey = {
+    50: '#f6f8fa',
+    100: '#eaeef2',
+    200: '#d0d7de',
+    300: '#afb8c1',
+    400: '#8c959f',
+    500: '#6e7781',
+    600: '#57606a',
+    700: '#424a53',
+    800: '#32383f',
+    900: '#24292f',
+};
+
+const StyledListbox = styled('ul')(
+    ({ theme }) => `
+  font-family: IBM Plex Sans, sans-serif;
+  font-size: 0.875rem;
+  box-sizing: border-box;
+  padding: 6px;
+  margin: 12px 0;
+  min-width: 200px;
+  border-radius: 12px;
+  overflow: auto;
+  outline: 0px;
+  background: ${theme.palette.mode === 'dark' ? grey[900] : '#fff'};
+  border: 1px solid ${theme.palette.mode === 'dark' ? grey[700] : grey[200]};
+  color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]};
+  box-shadow: 0px 2px 16px ${theme.palette.mode === 'dark' ? grey[900] : grey[200]};
+  `,
+);
+
+const StyledMenuItem = styled(MenuItem)(
+    ({ theme }) => `
+  list-style: none;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: default;
+  user-select: none;
+
+  &:last-of-type {
+    border-bottom: none;
+  }
+
+  &.${menuItemClasses.focusVisible} {
+    outline: 3px solid ${theme.palette.mode === 'dark' ? blue[600] : blue[200]};
+    background-color: ${theme.palette.mode === 'dark' ? grey[800] : grey[100]};
+    color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]};
+  }
+
+  &.${menuItemClasses.disabled} {
+    color: ${theme.palette.mode === 'dark' ? grey[700] : grey[400]};
+  }
+
+  &:hover:not(.${menuItemClasses.disabled}) {
+    background-color: ${theme.palette.mode === 'dark' ? grey[800] : grey[100]};
+    color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]};
+  }
+  `,
+);
+
+
+const StyledPopper = styled(Popper)`
+  z-index: 1;
+`;
+
+interface MenuSectionProps {
+    children: React.ReactNode;
+    label: string;
+}
+
+const MenuSectionRoot = styled('li')`
+  list-style: none;
+
+  & > ul {
+    padding-left: 1em;
+  }
+`;
+
+const MenuSectionLabel = styled('span')`
+  display: block;
+  padding: 10px 0 5px 10px;
+  font-size: 0.75em;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05rem;
+  color: ${grey[600]};
+`;
