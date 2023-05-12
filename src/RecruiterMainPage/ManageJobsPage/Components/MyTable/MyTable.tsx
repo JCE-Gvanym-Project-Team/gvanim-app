@@ -10,9 +10,10 @@ import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import { Breakpoint, Container, Theme, styled } from '@mui/material';
+import { Breakpoint, Container, Theme, createTheme, styled, useTheme } from '@mui/material';
 import MyDropMenu from '../MyDropMenu/MyDropMenu';
-import {
+import
+{
     DataGrid, GridToolbarFilterButton,
     GridColDef, GridToolbarDensitySelector,
     GridValueGetterParams, GridToolbarColumnsButton,
@@ -22,6 +23,7 @@ import {
     GridToolbarContainer, heIL,
     GridFooterContainer, GridFooter
 } from '@mui/x-data-grid';
+import { dataGridContainerStyle, dataGridSx } from './MyTableStyle';
 
 
 
@@ -29,7 +31,8 @@ function GridCustomToolbar({
     syncState,
 }: {
     syncState: (stateToSave: GridInitialState) => void;
-}) {
+})
+{
     const rootProps = useGridRootProps();
     const apiRef = useGridApiContext();
 
@@ -43,92 +46,6 @@ function GridCustomToolbar({
         </GridToolbarContainer>
     );
 }
-
-function customCheckbox(theme: Theme) {
-    return {
-        '& .MuiCheckbox-root svg': {
-            width: 16,
-            height: 16,
-            backgroundColor: 'transparent',
-            border: `1px solid ${theme.palette.mode === 'light' ? '#d9d9d9' : 'rgb(67, 67, 67)'
-                }`,
-            borderRadius: 2,
-        },
-        '& .MuiCheckbox-root svg path': {
-            display: 'none',
-        },
-        '& .MuiCheckbox-root.Mui-checked:not(.MuiCheckbox-indeterminate) svg': {
-            backgroundColor: '#1890ff',
-            borderColor: '#1890ff',
-        },
-        '& .MuiCheckbox-root.Mui-checked .MuiIconButton-label:after': {
-            position: 'absolute',
-            display: 'table',
-            border: '2px solid #fff',
-            borderTop: 0,
-            borderLeft: 0,
-            transform: 'rotate(45deg) translate(-50%,-50%)',
-            opacity: 1,
-            transition: 'all .2s cubic-bezier(.12,.4,.29,1.46) .1s',
-            content: '""',
-            top: '50%',
-            left: '39%',
-            width: 5.71428571,
-            height: 9.14285714,
-        },
-        '& .MuiCheckbox-root.MuiCheckbox-indeterminate .MuiIconButton-label:after': {
-            width: 8,
-            height: 8,
-            backgroundColor: '#1890ff',
-            transform: 'none',
-            top: '39%',
-            border: 0,
-        },
-    };
-}
-
-const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
-    border: 0,
-    color:
-        theme.palette.mode === 'light' ? 'rgba(0,0,0,.85)' : 'rgba(255,255,255,0.85)',
-    fontFamily: [
-        '-apple-system',
-        'BlinkMacSystemFont',
-        '"Segoe UI"',
-        'Roboto',
-        '"Helvetica Neue"',
-        'Arial',
-        'sans-serif',
-        '"Apple Color Emoji"',
-        '"Segoe UI Emoji"',
-        '"Segoe UI Symbol"',
-    ].join(','),
-    WebkitFontSmoothing: 'auto',
-    letterSpacing: 'normal',
-    '& .MuiDataGrid-columnsContainer': {
-        backgroundColor: theme.palette.mode === 'light' ? '#fafafa' : '#1d1d1d',
-    },
-    '& .MuiDataGrid-iconSeparator': {
-        display: 'none',
-    },
-    '& .MuiDataGrid-columnHeader, .MuiDataGrid-cell': {
-        borderRight: `1px solid ${theme.palette.mode === 'light' ? '#f0f0f0' : '#303030'
-            }`,
-    },
-    '& .MuiDataGrid-columnsContainer, .MuiDataGrid-cell': {
-        borderBottom: `1px solid ${theme.palette.mode === 'light' ? '#f0f0f0' : '#303030'
-            }`,
-    },
-    '& .MuiDataGrid-cell': {
-        color:
-            theme.palette.mode === 'light' ? 'rgba(0,0,0,.85)' : 'rgba(255,255,255,0.65)',
-    },
-    '& .MuiPaginationItem-root': {
-        borderRadius: 0,
-    },
-    ...customCheckbox(theme),
-}));
-
 
 const columns: GridColDef[] = [
 
@@ -144,8 +61,10 @@ const columns: GridColDef[] = [
         disableExport: true,
         editable: false,
 
-        renderCell: (params) => {
-            const onClick = (e) => {
+        renderCell: (params) =>
+        {
+            const onClick = (e) =>
+            {
                 e.stopPropagation(); // don't select this row after clicking
 
                 const api: GridApi = params.api;
@@ -248,7 +167,8 @@ function createData(
     carbs: number,
     protein: number,
     price: number,
-) {
+)
+{
     return {
         name,
         calories,
@@ -271,7 +191,8 @@ function createData(
     };
 }
 
-function Row(props: { row: ReturnType<typeof createData> }) {
+function Row(props: { row: ReturnType<typeof createData> })
+{
     const { row } = props;
     const [open, setOpen] = React.useState(false);
 
@@ -353,68 +274,66 @@ const rows = [
 ];
 
 
-
-export default function MyTable(props: { TableWidth: any }) {
-    const { TableWidth } = props;
+function CustomFooter()
+{
 
     const [dataSize, setDataSize] = React.useState(rows1.length);
 
-    function CustomFooter() {
+    return (
+        <GridFooterContainer>
+            <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
 
-        return (
-            <GridFooterContainer>
-                <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
-
-                    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                        <Typography
-                            variant='subtitle2'
-                            color='rgb(62, 80, 96)'
-                            fontWeight='500'
-                            fontFamily='"IBM Plex Sans", -apple-system, BlinkMacSystemFont, 
+                <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                    <Typography
+                        variant='subtitle2'
+                        color='rgb(62, 80, 96)'
+                        fontWeight='500'
+                        fontFamily='"IBM Plex Sans", -apple-system, BlinkMacSystemFont, 
         "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "sans-serif", "Apple Color Emoji",
          "Segoe UI Emoji", "Segoe UI Symbol"'
-                        >
-                            מס' משרות:
-                        </Typography>
-                    </div>
-
-                    <div style={{ display: 'flex', flexDirection: 'column-reverse' }}>
-                        <Typography
-                            variant='subtitle2'
-                            fontWeight='500'
-                            marginLeft='8px'
-                            color='rgb(62, 80, 96)'
-                            fontFamily='"IBM Plex Sans", -apple-system, BlinkMacSystemFont, 
-            "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "sans-serif", "Apple Color Emoji",
-             "Segoe UI Emoji", "Segoe UI Symbol"'
-                        >
-                            {dataSize}
-                        </Typography>
-                    </div>
+                    >
+                        מס' משרות:
+                    </Typography>
                 </div>
 
+                <div style={{ display: 'flex', flexDirection: 'column-reverse' }}>
+                    <Typography
+                        variant='subtitle2'
+                        fontWeight='500'
+                        marginLeft='8px'
+                        color='rgb(62, 80, 96)'
+                        fontFamily='"IBM Plex Sans", -apple-system, BlinkMacSystemFont, 
+            "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "sans-serif", "Apple Color Emoji",
+             "Segoe UI Emoji", "Segoe UI Symbol"'
+                    >
+                        {dataSize}
+                    </Typography>
+                </div>
+            </div>
 
-                {/* Add what you want here */}
-                <GridFooter sx={{
-                    border: 'none', // To delete double border.
-                }} />
-            </GridFooterContainer>
-        );
-    };
+
+            {/* Add what you want here */}
+            <GridFooter sx={{
+                border: 'none', // To delete double border.
+            }} />
+        </GridFooterContainer>
+    );
+};
 
 
+export default function MyTable(props: { TableWidth: any })
+{
+    const { TableWidth } = props;
+
+    const theme = useTheme();
     return (
 
-        <Container className="shadow-lg border rounded" sx={{ border: 1, overflow: 'hidden' }} style={{ padding: 0, marginTop: '15px', marginBottom: '15px' }} maxWidth={TableWidth as Breakpoint}>
-
-            <StyledDataGrid
-                sx={{
-                    maxHeight: 550, overflow: 'hidden',
-                    boxShadow: 2,
-                    "&.MuiDataGrid-root .MuiDataGrid-cell:focus-within": {
-                        outline: "none !important",
-                    },
-                }}
+        <Container className="shadow-lg border rounded"
+            sx={dataGridContainerStyle}
+            style={dataGridContainerStyle}
+            maxWidth={TableWidth as Breakpoint}>
+            <DataGrid
+                sx={dataGridSx(theme)}
                 rows={rows1}
                 columns={columns}
                 // checkboxSelection
