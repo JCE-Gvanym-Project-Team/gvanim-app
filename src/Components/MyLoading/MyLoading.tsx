@@ -1,6 +1,6 @@
 import SvgLogo from "../Logo/Logo.svg"
 import { Avatar, Backdrop, Box } from "@mui/material";
-import "./Loading.css"
+import "./MyLoading.css"
 import React, { useEffect } from "react";
 
 

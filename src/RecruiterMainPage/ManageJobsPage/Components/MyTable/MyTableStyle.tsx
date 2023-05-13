@@ -1,7 +1,6 @@
 import { SxProps, createTheme } from '@mui/material';
 import { CSSProperties } from '@mui/material/styles/createTypography';
 import { Theme } from '@mui/material/styles';
-import { ThermometerLow } from 'react-bootstrap-icons';
 
 export const dataGridContainerSx: SxProps = (theme) => ({
 	border: 1,

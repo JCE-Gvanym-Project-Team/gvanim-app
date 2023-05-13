@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react";
 import { dataref } from "../../Firebase/FirebaseConfig/firebase";
-import "./ManageJobsPage.css";
 import MyTable from "./Components/MyTable/MyTable";
 import { Box, Container } from "@mui/material";
 import MyAvatar from "./Components/MyAvatar/MyAvatar";
 import MyBar from "./Components/MyBar/MyBar";
 import React from "react";
-import MyLoading from "../../Components/MyLoading/Loading";
-
+import MyLoading from "../../Components/MyLoading/MyLoading";
+import {
+    ManageJobPageBoxSx,
+    MyAvatarContainerSx,
+    MySearchBarContainerStyle
+} from "./ManageJobsPageStyle";
 
 
 const ManageJobPageBody = () => {
@@ -27,16 +30,14 @@ const ManageJobPageBody = () => {
     }
     else {
         return (
-            <Box className="ManageJobPage-Body" sx={{ width: "100%" }}>
-                <Container sx={{ display: 'flex', justifyContent: 'center' }}
-                    style={{ left: 'auto', right: 'auto', padding: 0, marginTop: '30px', }} maxWidth="sm">
+            <Box className="ManageJobPage-Body" sx={ManageJobPageBoxSx}>
+
+                <Container sx={MyAvatarContainerSx} maxWidth="sm">
                     <MyAvatar />
                 </Container>
-                <Container
-                    style={{
-                        left: 'auto', right: 'auto', padding: 0, marginTop: '20px', width: '100%',
-                    }} maxWidth="sm">
 
+                <Container
+                    style={MySearchBarContainerStyle} maxWidth="sm">
                     <MyBar TableWidth={TableWidth} setTableWidth={setTableWidth} />
                 </Container>
 
