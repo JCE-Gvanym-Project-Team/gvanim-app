@@ -1,13 +1,12 @@
 import { SxProps, createTheme } from '@mui/material';
-import { CSSProperties } from '@mui/material/styles/createTypography';
 import { Theme } from '@mui/material/styles';
 
-export const dataGridContainerSx: SxProps = (theme) => ({
+export const dataGridContainerSx: SxProps = {
 	border: 1,
 	overflow: 'hidden'
-});
+}
 
-export const dataGridContainerStyle: CSSProperties = {
+export const dataGridContainerStyle = {
 	padding: 0,
 	marginTop: '15px',
 	marginBottom: '15px'
@@ -57,3 +56,18 @@ export const dataGridSx = (theme: Theme): SxProps => ({
 		borderRadius: 0,
 	}
 });
+
+export const TypographyFooterSx: SxProps = {
+	fontWeight: '500',
+	marginLeft: '8px',
+	color: 'rgb(62, 80, 96)',
+	fontFamily: '"IBM Plex Sans", -apple-system, BlinkMacSystemFont,"Segoe UI", "Roboto", "Helvetica Neue", "Arial", "sans-serif", "Apple Color Emoji","Segoe UI Emoji", "Segoe UI Symbol"'
+}
+
+export const GridFooterContainerSx: SxProps = {
+	width: '100%',
+	display: 'flex',
+	justifyContent: 'center'
+}
+
+
