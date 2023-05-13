@@ -9,7 +9,7 @@ import {
     MyAvatarContainerSx,
     MySearchBarContainerStyle
 } from "./ManageJobsPageStyle";
-import MySearchBar from "./Components/SearchBar/MySearchBar";
+import MySearchBar from "./Components/MySearchBar/MySearchBar";
 
 
 const ManageJobPageBody = () => {
