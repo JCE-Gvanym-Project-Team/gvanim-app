@@ -4,8 +4,9 @@ import MenuItem, { menuItemClasses } from '@mui/base/MenuItem';
 import Popper from '@mui/base/Popper';
 import { styled } from '@mui/system';
 import { ListActionTypes } from '@mui/base/useList';
-import { IconButton, ListItemIcon, Typography } from '@mui/material';
-import { Assignment, Edit, MoreVert, RemoveCircleOutline } from '@mui/icons-material';
+import { Box, IconButton, ListItemIcon, Typography } from '@mui/material';
+import { Assignment, Edit, MoreVert, Print } from '@mui/icons-material';
+import { MenuItemIconSx, MenuItemTypographySx, MoreVertSx, blue, grey } from './MyDropManuStyle';
 
 function MenuSection({ children, label }: MenuSectionProps) {
     return (
@@ -70,7 +71,7 @@ export default function WrappedMenuItems() {
     };
 
     return (
-        <div>
+        <Box>
             <IconButton
                 type="button"
                 onClick={handleButtonClick}
@@ -81,7 +82,7 @@ export default function WrappedMenuItems() {
                 aria-expanded={isOpen || undefined}
                 aria-haspopup="menu"
             >
-                <MoreVert sx={{ fontSize: '17px', color: 'rgb(45, 56, 67)' }} />
+                <MoreVert sx={MoreVertSx} />
             </IconButton>
 
             <Menu
@@ -98,18 +99,8 @@ export default function WrappedMenuItems() {
 
                     <StyledMenuItem onClick={createHandleMenuClick('GoToJobPage')}>
                         <ListItemIcon>
-                            <Assignment 
-                                sx={{ color: 'rgb(62, 80, 96)', marginRight: 1,fontSize: 'large' }}
-                            />
-                            <Typography
-                             
-                             variant='caption'
-                             fontSize='small'
-                                color='rgb(62, 80, 96)'
-                                fontFamily='"IBM Plex Sans", -apple-system, BlinkMacSystemFont, 
-                                "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "sans-serif", "Apple Color Emoji",
-                                 "Segoe UI Emoji", "Segoe UI Symbol"'
-                            >
+                            <Assignment sx={MenuItemIconSx} />
+                            <Typography sx={MenuItemTypographySx} >
                                 לדף המשרה
                             </Typography>
                         </ListItemIcon>
@@ -117,67 +108,30 @@ export default function WrappedMenuItems() {
 
                     <StyledMenuItem onClick={createHandleMenuClick('Edit')}>
                         <ListItemIcon>
-                            <Edit
-                          sx={{ color: 'rgb(62, 80, 96)', marginRight: 1,fontSize: 'large' }}
-                            />
-                            <Typography
-                               variant='caption'
-                               fontSize='small'
-                                color='rgb(62, 80, 96)'
-                                fontFamily='"IBM Plex Sans", -apple-system, BlinkMacSystemFont, 
-                                "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "sans-serif", "Apple Color Emoji",
-                                 "Segoe UI Emoji", "Segoe UI Symbol"'
-                            >
+                            <Edit sx={MenuItemIconSx} />
+                            <Typography sx={MenuItemTypographySx} >
                                 ערוך משרה
                             </Typography>
                         </ListItemIcon>
                     </StyledMenuItem>
+                </MenuSection>
 
-
-                    <StyledMenuItem onClick={createHandleMenuClick('Delete')}>
+                <MenuSection label='ייצוא'>
+                    <StyledMenuItem onClick={createHandleMenuClick('Print')}>
                         <ListItemIcon>
-                            <RemoveCircleOutline
-                             sx={{ color: 'error.main',marginRight: 1,fontSize: 'large' }}
-                                />
-                            <Typography 
-                               variant='caption'
-                               fontSize='small'
-                                 color='error'
-                                 fontFamily='"IBM Plex Sans", -apple-system, BlinkMacSystemFont, 
-                                 "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "sans-serif", "Apple Color Emoji",
-                                  "Segoe UI Emoji", "Segoe UI Symbol"'
-                            >
-                               הסר משרה
+                            <Print sx={MenuItemIconSx} />
+                            <Typography sx={MenuItemTypographySx} >
+                                הדפס משרה
                             </Typography>
                         </ListItemIcon>
                     </StyledMenuItem>
                 </MenuSection>
             </Menu>
-        </div>
+        </Box>
     );
 }
 
-const blue = {
-    100: '#DAECFF',
-    200: '#99CCF3',
-    400: '#3399FF',
-    500: '#007FFF',
-    600: '#0072E5',
-    900: '#003A75',
-};
 
-const grey = {
-    50: '#f6f8fa',
-    100: '#eaeef2',
-    200: '#d0d7de',
-    300: '#afb8c1',
-    400: '#8c959f',
-    500: '#6e7781',
-    600: '#57606a',
-    700: '#424a53',
-    800: '#32383f',
-    900: '#24292f',
-};
 
 const StyledListbox = styled('ul')(
     ({ theme }) => `
