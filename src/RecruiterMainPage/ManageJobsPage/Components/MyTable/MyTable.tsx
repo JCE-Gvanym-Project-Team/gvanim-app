@@ -140,8 +140,7 @@ function CustomFooter() {
 };
 
 
-export default function MyTable(props: { TableWidth: any }) {
-    const { TableWidth } = props;
+export default function MyTable() {
 
     const theme = useTheme();
     return (
@@ -149,7 +148,7 @@ export default function MyTable(props: { TableWidth: any }) {
         <Container className="shadow-lg border rounded"
             sx={dataGridContainerStyle}
             style={dataGridContainerStyle}
-            maxWidth={TableWidth as Breakpoint}>
+            maxWidth='xl'>
             <DataGrid
                 sx={dataGridSx(theme)}
                 rows={rows1}

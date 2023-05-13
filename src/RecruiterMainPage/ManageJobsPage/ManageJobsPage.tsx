@@ -3,18 +3,16 @@ import { dataref } from "../../Firebase/FirebaseConfig/firebase";
 import MyTable from "./Components/MyTable/MyTable";
 import { Box, Container } from "@mui/material";
 import MyAvatar from "./Components/MyAvatar/MyAvatar";
-import MyBar from "./Components/MyBar/MyBar";
-import React from "react";
 import MyLoading from "../../Components/MyLoading/MyLoading";
 import {
     ManageJobPageBoxSx,
     MyAvatarContainerSx,
     MySearchBarContainerStyle
 } from "./ManageJobsPageStyle";
+import MySearchBar from "./Components/SearchBar/MySearchBar";
 
 
 const ManageJobPageBody = () => {
-    const [TableWidth, setTableWidth] = React.useState('lg');
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -38,10 +36,10 @@ const ManageJobPageBody = () => {
 
                 <Container
                     style={MySearchBarContainerStyle} maxWidth="sm">
-                    <MyBar TableWidth={TableWidth} setTableWidth={setTableWidth} />
+                    <MySearchBar />
                 </Container>
 
-                <MyTable TableWidth={TableWidth} />
+                <MyTable />
             </Box>
         );
     }

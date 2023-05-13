@@ -8,8 +8,7 @@ import { Box, Tooltip } from '@mui/material';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 
-export default function MySearchBar(props: {handleClick: any,checked: any}) {
-    const {handleClick, checked} = props;
+export default function MySearchBar() {
     
     return (
         <Box
@@ -37,16 +36,6 @@ export default function MySearchBar(props: {handleClick: any,checked: any}) {
                 inputProps={{ 'aria-label': 'חיפוש חופשי' }}
               
             />
-
-            <Divider sx={{ height: 28, m: 0.5, minHeight: 28,  }} orientation="vertical" />
-
-           {/* for the radio group */}
-            <IconButton
-                onClick={handleClick}
-                size="small"
-            >
-                {checked ? <KeyboardArrowDown /> : <KeyboardArrowRight />}
-            </IconButton>
 
         </Box>
     );
