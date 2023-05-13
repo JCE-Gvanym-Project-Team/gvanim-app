@@ -14,6 +14,7 @@ import Slide from '@mui/material/Slide';
 import { TransitionProps } from '@mui/material/transitions';
 import { Avatar, Box, Link, ListItemAvatar, ListItemButton, ListItemIcon, Rating } from '@mui/material';
 import { ListItemTypographySx } from './CandidatesListDialogStyle';
+import { ChevronLeft } from '@mui/icons-material';
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -37,7 +38,8 @@ export default function CandidatesListFullScreenDialog() {
 
   return (
     <Box>
-      <Link role='button' onClick={handleClickOpen}>לרשימת המועמדים</Link>
+      <Button variant='text' endIcon={<ChevronLeft />} onClick={handleClickOpen} >לרשימת המועמדים</Button>
+
       <Dialog
         fullScreen
         sx={{
