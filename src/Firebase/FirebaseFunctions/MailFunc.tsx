@@ -1,38 +1,40 @@
+import * as firebase from 'firebase/compat/app';
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import * as nodemailer from 'nodemailer';
+import { httpsCallable } from 'firebase/functions';
 
-admin.initializeApp();
+const sendEmail = functions.https.onCall(async (data, context) => {
+  // Get the email address, subject, and content from the request data
+  admin.initializeApp();
+  const { email, subject, content } = data;
 
-export const sendEmail = functions.https.onCall(async (data, context) => {
-  const { mailAddress, subject, content } = data;
-
-  // Check that the user is authenticated
-  if (!context.auth) {
-    throw new functions.https.HttpsError('unauthenticated', 'The user must be authenticated to send emails.');
-  }
-
-  // Create a nodemailer transport object using Gmail SMTP settings
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
+  // Create a transport object to send the email using a SMTP server
+  const transport = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
     auth: {
-      user: functions.config().gmail.email,
-      pass: functions.config().gmail.password
-    }
+      user: process.env.REACT_APP_SENDER_MAIL,
+      pass: process.env.REACT_APP_SENDER_PASS
+    },
   });
 
-  // Define the email message options
-  const mailOptions = {
-    from: `Sender Name <${functions.config().gmail.email}>`,
-    to: mailAddress,
+  // Configure the email message
+  const message = {
+    from: process.env.REACT_APP_SENDER_MAIL,
+    to: email,
     subject: subject,
-    html: content
+    text: content,
   };
 
-  // Send the email using the nodemailer transport object
-  const info = await transporter.sendMail(mailOptions);
-
-  // Log the email message ID and return a success message
-  console.log(`Message ID: ${info.messageId}`);
-  return { message: `Email sent to ${mailAddress} successfully.` };
+  try {
+    // Send the email using the transport object
+    const result = await transport.sendMail(message);
+    console.log('Email sent successfully:', result);
+    return { success: true };
+  } catch (error: any) {
+    console.error('Error sending email:', error);
+    return { error: error.message };
+  }
 });

@@ -8,6 +8,7 @@ import { Recomendation } from "./Recomendation";
 import { Recruiter, getRecruitersFromDatabase } from "./Recruiter";
 import { registerRecruiter, loginRecruiter, loguotRecruiter } from "./Authentification";
 import { uploadFileToFirestore, getDownloadUrlFromFirestorePath } from "./firestoreFunc";
+
 const database = realtimeDB;
 /**
  * Prints the data located at the given path in the Firebase Realtime Database.
@@ -81,6 +82,7 @@ export async function main() {	//for debugging dont use
 	const file = new File(["test"], "C:/Users/elyaa/Desktop/sandboxtest.txt", { type: "text/plain" });
 	const path = 'myCollection';
 	const name = 'hello.txt';
+	
 	//uploadFileToFirestore(file, path, name);
 	//console.log((await getDownloadUrlFromFirestorePath(`${path}/${name}`)));	
 }	
