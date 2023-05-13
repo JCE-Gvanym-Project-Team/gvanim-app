@@ -10,8 +10,8 @@ import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import { Breakpoint, Container, Theme, styled } from '@mui/material';
-import MyDropMenu from '../MyDropMenu/MyDropMenu';
+import { Breakpoint, Container, Menu, Theme, styled } from '@mui/material';
+// import MyDropMenu from '../MyDropMenu/MyDropMenu';
 import {
     DataGrid, GridToolbarFilterButton,
     GridColDef, GridToolbarDensitySelector,
@@ -161,7 +161,7 @@ const columns: GridColDef[] = [
                 alert(params.id);
             };
 
-            return <MyDropMenu />;
+            return <Menu open />;
         },
 
 
