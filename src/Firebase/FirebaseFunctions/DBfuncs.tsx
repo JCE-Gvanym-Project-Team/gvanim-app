@@ -7,7 +7,7 @@ import { CandidateJobStatus, getFilteredCandidateJobStatuses } from "./Candidate
 import { Recomendation } from "./Recomendation";
 import { Recruiter, getRecruitersFromDatabase } from "./Recruiter";
 import { registerRecruiter, loginRecruiter, loguotRecruiter } from "./Authentification";
-import { uploadFileToFirestore, getDownloadUrlFromFirestorePath } from "./firestoreFunc";
+import { uploadFileToFirestore, getDownloadUrlFromFirestorePath, deleteFile, fileExists } from "./firestoreFunc";
 
 const database = realtimeDB;
 /**
@@ -84,5 +84,7 @@ export async function main() {	//for debugging dont use
 	const name = 'hello.txt';
 	
 	//uploadFileToFirestore(file, path, name);
+	//console.log((await fileExists("/myCollection/hello.txt")));
+	//deleteFile("/myCollection/hello.txt");
 	//console.log((await getDownloadUrlFromFirestorePath(`${path}/${name}`)));	
 }	

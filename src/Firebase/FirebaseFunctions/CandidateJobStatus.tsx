@@ -1,7 +1,7 @@
 import { dataref } from "../FirebaseConfig/firebase";
 import { Recomendation } from './Recomendation';
 import { getObjectAtPath, removeObjectAtPath, getFirebaseIdsAtPath, replaceData, appendToDatabase } from "./DBfuncs";
-import { uploadFileToFirestore, getDownloadUrlFromFirestorePath, getFileExtensionsInFolder } from "./firestoreFunc";
+import { uploadFileToFirestore, getDownloadUrlFromFirestorePath, getFileExtensionsInFolder, deleteFile, fileExists } from "./firestoreFunc";
 import { Candidate } from './Candidate';
 import { Job } from './Job';
 const database = dataref;
@@ -55,11 +55,21 @@ export class CandidateJobStatus {
         const phones = this._recomendations.map((rec) => rec._phone);
         for (let i = 0; i < phones.length; i++)
             for (let j = 0; j < extentions.length; j++)
-                if ((await getDownloadUrlFromFirestorePath(`CandidatesFiles/${this._candidateId}/${phones[i]}_REC.${extentions[j]}`)).length > 0) {
-                    let url = await getDownloadUrlFromFirestorePath(`CandidatesFiles/${this._candidateId}/${phones[i]}_REC.${extentions[j]}`);
+                if ((await fileExists(`CandidatesFiles/${this._candidateId}/${phones[i]}_${this._jobNumber}_REC.${extentions[j]}`))) {
+                    let url = await getDownloadUrlFromFirestorePath(`CandidatesFiles/${this._candidateId}/${phones[i]}_${this._jobNumber}_REC.${extentions[j]}`);
                     urls.push(url);
                 }
         return urls;
+    }
+    private async deleteAllRecomendations(){
+        const extentions = await getFileExtensionsInFolder(`CandidatesFiles/${this._candidateId}`);
+        const phones = this._recomendations.map((rec) => rec._phone);
+        for (let i = 0; i < phones.length; i++)
+            for (let j = 0; j < extentions.length; j++)
+                if ((await fileExists(`CandidatesFiles/${this._candidateId}/${phones[i]}_${this._jobNumber}_REC.${extentions[j]}`))) {
+                    let path = await getDownloadUrlFromFirestorePath(`CandidatesFiles/${this._candidateId}/${phones[i]}_${this._jobNumber}_REC.${extentions[j]}`);
+                    deleteFile(path);
+                }
     }
     public getNumOfInterviews() {
         return this._interviewsSummery.length;
@@ -100,6 +110,7 @@ export class CandidateJobStatus {
         return false;
     }
     public async remove() {
+        this.deleteAllRecomendations();
         let candidateIds = await getFirebaseIdsAtPath("/CandidatesJobStatus");
         candidateIds.forEach(async (id) => {
             if (((await getObjectAtPath("/CandidatesJobStatus/" + id))._candidateId === this._candidateId) &&
@@ -138,14 +149,7 @@ async function getCandidateJobStatusFromDatabase(): Promise<CandidateJobStatus[]
         throw new Error("Failed to fetch candidate job statuses from database.");
     }
 }
-async function removeCandidateJobStatus(candId: string = "", jobNumber: number = -1) {
-    let candidateIds = await getFirebaseIdsAtPath("/CandidatesJobStatus");
-    candidateIds.forEach(async (id) => {
-        if (((await getObjectAtPath("/CandidatesJobStatus/" + id))._candidateId === candId || candId === "") &&
-            ((await getObjectAtPath("/CandidatesJobStatus/" + id))._jobNumber === jobNumber || jobNumber === -1))
-            removeObjectAtPath("/CandidatesJobStatus/" + id);
-    });
-}
+
 export async function getFilteredCandidateJobStatuses(attributes: string[] = [], values: string[] = [], sortBy: string = "") {
     if (attributes.length !== values.length) {
         console.log("the attributes length not match to values length");
