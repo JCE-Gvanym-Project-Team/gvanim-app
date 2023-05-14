@@ -84,6 +84,7 @@ export async function main() {	//for debugging dont use
 		*/
 	loginAdmin();
 	let rec1 = new Recruiter("new@gmail.com", "is", "ra", ["sector1"]);
+	rec1.add();
 	//registerRecruiter(rec1,"123456");
 	//let job1 = new Job((await generateJobNumber()), "title1", "role", [50, 100], "tel-aviv", "sector1", "desc", "req", true, false);
 	//let job2 = new Job((await generateJobNumber()), "title2", "role", [50, 100], "tel-aviv", "sector2", "desc", "req", true, false);

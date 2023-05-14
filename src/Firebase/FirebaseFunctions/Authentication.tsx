@@ -1,6 +1,9 @@
+import firebase from 'firebase/app';
+import 'firebase/auth';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "firebase/auth";
 import * as admin from 'firebase-admin';
-import { firebaseConfig } from "../FirebaseConfig/firebase";
+import { firebaseConfig, app } from "../FirebaseConfig/firebase";
+
 import { Recruiter } from "./Recruiter";
 import { appendToDatabase } from "./DBfuncs";
 const auth = getAuth();
@@ -9,18 +12,6 @@ export async function registerRecruiter(recruiter: Recruiter, password: string) 
 		console.log(`${recruiter._email} already in use`);
 		return;
 	}
-	/*
-	let uid;
-	createUserWithEmailAndPassword(auth, recruiter._email, password)
-		.then(async (userCredential) => {
-			const user = userCredential.user;
-			uid = user.uid;
-		})
-		.catch((error) => {
-			const errorCode = error.code;
-			const errorMessage = error.message;
-		});
-	*/
 	let uid;
 	const userCredential = await createUserWithEmailAndPassword(auth, recruiter._email, password);
 	const user = userCredential.user;

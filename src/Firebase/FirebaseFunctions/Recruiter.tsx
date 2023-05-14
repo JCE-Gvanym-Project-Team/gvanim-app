@@ -29,8 +29,7 @@ export class Recruiter {
 		if (await this.exists())
 			removeObjectAtPath("/Recruiters/" + this._email);
 	}
-	//need to remove this function
-	private async add() {
+	public async add() {
 		if (!(await this.exists())){
 			const pass = generateRandomString();
 			registerRecruiter(this, pass);
