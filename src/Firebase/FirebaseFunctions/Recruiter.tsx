@@ -1,5 +1,6 @@
 import { realtimeDB } from "../FirebaseConfig/firebase";
 import { getObjectAtPath, removeObjectAtPath, getFirebaseIdsAtPath, appendToDatabase, replaceData } from "./DBfuncs";
+import { registerRecruiter } from "./Authentication";
 const database = realtimeDB;
 
 export class Recruiter {
@@ -9,7 +10,7 @@ export class Recruiter {
 	public _sectors: Array<string>;
 
 	constructor(email: string = "", firstName: string = "", lastName: string = "", sectors: Array<string> = []) {
-		this._email = email.replace('.', '_');
+		this._email = email;
 		this._firstName = firstName;
 		this._lastName = lastName;
 		this._sectors = sectors;
@@ -28,9 +29,13 @@ export class Recruiter {
 		if (await this.exists())
 			removeObjectAtPath("/Recruiters/" + this._email);
 	}
-	public async add() {
-		if (!(await this.exists()))
-			appendToDatabase(this, "/Recruiters", this._email);
+	//need to remove this function
+	private async add() {
+		if (!(await this.exists())){
+			const pass = generateRandomString();
+			registerRecruiter(this, pass);
+			//todo notify by mail the recruiter that their account was created and send the password for first login
+		}
 		else
 			console.log("this email already exists in the database");
 	}
@@ -74,3 +79,11 @@ export async function getRecruitersFromDatabase(): Promise<Recruiter[]> {
 		throw new Error("Failed to fetch recruiters from database.");
 	}
 }
+function generateRandomString(): string {
+	const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>/?';
+	let result = '';
+	for (let i = 0; i < 12; i++) {
+	  result += chars.charAt(Math.floor(Math.random() * chars.length));
+	}
+	return result;
+  }
