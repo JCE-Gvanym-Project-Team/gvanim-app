@@ -6,7 +6,7 @@ import { getFilteredCandidates, Candidate } from "./Candidate";
 import { CandidateJobStatus, getFilteredCandidateJobStatuses } from "./CandidateJobStatus";
 import { Recomendation } from "./Recomendation";
 import { Recruiter, getRecruitersFromDatabase } from "./Recruiter";
-import { registerRecruiter, loginRecruiter, loguotRecruiter } from "./Authentification";
+import { registerRecruiter, loginRecruiter, loguotRecruiter } from "./Authentication";
 import { uploadFileToFirestore, getDownloadUrlFromFirestorePath, deleteFile, fileExists } from "./firestoreFunc";
 
 const database = realtimeDB;
