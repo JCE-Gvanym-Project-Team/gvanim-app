@@ -25,10 +25,11 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function CandidatesListFullScreenDialog() {
+export default function CandidatesListFullScreenDialog({JobId}) {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
+    alert(JobId);
     setOpen(true);
   };
 
@@ -55,7 +56,7 @@ export default function CandidatesListFullScreenDialog() {
           <Toolbar>
 
             <Typography sx={{ ml: 2, flex: 1, textAlign: 'center' }} variant="h6" component="div">
-              משרה מס' 1121
+              משרה מס' {JobId}
             </Typography>
 
             <IconButton
