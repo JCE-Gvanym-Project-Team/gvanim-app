@@ -1,6 +1,6 @@
 import { realtimeDB } from "../FirebaseConfig/firebase";
 import { removeObjectAtPath, getFirebaseIdsAtPath, replaceData, appendToDatabase } from "./DBfuncs";
- export class Satges{
+ export class Stage{
     public _name: string;
     public _open: boolean;
     constructor(name: string, open: boolean){
@@ -35,3 +35,27 @@ import { removeObjectAtPath, getFirebaseIdsAtPath, replaceData, appendToDatabase
             console.log("the Stage already exists");
     }
  }
+ export async function getAllStages(): Promise<Stage[]> {
+	const database = realtimeDB;
+	try {
+		const snapshot = await database.ref("/Stages").once("value");
+		const recruitersData = snapshot.val();
+		const recruiters: Stage[] = [];
+		for (const recruiterId in recruitersData) {
+			const recruiter = recruitersData[recruiterId];
+			recruiters.push(recruiter);
+		}
+		return recruiters;
+	} catch (error) {
+		console.error(error);
+		throw new Error("Failed to fetch recruiters from database.");
+	}
+}
+export async function getOpenRoles() {
+    let roles = await getAllStages();
+    return roles.filter((role)=> role._open===true);
+}
+export async function getClosedRoles() {
+    let roles = await getAllStages();
+    return roles.filter((role)=> role._open===false);
+}

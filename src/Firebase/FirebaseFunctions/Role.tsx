@@ -35,3 +35,27 @@ import { removeObjectAtPath, getFirebaseIdsAtPath, replaceData, appendToDatabase
             console.log("the Rloe already exists");
     }
  }
+ export async function getAllRoles(): Promise<Role[]> {
+	const database = realtimeDB;
+	try {
+		const snapshot = await database.ref("/Roles").once("value");
+		const rolesData = snapshot.val();
+		const roles: Role[] = [];
+		for (const roleId in rolesData) {
+			const role = rolesData[roleId];
+			roles.push(role);
+		}
+		return roles;
+	} catch (error) {
+		console.error(error);
+		throw new Error("Failed to fetch roles from database.");
+	}
+}
+export async function getOpenRoles() {
+    let roles = await getAllRoles();
+    return roles.filter((role)=> role._open===true);
+}
+export async function getClosedRoles() {
+    let roles = await getAllRoles();
+    return roles.filter((role)=> role._open===false);
+}
