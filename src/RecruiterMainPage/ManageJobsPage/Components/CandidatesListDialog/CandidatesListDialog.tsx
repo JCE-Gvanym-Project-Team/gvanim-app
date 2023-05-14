@@ -29,7 +29,6 @@ export default function CandidatesListFullScreenDialog({JobId}) {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
-    alert(JobId);
     setOpen(true);
   };
 
