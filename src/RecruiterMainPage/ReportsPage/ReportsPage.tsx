@@ -7,9 +7,9 @@ import ReportPageTable from "./Components/ReportPageTable/ReportPageTable";
 function ReportsPage() {
     return (
     <>
-       <Link to="/manageReports">
-       <Button variant="contained" disableElevation >יצירת דו"ח</Button>
-       </Link>
+       {/* <Link to="/manageReports"> */}
+       {/* <Button variant="contained" disableElevation >יצירת דו"ח</Button> */}
+       {/* </Link> */}
        <ReportPageTable></ReportPageTable>        
     </>
   )
