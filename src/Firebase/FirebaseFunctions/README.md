@@ -1,4 +1,7 @@
 information about database function:
+all the function and class you can use is exported from:
+"src/Firebase/FirebaseFunctions/functionIndex.tsx"
+so if you need the class "Job" and the function "getOpenRoles()" write at top of your component file: import { Job, getOpenRoles } from "path-from-your-file-to-functionIndex";//without '.tsx'  
 the databases store 4 class of object:
 Job, Candidate, CandidatesJobStatus and Recruiter.
 all the class have the function:
@@ -6,7 +9,6 @@ all the class have the function:
     remove() - remove the object from database
     edit() - pass argument only to attributes you want to change leave empty for no change
     example of use:
-        import { Job, generateJobNumber } from "src/Firebase/FirebaseFunction/Job";
         // create objects
         let job1 = new Job((await generateJobNumber()),"title1", "role1", [50, 100], "tel-aviv", "tel-aviv-meguorim", "desc1", "req1", true, false);
 	    let job2 = new Job((await generateJobNumber()),"title2", "role2", [25, 50], "jerusalem", "jerusalem-soldier", "desc2", "req2", false, false);
@@ -27,7 +29,6 @@ you can get an Array of Job, Candidate, CandidatesJobStatus and Recruiter.
             choose an attribute to sort by
 
     example of use:
-        import { getFilteredJobs } from "src/Firebase/FirebaseFunction/Job";
         // get an array of all jobs in data base
         let allJobs = await getFilteredJobs(); 
         // apply filter and sort
