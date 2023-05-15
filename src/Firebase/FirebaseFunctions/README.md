@@ -1,6 +1,6 @@
-you can read this page in html format also (open README.html in your browser)
 Database Function Information
 =============================
+You can read this page in html format also (open README.html in your browser).
 
 Importing Classes and Functions
 -------------------------------
