@@ -10,6 +10,7 @@ function ReportsPage() {
        {/* <Link to="/manageReports"> */}
        {/* <Button variant="contained" disableElevation >יצירת דו"ח</Button> */}
        {/* </Link> */}
+       <h1>דוחות</h1>
        <ReportPageTable></ReportPageTable>        
     </>
   )
