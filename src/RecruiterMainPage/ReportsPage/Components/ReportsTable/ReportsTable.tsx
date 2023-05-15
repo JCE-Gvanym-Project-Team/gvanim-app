@@ -27,7 +27,7 @@ export default function DataGridDemo() {
   
     const onRowClick = (event, row) => {
       if(row.id === 1)
-           window.location.href = `./Components/Reports/CandidateByDate`;
+        window.location.href = `./Components/Reports/CandidateByDate`;
            
     };
 
@@ -48,7 +48,6 @@ export default function DataGridDemo() {
         checkboxSelection
         disableRowSelectionOnClick
         onRowClick={onRowClick}
-
       />
     </Box>
   );
