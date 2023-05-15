@@ -2,8 +2,7 @@ import { dataref } from "../FirebaseConfig/firebase";
 import { Recomendation } from './Recomendation';
 import { getObjectAtPath, removeObjectAtPath, getFirebaseIdsAtPath, replaceData, appendToDatabase } from "./DBfuncs";
 import { uploadFileToFirestore, getDownloadUrlFromFirestorePath, getFileExtensionsInFolder, deleteFile, fileExists } from "./firestoreFunc";
-import { Candidate } from './Candidate';
-import { Job } from './Job';
+
 const database = dataref;
 export class CandidateJobStatus {
     public _jobNumber: number;

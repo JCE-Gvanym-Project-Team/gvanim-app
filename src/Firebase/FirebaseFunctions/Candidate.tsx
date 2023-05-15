@@ -1,6 +1,6 @@
 import { realtimeDB } from "../FirebaseConfig/firebase";
 import { CandidateJobStatus, getFilteredCandidateJobStatuses } from "./CandidateJobStatus";
-import { getObjectAtPath, removeObjectAtPath, getFirebaseIdsAtPath, replaceData, appendToDatabase } from "./DBfuncs";
+import { removeObjectAtPath, getFirebaseIdsAtPath, replaceData, appendToDatabase } from "./DBfuncs";
 import { getFilteredJobs, Job } from "./Job";
 import { uploadFileToFirestore, getDownloadUrlFromFirestorePath, getFileExtensionsInFolder, deleteFile } from "./firestoreFunc";
 const database = realtimeDB;

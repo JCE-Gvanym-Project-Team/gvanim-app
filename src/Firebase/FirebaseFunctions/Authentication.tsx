@@ -1,8 +1,6 @@
-import firebase from 'firebase/app';
 import 'firebase/auth';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "firebase/auth";
-import * as admin from 'firebase-admin';
-import { firebaseConfig, app } from "../FirebaseConfig/firebase";
+
 
 import { Recruiter } from "./Recruiter";
 import { appendToDatabase } from "./DBfuncs";

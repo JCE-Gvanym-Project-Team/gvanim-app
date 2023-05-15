@@ -1,7 +1,7 @@
 import { realtimeDB } from "../FirebaseConfig/firebase";
-import { getObjectAtPath, removeObjectAtPath, getFirebaseIdsAtPath, appendToDatabase, replaceData } from "./DBfuncs";
+import { getObjectAtPath, removeObjectAtPath, getFirebaseIdsAtPath, appendToDatabase } from "./DBfuncs";
 import { registerRecruiter } from "./Authentication";
-const database = realtimeDB;
+
 
 export class Recruiter {
 	public _email: string;

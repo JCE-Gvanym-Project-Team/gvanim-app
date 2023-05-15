@@ -1,8 +1,8 @@
 import { CandidateJobStatus, getFilteredCandidateJobStatuses } from "./CandidateJobStatus";
 import { realtimeDB } from "../FirebaseConfig/firebase";
 import { Candidate, getFilteredCandidates } from "./Candidate";
-import { appendToDatabase, getFirebaseIdsAtPath, getObjectAtPath, removeObjectAtPath, replaceData } from "./DBfuncs";
-import { Stage, getAllStages } from "./Stage";
+import { appendToDatabase, getFirebaseIdsAtPath, removeObjectAtPath, replaceData } from "./DBfuncs";
+import { Stage } from "./Stage";
 const database = realtimeDB;
 
 export class Job {
@@ -94,6 +94,7 @@ export class Job {
         this._requirements = requirements;
         this._open = open;
         this._highPriority = highPriority;
+        this._stages = stages;
 
         if (!(await this.exists()))
             this.add();

@@ -1,15 +1,6 @@
-import firebase from "firebase/app";
 import "firebase/database";
-import { realtimeDB, myFirestore } from "../FirebaseConfig/firebase";
-import { Job, generateJobNumber, getFilteredJobs } from "./Job";
-import { getFilteredCandidates, Candidate } from "./Candidate";
-import { CandidateJobStatus, getFilteredCandidateJobStatuses } from "./CandidateJobStatus";
-import { Recomendation } from "./Recomendation";
-import { Recruiter, getRecruitersFromDatabase } from "./Recruiter";
-import { registerRecruiter, loginRecruiter, loguotRecruiter, loginAdmin } from "./Authentication";
-import { uploadFileToFirestore, getDownloadUrlFromFirestorePath, deleteFile, fileExists } from "./firestoreFunc";
-import { userInfo } from "os";
-import { auth } from "firebase-admin";
+import { realtimeDB } from "../FirebaseConfig/firebase";
+
 
 const database = realtimeDB;
 /**

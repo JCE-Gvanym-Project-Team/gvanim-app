@@ -1,8 +1,6 @@
-import * as firebase from 'firebase/compat/app';
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import * as nodemailer from 'nodemailer';
-import { httpsCallable } from 'firebase/functions';
 
 const sendEmail = functions.https.onCall(async (data, context) => {
   // Get the email address, subject, and content from the request data
