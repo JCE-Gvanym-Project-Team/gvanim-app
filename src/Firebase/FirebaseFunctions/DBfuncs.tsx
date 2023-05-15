@@ -4,7 +4,7 @@ import { realtimeDB } from "../FirebaseConfig/firebase";
 
 const database = realtimeDB;
 /**
- * Prints the data located at the given path in the Firebase Realtime Database.
+ * get the data located at the given path in the Firebase Realtime Database.
  * @param {string} path - The path to the data in the database.
  * @returns None
  */
@@ -12,6 +12,12 @@ export async function getObjectAtPath(path: string): Promise<any> {
 	const snapshot = await database.ref(path).once('value');
 	return snapshot.val();
 }
+/**
+ * Removes an object from the Firebase Realtime Database at the specified path.
+ * @param {string} path - The path to the object to be removed.
+ * @returns None
+ * @throws {Error} If there is an error removing the object from the database.
+ */
 export async function removeObjectAtPath(path: string) {
 	try {
 		const ref = database.ref(path);
@@ -25,7 +31,7 @@ export async function removeObjectAtPath(path: string) {
  * @param {string} path - The path to the data to be deleted.
  * @returns None
  */
-function deleteData(path: string) {
+export function deleteData(path: string) {
 	const database = realtimeDB;
 	const deleteRef = database.ref(path);
 	deleteRef.remove();
@@ -62,11 +68,20 @@ export async function appendToDatabase(obj: any, path: string, id: string = "") 
 			console.error(`Error storing object at path ${path}/${id}: ${error}`);
 		});
 }
+/**
+ * Retrieves the Firebase IDs at the specified path in the database.
+ * @param {string} path - The path to the desired location in the database.
+ * @returns {Promise<string[]>} - A promise that resolves to an array of Firebase IDs at the specified path.
+ */
 export async function getFirebaseIdsAtPath(path: string): Promise<string[]> {
 	const snapshot = await database.ref(path).once("value");
 	const values = snapshot.val();
 	return values ? Object.keys(values) : [];
 }
+/**
+ * Retrieves an array of sector names from the Firebase database.
+ * @returns {Promise<string[]>} - A promise that resolves to an array of sector names.
+ */
 export async function getSectors(): Promise<string[]> {
 	return getFirebaseIdsAtPath("/Sectors");
 }

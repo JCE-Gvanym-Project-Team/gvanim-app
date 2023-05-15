@@ -2,6 +2,13 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/storage';
 import 'firebase/compat/firestore';
 
+/**
+ * Uploads a file to Firebase Storage and adds a reference to the file in Firestore.
+ * @param {File} file - The file to upload.
+ * @param {string} path - The path in Firebase Storage to upload the file to.
+ * @param {string} name - The name of the file to upload.
+ * @returns A Promise that resolves when the file has been uploaded and the reference has been added to Firestore.
+ */
 export async function uploadFileToFirestore(file: File, path: string, name: string): Promise<void> {
   const storageRef = firebase.storage().ref();
   const fileRef = storageRef.child(`${path}/${name}`);
@@ -32,6 +39,11 @@ export async function getDownloadUrlFromFirestorePath(path: string): Promise<str
     return '';
   }
 }
+/**
+ * Retrieves the file extensions of all files in a given folder path in Firebase Storage.
+ * @param {string} folderPath - The path of the folder in Firebase Storage to retrieve the file extensions from.
+ * @returns {Promise<string[]>} - A promise that resolves to an array of file extensions.
+ */
 export async function getFileExtensionsInFolder(folderPath: string): Promise<string[]> {
   const storageRef = firebase.storage().ref(folderPath);
   const files = await storageRef.listAll();

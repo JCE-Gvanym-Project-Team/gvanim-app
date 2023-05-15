@@ -22,6 +22,11 @@ export class Candidate {
         this._firebaseId = firebaseId;
         this._generalRating = generalRating;
     }
+    /**
+     * Retrieves all the jobs that the user has applied to.
+     * @async
+     * @returns {Promise<Job[]>} - A promise that resolves to an array of Job objects.
+     */
     public async getAppliedJobs(): Promise<Job[]> {
         let jobs;
         let statArr = await this.getCandidatures();
@@ -29,29 +34,54 @@ export class Candidate {
         jobIds.forEach((id) => jobs.push(getFilteredJobs(["jobNumber"], [id.toString()])));
         return jobs;
     }
+    /**
+     * Retrieves the candidate job statuses for the current candidate.
+     * @returns {Promise<CandidateJobStatus[]>} - A promise that resolves to an array of CandidateJobStatus objects.
+     */
     public async getCandidatures(): Promise<CandidateJobStatus[]> {
         let candidatures;
         candidatures = await getFilteredCandidateJobStatuses(["candidateID"], [this._id]);
         return candidatures;
     }
+    /**
+     * Gets the path of the current job in the realtime DB.
+     * @returns {Promise<string>} - The path of the current job.
+     */
     public async getPath() {
         if ((await getFirebaseIdsAtPath('/Canndidates')).includes(this._id.toString()))
             return "/Jobs/" + this._id;
         return "";
     }
+    /**
+     * Checks if the current Candidate exists in the realtime DB.
+     * @returns {Promise<boolean>} - A promise that resolves to true if the path exists, false otherwise.
+     */
     public async exists() {
         if ((await this.getPath()).length > 0)
             return true;
         return false;
     }
+    /**
+     * Removes the current candidate from the realtime DB if it exists. 
+     * Also removes any candidatures associated with the candidate from the realtime DB.
+     * @returns None
+     */
     public async remove() {
         if (!(await this.exists()))
             return;
         const candidatures = await getFilteredCandidateJobStatuses(["candidateId"], [this._id]);
         candidatures.forEach((c) => c.remove());
         removeObjectAtPath("/Candidates/" + this._id);
-
     }
+    /**
+     * Edits the candidate's information and updates the database.
+     * @param {string} [firstName=this._firstName] - The candidate's first name.
+     * @param {string} [lastName=this._lastName] - The candidate's last name.
+     * @param {string} [phone=this._phone] - The candidate's phone number.
+     * @param {string} [eMail=this._eMail] - The candidate's email address.
+     * @param {number} [generalRating=this._generalRating] - The candidate's general rating.
+     * @returns None
+     */
     public async edit(firstName: string = this._firstName, lastName: string = this._lastName, phone: string = this._phone, eMail: string = this._eMail, generalRating: number = this._generalRating) {
         this._firstName = firstName;
         this._lastName = firstName;
@@ -66,22 +96,42 @@ export class Candidate {
             console.log("colision detected a candidate already exist with the same phone and eMail");
         replaceData((await this.getPath()), this);
     }
+    /**
+     * Adds the current candidate to the realtime DB if they do not already exist.
+     * @returns None
+     */
     public async add() {
         if ((await this.getPath()) === "/Candidates/")
             appendToDatabase(this, "/Candidates", this._id);
         else
             console.log("the candidate already exists");
     }
+    /**
+     * link betwwen Candidate and Job.
+     * add CandidatesJobStatus to the realtime DB
+     * @param {number} jobNumber - the job number to apply to the candidate
+     * @param {string} about - the free text the candidate write when apply
+     * @returns None
+     */
     public async apply(jobNumber: number, about: string) {
         if ((await this.getPath()) === "/Candidates/")
             this.add();
         let candidatuers = new CandidateJobStatus(jobNumber, this._id, "הוגשה מועמדות", about, -1, new Date(), new Date());
         candidatuers.add();
     }
+    /**
+     * Uploads a candidate's CV file to Firestore.
+     * @param {File} cv - The candidate's CV file.
+     * @returns None
+     */
     public async uploadCv(cv: File) {
         const extension = cv.name.split('.')[cv.name.split('.').length - 1];
         await uploadFileToFirestore(cv, `CandidatesFiles/${this._id}`, `${this._firstName}_${this._lastName}_CV.${extension}`);
     }
+    /**
+     * Deletes the CV file of the candidate from the firestore.
+     * @returns None
+     */
     public async deleteCv() {
         const extensions = await getFileExtensionsInFolder(`CandidatesFiles/${this._id}`);
         for (let i = 0; i < extensions.length; i++)
@@ -91,6 +141,10 @@ export class Candidate {
             }
     }
 
+    /**
+     * Retrieves the URL of the candidate's CV file from the Firebase storage.
+     * @returns {Promise<string>} - A promise that resolves with the URL of the CV file.
+     */
     public async getCvUrl(): Promise<string> {
         const extensions = await getFileExtensionsInFolder(`CandidatesFiles/${this._id}`);
         for (let i = 0; i < extensions.length; i++) {
@@ -103,6 +157,11 @@ export class Candidate {
     }
 }
 
+/**
+ * Retrieves a list of candidates from the Firebase Realtime Database.
+ * @returns {Promise<Candidate[]>} A promise that resolves to an array of Candidate objects.
+ * @throws {Error} If there is an error fetching the candidates from the database.
+ */
 async function getCandidatesFromDatabase(): Promise<Candidate[]> {
     try {
         const snapshot = await database.ref("/Candidates").once("value");
@@ -118,6 +177,14 @@ async function getCandidatesFromDatabase(): Promise<Candidate[]> {
         throw new Error("Failed to fetch candidates from database.");
     }
 }
+/**
+ * Retrieves a list of candidates from the database that match the given attributes and values.
+ * @param {string[]} [attributes=[]] - An array of attributes to filter the candidates by.
+ * @param {string[]} [values=[]] - An array of values to filter the candidates by.
+ * @param {string} [sortBy=""] - The attribute to sort the candidates by.
+ * @returns {Promise<Candidate[]>} - A promise that resolves to an array of Candidate objects.
+ * @throws None
+ */
 export async function getFilteredCandidates(attributes: string[] = [], values: string[] = [], sortBy: string = ""): Promise<Candidate[]> {
     if (attributes.length !== values.length) {
         console.log("the attributes length not match to values length")
