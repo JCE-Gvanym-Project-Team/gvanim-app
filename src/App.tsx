@@ -11,9 +11,11 @@ import { Router } from 'express';
 import NavBar from './Components/NavBar/NavBar';
 import { main } from './Firebase/FirebaseFunctions/DBfuncs'
 import ManageReports from './RecruiterMainPage/ReportsPage/Components/ManageReports/ManageReports';
+import FillReportPage from './RecruiterMainPage/ReportsPage/Components/FillReportPage/FillReportPage'
+
+
 
 main()
-
 const Admin = "admin";
 const Recruiter = "recruiter";
 
@@ -28,6 +30,7 @@ function App() {
 					<Route path="/manageCandidates" element={<ManageCandidatesPage />} />
 					<Route path="/manageJobs" element={<ManageJobsPage />} />
 					<Route path="/reports" element={<ReportsPage />} />
+					<Route path="/fillReportPage" element={<FillReportPage/>} />
 					<Route path="/manageReports" element={<ManageReports />} />
 				</Routes>
 			</BrowserRouter>		
