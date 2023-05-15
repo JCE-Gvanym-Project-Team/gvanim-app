@@ -1,13 +1,7 @@
-import firebase from "firebase/app";
 import "firebase/database";
-import { realtimeDB, myFirestore } from "../FirebaseConfig/firebase";
-import { Job, generateJobNumber, getFilteredJobs } from "./Job";
-import { getFilteredCandidates, Candidate } from "./Candidate";
-import { CandidateJobStatus, getFilteredCandidateJobStatuses } from "./CandidateJobStatus";
-import { Recomendation } from "./Recomendation";
-import { Recruiter, getRecruitersFromDatabase } from "./Recruiter";
-import { registerRecruiter, loginRecruiter, loguotRecruiter } from "./Authentification";
-import { uploadFileToFirestore, getDownloadUrlFromFirestorePath } from "./firestoreFunc";
+import { realtimeDB } from "../FirebaseConfig/firebase";
+
+
 const database = realtimeDB;
 /**
  * Prints the data located at the given path in the Firebase Realtime Database.
@@ -73,14 +67,9 @@ export async function getFirebaseIdsAtPath(path: string): Promise<string[]> {
 	const values = snapshot.val();
 	return values ? Object.keys(values) : [];
 }
+export async function getSectors(): Promise<string[]> {
+	return getFirebaseIdsAtPath("/Sectors");
+}
 export async function main() {	//for debugging dont use
-	//loginRecruiter("test1@gamil.com", "123456");
-	//let rec1 = new Recruiter("test1@gmail.com","is","ra",["sector1"]);
-	//let job1 = new Job((await generateJobNumber()), "title1", "role", [50, 100], "tel-aviv", "sector1", "desc", "req", true, false);
-	//let job2 = new Job((await generateJobNumber()), "title2", "role", [50, 100], "tel-aviv", "sector2", "desc", "req", true, false);
-	const file = new File(["test"], "C:/Users/elyaa/Desktop/sandboxtest.txt", { type: "text/plain" });
-	const path = 'myCollection';
-	const name = 'hello.txt';
-	//uploadFileToFirestore(file, path, name);
-	//console.log((await getDownloadUrlFromFirestorePath(`${path}/${name}`)));	
+	
 }	

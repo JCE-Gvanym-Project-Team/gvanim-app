@@ -12,6 +12,9 @@ import NavBar from './Components/NavBar/NavBar';
 import { main } from './Firebase/FirebaseFunctions/DBfuncs'
 import ManageReports from './RecruiterMainPage/ReportsPage/Components/ManageReports/ManageReports';
 import FillReportPage from './RecruiterMainPage/ReportsPage/Components/FillReportPage/FillReportPage'
+import { initializeApp } from 'firebase/app';
+
+main();
 
 
 
