@@ -26,8 +26,9 @@ export default function DataGridDemo() {
     const [selectedRows, setSelectedRows] = useState([]);
   
     const onRowClick = (event, row) => {
-      console.log("Hi")
-      window.location.href = `./Components/ManageReports${row.id}`;
+      if(row.id === 1)
+           window.location.href = `./Components/Reports/CandidateByDate`;
+           
     };
 
 

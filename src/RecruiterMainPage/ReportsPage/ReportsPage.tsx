@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import { Link } from "react-router-dom";
-import ReportPageTable from "./Components/ReportPageTable/ReportPageTable";
+import ReportPageTable from "./Components/ReportsTable/ReportsTable";
 
 
 function ReportsPage() {
