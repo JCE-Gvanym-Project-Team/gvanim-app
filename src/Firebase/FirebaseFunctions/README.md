@@ -1,5 +1,4 @@
-   Database Function Information body { font-family: Arial, sans-serif; margin: 20px; } h1 { margin-bottom: 20px; } code { background-color: #f8f8f8; padding: 2px 5px; border-radius: 4px; font-family: Consolas, monospace; } pre { background-color: #f8f8f8; padding: 10px; border-radius: 4px; overflow-x: auto; }
-
+you can read this page in html format also (open README.html in your browser)
 Database Function Information
 =============================
 
