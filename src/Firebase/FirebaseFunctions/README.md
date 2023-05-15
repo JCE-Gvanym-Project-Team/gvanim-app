@@ -1,5 +1,5 @@
 information about database function:<br />
-all the function and class you can use is exported from:<br />
+<emsp />all the function and class you can use is exported from:<br />
 "src/Firebase/FirebaseFunctions/functionIndex.tsx"<br />
 so if you need the class "Job" and the function "getOpenRoles()" write at top of your component file:<br /> import { Job, getOpenRoles } from "path-from-your-file-to-functionIndex";//without '.tsx'  <br />
 the databases store 4 class of object:<br />
