@@ -51,11 +51,11 @@ import { removeObjectAtPath, getFirebaseIdsAtPath, replaceData, appendToDatabase
 		throw new Error("Failed to fetch recruiters from database.");
 	}
 }
-export async function getOpenRoles() {
+export async function getOpenStages() {
     let roles = await getAllStages();
     return roles.filter((role)=> role._open===true);
 }
-export async function getClosedRoles() {
+export async function getClosedStages() {
     let roles = await getAllStages();
     return roles.filter((role)=> role._open===false);
 }

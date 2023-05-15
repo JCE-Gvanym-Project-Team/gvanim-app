@@ -8,6 +8,8 @@ import { Recomendation } from "./Recomendation";
 import { Recruiter, getRecruitersFromDatabase } from "./Recruiter";
 import { registerRecruiter, loginRecruiter, loguotRecruiter, loginAdmin } from "./Authentication";
 import { uploadFileToFirestore, getDownloadUrlFromFirestorePath, deleteFile, fileExists } from "./firestoreFunc";
+import { userInfo } from "os";
+import { auth } from "firebase-admin";
 
 const database = realtimeDB;
 /**
@@ -74,26 +76,9 @@ export async function getFirebaseIdsAtPath(path: string): Promise<string[]> {
 	const values = snapshot.val();
 	return values ? Object.keys(values) : [];
 }
+export async function getSectors(): Promise<string[]> {
+	return getFirebaseIdsAtPath("/Sectors");
+}
 export async function main() {	//for debugging dont use
-	/*
-	const user = process.env.REACT_APP_ADMIN_MAIL;
-	const pass = process.env.REACT_APP_ADMIN_PASS;
-	console.log(user);
-	if (user != null && pass != null)
-		loginRecruiter(user, pass);
-		*/
-	loginAdmin();
-	let rec1 = new Recruiter("new@gmail.com", "is", "ra", ["sector1"]);
-	rec1.add();
-	//registerRecruiter(rec1,"123456");
-	//let job1 = new Job((await generateJobNumber()), "title1", "role", [50, 100], "tel-aviv", "sector1", "desc", "req", true, false);
-	//let job2 = new Job((await generateJobNumber()), "title2", "role", [50, 100], "tel-aviv", "sector2", "desc", "req", true, false);
-	const file = new File(["test"], "C:/Users/elyaa/Desktop/sandboxtest.txt", { type: "text/plain" });
-	const path = 'myCollection';
-	const name = 'hello.txt';
-
-	//uploadFileToFirestore(file, path, name);
-	//console.log((await fileExists("/myCollection/hello.txt")));
-	//deleteFile("/myCollection/hello.txt");
-	//console.log((await getDownloadUrlFromFirestorePath(`${path}/${name}`)));	
+	
 }	

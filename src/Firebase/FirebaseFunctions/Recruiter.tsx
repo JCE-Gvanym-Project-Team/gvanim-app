@@ -8,16 +8,18 @@ export class Recruiter {
 	public _firstName: string;
 	public _lastName: string;
 	public _sectors: Array<string>;
+	public _id: string;
 
 	constructor(email: string = "", firstName: string = "", lastName: string = "", sectors: Array<string> = []) {
 		this._email = email;
 		this._firstName = firstName;
 		this._lastName = lastName;
 		this._sectors = sectors;
+		this._id = email.replace('.', '_');
 	}
 	public async getPath() {
-		if ((await getFirebaseIdsAtPath('/Recruiters')).includes(this._email))
-			return "/Recruiters/" + this._email;
+		if ((await getFirebaseIdsAtPath('/Recruiters')).includes(this._id))
+			return "/Recruiters/" + this._id;
 		return "";
 	}
 	public async exists() {
@@ -27,12 +29,14 @@ export class Recruiter {
 	}
 	public async remove() {
 		if (await this.exists())
-			removeObjectAtPath("/Recruiters/" + this._email);
+			removeObjectAtPath("/Recruiters/" + this._id);
 	}
 	public async add() {
-		if (!(await this.exists())){
+		if (!(await this.exists())) {
 			const pass = generateRandomString();
 			registerRecruiter(this, pass);
+			console.log(`the uid of ${this._email} is ${(await this.getUid)}`);
+			return pass;
 			//todo notify by mail the recruiter that their account was created and send the password for first login
 		}
 		else
@@ -43,22 +47,36 @@ export class Recruiter {
 		this._lastName = lastName;
 		if (email !== this._email) {
 			let tmp = new Recruiter(email);
-			if (!(await tmp.exists()))
+			if (!(await tmp.exists())) {
 				this._email = email;
+				this._id = email.replace('.', '_');
+			}
 			else
-				console.log("this user name already exists choose another");
+				console.log("this username already exists choose another");
 		}
-		replaceData((await this.getPath()), this);
+		this.remove();
+		this.add();
 	}
 	public async addSector(sector: string) {
 		if (!this._sectors.includes(sector))
 			this._sectors.push(sector);
-		replaceData((await this.getPath()), this);
+		this.remove();
+		appendToDatabase(this, "/Recruiters", this._id);
+		const uid = await this.getUid();
+		appendToDatabase(this._email,`/Sectors/${sector}`,uid);
 	}
 	public async removeSector(sector: string) {
 		if (this._sectors.includes(sector))
 			this._sectors.filter((val) => val !== sector);
-		replaceData((await this.getPath()), this);
+		this.remove();
+		appendToDatabase(this, "/Recruiters", this._id);
+		const uid = await this.getUid();
+		removeObjectAtPath(`Sectors/${sector}/${uid}`);
+	}
+	public async getUid(): Promise<string> {
+		if (!(await this.exists()))
+			return "";
+		return (await getObjectAtPath(`/RecUid/${this._id}`));
 	}
 }
 
@@ -82,7 +100,7 @@ function generateRandomString(): string {
 	const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>/?';
 	let result = '';
 	for (let i = 0; i < 12; i++) {
-	  result += chars.charAt(Math.floor(Math.random() * chars.length));
+		result += chars.charAt(Math.floor(Math.random() * chars.length));
 	}
 	return result;
-  }
+}

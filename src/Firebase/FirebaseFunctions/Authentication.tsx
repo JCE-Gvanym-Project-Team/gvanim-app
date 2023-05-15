@@ -17,21 +17,22 @@ export async function registerRecruiter(recruiter: Recruiter, password: string) 
 	const user = userCredential.user;
 	uid = user.uid;
 	auth.signOut().then(async () => {
-		console.log(`1)null] in registerRecruiter(): ${auth.currentUser?.uid}`);
+		//console.log(`1)null] in registerRecruiter(): ${auth.currentUser?.uid}`);
 		const user = process.env.REACT_APP_ADMIN_MAIL;
 		const pass = process.env.REACT_APP_ADMIN_PASS;
 		if (user != null && pass != null)
 			signInWithEmailAndPassword(auth, user, pass).then(async () => {
-				console.log(`3)admin] in registerRecruiter(): ${auth.currentUser?.uid}`);
-				console.log(uid);
+				//console.log(`3)admin] in registerRecruiter(): ${auth.currentUser?.uid}`);
+				//console.log(uid);
 				for (let i = 0; i < recruiter._sectors.length; i++)
 					await appendToDatabase(recruiter._email, `Sectors/${recruiter._sectors[i]}`, uid);
 				//await loguotRecruiter();
-				await appendToDatabase(recruiter, "/Recruiters", uid);
+				await appendToDatabase(uid, "/RecUid", recruiter._id);
+				await appendToDatabase(recruiter, "/Recruiters", recruiter._id);
 			});
 	});
 }
-export function loginRecruiter(email: string, password: string) {
+export async function loginRecruiter(email: string, password: string) {
 	signInWithEmailAndPassword(auth, email, password)
 		.then((userCredential) => {
 			const user = userCredential.user;

@@ -1,7 +1,3 @@
-/*
-import firebase from 'firebase/compat/app'
-import 'firebase/compat/storage';
-*/
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/storage';
 import 'firebase/compat/firestore';
