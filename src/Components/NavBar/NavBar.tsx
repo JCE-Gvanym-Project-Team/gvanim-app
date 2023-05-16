@@ -127,9 +127,13 @@ export default function NavBar(props: Props) {
 
 
 	return (
-		<Box sx={{ display: 'flex', marginTop: '64px'}}>
+		<Box sx={{ display: 'flex', marginTop: '80px'}}>
 			<CssBaseline />
-			<AppBar component="nav">
+			<AppBar component="nav" sx={{
+				margin: '16px 24px',
+				width: 'calc(100% - 48px)',
+				borderRadius: '0.75rem',
+				}}>
 				<Toolbar>
 					<IconButton
 						color="inherit"
@@ -170,6 +174,7 @@ export default function NavBar(props: Props) {
 										color: HomeActive ? 'primary' : 'white'
 									},
 
+									borderRadius: '0.75rem',
 									backgroundColor: HomeActive ? 'white' : 'primary',
 									color: HomeActive ? 'primary' : 'white',
 								}}
@@ -183,7 +188,7 @@ export default function NavBar(props: Props) {
 										backgroundColor: ReportsActive ? 'white' : 'primary',
 										color: ReportsActive ? 'primary' : 'white'
 									},
-
+									borderRadius: '0.75rem',
 									backgroundColor: ReportsActive ? 'white' : 'primary',
 									color: ReportsActive ? 'primary' : 'white',
 								}}
@@ -197,7 +202,7 @@ export default function NavBar(props: Props) {
 										backgroundColor: CandidatesActive ? 'white' : 'primary',
 										color: CandidatesActive ? 'primary' : 'white'
 									},
-
+									borderRadius: '0.75rem',
 									backgroundColor: CandidatesActive ? 'white' : 'primary',
 									color: CandidatesActive ? 'primary' : 'white',
 								}}
@@ -211,7 +216,7 @@ export default function NavBar(props: Props) {
 										backgroundColor: JobsActive ? 'white' : 'primary',
 										color: JobsActive ? 'primary' : 'white'
 									},
-
+									borderRadius: '0.75rem',
 									backgroundColor: JobsActive ? 'white' : 'primary',
 									color: JobsActive ? 'primary' : 'white',
 								}}
