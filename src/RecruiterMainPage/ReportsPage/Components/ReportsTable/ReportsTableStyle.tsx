@@ -1,4 +1,5 @@
-import { SxProps, createTheme } from '@mui/material';
+import React from 'react';
+import { SxProps } from '@mui/material';
 import { Theme } from '@mui/material/styles';
 export {};
 
