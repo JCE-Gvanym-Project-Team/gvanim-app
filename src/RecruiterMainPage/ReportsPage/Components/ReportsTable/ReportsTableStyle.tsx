@@ -1,8 +1,5 @@
-import React from 'react';
-import { SxProps } from '@mui/material';
+import { SxProps, createTheme } from '@mui/material';
 import { Theme } from '@mui/material/styles';
-export {};
-
 
 export const dataGridContainerSx: SxProps = {
 	border: 1,
