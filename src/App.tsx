@@ -11,6 +11,9 @@ import { Router } from 'express';
 import NavBar from './Components/NavBar/NavBar';
 import { main } from './Firebase/FirebaseFunctions/DBfuncs'
 import { initializeApp } from 'firebase/app';
+import Auth from './RecruiterMainPage/Components/Auth/Auth';
+
+import firebase1 from "../src/Firebase/FirebaseConfig/firebase";
 
 main();
 
@@ -18,18 +21,11 @@ const Admin = "admin";
 const Recruiter = "recruiter";
 
 function App() {
+	firebase1.auth().signOut();
 	const currentUser = "recruiter";
 	return (
 		<>
-			<BrowserRouter>
-				<NavBar />
-				<Routes>
-					<Route path="/" element={<RecruiterMainPage />} />
-					<Route path="/manageCandidates" element={<ManageCandidatesPage />} />
-					<Route path="/manageJobs" element={<ManageJobsPage />} />
-					<Route path="/reports" element={<ReportsPage />} />
-				</Routes>
-			</BrowserRouter>		
+			<Auth />
 		</>
 	);
 }

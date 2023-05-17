@@ -3,8 +3,10 @@ import React from 'react'
 import image from "../../../Components/Logo/Logo.svg"
 import { ReactSVG } from 'react-svg'
 import { BorderStyle } from 'react-bootstrap-icons'
+import firebase1 from "../../../Firebase/FirebaseConfig/firebase";
 
-export default function WelcomePage() {
+export default function WelcomePage()
+{
     return (
         <>
             <Box sx={{
@@ -123,20 +125,20 @@ export default function WelcomePage() {
                         </Typography>
                     </Box>
 
-                    <Divider orientation="vertical" 
-                    sx={{
-                        flexShrink: 0,
-                        borderTop: '0px solid rgba(0, 0, 0, 0.12)',
-                        borderLeft: '0px solid rgba(0, 0, 0, 0.12)',
-                        borderBottom: 'none',
-                        opacity: 0.25,
-                        background: 'rgba(52, 71, 103, 0.2)',
-                        width: '0.0625rem',
-                        height: '100%',
-                        margin: '0px 1rem 0px 0px',
-                        borderRight: 'none',
-                    }} />
- 
+                    <Divider orientation="vertical"
+                        sx={{
+                            flexShrink: 0,
+                            borderTop: '0px solid rgba(0, 0, 0, 0.12)',
+                            borderLeft: '0px solid rgba(0, 0, 0, 0.12)',
+                            borderBottom: 'none',
+                            opacity: 0.25,
+                            background: 'rgba(52, 71, 103, 0.2)',
+                            width: '0.0625rem',
+                            height: '100%',
+                            margin: '0px 1rem 0px 0px',
+                            borderRight: 'none',
+                        }} />
+
                     <Box sx={{
                         minWidth: '33.33%',
                         padding: '16px',

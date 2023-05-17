@@ -3,6 +3,8 @@ import firebase1 from "../../../Firebase/FirebaseConfig/firebase";
 import "firebase/compat/auth";
 import  { useEffect, useState } from "react"
 import RecruiterMainPageDemo from "../../LoginPage/RecruiterMainPageDemo";
+import WelcomePage from "../WelcomePage/WelcomePage";
+import RecruiterMainPage from "../../RecruiterMainPage";
 
 
 export default function Auth () {
@@ -98,7 +100,7 @@ export default function Auth () {
   return (
     <>
       {user ? (
-        <RecruiterMainPageDemo handlelogout={handlelogout} />
+        <RecruiterMainPage />
       ) : (
 
             <Login
