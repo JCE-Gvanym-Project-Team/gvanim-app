@@ -1,3 +1,4 @@
+
 .recruiter-main-page {
   display: flex;
   flex-direction: column;
@@ -71,14 +72,14 @@
 }
 
 /* General Styles */
-body {
+/* body {
   margin: 0;
   padding: 0;
   font-family: Arial, sans-serif;
   font-size: 16px;
   line-height: 1.5;
   color: #d43a3a;
-}
+} */
 
 .container {
   max-width: 1200px;
