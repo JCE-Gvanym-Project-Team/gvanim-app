@@ -1,13 +1,20 @@
-import React from 'react';
-import ReportPageComponents from './Components/ReportPage/ReportPageComponents'
+import React, { useState } from 'react';
+import Button from '@mui/material/Button';
+import { Link } from "react-router-dom";
+import ReportPageTable from "./Components/MyTable/MyTable";
 
 
-
-export default function ReportsPage() {
+function ReportsPage() {
   return (
     <>
-    <h1>test</h1>
-     <ReportPageComponents/>
+      {/* <Link to="/manageReports"> */}
+      {/* <Button variant="contained" disableElevation >יצירת דו"ח</Button> */}
+      {/* </Link> */}
+      <h1>דוחות</h1>
+      <ReportPageTable></ReportPageTable>
     </>
   )
 }
+
+
+export default ReportsPage;

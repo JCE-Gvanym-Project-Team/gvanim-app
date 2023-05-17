@@ -1,11 +1,49 @@
 import { useState, useEffect } from "react";
-import { dataref } from "../../FirebaseConfig/firebase";
-import { Container, Form, Button, InputGroup } from "react-bootstrap";
-import { GeoFill, LayoutTextSidebar, PeopleFill, Percent, Hammer } from "react-bootstrap-icons";
-import "./ManageJobsPage.css";
-import JobRow from "./Components/JobRow/JobRow";
-import { Search } from "react-bootstrap-icons";
-import AddOrUpdateJobPopup from "./Components/AddOrUpdateJobPopup/AddOrUpdateJobPopup";
+import { dataref } from "../../Firebase/FirebaseConfig/firebase";
+import MyTable from "./Components/MyTable/MyTable";
+import { Box, Container } from "@mui/material";
+import MyAvatar from "./Components/MyAvatar/MyAvatar";
+import MyLoading from "../../Components/MyLoading/MyLoading";
+import {
+    ManageJobPageBoxSx,
+    MyAvatarContainerSx,
+    MySearchBarContainerStyle
+} from "./ManageJobsPageStyle";
+import MySearchBar from "./Components/MySearchBar/MySearchBar";
+
+
+const ManageJobPageBody = () => {
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        setLoading(true);
+        setTimeout(() => {
+            setLoading(false);
+        }, 2500);
+    }, []);
+
+
+    if (loading) {
+        return (<MyLoading />);
+    }
+    else {
+        return (
+            <Box className="ManageJobPage-Body" sx={ManageJobPageBoxSx}>
+
+                <Container sx={MyAvatarContainerSx} maxWidth="sm">
+                    <MyAvatar />
+                </Container>
+
+                <Container
+                    style={MySearchBarContainerStyle} maxWidth="sm">
+                    <MySearchBar />
+                </Container>
+
+                <MyTable />
+            </Box>
+        );
+    }
+}
 
 const TableContainer = () => {
     const [data, setData] = useState({});
@@ -30,18 +68,19 @@ const TableContainer = () => {
 
 
     return (
+
         <>
 
-            <Container className="mt-5">
+            {/* <Container className="mt-5">
                 <div className="d-flex flex-row bd-highlight" style={{ marginLeft: '10px' }}>
                     <div className="d-flex justify-content-start">
                         <AddOrUpdateJobPopup action={"משרה חדשה"} id="" data={{}} />
                     </div>
                 </div>
 
-                <div style={{ display: 'flex', margin: '5px' }}>
-                    {/* ####################################### SEARCH BAR ################################################################ */}
-                    <Form.Group className="d-flex flex-column bd-highlight mb-3" style={{ flex: '1', margin: '5px' }}>
+                <div style={{ display: 'flex', margin: '5px' }}> */}
+            {/* ####################################### SEARCH BAR ################################################################ */}
+            {/* <Form.Group className="d-flex flex-column bd-highlight mb-3" style={{ flex: '1', margin: '5px' }}>
                         <div className="d-flex align-items-end" style={{ height: '100%' }}>
                             <InputGroup size="sm">
                                 <Form.Control
@@ -55,12 +94,12 @@ const TableContainer = () => {
                                 </Button>
                             </InputGroup>
                         </div>
-                    </Form.Group>
+                    </Form.Group> */}
 
-                    {/* ####################################### END SEARCH BAR ############################################################ */}
+            {/* ####################################### END SEARCH BAR ############################################################ */}
 
-                    {/* ####################################### FILTER ############################################################ */}
-                    <Form.Group className="d-flex flex-column bd-highlight mb-3" dir="rtl" style={{ flex: '1', margin: '5px' }}>
+            {/* ####################################### FILTER ############################################################ */}
+            {/* <Form.Group className="d-flex flex-column bd-highlight mb-3" dir="rtl" style={{ flex: '1', margin: '5px' }}>
                         <div className="d-flex align-items-end" style={{ height: '100%' }}>
                             <Form.Label style={{ fontSize: 'smaller', fontWeight: 'bold' }}>סנן לפי:</Form.Label>
                         </div>
@@ -80,12 +119,12 @@ const TableContainer = () => {
                             </Form.Select>
                         </div>
 
-                    </Form.Group>
+                    </Form.Group> */}
 
-                    {/* ####################################### END FILTER ######################################################### */}
+            {/* ####################################### END FILTER ######################################################### */}
 
-                    {/* ####################################### SORT ############################################################ */}
-                    <Form.Group className="d-flex flex-column bd-highlight mb-3" dir="rtl" style={{ flex: '1', margin: '5px' }}>
+            {/* ####################################### SORT ############################################################ */}
+            {/* <Form.Group className="d-flex flex-column bd-highlight mb-3" dir="rtl" style={{ flex: '1', margin: '5px' }}>
                         <div className="d-flex align-items-end" style={{ height: '100%' }}>
                             <Form.Label style={{ fontSize: 'smaller', fontWeight: 'bold' }}>מיין לפי:</Form.Label>
                         </div>
@@ -105,9 +144,9 @@ const TableContainer = () => {
                                 <option>אחוז משרה</option>
                             </Form.Select>
                         </div>
-                    </Form.Group>
-                    {/* ####################################### END SORT ######################################################### */}
-
+                    </Form.Group> */}
+            {/* ####################################### END SORT ######################################################### */}
+            {/* 
                 </div>
                 
                 <table dir='rtl' style={{ width: '100%' }}>
@@ -156,11 +195,9 @@ const TableContainer = () => {
                     </tbody>
                 </table>
 
-            </Container>
-
-
+            </Container> */}
         </>
     );
 };
 
-export default TableContainer;
+export default ManageJobPageBody;

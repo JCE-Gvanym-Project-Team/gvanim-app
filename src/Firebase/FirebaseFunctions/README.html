@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Function Information</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        code {
+            background-color: #f8f8f8;
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-family: Consolas, monospace;
+        }
+
+        pre {
+            background-color: #f8f8f8;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Database Function Information</h1>
+
+    <h2>Importing Classes and Functions</h2>
+    <p>
+        All the functions and classes you can use are exported from the file
+        <code>src/Firebase/FirebaseFunctions/functionIndex.tsx</code>. To import the <code>Job</code> class and the
+        <code>getOpenRoles()</code> function, add the following import statement at the top of your component file:
+    </p>
+
+    <pre>
+import { Job, getOpenRoles } from "path-from-your-file-to-functionIndex";
+  </pre>
+
+    <p>
+        Make sure to replace <code>"path-from-your-file-to-functionIndex"</code> with the actual path to the file,
+        without the <code>.tsx</code> extension.
+    </p>
+
+    <h2>Object Classes in the Database</h2>
+    <p>
+        The database stores the following four classes of objects:
+    </p>
+    <ul>
+        <li>Job</li>
+        <li>Candidate</li>
+        <li>CandidatesJobStatus</li>
+        <li>Recruiter</li>
+    </ul>
+
+    <h2>Class Functions</h2>
+    <p>
+        All the classes have the following functions:
+    </p>
+    <ul>
+        <li><code>add()</code>: Add a new object to the database. Make sure to pass the required arguments in the
+            required order.</li>
+        <li><code>remove()</code>: Remove the object from the database.</li>
+        <li><code>edit()</code>: Pass arguments only to the attributes you want to change. Leave empty for no change.</li>
+        <li><code>exists()</code>: check if object is stored in database</li>
+
+    </ul>
+
+    <h3>Example Usage</h3>
+    <p>
+        Here's an example of how to create and manipulate objects of the <code>Job</code> class:
+    </p>
+
+    <pre>
+// Create objects
+let job1 = new Job(await generateJobNumber(), "title1", "role1", [50, 100], "tel-aviv", "tel-aviv-meguorim", "desc1", "req1", true, false);
+let job2 = new Job(await generateJobNumber(), "title2", "role2", [25, 50], "jerusalem", "jerusalem-soldier", "desc2", "req2", false, false);
+
+// Add to the database
+job1.add();
+job2.add();
+
+// Remove from the database
+job1.remove();
+  </pre>
+    <h2>Getting Objects from the Database</h2>
+    <p>
+        You can retrieve an array of objects of a specific class from the database using the
+        <code>getFiltered&lt;type&gt;s(string[], string[], attributes)</code> syntax.
+    </p>
+    <h3>Argument Guidelines</h3>
+    <ul>
+        <li>First argument (optional): An array of strings representing attribute names for filtering.</li>
+        <li>Second argument (optional): An array of strings representing the values for filtering. Ensure the values are
+            in the same order as the attribute names.</li>
+        <li>Third argument (optional): Choose an attribute to sort the results by.</li>
+    </ul>
+    <h3>Example Usage</h3>
+    <p>
+        Here are some examples of retrieving filtered objects from the database:
+    </p>
+    <pre>
+  // Get an array of all jobs in the database
+  let allJobs = await getFilteredJobs();
+  
+  // Apply a filter and sort the results
+  let openJobs = await getFilteredJobs(["open"], ["true"], "creationDate");
+  
+  // Apply multiple filters and sort the results
+  let openAndPsycholog = await getFilteredJobs(["role", "open"], ["Psycholog", "true"], "creationDate");
+    </pre>
+</body>
+
+</html>
