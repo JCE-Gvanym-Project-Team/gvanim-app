@@ -1,7 +1,3 @@
-/*
-import firebase from 'firebase/compat/app'
-import 'firebase/compat/storage';
-*/
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/storage';
 import 'firebase/compat/firestore';
@@ -53,4 +49,18 @@ export async function getFileExtensionsInFolder(folderPath: string): Promise<str
   }
 
   return extensions;
+}
+export async function deleteFile(path: string) {
+  const storageRef = firebase.storage().ref(path);
+  await storageRef.delete();
+}
+export async function fileExists(path: string) {
+  const storageRef = firebase.storage().ref(path);
+  try{
+  const metaData = await storageRef.getMetadata();
+  return metaData !== null;
+  }
+  catch(error: any){
+    return false;
+  }
 }

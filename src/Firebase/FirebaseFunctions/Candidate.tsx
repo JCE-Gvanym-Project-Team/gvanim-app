@@ -1,8 +1,8 @@
 import { realtimeDB } from "../FirebaseConfig/firebase";
 import { CandidateJobStatus, getFilteredCandidateJobStatuses } from "./CandidateJobStatus";
-import { getObjectAtPath, removeObjectAtPath, getFirebaseIdsAtPath, replaceData, appendToDatabase } from "./DBfuncs";
+import { removeObjectAtPath, getFirebaseIdsAtPath, replaceData, appendToDatabase } from "./DBfuncs";
 import { getFilteredJobs, Job } from "./Job";
-import { uploadFileToFirestore, getDownloadUrlFromFirestorePath, getFileExtensionsInFolder } from "./firestoreFunc";
+import { uploadFileToFirestore, getDownloadUrlFromFirestorePath, getFileExtensionsInFolder, deleteFile } from "./firestoreFunc";
 const database = realtimeDB;
 export class Candidate {
     public _id: string;
@@ -50,6 +50,7 @@ export class Candidate {
         const candidatures = await getFilteredCandidateJobStatuses(["candidateId"], [this._id]);
         candidatures.forEach((c) => c.remove());
         removeObjectAtPath("/Candidates/" + this._id);
+
     }
     public async edit(firstName: string = this._firstName, lastName: string = this._lastName, phone: string = this._phone, eMail: string = this._eMail, generalRating: number = this._generalRating) {
         this._firstName = firstName;
@@ -81,16 +82,25 @@ export class Candidate {
         const extension = cv.name.split('.')[cv.name.split('.').length - 1];
         await uploadFileToFirestore(cv, `CandidatesFiles/${this._id}`, `${this._firstName}_${this._lastName}_CV.${extension}`);
     }
+    public async deleteCv() {
+        const extensions = await getFileExtensionsInFolder(`CandidatesFiles/${this._id}`);
+        for (let i = 0; i < extensions.length; i++)
+            if ((await `CandidatesFiles/${this._id}/${this._firstName}_${this._lastName}_CV.${extensions[i]}`)) {
+                await deleteFile(`CandidatesFiles/${this._id}/${this._firstName}_${this._lastName}_CV.${extensions[i]}`);
+                return;
+            }
+    }
+
     public async getCvUrl(): Promise<string> {
         const extensions = await getFileExtensionsInFolder(`CandidatesFiles/${this._id}`);
         for (let i = 0; i < extensions.length; i++) {
-          if ((await getDownloadUrlFromFirestorePath(`CandidatesFiles/${this._id}/${this._firstName}_${this._lastName}_CV.${extensions[i]}`)).length > 0){
-            const url = await getDownloadUrlFromFirestorePath(`CandidatesFiles/${this._id}/${this._firstName}_${this._lastName}_CV.${extensions[i]}`);
-            return url;
-          }
+            if ((await getDownloadUrlFromFirestorePath(`CandidatesFiles/${this._id}/${this._firstName}_${this._lastName}_CV.${extensions[i]}`)).length > 0) {
+                const url = await getDownloadUrlFromFirestorePath(`CandidatesFiles/${this._id}/${this._firstName}_${this._lastName}_CV.${extensions[i]}`);
+                return url;
+            }
         }
         return "";
-      }
+    }
 }
 
 async function getCandidatesFromDatabase(): Promise<Candidate[]> {

@@ -1,7 +1,8 @@
 import { CandidateJobStatus, getFilteredCandidateJobStatuses } from "./CandidateJobStatus";
 import { realtimeDB } from "../FirebaseConfig/firebase";
 import { Candidate, getFilteredCandidates } from "./Candidate";
-import { appendToDatabase, getFirebaseIdsAtPath, getObjectAtPath, removeObjectAtPath, replaceData } from "./DBfuncs";
+import { appendToDatabase, getFirebaseIdsAtPath, removeObjectAtPath, replaceData } from "./DBfuncs";
+import { Stage } from "./Stage";
 const database = realtimeDB;
 
 export class Job {
@@ -17,6 +18,7 @@ export class Job {
     public _highPriority: boolean;
     public _views: number;
     public _creationDate: Date
+    public _stages: Stage[];
 
     constructor(
         jobNumber: number,
@@ -30,6 +32,7 @@ export class Job {
         open: boolean = true,
         highPriority: boolean = false,
         views: number = 0,
+        stages: Stage[] = []
     ) {
         this._title = title;
         this._role = role;
@@ -43,6 +46,7 @@ export class Job {
         this._views = views;
         this._creationDate = new Date();
         this._jobNumber = jobNumber;
+        this._stages = stages;
     }
     public async getCandidatures(): Promise<CandidateJobStatus[]> {
         return (await getFilteredCandidateJobStatuses(["jobNumber"], [this._jobNumber.toString()]));
@@ -52,24 +56,24 @@ export class Job {
         let ids = (await this.getCandidatures()).map((obj) => obj._candidateId);
         ids = Array.from(new Set(ids));
         //candidtesId.forEach((id) => candidates.push(getFilteredCandidates(["id"], [id])[0]))
-        for(let i=0;i<ids.length;i++)
-            candidates.push((await getFilteredCandidates(["id"],[ids[i]])));
+        for (let i = 0; i < ids.length; i++)
+            candidates.push((await getFilteredCandidates(["id"], [ids[i]])));
         return candidates;
     }
     public async remove() {
-        const candidatures = await getFilteredCandidateJobStatuses(["jobNumber"],[this._jobNumber.toString()]);
-        candidatures.forEach((c)=>c.remove());
-        if((await this.exists()))
+        const candidatures = await getFilteredCandidateJobStatuses(["jobNumber"], [this._jobNumber.toString()]);
+        candidatures.forEach((c) => c.remove());
+        if ((await this.exists()))
             removeObjectAtPath("/Jobs/" + this._jobNumber);
-        
+
     }
     public async getPath() {
-        if((await getFirebaseIdsAtPath('/Jobs')).includes(this._jobNumber.toString()))
-            return "/Jobs/"+this._jobNumber;
+        if ((await getFirebaseIdsAtPath('/Jobs')).includes(this._jobNumber.toString()))
+            return "/Jobs/" + this._jobNumber;
         return "";
     }
-    public async exists(){
-        if((await this.getPath()).length>0)
+    public async exists() {
+        if ((await this.getPath()).length > 0)
             return true;
         return false;
     }
@@ -81,7 +85,8 @@ export class Job {
         description: string = this._description,
         requirements: string = this._requirements,
         open: boolean = this._open,
-        highPriority: boolean = this._highPriority) {
+        highPriority: boolean = this._highPriority,
+        stages: Stage[]=[]) {
         this._title = title;
         this._role = role;
         this._sector = sector;
@@ -89,6 +94,8 @@ export class Job {
         this._requirements = requirements;
         this._open = open;
         this._highPriority = highPriority;
+        this._stages = stages;
+
         if (!(await this.exists()))
             this.add();
         replaceData((await this.getPath()), this);
@@ -96,6 +103,9 @@ export class Job {
     public async add() {
         if (!(await this.exists()))
             appendToDatabase(this, "/Jobs", this._jobNumber.toString());
+    }
+    public getStages(){
+        return this._stages;
     }
 }
 /* Jobs functions */
