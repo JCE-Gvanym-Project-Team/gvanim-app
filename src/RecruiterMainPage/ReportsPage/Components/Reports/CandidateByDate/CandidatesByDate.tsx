@@ -7,13 +7,16 @@ import FormLabel from '@mui/material/FormLabel';
 import InputLabel from '@mui/material/InputLabel';
 import { styled } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs, { Dayjs } from 'dayjs';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Button from '@mui/material/Button';
-import { Job, getOpenRoles } from '../../../../../Firebase/FirebaseFunctions/functionIndex'
+// import { Job, getOpenRoles } from '.../Firebase/FirebaseFunctions/functionIndex'
 
+
+//...../Firebase/FirebaseFunctions/functionIndex
 
 
 // Style
@@ -56,12 +59,12 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
 
 
 
-export default async function Questions() {
+export default function Questions() {
   const [age, setAge] = React.useState('');
+  const [value, setValue] = React.useState<Dayjs | null>(dayjs('2022-04-17'));
   const createReport = () => {
     console.log("createReport");
   }
-
 
   return (
     <FormControl>
@@ -121,15 +124,21 @@ export default async function Questions() {
         <FormControlLabel value="כל הכל התפקידים" control={<Radio />} label="כל הסטטוסים" />
       </RadioGroup>
 
+
+
       {/* select time */}
       <FormLabel id="demo-row-radio-buttons-group-label">בחר תאריך</FormLabel>
-
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DatePicker />
-      <DatePicker />
-    </LocalizationProvider>
 
-
+        <DemoContainer components={['DatePicker', 'DatePicker']}>
+          <DatePicker label="מתאריך" defaultValue={dayjs('2022-04-17')} />
+          <DatePicker
+            label="עד תאריך"
+            value={value}
+            onChange={(newValue) => setValue(newValue)}
+          />
+        </DemoContainer>
+      </LocalizationProvider>
       {/* create report */}
       <Button onClick={createReport} variant="contained" disableElevation>צור דו"ח</Button>
     </FormControl>
