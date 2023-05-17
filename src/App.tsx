@@ -11,9 +11,13 @@ import { Router } from 'express';
 import NavBar from './Components/NavBar/NavBar';
 import { main } from './Firebase/FirebaseFunctions/DBfuncs'
 import { initializeApp } from 'firebase/app';
+import CandidateByDate from './RecruiterMainPage/ReportsPage/Components/Reports/CandidateByDate/CandidatesByDate';
 
 main();
 
+
+
+main()
 const Admin = "admin";
 const Recruiter = "recruiter";
 
@@ -28,6 +32,7 @@ function App() {
 					<Route path="/manageCandidates" element={<ManageCandidatesPage />} />
 					<Route path="/manageJobs" element={<ManageJobsPage />} />
 					<Route path="/reports" element={<ReportsPage />} />
+					<Route path="/reports_1" element={<CandidateByDate />} />
 				</Routes>
 			</BrowserRouter>		
 		</>
