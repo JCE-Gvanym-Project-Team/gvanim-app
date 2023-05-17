@@ -6,12 +6,20 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import InputLabel from '@mui/material/InputLabel';
 import { styled } from '@mui/material/styles';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
-import NativeSelect from '@mui/material/NativeSelect';
-import InputBase from '@mui/material/InputBase'; 
+import InputBase from '@mui/material/InputBase';
+import dayjs, { Dayjs } from 'dayjs';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import Button from '@mui/material/Button';
+import { Job, getOpenRoles } from '.../Firebase/FirebaseFunctions/functionIndex'
 
-///Style //////////////
+
+//...../Firebase/FirebaseFunctions/functionIndex
+
+
+// Style
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
   'label + &': {
     marginTop: theme.spacing(3),
@@ -53,14 +61,15 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
 
 export default function Questions() {
   const [age, setAge] = React.useState('');
-  const handleChange = (event: { target: { value: string } }) => {
-    setAge(event.target.value);
-  };
+  const [value, setValue] = React.useState<Dayjs | null>(dayjs('2022-04-17'));
+  const createReport = () =>{
+    console.log("createReport");
+  }
 
   return (
     <FormControl>
       <h1>ד"וח מועמדים לפי תאריכים</h1>
-       {/*מועמדים */}
+      {/*מועמדים */}
       <FormLabel id="demo-row-radio-buttons-group-label">מועמדים</FormLabel>
       <RadioGroup
         row
@@ -71,20 +80,51 @@ export default function Questions() {
         <FormControlLabel value="מועמדים שלא קיימים באתר" control={<Radio />} label="מועמדים שלא קיימים באתר" />
         <FormControlLabel value="כולם" control={<Radio />} label="כולם" />
       </RadioGroup>
-       
-       {/* אזור */}
+
+      {/* אזור */}
       <FormLabel id="demo-row-radio-buttons-group-label">אזור</FormLabel>
-      <FormControl sx={{ m: 1 }} variant="standard">
-        <InputLabel htmlFor="demo-customized-textbox">Age</InputLabel>
-        <BootstrapInput id="demo-customized-textbox" />
-      </FormControl>
+
       <RadioGroup
-       row
-       aria-labelledby="demo-row-radio-buttons-group-label"
-       name="row-radio-buttons-group"
-        >
-      <FormControlLabel value="כל הארץ" control={<Radio />} label="כל הארץ" />
-      </RadioGroup> 
-     </FormControl>
+        row
+        aria-labelledby="demo-row-radio-buttons-group-label"
+        name="row-radio-buttons-group"
+      >
+        <FormControl sx={{ m: 1, width: '40%', }} variant="standard">
+          <InputLabel htmlFor="demo-customized-textbox"></InputLabel>
+          <BootstrapInput id="demo-customized-textbox" />
+        </FormControl>
+        <FormControlLabel value="כל הארץ" control={<Radio />} label="כל הארץ" />
+      </RadioGroup>
+
+      {/* select role */}
+      <FormLabel id="demo-row-radio-buttons-group-label">בחר תפקיד</FormLabel>
+      <RadioGroup
+        row
+        aria-labelledby="demo-row-radio-buttons-group-label"
+        name="row-radio-buttons-group"
+      >
+        <FormControl sx={{ m: 1, width: '40%', }} variant="standard">
+          <InputLabel htmlFor="demo-customized-textbox"></InputLabel>
+          <BootstrapInput id="demo-customized-textbox" />
+        </FormControl>
+        <FormControlLabel value="כל הכל התפקידים" control={<Radio />} label="כל התפקידים" />
+      </RadioGroup>
+
+      {/* select time */}
+      <FormLabel id="demo-row-radio-buttons-group-label">בחר תאריך</FormLabel>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+
+      <DemoContainer components={['DatePicker', 'DatePicker']}>
+        <DatePicker label="מתאריך" defaultValue={dayjs('2022-04-17')} />
+        <DatePicker
+          label="עד תאריך"
+          value={value}
+          onChange={(newValue) => setValue(newValue)}
+        />
+      </DemoContainer>
+    </LocalizationProvider>
+    {/* create report */}
+    <Button onClick={createReport} variant="contained" disableElevation>צור דו"ח</Button>
+    </FormControl>
   );
 }

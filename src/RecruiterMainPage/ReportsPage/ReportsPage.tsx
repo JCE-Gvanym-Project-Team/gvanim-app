@@ -5,13 +5,13 @@ import ReportPageTable from "./Components/MyTable/MyTable";
 
 
 function ReportsPage() {
-    return (
+  return (
     <>
-       {/* <Link to="/manageReports"> */}
-       {/* <Button variant="contained" disableElevation >יצירת דו"ח</Button> */}
-       {/* </Link> */}
-       <h1>דוחות</h1>
-       <ReportPageTable></ReportPageTable>        
+      {/* <Link to="/manageReports"> */}
+      {/* <Button variant="contained" disableElevation >יצירת דו"ח</Button> */}
+      {/* </Link> */}
+      <h1>דוחות</h1>
+      <ReportPageTable></ReportPageTable>
     </>
   )
 }
