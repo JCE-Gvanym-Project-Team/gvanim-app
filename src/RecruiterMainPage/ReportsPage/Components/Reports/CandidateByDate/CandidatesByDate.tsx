@@ -62,7 +62,7 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
 export default function Questions() {
   const [age, setAge] = React.useState('');
   const [value, setValue] = React.useState<Dayjs | null>(dayjs('2022-04-17'));
-  const createReport = () =>{
+  const createReport = () => {
     console.log("createReport");
   }
 
@@ -110,21 +110,37 @@ export default function Questions() {
         <FormControlLabel value="כל הכל התפקידים" control={<Radio />} label="כל התפקידים" />
       </RadioGroup>
 
+      {/* status */}
+      <FormLabel id="demo-row-radio-buttons-group-label">סטטוס</FormLabel>
+      <RadioGroup
+        row
+        aria-labelledby="demo-row-radio-buttons-group-label"
+        name="row-radio-buttons-group"
+      >
+        <FormControl sx={{ m: 1, width: '40%', }} variant="standard">
+          <InputLabel htmlFor="demo-customized-textbox"></InputLabel>
+          <BootstrapInput id="demo-customized-textbox" />
+        </FormControl>
+        <FormControlLabel value="כל הכל התפקידים" control={<Radio />} label="כל הסטטוסים" />
+      </RadioGroup>
+
+
+
       {/* select time */}
       <FormLabel id="demo-row-radio-buttons-group-label">בחר תאריך</FormLabel>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
 
-      <DemoContainer components={['DatePicker', 'DatePicker']}>
-        <DatePicker label="מתאריך" defaultValue={dayjs('2022-04-17')} />
-        <DatePicker
-          label="עד תאריך"
-          value={value}
-          onChange={(newValue) => setValue(newValue)}
-        />
-      </DemoContainer>
-    </LocalizationProvider>
-    {/* create report */}
-    <Button onClick={createReport} variant="contained" disableElevation>צור דו"ח</Button>
+        <DemoContainer components={['DatePicker', 'DatePicker']}>
+          <DatePicker label="מתאריך" defaultValue={dayjs('2022-04-17')} />
+          <DatePicker
+            label="עד תאריך"
+            value={value}
+            onChange={(newValue) => setValue(newValue)}
+          />
+        </DemoContainer>
+      </LocalizationProvider>
+      {/* create report */}
+      <Button onClick={createReport} variant="contained" disableElevation>צור דו"ח</Button>
     </FormControl>
   );
 }
