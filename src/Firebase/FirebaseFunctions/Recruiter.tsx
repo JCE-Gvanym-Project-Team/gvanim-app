@@ -17,6 +17,10 @@ export class Recruiter {
 		this._sectors = sectors;
 		this._id = email.replace('.', '_');
 	}
+ /**
+  * Gets the path of the current recruiter in the The realtime DB.
+  * @returns {Promise<string>} - The path of the current recruiter in the Firebase database.
+  */
 	public async getPath() {
 		if ((await getFirebaseIdsAtPath('/Recruiters')).includes(this._id))
 			return "/Recruiters/" + this._id;
@@ -27,10 +31,19 @@ export class Recruiter {
 			return true;
 		return false;
 	}
+ /**
+  * Removes the recruiter object from the realtime DB if it exists.
+  * @returns None
+  */
 	public async remove() {
 		if (await this.exists())
 			removeObjectAtPath("/Recruiters/" + this._id);
 	}
+ /**
+  * Adds the recruiter to the realtime DB if they do not already exist.
+  * @returns {Promise<string>} A randomly generated password for the new recruiter.
+  * If the recruiter already exists, logs a message to the console and returns nothing.
+  */
 	public async add() {
 		if (!(await this.exists())) {
 			const pass = generateRandomString();
@@ -57,6 +70,11 @@ export class Recruiter {
 		this.remove();
 		this.add();
 	}
+ /**
+  * Add editing permissions to the recruiter to the sector. 
+  * @param {string} sector - The sector to add.
+  * @returns None
+  */
 	public async addSector(sector: string) {
 		if (!this._sectors.includes(sector))
 			this._sectors.push(sector);
@@ -65,6 +83,11 @@ export class Recruiter {
 		const uid = await this.getUid();
 		appendToDatabase(this._email,`/Sectors/${sector}`,uid);
 	}
+ /**
+  * Remove editing permissions to the recruiter to the sector
+  * @param {string} sector - The sector to remove.
+  * @returns None
+  */
 	public async removeSector(sector: string) {
 		if (this._sectors.includes(sector))
 			this._sectors.filter((val) => val !== sector);
@@ -73,6 +96,11 @@ export class Recruiter {
 		const uid = await this.getUid();
 		removeObjectAtPath(`Sectors/${sector}/${uid}`);
 	}
+ /**
+  * Gets the uid of the Recruiter, for internal use(you have no reason to call it).
+  * @async
+  * @returns {Promise<string>} A promise that resolves to the unique identifier string.
+  */
 	public async getUid(): Promise<string> {
 		if (!(await this.exists()))
 			return "";
@@ -80,6 +108,11 @@ export class Recruiter {
 	}
 }
 
+/**
+ * Retrieves a list of recruiters from the Firebase Realtime Database.
+ * @returns {Promise<Recruiter[]>} - A promise that resolves to an array of Recruiter objects.
+ * @throws {Error} - If there is an error fetching the recruiters from the database.
+ */
 export async function getRecruitersFromDatabase(): Promise<Recruiter[]> {
 	const database = realtimeDB;
 	try {
@@ -96,6 +129,11 @@ export async function getRecruitersFromDatabase(): Promise<Recruiter[]> {
 		throw new Error("Failed to fetch recruiters from database.");
 	}
 }
+/**
+ * Generates a random string of 12 characters using a set of allowed characters.
+ * Useful for generating random passwordsץ
+ * @returns {string} A random string of 12 characters.
+ */
 function generateRandomString(): string {
 	const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>/?';
 	let result = '';
