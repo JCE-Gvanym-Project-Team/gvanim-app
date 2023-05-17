@@ -12,7 +12,7 @@ export class Job {
     public _scope: Array<number>;//first is the the smallest
     public _region: string;
     public _sector: string;
-    public _description: string;// todo make arrays of strings[]
+    public _description: string[];// todo make arrays of strings[]
     public _requirements: string;
     public _open: boolean;
     public _highPriority: boolean;
@@ -27,7 +27,7 @@ export class Job {
         scope: Array<number> = [0, 0],
         region: string = "",
         sector: string = "",
-        description: string = "",
+        description: string[] = [],
         requirements: string = "",
         open: boolean = true,
         highPriority: boolean = false,
@@ -48,9 +48,18 @@ export class Job {
         this._jobNumber = jobNumber;
         this._stages = stages;
     }
+    /**
+     * Retrieves the candidate job statuses for the current job.
+     * @returns {Promise<CandidateJobStatus[]>} - A promise that resolves to an array of candidate job statuses.
+     */
     public async getCandidatures(): Promise<CandidateJobStatus[]> {
         return (await getFilteredCandidateJobStatuses(["jobNumber"], [this._jobNumber.toString()]));
     }
+    /**
+     * Retrieves a list of candidates for current Job.
+     * @async
+     * @returns {Promise<Candidate[]>} - A promise that resolves to an array of Candidate objects.
+     */
     public async getCandidates(): Promise<Candidate[]> {
         let candidates;
         let ids = (await this.getCandidatures()).map((obj) => obj._candidateId);
@@ -60,29 +69,51 @@ export class Job {
             candidates.push((await getFilteredCandidates(["id"], [ids[i]])));
         return candidates;
     }
+    /**
+     * Removes the current job from the realtime DB and all associated candidatures.
+     * @returns None
+     */
     public async remove() {
         const candidatures = await getFilteredCandidateJobStatuses(["jobNumber"], [this._jobNumber.toString()]);
         candidatures.forEach((c) => c.remove());
         if ((await this.exists()))
             removeObjectAtPath("/Jobs/" + this._jobNumber);
-
     }
+    /**
+     * Gets the path of the current job in the realtime DB.
+     * @returns {Promise<string>} - The path of the current job in the Firebase database.
+     */
     public async getPath() {
         if ((await getFirebaseIdsAtPath('/Jobs')).includes(this._jobNumber.toString()))
             return "/Jobs/" + this._jobNumber;
         return "";
     }
+    /**
+     * Checks if the job exists in the realtime DB.
+     * @returns {Promise<boolean>} - A promise that resolves to true if the path exists, false otherwise.
+     */
     public async exists() {
         if ((await this.getPath()).length > 0)
             return true;
         return false;
     }
+    
+    /**
+     * Edits the job with the given parameters and updates the realtime DB.
+     * @param {string} [title=this._title] - The title of the job posting.
+     * @param {string} [role=this._role] - The role of the job posting.
+     * @param {Array<number>} [scope=this._scope] - The scope of the job posting.
+     * @param {string} [region=this._region] - The region of the job posting.
+     * @param {string} [sector=this._sector] - The sector of the job posting.
+     * @param {string} [description=this._description] - The description of the job posting.
+     * @param {string} [requirements=this._requirements] - The requirments of the job posting.
+     */
     public async edit(title: string = this._title,
         role: string = this._role,
         scope: Array<number> = this._scope,
         region: string = this._region,
         sector: string = this._sector,
-        description: string = this._description,
+        description: string[] = this._description,
         requirements: string = this._requirements,
         open: boolean = this._open,
         highPriority: boolean = this._highPriority,
@@ -100,10 +131,18 @@ export class Job {
             this.add();
         replaceData((await this.getPath()), this);
     }
+    /**
+     * Adds the current job to the database if it does not already exist.
+     * @returns None
+     */
     public async add() {
         if (!(await this.exists()))
             appendToDatabase(this, "/Jobs", this._jobNumber.toString());
     }
+    /**
+     * Returns the stages of the current instance of the class.
+     * @returns {Array} - An array of stages.
+     */
     public getStages(){
         return this._stages;
     }
@@ -131,6 +170,12 @@ async function getJobsFromDatabase(): Promise<Job[]> {
         throw new Error("Failed to fetch jobs from database.");
     }
 }
+/**
+ * Generates a unique job number for a new job by selecting a random number within a range
+ * and checking if it already exists in the list of jobs. If it does, it generates a new number
+ * until a unique one is found.
+ * @returns {Promise<number>} - A promise that resolves to the generated job number.
+ */
 export async function generateJobNumber(): Promise<number> {
     const jobs = await getFilteredJobs();
     const len = jobs.length;
