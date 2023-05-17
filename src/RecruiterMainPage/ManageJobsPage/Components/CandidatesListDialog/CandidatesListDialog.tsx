@@ -17,111 +17,115 @@ import { ListItemTypographySx } from './CandidatesListDialogStyle';
 import { ChevronLeft } from '@mui/icons-material';
 
 const Transition = React.forwardRef(function Transition(
-  props: TransitionProps & {
-    children: React.ReactElement;
-  },
-  ref: React.Ref<unknown>,
-) {
-  return <Slide direction="up" ref={ref} {...props} />;
+	props: TransitionProps & {
+		children: React.ReactElement;
+	},
+	ref: React.Ref<unknown>,
+)
+{
+	return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function CandidatesListFullScreenDialog() {
-  const [open, setOpen] = React.useState(false);
+export default function CandidatesListFullScreenDialog({ JobId })
+{
+	const [open, setOpen] = React.useState(false);
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+	const handleClickOpen = () =>
+	{
+		setOpen(true);
+	};
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+	const handleClose = () =>
+	{
+		setOpen(false);
+	};
 
-  return (
-    <Box>
+	return (
+		<Box>
 
-      <Button variant='text' endIcon={ <ChevronLeft /> } onClick={handleClickOpen} >לרשימת המועמדים</Button>
+			<Button variant='text' endIcon={<ChevronLeft />} onClick={handleClickOpen} >לרשימת המועמדים</Button>
 
-      <Dialog
-        fullScreen
-        sx={{
-          '& .MuiDialog-paper': {
-            borderRadius: '8px',
-          }
-        }}
-        open={open}
+			<Dialog
+				fullScreen
+				sx={{
+					'& .MuiDialog-paper': {
+						borderRadius: '8px',
+					}
+				}}
+				open={open}
 
-        TransitionComponent={Transition}
-      >
-        <AppBar sx={{ position: 'relative' }}>
-          <Toolbar>
+				TransitionComponent={Transition}
+			>
+				<AppBar sx={{ position: 'relative' }}>
+					<Toolbar>
 
-            <Typography sx={{ ml: 2, flex: 1, textAlign: 'center' }} variant="h6" component="div">
-              משרה מס' 1121
-            </Typography>
+						<Typography sx={{ ml: 2, flex: 1, textAlign: 'center' }} variant="h6" component="div">
+							משרה מס' {JobId}
+						</Typography>
 
-            <IconButton
-              edge="start"
-              color="inherit"
-              onClick={handleClose}
-              aria-label="close"
-            >
-              <CloseIcon />
-            </IconButton>
-          </Toolbar>
-        </AppBar>
+						<IconButton
+							edge="start"
+							color="inherit"
+							onClick={handleClose}
+							aria-label="close"
+						>
+							<CloseIcon />
+						</IconButton>
+					</Toolbar>
+				</AppBar>
 
-        <List sx={{ padding: 0 }}>
-          {/* this is the header */}
+				<List sx={{ padding: 0 }}>
+					{/* this is the header */}
 
-          <ListItem>
-            <ListItemText sx={{ paddingRight: '16px', paddingLeft: '16px' }} >
-              <Typography sx={ListItemTypographySx} variant='subtitle1'>
-                שם המועמד
-              </Typography>
-            </ListItemText>
+					<ListItem>
+						<ListItemText sx={{ paddingRight: '16px', paddingLeft: '16px' }} >
+							<Typography sx={ListItemTypographySx} variant='subtitle1'>
+								שם המועמד
+							</Typography>
+						</ListItemText>
 
-            <ListItemIcon>
-              <ListItemText sx={{ paddingRight: '16px', paddingLeft: '16px' }} >
-                <Typography sx={ListItemTypographySx} variant='subtitle1'>
-                  התאמה
-                </Typography>
-              </ListItemText>
-            </ListItemIcon>
-          </ListItem>
-          {/* END HEADER */}
+						<ListItemIcon>
+							<ListItemText sx={{ paddingRight: '16px', paddingLeft: '16px' }} >
+								<Typography sx={ListItemTypographySx} variant='subtitle1'>
+									התאמה
+								</Typography>
+							</ListItemText>
+						</ListItemIcon>
+					</ListItem>
+					{/* END HEADER */}
 
-          <ListItemButton accessKey='ID עומר' onClick={(e) => console.log(e.currentTarget.accessKey)}>
+					<ListItemButton accessKey='ID עומר' onClick={(e) => console.log(e.currentTarget.accessKey)}>
 
-            <ListItemAvatar>
-              <Avatar />
-            </ListItemAvatar>
+						<ListItemAvatar>
+							<Avatar />
+						</ListItemAvatar>
 
 
-            <ListItemText primary="עומר תורג'מן" secondary="מעלה אדומים" />
+						<ListItemText primary="עומר תורג'מן" secondary="מעלה אדומים" />
 
-            <ListItemIcon >
-              <Rating defaultValue={2} size="medium" readOnly />
-            </ListItemIcon>
+						<ListItemIcon >
+							<Rating defaultValue={2} size="medium" readOnly />
+						</ListItemIcon>
 
-          </ListItemButton>
-          <Divider />
+					</ListItemButton>
+					<Divider />
 
-          <ListItemButton accessKey='ID גבריאל' onClick={(e) => console.log(e.currentTarget.accessKey)}>
+					<ListItemButton accessKey='ID גבריאל' onClick={(e) => console.log(e.currentTarget.accessKey)}>
 
-            <ListItemAvatar>
-              <Avatar />
-            </ListItemAvatar>
+						<ListItemAvatar>
+							<Avatar />
+						</ListItemAvatar>
 
-            <ListItemText
-              primary="עמוס לוי"
-              secondary="באר שבע"
-            />
-            <Rating defaultValue={5} size="medium" readOnly />
-          </ListItemButton>
+						<ListItemText
+							primary="עמוס לוי"
+							secondary="באר שבע"
+						/>
+						<Rating defaultValue={5} size="medium" readOnly />
+					</ListItemButton>
 
-        </List>
+				</List>
 
-      </Dialog>
-    </Box>
-  );
+			</Dialog>
+		</Box>
+	);
 }
