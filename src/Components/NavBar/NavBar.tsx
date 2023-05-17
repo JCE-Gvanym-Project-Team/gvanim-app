@@ -110,7 +110,7 @@ export default function NavBar(props: Props) {
 				</ListItem>
 				<ListItem disablePadding>
 					<ListItemButton sx={{ textAlign: 'center' }}>
-						<ListItemText primary='ניהול משרות' onClick={handleJobsClick}/>
+						<ListItemText primary='ניהול משרות' onClick={handleJobsClick} />
 					</ListItemButton>
 				</ListItem>
 				<ListItem disablePadding>
@@ -127,132 +127,136 @@ export default function NavBar(props: Props) {
 
 
 	return (
-		<Box sx={{ display: 'flex', marginTop: '80px'}}>
-			<CssBaseline />
-			<AppBar component="nav" sx={{
-				margin: '16px 24px',
-				width: 'calc(100% - 48px)',
-				borderRadius: '0.75rem',
+			<Box sx={{ display: 'flex', marginTop: '80px'}}>
+				<CssBaseline />
+				<AppBar component="nav" sx={{
+					background: 'linear-gradient(to top, rgb(9, 32, 63) 0%, rgb(83, 120, 149) 100%)',
+					margin: '16px 24px',
+					width: 'calc(100% - 48px)',
+					borderRadius: '0.75rem',
+					paddingTop: '0px',
+					paddingBottom: '0px',
+					boxShadow: 5
 				}}>
-				<Toolbar>
-					<IconButton
-						color="inherit"
-						aria-label="open drawer"
-						edge="start"
-						onClick={handleDrawerToggle}
-						sx={{ mr: 2, display: { md: 'none' } }}
-					>
-						<MenuIcon sx={{ color: '#fff' }} />
-					</IconButton>
-
-
-					<Box sx={{ display: { xs: 'none', sm: 'none', md: 'flex' } }}>
-
+					<Toolbar>
 						<IconButton
 							color="inherit"
+							aria-label="open drawer"
 							edge="start"
-							disabled
-
+							onClick={handleDrawerToggle}
+							sx={{ mr: 2, display: { md: 'none' } }}
 						>
-							<AccountCircle sx={{ color: '#fff' }} />
+							<MenuIcon sx={{ color: '#fff' }} />
 						</IconButton>
 
-						<Typography
-							variant="caption"
-						>
-							ברוך הבא User.
-						</Typography>
 
-					</Box>
+						<Box sx={{ display: { xs: 'none', sm: 'none', md: 'flex' } }}>
 
-					<Box sx={{ display: { xs: 'none', sm: 'none', md: 'flex', justifyContent: 'center', width: '100%' } }}>
-						<Stack direction="row" spacing={2}>
-							<Button disableFocusRipple disableRipple size="large" startIcon={<Home />} variant="text"
-								sx={{
-									"&:hover": {
+							<IconButton
+								color="inherit"
+								edge="start"
+								disabled
+
+							>
+								<AccountCircle sx={{ color: '#fff' }} />
+							</IconButton>
+
+							<Typography
+								variant="caption"
+							>
+								ברוך הבא User.
+							</Typography>
+
+						</Box>
+
+						<Box sx={{ display: { xs: 'none', sm: 'none', md: 'flex', justifyContent: 'center', width: '100%' } }}>
+							<Stack direction="row" spacing={2}>
+								<Button disableFocusRipple disableRipple size="large" startIcon={<Home />} variant="text"
+									sx={{
+										"&:hover": {
+											backgroundColor: HomeActive ? 'white' : 'primary',
+											color: HomeActive ? 'primary' : 'white'
+										},
+
+										borderRadius: '0.75rem',
 										backgroundColor: HomeActive ? 'white' : 'primary',
-										color: HomeActive ? 'primary' : 'white'
-									},
-
-									borderRadius: '0.75rem',
-									backgroundColor: HomeActive ? 'white' : 'primary',
-									color: HomeActive ? 'primary' : 'white',
-								}}
-								onClick={handleHomeClick}
-							>
-								דף הבית
-							</Button>
-							<Button disableFocusRipple disableRipple size="large" startIcon={<AssessmentOutlined />} variant="text"
-								sx={{
-									"&:hover": {
+										color: HomeActive ? 'primary' : 'white',
+									}}
+									onClick={handleHomeClick}
+								>
+									דף הבית
+								</Button>
+								<Button disableFocusRipple disableRipple size="large" startIcon={<AssessmentOutlined />} variant="text"
+									sx={{
+										"&:hover": {
+											backgroundColor: ReportsActive ? 'white' : 'primary',
+											color: ReportsActive ? 'primary' : 'white'
+										},
+										borderRadius: '0.75rem',
 										backgroundColor: ReportsActive ? 'white' : 'primary',
-										color: ReportsActive ? 'primary' : 'white'
-									},
-									borderRadius: '0.75rem',
-									backgroundColor: ReportsActive ? 'white' : 'primary',
-									color: ReportsActive ? 'primary' : 'white',
-								}}
-								onClick={handleReportsClick}
-							>
-								דוחות
-							</Button>
-							<Button size="large" startIcon={<PeopleAltOutlined />} variant="text"
-								sx={{
-									"&:hover": {
+										color: ReportsActive ? 'primary' : 'white',
+									}}
+									onClick={handleReportsClick}
+								>
+									דוחות
+								</Button>
+								<Button size="large" startIcon={<PeopleAltOutlined />} variant="text"
+									sx={{
+										"&:hover": {
+											backgroundColor: CandidatesActive ? 'white' : 'primary',
+											color: CandidatesActive ? 'primary' : 'white'
+										},
+										borderRadius: '0.75rem',
 										backgroundColor: CandidatesActive ? 'white' : 'primary',
-										color: CandidatesActive ? 'primary' : 'white'
-									},
-									borderRadius: '0.75rem',
-									backgroundColor: CandidatesActive ? 'white' : 'primary',
-									color: CandidatesActive ? 'primary' : 'white',
-								}}
-								onClick={handleCandidatesClick}
-							>
-								ניהול מועמדים
-							</Button>
-							<Button size="large" startIcon={<ArticleOutlined />} variant="text"
-								sx={{
-									"&:hover": {
+										color: CandidatesActive ? 'primary' : 'white',
+									}}
+									onClick={handleCandidatesClick}
+								>
+									ניהול מועמדים
+								</Button>
+								<Button size="large" startIcon={<ArticleOutlined />} variant="text"
+									sx={{
+										"&:hover": {
+											backgroundColor: JobsActive ? 'white' : 'primary',
+											color: JobsActive ? 'primary' : 'white'
+										},
+										borderRadius: '0.75rem',
 										backgroundColor: JobsActive ? 'white' : 'primary',
-										color: JobsActive ? 'primary' : 'white'
-									},
-									borderRadius: '0.75rem',
-									backgroundColor: JobsActive ? 'white' : 'primary',
-									color: JobsActive ? 'primary' : 'white',
-								}}
-								onClick={handleJobsClick}
-							>
-								ניהול משרות
+										color: JobsActive ? 'primary' : 'white',
+									}}
+									onClick={handleJobsClick}
+								>
+									ניהול משרות
+								</Button>
+
+							</Stack>
+						</Box>
+						<Box sx={{ display: { xs: 'none', sm: 'none', md: 'flex', justifyContent: 'center', width: 'fit-content' } }}>
+							<Button size="large" endIcon={<Logout />} sx={{ color: '#fff' }}>
+								התנתק
 							</Button>
 
-						</Stack>
-					</Box>
-					<Box sx={{ display: { xs: 'none', sm: 'none', md: 'flex', justifyContent: 'center', width: 'fit-content' } }}>
-						<Button size="large" endIcon={<Logout />} sx={{ color: '#fff' }}>
-							התנתק
-						</Button>
 
-
-					</Box>
-				</Toolbar>
-			</AppBar>
-			<Box component="nav">
-				<Drawer
-					container={container}
-					variant="temporary"
-					open={mobileOpen}
-					onClose={handleDrawerToggle}
-					ModalProps={{
-						keepMounted: true, // Better open performance on mobile.
-					}}
-					sx={{
-						display: { md: 'block', lg: 'none' },
-						'& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-					}}
-				>
-					{drawer}
-				</Drawer>
+						</Box>
+					</Toolbar>
+				</AppBar>
+				<Box component="nav">
+					<Drawer
+						container={container}
+						variant="temporary"
+						open={mobileOpen}
+						onClose={handleDrawerToggle}
+						ModalProps={{
+							keepMounted: true, // Better open performance on mobile.
+						}}
+						sx={{
+							display: { md: 'block', lg: 'none' },
+							'& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+						}}
+					>
+						{drawer}
+					</Drawer>
+				</Box>
 			</Box>
-		</Box>
 	);
 }
