@@ -14,34 +14,38 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-
 import Typography from '@mui/material/Typography';
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-interface Props {
-	/**
-	 * Injected by the documentation to work in an iframe.
-	 * You won't need it on your project.
-	 */
-	window?: () => Window;
-}
+
 
 const drawerWidth = 240;
 
-export default function NavBar(props: Props) {
+
+const NavBar = (props: { handlelogout: any, HomeActive: any,setHomeActive: any,
+	ReportsActive: any, setReportsActive: any, CandidatesActive: any, setCandidatesActive: any,
+	JobsActive: any, setJobsActive: any}) => {
+
+	const { 
+		handlelogout, 
+		HomeActive,
+		setHomeActive,
+		ReportsActive,
+		setReportsActive,
+		CandidatesActive,
+		setCandidatesActive,
+		JobsActive,
+		setJobsActive
+	 } = props;
+	 
 	const navigate = useNavigate();
-	const { window } = props;
 	const [mobileOpen, setMobileOpen] = React.useState(false);
 
 	const handleDrawerToggle = () => {
 		setMobileOpen((prevState) => !prevState);
 	};
 
-	const [HomeActive, setHomeActive] = useState(true);
-	const [ReportsActive, setReportsActive] = useState(false);
-	const [CandidatesActive, setCandidatesActive] = useState(false);
-	const [JobsActive, setJobsActive] = useState(false);
 
 
 	const handleHomeClick = () => {
@@ -115,15 +119,13 @@ export default function NavBar(props: Props) {
 				</ListItem>
 				<ListItem disablePadding>
 					<ListItemButton sx={{ textAlign: 'center' }}>
-						<ListItemText primary='התנתק' />
+						<ListItemText primary='התנתק' onClick={handlelogout} />
 					</ListItemButton>
 				</ListItem>
 
 			</List>
 		</Box>
 	);
-
-	const container = window !== undefined ? () => window().document.body : undefined;
 
 
 	return (
@@ -232,7 +234,7 @@ export default function NavBar(props: Props) {
 							</Stack>
 						</Box>
 						<Box sx={{ display: { xs: 'none', sm: 'none', md: 'flex', justifyContent: 'center', width: 'fit-content' } }}>
-							<Button size="large" endIcon={<Logout />} sx={{ color: '#fff' }}>
+							<Button size="large" endIcon={<Logout />} sx={{ color: '#fff' }} onClick={handlelogout}>
 								התנתק
 							</Button>
 
@@ -242,7 +244,6 @@ export default function NavBar(props: Props) {
 				</AppBar>
 				<Box component="nav">
 					<Drawer
-						container={container}
 						variant="temporary"
 						open={mobileOpen}
 						onClose={handleDrawerToggle}
@@ -259,4 +260,6 @@ export default function NavBar(props: Props) {
 				</Box>
 			</Box>
 	);
-}
+};
+
+export default NavBar;
