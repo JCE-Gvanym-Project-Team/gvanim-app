@@ -1,8 +1,9 @@
 import { Box, Button, Divider, Grid, Paper, Typography } from '@mui/material'
 import React from 'react'
-import { BoxGradientSx, MyBoxSectionSx, MyDividerSx, MyGridSx, MyPaperSx, MyTypographyInfoSx, MyTypographyMainSx, MyTypographyTitleSx } from './WelcomePageStyle'
+import { BoxGradientSx, MyGridItemSx, MyDividerSx, MyGridSx, MyPaperSx, MyTypographyInfoSx, MyTypographyMainSx, MyTypographyTitleSx } from './WelcomePageStyle'
 import { ChevronLeft } from '@mui/icons-material'
 import { useNavigate } from "react-router-dom";
+import NewJobPage from '../../ManageJobsPage/Components/NewJobPage/NewJobPage';
 
 export default function WelcomePage(props: { setHomeActive: any, setReportsActive: any, setCandidatesActive: any, setJobsActive: any }) {
     
@@ -39,8 +40,8 @@ export default function WelcomePage(props: { setHomeActive: any, setReportsActiv
 
             <Paper sx={MyPaperSx}>
 
-                <Grid sx={MyGridSx}>
-                    <Box sx={MyBoxSectionSx}>
+                <Grid xs={3} sx={MyGridSx}>
+                    <Grid item sx={MyGridItemSx}>
                         <Typography sx={MyTypographyMainSx}>
                             70
                         </Typography>
@@ -54,11 +55,12 @@ export default function WelcomePage(props: { setHomeActive: any, setReportsActiv
                         </Typography>
                         
                         <Button disableRipple variant='text' endIcon={<ChevronLeft />} onClick={handleJobsClick}>לחץ כאן</Button>
-                    </Box>
+                      
+                    </Grid>
 
-                    <Divider sx={MyDividerSx} />
+                    <Divider orientation="vertical" flexItem/>
 
-                    <Box sx={MyBoxSectionSx}>
+                    <Grid item sx={MyGridItemSx}>
 
                         <Typography sx={MyTypographyMainSx}>
                             13
@@ -75,12 +77,12 @@ export default function WelcomePage(props: { setHomeActive: any, setReportsActiv
 
                         <Button disableRipple variant='text' endIcon={<ChevronLeft />} onClick={handleReportsClick} >לחץ כאן</Button>
 
-                    </Box>
+                    </Grid>
 
-                    <Divider sx={MyDividerSx} />
+                    <Divider orientation="vertical" flexItem/>
 
 
-                    <Box sx={MyBoxSectionSx}>
+                    <Grid item sx={MyGridItemSx}>
                         <Typography sx={MyTypographyMainSx}>
                             22
                         </Typography>
@@ -95,11 +97,12 @@ export default function WelcomePage(props: { setHomeActive: any, setReportsActiv
                         
                         
                         <Button disableRipple variant='text' endIcon={<ChevronLeft />} onClick={handleCandidatesClick} >לחץ כאן</Button>
-                    </Box>
+                    </Grid>
                 </Grid>
 
             </Paper>
 
+         
         </>
     )
 }

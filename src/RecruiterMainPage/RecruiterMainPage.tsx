@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import "./RecruiterMainPage.css";
-import { Box } from "@mui/material";
 import WelcomePage from "./Components/WelcomePage/WelcomePage";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ManageCandidatesPage from "./ManageCandidatesPage/ManageCandidatesPage";

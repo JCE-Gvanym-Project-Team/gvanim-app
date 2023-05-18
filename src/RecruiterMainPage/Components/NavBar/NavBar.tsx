@@ -1,10 +1,10 @@
 
 import Toolbar from "@mui/material/Toolbar";
-import { Avatar, Box, Button, Stack } from "@mui/material";
+import { Avatar, Box, Button, Stack, SxProps } from "@mui/material";
 import * as React from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import { ArticleOutlined, AssessmentOutlined, Home, Logout, PeopleAltOutlined, PersonOutline } from "@mui/icons-material";
+import { ArticleOutlined, AssessmentOutlined, Home, PeopleAltOutlined, PersonOutline } from "@mui/icons-material";
 import AppBar from '@mui/material/AppBar';
 import CssBaseline from '@mui/material/CssBaseline';
 import Divider from '@mui/material/Divider';
@@ -15,13 +15,14 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MyLogoutDialog from "./Components/LogoutDialog";
+import { AppBarSx, BoxDrawerAvatarSx, BoxDrawerSx, BoxNavigationOptionsSx, DividerDrawerSx, ListItemButtonDrawerSx, LogoutButtonBoxSx, NavBarIconColorSx, OpenDrawerIconSx, TypographyDrawerSx, WelcomeUserBoxSx } from "./NavBarStyle";
 
 
 
 const drawerWidth = 240;
+
 
 
 const NavBar = (props: {
@@ -49,7 +50,53 @@ const NavBar = (props: {
 		setMobileOpen((prevState) => !prevState);
 	};
 
+// ############# Sx Props that cant be in another file #########
+	const HomeButtonNavigationSx: SxProps = {
+		"&:hover": {
+			backgroundColor: HomeActive ? 'white' : 'primary',
+			color: HomeActive ? 'primary' : 'white'
+		},
 
+		borderRadius: '0.75rem',
+		backgroundColor: HomeActive ? 'white' : 'primary',
+		color: HomeActive ? 'primary' : 'white'
+	}
+
+	const ReportsButtonNavigationSx: SxProps = {
+		"&:hover": {
+			backgroundColor: ReportsActive ? 'white' : 'primary',
+			color: ReportsActive ? 'primary' : 'white'
+		},
+		borderRadius: '0.75rem',
+		backgroundColor: ReportsActive ? 'white' : 'primary',
+		color: ReportsActive ? 'primary' : 'white'
+	}
+
+	const CandidatesButtonNavigationSx: SxProps = {
+		"&:hover": {
+			backgroundColor: CandidatesActive ? 'white' : 'primary',
+			color: CandidatesActive ? 'primary' : 'white'
+		},
+		borderRadius: '0.75rem',
+		backgroundColor: CandidatesActive ? 'white' : 'primary',
+		color: CandidatesActive ? 'primary' : 'white'
+	}
+
+	const JobsButtonNavigationSx: SxProps = {
+		"&:hover": {
+			backgroundColor: JobsActive ? 'white' : 'primary',
+			color: JobsActive ? 'primary' : 'white'
+		},
+		borderRadius: '0.75rem',
+		backgroundColor: JobsActive ? 'white' : 'primary',
+		color: JobsActive ? 'primary' : 'white'
+	}
+
+	const DrawerPaperSx: SxProps = {
+		display: { md: 'block', lg: 'none' },
+		'& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+	}
+// ######### END Sx Props #######################################
 
 	const handleHomeClick = () => {
 		setReportsActive(false);
@@ -84,39 +131,36 @@ const NavBar = (props: {
 	};
 
 	const drawer = (
-		<Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
-			<Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 3 }}>
+		<Box onClick={handleDrawerToggle} sx={BoxDrawerSx}>
+			<Box sx={BoxDrawerAvatarSx}>
 				<Avatar />
 			</Box>
 
-			<Typography
-				variant="caption"
-				sx={{ marginLeft: 2, }}
-			>
+			<Typography variant="caption" sx={TypographyDrawerSx}>
 				ברוך הבא UserUser.
 			</Typography>
 
-			<Divider sx={{ marginTop: 1 }} />
+			<Divider sx={DividerDrawerSx} />
 			<List>
 
 				<ListItem disablePadding>
-					<ListItemButton sx={{ textAlign: 'center' }} onClick={handleHomeClick}>
+					<ListItemButton sx={ListItemButtonDrawerSx} onClick={handleHomeClick}>
 						<ListItemText primary='דף הבית' />
 					</ListItemButton>
 				</ListItem>
 
 				<ListItem disablePadding>
-					<ListItemButton sx={{ textAlign: 'center' }} onClick={handleReportsClick}>
+					<ListItemButton sx={ListItemButtonDrawerSx} onClick={handleReportsClick}>
 						<ListItemText primary='דוחות' />
 					</ListItemButton>
 				</ListItem>
 				<ListItem disablePadding>
-					<ListItemButton sx={{ textAlign: 'center' }} onClick={handleCandidatesClick}>
+					<ListItemButton sx={ListItemButtonDrawerSx} onClick={handleCandidatesClick}>
 						<ListItemText primary='ניהול מועמדים' />
 					</ListItemButton>
 				</ListItem>
 				<ListItem disablePadding>
-					<ListItemButton sx={{ textAlign: 'center' }}>
+					<ListItemButton sx={ListItemButtonDrawerSx}>
 						<ListItemText primary='ניהול משרות' onClick={handleJobsClick} />
 					</ListItemButton>
 				</ListItem>
@@ -131,36 +175,29 @@ const NavBar = (props: {
 	return (
 		<Box sx={{ display: 'flex', marginTop: '80px' }}>
 			<CssBaseline />
-			<AppBar component="nav" sx={{
-				background: 'linear-gradient(to top, rgb(9, 32, 63) 0%, rgb(83, 120, 149) 100%)',
-				margin: '16px 24px',
-				width: 'calc(100% - 48px)',
-				borderRadius: '0.75rem',
-				paddingTop: '0px',
-				paddingBottom: '0px',
-				boxShadow: 5
-			}}>
+			<AppBar component="nav" sx={AppBarSx}>
 				<Toolbar>
 					<IconButton
 						color="inherit"
 						aria-label="open drawer"
 						edge="start"
 						onClick={handleDrawerToggle}
-						sx={{ mr: 2, display: { md: 'none' } }}
+						sx={OpenDrawerIconSx}
 					>
-						<MenuIcon sx={{ color: '#fff' }} />
+						<MenuIcon sx={NavBarIconColorSx} />
 					</IconButton>
 
 
-					<Box sx={{ display: { xs: 'none', sm: 'none', md: 'flex' } }}>
+					<Box sx={WelcomeUserBoxSx}>
 
 						<IconButton
 							color="inherit"
+							aria-label="welcome user"
 							edge="start"
 							disabled
 
 						>
-							<AccountCircle sx={{ color: '#fff' }} />
+							<AccountCircle sx={NavBarIconColorSx} />
 						</IconButton>
 
 						<Typography
@@ -171,61 +208,28 @@ const NavBar = (props: {
 
 					</Box>
 
-					<Box sx={{ display: { xs: 'none', sm: 'none', md: 'flex', justifyContent: 'center', width: '100%' } }}>
+					<Box sx={BoxNavigationOptionsSx}>
 						<Stack direction="row" spacing={2}>
 							<Button disableFocusRipple disableRipple size="large" startIcon={<Home />} variant="text"
-								sx={{
-									"&:hover": {
-										backgroundColor: HomeActive ? 'white' : 'primary',
-										color: HomeActive ? 'primary' : 'white'
-									},
-
-									borderRadius: '0.75rem',
-									backgroundColor: HomeActive ? 'white' : 'primary',
-									color: HomeActive ? 'primary' : 'white',
-								}}
+								sx={HomeButtonNavigationSx}
 								onClick={handleHomeClick}
 							>
 								דף הבית
 							</Button>
 							<Button disableFocusRipple disableRipple size="large" startIcon={<AssessmentOutlined />} variant="text"
-								sx={{
-									"&:hover": {
-										backgroundColor: ReportsActive ? 'white' : 'primary',
-										color: ReportsActive ? 'primary' : 'white'
-									},
-									borderRadius: '0.75rem',
-									backgroundColor: ReportsActive ? 'white' : 'primary',
-									color: ReportsActive ? 'primary' : 'white',
-								}}
+								sx={ReportsButtonNavigationSx}
 								onClick={handleReportsClick}
 							>
 								דוחות
 							</Button>
 							<Button size="large" startIcon={<PeopleAltOutlined />} variant="text"
-								sx={{
-									"&:hover": {
-										backgroundColor: CandidatesActive ? 'white' : 'primary',
-										color: CandidatesActive ? 'primary' : 'white'
-									},
-									borderRadius: '0.75rem',
-									backgroundColor: CandidatesActive ? 'white' : 'primary',
-									color: CandidatesActive ? 'primary' : 'white',
-								}}
+								sx={CandidatesButtonNavigationSx}
 								onClick={handleCandidatesClick}
 							>
 								ניהול מועמדים
 							</Button>
 							<Button size="large" startIcon={<ArticleOutlined />} variant="text"
-								sx={{
-									"&:hover": {
-										backgroundColor: JobsActive ? 'white' : 'primary',
-										color: JobsActive ? 'primary' : 'white'
-									},
-									borderRadius: '0.75rem',
-									backgroundColor: JobsActive ? 'white' : 'primary',
-									color: JobsActive ? 'primary' : 'white',
-								}}
+								sx={JobsButtonNavigationSx}
 								onClick={handleJobsClick}
 							>
 								ניהול משרות
@@ -233,7 +237,7 @@ const NavBar = (props: {
 
 						</Stack>
 					</Box>
-					<Box sx={{ display: { xs: 'none', sm: 'none', md: 'flex', justifyContent: 'center', width: 'fit-content' } }}>
+					<Box sx={LogoutButtonBoxSx}>
 						<MyLogoutDialog handlelogout={handlelogout} isMobile={false} />
 					</Box>
 				</Toolbar>
@@ -246,10 +250,7 @@ const NavBar = (props: {
 					ModalProps={{
 						keepMounted: true, // Better open performance on mobile.
 					}}
-					sx={{
-						display: { md: 'block', lg: 'none' },
-						'& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-					}}
+					sx={DrawerPaperSx}
 				>
 					{drawer}
 				</Drawer>
