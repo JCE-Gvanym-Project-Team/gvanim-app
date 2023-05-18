@@ -1,14 +1,43 @@
-import { Box, Divider, Grid, Paper, Typography } from '@mui/material'
+import { Box, Button, Divider, Grid, Paper, Typography } from '@mui/material'
 import React from 'react'
 import { BoxGradientSx, MyBoxSectionSx, MyDividerSx, MyGridSx, MyPaperSx, MyTypographyInfoSx, MyTypographyMainSx, MyTypographyTitleSx } from './WelcomePageStyle'
+import { ChevronLeft } from '@mui/icons-material'
+import { useNavigate } from "react-router-dom";
 
-export default function WelcomePage() {
+export default function WelcomePage(props: { setHomeActive: any, setReportsActive: any, setCandidatesActive: any, setJobsActive: any }) {
+    
+    const { setHomeActive, setReportsActive, setCandidatesActive, setJobsActive } = props;
+
+    const handleReportsClick = () => {
+        setReportsActive(true);
+        setHomeActive(false);
+        setCandidatesActive(false);
+        setJobsActive(false);
+        navigate("/reports");
+    };
+
+    const handleJobsClick = () => {
+        setJobsActive(true);
+        setReportsActive(false);
+        setHomeActive(false);
+        setCandidatesActive(false);
+        navigate("/manageJobs");
+    };
+
+    const handleCandidatesClick = () => {
+        setCandidatesActive(true);
+        setJobsActive(false);
+        setReportsActive(false);
+        setHomeActive(false);
+        navigate("/manageCandidates");
+    };
+
+    const navigate = useNavigate();
     return (
         <>
             <Box sx={BoxGradientSx} />
 
             <Paper sx={MyPaperSx}>
-
 
                 <Grid sx={MyGridSx}>
                     <Box sx={MyBoxSectionSx}>
@@ -21,12 +50,14 @@ export default function WelcomePage() {
                         </Typography>
 
                         <Typography sx={MyTypographyInfoSx}>
-                            משרות חדשות שנוספו או עודכנו, למעבר לדף המשרות
+                             משרות חדשות שנוספו או עודכנו, למעבר לדף ניהול המשרות:
                         </Typography>
+                        
+                        <Button disableRipple variant='text' endIcon={<ChevronLeft />} onClick={handleJobsClick}>לחץ כאן</Button>
                     </Box>
 
                     <Divider sx={MyDividerSx} />
- 
+
                     <Box sx={MyBoxSectionSx}>
 
                         <Typography sx={MyTypographyMainSx}>
@@ -38,8 +69,12 @@ export default function WelcomePage() {
                         </Typography>
 
                         <Typography sx={MyTypographyInfoSx}>
-                            Save 3-4 weeks of work when you use our pre-made pages for your website
+                            דוחות חדשים שנוספו או עודכנו, למעבר לדף ניהול הדוחות:
                         </Typography>
+
+
+                        <Button disableRipple variant='text' endIcon={<ChevronLeft />} onClick={handleReportsClick} >לחץ כאן</Button>
+
                     </Box>
 
                     <Divider sx={MyDividerSx} />
@@ -55,11 +90,13 @@ export default function WelcomePage() {
                         </Typography>
 
                         <Typography sx={MyTypographyInfoSx}>
-                            Save 3-4 weeks of work when you use our pre-made pages for your website
+                            מועמדים חדשים שנוספו או שחל שינוי בסטטוס שלהם, למעבר לדף ניהול המועמדים:
                         </Typography>
+                        
+                        
+                        <Button disableRipple variant='text' endIcon={<ChevronLeft />} onClick={handleCandidatesClick} >לחץ כאן</Button>
                     </Box>
                 </Grid>
-
 
             </Paper>
 
