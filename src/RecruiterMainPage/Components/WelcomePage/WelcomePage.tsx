@@ -4,9 +4,10 @@ import { BoxGradientSx, MyGridItemSx, MyDividerSx, MyGridSx, MyPaperSx, MyTypogr
 import { ChevronLeft } from '@mui/icons-material'
 import { useNavigate } from "react-router-dom";
 import NewJobPage from '../../ManageJobsPage/Components/NewJobPage/NewJobPage';
+import { MyTitleBoxSx } from '../../ManageJobsPage/Components/NewJobPage/NewJobStyle';
 
 export default function WelcomePage(props: { setHomeActive: any, setReportsActive: any, setCandidatesActive: any, setJobsActive: any }) {
-    
+
     const { setHomeActive, setReportsActive, setCandidatesActive, setJobsActive } = props;
 
     const handleReportsClick = () => {
@@ -37,7 +38,7 @@ export default function WelcomePage(props: { setHomeActive: any, setReportsActiv
     return (
         <>
             <Box sx={BoxGradientSx} />
-
+ 
             <Paper sx={MyPaperSx}>
 
                 <Grid xs={3} sx={MyGridSx}>
@@ -51,14 +52,14 @@ export default function WelcomePage(props: { setHomeActive: any, setReportsActiv
                         </Typography>
 
                         <Typography sx={MyTypographyInfoSx}>
-                             משרות חדשות שנוספו או עודכנו, למעבר לדף ניהול המשרות:
+                            משרות חדשות שנוספו או עודכנו, למעבר לדף ניהול המשרות:
                         </Typography>
-                        
-                        <Button disableRipple variant='text' endIcon={<ChevronLeft />} onClick={handleJobsClick}>לחץ כאן</Button>
-                      
+
+                        <Button  disableRipple variant='text' endIcon={<ChevronLeft />} onClick={handleJobsClick}>לחץ כאן</Button>
+
                     </Grid>
 
-                    <Divider orientation="vertical" flexItem/>
+                    <Divider orientation="vertical" flexItem />
 
                     <Grid item sx={MyGridItemSx}>
 
@@ -79,7 +80,7 @@ export default function WelcomePage(props: { setHomeActive: any, setReportsActiv
 
                     </Grid>
 
-                    <Divider orientation="vertical" flexItem/>
+                    <Divider orientation="vertical" flexItem />
 
 
                     <Grid item sx={MyGridItemSx}>
@@ -94,15 +95,13 @@ export default function WelcomePage(props: { setHomeActive: any, setReportsActiv
                         <Typography sx={MyTypographyInfoSx}>
                             מועמדים חדשים שנוספו או שחל שינוי בסטטוס שלהם, למעבר לדף ניהול המועמדים:
                         </Typography>
-                        
-                        
+
+
                         <Button disableRipple variant='text' endIcon={<ChevronLeft />} onClick={handleCandidatesClick} >לחץ כאן</Button>
                     </Grid>
                 </Grid>
 
             </Paper>
-
-         
         </>
     )
 }

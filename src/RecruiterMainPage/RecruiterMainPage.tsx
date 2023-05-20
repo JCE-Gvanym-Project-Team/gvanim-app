@@ -5,6 +5,7 @@ import ManageCandidatesPage from "./ManageCandidatesPage/ManageCandidatesPage";
 import ManageJobsPage from "./ManageJobsPage/ManageJobsPage";
 import ReportsPage from "./ReportsPage/ReportsPage";
 import NavBar from "./Components/NavBar/NavBar";
+import NewJobPage from "./ManageJobsPage/Components/NewJobPage/NewJobPage";
 
 
 
@@ -26,6 +27,7 @@ function RecruiterMainPage({handlelogout}) {
           />
           <Route path="/manageCandidates" element={<ManageCandidatesPage />} />
           <Route path="/manageJobs" element={<ManageJobsPage />} />
+          <Route path="/createJob" element={<NewJobPage />} />
           <Route path="/reports" element={<ReportsPage />} />
         </Routes>
       </BrowserRouter>

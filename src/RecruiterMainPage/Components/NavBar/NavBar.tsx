@@ -53,43 +53,43 @@ const NavBar = (props: {
 // ############# Sx Props that cant be in another file #########
 	const HomeButtonNavigationSx: SxProps = {
 		"&:hover": {
-			backgroundColor: HomeActive ? 'white' : 'primary',
-			color: HomeActive ? 'primary' : 'white'
+			backgroundColor: HomeActive ? 'white' : 'rgb(52, 71, 103)',
+			color: HomeActive ? 'rgb(52, 71, 103)' : 'white'
 		},
 
 		borderRadius: '0.75rem',
-		backgroundColor: HomeActive ? 'white' : 'primary',
-		color: HomeActive ? 'primary' : 'white'
+		backgroundColor: HomeActive ? 'white' : 'rgb(52, 71, 103)',
+		color: HomeActive ? 'rgb(52, 71, 103)' : 'white'
 	}
 
 	const ReportsButtonNavigationSx: SxProps = {
 		"&:hover": {
-			backgroundColor: ReportsActive ? 'white' : 'primary',
-			color: ReportsActive ? 'primary' : 'white'
+			backgroundColor: ReportsActive ? 'white' : 'rgb(52, 71, 103)',
+			color: ReportsActive ? 'rgb(52, 71, 103)' : 'white'
 		},
 		borderRadius: '0.75rem',
-		backgroundColor: ReportsActive ? 'white' : 'primary',
-		color: ReportsActive ? 'primary' : 'white'
+		backgroundColor: ReportsActive ? 'white' : 'rgb(52, 71, 103)',
+		color: ReportsActive ? 'rgb(52, 71, 103)' : 'white'
 	}
 
 	const CandidatesButtonNavigationSx: SxProps = {
 		"&:hover": {
-			backgroundColor: CandidatesActive ? 'white' : 'primary',
-			color: CandidatesActive ? 'primary' : 'white'
+			backgroundColor: CandidatesActive ? 'white' : 'rgb(52, 71, 103)',
+			color: CandidatesActive ? 'rgb(52, 71, 103)' : 'white'
 		},
 		borderRadius: '0.75rem',
-		backgroundColor: CandidatesActive ? 'white' : 'primary',
-		color: CandidatesActive ? 'primary' : 'white'
+		backgroundColor: CandidatesActive ? 'white' : 'rgb(52, 71, 103)',
+		color: CandidatesActive ? 'rgb(52, 71, 103)' : 'white'
 	}
 
 	const JobsButtonNavigationSx: SxProps = {
 		"&:hover": {
-			backgroundColor: JobsActive ? 'white' : 'primary',
-			color: JobsActive ? 'primary' : 'white'
+			backgroundColor: JobsActive ? 'white' : 'rgb(52, 71, 103)',
+			color: JobsActive ? 'rgb(52, 71, 103)' : 'white'
 		},
 		borderRadius: '0.75rem',
-		backgroundColor: JobsActive ? 'white' : 'primary',
-		color: JobsActive ? 'primary' : 'white'
+		backgroundColor: JobsActive ? 'white' : 'rgb(52, 71, 103)',
+		color: JobsActive ? 'rgb(52, 71, 103)' : 'white'
 	}
 
 	const DrawerPaperSx: SxProps = {

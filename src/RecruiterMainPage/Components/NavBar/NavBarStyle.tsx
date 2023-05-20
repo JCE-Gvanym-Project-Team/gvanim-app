@@ -2,7 +2,7 @@ import { SxProps } from "@mui/material";
 
 export const AppBarSx: SxProps = {
     borderColor: 'gray',
-    background: 'primary',
+    background: 'rgb(52, 71, 103)',
     margin: '16px 24px',
     width: 'calc(100% - 48px)',
     borderRadius: '0.75rem',
