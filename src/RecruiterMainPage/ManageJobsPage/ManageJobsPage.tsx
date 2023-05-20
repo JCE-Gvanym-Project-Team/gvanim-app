@@ -12,7 +12,13 @@ import {
 import MySearchBar from "./Components/MySearchBar/MySearchBar";
 
 
-const ManageJobPageBody = () => {
+const ManageJobPageBody = (props: { setHomeActive: any,setReportsActive: any, setCandidatesActive: any,setJobsActive: any }) => {
+    // for the navigation bar
+    const { setHomeActive, setReportsActive, setCandidatesActive, setJobsActive } = props;
+    setHomeActive(false); setCandidatesActive(false);
+    setReportsActive(false); setJobsActive(true);
+    // ----------------------------
+
     const [loading, setLoading] = useState(true);
     const [dataSize, setDataSize] = useState(0);
 

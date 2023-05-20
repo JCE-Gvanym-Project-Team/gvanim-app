@@ -7,38 +7,18 @@ import NewJobPage from '../../ManageJobsPage/Components/NewJobPage/NewJobPage';
 import { MyTitleBoxSx } from '../../ManageJobsPage/Components/NewJobPage/NewJobStyle';
 
 export default function WelcomePage(props: { setHomeActive: any, setReportsActive: any, setCandidatesActive: any, setJobsActive: any }) {
-
+    // for the navigation bar
     const { setHomeActive, setReportsActive, setCandidatesActive, setJobsActive } = props;
+    setHomeActive(true); setCandidatesActive(false);
+    setReportsActive(false); setJobsActive(false);
+    // ----------------------------
 
-    const handleReportsClick = () => {
-        setReportsActive(true);
-        setHomeActive(false);
-        setCandidatesActive(false);
-        setJobsActive(false);
-        navigate("/reports");
-    };
-
-    const handleJobsClick = () => {
-        setJobsActive(true);
-        setReportsActive(false);
-        setHomeActive(false);
-        setCandidatesActive(false);
-        navigate("/manageJobs");
-    };
-
-    const handleCandidatesClick = () => {
-        setCandidatesActive(true);
-        setJobsActive(false);
-        setReportsActive(false);
-        setHomeActive(false);
-        navigate("/manageCandidates");
-    };
 
     const navigate = useNavigate();
     return (
         <>
             <Box sx={BoxGradientSx} />
- 
+
             <Paper sx={MyPaperSx}>
 
                 <Grid xs={3} sx={MyGridSx}>
@@ -55,7 +35,7 @@ export default function WelcomePage(props: { setHomeActive: any, setReportsActiv
                             משרות חדשות שנוספו או עודכנו, למעבר לדף ניהול המשרות:
                         </Typography>
 
-                        <Button  disableRipple variant='text' endIcon={<ChevronLeft />} onClick={handleJobsClick}>לחץ כאן</Button>
+                        <Button disableRipple variant='text' endIcon={<ChevronLeft />} onClick={() => navigate("/manageJobs")}>לחץ כאן</Button>
 
                     </Grid>
 
@@ -76,7 +56,7 @@ export default function WelcomePage(props: { setHomeActive: any, setReportsActiv
                         </Typography>
 
 
-                        <Button disableRipple variant='text' endIcon={<ChevronLeft />} onClick={handleReportsClick} >לחץ כאן</Button>
+                        <Button disableRipple variant='text' endIcon={<ChevronLeft />} onClick={() => navigate("/reports")} >לחץ כאן</Button>
 
                     </Grid>
 
@@ -97,7 +77,7 @@ export default function WelcomePage(props: { setHomeActive: any, setReportsActiv
                         </Typography>
 
 
-                        <Button disableRipple variant='text' endIcon={<ChevronLeft />} onClick={handleCandidatesClick} >לחץ כאן</Button>
+                        <Button disableRipple variant='text' endIcon={<ChevronLeft />} onClick={() => navigate("/manageCandidates")} >לחץ כאן</Button>
                     </Grid>
                 </Grid>
 

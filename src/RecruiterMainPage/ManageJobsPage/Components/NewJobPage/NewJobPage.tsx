@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Container, Divider, FormControl, Grid, InputLabel, Paper, Slider, Stack, TextField, TextareaAutosize, Typography } from '@mui/material'
+import { Avatar, Box, Button, Container, Divider, FormControl, FormHelperText, Grid, InputLabel, Paper, Slider, Stack, TextField, TextareaAutosize, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import { BoxGradientSx, MyPaperSx } from './NewJobStyle'
 import JobScopeSlider from './Components/ScopeSlider/ScopeSlider';
@@ -6,7 +6,11 @@ import { Job, generateJobNumber } from '../../../../Firebase/FirebaseFunctions/J
 import { useNavigate } from 'react-router-dom';
 
 
-const NewJobPage = () => {
+const NewJobPage = (props: { setHomeActive: any,setReportsActive: any, setCandidatesActive: any,setJobsActive: any }) => {
+    const { setHomeActive, setReportsActive, setCandidatesActive, setJobsActive } = props;
+    setHomeActive(false); setCandidatesActive(false);
+    setReportsActive(false); setJobsActive(false);
+
     const [jobName, setJobName] = useState('');
     const [jobRole, setJobRole] = useState('');
     const [jobRegion, setJobRegion] = useState('');
@@ -17,27 +21,28 @@ const NewJobPage = () => {
     const [jobAdditionalInfo, setJobAdditionalInfo] = useState('');
     const [jobScope, setJobScope] = useState<number[]>([50, 100]);
     const navigate = useNavigate();
-    
+
+
     const handlePublishClick = async () => {
 
-        var description_array = new Array(jobDescription,jobDescriptionSkills,jobAdditionalInfo);
+        var description_array = new Array(jobDescription, jobDescriptionSkills, jobAdditionalInfo);
 
         let job1 = new Job(await generateJobNumber(), jobName, jobRole, jobScope, jobRegion, jobState, description_array, jobRequirements, true, false);
-         job1.add();
+        //  job1.add();
 
         console.log(
-            'Job Name: ' + jobName +'\n'
-            +'Job Role: ' + jobRole + '\n'
-            +'Job Region: ' + jobRegion + '\n'
-            +'Job State: ' + jobState + '\n'
-            +'Job Requirements: ' + jobRequirements + '\n'
-            +'Job Description: ' + jobDescription + '\n'
-            +'Job Description Skills: ' + jobDescriptionSkills + '\n'
-            +'Job Additional Info: ' + jobAdditionalInfo + '\n'
-            +'Job Scope: ' + jobScope[0].toString() + '% - ' + jobScope[1].toString() + '%' + '\n'
+            'Job Name: ' + jobName + '\n'
+            + 'Job Role: ' + jobRole + '\n'
+            + 'Job Region: ' + jobRegion + '\n'
+            + 'Job State: ' + jobState + '\n'
+            + 'Job Requirements: ' + jobRequirements + '\n'
+            + 'Job Description: ' + jobDescription + '\n'
+            + 'Job Description Skills: ' + jobDescriptionSkills + '\n'
+            + 'Job Additional Info: ' + jobAdditionalInfo + '\n'
+            + 'Job Scope: ' + jobScope[0].toString() + '% - ' + jobScope[1].toString() + '%' + '\n'
         );
 
-        navigate("/manageJobs");
+        // navigate("/manageJobs");
 
     }
 
@@ -73,7 +78,7 @@ const NewJobPage = () => {
                                                         value={jobName}
                                                         onChange={(e) => { setJobName(e.target.value) }}
                                                     />
-
+                                                    <FormHelperText hidden={false} security="invalid" style={{ color: '#ef5350', marginRight: 0 }}>זהו שדה חובה.</FormHelperText>
                                                 </Box>
                                                 <Box className="col-md-6 mt-1">
                                                     <label>
@@ -150,7 +155,7 @@ const NewJobPage = () => {
                                                 className="form-control" minRows={2} required
                                                 value={jobDescriptionSkills}
                                                 onChange={(e) => { setJobDescriptionSkills(e.target.value) }}
-                                                />
+                                            />
                                         </Box>
 
 
@@ -162,18 +167,18 @@ const NewJobPage = () => {
                                                 className="form-control" minRows={3} required
                                                 value={jobAdditionalInfo}
                                                 onChange={(e) => { setJobAdditionalInfo(e.target.value) }}
-                                                />
+                                            />
                                         </Box>
 
                                         <Box className="form-group mt-1">
                                             <label>
                                                 <Typography sx={{ fontWeight: 600, fontSize: 13 }}>היקף המשרה:</Typography>
                                             </label>
-                                            <JobScopeSlider setJobScope={setJobScope}  />
+                                            <JobScopeSlider setJobScope={setJobScope} />
                                         </Box>
                                         {/* <button type="submit" className="primary-btn submit">Submit</button> */}
 
-                                        <Button className='mt-3 mb-3' variant='contained' onClick={handlePublishClick} sx={{
+                                        <Button type="submit" className='mt-3 mb-3' variant='contained' onClick={handlePublishClick} sx={{
                                             backgroundColor: 'rgb(52, 71, 103)',
                                             ":hover": {
                                                 bgcolor: "rgb(52, 71, 103)",
