@@ -45,7 +45,7 @@ function GridCustomToolbar({
 
             <Box>
 
-                <Button color='info' variant='contained' size='small' onClick={handleCreatejob}>הוסף משרה</Button>
+                <Button color='info' variant='contained' size='small' onClick={handleCreatejob}>משרה חדשה</Button>
             </Box>
 
 

@@ -3,6 +3,8 @@ import React, { useState } from 'react'
 import { BoxGradientSx, MyPaperSx } from './NewJobStyle'
 import JobScopeSlider from './Components/ScopeSlider/ScopeSlider';
 import { Job, generateJobNumber } from '../../../../Firebase/FirebaseFunctions/Job';
+import { useNavigate } from 'react-router-dom';
+
 
 const NewJobPage = () => {
     const [jobName, setJobName] = useState('');
@@ -14,13 +16,14 @@ const NewJobPage = () => {
     const [jobDescriptionSkills, setJobDescriptionSkills] = useState('');
     const [jobAdditionalInfo, setJobAdditionalInfo] = useState('');
     const [jobScope, setJobScope] = useState<number[]>([50, 100]);
-
+    const navigate = useNavigate();
+    
     const handlePublishClick = async () => {
 
         var description_array = new Array(jobDescription,jobDescriptionSkills,jobAdditionalInfo);
 
         let job1 = new Job(await generateJobNumber(), jobName, jobRole, jobScope, jobRegion, jobState, description_array, jobRequirements, true, false);
-        job1.add();
+         job1.add();
 
         console.log(
             'Job Name: ' + jobName +'\n'
@@ -34,7 +37,8 @@ const NewJobPage = () => {
             +'Job Scope: ' + jobScope[0].toString() + '% - ' + jobScope[1].toString() + '%' + '\n'
         );
 
-        
+        navigate("/manageJobs");
+
     }
 
     return (

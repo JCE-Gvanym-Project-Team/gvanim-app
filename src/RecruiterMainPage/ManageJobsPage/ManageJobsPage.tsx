@@ -10,7 +10,6 @@ import {
     MySearchBarContainerStyle
 } from "./ManageJobsPageStyle";
 import MySearchBar from "./Components/MySearchBar/MySearchBar";
-import { Navigation } from "@mui/icons-material";
 
 
 const ManageJobPageBody = () => {

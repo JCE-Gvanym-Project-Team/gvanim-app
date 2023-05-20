@@ -7,7 +7,7 @@ export default function MyAvatar(props: {dataSize: any}) {
     const { dataSize } = props;
 
     return (
-            <Badge color="info" badgeContent={dataSize} anchorOrigin={{ vertical: 'top', horizontal: 'left', }} overlap="circular">
+            <Badge color="info" badgeContent={dataSize} max={100000} anchorOrigin={{ vertical: 'top', horizontal: 'left', }} overlap="circular">
                 <Avatar variant='circular' src={SvgLogo} sx={ AvatarSx } />
             </Badge>
     );
