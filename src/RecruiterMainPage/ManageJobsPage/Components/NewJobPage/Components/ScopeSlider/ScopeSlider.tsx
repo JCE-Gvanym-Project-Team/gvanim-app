@@ -74,11 +74,11 @@ function AirbnbThumbComponent(props: AirbnbThumbComponentProps) {
     );
 }
 
-export default function RangeSlider() {
-    const [value, setValue] = React.useState<number[]>([50, 100]);
+export default function JobScopeSlider(props: {setJobScope: any}) {
+    const { setJobScope } = props;
 
     const handleChange = (event: Event, newValue: number | number[]) => {
-        setValue(newValue as number[]);
+        setJobScope(newValue as number[]);
     };
 
 

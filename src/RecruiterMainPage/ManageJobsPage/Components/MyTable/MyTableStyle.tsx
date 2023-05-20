@@ -1,6 +1,13 @@
 import { SxProps, createTheme } from '@mui/material';
 import { Theme } from '@mui/material/styles';
 
+
+export const MyButtonSx: SxProps = {
+		backgroundColor: 'rgb(52, 71, 103)',
+		":hover": {
+			bgcolor: "rgb(52, 71, 103)",
+		}
+}
 export const dataGridContainerSx: SxProps = {
 	border: 1,
 	overflow: 'hidden'

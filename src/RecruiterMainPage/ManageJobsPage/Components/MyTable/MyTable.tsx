@@ -45,12 +45,7 @@ function GridCustomToolbar({
 
             <Box>
 
-                <Button sx={{
-                    backgroundColor: 'rgb(52, 71, 103)',
-                    ":hover": {
-                        bgcolor: "rgb(52, 71, 103)",
-                    }
-                }} variant='contained' size='small' onClick={handleCreatejob}>הוספה</Button>
+                <Button color='info' variant='contained' size='small' onClick={handleCreatejob}>הוסף משרה</Button>
             </Box>
 
 
@@ -73,10 +68,10 @@ const columns: GridColDef[] = [
         disableExport: true,
         editable: false,
 
-        renderCell: () => {
+        renderCell: (job) => {
 
 
-            return <MyDropMenu />;
+            return <MyDropMenu JobId={job.id} />;
         },
 
 
@@ -136,33 +131,17 @@ const rows = [
 
 
 
-function CustomFooter() {
 
-    const [dataSize, setDataSize] = React.useState(3);
-
-    return (
-        <GridFooterContainer sx={GridFooterContainerSx}>
-
-            <Typography variant='subtitle2' sx={TypographyFooterSx}>
-                מס' משרות:
-            </Typography>
-
-            <Typography variant='subtitle2' sx={TypographyFooterSx}>
-                {dataSize}
-            </Typography>
-
-        </GridFooterContainer>
-    );
-};
 
 
 function getScopeFormated(scope: number[] | null) {
 
-    return scope === null ? '0-100' : scope[0].toString() === scope[1].toString() ? scope[0].toString() : scope[0].toString() + '-' + scope[1].toString();
+    return scope === null ? '0-100' : scope[0].toString() === scope[1].toString() ? scope[0].toString() + '%' : scope[1].toString() + '% - ' + scope[0].toString() + '%';
 
 }
 
-export default function MyTable() {
+export default function MyTable(props: {setDataSize: any}) {
+    const { setDataSize } = props;
     const [allJobs, setAllJobs] = React.useState<any[]>([]);
 
     const fetchAllJobs = async () => {
@@ -170,6 +149,24 @@ export default function MyTable() {
         const jobsWithId = jobs.map((job) => ({ ...job, id: job._jobNumber, _scope: getScopeFormated(job._scope) }));
         setAllJobs(jobsWithId);
 
+    };
+
+    const CustomFooter = () => {
+        setDataSize(allJobs.length);
+    
+        return (
+            <GridFooterContainer sx={GridFooterContainerSx}>
+    
+                <Typography variant='subtitle2' sx={TypographyFooterSx}>
+                    מס' משרות:
+                </Typography>
+    
+                <Typography variant='subtitle2' sx={TypographyFooterSx}>
+                    {allJobs.length}
+                </Typography>
+    
+            </GridFooterContainer>
+        );
     };
 
     React.useEffect(() => {

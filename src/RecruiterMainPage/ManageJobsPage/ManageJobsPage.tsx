@@ -15,6 +15,7 @@ import { Navigation } from "@mui/icons-material";
 
 const ManageJobPageBody = () => {
     const [loading, setLoading] = useState(true);
+    const [dataSize, setDataSize] = useState(0);
 
     useEffect(() => {
         setLoading(true);
@@ -34,7 +35,7 @@ const ManageJobPageBody = () => {
                 <Box className="ManageJobPage-Body" sx={ManageJobPageBoxSx}>
 
                     <Container sx={MyAvatarContainerSx} maxWidth="sm">
-                        <MyAvatar />
+                        <MyAvatar dataSize={dataSize} />
                     </Container>
 
                     <Container
@@ -44,7 +45,7 @@ const ManageJobPageBody = () => {
 
                     </Container>
 
-                    <MyTable />
+                    <MyTable setDataSize={setDataSize} />
 
 
                 </Box>
