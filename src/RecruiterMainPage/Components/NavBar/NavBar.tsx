@@ -18,6 +18,7 @@ import Typography from '@mui/material/Typography';
 import { useNavigate } from "react-router-dom";
 import MyLogoutDialog from "./Components/LogoutDialog";
 import { AppBarSx, BoxDrawerAvatarSx, BoxDrawerSx, BoxNavigationOptionsSx, DividerDrawerSx, ListItemButtonDrawerSx, LogoutButtonBoxSx, NavBarIconColorSx, OpenDrawerIconSx, TypographyDrawerSx, WelcomeUserBoxSx } from "./NavBarStyle";
+import { blue, blueGrey, grey, lightBlue } from "@mui/material/colors";
 
 
 
@@ -50,14 +51,21 @@ const NavBar = (props: {
 		setMobileOpen((prevState) => !prevState);
 	};
 
-// ############# Sx Props that cant be in another file #########
+	// ############# Sx Props that cant be in another file #########
 	const HomeButtonNavigationSx: SxProps = {
 		"&:hover": {
 			backgroundColor: HomeActive ? 'white' : 'rgb(52, 71, 103)',
-			color: HomeActive ? 'rgb(52, 71, 103)' : 'white'
-		},
+			color: HomeActive ? 'rgb(52, 71, 103)' : 'white',
+			outline: HomeActive ? 'none' : `3px ${blueGrey[300]}`,
 
-		borderRadius: '0.75rem',
+		},
+		'&:focus': {
+			border: `solid ${blueGrey[300]}`,
+
+
+		},
+		border: HomeActive ? `3px solid ${blueGrey[300]}` : 'none',
+		borderRadius: '0.6rem',
 		backgroundColor: HomeActive ? 'white' : 'rgb(52, 71, 103)',
 		color: HomeActive ? 'rgb(52, 71, 103)' : 'white'
 	}
@@ -65,9 +73,17 @@ const NavBar = (props: {
 	const ReportsButtonNavigationSx: SxProps = {
 		"&:hover": {
 			backgroundColor: ReportsActive ? 'white' : 'rgb(52, 71, 103)',
-			color: ReportsActive ? 'rgb(52, 71, 103)' : 'white'
+			color: ReportsActive ? 'rgb(52, 71, 103)' : 'white',
+			outline: ReportsActive ? 'none' : `3px ${blueGrey[300]}`,
+
 		},
-		borderRadius: '0.75rem',
+		'&:focus': {
+			border: `3px solid ${blueGrey[300]}`,
+
+
+		},
+		border: ReportsActive ? `3px solid ${blueGrey[300]}` : 'none',
+		borderRadius: '0.6rem',
 		backgroundColor: ReportsActive ? 'white' : 'rgb(52, 71, 103)',
 		color: ReportsActive ? 'rgb(52, 71, 103)' : 'white'
 	}
@@ -75,9 +91,16 @@ const NavBar = (props: {
 	const CandidatesButtonNavigationSx: SxProps = {
 		"&:hover": {
 			backgroundColor: CandidatesActive ? 'white' : 'rgb(52, 71, 103)',
-			color: CandidatesActive ? 'rgb(52, 71, 103)' : 'white'
+			color: CandidatesActive ? 'rgb(52, 71, 103)' : 'white',
+			outline: CandidatesActive ? 'none' : `3px ${blueGrey[300]}`,
 		},
-		borderRadius: '0.75rem',
+
+		'&:focus': {
+			border: `solid ${blueGrey[300]}`,
+		},
+
+		border: CandidatesActive ? `3px solid ${blueGrey[300]}` : 'none',
+		borderRadius: '0.6rem',
 		backgroundColor: CandidatesActive ? 'white' : 'rgb(52, 71, 103)',
 		color: CandidatesActive ? 'rgb(52, 71, 103)' : 'white'
 	}
@@ -85,9 +108,16 @@ const NavBar = (props: {
 	const JobsButtonNavigationSx: SxProps = {
 		"&:hover": {
 			backgroundColor: JobsActive ? 'white' : 'rgb(52, 71, 103)',
-			color: JobsActive ? 'rgb(52, 71, 103)' : 'white'
+			color: JobsActive ? 'rgb(52, 71, 103)' : 'white',
+			outline: JobsActive ? 'none' : `3px ${blueGrey[300]}`,
 		},
-		borderRadius: '0.75rem',
+
+		'&:focus': {
+			border: `solid ${blueGrey[300]}`,
+		},
+
+		border: JobsActive ? `3px solid ${blueGrey[300]}` : 'none',
+		borderRadius: '0.6rem',
 		backgroundColor: JobsActive ? 'white' : 'rgb(52, 71, 103)',
 		color: JobsActive ? 'rgb(52, 71, 103)' : 'white'
 	}
@@ -96,7 +126,7 @@ const NavBar = (props: {
 		display: { md: 'block', lg: 'none' },
 		'& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
 	}
-// ######### END Sx Props #######################################
+	// ######### END Sx Props #######################################
 
 	const handleHomeClick = () => {
 		setReportsActive(false);
@@ -210,25 +240,25 @@ const NavBar = (props: {
 
 					<Box sx={BoxNavigationOptionsSx}>
 						<Stack direction="row" spacing={2}>
-							<Button disableFocusRipple disableRipple size="large" startIcon={<Home />} variant="text"
+							<Button disableRipple startIcon={<Home />} variant="text"
 								sx={HomeButtonNavigationSx}
 								onClick={handleHomeClick}
 							>
 								דף הבית
 							</Button>
-							<Button disableFocusRipple disableRipple size="large" startIcon={<AssessmentOutlined />} variant="text"
+							<Button disableRipple startIcon={<AssessmentOutlined />} variant="text"
 								sx={ReportsButtonNavigationSx}
 								onClick={handleReportsClick}
 							>
 								דוחות
 							</Button>
-							<Button size="large" startIcon={<PeopleAltOutlined />} variant="text"
+							<Button disableRipple startIcon={<PeopleAltOutlined />} variant="text"
 								sx={CandidatesButtonNavigationSx}
 								onClick={handleCandidatesClick}
 							>
 								ניהול מועמדים
 							</Button>
-							<Button size="large" startIcon={<ArticleOutlined />} variant="text"
+							<Button disableRipple startIcon={<ArticleOutlined />} variant="text"
 								sx={JobsButtonNavigationSx}
 								onClick={handleJobsClick}
 							>
