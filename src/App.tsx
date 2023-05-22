@@ -26,8 +26,7 @@ function App()
 	const currentUser = "recruiter";
 	return (
 		<>
-			{/* AVIV-TODO: revert this */}
-			<RecruiterMainPage handlelogout={{}} />
+			<Auth />
 		</>
 	);
 }
