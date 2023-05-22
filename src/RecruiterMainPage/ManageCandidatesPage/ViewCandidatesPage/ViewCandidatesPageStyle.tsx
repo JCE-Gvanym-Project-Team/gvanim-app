@@ -69,7 +69,7 @@ export const ContainerGradientSx: SxProps = {
 }
 
 export const mainStackSx: SxProps = {
-    marginTop: ManageCandidatesPageGlobalStyle.marginFromNavbar,
+    marginTop: '1rem',
     justifyContent: 'space-between',
 
 }
