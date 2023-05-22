@@ -1,5 +1,8 @@
 import "firebase/database";
 import { realtimeDB } from "../FirebaseConfig/firebase";
+import { loginAdmin, loginRecruiter } from "./Authentication";
+import { Job, generateJobNumber } from "./Job";
+import { roRO } from "@mui/x-data-grid";
 
 
 const database = realtimeDB;
@@ -86,5 +89,16 @@ export async function getSectors(): Promise<string[]> {
 	return getFirebaseIdsAtPath("/Sectors");
 }
 export async function main() {	//for debugging dont use
+	const user = process.env.REACT_APP_ADMIN_MAIL;
+	const pass = process.env.REACT_APP_ADMIN_PASS;
+	if (user != null && pass != null)
+		await loginRecruiter(user, pass).then(async ()=>{
+			const job = new Job(await generateJobNumber(), "title", "role", [0, 20]);
+			job.add();
+		});
+	else
+		console.log("not connected");
 	
+
+
 }	
