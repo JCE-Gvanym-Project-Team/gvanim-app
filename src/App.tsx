@@ -17,31 +17,14 @@ import firebase1 from "../src/Firebase/FirebaseConfig/firebase";
 
 main();
 
-const Admin = "admin";
-const Recruiter = "recruiter";
 
 function App() {
 	firebase1.auth().signOut();
-	const currentUser = "recruiter";
 	return (
 		<>
 			<Auth />
 		</>
 	);
-}
-
-function decidePage(currentUser: any) {
-	if (currentUser === Admin) {
-		return (<AdminMainPage />)
-	} else if (currentUser === Recruiter) {
-		return (
-			<RecruiterMainPage />
-		)
-	} else {
-		return (
-			<DrushimMainPage />
-		)
-	}
 }
 
 export default App;
