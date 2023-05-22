@@ -12,7 +12,10 @@ export default function ViewCandidatesPage()
 	let candidateName = "ישראל ישראלי"
 	return (
 		<>
+			{/* background div */}
 			<Box sx={BoxGradientSx} />
+
+			{/* glass container */}
 			<Box sx={{marginTop: ManageCandidatesPageGlobalStyle.marginFromNavbar}}>
 				<Box sx={ContainerGradientSx}>
 					<Stack direction={'column'} sx={mainStackSx} spacing={6}>
