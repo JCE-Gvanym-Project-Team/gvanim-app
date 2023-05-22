@@ -15,9 +15,6 @@ import Auth from './RecruiterMainPage/Components/Auth/Auth';
 
 main();
 
-
-
-main()
 const Admin = "admin";
 const Recruiter = "recruiter";
 

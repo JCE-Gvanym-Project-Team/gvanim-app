@@ -1,55 +1,42 @@
-/**
- * the format of the page is diffrent from the rest of thr project,
- * due to firebase rules
- * Import function triggers from their respective submodules:
- *
- * import {onCall} from "firebase-functions/v2/https";
- * import {onDocumentWritten} from "firebase-functions/v2/firestore";
- *
- * See a full list of supported triggers at https://firebase.google.com/docs/functions
- */
 import * as functions from "firebase-functions";
+import * as cors from "cors";
 import * as nodemailer from "nodemailer";
-// import {onRequest} from "firebase-functions/v2/https";
-// import * as logger from "firebase-functions/logger";
-// import {request} from "http";
 
-// Start writing functions
-// https://firebase.google.com/docs/functions/typescript
-export const sendMail = functions.https.onRequest((request, response) => {
-  const {destinationMail, subject, content} = request.body;
 
-  // Configure the SMTP transport for sending emails
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: process.env.SENDER_MAIL,
-      pass: process.env.SENDER_PASS,
-    },
+const corsHandler = cors({origin: true});
+
+
+exports.sendMail = functions
+  .region("europe-west1")
+  .https.onRequest((request: any, response: any) => {
+    corsHandler(request, response, async () => {
+      try {
+        // Implement your email sending logic here
+        const {destinationMail, subject, content} = request.body;
+
+        // Create the nodemailer transporter
+        const transporter = nodemailer.createTransport({
+          service: "gmail",
+          auth: {
+            user: process.env.SENDER_MAIL,
+            pass: process.env.SENDER_PASS,
+          },
+        });
+
+        // Send the email
+        await transporter.sendMail({
+          from: process.env.SENDER_MAIL,
+          to: destinationMail,
+          subject: subject,
+          text: content,
+        });
+
+        // Send a success response
+        response.status(200).json({message: "Email sent successfully"});
+      } catch (error) {
+        // Handle any errors and send an error response
+        console.error("Error sending email:", error);
+        response.status(500).json({error: "Failed to send email"});
+      }
+    });
   });
-
-  // Define the email options
-  const mailOptions = {
-    from: process.env.REACT_APP_SENDER_MAIL,
-    to: destinationMail,
-    subject: subject,
-    text: content,
-  };
-
-  // Send the email
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      // Handle the error case
-      console.error("Error sending email:", error);
-      response.status(500).send("Error sending email");
-    } else {
-      // Handle the success case
-      console.log("Email sent:", info.response);
-      response.send("Email sent successfully");
-    }
-  });
-});
-// export const helloWorld = onRequest((request, response) => {
-//   logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });

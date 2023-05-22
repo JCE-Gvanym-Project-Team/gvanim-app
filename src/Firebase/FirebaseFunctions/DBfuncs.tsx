@@ -2,7 +2,7 @@ import "firebase/database";
 import { realtimeDB } from "../FirebaseConfig/firebase";
 import { loginAdmin, loginRecruiter } from "./Authentication";
 import { Job, generateJobNumber } from "./Job";
-import { roRO } from "@mui/x-data-grid";
+import { sendEmail } from "./apiBackend";
 
 
 const database = realtimeDB;
@@ -92,13 +92,10 @@ export async function main() {	//for debugging dont use
 	const user = process.env.REACT_APP_ADMIN_MAIL;
 	const pass = process.env.REACT_APP_ADMIN_PASS;
 	if (user != null && pass != null)
-		await loginRecruiter(user, pass).then(async ()=>{
-			const job = new Job(await generateJobNumber(), "title", "role", [0, 20]);
-			job.add();
+		await loginRecruiter(user, pass).then(async () => {
+			sendEmail("elyaathlan@gmail.com", "test", "tesr message!");
 		});
 	else
 		console.log("not connected");
-	
-
 
 }	
