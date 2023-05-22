@@ -5,13 +5,25 @@ import { GlobalStyle, ManageCandidatesPageGlobalStyle } from '../../PageStyles';
 export const editButtonSx: SxProps = {
     backgroundColor: 'green',
     alignSelf: 'end',
-    
+
 }
 
 export const textSx: SxProps = {
     color: 'black',
     fontFamily: ManageCandidatesPageGlobalStyle.textFontFamily,
-    
+}
+
+export const candidateNameAndEditButtonContainerSx: SxProps = {
+    display: 'flex',
+    justifyContent: 'space-between',
+    justifySelf: 'stretch',
+    flexGrow: '1'
+}
+
+export const jobTextSx: SxProps = {
+    color: 'black',
+    fontFamily: ManageCandidatesPageGlobalStyle.textFontFamily,
+    marginTop: '1rem'
 }
 
 export const candidateNameSx: SxProps = {
@@ -19,7 +31,7 @@ export const candidateNameSx: SxProps = {
     fontFamily: ManageCandidatesPageGlobalStyle.textFontFamily,
     textDecoration: "bold",
     marginLeft: '1rem',
-    
+
 }
 
 export const titleSx: SxProps = {
@@ -27,7 +39,7 @@ export const titleSx: SxProps = {
     alignSelf: 'center',
     fontWeight: 'bold',
     fontFamily: ManageCandidatesPageGlobalStyle.textFontFamily,
-    
+
 }
 
 export const BoxGradientSx: SxProps = {
@@ -60,5 +72,5 @@ export const ContainerGradientSx: SxProps = {
 export const mainStackSx: SxProps = {
     marginTop: ManageCandidatesPageGlobalStyle.marginFromNavbar,
     justifyContent: 'space-between',
-    
+
 }

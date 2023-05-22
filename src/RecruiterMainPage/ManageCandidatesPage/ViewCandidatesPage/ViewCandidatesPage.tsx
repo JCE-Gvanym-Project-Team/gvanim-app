@@ -1,11 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Button, Grid, Container, Typography, Box, Stack, Input, TextField } from '@mui/material'
 import EditIcon from '@mui/icons-material/Edit';
-import { editButtonSx, textSx, titleSx, mainStackSx, ContainerGradientSx, candidateNameSx, BoxGradientSx } from './ViewCandidatesPageStyle';
+import { editButtonSx, textSx, titleSx, mainStackSx, ContainerGradientSx, candidateNameSx, BoxGradientSx, candidateNameAndEditButtonContainerSx, jobTextSx } from './ViewCandidatesPageStyle';
 import { ManageCandidatesPageGlobalStyle } from '../../PageStyles';
+import JobsTable from './Components/JobsTable';
 
 export default function ViewCandidatesPage()
 {
+	const [dataSize, setDataSize] = useState(0);
 	//TODO: replace this with real info
 	let candidateName = "ישראל ישראלי"
 	return (
@@ -20,11 +22,10 @@ export default function ViewCandidatesPage()
 						</Typography>
 
 						{/* Box for candidate name and 
-					 /* edit button to make them on the same line */}
-						<Box sx={{ display: 'flex', justifyContent: 'space-between', justifySelf: 'stretch', flexGrow: '1' }}>
-
+					 	/* edit button to make them on the same line */}
+						<Box sx={candidateNameAndEditButtonContainerSx}>
 							{/* Candidate Name */}
-							<Box sx={{ display: 'flex', alignItems: 'baseline' }}>
+							<Box sx={{ display: 'flex'}}>
 								<Typography sx={textSx} variant='h4'>
 									שם:
 								</Typography>
@@ -43,9 +44,11 @@ export default function ViewCandidatesPage()
 
 						{/* Candidate Info Table */}
 						<Box>
-							<Typography sx={textSx} variant='h4'>
+							<Typography sx={jobTextSx} variant='h4'>
 								משרות
 							</Typography>
+
+							<JobsTable setDataSize={setDataSize}/>
 
 						</Box>
 					</Stack>
