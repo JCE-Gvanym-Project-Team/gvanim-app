@@ -1,10 +1,11 @@
 import Login from "../../LoginPage/LoginPage";
-import firebase1 from "../../../Firebase/FirebaseConfig/firebase";
+
 import "firebase/compat/auth";
 import  { useEffect, useState } from "react"
 import RecruiterMainPage from "../../RecruiterMainPage";
 import NavBar from "../NavBar/NavBar";
-import { loginAdmin } from "../../../Firebase/FirebaseFunctions/Authentication";
+import { loginAdmin, loguotRecruiter } from "../../../Firebase/FirebaseFunctions/Authentication";
+import firebase from "../../../Firebase/FirebaseConfig/firebase";
 
 
 export default function Auth () {
@@ -29,7 +30,7 @@ export default function Auth () {
 
   const handleSignup = () => {
     clearErrors();
-    firebase1.auth().createUserWithEmailAndPassword(email, password)
+    firebase.auth().createUserWithEmailAndPassword(email, password)
       .then((userCredential) => {
         // Signed in 
         const user1 = userCredential.user;
@@ -62,35 +63,35 @@ export default function Auth () {
       setPasswordError(true);
     }
     else {
-      // firebase1
-      //   .auth()
-      //   .signInWithEmailAndPassword(email, password)
-      //   .catch(error => {
-      //     // alert(error.code);
-      //     setAlertHidden(false);
-      //      console.log(error.code); //the error
-      //   });
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(email, password)
+        .catch(error => {
+          // alert(error.code);
+          setAlertHidden(false);
+           console.log(error.code); //the error
+        });
 
-       loginAdmin({setAlertHidden});
+      //  loginAdmin({setAlertHidden});
     }
 
   };
 
-  const handlelogout = () => {
-    firebase1.auth().signOut();
-  };
+  // const handlelogout = () => {
+  //   firebase1.auth().signOut();
+  // };
 
 
   useEffect(() => {
     const authListener = () => {
-      firebase1.auth().onAuthStateChanged((user: any) => {
+      firebase.auth().onAuthStateChanged((user: any) => {
         if (user) {
           clearInputs();
           setUser(user);
         }
         else {
           setUser('');
-          return <RecruiterMainPage handlelogout={handlelogout} />;
+          return <RecruiterMainPage handlelogout={loguotRecruiter} />;
         }
       });
     };
@@ -102,7 +103,7 @@ export default function Auth () {
   return (
     <>
       {user ? (
-        <RecruiterMainPage handlelogout={handlelogout} />
+        <RecruiterMainPage handlelogout={loguotRecruiter} />
       ) : (
 
             <Login
