@@ -1,17 +1,28 @@
-import { Box, Divider, Grid, Paper, Typography } from '@mui/material'
+import { Box, Button, Divider, Grid, Paper, Typography } from '@mui/material'
 import React from 'react'
-import { BoxGradientSx, MyBoxSectionSx, MyDividerSx, MyGridSx, MyPaperSx, MyTypographyInfoSx, MyTypographyMainSx, MyTypographyTitleSx } from './WelcomePageStyle'
+import { BoxGradientSx, MyGridItemSx, MyDividerSx, MyGridSx, MyPaperSx, MyTypographyInfoSx, MyTypographyMainSx, MyTypographyTitleSx } from './WelcomePageStyle'
+import { ChevronLeft } from '@mui/icons-material'
+import { useNavigate } from "react-router-dom";
+import NewJobPage from '../../ManageJobsPage/Components/NewJobPage/NewJobPage';
+import { MyTitleBoxSx } from '../../ManageJobsPage/Components/NewJobPage/NewJobStyle';
 
-export default function WelcomePage() {
+export default function WelcomePage(props: { setHomeActive: any, setReportsActive: any, setCandidatesActive: any, setJobsActive: any }) {
+    // for the navigation bar
+    const { setHomeActive, setReportsActive, setCandidatesActive, setJobsActive } = props;
+    setHomeActive(true); setCandidatesActive(false);
+    setReportsActive(false); setJobsActive(false);
+    // ----------------------------
+
+
+    const navigate = useNavigate();
     return (
         <>
             <Box sx={BoxGradientSx} />
 
             <Paper sx={MyPaperSx}>
 
-
-                <Grid sx={MyGridSx}>
-                    <Box sx={MyBoxSectionSx}>
+                <Grid xs={3} sx={MyGridSx}>
+                    <Grid item sx={MyGridItemSx}>
                         <Typography sx={MyTypographyMainSx}>
                             70
                         </Typography>
@@ -21,13 +32,16 @@ export default function WelcomePage() {
                         </Typography>
 
                         <Typography sx={MyTypographyInfoSx}>
-                            משרות חדשות שנוספו או עודכנו, למעבר לדף המשרות
+                            משרות חדשות שנוספו או עודכנו, למעבר לדף ניהול המשרות:
                         </Typography>
-                    </Box>
 
-                    <Divider sx={MyDividerSx} />
- 
-                    <Box sx={MyBoxSectionSx}>
+                        <Button disableRipple variant='text' endIcon={<ChevronLeft />} onClick={() => navigate("/manageJobs")}>לחץ כאן</Button>
+
+                    </Grid>
+
+                    <Divider orientation="vertical" flexItem />
+
+                    <Grid item sx={MyGridItemSx}>
 
                         <Typography sx={MyTypographyMainSx}>
                             13
@@ -38,14 +52,18 @@ export default function WelcomePage() {
                         </Typography>
 
                         <Typography sx={MyTypographyInfoSx}>
-                            Save 3-4 weeks of work when you use our pre-made pages for your website
+                            דוחות חדשים שנוספו או עודכנו, למעבר לדף ניהול הדוחות:
                         </Typography>
-                    </Box>
-
-                    <Divider sx={MyDividerSx} />
 
 
-                    <Box sx={MyBoxSectionSx}>
+                        <Button disableRipple variant='text' endIcon={<ChevronLeft />} onClick={() => navigate("/reports")} >לחץ כאן</Button>
+
+                    </Grid>
+
+                    <Divider orientation="vertical" flexItem />
+
+
+                    <Grid item sx={MyGridItemSx}>
                         <Typography sx={MyTypographyMainSx}>
                             22
                         </Typography>
@@ -55,14 +73,15 @@ export default function WelcomePage() {
                         </Typography>
 
                         <Typography sx={MyTypographyInfoSx}>
-                            Save 3-4 weeks of work when you use our pre-made pages for your website
+                            מועמדים חדשים שנוספו או שחל שינוי בסטטוס שלהם, למעבר לדף ניהול המועמדים:
                         </Typography>
-                    </Box>
+
+
+                        <Button disableRipple variant='text' endIcon={<ChevronLeft />} onClick={() => navigate("/manageCandidates")} >לחץ כאן</Button>
+                    </Grid>
                 </Grid>
 
-
             </Paper>
-
         </>
     )
 }

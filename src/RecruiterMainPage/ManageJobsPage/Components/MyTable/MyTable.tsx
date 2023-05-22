@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Typography from '@mui/material/Typography';
-import { Container, Fab, useTheme } from '@mui/material';
+import { Box, Button, Container, Divider, Fab, Stack, useTheme } from '@mui/material';
 import MyDropMenu from '../MyDropMenu/MyDropMenu';
 import {
     DataGrid, GridToolbarFilterButton,
@@ -14,6 +14,8 @@ import {
 import { GridFooterContainerSx, TypographyFooterSx, dataGridContainerStyle, dataGridSx } from './MyTableStyle';
 import CandidatesListFullScreenDialog from '../CandidatesListDialog/CandidatesListDialog';
 import { getFilteredJobs } from '../../../../Firebase/FirebaseFunctions/Job';
+import { useNavigate } from "react-router-dom";
+
 
 
 
@@ -24,14 +26,31 @@ function GridCustomToolbar({
 }) {
     const rootProps = useGridRootProps();
     const apiRef = useGridApiContext();
+    const navigate = useNavigate();
+
+    const handleCreatejob = () => {
+        navigate("/createJob");
+    }
 
     return (
 
-        <GridToolbarContainer>
-            <GridToolbarFilterButton />
-            <GridToolbarColumnsButton />
-            <GridToolbarDensitySelector />
-            <GridToolbarExport />
+        <GridToolbarContainer sx={{ display: 'flex', justifyContent: 'space-between' }}>
+
+            <Box>
+                <GridToolbarFilterButton />
+                <GridToolbarColumnsButton />
+                <GridToolbarDensitySelector />
+                <GridToolbarExport />
+            </Box>
+
+            <Box>
+
+                <Button color='info' variant='contained' size='small' onClick={handleCreatejob}>משרה חדשה</Button>
+            </Box>
+
+
+
+
         </GridToolbarContainer>
     );
 }
@@ -49,10 +68,10 @@ const columns: GridColDef[] = [
         disableExport: true,
         editable: false,
 
-        renderCell: () => {
+        renderCell: (job) => {
 
 
-            return <MyDropMenu />;
+            return <MyDropMenu JobId={job.id} />;
         },
 
 
@@ -61,14 +80,14 @@ const columns: GridColDef[] = [
     {
         field: '_jobNumber',
         headerName: "מס' משרה",
-        width: 110,
+        width: 150,
         align: 'left'
     },
 
     {
         field: '_region',
         headerName: 'איזור',
-        width: 150,
+        width: 200,
         editable: false,
         align: 'left',
 
@@ -77,14 +96,14 @@ const columns: GridColDef[] = [
     {
         field: '_role',
         headerName: 'תפקיד',
-        width: 250,
+        width: 300,
         editable: false,
         align: 'left',
     },
     {
         field: '_scope',
         headerName: 'אחוז משרה',
-        width: 90,
+        width: 150,
         editable: false,
         align: 'left',
     },
@@ -95,7 +114,7 @@ const columns: GridColDef[] = [
         sortable: false,
         editable: false,
         align: 'left',
-        width: 260,
+        width: 300,
         renderCell: (job) => {
             return <CandidatesListFullScreenDialog JobId={job.id} />;
         },
@@ -112,33 +131,17 @@ const rows = [
 
 
 
-function CustomFooter() {
 
-    const [dataSize, setDataSize] = React.useState(3);
-
-    return (
-        <GridFooterContainer sx={GridFooterContainerSx}>
-
-            <Typography variant='subtitle2' sx={TypographyFooterSx}>
-                מס' משרות:
-            </Typography>
-
-            <Typography variant='subtitle2' sx={TypographyFooterSx}>
-                {dataSize}
-            </Typography>
-
-        </GridFooterContainer>
-    );
-};
 
 
 function getScopeFormated(scope: number[] | null) {
 
-    return scope === null ? '0-100' : scope[0].toString() + '-' + scope[1].toString();
+    return scope === null ? '0-100' : scope[0].toString() === scope[1].toString() ? scope[0].toString() + '%' : scope[1].toString() + '% - ' + scope[0].toString() + '%';
 
 }
 
-export default function MyTable() {
+export default function MyTable(props: {setDataSize: any}) {
+    const { setDataSize } = props;
     const [allJobs, setAllJobs] = React.useState<any[]>([]);
 
     const fetchAllJobs = async () => {
@@ -146,6 +149,24 @@ export default function MyTable() {
         const jobsWithId = jobs.map((job) => ({ ...job, id: job._jobNumber, _scope: getScopeFormated(job._scope) }));
         setAllJobs(jobsWithId);
 
+    };
+
+    const CustomFooter = () => {
+        setDataSize(allJobs.length);
+    
+        return (
+            <GridFooterContainer sx={GridFooterContainerSx}>
+    
+                <Typography variant='subtitle2' sx={TypographyFooterSx}>
+                    מס' משרות:
+                </Typography>
+    
+                <Typography variant='subtitle2' sx={TypographyFooterSx}>
+                    {allJobs.length}
+                </Typography>
+    
+            </GridFooterContainer>
+        );
     };
 
     React.useEffect(() => {
@@ -165,8 +186,8 @@ export default function MyTable() {
                     sx={dataGridSx(theme)}
                     rows={allJobs}
                     columns={columns}
-                    onRowDoubleClick={(job)=>{console.log(job.id)}}
-                   
+                    onRowDoubleClick={(job) => { console.log(job.id) }}
+
                     // checkboxSelection
                     // disableRowSelectionOnClick
                     // disableColumnMenu

@@ -2,6 +2,7 @@ import { SxProps } from "@mui/material";
 
 
 export const MySearchBarBoxSx: SxProps = {
+    width: '100%',
     boxShadow: 3,
     marginLeft: 'auto',
     marginRight: 'auto',

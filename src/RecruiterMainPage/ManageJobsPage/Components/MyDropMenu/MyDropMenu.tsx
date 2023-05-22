@@ -17,7 +17,8 @@ function MenuSection({ children, label }: MenuSectionProps) {
     );
 }
 
-export default function WrappedMenuItems() {
+export default function WrappedMenuItems(props: {JobId: any}) {
+    const { JobId } = props;
     const [buttonElement, setButtonElement] = React.useState<HTMLButtonElement | null>(
         null,
     );
@@ -28,6 +29,13 @@ export default function WrappedMenuItems() {
     const updateAnchor = React.useCallback((node: HTMLButtonElement | null) => {
         setButtonElement(node);
     }, []);
+
+
+    const handleEditClick = () => {
+        console.log("EditJobId: " + JobId);
+        setOpen(false);
+        buttonElement?.focus();
+    }
 
     const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         if (preventReopen.current) {
@@ -63,6 +71,7 @@ export default function WrappedMenuItems() {
     };
 
     const createHandleMenuClick = (menuItem: string) => {
+
         return () => {
             console.log(`Clicked on ${menuItem}`);
             setOpen(false);
@@ -106,7 +115,7 @@ export default function WrappedMenuItems() {
                         </ListItemIcon>
                     </StyledMenuItem>
 
-                    <StyledMenuItem onClick={createHandleMenuClick('Edit')}>
+                    <StyledMenuItem onClick={handleEditClick}>
                         <ListItemIcon>
                             <Edit sx={MenuItemIconSx} />
                             <Typography sx={MenuItemTypographySx} >
