@@ -1,22 +1,22 @@
 // imports
-import { Box, Button, Container, Typography, useTheme } from '@mui/material';
+import { Box, Button, Typography, useTheme } from '@mui/material';
 import React from 'react'
 import { GridFooterContainerSx, TypographyFooterSx, dataGridContainerStyle, dataGridSx } from './JobsTableStyle';
 import
-    {
-        DataGrid,
-        GridColDef,
-        GridFooterContainer,
-        GridInitialState,
-        GridToolbarColumnsButton,
-        GridToolbarContainer,
-        GridToolbarDensitySelector,
-        GridToolbarExport,
-        GridToolbarFilterButton,
-        heIL,
-        useGridApiContext,
-        useGridRootProps
-    } from '@mui/x-data-grid';
+{
+    DataGrid,
+    GridColDef,
+    GridFooterContainer,
+    GridInitialState,
+    GridToolbarColumnsButton,
+    GridToolbarContainer,
+    GridToolbarDensitySelector,
+    GridToolbarExport,
+    GridToolbarFilterButton,
+    heIL,
+    useGridApiContext,
+    useGridRootProps
+} from '@mui/x-data-grid';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -28,11 +28,6 @@ const GridCustomToolbar = ({ syncState }: { syncState: (stateToSave: GridInitial
     const apiRef = useGridApiContext();
     const navigate = useNavigate();
 
-    const handleCreatejob = () =>
-    {
-        navigate("/createJob", { state: null });
-    }
-
     return (
 
         <GridToolbarContainer sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -42,11 +37,6 @@ const GridCustomToolbar = ({ syncState }: { syncState: (stateToSave: GridInitial
                 <GridToolbarColumnsButton />
                 <GridToolbarDensitySelector />
                 <GridToolbarExport />
-            </Box>
-
-            <Box>
-
-                <Button color='info' variant='contained' size='small' onClick={handleCreatejob}>משרה חדשה</Button>
             </Box>
 
         </GridToolbarContainer>
@@ -89,7 +79,7 @@ const columns: GridColDef[] = [
 ];
 
 // Footer
-const CustomFooterComponent = ({setDataSize, jobs}) =>
+const CustomFooterComponent = ({ setDataSize, jobs }) =>
 {
     setDataSize(jobs.length);
 
@@ -113,30 +103,33 @@ export default function JobsTable(props: { setDataSize: any })
     const [jobs, setAllJobs] = React.useState<any[]>([]);
     const theme = useTheme();
     const { setDataSize } = props;
-    const CustomFooter = () => {
-        return <CustomFooterComponent setDataSize={setDataSize} jobs={jobs}/>
+    const CustomFooter = () =>
+    {
+        return <CustomFooterComponent setDataSize={setDataSize} jobs={jobs} />
     }
     return (
         <>
-            <Container className="shadow-lg border rounded"
-                sx={dataGridContainerStyle}
-                style={dataGridContainerStyle}
-                maxWidth='xl'>
-                <DataGrid
-                    sx={dataGridSx(theme)}
-                    rows={jobs}
-                    columns={columns}
-                    onRowDoubleClick={(job) => { console.log(job.id) }}
+            <Box sx={{width: "100%"}} >
+                <Box className="shadow-lg border rounded"
+                    sx={dataGridContainerStyle}
+                    style={dataGridContainerStyle}
+                    maxWidth='xl'>
+                    <DataGrid
+                        sx={dataGridSx(theme)}
+                        rows={jobs}
+                        columns={columns}
+                        onRowDoubleClick={(job) => { console.log(job.id) }}
 
-                    // checkboxSelection
-                    // disableRowSelectionOnClick
-                    // disableColumnMenu
-                    hideFooterSelectedRowCount
-                    hideFooterPagination
-                    // hideFooter
-                    localeText={heIL.components.MuiDataGrid.defaultProps.localeText}
-                    slots={{ toolbar: GridCustomToolbar, footer: CustomFooter }} />
-
-            </Container></>
+                        // checkboxSelection
+                        // disableRowSelectionOnClick
+                        // disableColumnMenu
+                        hideFooterSelectedRowCount
+                        hideFooterPagination
+                        // hideFooter
+                        localeText={heIL.components.MuiDataGrid.defaultProps.localeText}
+                        slots={{ toolbar: GridCustomToolbar, footer: CustomFooter }} />
+                </Box>
+            </Box>
+        </>
     );
 }

@@ -1,5 +1,6 @@
 import { SxProps } from '@mui/material';
 import { Theme } from '@mui/material/styles';
+import { CSSProperties } from '@mui/material/styles/createTypography';
 
 
 export const MyButtonSx: SxProps = {
@@ -13,10 +14,10 @@ export const dataGridContainerSx: SxProps = {
 	overflow: 'hidden'
 }
 
-export const dataGridContainerStyle = {
+export const dataGridContainerStyle:CSSProperties = {
 	padding: 0,
 	marginTop: '15px',
-	marginBottom: '15px'
+	marginBottom: '15px',
 }
 
 export const dataGridSx = (theme: Theme): SxProps => ({

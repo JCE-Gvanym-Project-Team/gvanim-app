@@ -3,7 +3,6 @@ import { SxProps } from '@mui/material/styles';
 import { GlobalStyle, ManageCandidatesPageGlobalStyle } from '../../PageStyles';
 
 export const editButtonSx: SxProps = {
-    backgroundColor: 'green',
     alignSelf: 'end',
 
 }
