@@ -47,16 +47,11 @@ export default function CandidatesListFullScreenDialog({ JobId })
 
 			<Dialog
 				fullScreen
-				sx={{
-					'& .MuiDialog-paper': {
-						borderRadius: '8px',
-					}
-				}}
 				open={open}
 
 				TransitionComponent={Transition}
 			>
-				<AppBar sx={{ position: 'relative' }}>
+				<AppBar sx={{ position: 'relative',backgroundColor: 'rgb(52, 71, 103)' }}>
 					<Toolbar>
 
 						<Typography sx={{ ml: 2, flex: 1, textAlign: 'center' }} variant="h6" component="div">

@@ -10,7 +10,7 @@ const MyLoading = () => {
     useEffect(() => {
         setTimeout(() => {
             setLoading(false);
-        }, 2500);
+        }, 1000);
     }, []);
 
   

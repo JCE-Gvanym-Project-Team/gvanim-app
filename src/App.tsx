@@ -11,7 +11,7 @@ import { Router } from 'express';
 import NavBar from './Components/NavBar/NavBar';
 import { main } from './Firebase/FirebaseFunctions/DBfuncs'
 import { initializeApp } from 'firebase/app';
-import CandidateByDate from './RecruiterMainPage/ReportsPage/Components/Reports/CandidateByDate/CandidatesByDate';
+import Auth from './RecruiterMainPage/Components/Auth/Auth';
 
 main();
 
@@ -25,32 +25,11 @@ function App() {
 	const currentUser = "recruiter";
 	return (
 		<>
-			<BrowserRouter>
-				<NavBar />
-				<Routes>
-					<Route path="/" element={<RecruiterMainPage />} />
-					<Route path="/manageCandidates" element={<ManageCandidatesPage />} />
-					<Route path="/manageJobs" element={<ManageJobsPage />} />
-					<Route path="/reports" element={<ReportsPage />} />
-					<Route path="/reports_1" element={<CandidateByDate />} />
-				</Routes>
-			</BrowserRouter>		
+		<Auth />	
 		</>
 	);
 }
 
-function decidePage(currentUser: any) {
-	if (currentUser === Admin) {
-		return (<AdminMainPage />)
-	} else if (currentUser === Recruiter) {
-		return (
-			<RecruiterMainPage />
-		)
-	} else {
-		return (
-			<DrushimMainPage />
-		)
-	}
-}
+
 
 export default App;
