@@ -43,13 +43,16 @@ export async function registerRecruiter(recruiter: Recruiter, password: string) 
  * @returns None
  * @throws {FirebaseError} If there is an error with the Firebase authentication.
  */
-export async function loginRecruiter(email: string, password: string) {
+export async function loginRecruiter( email: string, password: string, props: { setAlertHidden: any }) {
+	const { setAlertHidden } = props;
+
 	signInWithEmailAndPassword(auth, email, password)
 		.then((userCredential) => {
 			const user = userCredential.user;
 			//console.log(user.email);
 		})
 		.catch((error) => {
+			setAlertHidden(false);
 			const errorCode = error.code;
 			const errorMessage = error.message;
 		});
@@ -72,11 +75,12 @@ export async function loguotRecruiter() {
  * use while devlopment only
  * @returns None
  */
-export async function loginAdmin() {
+export async function loginAdmin(props: { setAlertHidden: any }) {
+	const { setAlertHidden } = props;
 	const user = process.env.REACT_APP_ADMIN_MAIL;
 	const pass = process.env.REACT_APP_ADMIN_PASS;
 	if (user != null && pass != null) {
-		loginRecruiter(user, pass);
+		loginRecruiter(user, pass, setAlertHidden);
 		console.log("loged as admin");
 	}
 	else

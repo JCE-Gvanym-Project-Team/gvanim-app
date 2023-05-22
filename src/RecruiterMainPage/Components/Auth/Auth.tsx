@@ -4,6 +4,7 @@ import "firebase/compat/auth";
 import  { useEffect, useState } from "react"
 import RecruiterMainPage from "../../RecruiterMainPage";
 import NavBar from "../NavBar/NavBar";
+import { loginAdmin } from "../../../Firebase/FirebaseFunctions/Authentication";
 
 
 export default function Auth () {
@@ -69,6 +70,8 @@ export default function Auth () {
           setAlertHidden(false);
            console.log(error.code); //the error
         });
+
+      // loginAdmin({setAlertHidden});
     }
 
   };

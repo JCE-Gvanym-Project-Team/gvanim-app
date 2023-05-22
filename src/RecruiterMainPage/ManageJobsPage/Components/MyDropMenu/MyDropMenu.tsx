@@ -7,6 +7,7 @@ import { ListActionTypes } from '@mui/base/useList';
 import { Box, IconButton, ListItemIcon, Typography } from '@mui/material';
 import { Assignment, Edit, MoreVert, Print } from '@mui/icons-material';
 import { MenuItemIconSx, MenuItemTypographySx, MoreVertSx, blue, grey } from './MyDropManuStyle';
+import { useNavigate } from 'react-router-dom';
 
 function MenuSection({ children, label }: MenuSectionProps) {
     return (
@@ -17,7 +18,9 @@ function MenuSection({ children, label }: MenuSectionProps) {
     );
 }
 
-export default function WrappedMenuItems(props: {JobId: any}) {
+export default function MyDropMenu(props: {JobId: any}) {
+    const navigate = useNavigate();
+
     const { JobId } = props;
     const [buttonElement, setButtonElement] = React.useState<HTMLButtonElement | null>(
         null,
@@ -32,9 +35,9 @@ export default function WrappedMenuItems(props: {JobId: any}) {
 
 
     const handleEditClick = () => {
-        console.log("EditJobId: " + JobId);
         setOpen(false);
         buttonElement?.focus();
+        navigate("/createJob", {state: JobId} );      
     }
 
     const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {

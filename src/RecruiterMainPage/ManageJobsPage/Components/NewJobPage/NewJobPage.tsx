@@ -2,8 +2,8 @@ import { Avatar, Box, Button, Container, Divider, FormControl, FormHelperText, G
 import React, { useState } from 'react'
 import { BoxGradientSx, MyPaperSx } from './NewJobStyle'
 import JobScopeSlider from './Components/ScopeSlider/ScopeSlider';
-import { Job, generateJobNumber } from '../../../../Firebase/FirebaseFunctions/Job';
-import { useNavigate } from 'react-router-dom';
+import { Job, generateJobNumber, getFilteredJobs } from '../../../../Firebase/FirebaseFunctions/Job';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 
 const Form = styled('form')(({ theme }) => ({
@@ -16,6 +16,8 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
     const { setHomeActive, setReportsActive, setCandidatesActive, setJobsActive } = props;
     setHomeActive(false); setCandidatesActive(false);
     setReportsActive(false); setJobsActive(false);
+
+    const { state } = useLocation();
 
     // values
     const [jobName, setJobName] = useState('');
@@ -33,9 +35,7 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
     const [errorJobRegion, setErrorJobRegion] = useState(false);
     const [errorJobState, setErrorJobState] = useState(false);
     const [errorJobRequirements, setErrorJobRequirements] = useState(false);
-    const [errorJobDescription, setErrorJobDescription] = useState(false);
-    const [errorJobDescriptionSkills, setErrorJobDescriptionSkills] = useState(false);
-    const [errorJobAdditionalInfo, setErrorJobAdditionalInfo] = useState(false);
+    
 
     // ### design TextFields #######################################################################################
     const MyTextFieldJobNameSx = {
@@ -136,7 +136,7 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
     }
     const MyTextFieldJobRequirementsSx = {
         "& .MuiOutlinedInput-root": {
-            
+
             "&:hover fieldset": {
                 color: errorJobRequirements ? '#dc3545' : '#212529',
                 border: errorJobRequirements ? '1px solid #dc3545' : '1px solid #ced4da',
@@ -159,6 +159,38 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
         },
     }
     // #############################################################################################################
+
+    const getAllJobs = async () => {
+        const jobs = await getFilteredJobs();
+
+        let JobToEdit = jobs.filter(job => job._jobNumber === state);
+
+        setJobName(JobToEdit[0]._title);
+        setJobRole(JobToEdit[0]._role);
+        setJobRegion(JobToEdit[0]._region);
+        setJobState(JobToEdit[0]._sector);
+        setJobRequirements(JobToEdit[0]._requirements);
+        setJobDescription(JobToEdit[0]._description[0]);
+        setJobDescriptionSkills(JobToEdit[0]._description[1]);
+        setJobAdditionalInfo(JobToEdit[0]._description[2]);
+                    //   setJobScope(JobToEdit[0]._scope);
+            console.log(jobScope);
+        console.log(JobToEdit);
+    }
+
+    if (state !== null) { // edit job
+        console.log('True Edit from NewPageJob: ID - ' + state);
+
+
+        getAllJobs();
+
+
+
+
+
+    }
+
+
     const navigate = useNavigate();
 
 
@@ -166,17 +198,17 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
 
         event.preventDefault();
 
-        if (jobName.length === 0 || jobRole.length === 0 || jobRegion.length === 0 || jobState.length === 0 || jobRequirements.length === 0 ) {
+        if (jobName.length === 0 || jobRole.length === 0 || jobRegion.length === 0 || jobState.length === 0 || jobRequirements.length === 0) {
 
-            if (jobName.length === 0) {setErrorJobName(true);}                                     if (jobRegion.length === 0) {setErrorJobRegion(true);}
-            if (jobRole.length === 0) {setErrorJobRole(true);}                                     if (jobState.length === 0) {setErrorJobState(true);}
-            if (jobRequirements.length === 0) {setErrorJobRequirements(true);}                     
+            if (jobName.length === 0) { setErrorJobName(true); } if (jobRegion.length === 0) { setErrorJobRegion(true); }
+            if (jobRole.length === 0) { setErrorJobRole(true); } if (jobState.length === 0) { setErrorJobState(true); }
+            if (jobRequirements.length === 0) { setErrorJobRequirements(true); }
         }
         else {
             var description_array = new Array(jobDescription, jobDescriptionSkills, jobAdditionalInfo);
 
             let job1 = new Job(await generateJobNumber(), jobName, jobRole, jobScope, jobRegion, jobState, description_array, jobRequirements, true, false);
-              job1.add();
+            job1.add();
 
             console.log(
                 'Job Name: ' + jobName + '\n'
@@ -190,7 +222,7 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
                 + 'Job Scope: ' + jobScope[0].toString() + '% - ' + jobScope[1].toString() + '%' + '\n'
             );
 
-             navigate("/manageJobs");
+            navigate("/manageJobs");
         }
     }
 
@@ -263,7 +295,7 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
                                                         className="form-control" required
                                                         value={jobRegion}
                                                         error={errorJobRegion}
-                                                        onChange={(e) => { 
+                                                        onChange={(e) => {
                                                             setJobRegion(e.target.value);
                                                             if (jobRegion.length > 0 && errorJobRegion) { setErrorJobRegion(false); }
                                                         }}
@@ -276,18 +308,18 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
                                                     <label>
                                                         <Typography sx={{ fontWeight: 600, fontSize: 13 }}>Label:</Typography>
                                                     </label>
-                                                    <TextField sx={MyTextFieldJobStateSx}  size='small' placeholder="(Job_state)" id="_job_state" type="text"
+                                                    <TextField sx={MyTextFieldJobStateSx} size='small' placeholder="(Job_state)" id="_job_state" type="text"
                                                         className="form-control"
                                                         required
                                                         error={errorJobState}
                                                         value={jobState}
-                                                        onChange={(e) => { 
+                                                        onChange={(e) => {
                                                             setJobState(e.target.value);
                                                             if (jobState.length > 0 && errorJobState) { setErrorJobState(false); }
-                                                         }}
+                                                        }}
                                                     />
-                                                   
-                                                   <FormHelperText hidden={!errorJobState} security="invalid" style={{ color: '#ef5350', marginRight: 0 }}>זהו שדה חובה.</FormHelperText>
+
+                                                    <FormHelperText hidden={!errorJobState} security="invalid" style={{ color: '#ef5350', marginRight: 0 }}>זהו שדה חובה.</FormHelperText>
 
 
                                                 </Box>
@@ -302,12 +334,12 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
                                                 className="form-control" required
                                                 error={errorJobRequirements}
                                                 value={jobRequirements}
-                                                onChange={(e) => { 
+                                                onChange={(e) => {
                                                     setJobRequirements(e.target.value);
                                                     if (jobRequirements.length > 0 && errorJobRequirements) { setErrorJobRequirements(false); }
-                                                 }}
+                                                }}
                                             />
-                                             <FormHelperText hidden={!errorJobRequirements} security="invalid" style={{ color: '#ef5350', marginRight: 0 }}>זהו שדה חובה.</FormHelperText>
+                                            <FormHelperText hidden={!errorJobRequirements} security="invalid" style={{ color: '#ef5350', marginRight: 0 }}>זהו שדה חובה.</FormHelperText>
 
                                         </Box>
 
@@ -315,7 +347,7 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
                                             <label>
                                                 <Typography sx={{ fontWeight: 600, fontSize: 13 }}>תיאור המשרה:</Typography>
                                             </label>
-                                            <TextareaAutosize  placeholder="Description" id="_description"
+                                            <TextareaAutosize placeholder="Description" id="_description"
                                                 className="form-control" minRows={2} required
                                                 value={jobDescription}
                                                 onChange={(e) => { setJobDescription(e.target.value) }}
