@@ -15,11 +15,5 @@
   },
   "storage": {
     "rules": "storage.rules"
-  },
-  "functions": {
-    "source": "src/Firebase/FirebaseFunctions",
-    "predeploy": [
-      "npm install --prefix functions"
-    ]
   }
 }
