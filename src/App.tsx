@@ -14,16 +14,9 @@ import { initializeApp } from 'firebase/app';
 import Auth from './RecruiterMainPage/Components/Auth/Auth';
 
 main();
-
-
-
-main()
-const Admin = "admin";
-const Recruiter = "recruiter";
-
 function App()
 {
-	const currentUser = "recruiter";
+	
 	return (
 		<>
 			<Auth />
