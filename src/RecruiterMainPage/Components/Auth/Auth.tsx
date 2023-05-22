@@ -62,16 +62,16 @@ export default function Auth () {
       setPasswordError(true);
     }
     else {
-      firebase1
-        .auth()
-        .signInWithEmailAndPassword(email, password)
-        .catch(error => {
-          // alert(error.code);
-          setAlertHidden(false);
-           console.log(error.code); //the error
-        });
+      // firebase1
+      //   .auth()
+      //   .signInWithEmailAndPassword(email, password)
+      //   .catch(error => {
+      //     // alert(error.code);
+      //     setAlertHidden(false);
+      //      console.log(error.code); //the error
+      //   });
 
-      // loginAdmin({setAlertHidden});
+       loginAdmin({setAlertHidden});
     }
 
   };
