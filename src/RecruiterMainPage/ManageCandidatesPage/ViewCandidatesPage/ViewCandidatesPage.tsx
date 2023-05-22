@@ -1,17 +1,18 @@
 import React from 'react'
 import { Button, Grid, Container, Typography, Box, Stack, Input, TextField } from '@mui/material'
 import EditIcon from '@mui/icons-material/Edit';
-import { editButtonStyle, textStyle, titleStyle, mainStackStyle } from './ViewCandidatesPageStyle';
+import { editButtonSx, textSx, titleSx, mainStackSx, ContainerGradientSx, candidateNameSx, BoxGradientSx } from './ViewCandidatesPageStyle';
 
 export default function ViewCandidatesPage() {
 	//TODO: replace this with real info
 	let candidateName = "ישראל ישראלי"
 	return (
 		<>
-			<Container>
-				<Stack direction={'column'} sx={mainStackStyle} spacing={6}>
+			<Box sx={BoxGradientSx} />
+			<Box sx={ContainerGradientSx}>
+				<Stack direction={'column'} sx={mainStackSx} spacing={6}>
 					{/* Title */}
-					<Typography sx={titleStyle} variant='h2'>
+					<Typography sx={titleSx} variant='h2'>
 						צפייה במועמד
 					</Typography>
 
@@ -21,17 +22,17 @@ export default function ViewCandidatesPage() {
 
 						{/* Candidate Name */}
 						<Box sx={{ display: 'flex', alignItems: 'baseline' }}>
-							<Typography sx={textStyle} variant='h4'>
+							<Typography sx={textSx} variant='h4'>
 								שם:
 							</Typography>
 
-							<Typography sx={{ textDecoration: 'underline', marginLeft: '1rem' }} variant='h4' >
+							<Typography sx={candidateNameSx} variant='h4' >
 								{candidateName}
 							</Typography>
 						</Box>
 
 						{/* Edit Button */}
-						<Button sx={editButtonStyle} variant="contained" startIcon={<EditIcon />}>
+						<Button sx={editButtonSx} variant="contained" startIcon={<EditIcon />}>
 							ערוך פרטים
 						</Button>
 					</Box>
@@ -39,13 +40,13 @@ export default function ViewCandidatesPage() {
 
 					{/* Candidate Info Table */}
 					<Box>
-						<Typography sx={textStyle} variant='h4'>
+						<Typography sx={textSx} variant='h4'>
 							משרות
 						</Typography>
 						
 					</Box>
 				</Stack>
-			</Container>
+			</Box>
 		</>
 	)
 }

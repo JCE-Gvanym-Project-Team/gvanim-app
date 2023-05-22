@@ -9,30 +9,31 @@ import NewJobPage from "./ManageJobsPage/Components/NewJobPage/NewJobPage";
 
 
 
-function RecruiterMainPage({ handlelogout }) {
-  const [HomeActive, setHomeActive] = useState(false);
-  const [ReportsActive, setReportsActive] = useState(false);
-  const [CandidatesActive, setCandidatesActive] = useState(false);
-  const [JobsActive, setJobsActive] = useState(false);
+function RecruiterMainPage({ handlelogout })
+{
+	const [HomeActive, setHomeActive] = useState(false);
+	const [ReportsActive, setReportsActive] = useState(false);
+	const [CandidatesActive, setCandidatesActive] = useState(false);
+	const [JobsActive, setJobsActive] = useState(false);
 
-  return (
-    <>
-      <BrowserRouter>
-        <NavBar handlelogout={handlelogout} HomeActive={HomeActive} setHomeActive={setHomeActive}
-          ReportsActive={ReportsActive} setReportsActive={setReportsActive} CandidatesActive={CandidatesActive}
-          setCandidatesActive={setCandidatesActive} JobsActive={JobsActive} setJobsActive={setJobsActive} />
-        <Routes>
-          <Route path="/" element={<WelcomePage setHomeActive={setHomeActive} setReportsActive={setReportsActive} setCandidatesActive={setCandidatesActive} setJobsActive={setJobsActive} />} />
-          <Route path="/manageCandidates" element={<ManageCandidatesPage setHomeActive={setHomeActive} setReportsActive={setReportsActive} setCandidatesActive={setCandidatesActive} setJobsActive={setJobsActive} />} />
-          <Route path="/manageJobs" element={<ManageJobsPage setHomeActive={setHomeActive} setReportsActive={setReportsActive} setCandidatesActive={setCandidatesActive} setJobsActive={setJobsActive} />} />
-          <Route path="/createJob" element={<NewJobPage setHomeActive={setHomeActive} setReportsActive={setReportsActive} setCandidatesActive={setCandidatesActive} setJobsActive={setJobsActive} />} />
-          <Route path="/reports" element={<ReportsPage setHomeActive={setHomeActive} setReportsActive={setReportsActive} setCandidatesActive={setCandidatesActive} setJobsActive={setJobsActive} />} />
-        </Routes>
-      </BrowserRouter>
+	return (
+		<>
+			<BrowserRouter>
+				<NavBar handlelogout={handlelogout} HomeActive={HomeActive} setHomeActive={setHomeActive}
+					ReportsActive={ReportsActive} setReportsActive={setReportsActive} CandidatesActive={CandidatesActive}
+					setCandidatesActive={setCandidatesActive} JobsActive={JobsActive} setJobsActive={setJobsActive} />
+				<Routes>
+					<Route path="/" element={<WelcomePage setHomeActive={setHomeActive} setReportsActive={setReportsActive} setCandidatesActive={setCandidatesActive} setJobsActive={setJobsActive} />} />
+					<Route path="/manageCandidates" element={<ManageCandidatesPage setHomeActive={setHomeActive} setReportsActive={setReportsActive} setCandidatesActive={setCandidatesActive} setJobsActive={setJobsActive} />} />
+					<Route path="/manageJobs" element={<ManageJobsPage setHomeActive={setHomeActive} setReportsActive={setReportsActive} setCandidatesActive={setCandidatesActive} setJobsActive={setJobsActive} />} />
+					<Route path="/createJob" element={<NewJobPage setHomeActive={setHomeActive} setReportsActive={setReportsActive} setCandidatesActive={setCandidatesActive} setJobsActive={setJobsActive} />} />
+					<Route path="/reports" element={<ReportsPage setHomeActive={setHomeActive} setReportsActive={setReportsActive} setCandidatesActive={setCandidatesActive} setJobsActive={setJobsActive} />} />
+				</Routes>
+			</BrowserRouter>
 
 
-    </>
-  );
+		</>
+	);
 }
 
 export default RecruiterMainPage;

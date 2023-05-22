@@ -21,11 +21,13 @@ main()
 const Admin = "admin";
 const Recruiter = "recruiter";
 
-function App() {
+function App()
+{
 	const currentUser = "recruiter";
 	return (
 		<>
-		<Auth />	
+			{/* AVIV-TODO: revert this */}
+			<RecruiterMainPage handlelogout={{}} />
 		</>
 	);
 }
