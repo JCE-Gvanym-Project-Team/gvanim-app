@@ -2,15 +2,16 @@ import * as React from 'react';
 import Typography from '@mui/material/Typography';
 import { Box, Button, Container, Divider, Fab, Stack, useTheme } from '@mui/material';
 import MyDropMenu from '../MyDropMenu/MyDropMenu';
-import {
-    DataGrid, GridToolbarFilterButton,
-    GridColDef, GridToolbarDensitySelector,
-    GridToolbarColumnsButton,
-    GridInitialState, GridToolbarExport,
-    useGridRootProps, GridApi,
-    useGridApiContext, GridKeyValue,
-    GridToolbarContainer, heIL, GridFooterContainer
-} from '@mui/x-data-grid';
+import
+    {
+        DataGrid, GridToolbarFilterButton,
+        GridColDef, GridToolbarDensitySelector,
+        GridToolbarColumnsButton,
+        GridInitialState, GridToolbarExport,
+        useGridRootProps, GridApi,
+        useGridApiContext, GridKeyValue,
+        GridToolbarContainer, heIL, GridFooterContainer
+    } from '@mui/x-data-grid';
 import { GridFooterContainerSx, TypographyFooterSx, dataGridContainerStyle, dataGridSx } from './MyTableStyle';
 import CandidatesListFullScreenDialog from '../CandidatesListDialog/CandidatesListDialog';
 import { getFilteredJobs } from '../../../../Firebase/FirebaseFunctions/Job';
@@ -42,7 +43,8 @@ const columns: GridColDef[] = [
         disableExport: true,
         editable: false,
 
-        renderCell: (job) => {
+        renderCell: (job) =>
+        {
 
 
             return <MyDropMenu JobId={job.id} />;
@@ -89,7 +91,8 @@ const columns: GridColDef[] = [
         editable: false,
         align: 'left',
         width: 300,
-        renderCell: (job) => {
+        renderCell: (job) =>
+        {
             return <CandidatesListFullScreenDialog JobId={job.id} />;
         },
         // valueGetter: (params: GridValueGetterParams) =>
@@ -97,13 +100,14 @@ const columns: GridColDef[] = [
     },
 ];
 
-const GridCustomToolbar = ( {syncState }: {syncState: (stateToSave: GridInitialState) => void;}) => 
+const GridCustomToolbar = ({ syncState }: { syncState: (stateToSave: GridInitialState) => void; }) => 
 {
     const rootProps = useGridRootProps();
     const apiRef = useGridApiContext();
     const navigate = useNavigate();
 
-    const handleCreatejob = () => {
+    const handleCreatejob = () =>
+    {
         navigate("/createJob", { state: null });
     }
 
@@ -130,45 +134,49 @@ const GridCustomToolbar = ( {syncState }: {syncState: (stateToSave: GridInitialS
     );
 };
 
-function getScopeFormated(scope: number[] | null) {
+function getScopeFormated(scope: number[] | null)
+{
 
     return scope === null ? '0-100' : scope[0].toString() === scope[1].toString() ? scope[0].toString() + '%' : scope[1].toString() + '% - ' + scope[0].toString() + '%';
 
 }
 
-export default function MyTable(props: { setDataSize: any }) {
+export default function MyTable(props: { setDataSize: any })
+{
     const { setDataSize } = props;
     const [allJobs, setAllJobs] = React.useState<any[]>([]);
 
-    const fetchAllJobs = async () => {
+    const fetchAllJobs = async () =>
+    {
         const jobs = await getFilteredJobs();
         const jobsWithId = jobs.map((job) => ({ ...job, id: job._jobNumber, _scope: getScopeFormated(job._scope) }));
         setAllJobs(jobsWithId);
-
     };
 
 
-    const CustomFooter = () => {
+    const CustomFooter = () =>
+    {
         setDataSize(allJobs.length);
-    
+
         return (
             <GridFooterContainer sx={GridFooterContainerSx}>
-    
+
                 <Typography variant='subtitle2' sx={TypographyFooterSx}>
                     מס' משרות:
                 </Typography>
-    
+
                 <Typography variant='subtitle2' sx={TypographyFooterSx}>
                     {allJobs.length}
                 </Typography>
-    
+
             </GridFooterContainer>
         );
     };
 
 
 
-    React.useEffect(() => {
+    React.useEffect(() =>
+    {
         fetchAllJobs();
     }, []);
 
