@@ -19,41 +19,15 @@ import { useNavigate } from "react-router-dom";
 
 
 
-function GridCustomToolbar({
-    syncState,
-}: {
-    syncState: (stateToSave: GridInitialState) => void;
-}) {
-    const rootProps = useGridRootProps();
-    const apiRef = useGridApiContext();
-    const navigate = useNavigate();
-
-    const handleCreatejob = () => {
-        navigate("/createJob");
-    }
-
-    return (
-
-        <GridToolbarContainer sx={{ display: 'flex', justifyContent: 'space-between' }}>
-
-            <Box>
-                <GridToolbarFilterButton />
-                <GridToolbarColumnsButton />
-                <GridToolbarDensitySelector />
-                <GridToolbarExport />
-            </Box>
-
-            <Box>
-
-                <Button color='info' variant='contained' size='small' onClick={handleCreatejob}>משרה חדשה</Button>
-            </Box>
 
 
 
 
-        </GridToolbarContainer>
-    );
-}
+const rows = [
+    { id: 1, _jobNumber: 1, _region: 'באר שבע', _role: 'מהנדס תוכנה', _scope: '80%', _candidates: 'לרשימת המועמדים' },
+
+];
+
 
 const columns: GridColDef[] = [
 
@@ -123,16 +97,38 @@ const columns: GridColDef[] = [
     },
 ];
 
-const rows = [
-    { id: 1, _jobNumber: 1, _region: 'באר שבע', _role: 'מהנדס תוכנה', _scope: '80%', _candidates: 'לרשימת המועמדים' },
+const GridCustomToolbar = ( {syncState }: {syncState: (stateToSave: GridInitialState) => void;}) => 
+{
+    const rootProps = useGridRootProps();
+    const apiRef = useGridApiContext();
+    const navigate = useNavigate();
 
-];
+    const handleCreatejob = () => {
+        navigate("/createJob", { state: null });
+    }
+
+    return (
+
+        <GridToolbarContainer sx={{ display: 'flex', justifyContent: 'space-between' }}>
+
+            <Box>
+                <GridToolbarFilterButton />
+                <GridToolbarColumnsButton />
+                <GridToolbarDensitySelector />
+                <GridToolbarExport />
+            </Box>
+
+            <Box>
+
+                <Button color='info' variant='contained' size='small' onClick={handleCreatejob}>משרה חדשה</Button>
+            </Box>
 
 
 
 
-
-
+        </GridToolbarContainer>
+    );
+};
 
 function getScopeFormated(scope: number[] | null) {
 
@@ -140,7 +136,7 @@ function getScopeFormated(scope: number[] | null) {
 
 }
 
-export default function MyTable(props: {setDataSize: any}) {
+export default function MyTable(props: { setDataSize: any }) {
     const { setDataSize } = props;
     const [allJobs, setAllJobs] = React.useState<any[]>([]);
 
@@ -150,6 +146,7 @@ export default function MyTable(props: {setDataSize: any}) {
         setAllJobs(jobsWithId);
 
     };
+
 
     const CustomFooter = () => {
         setDataSize(allJobs.length);
@@ -168,6 +165,8 @@ export default function MyTable(props: {setDataSize: any}) {
             </GridFooterContainer>
         );
     };
+
+
 
     React.useEffect(() => {
         fetchAllJobs();
