@@ -2,7 +2,8 @@ import Login from "../../LoginPage/LoginPage";
 import firebase1 from "../../../Firebase/FirebaseConfig/firebase";
 import "firebase/compat/auth";
 import  { useEffect, useState } from "react"
-import RecruiterMainPageDemo from "../../LoginPage/RecruiterMainPageDemo";
+import RecruiterMainPage from "../../RecruiterMainPage";
+import NavBar from "../NavBar/NavBar";
 
 
 export default function Auth () {
@@ -86,7 +87,7 @@ export default function Auth () {
         }
         else {
           setUser('');
-          return <RecruiterMainPageDemo handlelogout={handlelogout} />;
+          return <RecruiterMainPage handlelogout={handlelogout} />;
         }
       });
     };
@@ -98,7 +99,7 @@ export default function Auth () {
   return (
     <>
       {user ? (
-        <RecruiterMainPageDemo handlelogout={handlelogout} />
+        <RecruiterMainPage handlelogout={handlelogout} />
       ) : (
 
             <Login
