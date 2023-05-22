@@ -23,6 +23,7 @@ export const jobTextSx: SxProps = {
     color: 'black',
     fontFamily: ManageCandidatesPageGlobalStyle.textFontFamily,
     marginTop: '1rem'
+    
 }
 
 export const candidateNameSx: SxProps = {

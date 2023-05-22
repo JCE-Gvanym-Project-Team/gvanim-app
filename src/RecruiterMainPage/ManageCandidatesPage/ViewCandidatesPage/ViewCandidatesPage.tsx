@@ -16,7 +16,7 @@ export default function ViewCandidatesPage()
 			<Box sx={BoxGradientSx} />
 
 			{/* glass container */}
-			<Box sx={{marginTop: ManageCandidatesPageGlobalStyle.marginFromNavbar}}>
+			<Box sx={{ marginTop: ManageCandidatesPageGlobalStyle.marginFromNavbar }}>
 				<Box sx={ContainerGradientSx}>
 					<Stack direction={'column'} sx={mainStackSx} spacing={6}>
 						{/* Title */}
@@ -28,7 +28,7 @@ export default function ViewCandidatesPage()
 					 	/* edit button to make them on the same line */}
 						<Box sx={candidateNameAndEditButtonContainerSx}>
 							{/* Candidate Name */}
-							<Box sx={{ display: 'flex'}}>
+							<Box sx={{ display: 'flex' }}>
 								<Typography sx={textSx} variant='h4'>
 									שם:
 								</Typography>
@@ -45,15 +45,33 @@ export default function ViewCandidatesPage()
 						</Box>
 
 
-						{/* Candidate Info Table */}
-						<Box>
+						{/* text + move to another job button */}
+						<Box sx={candidateNameAndEditButtonContainerSx}>
 							<Typography sx={jobTextSx} variant='h4'>
 								משרות
 							</Typography>
 
-							<JobsTable setDataSize={setDataSize}/>
-
+							<Button sx={editButtonSx} variant="contained" startIcon={<EditIcon />}>
+								העבר למשרה אחרת
+							</Button>
 						</Box>
+
+						{/* Jobs table */}
+						<JobsTable setDataSize={setDataSize} />
+
+						{/* Bottom Buttons */}
+						<Box sx={candidateNameAndEditButtonContainerSx}>
+						<Button sx={editButtonSx} variant="contained" startIcon={<EditIcon />}>
+								ניהול ראיונות
+							</Button>
+							<Button sx={editButtonSx} variant="contained" startIcon={<EditIcon />}>
+								ממליצים
+							</Button>
+							<Button sx={editButtonSx} variant="contained" startIcon={<EditIcon />}>
+							 	הערות
+							</Button>
+						</Box>
+
 					</Stack>
 				</Box>
 			</Box>

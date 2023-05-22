@@ -16,7 +16,6 @@ export const dataGridContainerSx: SxProps = {
 
 export const dataGridContainerStyle:CSSProperties = {
 	padding: 0,
-	marginTop: '15px',
 	marginBottom: '15px',
 }
 
