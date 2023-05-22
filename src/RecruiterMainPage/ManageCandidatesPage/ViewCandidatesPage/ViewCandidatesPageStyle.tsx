@@ -41,18 +41,20 @@ export const BoxGradientSx: SxProps = {
 }
 
 export const ContainerGradientSx: SxProps = {
-    marginTop: ManageCandidatesPageGlobalStyle.marginFromNavbar,
-    marginBottom: '32px',
+    marginTop: "1rem",
     marginLeft: '3rem',
     marginRight: '3rem',
+    paddingBottom: '32px',
+    paddingLeft: "3rem",
+    paddingRight: "3rem",
+    paddingTop: "-300px",
     border: '1px solid rgba(0, 0, 0, 0.125)',
     borderRadius: '0.75rem',
     backgroundColor: 'rgba(255, 255, 255, 0.8)',
     backdropFilter: 'saturate(200%) blur(30px)',
     boxShadow: 'rgba(0, 0, 0, 0.05) 0rem 1.25rem 1.6875rem 0rem',
     color: 'rgba(0, 0, 0, 0.87)',
-    transition: 'box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
-
+    transition: 'box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms'
 }
 
 export const mainStackSx: SxProps = {
