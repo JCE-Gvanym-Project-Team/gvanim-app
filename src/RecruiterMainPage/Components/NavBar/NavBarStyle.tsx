@@ -30,7 +30,7 @@ export const DividerDrawerSx: SxProps = {
 }
 
 export const ListItemButtonDrawerSx: SxProps = {
-    textAlign: 'center'
+    textAlign: 'center',
 }
 
 export const OpenDrawerIconSx: SxProps = {

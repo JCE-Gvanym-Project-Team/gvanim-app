@@ -9,7 +9,7 @@ import {
     GridInitialState, GridToolbarExport,
     useGridRootProps, GridApi,
     useGridApiContext, GridKeyValue,
-    GridToolbarContainer, heIL, GridFooterContainer
+    GridToolbarContainer, heIL, GridFooterContainer, GridToolbarQuickFilter
 } from '@mui/x-data-grid';
 import { GridFooterContainerSx, TypographyFooterSx, dataGridContainerStyle, dataGridSx } from './MyTableStyle';
 import CandidatesListFullScreenDialog from '../CandidatesListDialog/CandidatesListDialog';
@@ -97,8 +97,7 @@ const columns: GridColDef[] = [
     },
 ];
 
-const GridCustomToolbar = ( {syncState }: {syncState: (stateToSave: GridInitialState) => void;}) => 
-{
+const GridCustomToolbar = ({ syncState }: { syncState: (stateToSave: GridInitialState) => void; }) => {
     const rootProps = useGridRootProps();
     const apiRef = useGridApiContext();
     const navigate = useNavigate();
@@ -108,24 +107,44 @@ const GridCustomToolbar = ( {syncState }: {syncState: (stateToSave: GridInitialS
     }
 
     return (
+        <GridToolbarContainer>
+            <Stack direction='row' sx={{ width: '100%' }}>
+                <Box sx={{ width: '100%' }}>
+                    <GridToolbarQuickFilter variant='outlined' size='small' sx={{ width: '100%' }} />
+                </Box>
+                <Box sx={{ display: 'flex', flexDirection: 'row-reverse', width: '100%'}}>
+                    <Box>
 
-        <GridToolbarContainer sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <Button type="button" onClick={handleCreatejob} variant='contained' sx={{
+                            backgroundColor: 'rgb(52, 71, 103)',
+                            ":hover": {
+                                bgcolor: "rgb(52, 71, 103)",
+                            }
+                        }} fullWidth>משרה חדשה</Button>
 
-            <Box>
-                <GridToolbarFilterButton />
-                <GridToolbarColumnsButton />
-                <GridToolbarDensitySelector />
-                <GridToolbarExport />
+                    </Box>
+                </Box>
+
+            </Stack>
+
+
+            <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', borderBottomColor: 'rgba(224, 224, 224, 1)' }}>
+
+                <Box>
+                    <GridToolbarFilterButton />
+                    <GridToolbarColumnsButton />
+                    <GridToolbarDensitySelector />
+                    <GridToolbarExport />
+                </Box>
+                {/* 
+                <Box>
+                    <Button color='info' variant='contained' size='small' onClick={handleCreatejob}>משרה חדשה</Button>
+                </Box> */}
+
+
+
+
             </Box>
-
-            <Box>
-
-                <Button color='info' variant='contained' size='small' onClick={handleCreatejob}>משרה חדשה</Button>
-            </Box>
-
-
-
-
         </GridToolbarContainer>
     );
 };
@@ -150,18 +169,18 @@ export default function MyTable(props: { setDataSize: any }) {
 
     const CustomFooter = () => {
         setDataSize(allJobs.length);
-    
+
         return (
             <GridFooterContainer sx={GridFooterContainerSx}>
-    
+
                 <Typography variant='subtitle2' sx={TypographyFooterSx}>
                     מס' משרות:
                 </Typography>
-    
+
                 <Typography variant='subtitle2' sx={TypographyFooterSx}>
                     {allJobs.length}
                 </Typography>
-    
+
             </GridFooterContainer>
         );
     };

@@ -37,7 +37,7 @@ export default function MyDropMenu(props: {JobId: any}) {
     const handleEditClick = () => {
         setOpen(false);
         buttonElement?.focus();
-        navigate("/createJob", {state: JobId} );      
+        navigate("/createJob", {state: JobId} );    
     }
 
     const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {

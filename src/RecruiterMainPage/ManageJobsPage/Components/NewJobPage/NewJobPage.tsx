@@ -1,9 +1,10 @@
-import { Avatar, Box, Button, Container, Divider, FormControl, FormHelperText, Grid, Input, InputBase, InputLabel, Paper, Slider, Stack, TextField, TextareaAutosize, Typography, styled } from '@mui/material'
-import React, { useState } from 'react'
+import { Box, Button, Container, Divider, FormHelperText, Stack, TextField, TextareaAutosize, Typography, styled } from '@mui/material'
+import React, { useEffect, useState } from 'react'
 import { BoxGradientSx, MyPaperSx } from './NewJobStyle'
 import JobScopeSlider from './Components/ScopeSlider/ScopeSlider';
 import { Job, generateJobNumber, getFilteredJobs } from '../../../../Firebase/FirebaseFunctions/Job';
 import { useLocation, useNavigate } from 'react-router-dom';
+import MyJobRemoveDialog from './Components/RemoveJobDialog/RemoveJobDialog';
 
 
 const Form = styled('form')(({ theme }) => ({
@@ -29,13 +30,15 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
     const [jobDescriptionSkills, setJobDescriptionSkills] = useState('');
     const [jobAdditionalInfo, setJobAdditionalInfo] = useState('');
     const [jobScope, setJobScope] = useState<number[]>([50, 100]);
+    const [newJob, setNewJob] = useState(true);
+    const [JobToEdit, setJobToEdit] = useState<Job[]>([]);
     // errors
     const [errorJobName, setErrorJobName] = useState(false);
     const [errorJobRole, setErrorJobRole] = useState(false);
     const [errorJobRegion, setErrorJobRegion] = useState(false);
     const [errorJobState, setErrorJobState] = useState(false);
     const [errorJobRequirements, setErrorJobRequirements] = useState(false);
-    
+
 
     // ### design TextFields #######################################################################################
     const MyTextFieldJobNameSx = {
@@ -163,32 +166,29 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
     const getAllJobs = async () => {
         const jobs = await getFilteredJobs();
 
-        let JobToEdit = jobs.filter(job => job._jobNumber === state);
+        let _JobToEdit = jobs.filter(job => job._jobNumber === state);
+        setJobToEdit(_JobToEdit);
 
-        setJobName(JobToEdit[0]._title);
-        setJobRole(JobToEdit[0]._role);
-        setJobRegion(JobToEdit[0]._region);
-        setJobState(JobToEdit[0]._sector);
-        setJobRequirements(JobToEdit[0]._requirements);
-        setJobDescription(JobToEdit[0]._description[0]);
-        setJobDescriptionSkills(JobToEdit[0]._description[1]);
-        setJobAdditionalInfo(JobToEdit[0]._description[2]);
-                    //   setJobScope(JobToEdit[0]._scope);
-            console.log(jobScope);
-        console.log(JobToEdit);
-    }
-
-    if (state !== null) { // edit job
-        console.log('True Edit from NewPageJob: ID - ' + state);
-
-
-        getAllJobs();
-
-
-
-
+        setJobName(_JobToEdit[0]._title);
+        setJobRole(_JobToEdit[0]._role);
+        setJobRegion(_JobToEdit[0]._region);
+        setJobState(_JobToEdit[0]._sector);
+        setJobRequirements(_JobToEdit[0]._requirements);
+        setJobDescription(_JobToEdit[0]._description[0]);
+        setJobDescriptionSkills(_JobToEdit[0]._description[1]);
+        setJobAdditionalInfo(_JobToEdit[0]._description[2]);
+        setJobScope(_JobToEdit[0]._scope);
 
     }
+
+    useEffect(() => {
+        if (state !== null) { // edit job
+            setNewJob(false);
+            getAllJobs();
+        }
+
+    }, []);
+
 
 
     const navigate = useNavigate();
@@ -197,33 +197,50 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
     const handleSubmit = async (event: any) => {
 
         event.preventDefault();
+        var description_array = new Array(jobDescription, jobDescriptionSkills, jobAdditionalInfo);
 
-        if (jobName.length === 0 || jobRole.length === 0 || jobRegion.length === 0 || jobState.length === 0 || jobRequirements.length === 0) {
-
-            if (jobName.length === 0) { setErrorJobName(true); } if (jobRegion.length === 0) { setErrorJobRegion(true); }
-            if (jobRole.length === 0) { setErrorJobRole(true); } if (jobState.length === 0) { setErrorJobState(true); }
-            if (jobRequirements.length === 0) { setErrorJobRequirements(true); }
-        }
-        else {
-            var description_array = new Array(jobDescription, jobDescriptionSkills, jobAdditionalInfo);
-
-            let job1 = new Job(await generateJobNumber(), jobName, jobRole, jobScope, jobRegion, jobState, description_array, jobRequirements, true, false);
-            job1.add();
-
-            console.log(
-                'Job Name: ' + jobName + '\n'
-                + 'Job Role: ' + jobRole + '\n'
-                + 'Job Region: ' + jobRegion + '\n'
-                + 'Job State: ' + jobState + '\n'
-                + 'Job Requirements: ' + jobRequirements + '\n'
-                + 'Job Description: ' + jobDescription + '\n'
-                + 'Job Description Skills: ' + jobDescriptionSkills + '\n'
-                + 'Job Additional Info: ' + jobAdditionalInfo + '\n'
-                + 'Job Scope: ' + jobScope[0].toString() + '% - ' + jobScope[1].toString() + '%' + '\n'
-            );
-
+        if (state !== null) {
+             let _job = JobToEdit[0];
+     
+             _job.edit( _job._title = jobName, _job._role = jobRole, _job._scope = jobScope, _job._region = jobRegion,
+                 _job._sector = jobState, _job._description = description_array, _job._requirements = jobRequirements, true, false);
             navigate("/manageJobs");
         }
+        else {
+
+            if (jobName.length === 0 || jobRole.length === 0 || jobRegion.length === 0 || jobState.length === 0 || jobRequirements.length === 0) {
+
+                if (jobName.length === 0) { setErrorJobName(true); } if (jobRegion.length === 0) { setErrorJobRegion(true); }
+                if (jobRole.length === 0) { setErrorJobRole(true); } if (jobState.length === 0) { setErrorJobState(true); }
+                if (jobRequirements.length === 0) { setErrorJobRequirements(true); }
+            }
+            else {
+
+
+                let job1 = new Job(await generateJobNumber(), jobName, jobRole, jobScope, jobRegion, jobState, description_array, jobRequirements, true, false);
+                job1.add();
+
+                console.log(
+                    'Job Name: ' + jobName + '\n'
+                    + 'Job Role: ' + jobRole + '\n'
+                    + 'Job Region: ' + jobRegion + '\n'
+                    + 'Job State: ' + jobState + '\n'
+                    + 'Job Requirements: ' + jobRequirements + '\n'
+                    + 'Job Description: ' + jobDescription + '\n'
+                    + 'Job Description Skills: ' + jobDescriptionSkills + '\n'
+                    + 'Job Additional Info: ' + jobAdditionalInfo + '\n'
+                    + 'Job Scope: ' + jobScope[0].toString() + '% - ' + jobScope[1].toString() + '%' + '\n'
+                );
+
+                navigate("/manageJobs");
+            }
+        }
+    }
+
+    const handleDelete = () => {
+        JobToEdit[0].remove();
+        console.log(`job (id: ${JobToEdit[0]._jobNumber}) deleted successfully`);
+        navigate("/manageJobs");
     }
 
     return (
@@ -238,10 +255,13 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
                             <Box className="col-md-12">
                                 <Box className="section-title">
 
-                                    <Typography sx={{ fontFamily: "'Noto Sans Hebrew', sans-serif", color: 'rgb(52, 71, 103)', textAlign: 'center' }} variant='h3'>משרה חדשה</Typography>
+                                    <Typography sx={{ fontFamily: "'Noto Sans Hebrew', sans-serif", color: 'rgb(52, 71, 103)', textAlign: 'center' }} variant='h3'>
+                                        {newJob ? 'משרה חדשה' : `משרה מס' ${state}`}
+                                    </Typography>
 
                                     <Typography className='mt-1' sx={{ fontFamily: "'Noto Sans Hebrew', sans-serif", color: 'rgb(123, 128, 154)', textAlign: 'center' }} variant='subtitle1'>
-                                        לתשומת ליבך: פעולה זו תיצור משרה חדשה ומס' משרה חדש.</Typography>
+                                        {newJob ? `לתשומת ליבך: פעולה זו תיצור משרה חדשה ומס' משרה חדש.` : 'לתשומת ליבך: עדכון השינויים יגרום לאובדן הנתונים הקודמים לצמיתות.'}
+                                    </Typography>
 
                                     <Divider sx={{ marginTop: '1rem', marginBottom: '1rem' }} />
 
@@ -381,16 +401,26 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
                                             <label>
                                                 <Typography sx={{ fontWeight: 600, fontSize: 13 }}>היקף המשרה:</Typography>
                                             </label>
-                                            <JobScopeSlider setJobScope={setJobScope} />
+                                            <JobScopeSlider setJobScope={setJobScope} jobScope={jobScope} />
                                         </Box>
                                         {/* <button type="submit" className="primary-btn submit">Submit</button> */}
 
-                                        <Button type="submit" className='mt-3 mb-3' variant='contained' sx={{
-                                            backgroundColor: 'rgb(52, 71, 103)',
-                                            ":hover": {
-                                                bgcolor: "rgb(52, 71, 103)",
-                                            }
-                                        }} fullWidth> פרסם</Button>
+                                        <Stack direction='row' spacing={2}>
+
+                                            <Button type="submit" className='mt-3 mb-3' variant='contained' sx={{
+                                                backgroundColor: 'rgb(52, 71, 103)',
+                                                ":hover": {
+                                                    bgcolor: "rgb(52, 71, 103)",
+                                                }
+                                            }} fullWidth>{newJob ? 'פרסם' : 'עדכן'}</Button>
+
+                                            {newJob ? (
+                                                <></>
+                                            ) : (
+                                                <MyJobRemoveDialog handleDelete={handleDelete} />
+                                            )}
+
+                                        </Stack>
                                     </Form>
                                 </Box>
                             </Box>
@@ -408,3 +438,5 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
 }
 
 export default NewJobPage;
+
+

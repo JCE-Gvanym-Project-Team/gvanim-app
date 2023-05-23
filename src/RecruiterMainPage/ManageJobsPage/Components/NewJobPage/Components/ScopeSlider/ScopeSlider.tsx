@@ -74,13 +74,12 @@ function AirbnbThumbComponent(props: AirbnbThumbComponentProps) {
     );
 }
 
-export default function JobScopeSlider(props: {setJobScope: any}) {
-    const { setJobScope } = props;
+export default function JobScopeSlider(props: {setJobScope: any, jobScope: any}) {
+    const { jobScope, setJobScope } = props;
 
     const handleChange = (event: Event, newValue: number | number[]) => {
         setJobScope(newValue as number[]);
     };
-
 
     return (
         <Box sx={MyPaperSx}>
@@ -90,6 +89,7 @@ export default function JobScopeSlider(props: {setJobScope: any}) {
                 onChange={handleChange}
                 valueLabelDisplay="auto"
                 getAriaValueText={valuetext}
+                value={jobScope}
                 getAriaLabel={(index) => (index === 0 ? 'Minimum scope' : 'Maximum scope')}
                 defaultValue={[50, 100]}
                 marks={marks}

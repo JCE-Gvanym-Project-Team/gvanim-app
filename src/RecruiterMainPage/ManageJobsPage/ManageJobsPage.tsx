@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { dataref } from "../../Firebase/FirebaseConfig/firebase";
 import MyTable from "./Components/MyTable/MyTable";
-import { Box, Container, Fab } from "@mui/material";
+import { Box, Button, Container, Fab } from "@mui/material";
 import MyAvatar from "./Components/MyAvatar/MyAvatar";
 import MyLoading from "../../Components/MyLoading/MyLoading";
 import {
@@ -12,7 +12,7 @@ import {
 import MySearchBar from "./Components/MySearchBar/MySearchBar";
 
 
-const ManageJobPageBody = (props: { setHomeActive: any,setReportsActive: any, setCandidatesActive: any,setJobsActive: any }) => {
+const ManageJobPageBody = (props: { setHomeActive: any, setReportsActive: any, setCandidatesActive: any, setJobsActive: any }) => {
     // for the navigation bar
     const { setHomeActive, setReportsActive, setCandidatesActive, setJobsActive } = props;
     setHomeActive(false); setCandidatesActive(false);
@@ -39,16 +39,11 @@ const ManageJobPageBody = (props: { setHomeActive: any,setReportsActive: any, se
 
                 <Box className="ManageJobPage-Body" sx={ManageJobPageBoxSx}>
 
-                    <Container sx={MyAvatarContainerSx} maxWidth="sm">
+                    {/* <Container sx={MyAvatarContainerSx} maxWidth="sm">
                         <MyAvatar dataSize={dataSize} />
-                    </Container>
+                    </Container> */}
 
-                    <Container
-                        style={MySearchBarContainerStyle} maxWidth="sm">
-
-                        <MySearchBar />
-
-                    </Container>
+    
 
                     <MyTable setDataSize={setDataSize} />
 
