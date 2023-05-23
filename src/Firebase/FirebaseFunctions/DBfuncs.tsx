@@ -3,6 +3,8 @@ import { realtimeDB } from "../FirebaseConfig/firebase";
 import { loginAdmin, loginRecruiter } from "./Authentication";
 import { Job, generateJobNumber } from "./Job";
 import { sendEmail } from "./apiBackend";
+import { Candidate } from "./Candidate";
+import { getFilteredCandidateJobStatuses } from "./CandidateJobStatus";
 
 
 const database = realtimeDB;
@@ -89,13 +91,5 @@ export async function getSectors(): Promise<string[]> {
 	return getFirebaseIdsAtPath("/Sectors");
 }
 export async function main() {	//for debugging dont use
-	const user = process.env.REACT_APP_ADMIN_MAIL;
-	const pass = process.env.REACT_APP_ADMIN_PASS;
-	if (user != null && pass != null)
-		await loginRecruiter(user, pass).then(async () => {
-			sendEmail("elyaathlan@gmail.com", "test", "tesr message!");
-		});
-	else
-		console.log("not connected");
 
 }	

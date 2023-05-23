@@ -11,15 +11,13 @@ export class Candidate {
     public _phone: string;
     public _eMail: string;
     public _generalRating: number;
-    public _firebaseId: string;
 
-    constructor(firstName: string = "", lastName: string = "", phone: string = "", eMail: string = "", generalRating: number = -1, firebaseId: string = "") {
-        this._id = eMail + phone;
+    constructor(firstName: string = "", lastName: string = "", phone: string = "", eMail: string = "", generalRating: number = -1) {
+        this._id = `${eMail}${phone}`.replace('.','_');
         this._firstName = firstName;
         this._lastName = lastName;
         this._phone = phone;
         this._eMail = eMail;
-        this._firebaseId = firebaseId;
         this._generalRating = generalRating;
     }
     /**
@@ -48,7 +46,7 @@ export class Candidate {
      * @returns {Promise<string>} - The path of the current job.
      */
     public async getPath() {
-        if ((await getFirebaseIdsAtPath('/Canndidates')).includes(this._id.toString()))
+        if ((await getFirebaseIdsAtPath('/Candidates')).includes(this._id.toString()))
             return "/Jobs/" + this._id;
         return "";
     }
@@ -86,7 +84,7 @@ export class Candidate {
         this._firstName = firstName;
         this._lastName = firstName;
         this._generalRating = generalRating;
-        const newId = eMail + phone;
+        const newId = `${eMail}${phone}`.replace('.','_');
         if ((this._id !== newId) && ((await getFilteredCandidates(["id"], [newId])).length === 0)) {
             this._id = newId;
             this._eMail = eMail;
@@ -101,7 +99,7 @@ export class Candidate {
      * @returns None
      */
     public async add() {
-        if ((await this.getPath()) === "/Candidates/")
+        if (!(await this.exists()))
             appendToDatabase(this, "/Candidates", this._id);
         else
             console.log("the candidate already exists");
@@ -114,7 +112,7 @@ export class Candidate {
      * @returns None
      */
     public async apply(jobNumber: number, about: string) {
-        if ((await this.getPath()) === "/Candidates/")
+        if (!(await this.exists()))
             this.add();
         let candidatuers = new CandidateJobStatus(jobNumber, this._id, "הוגשה מועמדות", about, -1, new Date(), new Date());
         candidatuers.add();
