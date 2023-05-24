@@ -6,9 +6,9 @@ import {
     DataGrid, GridToolbarFilterButton,
     GridColDef, GridToolbarDensitySelector,
     GridToolbarColumnsButton,
-    GridInitialState, GridToolbarExport,
-    useGridRootProps, GridApi,
-    useGridApiContext, GridKeyValue,
+    GridInitialState,
+    useGridRootProps,
+    useGridApiContext,
     GridToolbarContainer, heIL, GridFooterContainer, GridToolbarQuickFilter, GridToolbarExportContainer, GridCsvExportMenuItem, GridPrintExportMenuItem
 } from '@mui/x-data-grid';
 import { GridFooterContainerSx, TypographyFooterSx, dataGridContainerStyle, dataGridSx } from './MyTableStyle';
@@ -234,7 +234,6 @@ export default function MyTable(props: { setDataSize: any }) {
         const jobs = await getFilteredJobs();
         const jobsWithId = jobs.map((job) => ({ ...job, id: job._jobNumber, _scope: getScopeFormated(job._scope) }));
         setAllJobs(jobsWithId);
-
     };
 
 
