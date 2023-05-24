@@ -125,7 +125,7 @@ export async function getRecruitersFromDatabase(): Promise<Recruiter[]> {
  * Useful for generating random passwordsץ
  * @returns {string} A random string of 12 characters.
  */
-function generateRandomString(): string {
+export function generateRandomString(): string {
 	const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>/?';
 	let result = '';
 	for (let i = 0; i < 12; i++) {

@@ -9,11 +9,11 @@ import ManageJobsPage from './RecruiterMainPage/ManageJobsPage/ManageJobsPage';
 import ReportsPage from './RecruiterMainPage/ReportsPage/ReportsPage';
 import { Router } from 'express';
 import NavBar from './Components/NavBar/NavBar';
-import { main } from './Firebase/FirebaseFunctions/DBfuncs'
+import { main } from './Firebase/FirebaseFunctions/test'
 import { initializeApp } from 'firebase/app';
 import Auth from './RecruiterMainPage/Components/Auth/Auth';
 
-//main();
+main();
 
 const Admin = "admin";
 const Recruiter = "recruiter";

@@ -17,9 +17,9 @@ export class Job {
     public _requirements: string;
     public _open: boolean;
     public _highPriority: boolean;
-    public _viewsPerPlatform: Map<string,number>;
-    public _applyPerPlatform: Map<string,number>
-    public _creationDate: Date
+    public _viewsPerPlatform: Map<string, number>;
+    public _applyPerPlatform: Map<string, number>
+    public _creationDate: Date;
 
     constructor(
         jobNumber: number,
@@ -32,7 +32,9 @@ export class Job {
         requirements: string = "",
         open: boolean = true,
         highPriority: boolean = false,
-        stages: Stage[] = []
+        viewsPerPlatform: Map<string, number> = new Map<string, number>(),
+        applyPerPlatform: Map<string, number> = new Map<string, number>(),
+        creationDate = new Date(0, 0, 0)
     ) {
         this._title = title;
         this._role = role;
@@ -43,9 +45,13 @@ export class Job {
         this._requirements = requirements;
         this._open = open;
         this._highPriority = highPriority;
-        this._viewsPerPlatform = new Map<string,number>;
-        this._applyPerPlatform = new Map<string,number>;
-        this._creationDate = new Date();
+        this._viewsPerPlatform = viewsPerPlatform;
+        this._applyPerPlatform = applyPerPlatform;
+        const defaultDate = new Date(0, 0, 0);
+        if (creationDate === defaultDate)
+            this._creationDate = new Date();
+        else
+            this._creationDate = creationDate;
         this._jobNumber = jobNumber;
     }
     /**
@@ -85,7 +91,7 @@ export class Job {
      */
     public async getPath() {
         if ((await getFirebaseIdsAtPath('/Jobs')).includes(this._jobNumber.toString()))
-            return "/Jobs/" + this._jobNumber;
+            return `/Jobs/${this._jobNumber}`;
         return "";
     }
     /**
@@ -117,7 +123,7 @@ export class Job {
         requirements: string = this._requirements,
         open: boolean = this._open,
         highPriority: boolean = this._highPriority
-        ) {
+    ) {
         this._title = title;
         this._role = role;
         this._sector = sector;
@@ -138,20 +144,20 @@ export class Job {
         if (!(await this.exists()))
             appendToDatabase(this, "/Jobs", this._jobNumber.toString());
     }
-    public async incrementViews(platform: string){
+    public async incrementViews(platform: string) {
         let views = this._viewsPerPlatform.get(platform);
-        if(views===undefined)
+        if (views === undefined)
             views = 0;
-        this._viewsPerPlatform.set(platform, views+1);
+        this._viewsPerPlatform.set(platform, views + 1);
         if (!(await this.exists()))
             this.add();
         replaceData((await this.getPath()), this);
     }
-    public async incrementApply(platform: string){
+    public async incrementApply(platform: string) {
         let apply = this._applyPerPlatform.get(platform);
-        if(apply===undefined)
+        if (apply === undefined)
             apply = 0;
-        this._applyPerPlatform.set(platform, apply+1);
+        this._applyPerPlatform.set(platform, apply + 1);
         if (!(await this.exists()))
             this.add();
         replaceData((await this.getPath()), this);
@@ -171,7 +177,7 @@ async function getJobsFromDatabase(): Promise<Job[]> {
         const jobsData = snapshot.val();
         const jobs: Job[] = [];
         for (const i in jobsData) {
-            const job = jobsData.at(i);
+            const job = jobsData[i];
             jobs.push(job);
         }
         return jobs;
@@ -270,7 +276,7 @@ export async function getFilteredJobs(attributes: string[] = [], values: string[
         return jobs.sort(compareByViews);
     return jobs.map((job) => new Job(job._jobNumber, job._title, job._role, job._scope
         , job._region, job._sector, job._description, job._requirements,
-        job._open, job._highPriority, job._views));
+        job._open, job._highPriority, job._viewsPerPlatform, job._applyPerPlatform, job._creationDate));
 }
 /* compare function for sort */
 function compareByTitle(a: Job, b: Job): number {
@@ -314,7 +320,13 @@ function compareByHighPriority(a: Job, b: Job): number {
 }
 
 function compareByViews(a: Job, b: Job): number {
-    return b._views - a._views;
+    let asum =0;
+    let bsum =0;
+    for (const [key, value] of Array.from(a._viewsPerPlatform))
+        asum+=value;
+    for (const [key, value] of Array.from(b._viewsPerPlatform))
+        bsum+=value;
+    return bsum - asum;
 }
 function compareByCreationDate(a: Job, b: Job): number {
     if (b._creationDate > a._creationDate)
