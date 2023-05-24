@@ -16,7 +16,6 @@ function RecruiterMainPage({ handlelogout }) {
   const [JobsActive, setJobsActive] = useState(false);
 
   return (
-    <>
       <BrowserRouter>
         <NavBar handlelogout={handlelogout} HomeActive={HomeActive} setHomeActive={setHomeActive}
           ReportsActive={ReportsActive} setReportsActive={setReportsActive} CandidatesActive={CandidatesActive}
@@ -29,9 +28,6 @@ function RecruiterMainPage({ handlelogout }) {
           <Route path="/reports" element={<ReportsPage setHomeActive={setHomeActive} setReportsActive={setReportsActive} setCandidatesActive={setCandidatesActive} setJobsActive={setJobsActive} />} />
         </Routes>
       </BrowserRouter>
-
-
-    </>
   );
 }
 

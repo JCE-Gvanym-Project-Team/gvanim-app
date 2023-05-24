@@ -1,15 +1,11 @@
 import { useState, useEffect } from "react";
-import { dataref } from "../../Firebase/FirebaseConfig/firebase";
+
 import MyTable from "./Components/MyTable/MyTable";
 import { Box, Button, Container, Fab } from "@mui/material";
-import MyAvatar from "./Components/MyAvatar/MyAvatar";
 import MyLoading from "../../Components/MyLoading/MyLoading";
-import {
-    ManageJobPageBoxSx,
-    MyAvatarContainerSx,
-    MySearchBarContainerStyle
-} from "./ManageJobsPageStyle";
-import MySearchBar from "./Components/MySearchBar/MySearchBar";
+import { ManageJobPageBoxSx } from "./ManageJobsPageStyle";
+import TransitionComponentSnackbar from "./Components/NewJobPage/Components/SuccessSnackBar/SuccessSnackBar";
+import { useLocation } from "react-router-dom";
 
 
 const ManageJobPageBody = (props: { setHomeActive: any, setReportsActive: any, setCandidatesActive: any, setJobsActive: any }) => {
@@ -21,11 +17,22 @@ const ManageJobPageBody = (props: { setHomeActive: any, setReportsActive: any, s
 
     const [loading, setLoading] = useState(true);
     const [dataSize, setDataSize] = useState(0);
+    const [open, setOpen] = useState(false);
+
+    const { state } = useLocation();
+
+
 
     useEffect(() => {
         setLoading(true);
         setTimeout(() => {
             setLoading(false);
+
+            // for the snackbar
+            if( state !== null ) {
+                setOpen(true);
+            }
+
         }, 1000);
     }, []);
 
@@ -39,15 +46,16 @@ const ManageJobPageBody = (props: { setHomeActive: any, setReportsActive: any, s
 
                 <Box className="ManageJobPage-Body" sx={ManageJobPageBoxSx}>
 
+              
                     {/* <Container sx={MyAvatarContainerSx} maxWidth="sm">
                         <MyAvatar dataSize={dataSize} />
                     </Container> */}
 
-    
+
 
                     <MyTable setDataSize={setDataSize} />
 
-
+                    <TransitionComponentSnackbar open={open} setOpen={setOpen} message={state} />
                 </Box>
 
             </>
