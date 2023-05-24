@@ -1,17 +1,21 @@
 import { Box, Button, Divider, Grid, Paper, Typography } from '@mui/material'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { BoxGradientSx, MyGridItemSx, MyDividerSx, MyGridSx, MyPaperSx, MyTypographyInfoSx, MyTypographyMainSx, MyTypographyTitleSx } from './WelcomePageStyle'
 import { ChevronLeft } from '@mui/icons-material'
 import { useNavigate } from "react-router-dom";
-import NewJobPage from '../../ManageJobsPage/Components/NewJobPage/NewJobPage';
-import { MyTitleBoxSx } from '../../ManageJobsPage/Components/NewJobPage/NewJobStyle';
+import NewJobPage from '../ManageJobsPage/Components/NewJobPage/NewJobPage';
+import { MyTitleBoxSx } from '../ManageJobsPage/Components/NewJobPage/NewJobStyle';
 
 export default function WelcomePage(props: { setHomeActive: any, setReportsActive: any, setCandidatesActive: any, setJobsActive: any }) {
-    // for the navigation bar
     const { setHomeActive, setReportsActive, setCandidatesActive, setJobsActive } = props;
-    setHomeActive(true); setCandidatesActive(false);
-    setReportsActive(false); setJobsActive(false);
-    // ----------------------------
+    useEffect(() =>
+    {
+        // Code inside this effect will run after the component has rendered
+        setHomeActive(true);
+        setCandidatesActive(false);
+        setReportsActive(false);
+        setJobsActive(false);
+    }, []);
 
 
     const navigate = useNavigate();
@@ -21,7 +25,7 @@ export default function WelcomePage(props: { setHomeActive: any, setReportsActiv
 
             <Paper sx={MyPaperSx}>
 
-                <Grid xs={3} sx={MyGridSx}>
+                <Grid sx={MyGridSx}>
                     <Grid item sx={MyGridItemSx}>
                         <Typography sx={MyTypographyMainSx}>
                             70
