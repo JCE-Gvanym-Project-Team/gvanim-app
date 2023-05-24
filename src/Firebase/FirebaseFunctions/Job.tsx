@@ -3,6 +3,7 @@ import { realtimeDB } from "../FirebaseConfig/firebase";
 import { Candidate, getFilteredCandidates } from "./Candidate";
 import { appendToDatabase, getFirebaseIdsAtPath, removeObjectAtPath, replaceData } from "./DBfuncs";
 import { Stage } from "./Stage";
+import { Role } from "./Role";
 const database = realtimeDB;
 
 export class Job {
@@ -97,7 +98,7 @@ export class Job {
             return true;
         return false;
     }
-    
+
     /**
      * Edits the job with the given parameters and updates the realtime DB.
      * @param {string} [title=this._title] - The title of the job posting.
@@ -117,7 +118,7 @@ export class Job {
         requirements: string = this._requirements,
         open: boolean = this._open,
         highPriority: boolean = this._highPriority,
-        stages: Stage[]=[]) {
+        stages: Stage[] = []) {
         this._title = title;
         this._role = role;
         this._sector = sector;
@@ -143,7 +144,7 @@ export class Job {
      * Returns the stages of the current instance of the class.
      * @returns {Array} - An array of stages.
      */
-    public getStages(){
+    public getStages() {
         return this._stages;
     }
 }
@@ -161,7 +162,7 @@ async function getJobsFromDatabase(): Promise<Job[]> {
         const jobsData = snapshot.val();
         const jobs: Job[] = [];
         for (const i in jobsData) {
-            const job = jobsData[i];
+            const job = jobsData.at(i);
             jobs.push(job);
         }
         return jobs;
@@ -206,15 +207,15 @@ export async function getFilteredJobs(attributes: string[] = [], values: string[
     //filtering
     let i = attributes.indexOf("jobNumber");
     if (i >= 0) {
-        jobs = jobs.filter(job => job._jobNumber.toString() === values[i])
+        jobs = jobs.filter(job => job._jobNumber.toString() === values.at(i))
     }
     i = attributes.indexOf("title");
     if (i >= 0) {
-        jobs = jobs.filter(job => job._title === values[i])
+        jobs = jobs.filter(job => job._title === values.at(i))
     }
     i = attributes.indexOf("role");
     if (i >= 0) {
-        jobs = jobs.filter(job => job._role === values[i])
+        jobs = jobs.filter(job => job._role === values.at(i))
     }
     i = attributes.indexOf("scope");
     if (i >= 0) {
@@ -227,15 +228,15 @@ export async function getFilteredJobs(attributes: string[] = [], values: string[
     }
     i = attributes.indexOf("open");
     if (i >= 0) {
-        jobs = jobs.filter(job => job._open.toString() === values[i])
+        jobs = jobs.filter(job => job._open.toString() === values.at(i))
     }
     i = attributes.indexOf("highPriority");
     if (i >= 0) {
-        jobs = jobs.filter(job => job._highPriority.toString() === values[i])
+        jobs = jobs.filter(job => job._highPriority.toString() === values.at(i))
     }
     i = attributes.indexOf("sector");
     if (i >= 0) {
-        jobs = jobs.filter(job => job._sector === values[i])
+        jobs = jobs.filter(job => job._sector === values.at(i))
     }
     //sorting
     if (sortBy === "title")
