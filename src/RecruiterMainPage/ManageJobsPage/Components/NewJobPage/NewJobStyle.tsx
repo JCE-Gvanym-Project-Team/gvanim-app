@@ -1,7 +1,7 @@
 import { SxProps } from "@mui/material";
 
 export const MyTextFieldSx1: SxProps = {
-    "& .MuiOutlinedInput-root": {
+    "& .MuiOutlinedInputRoot": {
         
         "&:hover fieldset": {
             color: '#212529',
@@ -28,7 +28,7 @@ export const MyTextFieldSx1: SxProps = {
 
 }
 export const MyTextFieldSx: SxProps = {
-    "& .MuiOutlinedInput-root": {
+    "& .MuiOutlinedInputRoot": {
         
         "&:hover fieldset": {
             color: '#212529',

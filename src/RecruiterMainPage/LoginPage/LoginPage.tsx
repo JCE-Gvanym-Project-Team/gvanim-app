@@ -9,21 +9,27 @@ import {
     FormHelperText,
     TextField,
     Typography,
-    Paper
+    Paper,
+    Box,
+    Snackbar,
+    Collapse
 } from "@mui/material";
 
-import {styled} from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 
 
 // svg importer
 import { ReactSVG } from "react-svg";
 import SvgLogo from "../../Components/Logo/Logo.svg"
+import MyAvatar from "../ManageJobsPage/Components/MyAvatar/MyAvatar";
 // -----------------------------------------------------------------
 
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
-    boxShadow: 'unset',
-    padding: theme.spacing(2),
+    paddingTop: theme.spacing(4),
+    paddingLeft: theme.spacing(4),
+    paddingRight: theme.spacing(4),
+    border: '1px solid rgba(0, 0, 0, 0.125)',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -63,10 +69,103 @@ const Login = (props: { email: any; setEmail: any; password: any; setPassword: a
 
 
         <div>
-      
-
             <CssBaseline />
-            <div className='d-flex' dir='rtl' style={{ alignItems: 'center', height: '100vh' }}>
+
+            <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+                <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                    <Container maxWidth="xs">
+
+                        <StyledPaper>
+
+                            <ReactSVG src={SvgLogo} />
+
+
+                            <Typography
+                                sx={{ mt: 1 }}
+                                variant="h6"
+                                style={{ fontFamily: "'Noto Sans Hebrew', sans-serif", color: 'GrayText', textAlign: 'center' }}>
+                                כניסת משתמש
+                            </Typography>
+
+                            <Form noValidate={true} onSubmit={handleLogin}>
+                                
+                                <Collapse in={!alertHidden}>
+                                    <Alert sx={{ mt: 1,mb: 1 }} variant="outlined" severity="error">
+                                        אחד או יותר מפרטי ההזדהות שמסרת שגויים.
+                                    </Alert>
+                                </Collapse>
+
+
+                                <TextField
+                                    sx={{ mt: 1 }}
+                                    label={"כתובת אימייל"}
+                                    variant="standard"
+                                    required
+                                    type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    autoComplete="on"
+                                    fullWidth
+                                    error={emailError}
+                                />
+
+                                <FormHelperText hidden={!emailError} security="invalid" style={{ color: '#ef5350', textAlign: 'right' }}>זהו שדה חובה.</FormHelperText>
+
+                                <TextField
+                                    sx={{mt: 1}}
+                                    label={"סיסמה"}
+                                    variant="standard"
+                                    required
+                                    type="password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    fullWidth
+                                    autoComplete="off"
+                                    error={passwordError}
+                                />
+                                <FormHelperText hidden={!passwordError} security="invalid" style={{ color: '#ef5350', textAlign: 'right' }}>זהו שדה חובה.</FormHelperText>
+
+                                <Grid container sx={{ mt: 1 }}>
+                                    <Grid item>
+                                        <Link type="submit" href={"/#/recovery"} variant="caption">
+                                            שכחת את הסיסמה?
+                                        </Link>
+                                    </Grid>
+                                </Grid>
+
+                                <Grid container sx={{ mt: 3 }}>
+                                    <Grid item xs>
+                                        <div style={{ textAlign: 'start' }}>
+                                            <Typography style={{ fontSize: 'small', fontWeight: '500', color: 'GrayText' }} variant="body2">
+                                                זה לא המחשב שלך? מומלץ להשתמש במצב אורח כדי להיכנס לחשבון בפרטיות. <Link
+                                                    href="https://support.google.com/chrome/answer/6130773?hl=iw"
+                                                    variant="body2">
+                                                    מידע נוסף
+                                                </Link>
+                                            </Typography>
+                                        </div>
+                                    </Grid>
+                                </Grid>
+
+                                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                    <SubmitButton
+                                        size="medium"
+                                        variant="contained"
+                                        type={"submit"}
+                                    >
+                                        התחבר
+                                    </SubmitButton>
+                                </div>
+
+                            </Form>
+
+                        </StyledPaper>
+                    </Container>
+                </Box>
+            </Box>
+
+
+            {/* <div className='d-flex' dir='rtl' style={{ alignItems: 'center', height: '100vh' }}>
 
                 <Container maxWidth="xs" className="shadow-sm border rounded">
                     
@@ -83,8 +182,6 @@ const Login = (props: { email: any; setEmail: any; password: any; setPassword: a
 
                         <Form noValidate={true} onSubmit={handleLogin}>
 
-
-                            {/* the CacheProvider set the RTL plugin all components inside tag*/}
 
                             <Alert className="mt-3" sx={{ fontSize: 'small' }} variant="outlined" severity="error" hidden={alertHidden}>
                                     אחד או יותר מפרטי ההזדהות שמסרת שגויים.
@@ -155,7 +252,7 @@ const Login = (props: { email: any; setEmail: any; password: any; setPassword: a
 
                     </StyledPaper>
                 </Container>
-            </div>
+            </div> */}
 
         </div >
     );
