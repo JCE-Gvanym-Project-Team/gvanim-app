@@ -15,6 +15,7 @@ import { TransitionProps } from '@mui/material/transitions';
 import { Avatar, Box, Link, ListItemAvatar, ListItemButton, ListItemIcon, Rating } from '@mui/material';
 import { ListItemTypographySx } from './CandidatesListDialogStyle';
 import { ChevronLeft } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
 
 const Transition = React.forwardRef(function Transition(
 	props: TransitionProps & {
@@ -28,6 +29,7 @@ const Transition = React.forwardRef(function Transition(
 
 export default function CandidatesListFullScreenDialog({ JobId })
 {
+	const navigate = useNavigate();
 	const [open, setOpen] = React.useState(false);
 
 	const handleClickOpen = () =>
@@ -40,6 +42,7 @@ export default function CandidatesListFullScreenDialog({ JobId })
 		setOpen(false);
 	};
 
+	const listOfCandidates = ["candidate1", "candidate2"];
 	return (
 		<Box>
 
@@ -51,7 +54,7 @@ export default function CandidatesListFullScreenDialog({ JobId })
 
 				TransitionComponent={Transition}
 			>
-				<AppBar sx={{ position: 'relative',backgroundColor: 'rgb(52, 71, 103)' }}>
+				<AppBar sx={{ position: 'relative', backgroundColor: 'rgb(52, 71, 103)' }}>
 					<Toolbar>
 
 						<Typography sx={{ ml: 2, flex: 1, textAlign: 'center' }} variant="h6" component="div">
@@ -89,7 +92,9 @@ export default function CandidatesListFullScreenDialog({ JobId })
 					</ListItem>
 					{/* END HEADER */}
 
-					<ListItemButton accessKey='ID עומר' onClick={(e) => console.log(e.currentTarget.accessKey)}>
+					<ListItemButton accessKey='ID עומר' onClick={(e) => {
+						navigate("/manageCandidates", {state: listOfCandidates[0]})
+					}}>
 
 						<ListItemAvatar>
 							<Avatar />

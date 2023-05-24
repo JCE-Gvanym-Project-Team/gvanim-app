@@ -4,12 +4,21 @@ import EditIcon from '@mui/icons-material/Edit';
 import { editButtonSx, textSx, titleSx, mainStackSx, ContainerGradientSx, candidateNameSx, BoxGradientSx, candidateNameAndEditButtonContainerSx, jobTextSx } from './ViewCandidatesPageStyle';
 import { ManageCandidatesPageGlobalStyle } from '../../PageStyles';
 import JobsTable from './Components/JobsTable';
+import { Candidate } from '../../../Firebase/FirebaseFunctions/Candidate';
+import { useLocation } from 'react-router-dom';
 
 export default function ViewCandidatesPage()
-{
+{	
+	// get candidate id
+	const {state} = useLocation();
 	const [dataSize, setDataSize] = useState(0);
 	//TODO: replace this with real info
-	let candidateName = "ישראל ישראלי"
+
+	//extract candidate object from database
+	let candidateName = "";
+	if (state != null){
+		candidateName = state;
+	}
 	return (
 		<>
 			{/* background div */}

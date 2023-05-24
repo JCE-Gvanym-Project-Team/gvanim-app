@@ -1,6 +1,7 @@
 import { Button } from "@mui/material";
 import { Candidate } from "../../Firebase/FirebaseFunctions/Candidate";
 import { useEffect } from "react";
+import ViewCandidatesPage from "./ViewCandidatesPage/ViewCandidatesPage";
 
 export default function ManageCandidatesPage(props: { setHomeActive: any, setReportsActive: any, setCandidatesActive: any, setJobsActive: any })
 {
@@ -20,6 +21,7 @@ export default function ManageCandidatesPage(props: { setHomeActive: any, setRep
 
     return (
         <>
+            <ViewCandidatesPage />
             <div>hi</div>
             <Button onClick={addCandidate}>asdasdasdsa</Button>
         </>
