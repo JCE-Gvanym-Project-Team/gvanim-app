@@ -1,6 +1,7 @@
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/storage';
 import 'firebase/compat/firestore';
+import axios from 'axios';
 
 /**
  * Uploads a file to Firebase Storage and adds a reference to the file in Firestore.
@@ -75,4 +76,42 @@ export async function fileExists(path: string) {
   catch(error: any){
     return false;
   }
+}
+export async function renameFirestorePath(path: string, newName: string): Promise<void> {
+	try {
+		// Get the original document or collection data
+		const originalData = await getFirestorePathData(path);
+
+		// Create a new document or collection at the desired renamed path
+		const newPath = getParentPath(path) + '/' + newName;
+		await createFirestorePath(newPath, originalData);
+
+		// Delete the original document or collection
+		await deleteFirestorePath(path);
+
+		console.log(`Successfully renamed path: ${path} to ${newPath}`);
+	} catch (error) {
+		console.error(`Error renaming path: ${path}`, error);
+	}
+}
+
+async function getFirestorePathData(path: string): Promise<any> {
+	const url = `https://firestore.googleapis.com/v1/${path}`;
+	const response = await axios.get(url);
+	return response.data;
+}
+
+async function createFirestorePath(path: string, data: any): Promise<void> {
+	const url = `https://firestore.googleapis.com/v1/${path}`;
+	await axios.patch(url, data);
+}
+
+async function deleteFirestorePath(path: string): Promise<void> {
+	const url = `https://firestore.googleapis.com/v1/${path}`;
+	await axios.delete(url);
+}
+
+function getParentPath(path: string): string {
+	const lastSlashIndex = path.lastIndexOf('/');
+	return path.substring(0, lastSlashIndex);
 }

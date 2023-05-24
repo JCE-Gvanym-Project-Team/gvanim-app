@@ -47,11 +47,12 @@ export async function loginRecruiter(email: string, password: string) {
 	signInWithEmailAndPassword(auth, email, password)
 		.then((userCredential) => {
 			const user = userCredential.user;
-			//console.log(user.email);
+			console.log(`connected as: \n${user}`);
 		})
 		.catch((error) => {
 			const errorCode = error.code;
 			const errorMessage = error.message;
+			console.log(`${errorCode}: ${errorMessage}`);
 		});
 }
 /**
@@ -76,8 +77,9 @@ export async function loginAdmin() {
 	const user = process.env.REACT_APP_ADMIN_MAIL;
 	const pass = process.env.REACT_APP_ADMIN_PASS;
 	if (user != null && pass != null) {
-		loginRecruiter(user, pass);
-		console.log("loged as admin");
+		loginRecruiter(user, pass).then((userCredential)=>{
+			console.log(`loged as admin: ${auth.currentUser?.uid}`);
+		});
 	}
 	else
 		console.log("login admin fail(chek your env file)");
