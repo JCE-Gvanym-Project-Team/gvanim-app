@@ -13,13 +13,13 @@ export class Job {
     public _scope: Array<number>;//first is the the smallest
     public _region: string;
     public _sector: string;
-    public _description: string[];// todo make arrays of strings[]
+    public _description: string[];
     public _requirements: string;
     public _open: boolean;
     public _highPriority: boolean;
-    public _views: number;
+    public _viewsPerPlatform: Map<string,number>;
+    public _applyPerPlatform: Map<string,number>
     public _creationDate: Date
-    public _stages: Stage[];
 
     constructor(
         jobNumber: number,
@@ -32,7 +32,6 @@ export class Job {
         requirements: string = "",
         open: boolean = true,
         highPriority: boolean = false,
-        views: number = 0,
         stages: Stage[] = []
     ) {
         this._title = title;
@@ -44,10 +43,10 @@ export class Job {
         this._requirements = requirements;
         this._open = open;
         this._highPriority = highPriority;
-        this._views = views;
+        this._viewsPerPlatform = new Map<string,number>;
+        this._applyPerPlatform = new Map<string,number>;
         this._creationDate = new Date();
         this._jobNumber = jobNumber;
-        this._stages = stages;
     }
     /**
      * Retrieves the candidate job statuses for the current job.
@@ -117,8 +116,8 @@ export class Job {
         description: string[] = this._description,
         requirements: string = this._requirements,
         open: boolean = this._open,
-        highPriority: boolean = this._highPriority,
-        stages: Stage[] = []) {
+        highPriority: boolean = this._highPriority
+        ) {
         this._title = title;
         this._role = role;
         this._sector = sector;
@@ -126,7 +125,6 @@ export class Job {
         this._requirements = requirements;
         this._open = open;
         this._highPriority = highPriority;
-        this._stages = stages;
 
         if (!(await this.exists()))
             this.add();
@@ -140,12 +138,23 @@ export class Job {
         if (!(await this.exists()))
             appendToDatabase(this, "/Jobs", this._jobNumber.toString());
     }
-    /**
-     * Returns the stages of the current instance of the class.
-     * @returns {Array} - An array of stages.
-     */
-    public getStages() {
-        return this._stages;
+    public async incrementViews(platform: string){
+        let views = this._viewsPerPlatform.get(platform);
+        if(views===undefined)
+            views = 0;
+        this._viewsPerPlatform.set(platform, views+1);
+        if (!(await this.exists()))
+            this.add();
+        replaceData((await this.getPath()), this);
+    }
+    public async incrementApply(platform: string){
+        let apply = this._applyPerPlatform.get(platform);
+        if(apply===undefined)
+            apply = 0;
+        this._applyPerPlatform.set(platform, apply+1);
+        if (!(await this.exists()))
+            this.add();
+        replaceData((await this.getPath()), this);
     }
 }
 /* Jobs functions */
