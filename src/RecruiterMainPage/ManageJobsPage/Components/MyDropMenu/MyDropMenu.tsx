@@ -8,6 +8,7 @@ import { Box, IconButton, ListItemIcon, Typography } from '@mui/material';
 import { Assignment, Edit, Label, MoreVert, Print } from '@mui/icons-material';
 import { MenuItemIconSx, MenuItemTypographySx, MoreVertSx, blue, grey } from './MyDropManuStyle';
 import { useNavigate } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 function MenuSection({ children, label }: MenuSectionProps)
 {
@@ -123,12 +124,16 @@ export default function MyDropMenu(props: { JobId: any })
             >
                 <label>אפשרויות</label>
                 <StyledMenuItem onClick={createHandleMenuClick('GoToJobPage')}>
+                <Link to={`../jobs/${JobId}`}>
                     <ListItemIcon>
                         <Assignment sx={MenuItemIconSx} />
-                        <Typography sx={MenuItemTypographySx} >
+   
+                   <Typography sx={MenuItemTypographySx} >
                             לדף המשרה
                         </Typography>
-                    </ListItemIcon>
+                  
+                   </ListItemIcon>
+                   </Link>
                 </StyledMenuItem>
 
                 <StyledMenuItem onClick={handleEditClick}>
