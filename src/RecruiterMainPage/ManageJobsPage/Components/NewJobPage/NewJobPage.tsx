@@ -64,9 +64,10 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
 
         },
     }
+
     const MyTextFieldJobRoleSx = {
         boxShadow: '0px 2px 24px #DAECFF',
-        "&. MuiOutlinedInput-root": {
+        "& .MuiOutlinedInput-root": {
             fontSize: '0.875rem',
             "&:hover fieldset": {
                 color: errorJobRole ? '#dc3545' : '#212529',
@@ -166,27 +167,29 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
     }
     // #############################################################################################################
 
-    const getAllJobs = async () =>
-    {
-        const jobs = await getFilteredJobs();
 
-        let _JobToEdit = jobs.filter(job => job._jobNumber === state);
-        setJobToEdit(_JobToEdit);
-
-        setJobName(_JobToEdit[0]._title);
-        setJobRole(_JobToEdit[0]._role);
-        setJobRegion(_JobToEdit[0]._region);
-        setJobState(_JobToEdit[0]._sector);
-        setJobRequirements(_JobToEdit[0]._requirements);
-        setJobDescription(_JobToEdit[0]._description[0]);
-        setJobDescriptionSkills(_JobToEdit[0]._description[1]);
-        setJobAdditionalInfo(_JobToEdit[0]._description[2]);
-        setJobScope(_JobToEdit[0]._scope);
-
-    }
 
     useEffect(() =>
     {
+        
+        const getAllJobs = async () =>
+        {
+            const jobs = await getFilteredJobs();
+    
+            let _JobToEdit = jobs.filter(job => job._jobNumber === state);
+            setJobToEdit(_JobToEdit);
+    
+            setJobName(_JobToEdit[0]._title);
+            setJobRole(_JobToEdit[0]._role);
+            setJobRegion(_JobToEdit[0]._region);
+            setJobState(_JobToEdit[0]._sector);
+            setJobRequirements(_JobToEdit[0]._requirements);
+            setJobDescription(_JobToEdit[0]._description[0]);
+            setJobDescriptionSkills(_JobToEdit[0]._description[1]);
+            setJobAdditionalInfo(_JobToEdit[0]._description[2]);
+            setJobScope(_JobToEdit[0]._scope);
+    
+        }
         // for navbar
         setHomeActive(false); setCandidatesActive(false);
         setReportsActive(false); setJobsActive(false);
@@ -196,6 +199,7 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
             setNewJob(false);
             getAllJobs();
         }
+
 
     }, []);
 

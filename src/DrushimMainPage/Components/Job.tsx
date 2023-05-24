@@ -1,13 +1,17 @@
-import { type } from '@testing-library/user-event/dist/type'
+import { Box, Typography } from '@mui/material';
 import React from 'react'
 
-type text = {
-    description: string
-}
 
-
-export default function Job({description}: text) {
+const Job = () => {
   return (
-    <div>{description}</div>
+    <>
+      <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+        <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          <Typography variant='h1'>Single Page Job Details</Typography>
+        </Box>
+      </Box>
+    </>
   )
 }
+
+export default Job;

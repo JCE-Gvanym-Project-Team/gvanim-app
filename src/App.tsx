@@ -1,11 +1,10 @@
 import Auth from './RecruiterMainPage/Components/Auth/Auth';
 
-function App()
-{
+function App() {
 
 	return (
 		<>
-			<Auth />
+		<Auth />	
 		</>
 	);
 }
