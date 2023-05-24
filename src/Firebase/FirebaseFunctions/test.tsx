@@ -109,6 +109,7 @@ async function testAddSingleCandidateNoConflict() {
     newCand.add();
     await sleep(1000);
     const status = await newCand.exists();
+    await sleep(1000);
     newCand.remove()
     return status;
 }
