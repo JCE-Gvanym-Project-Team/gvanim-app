@@ -8,12 +8,16 @@ import TransitionComponentSnackbar from "./Components/NewJobPage/Components/Succ
 import { useLocation } from "react-router-dom";
 
 
-const ManageJobPageBody = (props: { setHomeActive: any, setReportsActive: any, setCandidatesActive: any, setJobsActive: any }) => {
-    // for the navigation bar
+const ManageJobsPage = (props: { setHomeActive: any, setReportsActive: any, setCandidatesActive: any, setJobsActive: any }) => {
     const { setHomeActive, setReportsActive, setCandidatesActive, setJobsActive } = props;
-    setHomeActive(false); setCandidatesActive(false);
-    setReportsActive(false); setJobsActive(true);
-    // ----------------------------
+    useEffect(() =>
+    {
+        // Code inside this effect will run after the component has rendered
+        setHomeActive(false);
+        setCandidatesActive(false);
+        setReportsActive(false);
+        setJobsActive(true);
+    }, []);
 
     const [loading, setLoading] = useState(true);
     const [dataSize, setDataSize] = useState(0);
@@ -67,4 +71,4 @@ const ManageJobPageBody = (props: { setHomeActive: any, setReportsActive: any, s
 }
 
 
-export default ManageJobPageBody;
+export default ManageJobsPage;

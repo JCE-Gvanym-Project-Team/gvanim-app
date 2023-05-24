@@ -66,7 +66,7 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
     }
     const MyTextFieldJobRoleSx = {
         boxShadow: '0px 2px 24px #DAECFF',
-        "& .MuiOutlinedInput-root": {
+        "&. MuiOutlinedInput-root": {
             fontSize: '0.875rem',
             "&:hover fieldset": {
                 color: errorJobRole ? '#dc3545' : '#212529',
