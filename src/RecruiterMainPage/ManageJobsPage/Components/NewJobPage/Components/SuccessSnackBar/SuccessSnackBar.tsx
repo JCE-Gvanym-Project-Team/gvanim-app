@@ -5,9 +5,11 @@ import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import CloseIcon from '@mui/icons-material/Close';
 import Snackbar from '@mui/base/Snackbar';
 import { SnackbarCloseReason } from '@mui/base/useSnackbar';
+import { Button, Typography } from '@mui/material';
 
-export default function TransitionComponentSnackbar() {
-  const [open, setOpen] = React.useState(false);
+export default function TransitionComponentSnackbar(props: { open: any, setOpen: any, message: any }) {
+  // const [open, setOpen] = React.useState(false);
+  const { open, setOpen, message} = props;
   const [exited, setExited] = React.useState(true);
   const nodeRef = React.useRef(null);
 
@@ -33,9 +35,6 @@ export default function TransitionComponentSnackbar() {
 
   return (
     <React.Fragment>
-      <TriggerButton type="button" onClick={handleClick}>
-        Open snackbar
-      </TriggerButton>
       <StyledSnackbar
         autoHideDuration={5000}
         open={open}
@@ -54,6 +53,7 @@ export default function TransitionComponentSnackbar() {
           {(status) => (
             <SnackbarContent
               style={{
+                minWidth: '400px',
                 transform: positioningStyles[status],
                 transition: 'transform 300ms ease',
               }}
@@ -67,16 +67,24 @@ export default function TransitionComponentSnackbar() {
                   height: '1.5rem',
                 }}
               />
+              
               <div className="snackbar-message">
-                <div className="snackbar-title">Notifications sent</div>
+                <div className="snackbar-title">
+                  <Typography>עדכון:</Typography>
+                </div>
                 <div className="snackbar-description">
-                  All your notifications were sent to the desired address.
+                  <Typography>
+                  {message}
+                  </Typography>
+             
                 </div>
               </div>
-              {/* <CloseIcon onClick={handleClose} className="snackbar-close-icon" /> */}
+              <CloseIcon onClick={()=>setOpen(false)} className="snackbar-close-icon" />
             </SnackbarContent>
           )}
+          
         </Transition>
+        
       </StyledSnackbar>
     </React.Fragment>
   );

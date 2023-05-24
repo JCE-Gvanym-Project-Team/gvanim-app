@@ -21,7 +21,7 @@ export const dataGridContainerStyle = {
 
 export const dataGridSx = (theme: Theme): SxProps => ({
 	padding: 1,
-	height: 550, 
+	height: 'calc(100vh - 112px)',	
 	overflow: 'hidden',
 	boxShadow: 2,
 	"&.MuiDataGrid-root .MuiDataGrid-cell:focus-within": {

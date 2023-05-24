@@ -1,7 +1,17 @@
 import { SxProps } from "@mui/material";
 
+export const BoxGradientSx: SxProps = {
+    marginTop: '-80px',
+    height: '45vh',
+    display: 'flex',
+    justifyContent: 'center',
+    background: 'linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%)',
+}
+
 export const ManageJobPageBoxSx: SxProps = {
-    width: '100%'
+    width: 'calc(100% - 48px)',
+    marginLeft: '24px',
+    height: '100%'
 }
 
 
@@ -13,8 +23,6 @@ export const MyAvatarContainerSx: SxProps = {
 
 export const MySearchBarContainerStyle = {
     marginTop: '20px',
-    left: 'auto',
-    right: 'auto',
     padding: 0,
     width: '100%',
 }
