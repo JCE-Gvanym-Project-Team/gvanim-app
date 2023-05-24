@@ -13,10 +13,10 @@ const Form = styled('form')(({ theme }) => ({
 }));
 
 
-const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandidatesActive: any, setJobsActive: any }) => {
+const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandidatesActive: any, setJobsActive: any }) =>
+{
+
     const { setHomeActive, setReportsActive, setCandidatesActive, setJobsActive } = props;
-    setHomeActive(false); setCandidatesActive(false);
-    setReportsActive(false); setJobsActive(false);
 
     const { state } = useLocation();
 
@@ -166,7 +166,8 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
     }
     // #############################################################################################################
 
-    const getAllJobs = async () => {
+    const getAllJobs = async () =>
+    {
         const jobs = await getFilteredJobs();
 
         let _JobToEdit = jobs.filter(job => job._jobNumber === state);
@@ -184,8 +185,14 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
 
     }
 
-    useEffect(() => {
-        if (state !== null) { // edit job
+    useEffect(() =>
+    {
+        // for navbar
+        setHomeActive(false); setCandidatesActive(false);
+        setReportsActive(false); setJobsActive(false);
+        
+        if (state !== null)
+        { // edit job
             setNewJob(false);
             getAllJobs();
         }
@@ -197,13 +204,15 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
     const navigate = useNavigate();
 
 
-    const handleSubmit = async (event: any) => {
+    const handleSubmit = async (event: any) =>
+    {
 
         event.preventDefault();
         var description_array = new Array(jobDescription, jobDescriptionSkills, jobAdditionalInfo);
 
         //edit
-        if (state !== null) {
+        if (state !== null)
+        {
             let _job = JobToEdit[0];
 
             _job.edit(_job._title = jobName, _job._role = jobRole, _job._scope = jobScope, _job._region = jobRegion,
@@ -211,15 +220,18 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
             navigate("/manageJobs", { state: `השינויים עבור משרה מס' ${_job._jobNumber} נשמרו בהצלחה.` });
         }
         //add
-        else {
+        else
+        {
 
-            if (jobName.length === 0 || jobRole.length === 0 || jobRegion.length === 0 || jobState.length === 0 || jobRequirements.length === 0) {
+            if (jobName.length === 0 || jobRole.length === 0 || jobRegion.length === 0 || jobState.length === 0 || jobRequirements.length === 0)
+            {
 
                 if (jobName.length === 0) { setErrorJobName(true); } if (jobRegion.length === 0) { setErrorJobRegion(true); }
                 if (jobRole.length === 0) { setErrorJobRole(true); } if (jobState.length === 0) { setErrorJobState(true); }
                 if (jobRequirements.length === 0) { setErrorJobRequirements(true); }
             }
-            else {
+            else
+            {
 
 
                 let job1 = new Job(await generateJobNumber(), jobName, jobRole, jobScope, jobRegion, jobState, description_array, jobRequirements, true, false);
@@ -242,7 +254,8 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
         }
     }
 
-    const handleDelete = () => {
+    const handleDelete = () =>
+    {
         JobToEdit[0].remove();
         console.log(`job (id: ${JobToEdit[0]._jobNumber}) deleted successfully`);
         navigate("/manageJobs", { state: `משרה מס' ${JobToEdit[0]._jobNumber} הוסרה בהצלחה.` });
@@ -285,7 +298,8 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
                                                     className="form-control" required
                                                     value={jobName}
                                                     error={errorJobName}
-                                                    onChange={(e) => {
+                                                    onChange={(e) =>
+                                                    {
                                                         setJobName(e.target.value);
                                                         if (jobName.length > 0 && errorJobName) { setErrorJobName(false); }
                                                     }}
@@ -300,7 +314,8 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
                                                     className="form-control" required
                                                     value={jobRole}
                                                     error={errorJobRole}
-                                                    onChange={(e) => {
+                                                    onChange={(e) =>
+                                                    {
                                                         setJobRole(e.target.value);
                                                         if (jobRole.length > 0 && errorJobRole) { setErrorJobRole(false); }
                                                     }}
@@ -313,7 +328,7 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
 
 
                                         <Stack direction='row'
-                                            sx={{mt: 1}}
+                                            sx={{ mt: 1 }}
                                             display={{ xs: 'block', sm: 'block', md: 'block', lg: 'flex', xl: 'flex' }}
                                             spacing={{ xs: 0, sm: 0, md: 0, lg: 2, xl: 2 }}>
                                             <Box sx={{ width: '100%' }}>
@@ -324,7 +339,8 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
                                                     className="form-control" required
                                                     value={jobRegion}
                                                     error={errorJobRegion}
-                                                    onChange={(e) => {
+                                                    onChange={(e) =>
+                                                    {
                                                         setJobRegion(e.target.value);
                                                         if (jobRegion.length > 0 && errorJobRegion) { setErrorJobRegion(false); }
                                                     }}
@@ -338,11 +354,12 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
                                                     <Typography sx={{ fontWeight: 600, fontSize: 13 }}>Label:</Typography>
                                                 </label>
                                                 <TextField style={{ width: '100%' }} sx={MyTextFieldJobStateSx} size='small' placeholder="(Job_state)" id="_job_state" type="text"
-                                        
+
                                                     required
                                                     error={errorJobState}
                                                     value={jobState}
-                                                    onChange={(e) => {
+                                                    onChange={(e) =>
+                                                    {
                                                         setJobState(e.target.value);
                                                         if (jobState.length > 0 && errorJobState) { setErrorJobState(false); }
                                                     }}
@@ -363,7 +380,8 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
                                                 className="form-control" required
                                                 error={errorJobRequirements}
                                                 value={jobRequirements}
-                                                onChange={(e) => {
+                                                onChange={(e) =>
+                                                {
                                                     setJobRequirements(e.target.value);
                                                     if (jobRequirements.length > 0 && errorJobRequirements) { setErrorJobRequirements(false); }
                                                 }}
@@ -373,7 +391,7 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
                                         </Box>
 
                                         <Stack direction='row'
-                                            sx={{mt: 1}}
+                                            sx={{ mt: 1 }}
                                             display={{ xs: 'block', sm: 'block', md: 'block', lg: 'flex', xl: 'flex' }}
                                             spacing={{ xs: 0, sm: 0, md: 0, lg: 2, xl: 2 }}>
                                             <Box sx={{ width: '100%' }}>
@@ -421,7 +439,7 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
                                         </Box>
                                         {/* <button type="submit" className="primary-btn submit">Submit</button> */}
 
-                                        <Stack direction='row' spacing={2} sx={{mt: 3}}>
+                                        <Stack direction='row' spacing={2} sx={{ mt: 3 }}>
 
                                             <Button type="submit" className='mt-3 mb-3' variant='contained' sx={{
                                                 backgroundColor: 'rgb(52, 71, 103)',

@@ -28,6 +28,6 @@ export default function ManageCandidatesPage(props: { setHomeActive: any, setRep
 
 const addCandidate = () =>
 {
-    let newCandidate: Candidate = new Candidate("example Candidate", "exmaple lastname", "055555555", "example@gmail.com", 4, "hiiiii");
+    let newCandidate: Candidate = new Candidate("example Candidate", "exmaple lastname", "055555555", "example@gmail.com", 4,"Hiiii");
     newCandidate.add();
 }
