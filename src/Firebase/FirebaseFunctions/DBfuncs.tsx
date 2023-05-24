@@ -6,7 +6,6 @@ import { sendEmail } from "./apiBackend";
 import { Candidate } from "./Candidate";
 import { getFilteredCandidateJobStatuses } from "./CandidateJobStatus";
 
-
 const database = realtimeDB;
 /**
  * get the data located at the given path in the Firebase Realtime Database.
@@ -90,6 +89,7 @@ export async function getFirebaseIdsAtPath(path: string): Promise<string[]> {
 export async function getSectors(): Promise<string[]> {
 	return getFirebaseIdsAtPath("/Sectors");
 }
+
 export async function main() {	//for debugging dont use
 
 }	

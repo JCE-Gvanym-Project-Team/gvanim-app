@@ -2,7 +2,7 @@ import { realtimeDB } from "../FirebaseConfig/firebase";
 import { CandidateJobStatus, getFilteredCandidateJobStatuses } from "./CandidateJobStatus";
 import { removeObjectAtPath, getFirebaseIdsAtPath, replaceData, appendToDatabase } from "./DBfuncs";
 import { getFilteredJobs, Job } from "./Job";
-import { uploadFileToFirestore, getDownloadUrlFromFirestorePath, getFileExtensionsInFolder, deleteFile } from "./firestoreFunc";
+import { uploadFileToFirestore, getDownloadUrlFromFirestorePath, getFileExtensionsInFolder, deleteFile, fileExists, renameFirestorePath } from "./firestoreFunc";
 const database = realtimeDB;
 export class Candidate {
     public _id: string;
@@ -13,7 +13,7 @@ export class Candidate {
     public _generalRating: number;
 
     constructor(firstName: string = "", lastName: string = "", phone: string = "", eMail: string = "", generalRating: number = -1) {
-        this._id = `${eMail}${phone}`.replace('.','_');
+        this._id = `${eMail}${phone}`.replace('.', '_');
         this._firstName = firstName;
         this._lastName = lastName;
         this._phone = phone;
@@ -69,6 +69,7 @@ export class Candidate {
             return;
         const candidatures = await getFilteredCandidateJobStatuses(["candidateId"], [this._id]);
         candidatures.forEach((c) => c.remove());
+        this.deleteCv();
         removeObjectAtPath("/Candidates/" + this._id);
     }
     /**
@@ -81,11 +82,20 @@ export class Candidate {
      * @returns None
      */
     public async edit(firstName: string = this._firstName, lastName: string = this._lastName, phone: string = this._phone, eMail: string = this._eMail, generalRating: number = this._generalRating) {
+        if (this._firstName !== firstName || this._lastName !== lastName) {
+            const extensions = await getFileExtensionsInFolder(`/CandidatesFiles/${this._id}`);
+            for (let i = 0; i < extensions.length; i++)
+                if (await fileExists(`/CandidatesFiles/${this._id}/${this._firstName}_${this._lastName}_CV.${extensions.at(i)}`)) {
+                    renameFirestorePath(`/CandidatesFiles/${this._id}/${this._firstName}_${this._lastName}_CV.${extensions.at(i)}`, `${firstName}_${lastName}_CV.${extensions.at(i)}`);
+                    break;
+                }
+        }
         this._firstName = firstName;
         this._lastName = firstName;
         this._generalRating = generalRating;
-        const newId = `${eMail}${phone}`.replace('.','_');
+        const newId = `${eMail}${phone}`.replace('.', '_');
         if ((this._id !== newId) && ((await getFilteredCandidates(["id"], [newId])).length === 0)) {
+            renameFirestorePath(`/CandidatesFiles/${this._id}`, newId);
             this._id = newId;
             this._eMail = eMail;
             this._phone = phone;
@@ -133,8 +143,8 @@ export class Candidate {
     public async deleteCv() {
         const extensions = await getFileExtensionsInFolder(`CandidatesFiles/${this._id}`);
         for (let i = 0; i < extensions.length; i++)
-            if ((await `CandidatesFiles/${this._id}/${this._firstName}_${this._lastName}_CV.${extensions[i]}`)) {
-                await deleteFile(`CandidatesFiles/${this._id}/${this._firstName}_${this._lastName}_CV.${extensions[i]}`);
+            if ((await `CandidatesFiles/${this._id}/${this._firstName}_${this._lastName}_CV.${extensions.at(i)}`)) {
+                await deleteFile(`CandidatesFiles/${this._id}/${this._firstName}_${this._lastName}_CV.${extensions.at(i)}`);
                 return;
             }
     }
@@ -146,8 +156,8 @@ export class Candidate {
     public async getCvUrl(): Promise<string> {
         const extensions = await getFileExtensionsInFolder(`CandidatesFiles/${this._id}`);
         for (let i = 0; i < extensions.length; i++) {
-            if ((await getDownloadUrlFromFirestorePath(`CandidatesFiles/${this._id}/${this._firstName}_${this._lastName}_CV.${extensions[i]}`)).length > 0) {
-                const url = await getDownloadUrlFromFirestorePath(`CandidatesFiles/${this._id}/${this._firstName}_${this._lastName}_CV.${extensions[i]}`);
+            if ((await getDownloadUrlFromFirestorePath(`CandidatesFiles/${this._id}/${this._firstName}_${this._lastName}_CV.${extensions.at(i)}`)).length > 0) {
+                const url = await getDownloadUrlFromFirestorePath(`CandidatesFiles/${this._id}/${this._firstName}_${this._lastName}_CV.${extensions.at(i)}`);
                 return url;
             }
         }
@@ -192,27 +202,27 @@ export async function getFilteredCandidates(attributes: string[] = [], values: s
     //filtering
     let i = attributes.indexOf("id");
     if (i >= 0) {
-        candidates = candidates.filter(candidate => candidate._id === values[i])
+        candidates = candidates.filter(candidate => candidate._id === values.at(i))
     }
     i = attributes.indexOf("firstName");
     if (i >= 0) {
-        candidates = candidates.filter(candidate => candidate._firstName === values[i])
+        candidates = candidates.filter(candidate => candidate._firstName === values.at(i))
     }
     i = attributes.indexOf("lastName");
     if (i >= 0) {
-        candidates = candidates.filter(candidate => candidate._lastName === values[i])
+        candidates = candidates.filter(candidate => candidate._lastName === values.at(i))
     }
     i = attributes.indexOf("phone");
     if (i >= 0) {
-        candidates = candidates.filter(candidate => candidate._phone === values[i])
+        candidates = candidates.filter(candidate => candidate._phone === values.at(i))
     }
     i = attributes.indexOf("eMail");
     if (i >= 0) {
-        candidates = candidates.filter(candidate => candidate._eMail === values[i])
+        candidates = candidates.filter(candidate => candidate._eMail === values.at(i))
     }
     i = attributes.indexOf("generalRating");
     if (i >= 0) {
-        candidates = candidates.filter(candidate => candidate._generalRating.toString() === values[i])
+        candidates = candidates.filter(candidate => candidate._generalRating.toString() === values.at(i))
     }
     if (sortBy === 'firstName')
         return candidates.sort(sortByFirstName);
