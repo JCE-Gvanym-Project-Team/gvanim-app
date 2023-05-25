@@ -17,11 +17,14 @@ export const dataGridContainerSx: SxProps = {
 export const dataGridContainerStyle:CSSProperties = {
 	padding: 0,
 	marginBottom: '15px',
+	maxWidth: "100%",
+	width: "100%",
 }
 
 export const dataGridSx = (theme: Theme): SxProps => ({
 	padding: 1,
 	height: 450, 
+	width: "100%",
 	overflow: 'hidden',
 	boxShadow: 2,
 	"&.MuiDataGrid-root .MuiDataGrid-cell:focus-within": {

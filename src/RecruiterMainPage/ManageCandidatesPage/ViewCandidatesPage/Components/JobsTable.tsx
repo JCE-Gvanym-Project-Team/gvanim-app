@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Typography from '@mui/material/Typography';
-import { Box, Button, Container, Stack, styled, useTheme } from '@mui/material';
+import { Box, Button, Container, Grid, Stack, styled, useTheme } from '@mui/material';
 import MyDropMenu from '../../../ManageJobsPage/Components/MyDropMenu/MyDropMenu';
 import
 {
@@ -232,12 +232,14 @@ export default function JobsTable(props: { setDataSize: any, jobs: Job[] })
     const { setDataSize, jobs } = props;
     const [allJobs, setAllJobs] = React.useState<any[]>([]);
 
-    // const fetchAllJobs = async () =>
-    // {
-    //     const jobs = await getFilteredJobs();
-    //     setAllJobs(jobsWithId);
+    const fetchAllJobs = async () =>
+    {
+        const jobs = await getFilteredJobs();
+        let jobsWithId = jobs.map((job) => ({ ...job, id: job._jobNumber, _scope: getScopeFormated(job._scope) }));
+        setAllJobs(jobsWithId);
 
-    // };
+    };
+
 
 
     const CustomFooter = () =>
@@ -266,9 +268,16 @@ export default function JobsTable(props: { setDataSize: any, jobs: Job[] })
 
     React.useEffect(() =>
     {
-        let jobsWithId = jobs.map((job) => ({ ...job, id: job._jobNumber, _scope: getScopeFormated(job._scope) }));
-        console.log(jobsWithId);
-        setAllJobs(jobsWithId);
+        if (Object.keys(jobs).length == 0)
+        {
+            fetchAllJobs()
+        } else
+        {
+            let jobsWithId = jobs.map((job) => ({ ...job, id: job._jobNumber, _scope: getScopeFormated(job._scope) }));
+
+
+            setAllJobs(jobsWithId);
+        }
     }, [jobs]);
 
 
@@ -276,7 +285,7 @@ export default function JobsTable(props: { setDataSize: any, jobs: Job[] })
 
     return (
         <>
-            <Container className="shadow-lg border rounded"
+            <Grid className="shadow-lg border rounded"
                 sx={dataGridContainerStyle}
                 style={dataGridContainerStyle}
                 maxWidth='xl'>
@@ -295,6 +304,7 @@ export default function JobsTable(props: { setDataSize: any, jobs: Job[] })
                     localeText={heIL.components.MuiDataGrid.defaultProps.localeText}
                     slots={{ noRowsOverlay: CustomNoRowsOverlay, toolbar: GridCustomToolbar, footer: CustomFooter }} />
 
-            </Container></>
+            </Grid>
+        </>
     );
 }
