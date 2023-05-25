@@ -1,24 +1,47 @@
-import React, { useState } from 'react'
-import { Button, Grid, Container, Typography, Box, Stack, Input, TextField } from '@mui/material'
+import { useEffect, useState } from 'react'
+import { Button, Typography, Box, Stack } from '@mui/material'
 import EditIcon from '@mui/icons-material/Edit';
 import { editButtonSx, textSx, titleSx, mainStackSx, ContainerGradientSx, candidateNameSx, BoxGradientSx, candidateNameAndEditButtonContainerSx, jobTextSx } from './ViewCandidatesPageStyle';
 import { ManageCandidatesPageGlobalStyle } from '../../PageStyles';
 import JobsTable from './Components/JobsTable';
-import { Candidate } from '../../../Firebase/FirebaseFunctions/Candidate';
+import { Candidate, getFilteredCandidates } from '../../../Firebase/FirebaseFunctions/Candidate';
 import { useLocation } from 'react-router-dom';
+import { Job, getFilteredJobs } from '../../../Firebase/FirebaseFunctions/Job';
+import { getFilteredCandidateJobStatuses } from '../../../Firebase/FirebaseFunctions/CandidateJobStatus';
+import MyTable from '../../ManageJobsPage/Components/MyTable/MyTable';
 
 export default function ViewCandidatesPage()
-{	
+{
+
 	// get candidate id
-	const {state} = useLocation();
+	const { state } = useLocation();
+
+	// get jobs data size
 	const [dataSize, setDataSize] = useState(0);
-	//TODO: replace this with real info
 
 	//extract candidate object from database
-	let candidateName = "";
-	if (state != null){
-		candidateName = state;
+	let candidateId = "";
+	if (state != null)
+	{
+		candidateId = state;
 	}
+
+	// candidate info
+	const [candidateInfo, setCandidateInfo] = useState<Candidate | null>(null);
+	const [jobs, setJobs] = useState<Job[]>([]);
+
+	useEffect(() =>
+	{
+		// pull candidate from firebase
+		getCandidate(candidateId, setCandidateInfo);
+
+		// get list of all jobs for this candidate
+		getJobs(candidateId, setJobs);
+	})
+
+
+	//TODO: remove this temporary candidateId
+	candidateId = "example@gmail_com055555555"
 	return (
 		<>
 			{/* background div */}
@@ -43,7 +66,7 @@ export default function ViewCandidatesPage()
 								</Typography>
 
 								<Typography sx={candidateNameSx} variant='h4' >
-									{candidateName}
+									{candidateInfo?._firstName}
 								</Typography>
 							</Box>
 
@@ -66,18 +89,18 @@ export default function ViewCandidatesPage()
 						</Box>
 
 						{/* Jobs table */}
-						<JobsTable setDataSize={setDataSize} />
+						<JobsTable setDataSize={setDataSize} jobs={jobs} />
 
 						{/* Bottom Buttons */}
 						<Box sx={candidateNameAndEditButtonContainerSx}>
-						<Button sx={editButtonSx} variant="contained" startIcon={<EditIcon />}>
+							<Button sx={editButtonSx} variant="contained" startIcon={<EditIcon />}>
 								ניהול ראיונות
 							</Button>
 							<Button sx={editButtonSx} variant="contained" startIcon={<EditIcon />}>
 								ממליצים
 							</Button>
 							<Button sx={editButtonSx} variant="contained" startIcon={<EditIcon />}>
-							 	הערות
+								הערות
 							</Button>
 						</Box>
 
@@ -86,4 +109,40 @@ export default function ViewCandidatesPage()
 			</Box>
 		</>
 	)
+}
+
+const getCandidate = function (candidateId: string, setCandidateInfo)
+{
+	const promise = getFilteredCandidates(["id"], [candidateId]);
+	promise.then((candidates) =>
+	{
+		setCandidateInfo(candidates[0]);
+	}).catch((error) =>
+	{
+		console.error(error);
+	});
+}
+
+const getJobs = async function (candidateId: string, setJobs)
+{
+	// get a list of all job numbers
+	// for the jobs this candidate applied to
+	const candidateJobStatuses = await getFilteredCandidateJobStatuses(["candidateId"], [candidateId]);
+	let jobNumbers: number[] = [];
+	candidateJobStatuses.forEach(element =>
+	{
+		jobNumbers.push(element._jobNumber);
+	});
+
+	// get all jobs from firebase
+	let jobs = await getFilteredJobs();
+
+	// filter them by the list of job numbers 
+	// we got from the previous request to firebase
+	jobs = jobs.filter(job =>
+	{
+		return jobNumbers.includes(job._jobNumber);
+	});
+	setJobs(jobs)
+
 }

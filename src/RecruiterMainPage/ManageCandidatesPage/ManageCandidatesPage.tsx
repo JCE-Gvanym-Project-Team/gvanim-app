@@ -21,15 +21,15 @@ export default function ManageCandidatesPage(props: { setHomeActive: any, setRep
 
     return (
         <>
-            <ViewCandidatesPage />
             <div>hi</div>
             <Button onClick={addCandidate}>asdasdasdsa</Button>
+            <ViewCandidatesPage />
         </>
     )
 }
 
 const addCandidate = () =>
 {
-    let newCandidate: Candidate = new Candidate("example Candidate", "exmaple lastname", "055555555", "example@gmail.com", 4);
+    let newCandidate: Candidate = new Candidate("example Can2idate 2", "exm2le las2name", "055555256", "exa2ple2@gmail.com", 4);
     newCandidate.add();
 }
