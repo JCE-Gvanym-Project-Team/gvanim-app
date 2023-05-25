@@ -54,7 +54,7 @@ export default function ViewCandidatesPage()
 
 
 	//TODO: remove this temporary candidateId
-	candidateId = "example@gmail_com055555555"
+	// candidateId = "example@gmail_com055555555"
 	return (
 		<>
 			{/* background div */}
