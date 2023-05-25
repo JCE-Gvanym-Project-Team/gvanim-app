@@ -13,8 +13,7 @@ const Form = styled('form')(({ theme }) => ({
 }));
 
 
-const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandidatesActive: any, setJobsActive: any }) =>
-{
+const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandidatesActive: any, setJobsActive: any }) => {
 
     const { setHomeActive, setReportsActive, setCandidatesActive, setJobsActive } = props;
 
@@ -64,7 +63,6 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
 
         },
     }
-
     const MyTextFieldJobRoleSx = {
         boxShadow: '0px 2px 24px #DAECFF',
         "& .MuiOutlinedInput-root": {
@@ -169,16 +167,18 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
 
 
 
-    useEffect(() =>
-    {
-        
-        const getAllJobs = async () =>
-        {
+    useEffect(() => {
+
+        // for navbar
+        setHomeActive(false); setCandidatesActive(false);
+        setReportsActive(false); setJobsActive(false);
+
+        const getAllJobs = async () => {
             const jobs = await getFilteredJobs();
-    
+
             let _JobToEdit = jobs.filter(job => job._jobNumber === state);
             setJobToEdit(_JobToEdit);
-    
+
             setJobName(_JobToEdit[0]._title);
             setJobRole(_JobToEdit[0]._role);
             setJobRegion(_JobToEdit[0]._region);
@@ -188,14 +188,10 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
             setJobDescriptionSkills(_JobToEdit[0]._description[1]);
             setJobAdditionalInfo(_JobToEdit[0]._description[2]);
             setJobScope(_JobToEdit[0]._scope);
-    
+
         }
-        // for navbar
-        setHomeActive(false); setCandidatesActive(false);
-        setReportsActive(false); setJobsActive(false);
-        
-        if (state !== null)
-        { // edit job
+
+        if (state !== null) { // edit job
             setNewJob(false);
             getAllJobs();
         }
@@ -208,15 +204,13 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
     const navigate = useNavigate();
 
 
-    const handleSubmit = async (event: any) =>
-    {
+    const handleSubmit = async (event: any) => {
 
         event.preventDefault();
         var description_array = new Array(jobDescription, jobDescriptionSkills, jobAdditionalInfo);
 
         //edit
-        if (state !== null)
-        {
+        if (state !== null) {
             let _job = JobToEdit[0];
 
             _job.edit(_job._title = jobName, _job._role = jobRole, _job._scope = jobScope, _job._region = jobRegion,
@@ -224,18 +218,15 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
             navigate("/manageJobs", { state: `השינויים עבור משרה מס' ${_job._jobNumber} נשמרו בהצלחה.` });
         }
         //add
-        else
-        {
+        else {
 
-            if (jobName.length === 0 || jobRole.length === 0 || jobRegion.length === 0 || jobState.length === 0 || jobRequirements.length === 0)
-            {
+            if (jobName.length === 0 || jobRole.length === 0 || jobRegion.length === 0 || jobState.length === 0 || jobRequirements.length === 0) {
 
                 if (jobName.length === 0) { setErrorJobName(true); } if (jobRegion.length === 0) { setErrorJobRegion(true); }
                 if (jobRole.length === 0) { setErrorJobRole(true); } if (jobState.length === 0) { setErrorJobState(true); }
                 if (jobRequirements.length === 0) { setErrorJobRequirements(true); }
             }
-            else
-            {
+            else {
 
 
                 let job1 = new Job(await generateJobNumber(), jobName, jobRole, jobScope, jobRegion, jobState, description_array, jobRequirements, true, false);
@@ -258,8 +249,7 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
         }
     }
 
-    const handleDelete = () =>
-    {
+    const handleDelete = () => {
         JobToEdit[0].remove();
         console.log(`job (id: ${JobToEdit[0]._jobNumber}) deleted successfully`);
         navigate("/manageJobs", { state: `משרה מס' ${JobToEdit[0]._jobNumber} הוסרה בהצלחה.` });
@@ -274,6 +264,7 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
                 <Box>
                     <Container>
                         <Box >
+                            
                             <Box className="col-md-12">
                                 <Box className="section-title">
 
@@ -302,8 +293,7 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
                                                     className="form-control" required
                                                     value={jobName}
                                                     error={errorJobName}
-                                                    onChange={(e) =>
-                                                    {
+                                                    onChange={(e) => {
                                                         setJobName(e.target.value);
                                                         if (jobName.length > 0 && errorJobName) { setErrorJobName(false); }
                                                     }}
@@ -318,8 +308,7 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
                                                     className="form-control" required
                                                     value={jobRole}
                                                     error={errorJobRole}
-                                                    onChange={(e) =>
-                                                    {
+                                                    onChange={(e) => {
                                                         setJobRole(e.target.value);
                                                         if (jobRole.length > 0 && errorJobRole) { setErrorJobRole(false); }
                                                     }}
@@ -343,8 +332,7 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
                                                     className="form-control" required
                                                     value={jobRegion}
                                                     error={errorJobRegion}
-                                                    onChange={(e) =>
-                                                    {
+                                                    onChange={(e) => {
                                                         setJobRegion(e.target.value);
                                                         if (jobRegion.length > 0 && errorJobRegion) { setErrorJobRegion(false); }
                                                     }}
@@ -362,8 +350,7 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
                                                     required
                                                     error={errorJobState}
                                                     value={jobState}
-                                                    onChange={(e) =>
-                                                    {
+                                                    onChange={(e) => {
                                                         setJobState(e.target.value);
                                                         if (jobState.length > 0 && errorJobState) { setErrorJobState(false); }
                                                     }}
@@ -384,8 +371,7 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
                                                 className="form-control" required
                                                 error={errorJobRequirements}
                                                 value={jobRequirements}
-                                                onChange={(e) =>
-                                                {
+                                                onChange={(e) => {
                                                     setJobRequirements(e.target.value);
                                                     if (jobRequirements.length > 0 && errorJobRequirements) { setErrorJobRequirements(false); }
                                                 }}
