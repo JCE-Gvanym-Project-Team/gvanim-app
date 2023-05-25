@@ -1,58 +1,11 @@
 import { SxProps } from "@mui/material";
 
-export const MyTextFieldSx1: SxProps = {
-    "& .MuiOutlinedInputRoot": {
-        
-        "&:hover fieldset": {
-            color: '#212529',
-            border: '1px solid #ced4da',
-            outline: 0,
-
-
-        },
-        "&.Mui fieldset": {
-            color: '#212529',
-            border: '1px solid #ced4da',
-            outline: 0,
-
-
-        },
-        "&.Mui-focused fieldset": {
-            border: '1px solid #86b7fe',
-            color: '#212529',
-            outline: 0,
-            boxShadow: '0 0 0 0.25rem rgba(13,110,253,.25)'
-        },
-
+export const MyTextFieldSx = {
+    boxShadow: '0px 2px 24px #DAECFF',
+    
+    "& .MuiInputBase-input": {
+        fontSize: '0.875rem',
     },
-
-}
-export const MyTextFieldSx: SxProps = {
-    "& .MuiOutlinedInputRoot": {
-        
-        "&:hover fieldset": {
-            color: '#212529',
-            border: '1px solid #ced4da',
-            outline: 0,
-
-
-        },
-        "&.Mui fieldset": {
-            color: '#212529',
-            border: '1px solid #ced4da',
-            outline: 0,
-
-
-        },
-        "&.Mui-focused fieldset": {
-            border: '1px solid #86b7fe',
-            color: '#212529',
-            outline: 0,
-            boxShadow: '0 0 0 0.25rem rgba(13,110,253,.25)'
-        },
-
-    },
-
 }
 
 export const BoxGradientSx: SxProps = {

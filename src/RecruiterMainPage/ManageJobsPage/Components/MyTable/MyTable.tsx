@@ -229,6 +229,7 @@ function getScopeFormated(scope: number[] | null)
 export default function MyTable(props: { setDataSize: any }) {
     const { setDataSize } = props;
     const [allJobs, setAllJobs] = React.useState<any[]>([]);
+	const navigate = useNavigate();
 
     const fetchAllJobs = async () => {
         const jobs = await getFilteredJobs();
@@ -275,7 +276,7 @@ export default function MyTable(props: { setDataSize: any }) {
 					sx={dataGridSx(theme)}
 					rows={allJobs}
 					columns={columns}
-					onRowDoubleClick={(job) => { console.log(job.id) }}
+					onRowDoubleClick={(job) => navigate(`../jobs/${job.id}`)}
 
 					// checkboxSelection
 					// disableRowSelectionOnClick

@@ -12,7 +12,7 @@ import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
 import { TransitionProps } from '@mui/material/transitions';
-import { Avatar, Box, Link, ListItemAvatar, ListItemButton, ListItemIcon, Rating } from '@mui/material';
+import { Avatar, Box, Container, Link, ListItemAvatar, ListItemButton, ListItemIcon, Rating } from '@mui/material';
 import { ListItemTypographySx } from './CandidatesListDialogStyle';
 import { ChevronLeft } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
@@ -22,8 +22,7 @@ const Transition = React.forwardRef(function Transition(
 		children: React.ReactElement;
 	},
 	ref: React.Ref<unknown>,
-)
-{
+) {
 	return <Slide direction="up" ref={ref} {...props} />;
 });
 
@@ -32,13 +31,11 @@ export default function CandidatesListFullScreenDialog({ JobId })
 	const navigate = useNavigate();
 	const [open, setOpen] = React.useState(false);
 
-	const handleClickOpen = () =>
-	{
+	const handleClickOpen = () => {
 		setOpen(true);
 	};
 
-	const handleClose = () =>
-	{
+	const handleClose = () => {
 		setOpen(false);
 	};
 
@@ -48,84 +45,94 @@ export default function CandidatesListFullScreenDialog({ JobId })
 
 			<Button variant='text' endIcon={<ChevronLeft />} onClick={handleClickOpen} >לרשימת המועמדים</Button>
 
-			<Dialog
-				fullScreen
-				open={open}
+			
+				<Dialog
+				  sx={{
+					"& .MuiDialog-container": {
+				
+					}
+				  }}
+				  PaperProps={{ sx: { maxWidth:{xs: 'xl',sm: 'xl',md: 'md', lg: 'md', xl: 'md'}, maxHeight:'80%',
+				  borderRadius: '0.6rem'}}}
+					fullScreen 
+					open={open}
+					TransitionComponent={Transition}
+					
+				>
 
-				TransitionComponent={Transition}
-			>
-				<AppBar sx={{ position: 'relative', backgroundColor: 'rgb(52, 71, 103)' }}>
-					<Toolbar>
+					<AppBar sx={{ position: 'relative', backgroundColor: 'rgb(52, 71, 103)'}} >
+						<Toolbar>
 
-						<Typography sx={{ ml: 2, flex: 1, textAlign: 'center' }} variant="h6" component="div">
-							משרה מס' {JobId}
-						</Typography>
-
-						<IconButton
-							edge="start"
-							color="inherit"
-							onClick={handleClose}
-							aria-label="close"
-						>
-							<CloseIcon />
-						</IconButton>
-					</Toolbar>
-				</AppBar>
-
-				<List sx={{ padding: 0 }}>
-					{/* this is the header */}
-
-					<ListItem>
-						<ListItemText sx={{ paddingRight: '16px', paddingLeft: '16px' }} >
-							<Typography sx={ListItemTypographySx} variant='subtitle1'>
-								שם המועמד
+							<Typography sx={{ ml: 2, flex: 1, textAlign: 'center' }} variant="h6" component="div">
+								משרה מס' {JobId}
 							</Typography>
-						</ListItemText>
 
-						<ListItemIcon>
+							<IconButton
+								edge="start"
+								color="inherit"
+								onClick={handleClose}
+								aria-label="close"
+							>
+								<CloseIcon />
+							</IconButton>
+						</Toolbar>
+					</AppBar>
+
+					<List>
+						{/* this is the header */}
+						<ListItem>
 							<ListItemText sx={{ paddingRight: '16px', paddingLeft: '16px' }} >
 								<Typography sx={ListItemTypographySx} variant='subtitle1'>
-									התאמה
+									שם המועמד
 								</Typography>
 							</ListItemText>
-						</ListItemIcon>
-					</ListItem>
-					{/* END HEADER */}
 
-					<ListItemButton accessKey='ID עומר' onClick={(e) => {
-						navigate("/manageCandidates", {state: listOfCandidates[0]})
-					}}>
+							<ListItemIcon>
+								<ListItemText sx={{ paddingRight: '16px', paddingLeft: '16px' }} >
+									<Typography sx={ListItemTypographySx} variant='subtitle1'>
+										התאמה
+									</Typography>
+								</ListItemText>
+							</ListItemIcon>
+						</ListItem>
+						{/* END HEADER */}
+						<Divider />
 
-						<ListItemAvatar>
-							<Avatar />
-						</ListItemAvatar>
+						<ListItemButton accessKey='ID עומר' onClick={(e) => {
+							navigate("/manageCandidates", {state: listOfCandidates[0]})
+						}}>
+
+							<ListItemAvatar>
+								<Avatar />
+							</ListItemAvatar>
 
 
-						<ListItemText primary="עומר תורג'מן" secondary="מעלה אדומים" />
+							<ListItemText primary="עומר תורג'מן" secondary="מעלה אדומים" />
 
-						<ListItemIcon >
-							<Rating defaultValue={2} size="medium" readOnly />
-						</ListItemIcon>
+							<ListItemIcon >
+								<Rating defaultValue={2} size="medium" readOnly />
+							</ListItemIcon>
 
-					</ListItemButton>
-					<Divider />
+						</ListItemButton>
+						<Divider />
 
-					<ListItemButton accessKey='ID גבריאל' onClick={(e) => console.log(e.currentTarget.accessKey)}>
+						<ListItemButton accessKey='ID גבריאל' onClick={(e) => console.log(e.currentTarget.accessKey)}>
 
-						<ListItemAvatar>
-							<Avatar />
-						</ListItemAvatar>
+							<ListItemAvatar>
+								<Avatar />
+							</ListItemAvatar>
 
-						<ListItemText
-							primary="עמוס לוי"
-							secondary="באר שבע"
-						/>
-						<Rating defaultValue={5} size="medium" readOnly />
-					</ListItemButton>
+							<ListItemText
+								primary="עמוס לוי"
+								secondary="באר שבע"
+							/>
+							<Rating defaultValue={5} size="medium" readOnly />
+						</ListItemButton>
+						<Divider />
+					</List>
 
-				</List>
-
-			</Dialog>
+				</Dialog>
+		
 		</Box>
 	);
 }

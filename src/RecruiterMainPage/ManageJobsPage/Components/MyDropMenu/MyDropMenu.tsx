@@ -8,6 +8,7 @@ import { Box, IconButton, ListItemIcon, Typography } from '@mui/material';
 import { Assignment, Edit, Label, MoreVert, Print } from '@mui/icons-material';
 import { MenuItemIconSx, MenuItemTypographySx, MoreVertSx, blue, grey } from './MyDropManuStyle';
 import { useNavigate } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 function MenuSection({ children, label }: MenuSectionProps)
 {
@@ -121,14 +122,18 @@ export default function MyDropMenu(props: { JobId: any })
                 slots={{ root: StyledPopper, listbox: StyledListbox }}
                 slotProps={{ listbox: { id: 'simple-menu' } }}
             >
-                <label>אפשרויות</label>
-                <StyledMenuItem onClick={createHandleMenuClick('GoToJobPage')}>
+                <Typography variant='caption' sx={{fontSize: 10,fontWeight: 600, padding: 1}}>אפשרויות</Typography>
+                <StyledMenuItem onClick={() => navigate(`../jobs/${JobId}`)}>
+                
                     <ListItemIcon>
                         <Assignment sx={MenuItemIconSx} />
-                        <Typography sx={MenuItemTypographySx} >
+   
+                   <Typography sx={MenuItemTypographySx} >
                             לדף המשרה
                         </Typography>
-                    </ListItemIcon>
+                  
+                   </ListItemIcon>
+                
                 </StyledMenuItem>
 
                 <StyledMenuItem onClick={handleEditClick}>
@@ -140,15 +145,6 @@ export default function MyDropMenu(props: { JobId: any })
                     </ListItemIcon>
                 </StyledMenuItem>
 
-                <label>ייצוא</label>
-                <StyledMenuItem onClick={createHandleMenuClick('Print')}>
-                    <ListItemIcon>
-                        <Print sx={MenuItemIconSx} />
-                        <Typography sx={MenuItemTypographySx} >
-                            הדפס משרה
-                        </Typography>
-                    </ListItemIcon>
-                </StyledMenuItem>
                 {/* </MenuSection> */}
             </Menu>
         </Box>
