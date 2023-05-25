@@ -14,8 +14,10 @@ import Slide from '@mui/material/Slide';
 import { TransitionProps } from '@mui/material/transitions';
 import { Avatar, Box, Container, Link, ListItemAvatar, ListItemButton, ListItemIcon, Rating } from '@mui/material';
 import { ListItemTypographySx } from './CandidatesListDialogStyle';
-import { ChevronLeft } from '@mui/icons-material';
+import { ChevronLeft, ConstructionOutlined } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
+import { Candidate, getFilteredCandidates } from '../../../../Firebase/FirebaseFunctions/Candidate';
+import { getFilteredCandidateJobStatuses } from '../../../../Firebase/FirebaseFunctions/CandidateJobStatus';
 
 const Transition = React.forwardRef(function Transition(
 	props: TransitionProps & {
@@ -30,6 +32,31 @@ export default function CandidatesListFullScreenDialog({ JobId })
 {
 	const navigate = useNavigate();
 	const [open, setOpen] = React.useState(false);
+	const [candidates, setCandidates] = React.useState<Candidate[]>([]);
+
+
+	const getCandidates = async () => {
+		const _candidates_jobstatus = await getFilteredCandidateJobStatuses(["jobNumber"],[`${JobId}`]);
+		// console.log(_candidates_jobstatus);
+
+		const candidateId = _candidates_jobstatus.map(candidate => candidate._candidateId);
+		const matchingRate = _candidates_jobstatus.map(candidate => candidate._matchingRate);
+
+		let _candidates: Candidate[] = [];
+
+		candidateId.forEach(async id => {
+			let candidate1: Candidate[] = await getFilteredCandidates(["id"], [id]);
+			console.log(`THIS: ${id}`);
+			console.log(candidate1);
+			candidates.push(candidate1[0]);
+		});
+	
+		// console.log('ID: ' + candidateId);
+
+		// console.log(_candidates);
+	}
+
+	getCandidates();
 
 	const handleClickOpen = () => {
 		setOpen(true);
@@ -114,7 +141,11 @@ export default function CandidatesListFullScreenDialog({ JobId })
 							</ListItemIcon>
 
 						</ListItemButton>
+
 						<Divider />
+
+						
+
 
 						<ListItemButton accessKey='ID גבריאל' onClick={(e) => console.log(e.currentTarget.accessKey)}>
 
