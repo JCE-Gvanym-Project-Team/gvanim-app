@@ -108,8 +108,6 @@ const columns: GridColDef[] = [
 		editable: false,
 
         renderCell: (job) => {
-
-
 			return <MyDropMenu JobId={job.id} />;
 		},
 
@@ -155,7 +153,8 @@ const columns: GridColDef[] = [
         align: 'left',
         width: 300,
         renderCell: (job) => {
-            return <CandidatesListFullScreenDialog JobId={job.id} />;
+			const { id } = job.row;
+			return <CandidatesListFullScreenDialog JobId={id} />;
         },
         // valueGetter: (params: GridValueGetterParams) =>
         //     `${params.row.firstName || ''} ${params.row.lastName || ''}`,
