@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Typography from '@mui/material/Typography';
 import { Box, Button, Container, Grid, Stack, styled, useTheme } from '@mui/material';
-import MyDropMenu from '../../../ManageJobsPage/Components/MyDropMenu/MyDropMenu';
+import MyDropMenu from '../../../../ManageJobsPage/Components/MyDropMenu/MyDropMenu';
 import
 {
     DataGrid, GridToolbarFilterButton,
@@ -13,8 +13,8 @@ import
     GridToolbarContainer, heIL, GridFooterContainer, GridToolbarQuickFilter, GridToolbarExportContainer, GridCsvExportMenuItem, GridPrintExportMenuItem
 } from '@mui/x-data-grid';
 import { GridFooterContainerSx, TypographyFooterSx, dataGridContainerStyle, dataGridSx } from './JobsTableStyle';
-import CandidatesListFullScreenDialog from '../../../ManageJobsPage/Components/CandidatesListDialog/CandidatesListDialog';
-import { Job, getFilteredJobs } from '../../../../Firebase/FirebaseFunctions/Job';
+import CandidatesListFullScreenDialog from '../../../../ManageJobsPage/Components/CandidatesListDialog/CandidatesListDialog';
+import { Job, getFilteredJobs } from '../../../../../Firebase/FirebaseFunctions/Job';
 import { useNavigate } from "react-router-dom";
 
 

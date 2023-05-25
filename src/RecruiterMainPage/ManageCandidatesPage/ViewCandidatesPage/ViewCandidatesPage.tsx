@@ -3,12 +3,12 @@ import { Button, Typography, Box, Stack } from '@mui/material'
 import EditIcon from '@mui/icons-material/Edit';
 import { editButtonSx, textSx, titleSx, mainStackSx, ContainerGradientSx, candidateNameSx, BoxGradientSx, candidateNameAndEditButtonContainerSx, jobTextSx } from './ViewCandidatesPageStyle';
 import { ManageCandidatesPageGlobalStyle } from '../../PageStyles';
-import JobsTable from './Components/JobsTable';
+import JobsTable from './Components/JobsTable/JobsTable';
 import { Candidate, getFilteredCandidates } from '../../../Firebase/FirebaseFunctions/Candidate';
 import { useLocation } from 'react-router-dom';
 import { Job, getFilteredJobs } from '../../../Firebase/FirebaseFunctions/Job';
 import { getFilteredCandidateJobStatuses } from '../../../Firebase/FirebaseFunctions/CandidateJobStatus';
-import MyTable from '../../ManageJobsPage/Components/MyTable/MyTable';
+import NotesPopup from './Components/NotesPopup/NotesPopup';
 
 export default function ViewCandidatesPage()
 {
@@ -38,6 +38,19 @@ export default function ViewCandidatesPage()
 		// get list of all jobs for this candidate
 		getJobs(candidateId, setJobs);
 	})
+
+	// comments popup handlers
+	const [popupOpen, setPopupOpen] = useState(false);
+
+	const commentsPopupOpenHandler = () =>
+	{
+		setPopupOpen(true);
+	};
+
+	const commentsPopupCloseHandler = () =>
+	{
+		setPopupOpen(false);
+	};
 
 
 	//TODO: remove this temporary candidateId
@@ -99,9 +112,10 @@ export default function ViewCandidatesPage()
 							<Button sx={editButtonSx} variant="contained" startIcon={<EditIcon />}>
 								ממליצים
 							</Button>
-							<Button sx={editButtonSx} variant="contained" startIcon={<EditIcon />}>
+							<Button sx={editButtonSx} variant="contained" onClick={commentsPopupOpenHandler} startIcon={<EditIcon />}>
 								הערות
 							</Button>
+							<NotesPopup open={popupOpen} onClose={commentsPopupCloseHandler}/>
 						</Box>
 
 					</Stack>
