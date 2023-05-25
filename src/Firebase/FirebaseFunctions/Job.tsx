@@ -3,6 +3,7 @@ import { realtimeDB } from "../FirebaseConfig/firebase";
 import { Candidate, getFilteredCandidates } from "./Candidate";
 import { appendToDatabase, getFirebaseIdsAtPath, removeObjectAtPath, replaceData } from "./DBfuncs";
 import { Stage } from "./Stage";
+import { Role } from "./Role";
 const database = realtimeDB;
 
 export class Job {
@@ -12,13 +13,13 @@ export class Job {
     public _scope: Array<number>;//first is the the smallest
     public _region: string;
     public _sector: string;
-    public _description: string[];// todo make arrays of strings[]
+    public _description: string[];
     public _requirements: string;
     public _open: boolean;
     public _highPriority: boolean;
-    public _views: number;
-    public _creationDate: Date
-    public _stages: Stage[];
+    public _viewsPerPlatform: Map<string, number>;
+    public _applyPerPlatform: Map<string, number>
+    public _creationDate: Date;
 
     constructor(
         jobNumber: number,
@@ -31,8 +32,9 @@ export class Job {
         requirements: string = "",
         open: boolean = true,
         highPriority: boolean = false,
-        views: number = 0,
-        stages: Stage[] = []
+        viewsPerPlatform: Map<string, number> = new Map<string, number>(),
+        applyPerPlatform: Map<string, number> = new Map<string, number>(),
+        creationDate = new Date(0, 0, 0)
     ) {
         this._title = title;
         this._role = role;
@@ -43,10 +45,14 @@ export class Job {
         this._requirements = requirements;
         this._open = open;
         this._highPriority = highPriority;
-        this._views = views;
-        this._creationDate = new Date();
+        this._viewsPerPlatform = viewsPerPlatform;
+        this._applyPerPlatform = applyPerPlatform;
+        const defaultDate = new Date(0, 0, 0);
+        if (creationDate === defaultDate)
+            this._creationDate = new Date();
+        else
+            this._creationDate = creationDate;
         this._jobNumber = jobNumber;
-        this._stages = stages;
     }
     /**
      * Retrieves the candidate job statuses for the current job.
@@ -85,7 +91,7 @@ export class Job {
      */
     public async getPath() {
         if ((await getFirebaseIdsAtPath('/Jobs')).includes(this._jobNumber.toString()))
-            return "/Jobs/" + this._jobNumber;
+            return `/Jobs/${this._jobNumber}`;
         return "";
     }
     /**
@@ -97,7 +103,7 @@ export class Job {
             return true;
         return false;
     }
-    
+
     /**
      * Edits the job with the given parameters and updates the realtime DB.
      * @param {string} [title=this._title] - The title of the job posting.
@@ -116,8 +122,8 @@ export class Job {
         description: string[] = this._description,
         requirements: string = this._requirements,
         open: boolean = this._open,
-        highPriority: boolean = this._highPriority,
-        stages: Stage[]=[]) {
+        highPriority: boolean = this._highPriority
+    ) {
         this._title = title;
         this._role = role;
         this._sector = sector;
@@ -125,7 +131,6 @@ export class Job {
         this._requirements = requirements;
         this._open = open;
         this._highPriority = highPriority;
-        this._stages = stages;
 
         if (!(await this.exists()))
             this.add();
@@ -139,12 +144,23 @@ export class Job {
         if (!(await this.exists()))
             appendToDatabase(this, "/Jobs", this._jobNumber.toString());
     }
-    /**
-     * Returns the stages of the current instance of the class.
-     * @returns {Array} - An array of stages.
-     */
-    public getStages(){
-        return this._stages;
+    public async incrementViews(platform: string) {
+        let views = this._viewsPerPlatform.get(platform);
+        if (views === undefined)
+            views = 0;
+        this._viewsPerPlatform.set(platform, views + 1);
+        if (!(await this.exists()))
+            this.add();
+        replaceData((await this.getPath()), this);
+    }
+    public async incrementApply(platform: string) {
+        let apply = this._applyPerPlatform.get(platform);
+        if (apply === undefined)
+            apply = 0;
+        this._applyPerPlatform.set(platform, apply + 1);
+        if (!(await this.exists()))
+            this.add();
+        replaceData((await this.getPath()), this);
     }
 }
 /* Jobs functions */
@@ -206,15 +222,15 @@ export async function getFilteredJobs(attributes: string[] = [], values: string[
     //filtering
     let i = attributes.indexOf("jobNumber");
     if (i >= 0) {
-        jobs = jobs.filter(job => job._jobNumber.toString() === values[i])
+        jobs = jobs.filter(job => job._jobNumber.toString() === values.at(i))
     }
     i = attributes.indexOf("title");
     if (i >= 0) {
-        jobs = jobs.filter(job => job._title === values[i])
+        jobs = jobs.filter(job => job._title === values.at(i))
     }
     i = attributes.indexOf("role");
     if (i >= 0) {
-        jobs = jobs.filter(job => job._role === values[i])
+        jobs = jobs.filter(job => job._role === values.at(i))
     }
     i = attributes.indexOf("scope");
     if (i >= 0) {
@@ -227,15 +243,15 @@ export async function getFilteredJobs(attributes: string[] = [], values: string[
     }
     i = attributes.indexOf("open");
     if (i >= 0) {
-        jobs = jobs.filter(job => job._open.toString() === values[i])
+        jobs = jobs.filter(job => job._open.toString() === values.at(i))
     }
     i = attributes.indexOf("highPriority");
     if (i >= 0) {
-        jobs = jobs.filter(job => job._highPriority.toString() === values[i])
+        jobs = jobs.filter(job => job._highPriority.toString() === values.at(i))
     }
     i = attributes.indexOf("sector");
     if (i >= 0) {
-        jobs = jobs.filter(job => job._sector === values[i])
+        jobs = jobs.filter(job => job._sector === values.at(i))
     }
     //sorting
     if (sortBy === "title")
@@ -260,7 +276,7 @@ export async function getFilteredJobs(attributes: string[] = [], values: string[
         return jobs.sort(compareByViews);
     return jobs.map((job) => new Job(job._jobNumber, job._title, job._role, job._scope
         , job._region, job._sector, job._description, job._requirements,
-        job._open, job._highPriority, job._views));
+        job._open, job._highPriority, job._viewsPerPlatform, job._applyPerPlatform, job._creationDate));
 }
 /* compare function for sort */
 function compareByTitle(a: Job, b: Job): number {
@@ -304,7 +320,13 @@ function compareByHighPriority(a: Job, b: Job): number {
 }
 
 function compareByViews(a: Job, b: Job): number {
-    return b._views - a._views;
+    let asum =0;
+    let bsum =0;
+    for (const [key, value] of Array.from(a._viewsPerPlatform))
+        asum+=value;
+    for (const [key, value] of Array.from(b._viewsPerPlatform))
+        bsum+=value;
+    return bsum - asum;
 }
 function compareByCreationDate(a: Job, b: Job): number {
     if (b._creationDate > a._creationDate)
