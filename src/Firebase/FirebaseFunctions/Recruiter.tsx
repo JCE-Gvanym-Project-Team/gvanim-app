@@ -58,20 +58,11 @@ export class Recruiter {
 	public async edit(email: string = this._email, firstName: string = this._firstName, lastName: string = this._lastName) {
 		this._firstName = firstName;
 		this._lastName = lastName;
-		if (email !== this._email) {
-			let tmp = new Recruiter(email);
-			if (!(await tmp.exists())) {
-				this._email = email;
-				this._id = email.replace('.', '_');
-			}
-			else
-				console.log("this username already exists choose another");
-		}
 		this.remove();
 		this.add();
 	}
  /**
-  * Add editing permissions to the recruiter to the sector. 
+  * Add permissions to a sector. 
   * @param {string} sector - The sector to add.
   * @returns None
   */
@@ -134,7 +125,7 @@ export async function getRecruitersFromDatabase(): Promise<Recruiter[]> {
  * Useful for generating random passwordsץ
  * @returns {string} A random string of 12 characters.
  */
-function generateRandomString(): string {
+export function generateRandomString(): string {
 	const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>/?';
 	let result = '';
 	for (let i = 0; i < 12; i++) {

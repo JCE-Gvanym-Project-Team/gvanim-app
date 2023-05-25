@@ -57,6 +57,12 @@ import { removeObjectAtPath, getFirebaseIdsAtPath, replaceData, appendToDatabase
         else
             console.log("the Stage already exists");
     }
+    public async getMessages(candidateName: string, recruiterName: string, interviewDate: Date = new Date(0,0,0),location: string=""): Promise<string>{
+        let message = "";
+        if(this._name==='')
+            message = 'something'
+        return message;
+    }
  }
  /**
   * Retrieves all stages from the Firebase Realtime Database.
