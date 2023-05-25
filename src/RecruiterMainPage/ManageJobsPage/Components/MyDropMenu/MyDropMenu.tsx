@@ -122,9 +122,9 @@ export default function MyDropMenu(props: { JobId: any })
                 slots={{ root: StyledPopper, listbox: StyledListbox }}
                 slotProps={{ listbox: { id: 'simple-menu' } }}
             >
-                <label>אפשרויות</label>
-                <StyledMenuItem onClick={createHandleMenuClick('GoToJobPage')}>
-                <Link to={`../jobs/${JobId}`}>
+                <Typography variant='caption' sx={{fontSize: 10,fontWeight: 600, padding: 1}}>אפשרויות</Typography>
+                <StyledMenuItem onClick={() => navigate(`../jobs/${JobId}`)}>
+                
                     <ListItemIcon>
                         <Assignment sx={MenuItemIconSx} />
    
@@ -133,7 +133,7 @@ export default function MyDropMenu(props: { JobId: any })
                         </Typography>
                   
                    </ListItemIcon>
-                   </Link>
+                
                 </StyledMenuItem>
 
                 <StyledMenuItem onClick={handleEditClick}>
@@ -145,15 +145,6 @@ export default function MyDropMenu(props: { JobId: any })
                     </ListItemIcon>
                 </StyledMenuItem>
 
-                <label>ייצוא</label>
-                <StyledMenuItem onClick={createHandleMenuClick('Print')}>
-                    <ListItemIcon>
-                        <Print sx={MenuItemIconSx} />
-                        <Typography sx={MenuItemTypographySx} >
-                            הדפס משרה
-                        </Typography>
-                    </ListItemIcon>
-                </StyledMenuItem>
                 {/* </MenuSection> */}
             </Menu>
         </Box>
