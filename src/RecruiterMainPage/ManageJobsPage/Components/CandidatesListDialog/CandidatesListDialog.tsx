@@ -158,7 +158,7 @@ export default function CandidatesListFullScreenDialog({ JobId }) {
 				
 				{CMR.length < 1 ? (
 				<Box sx={{display: 'flex', justifyContent: 'center'}}>
-					<Typography variant='h6'>לא נמצאו מועמדים למשרה זו.</Typography>
+					<Typography sx={{ fontFamily: "'Noto Sans Hebrew', sans-serif", color: 'rgb(52, 71, 103)'}} variant='h6'>לא נמצאו מועמדים למשרה זו.</Typography>
 				</Box>
 				) : (<></>)}
 
