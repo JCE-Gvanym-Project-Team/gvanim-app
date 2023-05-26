@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Typography from '@mui/material/Typography';
-import { Box, Button, Container, Stack, styled, useTheme } from '@mui/material';
+import { Box, Container, styled, useTheme } from '@mui/material';
 import MyDropMenu from '../../../../ManageJobsPage/Components/MyDropMenu/MyDropMenu';
 import
 {
@@ -8,9 +8,7 @@ import
 	GridColDef, GridToolbarDensitySelector,
 	GridToolbarColumnsButton,
 	GridInitialState,
-	useGridRootProps,
-	useGridApiContext,
-	GridToolbarContainer, heIL, GridFooterContainer, GridToolbarQuickFilter, GridToolbarExportContainer, GridCsvExportMenuItem, GridPrintExportMenuItem
+	GridToolbarContainer, heIL, GridFooterContainer, GridToolbarQuickFilter, GridToolbarExportContainer, GridPrintExportMenuItem
 } from '@mui/x-data-grid';
 import { GridFooterContainerSx, TypographyFooterSx, dataGridContainerStyle, dataGridSx } from './JobsTableStyle';
 import CandidatesListFullScreenDialog from '../../../../ManageJobsPage/Components/CandidatesListDialog/CandidatesListDialog';
@@ -107,7 +105,8 @@ const columns: GridColDef[] = [
 		disableExport: true,
 		editable: false,
 
-        renderCell: (job) => {
+		renderCell: (job) =>
+		{
 			return <MyDropMenu JobId={job.id} />;
 		},
 
@@ -129,69 +128,46 @@ const columns: GridColDef[] = [
 		align: 'left',
 
 
-    },
-    {
-        field: '_role',
-        headerName: 'תפקיד',
-        width: 300,
-        editable: false,
-        align: 'left',
-    },
-    {
-        field: '_scope',
-        headerName: 'אחוז משרה',
-        width: 150,
-        editable: false,
-        align: 'left',
-    },
-    {
-        field: 'candidates',
-        headerName: 'מועמדים שניגשו',
-        description: 'עמודה זו אינה ניתנת למיון',
-        sortable: false,
-        editable: false,
-        align: 'left',
-        width: 300,
-        renderCell: (job) => {
+	},
+	{
+		field: '_role',
+		headerName: 'תפקיד',
+		width: 300,
+		editable: false,
+		align: 'left',
+	},
+	{
+		field: '_scope',
+		headerName: 'אחוז משרה',
+		width: 150,
+		editable: false,
+		align: 'left',
+	},
+	{
+		field: 'candidates',
+		headerName: 'מועמדים שניגשו',
+		description: 'עמודה זו אינה ניתנת למיון',
+		sortable: false,
+		editable: false,
+		align: 'left',
+		width: 300,
+		renderCell: (job) =>
+		{
 			const { id } = job.row;
 			return <CandidatesListFullScreenDialog JobId={id} />;
-        },
-        // valueGetter: (params: GridValueGetterParams) =>
-        //     `${params.row.firstName || ''} ${params.row.lastName || ''}`,
-    },
+		},
+		// valueGetter: (params: GridValueGetterParams) =>
+		//     `${params.row.firstName || ''} ${params.row.lastName || ''}`,
+	},
 ];
 
-const GridCustomToolbar = ( {syncState }: {syncState: (stateToSave: GridInitialState) => void;}) => 
+const GridCustomToolbar = ({ syncState }: { syncState: (stateToSave: GridInitialState) => void; }) => 
 {
-	const rootProps = useGridRootProps();
-	const apiRef = useGridApiContext();
-	const navigate = useNavigate();
-
-    const handleCreatejob = () => {
-        navigate("/createJob", { state: null });
-    }
 
 	return (
 		<GridToolbarContainer>
-			<Stack direction='row' sx={{ width: '100%' }}>
-				<Box sx={{ width: '100%' }}>
-					<GridToolbarQuickFilter variant='outlined' size='small' sx={{ width: '100%' }} />
-				</Box>
-				<Box sx={{ display: 'flex', flexDirection: 'row-reverse', width: '100%' }}>
-					<Box>
 
-						<Button type="button" onClick={handleCreatejob} variant='contained' sx={{
-							backgroundColor: 'rgb(52, 71, 103)',
-							":hover": {
-								bgcolor: "rgb(52, 71, 103)",
-							}
-						}} fullWidth>משרה חדשה</Button>
-
-					</Box>
-				</Box>
-
-			</Stack>
-
+			<GridToolbarQuickFilter variant='outlined' size='small' />
 
 			<Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', borderBottomColor: 'rgba(224, 224, 224, 1)' }}>
 
@@ -205,13 +181,6 @@ const GridCustomToolbar = ( {syncState }: {syncState: (stateToSave: GridInitialS
 					</GridToolbarExportContainer>
 
 				</Box>
-				{/* 
-                <Box>
-                    <Button color='info' variant='contained' size='small' onClick={handleCreatejob}>משרה חדשה</Button>
-                </Box> */}
-
-
-
 
 			</Box>
 		</GridToolbarContainer>
@@ -225,53 +194,57 @@ function getScopeFormated(scope: number[] | null)
 
 }
 
-export default function JobsTable(props: { setDataSize: any, jobs: Job[]}) {
-    const { setDataSize, jobs } = props;
-    const [allJobs, setAllJobs] = React.useState<any[]>([]);
+export default function JobsTable(props: { setDataSize: any, jobs: Job[] })
+{
+	const { setDataSize, jobs } = props;
+	const [allJobs, setAllJobs] = React.useState<any[]>([]);
 	const navigate = useNavigate();
 
-    const fetchAllJobs = async () => {
-        const jobs = await getFilteredJobs();
-        const jobsWithId = jobs.map((job) => ({ ...job, id: job._jobNumber, _scope: getScopeFormated(job._scope) }));
-        setAllJobs(jobsWithId);
+	const fetchAllJobs = async () =>
+	{
+		const jobs = await getFilteredJobs();
+		const jobsWithId = jobs.map((job) => ({ ...job, id: job._jobNumber, _scope: getScopeFormated(job._scope) }));
+		setAllJobs(jobsWithId);
 
-    };
+	};
 
 
-    const CustomFooter = () => {
-		React.useEffect(() => {
+	const CustomFooter = () =>
+	{
+		React.useEffect(() =>
+		{
 			setDataSize(allJobs.length);
 		}, []);
-        
-    
-        return (
-            <GridFooterContainer sx={GridFooterContainerSx}>
-    
-                <Typography variant='subtitle2' sx={TypographyFooterSx}>
-                    מס' משרות:
-                </Typography>
-    
-                <Typography variant='subtitle2' sx={TypographyFooterSx}>
-                    {allJobs.length}
-                </Typography>
-    
-            </GridFooterContainer>
-        );
-    };
+
+
+		return (
+			<GridFooterContainer sx={GridFooterContainerSx}>
+
+				<Typography variant='subtitle2' sx={TypographyFooterSx}>
+					מס' משרות:
+				</Typography>
+
+				<Typography variant='subtitle2' sx={TypographyFooterSx}>
+					{allJobs.length}
+				</Typography>
+
+			</GridFooterContainer>
+		);
+	};
 
 
 
 	React.useEffect(() =>
-    {
-        if (Object.keys(jobs).length == 0)
-        {
-            fetchAllJobs()
-        } else
-        {
-            let jobsWithId = jobs.map((job) => ({ ...job, id: job._jobNumber, _scope: getScopeFormated(job._scope) }));
-            setAllJobs(jobsWithId);
-        }
-    }, [jobs]);
+	{
+		if (Object.keys(jobs).length == 0)
+		{
+			fetchAllJobs()
+		} else
+		{
+			let jobsWithId = jobs.map((job) => ({ ...job, id: job._jobNumber, _scope: getScopeFormated(job._scope) }));
+			setAllJobs(jobsWithId);
+		}
+	}, [jobs]);
 
 
 	const theme = useTheme();
