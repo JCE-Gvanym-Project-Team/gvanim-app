@@ -155,6 +155,12 @@ export default function CandidatesListFullScreenDialog({ JobId }) {
 					)))}
 
 				</List>
+				
+				{CMR.length < 1 ? (
+				<Box sx={{display: 'flex', justifyContent: 'center'}}>
+					<Typography variant='h6'>לא נמצאו מועמדים למשרה זו.</Typography>
+				</Box>
+				) : (<></>)}
 
 			</Dialog>
 
