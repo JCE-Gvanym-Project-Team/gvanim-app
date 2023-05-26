@@ -165,14 +165,14 @@ const NavBar = (props: {
 			<Box sx={BoxDrawerAvatarSx}>
 				<Avatar />
 			</Box>
-
 			<Typography variant="caption" sx={TypographyDrawerSx}>
 				ברוך הבא UserUser.
 			</Typography>
+			
 
 			<Divider sx={DividerDrawerSx} />
-			<List>
 
+			<List>
 				<ListItem disablePadding>
 					<ListItemButton sx={ListItemButtonDrawerSx} onClick={handleHomeClick}>
 						<ListItemText primary='דף הבית' />

@@ -16,6 +16,7 @@ import { GridFooterContainerSx, TypographyFooterSx, dataGridContainerStyle, data
 import CandidatesListFullScreenDialog from '../CandidatesListDialog/CandidatesListDialog';
 import { getFilteredJobs } from '../../../../Firebase/FirebaseFunctions/Job';
 import { useNavigate } from "react-router-dom";
+import { ArticleOutlined } from '@mui/icons-material';
 
 
 
@@ -180,7 +181,7 @@ const GridCustomToolbar = ( {syncState }: {syncState: (stateToSave: GridInitialS
 				<Box sx={{ display: 'flex', flexDirection: 'row-reverse', width: '100%' }}>
 					<Box>
 
-						<Button type="button" onClick={handleCreatejob} variant='contained' sx={{
+						<Button type="button" endIcon={<ArticleOutlined />} onClick={handleCreatejob} variant='contained' sx={{
 							backgroundColor: 'rgb(52, 71, 103)',
 							":hover": {
 								bgcolor: "rgb(52, 71, 103)",

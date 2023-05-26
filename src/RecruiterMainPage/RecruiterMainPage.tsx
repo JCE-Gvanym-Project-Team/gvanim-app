@@ -9,6 +9,7 @@ import NewJobPage from "./ManageJobsPage/Components/NewJobPage/NewJobPage";
 import { getFilteredJobs } from "../Firebase/FirebaseFunctions/Job";
 import { Link } from "react-router-dom";
 import SingleJob from "../DrushimMainPage/Components/Job";
+import AdminPage from "./Components/AdminPage/AdminPage";
 
 
 
@@ -43,12 +44,13 @@ function RecruiterMainPage({ handlelogout }) {
 
       {allJobs.map((job) => (<Route path={`/jobs/${job.id}`} key={job.id} element={<SingleJob id={job.id}></SingleJob>} />))}
 
-
         <Route path="/" element={<WelcomePage setHomeActive={setHomeActive} setReportsActive={setReportsActive} setCandidatesActive={setCandidatesActive} setJobsActive={setJobsActive} />} />
         <Route path="/manageCandidates" element={<ManageCandidatesPage setHomeActive={setHomeActive} setReportsActive={setReportsActive} setCandidatesActive={setCandidatesActive} setJobsActive={setJobsActive} />} />
         <Route path="/manageJobs" element={<ManageJobsPage setHomeActive={setHomeActive} setReportsActive={setReportsActive} setCandidatesActive={setCandidatesActive} setJobsActive={setJobsActive} />} />
         <Route path="/createJob" element={<NewJobPage setHomeActive={setHomeActive} setReportsActive={setReportsActive} setCandidatesActive={setCandidatesActive} setJobsActive={setJobsActive} />} />
         <Route path="/reports" element={<ReportsPage setHomeActive={setHomeActive} setReportsActive={setReportsActive} setCandidatesActive={setCandidatesActive} setJobsActive={setJobsActive} />} />
+        
+        <Route path="/admin" element={<AdminPage />} />
       </Routes>
     </>
 
