@@ -27,7 +27,7 @@ const EditCandidate = (props: { setHomeActive: any, setReportsActive: any, setCa
     const [candidatePhone, setCandidatePhone] = useState('');
     const [candidateMail, setCandidateMail] = useState('');
     const [candidateGeneralRating, setCandidateGeneralRating] = useState(-1);
-    const [candidateToEdit, setCandidateToEdit] = useState<Candidate[]>([]);
+    const [candidateToEdit, setCandidateToEdit] = useState<Candidate>();
     // errors
     const [errorJobName, setErrorJobName] = useState(false);
     const [errorJobRole, setErrorJobRole] = useState(false);
@@ -172,8 +172,8 @@ const EditCandidate = (props: { setHomeActive: any, setReportsActive: any, setCa
         const getCandidateDetails = async () =>
         {
             const candidates = await getFilteredCandidates(["id"], [state]);
-            setCandidateToEdit(candidates);
-
+            let candidate = new Candidate(candidates[0]._firstName, candidates[0]._lastName, candidates[0]._phone, candidates[0]._eMail, candidates[0]._generalRating);
+            setCandidateToEdit(candidate);
 
             setCandidateId(candidates[0]._id);
             setCandidateFirstname(candidates[0]._firstName);
@@ -204,19 +204,23 @@ const EditCandidate = (props: { setHomeActive: any, setReportsActive: any, setCa
 
         if (state !== null)
         {
-            let candidate = candidateToEdit[0];
-
-            candidate.edit(candidateFirstname, candidateLastname, candidatePhone, candidateMail, candidateGeneralRating);
-            //TODO: tell Gavriel to integrate this
-            navigate("/manageCandidates", { state: `השינויים עבור המועמד' ${candidate._firstName + " " + candidate._lastName} נשמרו בהצלחה.` });
+            if (candidateToEdit)
+            {
+                candidateToEdit.edit(candidateFirstname, candidateLastname, candidatePhone, candidateMail, candidateGeneralRating);
+                //TODO: tell Gavriel to integrate this
+                navigate("/manageCandidates", { state: `השינויים עבור המועמד' ${candidateToEdit._firstName + " " + candidateToEdit._lastName} נשמרו בהצלחה.` });
+            }
         }
     }
 
     const handleDelete = () =>
     {
-        candidateToEdit[0].remove();
-        console.log(`candidate (id: ${candidateToEdit[0]._id}) deleted successfully`);
-        navigate("/manageCandidates", { state: `המועמד' ${candidateToEdit[0]._firstName + " " + candidateToEdit[0]._lastName} הוסרה בהצלחה.` });
+        if (candidateToEdit)
+        {
+            candidateToEdit.remove();
+            console.log(`candidate (id: ${candidateToEdit._id}) deleted successfully`);
+            navigate("/manageCandidates", { state: `המועמד' ${candidateToEdit._firstName + " " + candidateToEdit._lastName} הוסרה בהצלחה.` });
+        }
     }
 
     return (
@@ -245,85 +249,85 @@ const EditCandidate = (props: { setHomeActive: any, setReportsActive: any, setCa
                                     <Form noValidate={true} onSubmit={handleSubmit} sx={{ width: '100%' }} className='mt-3'>
 
 
-                                            <Box sx={{width: "100%"}} >
-                                                <label>
-                                                    <Typography sx={{ fontWeight: 600, fontSize: 13 }}>שם:</Typography>
-                                                </label>
+                                        <Box sx={{ width: "100%" }} >
+                                            <label>
+                                                <Typography sx={{ fontWeight: 600, fontSize: 13 }}>שם:</Typography>
+                                            </label>
 
-                                                <TextField style={{ width: '100%' }} sx={MyTextFieldJobNameSx} size='small' placeholder="שם של המועמד" id="_JobName" type="text"
-                                                    className="form-control" required
-                                                    value={candidateFirstname}
-                                                    error={errorJobName}
-                                                    onChange={(e) =>
-                                                    {
-                                                        setCandidateFirstname(e.target.value);
-                                                        if (candidateFirstname.length > 0 && errorJobName) { setErrorJobName(false); }
-                                                    }}
-                                                />
-                                                <FormHelperText hidden={!errorJobName} security="invalid" style={{ color: '#ef5350', marginRight: 0 }}>זהו שדה חובה.</FormHelperText>
-                                            </Box>
-                                            <Box sx={{width: "100%"}} >
-                                                <label>
-                                                    <Typography sx={{ fontWeight: 600, fontSize: 13 }}>שם משפחה:</Typography>
-                                                </label>
-                                                <TextField style={{ width: '100%' }} sx={MyTextFieldJobRoleSx} size='small' placeholder="תפקיד (role)" id="_role" type="text"
-                                                    className="form-control" required
-                                                    value={candidateLastname}
-                                                    error={errorJobRole}
-                                                    onChange={(e) =>
-                                                    {
-                                                        setCandidateLastname(e.target.value);
-                                                        if (candidateLastname.length > 0 && errorJobRole) { setErrorJobRole(false); }
-                                                    }}
-                                                />
-                                                <FormHelperText hidden={!errorJobRole} security="invalid" style={{ color: '#ef5350', marginRight: 0 }}>זהו שדה חובה.</FormHelperText>
+                                            <TextField style={{ width: '100%' }} sx={MyTextFieldJobNameSx} size='small' placeholder="שם של המועמד" id="_JobName" type="text"
+                                                className="form-control" required
+                                                value={candidateFirstname}
+                                                error={errorJobName}
+                                                onChange={(e) =>
+                                                {
+                                                    setCandidateFirstname(e.target.value);
+                                                    if (candidateFirstname.length > 0 && errorJobName) { setErrorJobName(false); }
+                                                }}
+                                            />
+                                            <FormHelperText hidden={!errorJobName} security="invalid" style={{ color: '#ef5350', marginRight: 0 }}>זהו שדה חובה.</FormHelperText>
+                                        </Box>
+                                        <Box sx={{ width: "100%" }} >
+                                            <label>
+                                                <Typography sx={{ fontWeight: 600, fontSize: 13 }}>שם משפחה:</Typography>
+                                            </label>
+                                            <TextField style={{ width: '100%' }} sx={MyTextFieldJobRoleSx} size='small' placeholder="תפקיד (role)" id="_role" type="text"
+                                                className="form-control" required
+                                                value={candidateLastname}
+                                                error={errorJobRole}
+                                                onChange={(e) =>
+                                                {
+                                                    setCandidateLastname(e.target.value);
+                                                    if (candidateLastname.length > 0 && errorJobRole) { setErrorJobRole(false); }
+                                                }}
+                                            />
+                                            <FormHelperText hidden={!errorJobRole} security="invalid" style={{ color: '#ef5350', marginRight: 0 }}>זהו שדה חובה.</FormHelperText>
 
-                                            </Box>
-                                        
-
+                                        </Box>
 
 
-                                            <Box sx={{width: "100%"}}>
-                                                <label>
-                                                    <Typography sx={{ fontWeight: 600, fontSize: 13 }}>מס' טלפון:</Typography>
-                                                </label>
-                                                <TextField style={{ width: '100%' }} sx={MyTextFieldJobRegionSx} size='small' placeholder="איזור (region)" id="_region" type="text"
-                                                    className="form-control" required
-                                                    value={candidatePhone}
-                                                    error={errorJobRegion}
-                                                    onChange={(e) =>
-                                                    {
-                                                        setCandidatePhone(e.target.value);
-                                                        if (candidatePhone.length > 0 && errorJobRegion) { setErrorJobRegion(false); }
-                                                    }}
-                                                />
-
-                                                <FormHelperText hidden={!errorJobRegion} security="invalid" style={{ color: '#ef5350', marginRight: 0 }}>זהו שדה חובה.</FormHelperText>
-
-                                            </Box>
-                                            <Box sx={{width: "100%"}}>
-                                                <label>
-                                                    <Typography sx={{ fontWeight: 600, fontSize: 13 }}>אימייל:</Typography>
-                                                </label>
-                                                <TextField style={{ width: '100%' }} sx={MyTextFieldJobStateSx} size='small' placeholder="(Job_state)" id="_job_state" type="text"
-
-                                                    required
-                                                    error={errorJobState}
-                                                    value={candidateMail}
-                                                    onChange={(e) =>
-                                                    {
-                                                        setCandidateMail(e.target.value);
-                                                        if (candidateMail.length > 0 && errorJobState) { setErrorJobState(false); }
-                                                    }}
-                                                />
-
-                                                <FormHelperText hidden={!errorJobState} security="invalid" style={{ color: '#ef5350', marginRight: 0 }}>זהו שדה חובה.</FormHelperText>
 
 
-                                            </Box>
+                                        <Box sx={{ width: "100%" }}>
+                                            <label>
+                                                <Typography sx={{ fontWeight: 600, fontSize: 13 }}>מס' טלפון:</Typography>
+                                            </label>
+                                            <TextField style={{ width: '100%' }} sx={MyTextFieldJobRegionSx} size='small' placeholder="איזור (region)" id="_region" type="text"
+                                                className="form-control" required
+                                                value={candidatePhone}
+                                                error={errorJobRegion}
+                                                onChange={(e) =>
+                                                {
+                                                    setCandidatePhone(e.target.value);
+                                                    if (candidatePhone.length > 0 && errorJobRegion) { setErrorJobRegion(false); }
+                                                }}
+                                            />
+
+                                            <FormHelperText hidden={!errorJobRegion} security="invalid" style={{ color: '#ef5350', marginRight: 0 }}>זהו שדה חובה.</FormHelperText>
+
+                                        </Box>
+                                        <Box sx={{ width: "100%" }}>
+                                            <label>
+                                                <Typography sx={{ fontWeight: 600, fontSize: 13 }}>אימייל:</Typography>
+                                            </label>
+                                            <TextField style={{ width: '100%' }} sx={MyTextFieldJobStateSx} size='small' placeholder="(Job_state)" id="_job_state" type="text"
+
+                                                required
+                                                error={errorJobState}
+                                                value={candidateMail}
+                                                onChange={(e) =>
+                                                {
+                                                    setCandidateMail(e.target.value);
+                                                    if (candidateMail.length > 0 && errorJobState) { setErrorJobState(false); }
+                                                }}
+                                            />
+
+                                            <FormHelperText hidden={!errorJobState} security="invalid" style={{ color: '#ef5350', marginRight: 0 }}>זהו שדה חובה.</FormHelperText>
 
 
-                                        <Box sx={{width: "100%", mt:1}}>
+                                        </Box>
+
+
+                                        <Box sx={{ width: "100%", mt: 1 }}>
                                             <label>
                                                 <Typography sx={{ fontWeight: 600, fontSize: 13 }}>דירוג כללי:</Typography>
                                             </label>
@@ -346,7 +350,7 @@ const EditCandidate = (props: { setHomeActive: any, setReportsActive: any, setCa
 
                                         </Box>
 
-                                        <Stack direction='row' spacing={2} sx={{ mt: 3, width: "100%"}}>
+                                        <Stack direction='row' spacing={2} sx={{ mt: 3, width: "100%" }}>
 
                                             <Button type="submit" className='mt-3 mb-3' variant='contained' sx={{
                                                 backgroundColor: 'rgb(52, 71, 103)',

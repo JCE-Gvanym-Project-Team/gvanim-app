@@ -58,9 +58,6 @@ export default function ViewCandidatesPage()
         navigate("/editCandidate", { state: candidateId });
     }
 
-
-	//TODO: remove this temporary candidateId
-	// candidateId = "example@gmail_com055555555"
 	return (
 		<>
 			{/* background div */}
@@ -90,7 +87,7 @@ export default function ViewCandidatesPage()
 							</Box>
 
 							{/* Edit Button */}
-							<Button sx={editButtonSx} variant="contained" startIcon={<EditIcon />} onClick={editCandidateHandler}>
+							<Button sx={editButtonSx} variant="contained" startIcon={<EditIcon />} onClick={() => editCandidateHandler}>
 								ערוך פרטים
 							</Button>
 						</Box>
@@ -103,7 +100,7 @@ export default function ViewCandidatesPage()
 							</Typography>
 
 							<Button sx={editButtonSx} variant="contained" startIcon={<EditIcon />}>
-								העבר למשרה אחרת
+								העבר משרה
 							</Button>
 						</Box>
 

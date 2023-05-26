@@ -20,13 +20,15 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     },
 }));
 
-export interface DialogTitleProps {
+export interface DialogTitleProps
+{
     id: string;
     children?: React.ReactNode;
     onClose: () => void;
 }
 
-function BootstrapDialogTitle(props: DialogTitleProps) {
+function BootstrapDialogTitle(props: DialogTitleProps)
+{
     const { children, onClose, ...other } = props;
 
     return (
@@ -50,19 +52,23 @@ function BootstrapDialogTitle(props: DialogTitleProps) {
     );
 }
 
-export default function RemoveCandidateDialog(props: { handleDelete: any }) {
+export default function RemoveCandidateDialog(props: { handleDelete: any })
+{
     const { handleDelete } = props;
     const [open, setOpen] = React.useState(false);
 
-    const handleClickOpen = () => {
+    const handleClickOpen = () =>
+    {
         setOpen(true);
     };
-    const handleClose = () => {
+    const handleClose = () =>
+    {
         setOpen(false);
     };
 
     return (
         <>
+            {/* Remove Candidate Button */}
             <Button type="button" className='mt-3 mb-3' variant='contained' color='error' onClick={handleClickOpen} sx={{
                 width: '20%',
                 backgroundColor: '#c82333',
@@ -71,20 +77,26 @@ export default function RemoveCandidateDialog(props: { handleDelete: any }) {
                 הסר מועמד
             </Button>
 
+            {/* Notes Dialog */}
             <BootstrapDialog
                 fullWidth
                 onClose={handleClose}
                 aria-labelledby="customized-dialog-title"
                 open={open}
             >
+                {/* Title */}
                 <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
                     הודעת אימות
                 </BootstrapDialogTitle>
+
+                {/* Are you sure text */}
                 <DialogContent dividers>
                     <Typography gutterBottom>
-                        האם את/ה בטוח/ה שברצונך להסיר משרה זו לצמיתות?
+                        האם את/ה בטוח/ה שברצונך להסיר מועמד זה לצמיתות?
                     </Typography>
                 </DialogContent>
+
+                {/* Action Buttons */}
                 <DialogActions>
                     <Button variant='text' autoFocus onClick={handleClose}>
                         ביטול
