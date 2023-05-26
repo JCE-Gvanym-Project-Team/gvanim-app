@@ -5,7 +5,7 @@ import { editButtonSx, textSx, titleSx, mainStackSx, ContainerGradientSx, candid
 import { ManageCandidatesPageGlobalStyle } from '../../PageStyles';
 import JobsTable from './Components/JobsTable/JobsTable';
 import { Candidate, getFilteredCandidates } from '../../../Firebase/FirebaseFunctions/Candidate';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Job, getFilteredJobs } from '../../../Firebase/FirebaseFunctions/Job';
 import { getFilteredCandidateJobStatuses } from '../../../Firebase/FirebaseFunctions/CandidateJobStatus';
 import NotesPopup from './Components/NotesPopup/NotesPopup';
@@ -15,6 +15,7 @@ export default function ViewCandidatesPage()
 
 	// get candidate id
 	const { state } = useLocation();
+	const navigate = useNavigate();
 
 	// get jobs data size
 	const [dataSize, setDataSize] = useState(0);
@@ -52,6 +53,11 @@ export default function ViewCandidatesPage()
 		setPopupOpen(false);
 	};
 
+	const editCandidateHandler = () =>
+    {
+        navigate("/editCandidate", { state: candidateId });
+    }
+
 
 	//TODO: remove this temporary candidateId
 	// candidateId = "example@gmail_com055555555"
@@ -84,7 +90,7 @@ export default function ViewCandidatesPage()
 							</Box>
 
 							{/* Edit Button */}
-							<Button sx={editButtonSx} variant="contained" startIcon={<EditIcon />}>
+							<Button sx={editButtonSx} variant="contained" startIcon={<EditIcon />} onClick={editCandidateHandler}>
 								ערוך פרטים
 							</Button>
 						</Box>
