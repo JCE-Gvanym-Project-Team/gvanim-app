@@ -87,7 +87,7 @@ export default function ViewCandidatesPage()
 							</Box>
 
 							{/* Edit Button */}
-							<Button sx={editButtonSx} variant="contained" startIcon={<EditIcon />} onClick={() => editCandidateHandler}>
+							<Button sx={editButtonSx} variant="contained" startIcon={<EditIcon />} onClick={editCandidateHandler}>
 								ערוך פרטים
 							</Button>
 						</Box>

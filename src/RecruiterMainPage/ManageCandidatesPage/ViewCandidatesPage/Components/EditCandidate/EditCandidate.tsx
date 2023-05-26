@@ -172,16 +172,16 @@ const EditCandidate = (props: { setHomeActive: any, setReportsActive: any, setCa
         const getCandidateDetails = async () =>
         {
             const candidates = await getFilteredCandidates(["id"], [state]);
-            let candidate = new Candidate(candidates[0]._firstName, candidates[0]._lastName, candidates[0]._phone, candidates[0]._eMail, candidates[0]._generalRating);
-            setCandidateToEdit(candidate);
-
+            
             setCandidateId(candidates[0]._id);
             setCandidateFirstname(candidates[0]._firstName);
             setCandidateLastname(candidates[0]._lastName);
             setCandidatePhone(candidates[0]._phone);
             setCandidateMail(candidates[0]._eMail);
             setCandidateGeneralRating(candidates[0]._generalRating);
-
+            
+            let candidate = new Candidate(candidates[0]._firstName, candidates[0]._lastName, candidates[0]._phone, candidates[0]._eMail, candidates[0]._generalRating);
+            setCandidateToEdit(candidate);
         }
 
         if (state !== null)
