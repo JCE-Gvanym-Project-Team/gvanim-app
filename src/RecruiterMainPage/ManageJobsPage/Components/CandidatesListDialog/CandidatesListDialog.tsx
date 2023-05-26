@@ -122,8 +122,8 @@ export default function CandidatesListFullScreenDialog({ JobId }) {
 
 
 					{CMR.map(((cmr) => (
-						<>
-						<ListItemButton accessKey={cmr[0]?._id} onClick={() => {
+						<React.Fragment key={cmr[0]?._id}>
+						<ListItemButton onClick={() => {
 							navigate("/manageCandidates", { state: cmr[0]?._id })
 						}}>
 
@@ -131,7 +131,7 @@ export default function CandidatesListFullScreenDialog({ JobId }) {
 								<Avatar />
 							</ListItemAvatar>
 
-							<ListItemText primary={cmr[0]?._firstName} secondary={cmr[0]?._eMail} />
+							<ListItemText primary={cmr[0]?._firstName +  ' ' + cmr[0]?._lastName} secondary={cmr[0]?._eMail} />
 
 						{cmr[1] < 0 ? (
 						<>
@@ -141,7 +141,7 @@ export default function CandidatesListFullScreenDialog({ JobId }) {
 						</>) : 
 						(
 						<>
-							<ListItemIcon >
+							<ListItemIcon>
 								<Rating defaultValue={cmr[1]} size="medium" readOnly />
 							</ListItemIcon>
 						</>)}
@@ -150,7 +150,7 @@ export default function CandidatesListFullScreenDialog({ JobId }) {
 						</ListItemButton>
 
 						<Divider />
-						</>
+						</React.Fragment>
 						
 					)))}
 
