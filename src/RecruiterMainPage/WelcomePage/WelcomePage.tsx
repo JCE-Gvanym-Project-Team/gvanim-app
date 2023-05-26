@@ -22,6 +22,7 @@ export default function WelcomePage(props: { setHomeActive: any, setReportsActiv
     return (
         <>
             <Box sx={BoxGradientSx} />
+            <Button sx={{backgroundColor: '#fff'}} onClick={()=>navigate("/admin")}>temp</Button>
 
             <Paper sx={MyPaperSx}>
 

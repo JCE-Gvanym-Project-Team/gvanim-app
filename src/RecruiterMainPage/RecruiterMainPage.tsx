@@ -10,6 +10,7 @@ import { getFilteredJobs } from "../Firebase/FirebaseFunctions/Job";
 import { Link } from "react-router-dom";
 import SingleJob from "../DrushimMainPage/Components/Job";
 import EditCandidate from "./ManageCandidatesPage/ViewCandidatesPage/Components/EditCandidate/EditCandidate";
+import AdminPage from "./Components/AdminPage/AdminPage";
 
 
 
@@ -44,7 +45,6 @@ function RecruiterMainPage({ handlelogout }) {
 
       {allJobs.map((job) => (<Route path={`/jobs/${job.id}`} key={job.id} element={<SingleJob id={job.id}></SingleJob>} />))}
 
-
         <Route path="/" element={<WelcomePage setHomeActive={setHomeActive} setReportsActive={setReportsActive} setCandidatesActive={setCandidatesActive} setJobsActive={setJobsActive} />} />
         {/* Jobs Routes */}
         <Route path="/manageJobs" element={<ManageJobsPage setHomeActive={setHomeActive} setReportsActive={setReportsActive} setCandidatesActive={setCandidatesActive} setJobsActive={setJobsActive} />} />
@@ -57,6 +57,8 @@ function RecruiterMainPage({ handlelogout }) {
         {/* Reports Routes */}
         <Route path="/reports" element={<ReportsPage setHomeActive={setHomeActive} setReportsActive={setReportsActive} setCandidatesActive={setCandidatesActive} setJobsActive={setJobsActive} />} />
 
+        {/* Admin Routes */}
+        <Route path="/admin" element={<AdminPage />} />
       </Routes>
     </>
 
