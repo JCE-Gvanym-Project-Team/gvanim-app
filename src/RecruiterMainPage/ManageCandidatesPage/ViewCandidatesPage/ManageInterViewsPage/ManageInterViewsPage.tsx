@@ -1,7 +1,7 @@
 import React from 'react'
 
-export default function ManageInterViewsPage() {
+export default function ManageInterviewsPage() {
   return (
-    <div>ManageInterViewsPage</div>
+    <div>ManageInterviewsPage</div>
   )
 }

@@ -12,9 +12,12 @@ import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
 import { TransitionProps } from '@mui/material/transitions';
-import { Avatar, Box, Container, Link, ListItemAvatar, ListItemButton, ListItemIcon, Rating } from '@mui/material';
+import { Avatar, Box,ListItemAvatar, ListItemButton, ListItemIcon, Rating } from '@mui/material';
 import { ListItemTypographySx } from './CandidatesListDialogStyle';
 import { ChevronLeft } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
+import { Candidate, getFilteredCandidates } from '../../../../Firebase/FirebaseFunctions/Candidate';
+import { getFilteredCandidateJobStatuses } from '../../../../Firebase/FirebaseFunctions/CandidateJobStatus';
 
 const Transition = React.forwardRef(function Transition(
 	props: TransitionProps & {
@@ -26,7 +29,26 @@ const Transition = React.forwardRef(function Transition(
 });
 
 export default function CandidatesListFullScreenDialog({ JobId }) {
+	const navigate = useNavigate();
 	const [open, setOpen] = React.useState(false);
+	const [CMR, setCMR] = React.useState<any[]>([]);
+
+	const getCandidates = async () => {
+		const _candidates_jobstatus = await getFilteredCandidateJobStatuses(["jobNumber"], [`${JobId}`]);
+
+		const promises = _candidates_jobstatus.map(async (candidateJobStatus) => {
+			const candidate1: Candidate[] = await getFilteredCandidates(["id"], [candidateJobStatus._candidateId]);
+			return [candidate1[0], candidateJobStatus._matchingRate];
+		});
+
+		const results = await Promise.all(promises);
+
+		setCMR(results);
+	}
+
+	React.useEffect(() => {
+		getCandidates();
+	}, [])
 
 	const handleClickOpen = () => {
 		setOpen(true);
@@ -41,92 +63,107 @@ export default function CandidatesListFullScreenDialog({ JobId }) {
 
 			<Button variant='text' endIcon={<ChevronLeft />} onClick={handleClickOpen} >לרשימת המועמדים</Button>
 
-			
-				<Dialog
-				  sx={{
+
+			<Dialog
+				sx={{
 					"& .MuiDialog-container": {
-				
+
 					}
-				  }}
-				  PaperProps={{ sx: { maxWidth:{xs: 'xl',sm: 'xl',md: 'md', lg: 'md', xl: 'md'}, maxHeight:'80%',
-				  borderRadius: '0.6rem'}}}
-					fullScreen 
-					open={open}
-					TransitionComponent={Transition}
-					
-				>
+				}}
+				PaperProps={{
+					sx: {
+						maxWidth: { xs: 'xl', sm: 'xl', md: 'md', lg: 'md', xl: 'md' }, maxHeight: '80%',
+						borderRadius: '0.6rem'
+					}
+				}}
+				fullScreen
+				open={open}
+				TransitionComponent={Transition}
 
-					<AppBar sx={{ position: 'relative', backgroundColor: 'rgb(52, 71, 103)'}} >
-						<Toolbar>
+			>
 
-							<Typography sx={{ ml: 2, flex: 1, textAlign: 'center' }} variant="h6" component="div">
-								משרה מס' {JobId}
+				<AppBar sx={{ position: 'relative', backgroundColor: 'rgb(52, 71, 103)' }} >
+					<Toolbar>
+
+						<Typography sx={{ ml: 2, flex: 1, textAlign: 'center' }} variant="h6" component="div">
+							משרה מס' {JobId}
+						</Typography>
+
+						<IconButton
+							edge="start"
+							color="inherit"
+							onClick={handleClose}
+							aria-label="close"
+						>
+							<CloseIcon />
+						</IconButton>
+					</Toolbar>
+				</AppBar>
+
+				<List>
+					{/* this is the header */}
+					<ListItem>
+						<ListItemText sx={{ paddingRight: '16px', paddingLeft: '16px' }} >
+							<Typography sx={ListItemTypographySx} variant='subtitle1'>
+								שם המועמד
 							</Typography>
+						</ListItemText>
 
-							<IconButton
-								edge="start"
-								color="inherit"
-								onClick={handleClose}
-								aria-label="close"
-							>
-								<CloseIcon />
-							</IconButton>
-						</Toolbar>
-					</AppBar>
-
-					<List>
-						{/* this is the header */}
-						<ListItem>
+						<ListItemIcon>
 							<ListItemText sx={{ paddingRight: '16px', paddingLeft: '16px' }} >
 								<Typography sx={ListItemTypographySx} variant='subtitle1'>
-									שם המועמד
+									התאמה
 								</Typography>
 							</ListItemText>
+						</ListItemIcon>
+					</ListItem>
+					{/* END HEADER */}
+					<Divider />
 
+
+					{CMR.map(((cmr) => (
+						<React.Fragment key={cmr[0]?._id}>
+						<ListItemButton onClick={() => {
+							navigate("/manageCandidates", { state: cmr[0]?._id })
+						}}>
+
+							<ListItemAvatar>
+								<Avatar />
+							</ListItemAvatar>
+
+							<ListItemText primary={cmr[0]?._firstName +  ' ' + cmr[0]?._lastName} secondary={cmr[0]?._eMail} />
+
+						{cmr[1] < 0 ? (
+						<>
+							<ListItemIcon sx={{ paddingRight: '16px', paddingLeft: '16px' }} >
+								<Typography >לא צויין</Typography>
+							</ListItemIcon>
+						</>) : 
+						(
+						<>
 							<ListItemIcon>
-								<ListItemText sx={{ paddingRight: '16px', paddingLeft: '16px' }} >
-									<Typography sx={ListItemTypographySx} variant='subtitle1'>
-										התאמה
-									</Typography>
-								</ListItemText>
+								<Rating defaultValue={cmr[1]} size="medium" readOnly />
 							</ListItemIcon>
-						</ListItem>
-						{/* END HEADER */}
-						<Divider />
-
-						<ListItemButton accessKey='ID עומר' onClick={(e) => console.log(e.currentTarget.accessKey)}>
-
-							<ListItemAvatar>
-								<Avatar />
-							</ListItemAvatar>
-
-
-							<ListItemText primary="עומר תורג'מן" secondary="מעלה אדומים" />
-
-							<ListItemIcon >
-								<Rating defaultValue={2} size="medium" readOnly />
-							</ListItemIcon>
+						</>)}
+						
 
 						</ListItemButton>
+
 						<Divider />
+						</React.Fragment>
+						
+					)))}
 
-						<ListItemButton accessKey='ID גבריאל' onClick={(e) => console.log(e.currentTarget.accessKey)}>
+				</List>
+				
+				{CMR.length < 1 ? (
+				<Box sx={{display: 'flex', justifyContent: 'center'}}>
+					<Typography sx={{ fontFamily: "'Noto Sans Hebrew', sans-serif", color: 'rgb(52, 71, 103)'}} variant='h6'>לא נמצאו מועמדים למשרה זו.</Typography>
+				</Box>
+				) : (<></>)}
 
-							<ListItemAvatar>
-								<Avatar />
-							</ListItemAvatar>
+			</Dialog>
 
-							<ListItemText
-								primary="עמוס לוי"
-								secondary="באר שבע"
-							/>
-							<Rating defaultValue={5} size="medium" readOnly />
-						</ListItemButton>
-						<Divider />
-					</List>
-
-				</Dialog>
-		
 		</Box>
 	);
 }
