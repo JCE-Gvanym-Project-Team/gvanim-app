@@ -24,49 +24,40 @@ const Transition = React.forwardRef(function Transition(
 		children: React.ReactElement;
 	},
 	ref: React.Ref<unknown>,
-)
-{
+) {
 	return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function CandidatesListFullScreenDialog({ JobId })
-{
+export default function CandidatesListFullScreenDialog({ JobId }) {
 	const navigate = useNavigate();
 	const [open, setOpen] = React.useState(false);
 	const [CMR, setCMR] = React.useState<any[]>([]);
 
-	const getCandidates = async () =>
-	{
+	const getCandidates = async () => {
 		const _candidates_jobstatus = await getFilteredCandidateJobStatuses(["jobNumber"], [`${JobId}`]);
 
-		const promises = _candidates_jobstatus.map(async (candidateJobStatus) =>
-		{
+		const promises = _candidates_jobstatus.map(async (candidateJobStatus) => {
 			const candidate1: Candidate[] = await getFilteredCandidates(["id"], [candidateJobStatus._candidateId]);
-			return [candidate1, candidateJobStatus._matchingRate];
+			return [candidate1[0], candidateJobStatus._matchingRate];
 		});
 
 		const results = await Promise.all(promises);
-		// TODO: FIX THIS
+
 		setCMR(results);
 	}
 
-	React.useEffect(() =>
-	{
-
-	}, JobId)
-
-	const handleClickOpen = () =>
-	{
+	React.useEffect(() => {
 		getCandidates();
+	}, [])
+
+	const handleClickOpen = () => {
 		setOpen(true);
 	};
 
-	const handleClose = () =>
-	{
+	const handleClose = () => {
 		setOpen(false);
 	};
 
-	const listOfCandidates = ["candidate1", "candidate2"];
 	return (
 		<Box>
 
@@ -129,25 +120,39 @@ export default function CandidatesListFullScreenDialog({ JobId })
 					{/* END HEADER */}
 					<Divider />
 
-					<ListItemButton accessKey='ID עומר' onClick={(e) =>
-					{
-						navigate("/manageCandidates", { state: listOfCandidates[0] })
-					}}>
 
-						<ListItemAvatar>
-							<Avatar />
-						</ListItemAvatar>
+					{CMR.map(((cmr) => (
+						<>
+						<ListItemButton accessKey={cmr[0]?._id} onClick={() => {
+							navigate("/manageCandidates", { state: cmr[0]?._id })
+						}}>
 
+							<ListItemAvatar>
+								<Avatar />
+							</ListItemAvatar>
 
-						<ListItemText primary="עומר תורג'מן" secondary="מעלה אדומים" />
+							<ListItemText primary={cmr[0]?._firstName} secondary={cmr[0]?._eMail} />
 
-						<ListItemIcon >
-							<Rating defaultValue={2} size="medium" readOnly />
-						</ListItemIcon>
+						{cmr[1] < 0 ? (
+						<>
+							<ListItemIcon sx={{ paddingRight: '16px', paddingLeft: '16px' }} >
+								<Typography >לא צויין</Typography>
+							</ListItemIcon>
+						</>) : 
+						(
+						<>
+							<ListItemIcon >
+								<Rating defaultValue={cmr[1]} size="medium" readOnly />
+							</ListItemIcon>
+						</>)}
+						
 
-					</ListItemButton>
+						</ListItemButton>
 
-					<Divider />
+						<Divider />
+						</>
+						
+					)))}
 
 				</List>
 

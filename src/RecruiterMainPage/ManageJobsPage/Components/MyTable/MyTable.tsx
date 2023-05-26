@@ -239,7 +239,10 @@ export default function MyTable(props: { setDataSize: any }) {
 
 
     const CustomFooter = () => {
-        setDataSize(allJobs.length);
+		React.useEffect(() => {
+			setDataSize(allJobs.length);
+		}, []);
+        
     
         return (
             <GridFooterContainer sx={GridFooterContainerSx}>
