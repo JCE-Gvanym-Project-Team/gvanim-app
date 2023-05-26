@@ -165,7 +165,6 @@ const EditCandidate = (props: { setHomeActive: any, setReportsActive: any, setCa
 
     useEffect(() =>
     {
-
         // for navbar
         setHomeActive(false); setCandidatesActive(false);
         setReportsActive(false); setJobsActive(false);
@@ -191,7 +190,7 @@ const EditCandidate = (props: { setHomeActive: any, setReportsActive: any, setCa
         }
 
 
-    }, [candidateId]);
+    }, [state]);
 
 
 

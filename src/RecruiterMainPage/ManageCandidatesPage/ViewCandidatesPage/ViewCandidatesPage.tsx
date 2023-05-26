@@ -38,7 +38,7 @@ export default function ViewCandidatesPage()
 
 		// get list of all jobs for this candidate
 		getJobs(candidateId, setJobs);
-	})
+	}, [])
 
 	// comments popup handlers
 	const [popupOpen, setPopupOpen] = useState(false);

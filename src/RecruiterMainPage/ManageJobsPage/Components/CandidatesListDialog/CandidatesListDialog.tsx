@@ -53,7 +53,7 @@ export default function CandidatesListFullScreenDialog({ JobId })
 	React.useEffect(() =>
 	{
 
-	}, JobId)
+	}, [JobId])
 
 	const handleClickOpen = () =>
 	{
