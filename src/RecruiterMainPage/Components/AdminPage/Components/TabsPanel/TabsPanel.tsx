@@ -9,6 +9,7 @@ import AccountSettings from './Components/AccountSettings/AccountSettings';
 import PasswordSettings from './Components/PasswordSettings/PasswordSettings';
 import { ManageAccounts, Password, PeopleAltOutlined, Settings, Summarize } from '@mui/icons-material';
 import Tooltip from '@mui/material/Tooltip';
+import RecruiterList from '../RecruitersList/RecruiterList';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -72,9 +73,11 @@ const MyTabsPanel: React.FC = () => {
 
           <Tab icon={<Password />} sx={{ borderBottom: '1px solid rgba(0, 0, 0, 0.125)', borderRight: '1px solid rgba(0, 0, 0, 0.125)' }} label="סיסמה" />
 
-          <Tab disabled icon={<PeopleAltOutlined />} sx={{ borderBottom: '1px solid rgba(0, 0, 0, 0.125)', borderRight: '1px solid rgba(0, 0, 0, 0.125)' }} label="אשכולות ומגייסים" />
+          <Tab icon={<PeopleAltOutlined />} sx={{ borderBottom: '1px solid rgba(0, 0, 0, 0.125)', borderRight: '1px solid rgba(0, 0, 0, 0.125)' }} label="ניהול אשכולות" />
 
-          <Tab disabled icon={<Summarize />} sx={{ borderBottom: '1px solid rgba(0, 0, 0, 0.125)', borderRight: '1px solid rgba(0, 0, 0, 0.125)' }} label="עדכון שדות" />
+          <Tab icon={<PeopleAltOutlined />} sx={{ borderBottom: '1px solid rgba(0, 0, 0, 0.125)', borderRight: '1px solid rgba(0, 0, 0, 0.125)' }} label="ניהול מגייסים" />
+
+          <Tab icon={<Summarize />} sx={{ borderBottom: '1px solid rgba(0, 0, 0, 0.125)', borderRight: '1px solid rgba(0, 0, 0, 0.125)' }} label="עדכון שדות" />
 
         </Tabs>
       </Stack>
@@ -99,11 +102,16 @@ const MyTabsPanel: React.FC = () => {
           </Tooltip>
           
           <Tooltip title={'ניהול אשכולות ומגייסים'}>
-          <Tab disabled icon={<PeopleAltOutlined />} sx={{ borderBottom: '1px solid rgba(0, 0, 0, 0.125)', borderRight: '1px solid rgba(0, 0, 0, 0.125)' }} />
+          <Tab icon={<PeopleAltOutlined />} sx={{ borderBottom: '1px solid rgba(0, 0, 0, 0.125)', borderRight: '1px solid rgba(0, 0, 0, 0.125)' }} />
+          </Tooltip>
+
+           
+          <Tooltip title={'ניהול אשכולות ומגייסים'}>
+          <Tab icon={<PeopleAltOutlined />} sx={{ borderBottom: '1px solid rgba(0, 0, 0, 0.125)', borderRight: '1px solid rgba(0, 0, 0, 0.125)' }} />
           </Tooltip>
 
           <Tooltip title={'ניהול שדות'}>
-          <Tab disabled icon={<Summarize />} sx={{ borderBottom: '1px solid rgba(0, 0, 0, 0.125)', borderRight: '1px solid rgba(0, 0, 0, 0.125)' }} />
+          <Tab icon={<Summarize />} sx={{ borderBottom: '1px solid rgba(0, 0, 0, 0.125)', borderRight: '1px solid rgba(0, 0, 0, 0.125)' }} />
           </Tooltip>
         </Tabs>
       </Stack>
@@ -120,14 +128,16 @@ const MyTabsPanel: React.FC = () => {
       </TabPanel>
 
       <TabPanel value={value} index={2}>
-        <Typography component="span" sx={{ fontFamily: "'Noto Sans Hebrew', sans-serif", fontWeight: 600 }} variant='h6'> ניהול אשכולות ומגייסים</Typography>
+        <Typography component="span" sx={{ fontFamily: "'Noto Sans Hebrew', sans-serif", fontWeight: 600 }} variant='h6'> ניהול אשכולות</Typography>
       </TabPanel>
 
       <TabPanel value={value} index={3}>
-        <Typography component="span" sx={{ fontFamily: "'Noto Sans Hebrew', sans-serif", fontWeight: 600 }} variant='h6'>הוספה / הסרה של שדות</Typography>
+        <Typography component="span" sx={{ fontFamily: "'Noto Sans Hebrew', sans-serif", fontWeight: 600 }} variant='h6'> ניהול מגייסים</Typography>
+        <RecruiterList />
       </TabPanel>
+
       <TabPanel value={value} index={4}>
-        Item Five
+        <Typography component="span" sx={{ fontFamily: "'Noto Sans Hebrew', sans-serif", fontWeight: 600 }} variant='h6'>הוספה / הסרה של שדות</Typography>
       </TabPanel>
       <TabPanel value={value} index={5}>
         Item Six
