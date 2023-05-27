@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Typography, Box, IconButton } from '@mui/material';
-import { dialogActionsSx, dialogContentSx, dialogSx } from './NotesPopupStyles';
+import { dialogActionsSx, dialogContentSx, dialogSx, dialogTitleSx, dialogTopAreaSx } from './NotesPopupStyles';
 import CloseIcon from '@mui/icons-material/Close';
 
 export default function NotesPopup({ open, onClose })
@@ -22,23 +22,25 @@ export default function NotesPopup({ open, onClose })
     return (
         // popup dialog
         <Dialog open={open} onClose={onClose} sx={dialogSx}>
-            <Box sx={{ display: "flex", justifyContent: "end" }}>
+            <Box sx={dialogTopAreaSx}>
+                {/* Title */}
+                <DialogTitle sx={dialogTitleSx}>
+                    הערות למועמד
+                </DialogTitle>
+                <Box sx={{ display: "flex", justifyContent: "end" }}>
 
-                {/* Close button */}
-                <IconButton
-                    edge="start"
-                    color="inherit"
-                    onClick={onClose}
-                    aria-label="close"
-                >
-                    <CloseIcon />
-                </IconButton>
+
+                    {/* Close button */}
+                    <IconButton
+                        edge="start"
+                        color="inherit"
+                        onClick={onClose}
+                        aria-label="close"
+                    >
+                        <CloseIcon />
+                    </IconButton>
+                </Box>
             </Box>
-
-            {/* Title */}
-            <DialogTitle>
-                הערות למועמד
-            </DialogTitle>
 
             {/* Text Field area */}
             <DialogContent sx={dialogContentSx}>

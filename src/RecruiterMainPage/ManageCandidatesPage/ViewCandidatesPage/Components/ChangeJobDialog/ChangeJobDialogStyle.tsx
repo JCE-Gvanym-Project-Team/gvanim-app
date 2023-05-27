@@ -1,10 +1,10 @@
 import { CSSProperties } from "@mui/material/styles/createTypography";
 import { SxProps } from "@mui/system";
-import { ManageCandidatesPageGlobalStyle } from "../../../../PageStyles";
+import { ManageCandidatesPageGlobalStyle, GlobalStyle } from "../../../../PageStyles";
+
 
 
 export const dialogSx: SxProps = {
-    
 }
 
 export const dialogContentSx: SxProps = {
@@ -17,6 +17,8 @@ export const dialogContentSx: SxProps = {
 
 export const dialogContentStyle: CSSProperties = {
     paddingTop: "1rem",
+    borderBottom: "1px solid",
+    borderColor: GlobalStyle.NavbarBackgroundColor
 }
 
 export const dialogTitleSx: SxProps = {
@@ -27,6 +29,7 @@ export const dialogTitleSx: SxProps = {
 }
 
 export const dialogTopAreaSx: SxProps = {
+    marginTop:"-1rem",
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",

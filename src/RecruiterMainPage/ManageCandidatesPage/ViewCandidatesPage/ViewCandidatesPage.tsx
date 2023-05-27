@@ -10,6 +10,7 @@ import { Job, getFilteredJobs } from '../../../Firebase/FirebaseFunctions/Job';
 import { getFilteredCandidateJobStatuses } from '../../../Firebase/FirebaseFunctions/CandidateJobStatus';
 import NotesPopup from './Components/NotesPopup/NotesPopup';
 import ChangeJobDialog from './Components/ChangeJobDialog/ChangeJobDialog';
+import { Autorenew, EditNote, QuestionAnswer } from '@mui/icons-material';
 
 export default function ViewCandidatesPage()
 {
@@ -107,7 +108,7 @@ export default function ViewCandidatesPage()
 							</Box>
 
 							{/* Edit Button */}
-							<Button sx={editButtonSx} variant="contained" startIcon={<EditIcon />} onClick={editCandidateHandler}>
+							<Button sx={editButtonSx} variant="contained" startIcon={<EditNote />} onClick={editCandidateHandler}>
 								ערוך פרטים
 							</Button>
 						</Box>
@@ -119,8 +120,8 @@ export default function ViewCandidatesPage()
 								משרות
 							</Typography>
 
-							<Button sx={editButtonSx} variant="contained" startIcon={<EditIcon />} onClick={openChangeJobDialogHandler}>
-								העבר משרה
+							<Button sx={editButtonSx} variant="contained" startIcon={<Autorenew />} onClick={openChangeJobDialogHandler}>
+								שינוי משרה
 							</Button>
 							<ChangeJobDialog
 								open={changeJobDialogOpen}
@@ -129,7 +130,7 @@ export default function ViewCandidatesPage()
 								{
 									return job._jobNumber.toString() + ", " + job._role + ", " + job._region;
 								})}
-								// first filter out jobs that they applied to, then map to a nice string
+								// first filter out jobs that they applied to, then map to a nice string for the user
 								allJobs={allJobs.filter(job =>
 								{
 									return !candidateJobs.includes(job);
@@ -146,13 +147,13 @@ export default function ViewCandidatesPage()
 
 						{/* Bottom Buttons */}
 						<Box sx={candidateNameAndEditButtonContainerSx}>
-							<Button sx={editButtonSx} variant="contained" startIcon={<EditIcon />}>
+							<Button sx={editButtonSx} variant="contained" startIcon={<QuestionAnswer />}>
 								ניהול ראיונות
 							</Button>
 							<Button sx={editButtonSx} variant="contained" startIcon={<EditIcon />}>
 								ממליצים
 							</Button>
-							<Button sx={editButtonSx} variant="contained" onClick={commentsPopupOpenHandler} startIcon={<EditIcon />}>
+							<Button sx={editButtonSx} variant="contained" onClick={commentsPopupOpenHandler} startIcon={<EditNote />}>
 								הערות
 							</Button>
 							<NotesPopup open={popupOpen} onClose={commentsPopupCloseHandler} />
