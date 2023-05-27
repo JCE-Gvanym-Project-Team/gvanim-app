@@ -27,3 +27,7 @@ export const MyPaperSx: SxProps = {
     overflow: 'hidden',
 
 }
+
+export const StackNavigationOptionsSx: SxProps = {
+    display: { xs: 'none', sm: 'none', md: 'flex', justifyContent: 'center', width: '100%' } 
+}

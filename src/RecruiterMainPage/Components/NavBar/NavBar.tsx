@@ -19,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 import MyLogoutDialog from "./Components/LogoutDialog";
 import { AppBarSx, BoxDrawerAvatarSx, BoxDrawerSx, BoxNavigationOptionsSx, DividerDrawerSx, ListItemButtonDrawerSx, LogoutButtonBoxSx, NavBarIconColorSx, OpenDrawerIconSx, TypographyDrawerSx, WelcomeUserBoxSx } from "./NavBarStyle";
 import { blue, blueGrey, grey, lightBlue } from "@mui/material/colors";
+import UserDropMenu from "./Components/UserDropMenu/UserDropMenu";
 
 
 
@@ -220,21 +221,15 @@ const NavBar = (props: {
 
 					<Box sx={WelcomeUserBoxSx}>
 
-						<IconButton
-							color="inherit"
-							aria-label="welcome user"
-							edge="start"
-							disabled
-
-						>
-							<AccountCircle sx={NavBarIconColorSx} />
-						</IconButton>
-
+						<UserDropMenu handlelogout={handlelogout} />
 						<Typography
+							marginLeft={1}
+							sx={{maxWidth: 80,maxHeight: 20}}
 							variant="caption"
 						>
-							ברוך הבא User.
+							ברוך הבא משתמש
 						</Typography>
+				
 
 					</Box>
 
@@ -267,9 +262,7 @@ const NavBar = (props: {
 
 						</Stack>
 					</Box>
-					<Box sx={LogoutButtonBoxSx}>
-						<MyLogoutDialog handlelogout={handlelogout} isMobile={false} />
-					</Box>
+				
 				</Toolbar>
 			</AppBar>
 			<Box component="nav">
