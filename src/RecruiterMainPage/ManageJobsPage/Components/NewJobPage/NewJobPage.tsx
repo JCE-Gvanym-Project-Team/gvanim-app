@@ -39,133 +39,6 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
     const [errorJobRequirements, setErrorJobRequirements] = useState(false);
 
 
-    // ### design TextFields #######################################################################################
-    const MyTextFieldJobNameSx = {
-        boxShadow: '0px 2px 24px #DAECFF',
-        "& .MuiOutlinedInput-root": {
-            fontSize: '0.875rem',
-            "&:hover fieldset": {
-                color: errorJobName ? '#dc3545' : '#212529',
-                border: errorJobName ? '1px solid #dc3545' : '1px solid #ced4da',
-                outline: 0,
-            },
-            "&.Mui fieldset": {
-                color: errorJobName ? '#dc3545' : '#212529',
-                border: errorJobName ? '1px solid #dc3545' : '1px solid #ced4da',
-                outline: 0,
-            },
-            "&.Mui-focused fieldset": {
-                border: errorJobName ? '1px solid #dc3545' : '1px solid #86b7fe',
-                color: errorJobName ? '#dc3545' : '#212529',
-                outline: 0,
-                boxShadow: errorJobName ? '0 0 0 0.25rem rgba(220,53,69,.25)' : '0 0 0 0.25rem rgba(13,110,253,.25)'
-            },
-
-        },
-    }
-    const MyTextFieldJobRoleSx = {
-        boxShadow: '0px 2px 24px #DAECFF',
-        "& .MuiOutlinedInput-root": {
-            fontSize: '0.875rem',
-            "&:hover fieldset": {
-                color: errorJobRole ? '#dc3545' : '#212529',
-                border: errorJobRole ? '1px solid #dc3545' : '1px solid #ced4da',
-                outline: 0,
-            },
-            "&.Mui fieldset": {
-                color: errorJobRole ? '#dc3545' : '#212529',
-                border: errorJobRole ? '1px solid #dc3545' : '1px solid #ced4da',
-                outline: 0,
-
-
-            },
-            "&.Mui-focused fieldset": {
-                border: errorJobRole ? '1px solid #dc3545' : '1px solid #86b7fe',
-                color: errorJobRole ? '#dc3545' : '#212529',
-                outline: 0,
-                boxShadow: errorJobRole ? '0 0 0 0.25rem rgba(220,53,69,.25)' : '0 0 0 0.25rem rgba(13,110,253,.25)'
-            },
-
-        },
-    }
-    const MyTextFieldJobRegionSx = {
-        boxShadow: '0px 2px 24px #DAECFF',
-        "& .MuiOutlinedInput-root": {
-            fontSize: '0.875rem',
-            "&:hover fieldset": {
-                color: errorJobRegion ? '#dc3545' : '#212529',
-                border: errorJobRegion ? '1px solid #dc3545' : '1px solid #ced4da',
-                outline: 0,
-            },
-            "&.Mui fieldset": {
-                color: errorJobRegion ? '#dc3545' : '#212529',
-                border: errorJobRegion ? '1px solid #dc3545' : '1px solid #ced4da',
-                outline: 0,
-
-
-            },
-            "&.Mui-focused fieldset": {
-                border: errorJobRegion ? '1px solid #dc3545' : '1px solid #86b7fe',
-                color: errorJobRegion ? '#dc3545' : '#212529',
-                outline: 0,
-                boxShadow: errorJobRegion ? '0 0 0 0.25rem rgba(220,53,69,.25)' : '0 0 0 0.25rem rgba(13,110,253,.25)'
-            },
-
-        },
-    }
-    const MyTextFieldJobStateSx = {
-        boxShadow: '0px 2px 24px #DAECFF',
-        "& .MuiOutlinedInput-root": {
-            fontSize: '0.875rem',
-            "&:hover fieldset": {
-                color: errorJobState ? '#dc3545' : '#212529',
-                border: errorJobState ? '1px solid #dc3545' : '1px solid #ced4da',
-                outline: 0,
-            },
-            "&.Mui fieldset": {
-                color: errorJobState ? '#dc3545' : '#212529',
-                border: errorJobState ? '1px solid #dc3545' : '1px solid #ced4da',
-                outline: 0,
-
-
-            },
-            "&.Mui-focused fieldset": {
-                border: errorJobState ? '1px solid #dc3545' : '1px solid #86b7fe',
-                color: errorJobState ? '#dc3545' : '#212529',
-                outline: 0,
-                boxShadow: errorJobState ? '0 0 0 0.25rem rgba(220,53,69,.25)' : '0 0 0 0.25rem rgba(13,110,253,.25)'
-            },
-
-        },
-    }
-    const MyTextFieldJobRequirementsSx = {
-        boxShadow: '0px 2px 24px #DAECFF',
-        "& .MuiOutlinedInput-root": {
-            fontSize: '0.875rem',
-            "&:hover fieldset": {
-                color: errorJobRequirements ? '#dc3545' : '#212529',
-                border: errorJobRequirements ? '1px solid #dc3545' : '1px solid #ced4da',
-                outline: 0,
-            },
-            "&.Mui fieldset": {
-                color: errorJobRequirements ? '#dc3545' : '#212529',
-                border: errorJobRequirements ? '1px solid #dc3545' : '1px solid #ced4da',
-                outline: 0,
-
-
-            },
-            "&.Mui-focused fieldset": {
-                border: errorJobRequirements ? '1px solid #dc3545' : '1px solid #86b7fe',
-                color: errorJobRequirements ? '#dc3545' : '#212529',
-                outline: 0,
-                boxShadow: errorJobRequirements ? '0 0 0 0.25rem rgba(220,53,69,.25)' : '0 0 0 0.25rem rgba(13,110,253,.25)'
-            },
-
-        },
-    }
-    // #############################################################################################################
-
-
 
     useEffect(() => {
 
@@ -289,7 +162,7 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
                                                     <Typography sx={{ fontWeight: 600, fontSize: 13 }}>שם המשרה:</Typography>
                                                 </label>
 
-                                                <TextField style={{ width: '100%' }} sx={MyTextFieldJobNameSx} size='small' placeholder="שם המשרה (title)" id="_JobName" type="text"
+                                                <TextField style={{ width: '100%' }} size='small' placeholder="שם המשרה (title)" id="_JobName" type="text"
                                                     className="form-control" required
                                                     value={jobName}
                                                     error={errorJobName}
@@ -304,7 +177,7 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
                                                 <label>
                                                     <Typography sx={{ fontWeight: 600, fontSize: 13 }}>תפקיד:</Typography>
                                                 </label>
-                                                <TextField style={{ width: '100%' }} sx={MyTextFieldJobRoleSx} size='small' placeholder="תפקיד (role)" id="_role" type="text"
+                                                <TextField style={{ width: '100%' }} size='small' placeholder="תפקיד (role)" id="_role" type="text"
                                                     className="form-control" required
                                                     value={jobRole}
                                                     error={errorJobRole}
@@ -328,7 +201,7 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
                                                 <label>
                                                     <Typography sx={{ fontWeight: 600, fontSize: 13 }}>איזור:</Typography>
                                                 </label>
-                                                <TextField style={{ width: '100%' }} sx={MyTextFieldJobRegionSx} size='small' placeholder="איזור (region)" id="_region" type="text"
+                                                <TextField style={{ width: '100%' }}  size='small' placeholder="איזור (region)" id="_region" type="text"
                                                     className="form-control" required
                                                     value={jobRegion}
                                                     error={errorJobRegion}
@@ -345,7 +218,7 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
                                                 <label>
                                                     <Typography sx={{ fontWeight: 600, fontSize: 13 }}>Label:</Typography>
                                                 </label>
-                                                <TextField style={{ width: '100%' }} sx={MyTextFieldJobStateSx} size='small' placeholder="(Job_state)" id="_job_state" type="text"
+                                                <TextField style={{ width: '100%' }} size='small' placeholder="(Job_state)" id="_job_state" type="text"
 
                                                     required
                                                     error={errorJobState}
@@ -367,7 +240,7 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
                                             <label>
                                                 <Typography sx={{ fontWeight: 600, fontSize: 13 }}>דרישות:</Typography>
                                             </label>
-                                            <TextField style={{ width: '100%' }} sx={MyTextFieldJobRequirementsSx} size='small' placeholder="דרישות (requirements)" id="_requirements" type="text"
+                                            <TextField style={{ width: '100%' }} size='small' placeholder="דרישות (requirements)" id="_requirements" type="text"
                                                 className="form-control" required
                                                 error={errorJobRequirements}
                                                 value={jobRequirements}
@@ -422,12 +295,12 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
                                             <label>
                                                 <Typography sx={{ fontWeight: 600, fontSize: 13 }}>היקף המשרה:</Typography>
                                             </label>
-                                            <Box style={MyTextFieldJobRequirementsSx}>
+                                            <Box>
                                                 <JobScopeSlider setJobScope={setJobScope} jobScope={jobScope} />
                                             </Box>
 
                                         </Box>
-                                        {/* <button type="submit" className="primary-btn submit">Submit</button> */}
+
 
                                         <Stack direction='row' spacing={2} sx={{ mt: 3 }}>
 
