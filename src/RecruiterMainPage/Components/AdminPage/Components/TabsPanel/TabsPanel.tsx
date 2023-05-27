@@ -8,6 +8,7 @@ import { Avatar, Stack } from '@mui/material';
 import AccountSettings from './Components/AccountSettings/AccountSettings';
 import PasswordSettings from './Components/PasswordSettings/PasswordSettings';
 import { ManageAccounts, Password, PeopleAltOutlined, Settings, Summarize } from '@mui/icons-material';
+import Tooltip from '@mui/material/Tooltip';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -39,17 +40,20 @@ const MyTabsPanel: React.FC = () => {
 
   return (
     <Box sx={{ display: 'flex',width: '100%' }}>
-      <Stack direction='column'>
+      <Stack direction='column'
+              display={{xs:'none', sm: 'none', md: 'none', lg: 'flex'}}
+      >
         <Stack direction='column' sx={{
           width: '150px', height: 'fit-content',
           borderRight: '1px solid rgba(0, 0, 0, 0.125)',
-          borderBottom: '1px solid rgba(0, 0, 0, 0.125)'
-        }}>
+          borderBottom: '1px solid rgba(0, 0, 0, 0.125)',
+        }}
+        >
           <Box sx={{
-            display: 'flex', justifyContent: 'center', paddingRight: 2, paddingLeft: 2, paddingTop: 2
+            display: 'flex', justifyContent: 'center', paddingRight: 4, paddingLeft: 4, paddingTop: 2
 
           }}>
-            <Avatar />
+            <Avatar sx={{width: 48, height: 48}} />
           </Box>
 
           <Box sx={{
@@ -64,7 +68,7 @@ const MyTabsPanel: React.FC = () => {
           value={value}
           onChange={handleChange}
         >
-          <Tab icon={<ManageAccounts />} sx={{ borderBottom: '1px solid rgba(0, 0, 0, 0.125)', borderRight: '1px solid rgba(0, 0, 0, 0.125)'}} label="הגדרות חשבון" />
+          <Tab icon={<ManageAccounts />} sx={{ borderBottom: '1px solid rgba(0, 0, 0, 0.125)', borderRight: '1px solid rgba(0, 0, 0, 0.125)'}} label="הגדרות משתמש" />
 
           <Tab icon={<Password />} sx={{ borderBottom: '1px solid rgba(0, 0, 0, 0.125)', borderRight: '1px solid rgba(0, 0, 0, 0.125)' }} label="סיסמה" />
 
@@ -72,6 +76,35 @@ const MyTabsPanel: React.FC = () => {
 
           <Tab disabled icon={<Summarize />} sx={{ borderBottom: '1px solid rgba(0, 0, 0, 0.125)', borderRight: '1px solid rgba(0, 0, 0, 0.125)' }} label="עדכון שדות" />
 
+        </Tabs>
+      </Stack>
+        
+      <Stack className='forMobile' direction='column'
+              display={{xs:'flex', sm: 'flex', md: 'flex', lg: 'none', xl: 'none'}}
+      >
+        <Tabs
+          orientation="vertical"
+          variant="scrollable"
+          value={value}
+          onChange={handleChange}
+        >
+
+          <Tooltip title={'הגדרות משתמש'}>
+          <Tab icon={<ManageAccounts />} sx={{ borderBottom: '1px solid rgba(0, 0, 0, 0.125)', borderRight: '1px solid rgba(0, 0, 0, 0.125)'}} />
+          </Tooltip>
+
+                
+          <Tooltip title={'סיסמה'}>
+          <Tab icon={<Password />} sx={{ borderBottom: '1px solid rgba(0, 0, 0, 0.125)', borderRight: '1px solid rgba(0, 0, 0, 0.125)' }} />
+          </Tooltip>
+          
+          <Tooltip title={'ניהול אשכולות ומגייסים'}>
+          <Tab disabled icon={<PeopleAltOutlined />} sx={{ borderBottom: '1px solid rgba(0, 0, 0, 0.125)', borderRight: '1px solid rgba(0, 0, 0, 0.125)' }} />
+          </Tooltip>
+
+          <Tooltip title={'ניהול שדות'}>
+          <Tab disabled icon={<Summarize />} sx={{ borderBottom: '1px solid rgba(0, 0, 0, 0.125)', borderRight: '1px solid rgba(0, 0, 0, 0.125)' }} />
+          </Tooltip>
         </Tabs>
       </Stack>
   
