@@ -23,7 +23,6 @@ export default function ManageCandidatesPage(props: { setHomeActive: any, setRep
         <>
             <div>hi</div>
             <Button onClick={addCandidate}>asdasdasdsa</Button>
-            <ViewCandidatesPage />
         </>
     )
 }
