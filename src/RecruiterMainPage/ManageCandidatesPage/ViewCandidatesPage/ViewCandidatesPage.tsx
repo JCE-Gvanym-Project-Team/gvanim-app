@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Button, Typography, Box, Stack } from '@mui/material'
 import EditIcon from '@mui/icons-material/Edit';
-import { editButtonSx, textSx, titleSx, mainStackSx, ContainerGradientSx, candidateNameSx, BoxGradientSx, candidateNameAndEditButtonContainerSx, jobTextSx } from './ViewCandidatesPageStyle';
+import { editButtonSx, textSx, titleSx, mainStackSx, ContainerGradientSx, candidateNameSx, BoxGradientSx, candidateNameAndEditButtonContainerSx, jobTextSx, notesButtonSx, interviewsButtonSx, changeJobButtonSx, recommendationsButtonSx } from './ViewCandidatesPageStyle';
 import { ManageCandidatesPageGlobalStyle } from '../../PageStyles';
 import JobsTable from './Components/JobsTable/JobsTable';
 import { Candidate, getFilteredCandidates } from '../../../Firebase/FirebaseFunctions/Candidate';
@@ -53,7 +53,8 @@ export default function ViewCandidatesPage()
 
 	const commentsPopupCloseHandler = (event, reason) =>
 	{
-		if ((reason && reason !== "backdropClick") || reason === undefined){
+		if ((reason && reason !== "backdropClick") || reason === undefined)
+		{
 			setPopupOpen(false);
 		}
 	};
@@ -68,7 +69,8 @@ export default function ViewCandidatesPage()
 
 	const closeChangeJobDialogHandler = (event, reason) =>
 	{
-		if ((reason && reason !== "backdropClick") || reason === undefined){
+		if ((reason && reason !== "backdropClick") || reason === undefined)
+		{
 			setChangeJobDialogOpen(false);
 		}
 	};
@@ -109,7 +111,7 @@ export default function ViewCandidatesPage()
 
 							{/* Edit Button */}
 							<Button sx={editButtonSx} variant="contained" startIcon={<EditNote />} onClick={editCandidateHandler}>
-								ערוך פרטים
+								עריכת פרטים
 							</Button>
 						</Box>
 
@@ -120,7 +122,7 @@ export default function ViewCandidatesPage()
 								משרות
 							</Typography>
 
-							<Button sx={editButtonSx} variant="contained" startIcon={<Autorenew />} onClick={openChangeJobDialogHandler}>
+							<Button sx={changeJobButtonSx} variant="contained" startIcon={<Autorenew />} onClick={openChangeJobDialogHandler}>
 								שינוי משרה
 							</Button>
 							<ChangeJobDialog
@@ -147,13 +149,13 @@ export default function ViewCandidatesPage()
 
 						{/* Bottom Buttons */}
 						<Box sx={candidateNameAndEditButtonContainerSx}>
-							<Button sx={editButtonSx} variant="contained" startIcon={<QuestionAnswer />}>
-								ניהול ראיונות
-							</Button>
-							<Button sx={editButtonSx} variant="contained" startIcon={<EditIcon />}>
+							<Button sx={recommendationsButtonSx} variant="contained" startIcon={<EditIcon />}>
 								ממליצים
 							</Button>
-							<Button sx={editButtonSx} variant="contained" onClick={commentsPopupOpenHandler} startIcon={<EditNote />}>
+							<Button sx={interviewsButtonSx} variant="contained" startIcon={<QuestionAnswer />}>
+								ניהול ראיונות
+							</Button>
+							<Button sx={notesButtonSx} variant="contained" onClick={commentsPopupOpenHandler} startIcon={<EditNote />}>
 								הערות
 							</Button>
 							<NotesPopup open={popupOpen} onClose={commentsPopupCloseHandler} />

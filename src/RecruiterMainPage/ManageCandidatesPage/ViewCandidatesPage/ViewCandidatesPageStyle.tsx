@@ -3,8 +3,28 @@ import { SxProps } from '@mui/material/styles';
 import { GlobalStyle, ManageCandidatesPageGlobalStyle } from '../../PageStyles';
 
 export const editButtonSx: SxProps = {
+    backgroundColor: ManageCandidatesPageGlobalStyle.editDetailsButtonColor,
     alignSelf: 'end',
+}
 
+export const notesButtonSx: SxProps = {
+    backgroundColor: ManageCandidatesPageGlobalStyle.notesButtonColor,
+    alignSelf: 'end',
+}
+
+export const changeJobButtonSx: SxProps = {
+    backgroundColor: ManageCandidatesPageGlobalStyle.changeJobButtonColor,
+    alignSelf: 'end',
+}
+
+export const recommendationsButtonSx: SxProps = {
+    backgroundColor: ManageCandidatesPageGlobalStyle.recommendationsButtonColor,
+    alignSelf: 'end',
+}
+
+export const interviewsButtonSx: SxProps = {
+    backgroundColor: ManageCandidatesPageGlobalStyle.interviewsButtonColor,
+    alignSelf: 'end',
 }
 
 export const textSx: SxProps = {
