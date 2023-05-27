@@ -236,14 +236,8 @@ export default function JobsTable(props: { setDataSize: any, jobs: Job[] })
 
 	React.useEffect(() =>
 	{
-		if (Object.keys(jobs).length == 0)
-		{
-			fetchAllJobs()
-		} else
-		{
-			let jobsWithId = jobs.map((job) => ({ ...job, id: job._jobNumber, _scope: getScopeFormated(job._scope) }));
-			setAllJobs(jobsWithId);
-		}
+		let jobsWithId = jobs.map((job) => ({ ...job, id: job._jobNumber, _scope: getScopeFormated(job._scope) }));
+		setAllJobs(jobsWithId);
 	}, [jobs]);
 
 

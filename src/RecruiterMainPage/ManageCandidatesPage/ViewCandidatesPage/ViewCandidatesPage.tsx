@@ -12,7 +12,7 @@ import NotesPopup from './Components/NotesPopup/NotesPopup';
 import ChangeJobDialog from './Components/ChangeJobDialog/ChangeJobDialog';
 import { Autorenew, EditNote, QuestionAnswer } from '@mui/icons-material';
 
-export default function ViewCandidatesPage()
+export default function ViewCandidatesPage(props: {candidateId: string})
 {
 
 	// get candidate id
@@ -23,11 +23,11 @@ export default function ViewCandidatesPage()
 	const [dataSize, setDataSize] = useState(0);
 
 	//extract candidate object from database
-	let candidateId = "";
-	if (state != null)
-	{
-		candidateId = state;
-	}
+	let {candidateId} = props;
+	// if (state != null)
+	// {
+	// 	candidateId = state;
+	// }
 
 	// candidate info
 	const [candidateInfo, setCandidateInfo] = useState<Candidate | null>(null);
@@ -41,7 +41,7 @@ export default function ViewCandidatesPage()
 
 		// get list of all jobs for this candidate
 		getJobs(candidateId, setCandidateJobs, setAllJobs);
-	}, [state])
+	}, [candidateId])
 
 	// comments popup handlers
 	const [popupOpen, setPopupOpen] = useState(false);
@@ -79,6 +79,11 @@ export default function ViewCandidatesPage()
 	const editCandidateHandler = () =>
 	{
 		navigate("/editCandidate", { state: candidateId });
+	}
+
+	// move to interviews page handler
+	const interviewsPageHandler = (id) => {
+		navigate("/manageCandidates/:" + id + "/interviews")
 	}
 
 	return (

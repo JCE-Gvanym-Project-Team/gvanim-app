@@ -124,7 +124,7 @@ export default function CandidatesListFullScreenDialog({ JobId }) {
 					{CMR.map(((cmr) => (
 						<React.Fragment key={cmr[0]?._id}>
 						<ListItemButton onClick={() => {
-							navigate("/manageCandidates", { state: cmr[0]?._id })
+							navigate("/manageCandidates/" + cmr[0]?._id, { state: cmr[0]?._id })
 						}}>
 
 							<ListItemAvatar>
