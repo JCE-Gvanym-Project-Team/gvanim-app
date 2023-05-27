@@ -70,7 +70,7 @@ function RecruiterMainPage({ handlelogout })
 				{candidateIDs.map((candidateId) =>
 				{
 					return (
-						<Route path={"/manageCandidates/" + candidateId} element={<ViewCandidatesPage candidateId={candidateId}/>} key={candidateId} />
+						<Route path={"/manageCandidates/" + candidateId} element={<ViewCandidatesPage candidateId={candidateId} setHomeActive={setHomeActive} setReportsActive={setReportsActive} setCandidatesActive={setCandidatesActive} setJobsActive={setJobsActive}/>} key={candidateId} />
 					);
 				})
 				}

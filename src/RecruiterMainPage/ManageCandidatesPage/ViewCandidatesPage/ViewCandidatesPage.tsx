@@ -12,30 +12,29 @@ import NotesPopup from './Components/NotesPopup/NotesPopup';
 import ChangeJobDialog from './Components/ChangeJobDialog/ChangeJobDialog';
 import { Autorenew, EditNote, QuestionAnswer } from '@mui/icons-material';
 
-export default function ViewCandidatesPage(props: {candidateId: string})
+export default function ViewCandidatesPage(props: {candidateId: string, setHomeActive: any, setReportsActive: any, setCandidatesActive: any, setJobsActive: any})
 {
 
-	// get candidate id
-	const { state } = useLocation();
 	const navigate = useNavigate();
-
+	
 	// get jobs data size
 	const [dataSize, setDataSize] = useState(0);
+	
+	// get candidate id
+	let {candidateId, setHomeActive, setReportsActive, setCandidatesActive, setJobsActive} = props;
 
-	//extract candidate object from database
-	let {candidateId} = props;
-	// if (state != null)
-	// {
-	// 	candidateId = state;
-	// }
-
-	// candidate info
+	// candidate and jobs info
 	const [candidateInfo, setCandidateInfo] = useState<Candidate | null>(null);
 	const [candidateJobs, setCandidateJobs] = useState<Job[]>([]);
 	const [allJobs, setAllJobs] = useState<Job[]>([]);
 
 	useEffect(() =>
 	{
+		setHomeActive(false);
+		setReportsActive(false);
+		setCandidatesActive(false);
+		setJobsActive(false);
+
 		// pull candidate from firebase
 		getCandidate(candidateId, setCandidateInfo);
 
