@@ -73,7 +73,7 @@ export default function MyLogoutDialog(props: { handlelogout: any, isMobile: Boo
                 </>
 
             ) : (
-                <Button size="large" endIcon={<Logout />} sx={{ color: '#fff' }} onClick={handleClickOpen}>
+                <Button color='error' size="large" startIcon={<Logout />} sx={{ width: '100%'}} onClick={handleClickOpen}>
                     התנתק
                 </Button>)
             }

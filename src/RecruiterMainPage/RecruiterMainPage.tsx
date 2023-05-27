@@ -38,6 +38,7 @@ function RecruiterMainPage({ handlelogout }) {
       <NavBar handlelogout={handlelogout} HomeActive={HomeActive} setHomeActive={setHomeActive}
         ReportsActive={ReportsActive} setReportsActive={setReportsActive} CandidatesActive={CandidatesActive}
         setCandidatesActive={setCandidatesActive} JobsActive={JobsActive} setJobsActive={setJobsActive} />
+        
                {allJobs.map(job => (<Link key={job.id} to={'/jobs/' + job.id} />))}
       <Routes>
 
@@ -58,7 +59,7 @@ function RecruiterMainPage({ handlelogout }) {
         <Route path="/reports" element={<ReportsPage setHomeActive={setHomeActive} setReportsActive={setReportsActive} setCandidatesActive={setCandidatesActive} setJobsActive={setJobsActive} />} />
 
         {/* Admin Routes */}
-        <Route path="/admin" element={<AdminPage />} />
+        <Route path="/settings" element={<AdminPage />} />
       </Routes>
     </>
 
