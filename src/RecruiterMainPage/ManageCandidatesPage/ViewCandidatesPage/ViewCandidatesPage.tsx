@@ -9,6 +9,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Job, getFilteredJobs } from '../../../Firebase/FirebaseFunctions/Job';
 import { getFilteredCandidateJobStatuses } from '../../../Firebase/FirebaseFunctions/CandidateJobStatus';
 import NotesPopup from './Components/NotesPopup/NotesPopup';
+import ChangeJobDialog from './Components/ChangeJobDialog/ChangeJobDialog';
 
 export default function ViewCandidatesPage()
 {
@@ -29,7 +30,8 @@ export default function ViewCandidatesPage()
 
 	// candidate info
 	const [candidateInfo, setCandidateInfo] = useState<Candidate | null>(null);
-	const [jobs, setJobs] = useState<Job[]>([]);
+	const [candidateJobs, setCandidateJobs] = useState<Job[]>([]);
+	const [allJobs, setAllJobs] = useState<Job[]>([]);
 
 	useEffect(() =>
 	{
@@ -37,8 +39,8 @@ export default function ViewCandidatesPage()
 		getCandidate(candidateId, setCandidateInfo);
 
 		// get list of all jobs for this candidate
-		getJobs(candidateId, setJobs);
-	}, [])
+		getJobs(candidateId, setCandidateJobs, setAllJobs);
+	}, [state])
 
 	// comments popup handlers
 	const [popupOpen, setPopupOpen] = useState(false);
@@ -48,15 +50,33 @@ export default function ViewCandidatesPage()
 		setPopupOpen(true);
 	};
 
-	const commentsPopupCloseHandler = () =>
+	const commentsPopupCloseHandler = (event, reason) =>
 	{
-		setPopupOpen(false);
+		if ((reason && reason !== "backdropClick") || reason === undefined){
+			setPopupOpen(false);
+		}
 	};
 
+	// change job handler
+	const [changeJobDialogOpen, setChangeJobDialogOpen] = useState(false);
+
+	const openChangeJobDialogHandler = () =>
+	{
+		setChangeJobDialogOpen(true);
+	};
+
+	const closeChangeJobDialogHandler = (event, reason) =>
+	{
+		if ((reason && reason !== "backdropClick") || reason === undefined){
+			setChangeJobDialogOpen(false);
+		}
+	};
+
+	// edit candidate handler
 	const editCandidateHandler = () =>
-    {
-        navigate("/editCandidate", { state: candidateId });
-    }
+	{
+		navigate("/editCandidate", { state: candidateId });
+	}
 
 	return (
 		<>
@@ -99,13 +119,30 @@ export default function ViewCandidatesPage()
 								משרות
 							</Typography>
 
-							<Button sx={editButtonSx} variant="contained" startIcon={<EditIcon />}>
+							<Button sx={editButtonSx} variant="contained" startIcon={<EditIcon />} onClick={openChangeJobDialogHandler}>
 								העבר משרה
 							</Button>
+							<ChangeJobDialog
+								open={changeJobDialogOpen}
+								onClose={closeChangeJobDialogHandler}
+								candidateAppliedJobs={candidateJobs.map(job =>
+								{
+									return job._jobNumber.toString() + ", " + job._role + ", " + job._region;
+								})}
+								// first filter out jobs that they applied to, then map to a nice string
+								allJobs={allJobs.filter(job =>
+								{
+									return !candidateJobs.includes(job);
+								}).map(job =>
+								{
+									return job._jobNumber.toString() + ", " + job._role + ", " + job._region;
+								})}
+								candidate={candidateInfo}
+							/>
 						</Box>
 
 						{/* Jobs table */}
-						<JobsTable setDataSize={setDataSize} jobs={jobs} />
+						<JobsTable setDataSize={setDataSize} jobs={candidateJobs} />
 
 						{/* Bottom Buttons */}
 						<Box sx={candidateNameAndEditButtonContainerSx}>
@@ -118,7 +155,7 @@ export default function ViewCandidatesPage()
 							<Button sx={editButtonSx} variant="contained" onClick={commentsPopupOpenHandler} startIcon={<EditIcon />}>
 								הערות
 							</Button>
-							<NotesPopup open={popupOpen} onClose={commentsPopupCloseHandler}/>
+							<NotesPopup open={popupOpen} onClose={commentsPopupCloseHandler} />
 						</Box>
 
 					</Stack>
@@ -140,7 +177,7 @@ const getCandidate = function (candidateId: string, setCandidateInfo)
 	});
 }
 
-const getJobs = async function (candidateId: string, setJobs)
+const getJobs = async function (candidateId: string, setCandidateJobs, setAllJobs)
 {
 	// get a list of all job numbers
 	// for the jobs this candidate applied to
@@ -153,6 +190,7 @@ const getJobs = async function (candidateId: string, setJobs)
 
 	// get all jobs from firebase
 	let jobs = await getFilteredJobs();
+	setAllJobs(jobs);
 
 	// filter them by the list of job numbers 
 	// we got from the previous request to firebase
@@ -160,6 +198,5 @@ const getJobs = async function (candidateId: string, setJobs)
 	{
 		return jobNumbers.includes(job._jobNumber);
 	});
-	setJobs(jobs)
-
+	setCandidateJobs(jobs)
 }
