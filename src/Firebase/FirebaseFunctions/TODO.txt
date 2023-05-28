@@ -1,1 +1,3 @@
-- add "moved to another job" field in a candidate status for a job
+- registerRecruiter by mail: elya
+- edit realtime rules: elya
+
