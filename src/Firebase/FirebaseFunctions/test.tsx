@@ -1,7 +1,9 @@
+import { isConnected, loginAdmin } from "./Authentication";
 import { Candidate } from "./Candidate";
 import { Job, generateJobNumber, getFilteredJobs } from "./Job";
-import { generateRandomString } from "./Recruiter";
-function sleep(ms: number): Promise<void> {
+import { Recruiter, generateRandomString } from "./Recruiter";
+import { Sector } from "./Sector";
+export function sleep(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 async function testSingleJobAddNoConfilct(): Promise<boolean> {
@@ -120,5 +122,4 @@ export async function main() {
     //console.log(`testGenerateJobNumber(): ${await testGenerateJobNumber()}`);
     //console.log(`testJobEditNoConfilct(): ${await testJobEditNoConflict()}`);
     //console.log(`testAddSingleCandidateNoConflict(): ${await testAddSingleCandidateNoConflict()}`);
-
 }

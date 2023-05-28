@@ -234,7 +234,8 @@ export async function getFilteredCandidates(attributes: string[] = [], values: s
         return candidates.sort(sortByEmail);
     if (sortBy === 'generalRating')
         return candidates.sort(sortByGeneralRating);
-    return candidates;
+    return candidates.map((cand)=>new Candidate(cand._firstName, cand._lastName, cand._phone,
+             cand._eMail, cand._generalRating));
 }
 /* compare function for sort */
 function sortByFirstName(a: Candidate, b: Candidate): number {

@@ -5,7 +5,7 @@ export class Sector {
     public _name: string;
     public _open: boolean;
     public _recruitersUid: string[];
-    constructor(name: string, open: boolean, recruiterUid: string[]) {
+    constructor(name: string, open: boolean, recruiterUid: string[]=[]) {
         this._name = name;
         this._open = open;
         this._recruitersUid = recruiterUid;
@@ -61,15 +61,15 @@ export class Sector {
      * @returns None
      */
     public async add() {
-        if ((await this.exists()))
+        if (!(await this.exists()))
             appendToDatabase(this, "/Sectors", this._name);
         else
-            console.log("the Stage already exists");
+            console.log("the Sector already exists");
     }
     public async addRecruiter(recruiter: Recruiter) {
         if (await this.exists()) {
             this._recruitersUid.push(await recruiter.getUid());
-            this.remove();
+            await this.remove();
             this.add();
         }
         else
@@ -78,7 +78,7 @@ export class Sector {
     public async removeRecruiter(recruiter: Recruiter) {
         if (await this.exists()) {
             this._recruitersUid.filter(async (uid) => uid !== (await recruiter.getUid()))
-            this.remove();
+            await this.remove();
             this.add();
         }
         else
@@ -87,23 +87,23 @@ export class Sector {
 }
 /**
  * Retrieves all stages from the Firebase Realtime Database.
- * @returns {Promise<Stage[]>} A promise that resolves with an array of Stage objects.
+ * @returns {Promise<Sector[]>} A promise that resolves with an array of Stage objects.
  * @throws {Error} If there is an error fetching the stages from the database.
  */
 export async function getAllSectors(): Promise<Sector[]> {
     const database = realtimeDB;
     try {
         const snapshot = await database.ref("/Sectors").once("value");
-        const recruitersData = snapshot.val();
-        const recruiters: Sector[] = [];
-        for (const recruiterId in recruitersData) {
-            const recruiter = recruitersData[recruiterId];
-            recruiters.push(recruiter);
+        const sectorsData = snapshot.val();
+        const sectors: Sector[] = [];
+        for (const name in sectorsData) {
+            let sec = sectorsData[name];
+            sectors.push(new Sector(sec._name, sec._open, sec._recruitersUid));
         }
-        return recruiters;
+        return sectors;
     } catch (error) {
         console.error(error);
-        throw new Error("Failed to fetch recruiters from database.");
+        throw new Error("Failed to fetch sectors from database.");
     }
 }
 /**
