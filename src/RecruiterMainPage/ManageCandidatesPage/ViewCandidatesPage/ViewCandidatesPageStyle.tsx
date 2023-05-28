@@ -74,11 +74,11 @@ export const BoxGradientSx: SxProps = {
 
 export const ContainerGradientSx: SxProps = {
     marginTop: "1rem",
-    marginLeft: '3rem',
-    marginRight: '3rem',
+    marginLeft: {xs: '0', md: "3rem"},
+    marginRight: {xs: '0', md: "3rem"},
     paddingBottom: '32px',
-    paddingLeft: "3rem",
-    paddingRight: "3rem",
+    paddingLeft: {xs: '0', md: "3rem"},
+    paddingRight: {xs: '0', md: "3rem"},
     paddingTop: "-300px",
     border: '1px solid rgba(0, 0, 0, 0.125)',
     borderRadius: '0.75rem',
