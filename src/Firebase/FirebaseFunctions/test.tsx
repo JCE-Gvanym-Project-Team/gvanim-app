@@ -113,11 +113,12 @@ async function testAddSingleCandidateNoConflict() {
     newCand.remove()
     return status;
 }
+
 export async function main() {
     //console.log(`testSingleJobAddNoConfilct(): ${await testSingleJobAddNoConfilct()}`);
     //console.log(`testSingleJobAddConfilct(): ${await testSingleJobAddConfilct()}`);
     //console.log(`testGenerateJobNumber(): ${await testGenerateJobNumber()}`);
     //console.log(`testJobEditNoConfilct(): ${await testJobEditNoConflict()}`);
-    console.log(`testAddSingleCandidateNoConflict(): ${await testAddSingleCandidateNoConflict()}`);
+    //console.log(`testAddSingleCandidateNoConflict(): ${await testAddSingleCandidateNoConflict()}`);
 
 }
