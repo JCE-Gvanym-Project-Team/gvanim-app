@@ -1,20 +1,5 @@
 import { Candidate } from "../Candidate";
-import { Job, loginAdmin, generateJobNumber, getFilteredJobs, loginRecruiter } from "../functionIndex";
-
-
-async function generateFilteredReports(reports: any[], filters: any[]): Promise<any[]> {
-    let filteredData = reports;
-  
-    for (const filter of filters) {
-      if (filter.type === 'category') {
-        filteredData = await filterByCategory(filteredData, filter.value);
-      } else if (filter.type === 'date') {
-        filteredData = await filterByDate(filteredData, filter.startDate, filter.endDate);
-      }
-    }
-  
-    return filteredData;
-  }
+import { Job, loginAdmin, getFilteredCandidateJobStatuses, generateJobNumber, getFilteredJobs, loginRecruiter } from "../functionIndex";
 
 
 
@@ -33,13 +18,31 @@ export async function filterByRegion(region: string): Promise <Candidate[]> {
 
 
 
-
-
-
-export async function main() {
-    loginAdmin().then(async () => {
+export async function main(filters: any[]): Promise <any[]> {
+    // loginAdmin().then(async () => {
         // let job1 = new Job(await generateJobNumber(), '  דרוש עובד סוציאלי', 'עובד סוציאלי', [40, 80], 'חיפה', '1');
         // await job1.add();
-        console.log((await getFilteredJobs()));
-    });
+        // console.log((await getFilteredJobs()));
+    // });
+
+    const cnadidateStation = await filterByStation(filters[0])  
+    //const candidate = await getFilteredCandidateJobStatuses([], filters[0]);
+
 }
+
+
+
+export async function filterByStation (choice: string): Promise<Candidate[]>{
+  let candidates: Array<Candidate> = [];
+ 
+  if(choice == "not_received_yet"){
+    candidates = await getFilteredCandidateJobStatuses(["status"], [choice]);
+  }
+  else if (choice == "accepted_for_position"){
+
+  }
+  else{ // choice == "all_candidates"
+   
+  }
+
+} 
