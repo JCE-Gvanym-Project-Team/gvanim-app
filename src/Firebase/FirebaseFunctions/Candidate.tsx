@@ -11,14 +11,16 @@ export class Candidate {
     public _phone: string;
     public _eMail: string;
     public _generalRating: number;
+    public _note: string;
 
-    constructor(firstName: string = "", lastName: string = "", phone: string = "", eMail: string = "", generalRating: number = -1) {
-        this._id = `${eMail}${phone}`.replace('.', '_');
+    constructor(id: string, firstName: string = "", lastName: string = "", phone: string = "", eMail: string = "", generalRating: number = -1, note: string = "") {
+        this._id = id;
         this._firstName = firstName;
         this._lastName = lastName;
         this._phone = phone;
         this._eMail = eMail;
         this._generalRating = generalRating;
+        this._note = note;
     }
     /**
      * Retrieves all the jobs that the user has applied to.
@@ -185,6 +187,18 @@ async function getCandidatesFromDatabase(): Promise<Candidate[]> {
         throw new Error("Failed to fetch candidates from database.");
     }
 }
+export async function generateCandidateId(): Promise<string> {
+    const candidates = await getFilteredCandidates();
+    const len = candidates.length;
+    const candIds: string[] = candidates.map((cand) => cand._id);
+    const min = 10; // minimum number in range
+    const max = len + 100; // maximum number in range
+    let num = Math.floor(Math.random() * (max - min + 1)) + min; // generates a random number between 1 and 10
+    while (candIds.some((id) => id === num.toString())) {
+        num = Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+    return num.toString();
+}
 /**
  * Retrieves a list of candidates from the database that match the given attributes and values.
  * @param {string[]} [attributes=[]] - An array of attributes to filter the candidates by.
@@ -234,8 +248,8 @@ export async function getFilteredCandidates(attributes: string[] = [], values: s
         return candidates.sort(sortByEmail);
     if (sortBy === 'generalRating')
         return candidates.sort(sortByGeneralRating);
-    return candidates.map((cand)=>new Candidate(cand._firstName, cand._lastName, cand._phone,
-             cand._eMail, cand._generalRating));
+    return candidates.map((cand) => new Candidate(cand._id, cand._firstName, cand._lastName, cand._phone,
+        cand._eMail, cand._generalRating, cand._note));
 }
 /* compare function for sort */
 function sortByFirstName(a: Candidate, b: Candidate): number {
