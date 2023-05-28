@@ -10,7 +10,7 @@ import { Job, getFilteredJobs } from '../../../Firebase/FirebaseFunctions/Job';
 import { getFilteredCandidateJobStatuses } from '../../../Firebase/FirebaseFunctions/CandidateJobStatus';
 import NotesPopup from './Components/NotesPopup/NotesPopup';
 import ChangeJobDialog from './Components/ChangeJobDialog/ChangeJobDialog';
-import { Autorenew, EditNote, QuestionAnswer } from '@mui/icons-material';
+import { Autorenew, EditNote, QuestionAnswer, SpeakerNotes } from '@mui/icons-material';
 
 export default function ViewCandidatesPage(props: {candidateId: string, setHomeActive: any, setReportsActive: any, setCandidatesActive: any, setJobsActive: any})
 {
@@ -82,7 +82,7 @@ export default function ViewCandidatesPage(props: {candidateId: string, setHomeA
 
 	// move to interviews page handler
 	const interviewsPageHandler = (id) => {
-		navigate("/manageCandidates/:" + id + "/interviews")
+		navigate("/manageCandidates/" + id + "/interviews");
 	}
 
 	return (
@@ -109,7 +109,7 @@ export default function ViewCandidatesPage(props: {candidateId: string, setHomeA
 								</Typography>
 
 								<Typography sx={candidateNameSx} variant='h4' >
-									{candidateInfo?._firstName}
+									{candidateInfo?._firstName + " " + candidateInfo?._lastName}
 								</Typography>
 							</Box>
 
@@ -156,10 +156,12 @@ export default function ViewCandidatesPage(props: {candidateId: string, setHomeA
 							<Button sx={recommendationsButtonSx} variant="contained" startIcon={<EditIcon />}>
 								ממליצים
 							</Button>
-							<Button sx={interviewsButtonSx} variant="contained" startIcon={<QuestionAnswer />}>
-								ניהול ראיונות
+							<Button sx={interviewsButtonSx} variant="contained" startIcon={<QuestionAnswer />} onClick={() => {
+								interviewsPageHandler(candidateId);
+							}}>
+								ראיונות
 							</Button>
-							<Button sx={notesButtonSx} variant="contained" onClick={commentsPopupOpenHandler} startIcon={<EditNote />}>
+							<Button sx={notesButtonSx} variant="contained" onClick={commentsPopupOpenHandler} startIcon={<SpeakerNotes />}>
 								הערות
 							</Button>
 							<NotesPopup open={popupOpen} onClose={commentsPopupCloseHandler} />
