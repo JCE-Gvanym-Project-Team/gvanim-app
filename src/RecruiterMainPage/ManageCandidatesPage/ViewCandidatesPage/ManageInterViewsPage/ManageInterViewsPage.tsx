@@ -61,20 +61,9 @@ export default function ManageInterviewsPage(props: { candidateId: string, setHo
 			return;
 		}
 		const candidateJobStatuses = await getFilteredCandidateJobStatuses(["jobNumber", "candidateId"], [jobNumber.toString(), candidateId]);
-		const temp = new CandidateJobStatus(
-			candidateJobStatuses[0]._jobNumber,
-			candidateJobStatuses[0]._candidateId,
-			candidateJobStatuses[0]._status,
-			candidateJobStatuses[0]._about,
-			candidateJobStatuses[0]._matchingRate,
-			candidateJobStatuses[0]._applyDate,
-			candidateJobStatuses[0]._lastUpdate,
-			candidateJobStatuses[0]._interviewsSummery,
-			candidateJobStatuses[0]._recomendations,
-			candidateJobStatuses[0]._rejectCause);
-		setCandidateJobStatus(temp);
-		setLastScheduleDate(temp._lastUpdate);
-		setAppliedDate(temp._applyDate);
+		setCandidateJobStatus(candidateJobStatuses[0]);
+		setLastScheduleDate(candidateJobStatuses[0]._lastUpdate);
+		setAppliedDate(candidateJobStatuses[0]._applyDate);
 	}
 
 
@@ -126,7 +115,7 @@ export default function ManageInterviewsPage(props: { candidateId: string, setHo
 								<Typography sx={scheduleInterviewText}>
 									נשלח לאחרונה ב: { }
 								</Typography>
-								<ScheduleInterviewDialog open={interviewDialogOpen} onClose={scheduleInterviewCloseHandler} />
+								<ScheduleInterviewDialog open={interviewDialogOpen} onClose={scheduleInterviewCloseHandler} candidate={candidateInfo} />
 							</Box>
 						</Box>
 

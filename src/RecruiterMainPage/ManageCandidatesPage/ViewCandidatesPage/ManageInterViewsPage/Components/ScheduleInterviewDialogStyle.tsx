@@ -10,8 +10,8 @@ export const dialogSx: SxProps = {
 export const dialogContentSx: SxProps = {
     width: { xs: "100%", md: "500px" },
     display: "flex",
-    flexDirection: { xs: "column", md: "row" },
-    alignItems: "center",
+    // flexDirection: { xs: "column", md: "row" },
+    justifyContent:"space-evenly",
     minHeight: "100%",
 }
 
@@ -36,5 +36,5 @@ export const dialogTopAreaSx: SxProps = {
 
 export const dialogActionsSx: SxProps = {
     justifyContent: "start",
-    marginLeft: "3rem"
+    marginLeft: "1rem"
 }

@@ -2,21 +2,31 @@ import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconBut
 import { useState } from "react";
 import { dialogActionsSx, dialogContentSx, dialogSx, dialogTitleSx, dialogTopAreaSx } from "./ScheduleInterviewDialogStyle";
 import { Close } from "@mui/icons-material";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { esES } from "@mui/x-data-grid";
+import { DatePicker, LocalizationProvider, MobileTimePicker, TimeField } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import 'dayjs/locale/he'
+import { Candidate } from "../../../../../Firebase/FirebaseFunctions/Candidate";
 
-export default function ScheduleInterviewDialog({ open, onClose })
+export default function ScheduleInterviewDialog(props: { open, onClose, candidate: Candidate | null})
 {
-    const [formData, setFormData] = useState('');
-    const handleChange = (event) =>
+
+    const {open, onClose, candidate} = props;
+    const [time, setTime] = useState<any>();
+    const [date, setDate] = useState<any>();
+    
+    const handleDateChange = (value) =>
     {
-        setFormData(event.target.value);
+        setDate(value);
     };
 
-    const handleSave = () =>
+    const handleTimeChange = (value) => {
+        setTime(value);
+    };
+
+    const handleSubmit = () =>
     {
-        // TODO: Perform save logic here
-        console.log(formData);
+        // TODO: Perform submit logic here
+        console.log(time.$d.getDate());
         onClose();
     };
 
@@ -46,17 +56,23 @@ export default function ScheduleInterviewDialog({ open, onClose })
 
             {/* Text Field area */}
             <DialogContent sx={dialogContentSx}>
-                {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="he">
                     <DatePicker
-                        label={'"year", "month" and "day"'}
+                        label={'בחירת תאריך'}
                         views={['year', 'month', 'day']}
+                        onChange={handleDateChange}
                     />
-                </LocalizationProvider> */}
+                    <MobileTimePicker
+                        label="בחירת שעה"
+                        views={['hours']}
+                        onChange={handleTimeChange}
+                    />
+                </LocalizationProvider>
             </DialogContent>
 
             {/* Action Button */}
             <DialogActions sx={dialogActionsSx}>
-                <Button onClick={handleSave}>שמירה</Button>
+                <Button onClick={handleSubmit} variant="contained">שליחת זימון בוואצאפ</Button>
             </DialogActions>
         </Dialog>
     )
