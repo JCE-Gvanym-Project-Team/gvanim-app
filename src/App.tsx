@@ -1,6 +1,6 @@
 import Auth from './RecruiterMainPage/Components/Auth/Auth';
 import { main } from './Firebase/FirebaseFunctions/Authentication';
-main();
+//main();
 function App()
 {
 	return (
