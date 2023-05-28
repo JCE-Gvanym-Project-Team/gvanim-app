@@ -4,12 +4,13 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
-import { Avatar, Stack } from '@mui/material';
+import { Avatar, Button, Stack } from '@mui/material';
 import AccountSettings from './Components/AccountSettings/AccountSettings';
 import PasswordSettings from './Components/PasswordSettings/PasswordSettings';
 import { ManageAccounts, Password, PeopleAltOutlined, Settings, Summarize } from '@mui/icons-material';
 import Tooltip from '@mui/material/Tooltip';
 import RecruiterList from '../RecruitersList/RecruiterList';
+import SectorChip from '../SectorChip/SectorChip';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -132,7 +133,11 @@ const MyTabsPanel: React.FC = () => {
       </TabPanel>
 
       <TabPanel value={value} index={3}>
-        <Typography component="span" sx={{ fontFamily: "'Noto Sans Hebrew', sans-serif", fontWeight: 600 }} variant='h6'> ניהול מגייסים</Typography>
+
+     <Stack direction='row' justifyContent='space-between'>
+     <Typography component="span" sx={{ fontFamily: "'Noto Sans Hebrew', sans-serif", fontWeight: 600 }} variant='h6'> ניהול מגייסים</Typography>
+     <Button variant='contained'>הוסף מגייס</Button>
+     </Stack>
         <RecruiterList />
       </TabPanel>
 

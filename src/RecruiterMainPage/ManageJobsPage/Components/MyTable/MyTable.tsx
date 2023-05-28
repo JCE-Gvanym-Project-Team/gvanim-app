@@ -206,13 +206,6 @@ const GridCustomToolbar = ( {syncState }: {syncState: (stateToSave: GridInitialS
 					</GridToolbarExportContainer>
 
 				</Box>
-				{/* 
-                <Box>
-                    <Button color='info' variant='contained' size='small' onClick={handleCreatejob}>משרה חדשה</Button>
-                </Box> */}
-
-
-
 
 			</Box>
 		</GridToolbarContainer>
