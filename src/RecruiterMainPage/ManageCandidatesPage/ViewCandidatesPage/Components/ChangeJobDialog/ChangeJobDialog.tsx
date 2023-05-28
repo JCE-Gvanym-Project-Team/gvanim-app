@@ -68,26 +68,7 @@ export default function ChangeJobDialog(props: { open, onClose, candidateApplied
 
         // remove from chosen "from" job
         const fromCandidateJobStatus = await getFilteredCandidateJobStatuses(["jobNumber", "candidateId"], [fromJobNumber.toString(), candidate ? candidate._id : ""]);
-        const temp: CandidateJobStatus = new CandidateJobStatus(
-            fromCandidateJobStatus[0]._jobNumber,
-            fromCandidateJobStatus[0]._candidateId,
-            fromCandidateJobStatus[0]._status,
-            fromCandidateJobStatus[0]._about,
-            fromCandidateJobStatus[0]._matchingRate,
-            fromCandidateJobStatus[0]._applyDate,
-            fromCandidateJobStatus[0]._lastUpdate,
-            fromCandidateJobStatus[0]._interviewsSummery,
-            fromCandidateJobStatus[0]._recomendations);
-        await temp.remove();
-
-        const tempCandidate: Candidate = new Candidate(
-            !candidate?._id ? "" : candidate?._id,
-            candidate?._firstName,
-            candidate?._lastName,
-            candidate?._phone,
-            candidate?._eMail,
-            candidate?._generalRating);
-
+        await fromCandidateJobStatus[0].remove();
         await candidate?.apply(toJobNumber, "don't know what to put in about pls send help");
 
 
