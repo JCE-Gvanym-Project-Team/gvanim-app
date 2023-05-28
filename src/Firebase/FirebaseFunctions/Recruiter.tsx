@@ -1,6 +1,7 @@
 import { realtimeDB } from "../FirebaseConfig/firebase";
 import { getObjectAtPath, removeObjectAtPath, getFirebaseIdsAtPath, appendToDatabase } from "./DBfuncs";
 import { registerRecruiter } from "./Authentication";
+import { Sector, getAllSectors } from "./Sector";
 
 
 export class Recruiter {
@@ -17,10 +18,10 @@ export class Recruiter {
 		this._sectors = sectors;
 		this._id = email.replace('.', '_');
 	}
- /**
-  * Gets the path of the current recruiter in the The realtime DB.
-  * @returns {Promise<string>} - The path of the current recruiter in the Firebase database.
-  */
+	/**
+	 * Gets the path of the current recruiter in the The realtime DB.
+	 * @returns {Promise<string>} - The path of the current recruiter in the Firebase database.
+	 */
 	public async getPath() {
 		if ((await getFirebaseIdsAtPath('/Recruiters')).includes(this._id))
 			return "/Recruiters/" + this._id;
@@ -31,19 +32,24 @@ export class Recruiter {
 			return true;
 		return false;
 	}
- /**
-  * Removes the recruiter object from the realtime DB if it exists.
-  * @returns None
-  */
+	/**
+	 * Removes the recruiter object from the realtime DB if it exists.
+	 * @returns None
+	 */
 	public async remove() {
-		if (await this.exists())
+		if (await this.exists()) {
+			let secs = await getAllSectors();
+			secs = secs.filter((sec) => this._sectors.includes(sec._name));
+			for (let i = 0; i < secs.length; i++)
+				secs[i].removeRecruiter(this);
 			removeObjectAtPath("/Recruiters/" + this._id);
+		}
 	}
- /**
-  * Adds the recruiter to the realtime DB if they do not already exist.
-  * @returns {Promise<string>} A randomly generated password for the new recruiter.
-  * If the recruiter already exists, logs a message to the console and returns nothing.
-  */
+	/**
+	 * Adds the recruiter to the realtime DB if they do not already exist.
+	 * @returns {Promise<string>} A randomly generated password for the new recruiter.
+	 * If the recruiter already exists, logs a message to the console and returns nothing.
+	 */
 	public async add() {
 		if (!(await this.exists())) {
 			const pass = generateRandomString();
@@ -61,24 +67,29 @@ export class Recruiter {
 		this.remove();
 		this.add();
 	}
- /**
-  * Add permissions to a sector. 
-  * @param {string} sector - The sector to add.
-  * @returns None
-  */
+	/**
+	 * Add permissions to a sector. 
+	 * @param {string} sector - The sector to add.
+	 * @returns None
+	 */
 	public async addSector(sector: string) {
 		if (!this._sectors.includes(sector))
 			this._sectors.push(sector);
 		this.remove();
-		appendToDatabase(this, "/Recruiters", this._id);
-		const uid = await this.getUid();
-		appendToDatabase(this._email,`/Sectors/${sector}`,uid);
+		this.add();
+		const sectors = await getAllSectors();
+		for (let i = 0; i < sectors.length; i++) {
+			if (sectors[i]._name === sector) {
+				sectors[i].addRecruiter(this);
+				break;
+			}
+		}
 	}
- /**
-  * Remove editing permissions to the recruiter to the sector
-  * @param {string} sector - The sector to remove.
-  * @returns None
-  */
+	/**
+	 * Remove editing permissions to the recruiter to the sector
+	 * @param {string} sector - The sector to remove.
+	 * @returns None
+	 */
 	public async removeSector(sector: string) {
 		if (this._sectors.includes(sector))
 			this._sectors.filter((val) => val !== sector);
@@ -87,11 +98,11 @@ export class Recruiter {
 		const uid = await this.getUid();
 		removeObjectAtPath(`Sectors/${sector}/${uid}`);
 	}
- /**
-  * Gets the uid of the Recruiter, for internal use(you have no reason to call it).
-  * @async
-  * @returns {Promise<string>} A promise that resolves to the unique identifier string.
-  */
+	/**
+	 * Gets the uid of the Recruiter, for internal use(you have no reason to call it).
+	 * @async
+	 * @returns {Promise<string>} A promise that resolves to the unique identifier string.
+	 */
 	public async getUid(): Promise<string> {
 		if (!(await this.exists()))
 			return "";
