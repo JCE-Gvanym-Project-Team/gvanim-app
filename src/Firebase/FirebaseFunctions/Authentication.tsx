@@ -44,25 +44,21 @@ export async function registerRecruiter(recruiter: Recruiter, password: string) 
  * @throws {FirebaseError} If there is an error with the Firebase authentication.
  */
 export async function loginRecruiter(email: string, password: string) {
-	getAuth().onAuthStateChanged(function (user) {
-		if (user) {
-			console.log("User is connected");
-		} else {
-			signInWithEmailAndPassword(auth, email, password)
-				.then((userCredential) => {
-					const user = userCredential.user;
-					console.log(`connected as: \n${user}`);
-				})
-				.catch((error) => {
-					const errorCode = error.code;
-					const errorMessage = error.message;
-					console.log(`${errorCode}: ${errorMessage}`);
-				});
-		}
-	});
-
-	//---------------------------------------
-
+	if (await isConnected()) {
+		console.log('alrady connected');
+	}
+	else {
+		signInWithEmailAndPassword(auth, email, password)
+			.then((userCredential) => {
+				const user = userCredential.user;
+				console.log(`connected as: \n${user}`);
+			})
+			.catch((error) => {
+				const errorCode = error.code;
+				const errorMessage = error.message;
+				console.log(`${errorCode}: ${errorMessage}`);
+			});
+	}
 }
 /**
  * Logs out the current recruiter user.
@@ -83,22 +79,22 @@ export async function loguotRecruiter() {
  * @returns None
  */
 export async function loginAdmin() {
+	const user = process.env.REACT_APP_ADMIN_MAIL;
+	const pass = process.env.REACT_APP_ADMIN_PASS;
+	if (user != null && pass != null && !(await isConnected())) {
+		loginRecruiter(user, pass).then((userCredential) => {
+			console.log(`loged as admin: ${auth.currentUser?.uid}`);
+		});
+	}
+}
+export async function isConnected(): Promise<boolean> {
+	let status = false;
 	getAuth().onAuthStateChanged(function (user) {
 		if (user) {
-			console.log("User is connected");
+			status = true;
 		} else {
-			const user = process.env.REACT_APP_ADMIN_MAIL;
-			const pass = process.env.REACT_APP_ADMIN_PASS;
-			if (user != null && pass != null) {
-				loginRecruiter(user, pass).then((userCredential) => {
-					console.log(`loged as admin: ${auth.currentUser?.uid}`);
-				});
-			}
-			else
-				console.log("login admin fail(chek your env file)");
+			status = false;
 		}
 	});
-
-	//---------------------------------------------
-
+	return status;
 }
