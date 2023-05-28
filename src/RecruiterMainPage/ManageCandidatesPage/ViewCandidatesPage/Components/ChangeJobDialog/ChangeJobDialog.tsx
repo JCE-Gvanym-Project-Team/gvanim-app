@@ -81,19 +81,20 @@ export default function ChangeJobDialog(props: { open, onClose, candidateApplied
         await temp.remove();
 
         const tempCandidate: Candidate = new Candidate(
+            !candidate?._id ? "" : candidate?._id,
             candidate?._firstName,
             candidate?._lastName,
             candidate?._phone,
             candidate?._eMail,
             candidate?._generalRating);
 
-        await tempCandidate.apply(toJobNumber, "don't know what to put in about pls send help");
+        await candidate?.apply(toJobNumber, "don't know what to put in about pls send help");
 
 
         // reset values
         setFromJobValue('');
         setToJobValue('');
-        navigate("/manageCandidates/" + tempCandidate?._id, { state: tempCandidate?._id });
+        navigate("/manageCandidates/" + candidate?._id, { state: candidate?._id });
         onClose();
     };
 
