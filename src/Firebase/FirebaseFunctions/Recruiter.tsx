@@ -1,5 +1,5 @@
 import { realtimeDB } from "../FirebaseConfig/firebase";
-import { getObjectAtPath, removeObjectAtPath, getFirebaseIdsAtPath, appendToDatabase } from "./DBfuncs";
+import { getObjectAtPath, removeObjectAtPath, getFirebaseIdsAtPath, appendToDatabase, replaceData } from "./DBfuncs";
 import { Sector, getAllSectors } from "./Sector";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "firebase/auth";
 const auth = getAuth();
@@ -46,7 +46,7 @@ export class Recruiter {
 				sec.removeRecruiter(this);
 			}
 
-			removeObjectAtPath("/Recruiters/" + this._id);
+			await removeObjectAtPath("/Recruiters/" + this._id);
 		}
 	}
 	/**
@@ -80,8 +80,7 @@ export class Recruiter {
 	public async edit(email: string = this._email, firstName: string = this._firstName, lastName: string = this._lastName) {
 		this._firstName = firstName;
 		this._lastName = lastName;
-		this.remove();
-		this.add();
+		replaceData(`/Recruiter/${this._id}`, this);
 	}
 	/**
 	 * Add permissions to a sector. 
@@ -98,16 +97,17 @@ export class Recruiter {
 			this._sectors.push(sector);
 		else
 			return;
-		await this.remove();
-		this.add();
+		replaceData(`/Recruiters/${this._id}`, this);
+		console.log(`2)exist?(t) ${await this.exists()}`);
 		const sectors = await getAllSectors();
 		for (let i = 0; i < sectors.length; i++) {
 			if (sectors[i]._name === sector) {
 				let sec = new Sector(sectors[i]._name, sectors[i]._open, sectors[i]._recruitersUid);
-				sec.addRecruiter(this);
+				await sec.addRecruiter(this);
 				break;
 			}
 		}
+		console.log(`3)exist?(t) ${await this.exists()}`)
 	}
 	/**
 	 * Remove editing permissions to the recruiter to the sector
@@ -117,7 +117,7 @@ export class Recruiter {
 	public async removeSector(sector: string) {
 		if (this._sectors.includes(sector))
 			this._sectors.filter((val) => val !== sector);
-		this.remove();
+		replaceData(`/Recruiters/${this._id}`,this);
 		appendToDatabase(this, "/Recruiters", this._id);
 		const uid = await this.getUid();
 		removeObjectAtPath(`Sectors/${sector}/${uid}`);
@@ -149,7 +149,7 @@ export async function getRecruitersFromDatabase(): Promise<Recruiter[]> {
 			const recruiter = recruitersData[recruiterId];
 			recruiters.push(recruiter);
 		}
-		const res = recruiters.map((rec)=> new Recruiter(rec._email,rec._firstName,rec._lastName, rec._sectors));
+		const res = recruiters.map((rec) => new Recruiter(rec._email, rec._firstName, rec._lastName, rec._sectors));
 		return res;
 	} catch (error) {
 		console.error(error);

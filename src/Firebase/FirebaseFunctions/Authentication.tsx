@@ -55,9 +55,11 @@ export async function isConnected(): Promise<boolean> {
 export async function main() {
 	await loginAdmin();
 	let rec = new Recruiter('ex@gmail.com',"el","ta");
-	//await rec.add();
-	console.log(await rec.getUid());
+	await rec.add('123456');
 	let sec = new Sector('sec1', true);
-	sec.add();
-	rec.addSector('sec1');
+	await sec.add();
+	await rec.addSector('sec1');
+	console.log(`4)exist?(t) ${await rec.exists()}`);
+	await sleep(5000);
+	console.log(`5)exist?(t) ${await rec.exists()}`);
 }

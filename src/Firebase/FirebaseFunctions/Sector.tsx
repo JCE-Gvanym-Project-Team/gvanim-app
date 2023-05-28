@@ -70,16 +70,15 @@ export class Sector {
         if (await this.exists()) {
             this._recruitersUid.push(await recruiter.getUid());
             await this.remove();
-            this.add();
+            await this.add();
         }
         else
             console.log(`Sector ${this._name} not exist add it before edit`);
     }
     public async removeRecruiter(recruiter: Recruiter) {
         if (await this.exists()) {
-            this._recruitersUid.filter(async (uid) => uid !== (await recruiter.getUid()))
-            await this.remove();
-            this.add();
+            this._recruitersUid = this._recruitersUid.filter(async (uid) => uid !== (await recruiter.getUid()))
+            replaceData(`/Sectors/${this._name}`,this);
         }
         else
             console.log(`Sector ${this._name} not exist add it before edit`);
