@@ -14,10 +14,6 @@ export default function ManageCandidatesPage(props: { setHomeActive: any, setRep
         setReportsActive(false);
         setJobsActive(false);
     }, []);
-    // // for the navigation bar
-    // setHomeActive(false); setCandidatesActive(true);
-    // setReportsActive(false); setJobsActive(false);
-    // // ----------------------------
 
     return (
         <>
@@ -29,6 +25,6 @@ export default function ManageCandidatesPage(props: { setHomeActive: any, setRep
 
 const addCandidate = () =>
 {
-    let newCandidate: Candidate = new Candidate("יוסי", "בוסי", "0566", "example2@gmail.com", 2);
-    newCandidate.apply(35, "he's so good omg");
+    // let newCandidate: Candidate = new Candidate("יוסי", "בוסי", "0566", "example2@gmail.com");
+    // newCandidate.apply(35, "he's so good omg");
 }
