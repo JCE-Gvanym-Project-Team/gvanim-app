@@ -12,7 +12,7 @@ import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Button from '@mui/material/Button';
-// import { Job, getOpenRoles } from '.../Firebase/FirebaseFunctions/functionIndex'
+// import { Job, getOpenRoles } from '../../../../Firebase/FirebaseFunctions/functionIndex'
 
 
 //...../Firebase/FirebaseFunctions/functionIndex
@@ -58,15 +58,19 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
 
 
 
-export default function Questions() {
+export default function CandidateByDate() {
   const [age, setAge] = React.useState('');
   const createReport = () => {
     console.log("createReport");
   }
+  
 
   return (
+
+
     <FormControl>
       <h1>ד"וח מועמדים לפי תאריכים</h1>
+
       {/*מועמדים */}
       <FormLabel id="demo-row-radio-buttons-group-label">מועמדים</FormLabel>
       <RadioGroup
@@ -79,8 +83,13 @@ export default function Questions() {
         <FormControlLabel value="כולם" control={<Radio />} label="כולם" />
       </RadioGroup>
 
+
+
+
+
+
       {/* אזור */}
-      <FormLabel id="demo-row-radio-buttons-group-label">אזור</FormLabel>
+      <FormLabel id="demo-row-radio-buttons-grDoup-label">אזור</FormLabel>
 
       <RadioGroup
         row
@@ -93,6 +102,17 @@ export default function Questions() {
         </FormControl>
         <FormControlLabel value="כל הארץ" control={<Radio />} label="כל הארץ" />
       </RadioGroup>
+
+
+
+
+
+
+
+
+
+
+
 
       {/* select role */}
       <FormLabel id="demo-row-radio-buttons-group-label">בחר תפקיד</FormLabel>
