@@ -1,25 +1,43 @@
 import { useState, useEffect } from "react";
-import { dataref } from "../../Firebase/FirebaseConfig/firebase";
+
 import MyTable from "./Components/MyTable/MyTable";
-import { Box, Container } from "@mui/material";
-import MyAvatar from "./Components/MyAvatar/MyAvatar";
+import { Box, Button, Container, Fab } from "@mui/material";
 import MyLoading from "../../Components/MyLoading/MyLoading";
-import {
-    ManageJobPageBoxSx,
-    MyAvatarContainerSx,
-    MySearchBarContainerStyle
-} from "./ManageJobsPageStyle";
-import MySearchBar from "./Components/MySearchBar/MySearchBar";
+import { ManageJobPageBoxSx } from "./ManageJobsPageStyle";
+import TransitionComponentSnackbar from "./Components/NewJobPage/Components/SuccessSnackBar/SuccessSnackBar";
+import { useLocation } from "react-router-dom";
 
 
-const ManageJobPageBody = () => {
+const ManageJobsPage = (props: { setHomeActive: any, setReportsActive: any, setCandidatesActive: any, setJobsActive: any }) => {
+    const { setHomeActive, setReportsActive, setCandidatesActive, setJobsActive } = props;
+    useEffect(() =>
+    {
+        // Code inside this effect will run after the component has rendered
+        setHomeActive(false);
+        setCandidatesActive(false);
+        setReportsActive(false);
+        setJobsActive(true);
+    }, []);
+
     const [loading, setLoading] = useState(true);
+    const [dataSize, setDataSize] = useState(0);
+    const [open, setOpen] = useState(false);
+
+    const { state } = useLocation();
+
+
 
     useEffect(() => {
         setLoading(true);
         setTimeout(() => {
             setLoading(false);
-        }, 2500);
+
+            // for the snackbar
+            if( state !== null ) {
+                setOpen(true);
+            }
+
+        }, 1000);
     }, []);
 
 
@@ -28,176 +46,26 @@ const ManageJobPageBody = () => {
     }
     else {
         return (
-            <Box className="ManageJobPage-Body" sx={ManageJobPageBoxSx}>
+            <>
 
-                <Container sx={MyAvatarContainerSx} maxWidth="sm">
-                    <MyAvatar />
-                </Container>
+                <Box className="ManageJobPage-Body" sx={ManageJobPageBoxSx}>
+              
+                    {/* <Container sx={MyAvatarContainerSx} maxWidth="sm">
+                        <MyAvatar dataSize={dataSize} />
+                    </Container> */}
 
-                <Container
-                    style={MySearchBarContainerStyle} maxWidth="sm">
-                    <MySearchBar />
-                </Container>
+                    <MyTable setDataSize={setDataSize} />
 
-                <MyTable />
-            </Box>
+                    <TransitionComponentSnackbar open={open} setOpen={setOpen} message={state} />
+                </Box>
+
+            </>
+
+
+
         );
     }
 }
 
-const TableContainer = () => {
-    const [data, setData] = useState({});
-    const [search, setSearch] = useState('');
-    const [filter, setFilter] = useState('');
-    const [sortOrder, setSortOrder] = useState('');
 
-    useEffect(() => {
-        dataref.ref().child('jobs').on('value', (snapshot) => {
-            if (snapshot.val() !== null) {
-                setData({ ...snapshot.val() });
-            }
-            else {
-                setData({});
-            }
-        });
-
-        return () => {
-            setData({});
-        };
-    }, []);
-
-
-    return (
-
-        <>
-
-            {/* <Container className="mt-5">
-                <div className="d-flex flex-row bd-highlight" style={{ marginLeft: '10px' }}>
-                    <div className="d-flex justify-content-start">
-                        <AddOrUpdateJobPopup action={"משרה חדשה"} id="" data={{}} />
-                    </div>
-                </div>
-
-                <div style={{ display: 'flex', margin: '5px' }}> */}
-            {/* ####################################### SEARCH BAR ################################################################ */}
-            {/* <Form.Group className="d-flex flex-column bd-highlight mb-3" style={{ flex: '1', margin: '5px' }}>
-                        <div className="d-flex align-items-end" style={{ height: '100%' }}>
-                            <InputGroup size="sm">
-                                <Form.Control
-                                    onChange={(e) => { setSearch(e.target.value) }}
-                                    dir="rtl"
-                                    placeholder="חיפוש"
-                                    aria-describedby="basic-addon2"
-                                />
-                                <Button variant="outline-primary">
-                                    <Search />
-                                </Button>
-                            </InputGroup>
-                        </div>
-                    </Form.Group> */}
-
-            {/* ####################################### END SEARCH BAR ############################################################ */}
-
-            {/* ####################################### FILTER ############################################################ */}
-            {/* <Form.Group className="d-flex flex-column bd-highlight mb-3" dir="rtl" style={{ flex: '1', margin: '5px' }}>
-                        <div className="d-flex align-items-end" style={{ height: '100%' }}>
-                            <Form.Label style={{ fontSize: 'smaller', fontWeight: 'bold' }}>סנן לפי:</Form.Label>
-                        </div>
-
-                        <div className="d-flex align-items-end" style={{ height: '100%' }}>
-                            <Form.Select
-                                size="sm"
-                                defaultChecked={true}
-                                defaultValue={'ללא'}
-                                onChange={(e) => { setFilter(e.target.value) }}
-                            >
-                                <option>ללא</option>
-                                <option>מס' משרה</option>
-                                <option>איזור</option>
-                                <option>תפקיד</option>
-                                <option>אחוז משרה</option>
-                            </Form.Select>
-                        </div>
-
-                    </Form.Group> */}
-
-            {/* ####################################### END FILTER ######################################################### */}
-
-            {/* ####################################### SORT ############################################################ */}
-            {/* <Form.Group className="d-flex flex-column bd-highlight mb-3" dir="rtl" style={{ flex: '1', margin: '5px' }}>
-                        <div className="d-flex align-items-end" style={{ height: '100%' }}>
-                            <Form.Label style={{ fontSize: 'smaller', fontWeight: 'bold' }}>מיין לפי:</Form.Label>
-                        </div>
-
-                        <div className="d-flex align-items-end" style={{ height: '100%' }}>
-                            <Form.Select
-                                size="sm"
-                                style={{ width: '100%' }}
-                                defaultChecked={true}
-                                defaultValue={'ללא'}
-                                onChange={(e) => { setSortOrder(e.target.value) }}
-                            >
-                                <option>ללא</option>
-                                <option>מס' משרה</option>
-                                <option>איזור</option>
-                                <option>תפקיד</option>
-                                <option>אחוז משרה</option>
-                            </Form.Select>
-                        </div>
-                    </Form.Group> */}
-            {/* ####################################### END SORT ######################################################### */}
-            {/* 
-                </div>
-                
-                <table dir='rtl' style={{ width: '100%' }}>
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th><LayoutTextSidebar /> מס' משרה</th>
-                            <th><GeoFill /> איזור</th>
-                            <th><Hammer /> תפקיד</th>
-                            <th><Percent /> אחוז משרה</th>
-                            <th><PeopleFill /> מועמדים שניגשו</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-
-
-                        {Object.keys(data).filter((item_key) => {
-
-                            return search.toLowerCase() === '' ? item_key :
-                                filter.toLowerCase() === 'תפקיד' ?
-                                    data[item_key].Job_Name.toLowerCase().includes(search) :
-                                    filter.toLowerCase() === 'איזור' ?
-                                        data[item_key].Job_Location.toLowerCase().includes(search) :
-                                        filter.toLowerCase() === 'אחוז משרה' ?
-                                            data[item_key].Job_Percentage.toLowerCase().includes(search) :
-                                            (data[item_key].Job_Name.toLowerCase().includes(search) || data[item_key].Job_Location.toLowerCase().includes(search) || data[item_key].Job_Percentage.toLowerCase().includes(search));
-
-                        }).sort((a, b) => {
-                            if (sortOrder.toLowerCase() === 'אחוז משרה') {
-                                return data[a].Job_Percentage > data[b].Job_Percentage ? 1 : -1
-                            }
-                            else if (sortOrder.toLowerCase() === 'איזור') {
-                                return data[a].Job_Location > data[b].Job_Location ? 1 : -1
-                            }
-                            else if (sortOrder.toLowerCase() === 'תפקיד') {
-                                return data[a].Job_Name > data[b].Job_Name ? 1 : -1
-                            }
-                            else return 0;
-                        }).map((item_key, index) => {
-
-                            return (
-                                <JobRow key={item_key} data={data} index={index} item_key={item_key}></JobRow>
-                            );
-                        })}
-
-                    </tbody>
-                </table>
-
-            </Container> */}
-        </>
-    );
-};
-
-export default ManageJobPageBody;
+export default ManageJobsPage;

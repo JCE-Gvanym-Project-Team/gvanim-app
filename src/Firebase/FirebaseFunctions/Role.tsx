@@ -40,11 +40,9 @@ import { removeObjectAtPath, getFirebaseIdsAtPath, replaceData, appendToDatabase
      * @param {boolean} [open=this._open] - The new open status for the Role object.
      * @returns None
      */
-    public async edit(name: string = this._name, open: boolean = this._open) {
-        this._name =name;
+    public async edit(open: boolean = this._open) {
         this._open = open;
-        if((await this.exists()))
-            replaceData((await this.getPath()), this);
+        replaceData((await this.getPath()), this);
     }
     /**
      * Adds the current Role object to the database if it does not already exist.

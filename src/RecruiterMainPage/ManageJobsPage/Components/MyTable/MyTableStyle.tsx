@@ -1,6 +1,13 @@
 import { SxProps, createTheme } from '@mui/material';
 import { Theme } from '@mui/material/styles';
 
+
+export const MyButtonSx: SxProps = {
+		backgroundColor: 'rgb(52, 71, 103)',
+		":hover": {
+			bgcolor: "rgb(52, 71, 103)",
+		}
+}
 export const dataGridContainerSx: SxProps = {
 	border: 1,
 	overflow: 'hidden'
@@ -9,12 +16,13 @@ export const dataGridContainerSx: SxProps = {
 export const dataGridContainerStyle = {
 	padding: 0,
 	marginTop: '15px',
-	marginBottom: '15px'
+	marginBottom: '15px',
+	maxWidth: "100%"
 }
 
 export const dataGridSx = (theme: Theme): SxProps => ({
 	padding: 1,
-	height: 550, 
+	height: 'calc(100vh - 112px)',	
 	overflow: 'hidden',
 	boxShadow: 2,
 	"&.MuiDataGrid-root .MuiDataGrid-cell:focus-within": {

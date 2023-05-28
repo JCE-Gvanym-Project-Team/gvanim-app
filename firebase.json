@@ -1,25 +1,30 @@
 {
-  "hosting": {
-    "public": "build",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
-    ]
-  },
-  "storage": {
-    "rules": "storage.rules"
-  },
-  "functions": {
-    "source": "src/Firebase/FirebaseFunctions",
-    "predeploy": [
-      "npm install --prefix functions"
-    ]
-  }
+	"hosting": {
+		"public": "build",
+		"ignore": [
+			"firebase.json",
+			"**/.*",
+			"**/node_modules/**"
+		],
+		"rewrites": [
+			{
+				"source": "**",
+				"destination": "/index.html"
+			}
+		],
+		"headers": [
+			{
+				"source": "https://us-central1-gvanim-app.cloudfunctions.net/sendMail",
+				"headers": [
+					{
+						"key": "Access-Control-Allow-Origin",
+						"value": "*"
+					}
+				]
+			}
+		]
+	},
+	"storage": {
+		"rules": "storage.rules"
+	}
 }

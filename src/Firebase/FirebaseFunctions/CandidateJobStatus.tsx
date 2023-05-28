@@ -2,7 +2,7 @@ import { dataref } from "../FirebaseConfig/firebase";
 import { Recomendation } from './Recomendation';
 import { getObjectAtPath, removeObjectAtPath, getFirebaseIdsAtPath, replaceData, appendToDatabase } from "./DBfuncs";
 import { uploadFileToFirestore, getDownloadUrlFromFirestorePath, getFileExtensionsInFolder, deleteFile, fileExists } from "./firestoreFunc";
-
+import { getFilteredCandidates } from "./Candidate";
 const database = dataref;
 export class CandidateJobStatus {
     public _jobNumber: number;
@@ -15,6 +15,7 @@ export class CandidateJobStatus {
     public _interviewDate: Date;
     public _interviewsSummery: Array<string>;
     public _recomendations: Array<Recomendation>;
+    public _rejectCause: string;
 
     constructor(
         jobNumber: number = -1,
@@ -25,7 +26,8 @@ export class CandidateJobStatus {
         applyDate: Date = new Date(0, 0, 0),
         lastUpdate: Date = new Date(0, 0, 0),
         interviewsSummery: Array<string> = ["", ""],
-        recomendations: Array<Recomendation> = []
+        recomendations: Array<Recomendation> = [],
+        rejectCause = ""
     ) {
         this._jobNumber = jobNumber;
         this._candidateId = candidateId;
@@ -33,10 +35,11 @@ export class CandidateJobStatus {
         this._matchingRate = matchingRate;
         this._applyDate = applyDate;
         this._lastUpdate = lastUpdate;
-        this._interviewDate = new Date(0, 0, 0);
+        this._interviewDate = new Date();
         this._interviewsSummery = interviewsSummery;
         this._about = about;
         this._recomendations = recomendations;
+        this._rejectCause = rejectCause;
     }
     /**
      * Adds a recommendation to the candidate's application.
@@ -76,7 +79,7 @@ export class CandidateJobStatus {
      * Deletes all recommendations files for the current CandidateJobStatus.
      * @returns None
      */
-    private async deleteAllRecomendations(){
+    private async deleteAllRecomendations() {
         const extentions = await getFileExtensionsInFolder(`CandidatesFiles/${this._candidateId}`);
         const phones = this._recomendations.map((rec) => rec._phone);
         for (let i = 0; i < phones.length; i++)
@@ -106,7 +109,7 @@ export class CandidateJobStatus {
         else
             this._interviewsSummery[index] = summery;
     }
-    
+
     /**
      * Edits the current object's properties and updates the data in the database.
      * @param {number} [matchingRate=this._matchingRate] - The new matching rate to set.
@@ -140,7 +143,7 @@ export class CandidateJobStatus {
         }
         if (firebaseId.length > 0)
             return "/Candidates/" + firebaseId;
-        return ";"
+        return "";
     }
     /**
      * Checks if the object exists in realtime DB.
@@ -180,16 +183,22 @@ export class CandidateJobStatus {
      * Updates the status of the candidate job application and replaces the data in the realtime DB.
      * @param {string} newStatus - The new status to update the candidate job application to.
      * @param {Date} [interviewDate=this._interviewDate] - The interview date for the candidate job application leave empty if the new satatus not require interview.
-     * @returns None
+     * @returns url link to notify the candidate via whatsapp
      */
-    public async updateStatus(newStatus: string, interviewDate: Date = this._interviewDate) {
+    public async updateStatus(newStatus: string, interviewDate: Date = this._interviewDate): Promise<string> {
         if (!(await this.exists())) {
             console.log("candidate job status not found in the database");
-            return;
+            return "";
         }
         this._status = newStatus;
         /* todo: notify() candidate via mail with the next interview date */
         replaceData((await this.getPath()), this);
+        const cand = (await getFilteredCandidates(["id"], [this._candidateId])).at(0);
+        let text = `${cand?._firstName} שלום,\n סטטוס מועמדותך שונה ל: ${newStatus}`;
+        const date = `${interviewDate.getDate()}/${interviewDate.getMonth() + 1}/${interviewDate.getFullYear()}`;
+        if (interviewDate !== this._interviewDate)
+            text += `נשמח לקבוע ראיון עמך בתאריך: ${date}` + `בשעה: ${interviewDate.getHours()}:${interviewDate.getMinutes()}`
+        return `https://api.whatsapp.com/send?phone=972${cand?._phone.slice(-9)}&text=${text}`.replace(' ', '%20');
     }
 }
 /**
@@ -263,6 +272,12 @@ export async function getFilteredCandidateJobStatuses(attributes: string[] = [],
     if (i >= 0) {
         candidateJobStatuses = candidateJobStatuses.filter(
             (status) => status._lastUpdate.toISOString() === values[i]
+        );
+    }
+    i = attributes.indexOf("rejectCause");
+    if (i >= 0) {
+        candidateJobStatuses = candidateJobStatuses.filter(
+            (status) => status._rejectCause === values[i]
         );
     }
     if (sortBy === "jobNumber")

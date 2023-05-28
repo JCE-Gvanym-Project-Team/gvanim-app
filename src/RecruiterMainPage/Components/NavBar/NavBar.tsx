@@ -1,10 +1,10 @@
 
 import Toolbar from "@mui/material/Toolbar";
-import { Avatar, Box, Button, Stack } from "@mui/material";
+import { Avatar, Box, Button, Stack, SxProps } from "@mui/material";
 import * as React from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import { ArticleOutlined, AssessmentOutlined, Home, Logout, PeopleAltOutlined, PersonOutline } from "@mui/icons-material";
+import { ArticleOutlined, AssessmentOutlined, Home, PeopleAltOutlined, PersonOutline } from "@mui/icons-material";
 import AppBar from '@mui/material/AppBar';
 import CssBaseline from '@mui/material/CssBaseline';
 import Divider from '@mui/material/Divider';
@@ -14,35 +14,120 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-
 import Typography from '@mui/material/Typography';
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import MyLogoutDialog from "./Components/LogoutDialog";
+import { AppBarSx, BoxDrawerAvatarSx, BoxDrawerSx, BoxNavigationOptionsSx, DividerDrawerSx, ListItemButtonDrawerSx, LogoutButtonBoxSx, NavBarIconColorSx, OpenDrawerIconSx, TypographyDrawerSx, WelcomeUserBoxSx } from "./NavBarStyle";
+import { blue, blueGrey, grey, lightBlue } from "@mui/material/colors";
+import UserDropMenu from "./Components/UserDropMenu/UserDropMenu";
 
-interface Props {
-	/**
-	 * Injected by the documentation to work in an iframe.
-	 * You won't need it on your project.
-	 */
-	window?: () => Window;
-}
+
 
 const drawerWidth = 240;
 
-export default function NavBar(props: Props) {
+
+
+const NavBar = (props: {
+	handlelogout: any, HomeActive: any, setHomeActive: any,
+	ReportsActive: any, setReportsActive: any, CandidatesActive: any, setCandidatesActive: any,
+	JobsActive: any, setJobsActive: any
+}) => {
+
+	const {
+		handlelogout,
+		HomeActive,
+		setHomeActive,
+		ReportsActive,
+		setReportsActive,
+		CandidatesActive,
+		setCandidatesActive,
+		JobsActive,
+		setJobsActive
+	} = props;
+
 	const navigate = useNavigate();
-	const { window } = props;
 	const [mobileOpen, setMobileOpen] = React.useState(false);
 
 	const handleDrawerToggle = () => {
 		setMobileOpen((prevState) => !prevState);
 	};
 
-	const [HomeActive, setHomeActive] = useState(true);
-	const [ReportsActive, setReportsActive] = useState(false);
-	const [CandidatesActive, setCandidatesActive] = useState(false);
-	const [JobsActive, setJobsActive] = useState(false);
+	// ############# Sx Props that cant be in another file #########
+	const HomeButtonNavigationSx: SxProps = {
+		"&:hover": {
+			backgroundColor: HomeActive ? 'white' : 'rgb(52, 71, 103)',
+			color: HomeActive ? 'rgb(52, 71, 103)' : 'white',
+			outline: HomeActive ? 'none' : `3px ${blueGrey[300]}`,
 
+		},
+		'&:focus': {
+			border: `solid ${blueGrey[300]}`,
+
+
+		},
+		border: HomeActive ? `3px solid ${blueGrey[300]}` : 'none',
+		borderRadius: '0.6rem',
+		backgroundColor: HomeActive ? 'white' : 'rgb(52, 71, 103)',
+		color: HomeActive ? 'rgb(52, 71, 103)' : 'white'
+	}
+
+	const ReportsButtonNavigationSx: SxProps = {
+		"&:hover": {
+			backgroundColor: ReportsActive ? 'white' : 'rgb(52, 71, 103)',
+			color: ReportsActive ? 'rgb(52, 71, 103)' : 'white',
+			outline: ReportsActive ? 'none' : `3px ${blueGrey[300]}`,
+
+		},
+		'&:focus': {
+			border: `3px solid ${blueGrey[300]}`,
+
+
+		},
+		border: ReportsActive ? `3px solid ${blueGrey[300]}` : 'none',
+		borderRadius: '0.6rem',
+		backgroundColor: ReportsActive ? 'white' : 'rgb(52, 71, 103)',
+		color: ReportsActive ? 'rgb(52, 71, 103)' : 'white'
+	}
+
+	const CandidatesButtonNavigationSx: SxProps = {
+		"&:hover": {
+			backgroundColor: CandidatesActive ? 'white' : 'rgb(52, 71, 103)',
+			color: CandidatesActive ? 'rgb(52, 71, 103)' : 'white',
+			outline: CandidatesActive ? 'none' : `3px ${blueGrey[300]}`,
+		},
+
+		'&:focus': {
+			border: `solid ${blueGrey[300]}`,
+		},
+
+		border: CandidatesActive ? `3px solid ${blueGrey[300]}` : 'none',
+		borderRadius: '0.6rem',
+		backgroundColor: CandidatesActive ? 'white' : 'rgb(52, 71, 103)',
+		color: CandidatesActive ? 'rgb(52, 71, 103)' : 'white'
+	}
+
+	const JobsButtonNavigationSx: SxProps = {
+		"&:hover": {
+			backgroundColor: JobsActive ? 'white' : 'rgb(52, 71, 103)',
+			color: JobsActive ? 'rgb(52, 71, 103)' : 'white',
+			outline: JobsActive ? 'none' : `3px ${blueGrey[300]}`,
+		},
+
+		'&:focus': {
+			border: `solid ${blueGrey[300]}`,
+		},
+
+		border: JobsActive ? `3px solid ${blueGrey[300]}` : 'none',
+		borderRadius: '0.6rem',
+		backgroundColor: JobsActive ? 'white' : 'rgb(52, 71, 103)',
+		color: JobsActive ? 'rgb(52, 71, 103)' : 'white'
+	}
+
+	const DrawerPaperSx: SxProps = {
+		display: { md: 'block', lg: 'none' },
+		'& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+	}
+	// ######### END Sx Props #######################################
 
 	const handleHomeClick = () => {
 		setReportsActive(false);
@@ -77,186 +162,124 @@ export default function NavBar(props: Props) {
 	};
 
 	const drawer = (
-		<Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
-			<Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 3 }}>
+		<Box onClick={handleDrawerToggle} sx={BoxDrawerSx}>
+			<Box sx={BoxDrawerAvatarSx}>
 				<Avatar />
 			</Box>
-
-			<Typography
-				variant="caption"
-				sx={{ marginLeft: 2, }}
-			>
+			<Typography variant="caption" sx={TypographyDrawerSx}>
 				ברוך הבא UserUser.
 			</Typography>
+			
 
-			<Divider sx={{ marginTop: 1 }} />
+			<Divider sx={DividerDrawerSx} />
+
 			<List>
-
 				<ListItem disablePadding>
-					<ListItemButton sx={{ textAlign: 'center' }} onClick={handleHomeClick}>
+					<ListItemButton sx={ListItemButtonDrawerSx} onClick={handleHomeClick}>
 						<ListItemText primary='דף הבית' />
 					</ListItemButton>
 				</ListItem>
 
 				<ListItem disablePadding>
-					<ListItemButton sx={{ textAlign: 'center' }} onClick={handleReportsClick}>
+					<ListItemButton sx={ListItemButtonDrawerSx} onClick={handleReportsClick}>
 						<ListItemText primary='דוחות' />
 					</ListItemButton>
 				</ListItem>
 				<ListItem disablePadding>
-					<ListItemButton sx={{ textAlign: 'center' }} onClick={handleCandidatesClick}>
+					<ListItemButton sx={ListItemButtonDrawerSx} onClick={handleCandidatesClick}>
 						<ListItemText primary='ניהול מועמדים' />
 					</ListItemButton>
 				</ListItem>
 				<ListItem disablePadding>
-					<ListItemButton sx={{ textAlign: 'center' }}>
+					<ListItemButton sx={ListItemButtonDrawerSx}>
 						<ListItemText primary='ניהול משרות' onClick={handleJobsClick} />
 					</ListItemButton>
 				</ListItem>
-				<ListItem disablePadding>
-					<ListItemButton sx={{ textAlign: 'center' }}>
-						<ListItemText primary='התנתק' />
-					</ListItemButton>
-				</ListItem>
+
+				<MyLogoutDialog handlelogout={handlelogout} isMobile={true} />
 
 			</List>
 		</Box>
 	);
 
-	const container = window !== undefined ? () => window().document.body : undefined;
-
 
 	return (
-			<Box sx={{ display: 'flex', marginTop: '80px'}}>
-				<CssBaseline />
-				<AppBar component="nav" sx={{
-					background: 'linear-gradient(to top, rgb(9, 32, 63) 0%, rgb(83, 120, 149) 100%)',
-					margin: '16px 24px',
-					width: 'calc(100% - 48px)',
-					borderRadius: '0.75rem',
-					paddingTop: '0px',
-					paddingBottom: '0px',
-					boxShadow: 5
-				}}>
-					<Toolbar>
-						<IconButton
-							color="inherit"
-							aria-label="open drawer"
-							edge="start"
-							onClick={handleDrawerToggle}
-							sx={{ mr: 2, display: { md: 'none' } }}
+		<Box sx={{ display: 'flex', marginTop: '80px' }}>
+			<CssBaseline />
+			<AppBar component="nav" sx={AppBarSx}>
+				<Toolbar>
+					<IconButton
+						color="inherit"
+						aria-label="open drawer"
+						edge="start"
+						onClick={handleDrawerToggle}
+						sx={OpenDrawerIconSx}
+					>
+						<MenuIcon sx={NavBarIconColorSx} />
+					</IconButton>
+
+
+					<Box sx={WelcomeUserBoxSx}>
+
+						<UserDropMenu handlelogout={handlelogout} />
+						<Typography
+							marginLeft={1}
+							sx={{maxWidth: 80,maxHeight: 20}}
+							variant="caption"
 						>
-							<MenuIcon sx={{ color: '#fff' }} />
-						</IconButton>
+							ברוך הבא משתמש
+						</Typography>
+				
 
+					</Box>
 
-						<Box sx={{ display: { xs: 'none', sm: 'none', md: 'flex' } }}>
-
-							<IconButton
-								color="inherit"
-								edge="start"
-								disabled
-
+					<Box sx={BoxNavigationOptionsSx}>
+						<Stack direction="row" spacing={2}>
+							<Button disableRipple startIcon={<Home />} variant="text"
+								sx={HomeButtonNavigationSx}
+								onClick={handleHomeClick}
 							>
-								<AccountCircle sx={{ color: '#fff' }} />
-							</IconButton>
-
-							<Typography
-								variant="caption"
+								דף הבית
+							</Button>
+							<Button disableRipple startIcon={<AssessmentOutlined />} variant="text"
+								sx={ReportsButtonNavigationSx}
+								onClick={handleReportsClick}
 							>
-								ברוך הבא User.
-							</Typography>
-
-						</Box>
-
-						<Box sx={{ display: { xs: 'none', sm: 'none', md: 'flex', justifyContent: 'center', width: '100%' } }}>
-							<Stack direction="row" spacing={2}>
-								<Button disableFocusRipple disableRipple size="large" startIcon={<Home />} variant="text"
-									sx={{
-										"&:hover": {
-											backgroundColor: HomeActive ? 'white' : 'primary',
-											color: HomeActive ? 'primary' : 'white'
-										},
-
-										borderRadius: '0.75rem',
-										backgroundColor: HomeActive ? 'white' : 'primary',
-										color: HomeActive ? 'primary' : 'white',
-									}}
-									onClick={handleHomeClick}
-								>
-									דף הבית
-								</Button>
-								<Button disableFocusRipple disableRipple size="large" startIcon={<AssessmentOutlined />} variant="text"
-									sx={{
-										"&:hover": {
-											backgroundColor: ReportsActive ? 'white' : 'primary',
-											color: ReportsActive ? 'primary' : 'white'
-										},
-										borderRadius: '0.75rem',
-										backgroundColor: ReportsActive ? 'white' : 'primary',
-										color: ReportsActive ? 'primary' : 'white',
-									}}
-									onClick={handleReportsClick}
-								>
-									דוחות
-								</Button>
-								<Button size="large" startIcon={<PeopleAltOutlined />} variant="text"
-									sx={{
-										"&:hover": {
-											backgroundColor: CandidatesActive ? 'white' : 'primary',
-											color: CandidatesActive ? 'primary' : 'white'
-										},
-										borderRadius: '0.75rem',
-										backgroundColor: CandidatesActive ? 'white' : 'primary',
-										color: CandidatesActive ? 'primary' : 'white',
-									}}
-									onClick={handleCandidatesClick}
-								>
-									ניהול מועמדים
-								</Button>
-								<Button size="large" startIcon={<ArticleOutlined />} variant="text"
-									sx={{
-										"&:hover": {
-											backgroundColor: JobsActive ? 'white' : 'primary',
-											color: JobsActive ? 'primary' : 'white'
-										},
-										borderRadius: '0.75rem',
-										backgroundColor: JobsActive ? 'white' : 'primary',
-										color: JobsActive ? 'primary' : 'white',
-									}}
-									onClick={handleJobsClick}
-								>
-									ניהול משרות
-								</Button>
-
-							</Stack>
-						</Box>
-						<Box sx={{ display: { xs: 'none', sm: 'none', md: 'flex', justifyContent: 'center', width: 'fit-content' } }}>
-							<Button size="large" endIcon={<Logout />} sx={{ color: '#fff' }}>
-								התנתק
+								דוחות
+							</Button>
+							<Button disableRipple startIcon={<PeopleAltOutlined />} variant="text"
+								sx={CandidatesButtonNavigationSx}
+								onClick={handleCandidatesClick}
+							>
+								ניהול מועמדים
+							</Button>
+							<Button disableRipple startIcon={<ArticleOutlined />} variant="text"
+								sx={JobsButtonNavigationSx}
+								onClick={handleJobsClick}
+							>
+								ניהול משרות
 							</Button>
 
-
-						</Box>
-					</Toolbar>
-				</AppBar>
-				<Box component="nav">
-					<Drawer
-						container={container}
-						variant="temporary"
-						open={mobileOpen}
-						onClose={handleDrawerToggle}
-						ModalProps={{
-							keepMounted: true, // Better open performance on mobile.
-						}}
-						sx={{
-							display: { md: 'block', lg: 'none' },
-							'& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-						}}
-					>
-						{drawer}
-					</Drawer>
-				</Box>
+						</Stack>
+					</Box>
+				
+				</Toolbar>
+			</AppBar>
+			<Box component="nav">
+				<Drawer
+					variant="temporary"
+					open={mobileOpen}
+					onClose={handleDrawerToggle}
+					ModalProps={{
+						keepMounted: true, // Better open performance on mobile.
+					}}
+					sx={DrawerPaperSx}
+				>
+					{drawer}
+				</Drawer>
 			</Box>
+		</Box>
 	);
-}
+};
+
+export default NavBar;

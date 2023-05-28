@@ -5,10 +5,13 @@ import Popper from '@mui/base/Popper';
 import { styled } from '@mui/system';
 import { ListActionTypes } from '@mui/base/useList';
 import { Box, IconButton, ListItemIcon, Typography } from '@mui/material';
-import { Assignment, Edit, MoreVert, Print } from '@mui/icons-material';
+import { Assignment, Edit, Label, MoreVert, Print } from '@mui/icons-material';
 import { MenuItemIconSx, MenuItemTypographySx, MoreVertSx, blue, grey } from './MyDropManuStyle';
+import { useNavigate } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
-function MenuSection({ children, label }: MenuSectionProps) {
+function MenuSection({ children, label }: MenuSectionProps)
+{
     return (
         <MenuSectionRoot>
             <MenuSectionLabel>{label}</MenuSectionLabel>
@@ -17,7 +20,11 @@ function MenuSection({ children, label }: MenuSectionProps) {
     );
 }
 
-export default function WrappedMenuItems() {
+export default function MyDropMenu(props: { JobId: any })
+{
+    const navigate = useNavigate();
+
+    const { JobId } = props;
     const [buttonElement, setButtonElement] = React.useState<HTMLButtonElement | null>(
         null,
     );
@@ -25,12 +32,23 @@ export default function WrappedMenuItems() {
     const menuActions = React.useRef<MenuActions>(null);
     const preventReopen = React.useRef(false);
 
-    const updateAnchor = React.useCallback((node: HTMLButtonElement | null) => {
+    const updateAnchor = React.useCallback((node: HTMLButtonElement | null) =>
+    {
         setButtonElement(node);
     }, []);
 
-    const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        if (preventReopen.current) {
+
+    const handleEditClick = () =>
+    {
+        setOpen(false);
+        buttonElement?.focus();
+        navigate("/createJob", { state: JobId });
+    }
+
+    const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>) =>
+    {
+        if (preventReopen.current)
+        {
             event.preventDefault();
             preventReopen.current = false;
             return;
@@ -39,19 +57,24 @@ export default function WrappedMenuItems() {
         setOpen((open) => !open);
     };
 
-    const handleButtonMouseDown = () => {
-        if (isOpen) {
+    const handleButtonMouseDown = () =>
+    {
+        if (isOpen)
+        {
             // Prevents the menu from reopening right after closing
             // when clicking the button.
             preventReopen.current = true;
         }
     };
 
-    const handleButtonKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
-        if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+    const handleButtonKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) =>
+    {
+        if (event.key === 'ArrowDown' || event.key === 'ArrowUp')
+        {
             event.preventDefault();
             setOpen(true);
-            if (event.key === 'ArrowUp') {
+            if (event.key === 'ArrowUp')
+            {
                 // Focus the last item when pressing ArrowUp.
                 menuActions.current?.dispatch({
                     type: ListActionTypes.keyDown,
@@ -62,8 +85,11 @@ export default function WrappedMenuItems() {
         }
     };
 
-    const createHandleMenuClick = (menuItem: string) => {
-        return () => {
+    const createHandleMenuClick = (menuItem: string) =>
+    {
+
+        return () =>
+        {
             console.log(`Clicked on ${menuItem}`);
             setOpen(false);
             buttonElement?.focus();
@@ -88,44 +114,38 @@ export default function WrappedMenuItems() {
             <Menu
                 actions={menuActions}
                 open={isOpen}
-                onOpenChange={(open) => {
+                onOpenChange={(open) =>
+                {
                     setOpen(open);
                 }}
                 anchorEl={buttonElement}
                 slots={{ root: StyledPopper, listbox: StyledListbox }}
                 slotProps={{ listbox: { id: 'simple-menu' } }}
             >
-                <MenuSection label="אפשרויות">
+                <Typography variant='caption' sx={{fontSize: 10,fontWeight: 600, padding: 1}}>אפשרויות</Typography>
+                <StyledMenuItem onClick={() => navigate(`../jobs/${JobId}`)}>
+                
+                    <ListItemIcon>
+                        <Assignment sx={MenuItemIconSx} />
+   
+                   <Typography sx={MenuItemTypographySx} >
+                            לדף המשרה
+                        </Typography>
+                  
+                   </ListItemIcon>
+                
+                </StyledMenuItem>
 
-                    <StyledMenuItem onClick={createHandleMenuClick('GoToJobPage')}>
-                        <ListItemIcon>
-                            <Assignment sx={MenuItemIconSx} />
-                            <Typography sx={MenuItemTypographySx} >
-                                לדף המשרה
-                            </Typography>
-                        </ListItemIcon>
-                    </StyledMenuItem>
+                <StyledMenuItem onClick={handleEditClick}>
+                    <ListItemIcon>
+                        <Edit sx={MenuItemIconSx} />
+                        <Typography sx={MenuItemTypographySx} >
+                            ערוך משרה
+                        </Typography>
+                    </ListItemIcon>
+                </StyledMenuItem>
 
-                    <StyledMenuItem onClick={createHandleMenuClick('Edit')}>
-                        <ListItemIcon>
-                            <Edit sx={MenuItemIconSx} />
-                            <Typography sx={MenuItemTypographySx} >
-                                ערוך משרה
-                            </Typography>
-                        </ListItemIcon>
-                    </StyledMenuItem>
-                </MenuSection>
-
-                <MenuSection label='ייצוא'>
-                    <StyledMenuItem onClick={createHandleMenuClick('Print')}>
-                        <ListItemIcon>
-                            <Print sx={MenuItemIconSx} />
-                            <Typography sx={MenuItemTypographySx} >
-                                הדפס משרה
-                            </Typography>
-                        </ListItemIcon>
-                    </StyledMenuItem>
-                </MenuSection>
+                {/* </MenuSection> */}
             </Menu>
         </Box>
     );
@@ -185,7 +205,8 @@ const StyledPopper = styled(Popper)`
   z-index: 1;
 `;
 
-interface MenuSectionProps {
+interface MenuSectionProps
+{
     children: React.ReactNode;
     label: string;
 }

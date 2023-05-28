@@ -6,7 +6,9 @@ export const BoxGradientSx: SxProps = {
     height: '45vh',
     display: 'flex',
     justifyContent: 'center',
-    background: 'linear-gradient(112.1deg, rgb(32, 38, 57) 11.4%, rgb(63, 76, 119) 70.2%)'
+    background: 'linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%)',
+    // background: 'radial-gradient(circle at 18.7% 37.8%, rgb(250, 250, 250) 0%, rgb(225, 234, 238) 90%)'
+    // background: 'linear-gradient(112.1deg, rgb(32, 38, 57) 11.4%, rgb(63, 76, 119) 70.2%)'
 }
 
 
@@ -20,7 +22,7 @@ export const MyPaperSx: SxProps = {
     minWidth: '0px',
     overflowWrap: 'break-word',
     backgroundClip: 'border-box',
-    border: '0px solid rgba(0, 0, 0, 0.125)',
+    border: '1px solid rgba(0, 0, 0, 0.125)',
     borderRadius: '0.75rem',
     overflow: 'visible',
     padding: '16px',
@@ -29,8 +31,8 @@ export const MyPaperSx: SxProps = {
     backgroundColor: 'rgba(255, 255, 255, 0.8)',
     backdropFilter: 'saturate(200%) blur(30px)',
     boxShadow: 'rgba(0, 0, 0, 0.05) 0rem 1.25rem 1.6875rem 0rem',
-    marginLeft: '16px',
-    marginRight: '16px'
+    marginLeft: '32px',
+    marginRight: '32px'
 }
 
 export const MyGridSx: SxProps = {
@@ -45,8 +47,8 @@ export const MyGridSx: SxProps = {
     maxWidth: '100%'
 }
 
-export const MyBoxSectionSx: SxProps = {
-    minWidth: '33.33%',
+export const MyGridItemSx: SxProps = {
+    minWidth: '33.333%',
     padding: '16px',
     textAlign: 'center',
     lineHeight: 1,

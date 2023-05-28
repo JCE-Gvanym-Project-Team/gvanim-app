@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "gvanim-app"
-  }
+    "default": "gvanim-app",
+    "gvanim-alias": "gvanim-app"
+  },
+  "targets": {},
+  "etags": {}
 }
