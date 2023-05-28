@@ -25,6 +25,7 @@ export async function removeObjectAtPath(path: string) {
 	try {
 		const ref = database.ref(path);
 		await ref.remove();
+		console.log(`${path} romoved from DB`);
 	} catch (error) {
 		console.error("Error removing object:", error);
 	}

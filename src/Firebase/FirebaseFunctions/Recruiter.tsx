@@ -1,7 +1,8 @@
 import { realtimeDB } from "../FirebaseConfig/firebase";
-import { getObjectAtPath, removeObjectAtPath, getFirebaseIdsAtPath, appendToDatabase } from "./DBfuncs";
-import { registerRecruiter } from "./Authentication";
+import { getObjectAtPath, removeObjectAtPath, getFirebaseIdsAtPath, appendToDatabase, replaceData } from "./DBfuncs";
 import { Sector, getAllSectors } from "./Sector";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "firebase/auth";
+const auth = getAuth();
 
 
 export class Recruiter {
@@ -40,9 +41,12 @@ export class Recruiter {
 		if (await this.exists()) {
 			let secs = await getAllSectors();
 			secs = secs.filter((sec) => this._sectors.includes(sec._name));
-			for (let i = 0; i < secs.length; i++)
-				secs[i].removeRecruiter(this);
-			removeObjectAtPath("/Recruiters/" + this._id);
+			for (let i = 0; i < secs.length; i++) {
+				let sec = new Sector(secs[i]._name, secs[i]._open, secs[i]._recruitersUid);
+				sec.removeRecruiter(this);
+			}
+
+			await removeObjectAtPath("/Recruiters/" + this._id);
 		}
 	}
 	/**
@@ -50,22 +54,33 @@ export class Recruiter {
 	 * @returns {Promise<string>} A randomly generated password for the new recruiter.
 	 * If the recruiter already exists, logs a message to the console and returns nothing.
 	 */
-	public async add() {
-		if (!(await this.exists())) {
-			const pass = generateRandomString();
-			registerRecruiter(this, pass);
-			console.log(`the uid of ${this._email} is ${(await this.getUid)}`);
-			return pass;
+	public async add(password: string = "") {
+		if ((await this.exists())) {
+			console.log(`${this._email} already in use`);
+			return;
+		}
+		if (password.length > 0) {
+			const userCredential = await createUserWithEmailAndPassword(auth, this._email, password);
+			const userUid = userCredential.user.uid;
+			await auth.signOut();
+			const user = process.env.REACT_APP_ADMIN_MAIL;
+			const pass = process.env.REACT_APP_ADMIN_PASS;
+			if (user != null && pass != null) {
+				await signInWithEmailAndPassword(auth, user, pass)
+				for (let i = 0; i < this._sectors.length; i++) {
+					let sec = new Sector(this._sectors[i], true);
+					sec.addRecruiter(this);
+				}
+			}
+			await appendToDatabase(userUid, "/RecUid", this._id);
 			//todo notify by mail the recruiter that their account was created and send the password for first login
 		}
-		else
-			console.log("this email already exists in the database");
+		await appendToDatabase(this, "/Recruiters", this._id);
 	}
 	public async edit(email: string = this._email, firstName: string = this._firstName, lastName: string = this._lastName) {
 		this._firstName = firstName;
 		this._lastName = lastName;
-		this.remove();
-		this.add();
+		replaceData(`/Recruiter/${this._id}`, this);
 	}
 	/**
 	 * Add permissions to a sector. 
@@ -73,17 +88,26 @@ export class Recruiter {
 	 * @returns None
 	 */
 	public async addSector(sector: string) {
+		let sectObj = new Sector(sector, true);
+		if (!(await sectObj.exists())) {
+			console.log(`sector: ${sector} not exists in DB`);
+			return;
+		}
 		if (!this._sectors.includes(sector))
 			this._sectors.push(sector);
-		this.remove();
-		this.add();
+		else
+			return;
+		replaceData(`/Recruiters/${this._id}`, this);
+		console.log(`2)exist?(t) ${await this.exists()}`);
 		const sectors = await getAllSectors();
 		for (let i = 0; i < sectors.length; i++) {
 			if (sectors[i]._name === sector) {
-				sectors[i].addRecruiter(this);
+				let sec = new Sector(sectors[i]._name, sectors[i]._open, sectors[i]._recruitersUid);
+				await sec.addRecruiter(this);
 				break;
 			}
 		}
+		console.log(`3)exist?(t) ${await this.exists()}`)
 	}
 	/**
 	 * Remove editing permissions to the recruiter to the sector
@@ -93,7 +117,7 @@ export class Recruiter {
 	public async removeSector(sector: string) {
 		if (this._sectors.includes(sector))
 			this._sectors.filter((val) => val !== sector);
-		this.remove();
+		replaceData(`/Recruiters/${this._id}`,this);
 		appendToDatabase(this, "/Recruiters", this._id);
 		const uid = await this.getUid();
 		removeObjectAtPath(`Sectors/${sector}/${uid}`);
@@ -125,7 +149,8 @@ export async function getRecruitersFromDatabase(): Promise<Recruiter[]> {
 			const recruiter = recruitersData[recruiterId];
 			recruiters.push(recruiter);
 		}
-		return recruiters;
+		const res = recruiters.map((rec) => new Recruiter(rec._email, rec._firstName, rec._lastName, rec._sectors));
+		return res;
 	} catch (error) {
 		console.error(error);
 		throw new Error("Failed to fetch recruiters from database.");

@@ -292,7 +292,10 @@ export async function getFilteredCandidateJobStatuses(attributes: string[] = [],
         return candidateJobStatuses.sort(sortByApplyDate);
     if (sortBy === "lastUpdate")
         return candidateJobStatuses.sort(sortByLastUpdate);
-    return candidateJobStatuses;
+    return candidateJobStatuses.map((s)=>new CandidateJobStatus(s._jobNumber,s._candidateId,
+                                        s._status,s._about,s._matchingRate,s._applyDate,
+                                        s._lastUpdate,s._interviewsSummery,s._recomendations,
+                                        s._rejectCause));
 }
 function sortByJobNumber(a: CandidateJobStatus, b: CandidateJobStatus): number {
     return a._jobNumber - b._jobNumber;

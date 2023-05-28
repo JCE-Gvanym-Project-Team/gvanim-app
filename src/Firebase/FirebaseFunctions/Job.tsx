@@ -18,7 +18,7 @@ export class Job {
     public _open: boolean;
     public _highPriority: boolean;
     public _viewsPerPlatform: Map<string, number>;
-    public _applyPerPlatform: Map<string, number>
+    public _applyPerPlatform: Map<string, number>;
     public _creationDate: Date;
 
     constructor(

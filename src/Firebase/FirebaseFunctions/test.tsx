@@ -1,7 +1,10 @@
+import { auth } from "firebase-functions/v1";
+import { isConnected, loginAdmin, loginRecruiter, loguotRecruiter } from "./Authentication";
 import { Candidate } from "./Candidate";
 import { Job, generateJobNumber, getFilteredJobs } from "./Job";
-import { generateRandomString } from "./Recruiter";
-function sleep(ms: number): Promise<void> {
+import { Recruiter, generateRandomString } from "./Recruiter";
+import { Sector } from "./Sector";
+export function sleep(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 async function testSingleJobAddNoConfilct(): Promise<boolean> {
@@ -113,12 +116,31 @@ async function testAddSingleCandidateNoConflict() {
     newCand.remove()
     return status;
 }
-
+async function testAddRecruiterNoSectors() {
+    await loginAdmin();
+    let rec = new Recruiter("ex@gmail.com","el","ta");
+    await rec.add('123456');
+    const status = await rec.exists();
+    await rec.remove();
+    return status;
+}
+async function testLoginRecruiter() {
+    await loginAdmin();
+    let rec = new Recruiter("ex@gmail.com","el","ta");
+    await rec.add('123456');
+    await loguotRecruiter();
+    await loginRecruiter("ex@gmail.com","123456");
+    const status = await isConnected();
+    await loguotRecruiter();
+    await rec.remove();
+    return status;
+}
 export async function main() {
     //console.log(`testSingleJobAddNoConfilct(): ${await testSingleJobAddNoConfilct()}`);
     //console.log(`testSingleJobAddConfilct(): ${await testSingleJobAddConfilct()}`);
     //console.log(`testGenerateJobNumber(): ${await testGenerateJobNumber()}`);
     //console.log(`testJobEditNoConfilct(): ${await testJobEditNoConflict()}`);
     //console.log(`testAddSingleCandidateNoConflict(): ${await testAddSingleCandidateNoConflict()}`);
-
+    //console.log(`testAddRecruiterNoSectors(): ${await testAddRecruiterNoSectors()}`);
+    console.log(`testLoginRecruiter(): ${await testLoginRecruiter()}`);
 }
