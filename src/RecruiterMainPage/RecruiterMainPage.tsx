@@ -25,7 +25,7 @@ function RecruiterMainPage({ handlelogout })
 	const [CandidatesActive, setCandidatesActive] = useState(false);
 	const [JobsActive, setJobsActive] = useState(false);
 	const [allJobs, setAllJobs] = React.useState<any[]>([]);
-	const [candidateIDs, setCandidateIDs] = useState<string[]>([]);
+	const [candidateIDs, setCandidateIDs] = useState<string[]>([])
 
 
 
