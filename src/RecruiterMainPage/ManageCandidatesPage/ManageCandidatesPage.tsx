@@ -17,8 +17,8 @@ export default function ManageCandidatesPage(props: { setHomeActive: any, setRep
 
     return (
         <>
-            <div>hi</div>
-            <Button onClick={addCandidate}>asdasdasdsa</Button>
+            <div>ManageCandidatesPage</div>
+            {/* <Button onClick={addCandidate}>asdasdasdsa</Button> */}
         </>
     )
 }
