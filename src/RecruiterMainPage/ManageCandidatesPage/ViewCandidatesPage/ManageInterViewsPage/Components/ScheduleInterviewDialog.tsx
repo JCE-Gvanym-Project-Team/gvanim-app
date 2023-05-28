@@ -1,7 +1,9 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, TextField } from "@mui/material";
 import { useState } from "react";
 import { dialogActionsSx, dialogContentSx, dialogSx, dialogTitleSx, dialogTopAreaSx } from "./ScheduleInterviewDialogStyle";
 import { Close } from "@mui/icons-material";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { esES } from "@mui/x-data-grid";
 
 export default function ScheduleInterviewDialog({ open, onClose })
 {
@@ -25,7 +27,7 @@ export default function ScheduleInterviewDialog({ open, onClose })
             <Box sx={dialogTopAreaSx}>
                 {/* Title */}
                 <DialogTitle sx={dialogTitleSx}>
-                    
+                    בחר\י תאריך לראיון
                 </DialogTitle>
                 <Box sx={{ display: "flex", justifyContent: "end" }}>
 
@@ -44,7 +46,12 @@ export default function ScheduleInterviewDialog({ open, onClose })
 
             {/* Text Field area */}
             <DialogContent sx={dialogContentSx}>
-                
+                {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                        label={'"year", "month" and "day"'}
+                        views={['year', 'month', 'day']}
+                    />
+                </LocalizationProvider> */}
             </DialogContent>
 
             {/* Action Button */}
