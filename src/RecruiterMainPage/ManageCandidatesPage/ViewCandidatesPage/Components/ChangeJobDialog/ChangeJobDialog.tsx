@@ -44,7 +44,8 @@ export default function ChangeJobDialog(props: { open, onClose, candidateApplied
             setToJobValue('');
             onClose();
         }
-        // TODO: Perform submit logic here
+        // TODO: Add are you sure button
+        // TODO: handle error correctly here
         const fromJobNumberString = fromJobValue?.match(/\d+/)?.[0];
         const fromJobNumber = fromJobNumberString ? parseInt(fromJobNumberString) : NaN;
 

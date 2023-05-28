@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { BoxGradientSx, ContainerGradientSx, candidateNameSx, mainStackSx, textSx, titleSx } from './ManageInterviewsPageStyle';
-import { Autocomplete, Box, Stack, TextField, Typography } from '@mui/material';
+import { BoxGradientSx, ContainerGradientSx, appliedDateTextSx, autoCompleteSx, candidateNameAndButtonSx, candidateNameSx, chooseJobAndInterviewContainerSx, chooseJobContainerSx, mainStackSx, scheduleInterviewButton, scheduleInterviewContainer, scheduleInterviewText, textSx, titleSx } from './ManageInterviewsPageStyle';
+import { Autocomplete, Box, Button, Container, Divider, Stack, TextField, Typography } from '@mui/material';
 import { ManageCandidatesPageGlobalStyle } from '../../../PageStyles';
 import { Candidate, getFilteredCandidates } from '../../../../Firebase/FirebaseFunctions/Candidate';
 import { CandidateJobStatus, getFilteredCandidateJobStatuses } from '../../../../Firebase/FirebaseFunctions/CandidateJobStatus';
 import { Job, getFilteredJobs } from '../../../../Firebase/FirebaseFunctions/Job';
+import { CalendarMonth } from '@mui/icons-material';
+import ScheduleInterviewDialog from './Components/ScheduleInterviewDialog';
 
 export default function ManageInterviewsPage(props: { candidateId: string, setHomeActive: any, setReportsActive: any, setCandidatesActive: any, setJobsActive: any })
 {
@@ -14,13 +16,20 @@ export default function ManageInterviewsPage(props: { candidateId: string, setHo
 	const [candidateAppliedJobs, setCandidateAppliedJobs] = useState<Job[]>([]);
 	const [allJobs, setAllJobs] = useState<Job[]>([]);
 	const [selecetedJob, setSelectedJob] = useState<Job | null>(null);
+	const [selectedJobError, setSelectedJobError] = useState(false);
 
+	// select job use states
 	const [jobValue, setJobValue] = useState("");
 
+	// schedule interview use states
+	const [interviewDialogOpen, setInterviewDialogOpen] = useState(false);
 
+	// candidate_job_status after selecting a job
+	const [candidateJobStatus, setCandidateJobStatus] = useState<CandidateJobStatus | null>(null);
+	const [lastScheduleDate, setLastScheduleDate] = useState<Date | null>();
+	const [appliedDate, setAppliedDate] = useState<Date | null>(null);
 
-
-	// whenever candidate Id changes, rerender:
+	// use effects
 	useEffect(() =>
 	{
 		setHomeActive(false);
@@ -33,10 +42,53 @@ export default function ManageInterviewsPage(props: { candidateId: string, setHo
 	}, [candidateId]);
 
 
-	// autcomplete job select
-	const handleJobChange = function ()
+	useEffect(() =>
 	{
-		console.log("hi");
+		handleChooseJob();
+	}, [jobValue])
+
+
+	// autcomplete job select
+	const handleChooseJob = async function ()
+	{
+		const jobNumberString = jobValue?.match(/\d+/)?.[0];
+		const jobNumber = jobNumberString ? parseInt(jobNumberString) : NaN;
+
+
+		if (Number.isNaN(jobNumber))
+		{
+			setSelectedJobError(true);
+			return;
+		}
+		const candidateJobStatuses = await getFilteredCandidateJobStatuses(["jobNumber", "candidateId"], [jobNumber.toString(), candidateId]);
+		const temp = new CandidateJobStatus(
+			candidateJobStatuses[0]._jobNumber,
+			candidateJobStatuses[0]._candidateId,
+			candidateJobStatuses[0]._status,
+			candidateJobStatuses[0]._about,
+			candidateJobStatuses[0]._matchingRate,
+			candidateJobStatuses[0]._applyDate,
+			candidateJobStatuses[0]._lastUpdate,
+			candidateJobStatuses[0]._interviewsSummery,
+			candidateJobStatuses[0]._recomendations,
+			candidateJobStatuses[0]._rejectCause);
+		setCandidateJobStatus(temp);
+		setLastScheduleDate(temp._lastUpdate);
+		setAppliedDate(temp._applyDate);
+	}
+
+
+	// schedule interview button handler and close handler
+	const scheduleInterviewOpenHandler = () =>
+	{
+		setInterviewDialogOpen(true);
+		console.log("schedule interview");
+	}
+
+	const scheduleInterviewCloseHandler = () =>
+	{
+		setInterviewDialogOpen(false);
+		console.log("close interview");
 	}
 
 	return (
@@ -49,36 +101,73 @@ export default function ManageInterviewsPage(props: { candidateId: string, setHo
 				<Box sx={ContainerGradientSx}>
 					<Stack direction={'column'} sx={mainStackSx} spacing={6}>
 
-						{/* Title */}
 						<Typography sx={titleSx} variant='h2'>
-							ראיונות למועמד
+							ראיונות
 						</Typography>
 
-						{/* Candidate Name */}
-						<Box sx={{ display: 'flex' }}>
-							<Typography sx={textSx} variant='h4'>
-								שם:
-							</Typography>
+						<Box sx={candidateNameAndButtonSx}>
+							{/* Candidate Name */}
+							<Box sx={{ display: 'flex' }}>
+								<Typography sx={textSx} variant='h4'>
+									שם:
+								</Typography>
 
-							<Typography sx={candidateNameSx} variant='h4' >
-								{candidateInfo?._firstName + " " + candidateInfo?._lastName}
-							</Typography>
+								<Typography sx={candidateNameSx} variant='h4' >
+									{candidateInfo?._firstName + " " + candidateInfo?._lastName}
+								</Typography>
+							</Box>
+
+							{/* Schedule Interview Button*/}
+							<Box sx={scheduleInterviewContainer}>
+								<Button sx={scheduleInterviewButton} variant="contained" startIcon={<CalendarMonth />} onClick={scheduleInterviewOpenHandler}>
+									קביעת ראיון
+								</Button>
+								<Divider />
+								<Typography sx={scheduleInterviewText}>
+									נשלח לאחרונה ב: { }
+								</Typography>
+								<ScheduleInterviewDialog open={interviewDialogOpen} onClose={scheduleInterviewCloseHandler} />
+							</Box>
 						</Box>
 
-						{/* Choose Job */}
-						<Box>
-							<Autocomplete
-								disablePortal
-								options={candidateAppliedJobs.map((job) => job._jobNumber.toString() + ", " + job._role + ", " + job._region)}
-								sx={{ width: 300 }}
-								renderInput={(params) => <TextField {...params} label="בחירת משרה" />}
-								onChange={handleJobChange}
-								onInputChange={(event, value) =>
-								{
-									setJobValue(value);
-								}}
-							/>
+						{/* Choose Job and interview*/}
+						<Box sx={chooseJobAndInterviewContainerSx}>
+							{/* Choose Job */}
+							<Box sx={chooseJobContainerSx}>
+								<Autocomplete
+									disablePortal
+									options={candidateAppliedJobs.map((job) => job._jobNumber.toString() + ", " + job._role + ", " + job._region)}
+									sx={autoCompleteSx}
+									renderInput={(params) => <TextField {...params} label="בחירת משרה" />}
+									onInputChange={(event, value) =>
+									{
+										setJobValue(value);
+									}}
+								/>
+								{jobValue !== "" ?
+									<Typography sx={appliedDateTextSx}>
+										הגיש\ה ב: {appliedDate ? appliedDate.getDay() + "/" + appliedDate.getMonth() + "/" + appliedDate.getFullYear() : ""}
+									</Typography> :
+									<></>
+								}
+							</Box>
+
+
+							{/* Choose Interview */}
+							<Box>
+								<Autocomplete
+									disablePortal
+									options={candidateAppliedJobs.map((job) => job._jobNumber.toString() + ", " + job._role + ", " + job._region)}
+									sx={autoCompleteSx}
+									renderInput={(params) => <TextField {...params} label="בחירת ראיון" />}
+									onInputChange={(event, value) =>
+									{
+										// 
+									}}
+								/>
+							</Box>
 						</Box>
+
 					</Stack>
 				</Box>
 			</Box>
@@ -115,5 +204,4 @@ const getJobs = async function (candidateId: string, setCandidateAppliedJobs, se
 		return jobNumbers.includes(job._jobNumber);
 	});
 	setCandidateAppliedJobs(jobs)
-	console.log(jobs);
 }

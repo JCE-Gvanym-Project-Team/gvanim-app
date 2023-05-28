@@ -1,6 +1,7 @@
 import React from 'react'
 import { SxProps } from '@mui/material/styles';
 import { GlobalStyle, ManageCandidatesPageGlobalStyle } from '../../../PageStyles';
+import { CSSProperties } from '@mui/material/styles/createTypography';
 
 
 export const textSx: SxProps = {
@@ -8,18 +9,57 @@ export const textSx: SxProps = {
     fontFamily: ManageCandidatesPageGlobalStyle.textFontFamily,
 }
 
-export const candidateNameAndEditButtonContainerSx: SxProps = {
+export const candidateNameAndButtonSx: SxProps = {
     display: 'flex',
     justifyContent: 'space-between',
     justifySelf: 'stretch',
     flexGrow: '1'
 }
 
+export const scheduleInterviewButton: SxProps = {
+    backgroundColor: ManageCandidatesPageGlobalStyle.editDetailsButtonColor,
+    alignSelf: 'center',
+    marginBottom: "1rem"
+}
+
+export const chooseJobAndInterviewContainerSx: SxProps = {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: {xs: "space-evenly", md:"space-evenly"},
+    width: "100%"
+}
+
+export const autoCompleteSx: SxProps = {
+    width: {xs: "45vw", md: "300px"}
+}
+
+export const scheduleInterviewText: SxProps = {
+    color: "grey"
+}
+
+export const chooseJobContainerSx: SxProps = {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    width: "fit-content"
+}
+
+export const appliedDateTextSx: SxProps = {
+    color: "#6e6e6e"
+}
+
+export const scheduleInterviewContainer: SxProps = {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center"
+}
+
 export const jobTextSx: SxProps = {
     color: 'black',
     fontFamily: ManageCandidatesPageGlobalStyle.textFontFamily,
     marginTop: '1rem'
-    
+
 }
 
 export const candidateNameSx: SxProps = {
@@ -50,11 +90,11 @@ export const BoxGradientSx: SxProps = {
 
 export const ContainerGradientSx: SxProps = {
     marginTop: "1rem",
-    marginLeft: {xs: '0', md: "3rem"},
-    marginRight: {xs: '0', md: "3rem"},
+    marginLeft: { xs: '0', md: "3rem" },
+    marginRight: { xs: '0', md: "3rem" },
     paddingBottom: '32px',
-    paddingLeft: {xs: '0', md: "3rem"},
-    paddingRight: {xs: '0', md: "3rem"},
+    paddingLeft: { xs: '0', md: "3rem" },
+    paddingRight: { xs: '0', md: "3rem" },
     paddingTop: "-300px",
     border: '1px solid rgba(0, 0, 0, 0.125)',
     borderRadius: '0.75rem',

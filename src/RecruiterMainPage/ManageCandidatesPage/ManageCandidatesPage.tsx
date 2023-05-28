@@ -30,5 +30,5 @@ export default function ManageCandidatesPage(props: { setHomeActive: any, setRep
 const addCandidate = () =>
 {
     let newCandidate: Candidate = new Candidate("יוסי", "בוסי", "0566", "example2@gmail.com", 2);
-    newCandidate.apply(35, "he's so good omg");
+    newCandidate.apply(85, "he's so good omg");
 }

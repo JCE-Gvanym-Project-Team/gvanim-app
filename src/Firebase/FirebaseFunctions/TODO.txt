@@ -1,0 +1,1 @@
+- add "moved to another job" field in a candidate status for a job
