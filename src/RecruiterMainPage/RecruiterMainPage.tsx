@@ -14,6 +14,7 @@ import AdminPage from "./Components/AdminPage/AdminPage";
 import { getFilteredCandidates } from "../Firebase/FirebaseFunctions/Candidate";
 import ViewCandidatesPage from "./ManageCandidatesPage/ViewCandidatesPage/ViewCandidatesPage";
 import { Box } from "@mui/material";
+import ManageInterviewsPage from "./ManageCandidatesPage/ViewCandidatesPage/ManageInterviewsPage/ManageInterviewsPage";
 
 
 
@@ -73,7 +74,7 @@ function RecruiterMainPage({ handlelogout })
 					return (
 						<React.Fragment key={candidateId + "fragment"}>
 							<Route path={"/manageCandidates/" + candidateId} element={<ViewCandidatesPage candidateId={candidateId} setHomeActive={setHomeActive} setReportsActive={setReportsActive} setCandidatesActive={setCandidatesActive} setJobsActive={setJobsActive} key={candidateId + "ViewCandidatesPage"}/>} key={candidateId} />
-							<Route path={"/manageCandidates/" + candidateId + "/interviews"} element={<ViewCandidatesPage candidateId={candidateId} setHomeActive={setHomeActive} setReportsActive={setReportsActive} setCandidatesActive={setCandidatesActive} setJobsActive={setJobsActive} />} key={candidateId + "interviews"} />
+							<Route path={"/manageCandidates/" + candidateId + "/interviews"} element={<ManageInterviewsPage candidateId={candidateId} setHomeActive={setHomeActive} setReportsActive={setReportsActive} setCandidatesActive={setCandidatesActive} setJobsActive={setJobsActive} />} key={candidateId + "interviews"} />
 						</React.Fragment>
 					);
 				})

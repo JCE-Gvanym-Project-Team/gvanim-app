@@ -17,6 +17,8 @@ export default function ChangeJobDialog(props: { open, onClose, candidateApplied
     const [toJobError, setToJobError] = useState(true);
     const navigate = useNavigate();
 
+    console.log(candidateAppliedJobs);
+
     const handleFromJobChange = (event, value) =>
     {
         setFromJobValue(value);
