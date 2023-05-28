@@ -93,17 +93,8 @@ export class Candidate {
                 }
         }
         this._firstName = firstName;
-        this._lastName = firstName;
+        this._lastName = lastName;
         this._generalRating = generalRating;
-        const newId = `${eMail}${phone}`.replace('.', '_');
-        if ((this._id !== newId) && ((await getFilteredCandidates(["id"], [newId])).length === 0)) {
-            renameFirestorePath(`/CandidatesFiles/${this._id}`, newId);
-            this._id = newId;
-            this._eMail = eMail;
-            this._phone = phone;
-        }
-        else
-            console.log("colision detected a candidate already exist with the same phone and eMail");
         replaceData((await this.getPath()), this);
     }
     /**
