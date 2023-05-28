@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import WelcomePage from "./WelcomePage/WelcomePage";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ManageCandidatesPage from "./ManageCandidatesPage/ManageCandidatesPage";
@@ -13,6 +13,7 @@ import EditCandidate from "./ManageCandidatesPage/ViewCandidatesPage/Components/
 import AdminPage from "./Components/AdminPage/AdminPage";
 import { getFilteredCandidates } from "../Firebase/FirebaseFunctions/Candidate";
 import ViewCandidatesPage from "./ManageCandidatesPage/ViewCandidatesPage/ViewCandidatesPage";
+import { Box } from "@mui/material";
 
 
 
@@ -68,9 +69,12 @@ function RecruiterMainPage({ handlelogout })
 				<Route path="/editCandidate" element={<EditCandidate setHomeActive={setHomeActive} setReportsActive={setReportsActive} setCandidatesActive={setCandidatesActive} setJobsActive={setJobsActive} />} />
 				<Route path="/manageCandidates" element={<ManageCandidatesPage setHomeActive={setHomeActive} setReportsActive={setReportsActive} setCandidatesActive={setCandidatesActive} setJobsActive={setJobsActive} />} />
 				{candidateIDs.map((candidateId) =>
-				{
+				{	
 					return (
-						<Route path={"/manageCandidates/" + candidateId} element={<ViewCandidatesPage candidateId={candidateId} setHomeActive={setHomeActive} setReportsActive={setReportsActive} setCandidatesActive={setCandidatesActive} setJobsActive={setJobsActive}/>} key={candidateId} />
+						<React.Fragment key={candidateId + "fragment"}>
+							<Route path={"/manageCandidates/" + candidateId} element={<ViewCandidatesPage candidateId={candidateId} setHomeActive={setHomeActive} setReportsActive={setReportsActive} setCandidatesActive={setCandidatesActive} setJobsActive={setJobsActive} key={candidateId + "ViewCandidatesPage"}/>} key={candidateId} />
+							<Route path={"/manageCandidates/" + candidateId + "/interviews"} element={<ViewCandidatesPage candidateId={candidateId} setHomeActive={setHomeActive} setReportsActive={setReportsActive} setCandidatesActive={setCandidatesActive} setJobsActive={setJobsActive} />} key={candidateId + "interviews"} />
+						</React.Fragment>
 					);
 				})
 				}
