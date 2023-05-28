@@ -1,6 +1,7 @@
 import { Button } from "@mui/material";
 import { Candidate } from "../../Firebase/FirebaseFunctions/Candidate";
 import { useEffect } from "react";
+import ViewCandidatesPage from "./ViewCandidatesPage/ViewCandidatesPage";
 
 export default function ManageCandidatesPage(props: { setHomeActive: any, setReportsActive: any, setCandidatesActive: any, setJobsActive: any })
 {
@@ -28,6 +29,6 @@ export default function ManageCandidatesPage(props: { setHomeActive: any, setRep
 
 const addCandidate = () =>
 {
-    let newCandidate: Candidate = new Candidate("example Candidate", "exmaple lastname", "055555555", "example@gmail.com", 4,"Hiiii");
-    newCandidate.add();
+    let newCandidate: Candidate = new Candidate("יוסי", "בוסי", "0566", "example2@gmail.com", 2);
+    newCandidate.apply(35, "he's so good omg");
 }

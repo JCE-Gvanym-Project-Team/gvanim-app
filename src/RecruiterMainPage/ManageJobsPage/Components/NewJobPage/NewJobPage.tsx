@@ -13,8 +13,7 @@ const Form = styled('form')(({ theme }) => ({
 }));
 
 
-const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandidatesActive: any, setJobsActive: any }) =>
-{
+const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandidatesActive: any, setJobsActive: any }) => {
 
     const { setHomeActive, setReportsActive, setCandidatesActive, setJobsActive } = props;
 
@@ -40,162 +39,36 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
     const [errorJobRequirements, setErrorJobRequirements] = useState(false);
 
 
-    // ### design TextFields #######################################################################################
-    const MyTextFieldJobNameSx = {
-        boxShadow: '0px 2px 24px #DAECFF',
-        "& .MuiOutlinedInput-root": {
-            fontSize: '0.875rem',
-            "&:hover fieldset": {
-                color: errorJobName ? '#dc3545' : '#212529',
-                border: errorJobName ? '1px solid #dc3545' : '1px solid #ced4da',
-                outline: 0,
-            },
-            "&.Mui fieldset": {
-                color: errorJobName ? '#dc3545' : '#212529',
-                border: errorJobName ? '1px solid #dc3545' : '1px solid #ced4da',
-                outline: 0,
-            },
-            "&.Mui-focused fieldset": {
-                border: errorJobName ? '1px solid #dc3545' : '1px solid #86b7fe',
-                color: errorJobName ? '#dc3545' : '#212529',
-                outline: 0,
-                boxShadow: errorJobName ? '0 0 0 0.25rem rgba(220,53,69,.25)' : '0 0 0 0.25rem rgba(13,110,253,.25)'
-            },
 
-        },
-    }
-    const MyTextFieldJobRoleSx = {
-        boxShadow: '0px 2px 24px #DAECFF',
-        "&. MuiOutlinedInput-root": {
-            fontSize: '0.875rem',
-            "&:hover fieldset": {
-                color: errorJobRole ? '#dc3545' : '#212529',
-                border: errorJobRole ? '1px solid #dc3545' : '1px solid #ced4da',
-                outline: 0,
-            },
-            "&.Mui fieldset": {
-                color: errorJobRole ? '#dc3545' : '#212529',
-                border: errorJobRole ? '1px solid #dc3545' : '1px solid #ced4da',
-                outline: 0,
+    useEffect(() => {
 
-
-            },
-            "&.Mui-focused fieldset": {
-                border: errorJobRole ? '1px solid #dc3545' : '1px solid #86b7fe',
-                color: errorJobRole ? '#dc3545' : '#212529',
-                outline: 0,
-                boxShadow: errorJobRole ? '0 0 0 0.25rem rgba(220,53,69,.25)' : '0 0 0 0.25rem rgba(13,110,253,.25)'
-            },
-
-        },
-    }
-    const MyTextFieldJobRegionSx = {
-        boxShadow: '0px 2px 24px #DAECFF',
-        "& .MuiOutlinedInput-root": {
-            fontSize: '0.875rem',
-            "&:hover fieldset": {
-                color: errorJobRegion ? '#dc3545' : '#212529',
-                border: errorJobRegion ? '1px solid #dc3545' : '1px solid #ced4da',
-                outline: 0,
-            },
-            "&.Mui fieldset": {
-                color: errorJobRegion ? '#dc3545' : '#212529',
-                border: errorJobRegion ? '1px solid #dc3545' : '1px solid #ced4da',
-                outline: 0,
-
-
-            },
-            "&.Mui-focused fieldset": {
-                border: errorJobRegion ? '1px solid #dc3545' : '1px solid #86b7fe',
-                color: errorJobRegion ? '#dc3545' : '#212529',
-                outline: 0,
-                boxShadow: errorJobRegion ? '0 0 0 0.25rem rgba(220,53,69,.25)' : '0 0 0 0.25rem rgba(13,110,253,.25)'
-            },
-
-        },
-    }
-    const MyTextFieldJobStateSx = {
-        boxShadow: '0px 2px 24px #DAECFF',
-        "& .MuiOutlinedInput-root": {
-            fontSize: '0.875rem',
-            "&:hover fieldset": {
-                color: errorJobState ? '#dc3545' : '#212529',
-                border: errorJobState ? '1px solid #dc3545' : '1px solid #ced4da',
-                outline: 0,
-            },
-            "&.Mui fieldset": {
-                color: errorJobState ? '#dc3545' : '#212529',
-                border: errorJobState ? '1px solid #dc3545' : '1px solid #ced4da',
-                outline: 0,
-
-
-            },
-            "&.Mui-focused fieldset": {
-                border: errorJobState ? '1px solid #dc3545' : '1px solid #86b7fe',
-                color: errorJobState ? '#dc3545' : '#212529',
-                outline: 0,
-                boxShadow: errorJobState ? '0 0 0 0.25rem rgba(220,53,69,.25)' : '0 0 0 0.25rem rgba(13,110,253,.25)'
-            },
-
-        },
-    }
-    const MyTextFieldJobRequirementsSx = {
-        boxShadow: '0px 2px 24px #DAECFF',
-        "& .MuiOutlinedInput-root": {
-            fontSize: '0.875rem',
-            "&:hover fieldset": {
-                color: errorJobRequirements ? '#dc3545' : '#212529',
-                border: errorJobRequirements ? '1px solid #dc3545' : '1px solid #ced4da',
-                outline: 0,
-            },
-            "&.Mui fieldset": {
-                color: errorJobRequirements ? '#dc3545' : '#212529',
-                border: errorJobRequirements ? '1px solid #dc3545' : '1px solid #ced4da',
-                outline: 0,
-
-
-            },
-            "&.Mui-focused fieldset": {
-                border: errorJobRequirements ? '1px solid #dc3545' : '1px solid #86b7fe',
-                color: errorJobRequirements ? '#dc3545' : '#212529',
-                outline: 0,
-                boxShadow: errorJobRequirements ? '0 0 0 0.25rem rgba(220,53,69,.25)' : '0 0 0 0.25rem rgba(13,110,253,.25)'
-            },
-
-        },
-    }
-    // #############################################################################################################
-
-    const getAllJobs = async () =>
-    {
-        const jobs = await getFilteredJobs();
-
-        let _JobToEdit = jobs.filter(job => job._jobNumber === state);
-        setJobToEdit(_JobToEdit);
-
-        setJobName(_JobToEdit[0]._title);
-        setJobRole(_JobToEdit[0]._role);
-        setJobRegion(_JobToEdit[0]._region);
-        setJobState(_JobToEdit[0]._sector);
-        setJobRequirements(_JobToEdit[0]._requirements);
-        setJobDescription(_JobToEdit[0]._description[0]);
-        setJobDescriptionSkills(_JobToEdit[0]._description[1]);
-        setJobAdditionalInfo(_JobToEdit[0]._description[2]);
-        setJobScope(_JobToEdit[0]._scope);
-
-    }
-
-    useEffect(() =>
-    {
         // for navbar
         setHomeActive(false); setCandidatesActive(false);
         setReportsActive(false); setJobsActive(false);
-        
-        if (state !== null)
-        { // edit job
+
+        const getAllJobs = async () => {
+            const jobs = await getFilteredJobs();
+
+            let _JobToEdit = jobs.filter(job => job._jobNumber === state);
+            setJobToEdit(_JobToEdit);
+
+            setJobName(_JobToEdit[0]._title);
+            setJobRole(_JobToEdit[0]._role);
+            setJobRegion(_JobToEdit[0]._region);
+            setJobState(_JobToEdit[0]._sector);
+            setJobRequirements(_JobToEdit[0]._requirements);
+            setJobDescription(_JobToEdit[0]._description[0]);
+            setJobDescriptionSkills(_JobToEdit[0]._description[1]);
+            setJobAdditionalInfo(_JobToEdit[0]._description[2]);
+            setJobScope(_JobToEdit[0]._scope);
+
+        }
+
+        if (state !== null) { // edit job
             setNewJob(false);
             getAllJobs();
         }
+
 
     }, []);
 
@@ -204,15 +77,13 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
     const navigate = useNavigate();
 
 
-    const handleSubmit = async (event: any) =>
-    {
+    const handleSubmit = async (event: any) => {
 
         event.preventDefault();
         var description_array = new Array(jobDescription, jobDescriptionSkills, jobAdditionalInfo);
 
         //edit
-        if (state !== null)
-        {
+        if (state !== null) {
             let _job = JobToEdit[0];
 
             _job.edit(_job._title = jobName, _job._role = jobRole, _job._scope = jobScope, _job._region = jobRegion,
@@ -220,18 +91,15 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
             navigate("/manageJobs", { state: `השינויים עבור משרה מס' ${_job._jobNumber} נשמרו בהצלחה.` });
         }
         //add
-        else
-        {
+        else {
 
-            if (jobName.length === 0 || jobRole.length === 0 || jobRegion.length === 0 || jobState.length === 0 || jobRequirements.length === 0)
-            {
+            if (jobName.length === 0 || jobRole.length === 0 || jobRegion.length === 0 || jobState.length === 0 || jobRequirements.length === 0) {
 
                 if (jobName.length === 0) { setErrorJobName(true); } if (jobRegion.length === 0) { setErrorJobRegion(true); }
                 if (jobRole.length === 0) { setErrorJobRole(true); } if (jobState.length === 0) { setErrorJobState(true); }
                 if (jobRequirements.length === 0) { setErrorJobRequirements(true); }
             }
-            else
-            {
+            else {
 
 
                 let job1 = new Job(await generateJobNumber(), jobName, jobRole, jobScope, jobRegion, jobState, description_array, jobRequirements, true, false);
@@ -254,8 +122,7 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
         }
     }
 
-    const handleDelete = () =>
-    {
+    const handleDelete = () => {
         JobToEdit[0].remove();
         console.log(`job (id: ${JobToEdit[0]._jobNumber}) deleted successfully`);
         navigate("/manageJobs", { state: `משרה מס' ${JobToEdit[0]._jobNumber} הוסרה בהצלחה.` });
@@ -270,6 +137,7 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
                 <Box>
                     <Container>
                         <Box >
+                            
                             <Box className="col-md-12">
                                 <Box className="section-title">
 
@@ -294,12 +162,11 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
                                                     <Typography sx={{ fontWeight: 600, fontSize: 13 }}>שם המשרה:</Typography>
                                                 </label>
 
-                                                <TextField style={{ width: '100%' }} sx={MyTextFieldJobNameSx} size='small' placeholder="שם המשרה (title)" id="_JobName" type="text"
+                                                <TextField style={{ width: '100%' }} size='small' placeholder="שם המשרה (title)" id="_JobName" type="text"
                                                     className="form-control" required
                                                     value={jobName}
                                                     error={errorJobName}
-                                                    onChange={(e) =>
-                                                    {
+                                                    onChange={(e) => {
                                                         setJobName(e.target.value);
                                                         if (jobName.length > 0 && errorJobName) { setErrorJobName(false); }
                                                     }}
@@ -310,12 +177,11 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
                                                 <label>
                                                     <Typography sx={{ fontWeight: 600, fontSize: 13 }}>תפקיד:</Typography>
                                                 </label>
-                                                <TextField style={{ width: '100%' }} sx={MyTextFieldJobRoleSx} size='small' placeholder="תפקיד (role)" id="_role" type="text"
+                                                <TextField style={{ width: '100%' }} size='small' placeholder="תפקיד (role)" id="_role" type="text"
                                                     className="form-control" required
                                                     value={jobRole}
                                                     error={errorJobRole}
-                                                    onChange={(e) =>
-                                                    {
+                                                    onChange={(e) => {
                                                         setJobRole(e.target.value);
                                                         if (jobRole.length > 0 && errorJobRole) { setErrorJobRole(false); }
                                                     }}
@@ -335,12 +201,11 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
                                                 <label>
                                                     <Typography sx={{ fontWeight: 600, fontSize: 13 }}>איזור:</Typography>
                                                 </label>
-                                                <TextField style={{ width: '100%' }} sx={MyTextFieldJobRegionSx} size='small' placeholder="איזור (region)" id="_region" type="text"
+                                                <TextField style={{ width: '100%' }}  size='small' placeholder="איזור (region)" id="_region" type="text"
                                                     className="form-control" required
                                                     value={jobRegion}
                                                     error={errorJobRegion}
-                                                    onChange={(e) =>
-                                                    {
+                                                    onChange={(e) => {
                                                         setJobRegion(e.target.value);
                                                         if (jobRegion.length > 0 && errorJobRegion) { setErrorJobRegion(false); }
                                                     }}
@@ -353,13 +218,12 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
                                                 <label>
                                                     <Typography sx={{ fontWeight: 600, fontSize: 13 }}>Label:</Typography>
                                                 </label>
-                                                <TextField style={{ width: '100%' }} sx={MyTextFieldJobStateSx} size='small' placeholder="(Job_state)" id="_job_state" type="text"
+                                                <TextField style={{ width: '100%' }} size='small' placeholder="(Job_state)" id="_job_state" type="text"
 
                                                     required
                                                     error={errorJobState}
                                                     value={jobState}
-                                                    onChange={(e) =>
-                                                    {
+                                                    onChange={(e) => {
                                                         setJobState(e.target.value);
                                                         if (jobState.length > 0 && errorJobState) { setErrorJobState(false); }
                                                     }}
@@ -376,12 +240,11 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
                                             <label>
                                                 <Typography sx={{ fontWeight: 600, fontSize: 13 }}>דרישות:</Typography>
                                             </label>
-                                            <TextField style={{ width: '100%' }} sx={MyTextFieldJobRequirementsSx} size='small' placeholder="דרישות (requirements)" id="_requirements" type="text"
+                                            <TextField style={{ width: '100%' }} size='small' placeholder="דרישות (requirements)" id="_requirements" type="text"
                                                 className="form-control" required
                                                 error={errorJobRequirements}
                                                 value={jobRequirements}
-                                                onChange={(e) =>
-                                                {
+                                                onChange={(e) => {
                                                     setJobRequirements(e.target.value);
                                                     if (jobRequirements.length > 0 && errorJobRequirements) { setErrorJobRequirements(false); }
                                                 }}
@@ -432,12 +295,12 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
                                             <label>
                                                 <Typography sx={{ fontWeight: 600, fontSize: 13 }}>היקף המשרה:</Typography>
                                             </label>
-                                            <Box style={MyTextFieldJobRequirementsSx}>
+                                            <Box>
                                                 <JobScopeSlider setJobScope={setJobScope} jobScope={jobScope} />
                                             </Box>
 
                                         </Box>
-                                        {/* <button type="submit" className="primary-btn submit">Submit</button> */}
+
 
                                         <Stack direction='row' spacing={2} sx={{ mt: 3 }}>
 

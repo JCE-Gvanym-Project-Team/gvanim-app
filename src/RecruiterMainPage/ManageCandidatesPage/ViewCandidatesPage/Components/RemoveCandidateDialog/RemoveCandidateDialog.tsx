@@ -20,13 +20,15 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     },
 }));
 
-export interface DialogTitleProps {
+export interface DialogTitleProps
+{
     id: string;
     children?: React.ReactNode;
     onClose: () => void;
 }
 
-function BootstrapDialogTitle(props: DialogTitleProps) {
+function BootstrapDialogTitle(props: DialogTitleProps)
+{
     const { children, onClose, ...other } = props;
 
     return (
@@ -50,56 +52,60 @@ function BootstrapDialogTitle(props: DialogTitleProps) {
     );
 }
 
-export default function MyLogoutDialog(props: { handlelogout: any, isMobile: Boolean }) {
-    const { handlelogout, isMobile } = props;
+export default function RemoveCandidateDialog(props: { handleDelete: any })
+{
+    const { handleDelete } = props;
     const [open, setOpen] = React.useState(false);
 
-    const handleClickOpen = () => {
+    const handleClickOpen = () =>
+    {
         setOpen(true);
     };
-    const handleClose = () => {
+    const handleClose = () =>
+    {
         setOpen(false);
     };
 
     return (
-        <div>
-            {isMobile ? (
-                <>
-                    <ListItem disablePadding>
-                        <ListItemButton sx={{ textAlign: 'center' }}>
-                            <ListItemText primary='התנתק' onClick={handleClickOpen} />
-                        </ListItemButton>
-                    </ListItem>
-                </>
+        <>
+            {/* Remove Candidate Button */}
+            <Button type="button" className='mt-3 mb-3' variant='contained' color='error' onClick={handleClickOpen} sx={{
+                width: '20%',
+                backgroundColor: '#c82333',
+                borderColor: '#bd2130'
+            }}>
+                הסר מועמד
+            </Button>
 
-            ) : (
-                <Button color='error' size="large" startIcon={<Logout />} sx={{ width: '100%'}} onClick={handleClickOpen}>
-                    התנתק
-                </Button>)
-            }
+            {/* Notes Dialog */}
             <BootstrapDialog
                 fullWidth
                 onClose={handleClose}
                 aria-labelledby="customized-dialog-title"
                 open={open}
             >
+                {/* Title */}
                 <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
                     הודעת אימות
                 </BootstrapDialogTitle>
+
+                {/* Are you sure text */}
                 <DialogContent dividers>
                     <Typography gutterBottom>
-                        האם את/ה בטוח/ה שברצונך להתנתק?
+                        האם את/ה בטוח/ה שברצונך להסיר מועמד זה לצמיתות?
                     </Typography>
                 </DialogContent>
+
+                {/* Action Buttons */}
                 <DialogActions>
                     <Button variant='text' autoFocus onClick={handleClose}>
                         ביטול
                     </Button>
-                    <Button variant='text' color='error' type='submit' autoFocus onClick={handlelogout}>
-                        התנתק
+                    <Button variant='text' color='error' type='submit' autoFocus onClick={handleDelete}>
+                        הסר
                     </Button>
                 </DialogActions>
             </BootstrapDialog>
-        </div>
+        </>
     );
 }

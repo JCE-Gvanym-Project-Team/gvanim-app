@@ -23,6 +23,7 @@ export default function WelcomePage(props: { setHomeActive: any, setReportsActiv
         <>
             <Box sx={BoxGradientSx} />
 
+
             <Paper sx={MyPaperSx}>
 
                 <Grid sx={MyGridSx}>
