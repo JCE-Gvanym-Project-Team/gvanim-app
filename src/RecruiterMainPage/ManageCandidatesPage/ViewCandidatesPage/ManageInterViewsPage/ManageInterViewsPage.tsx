@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { BoxGradientSx, ContainerGradientSx, appliedDateTextSx, autoCompleteSx, candidateNameAndButtonSx, candidateNameSx, chooseJobAndInterviewContainerSx, chooseJobContainerSx, errorTextSx, mainStackSx, scheduleInterviewButton, scheduleInterviewContainer, scheduleInterviewText, textSx, titleSx } from './ManageInterviewsPageStyle';
-import { Autocomplete, Box, Button, Container, Divider, Stack, TextField, Typography } from '@mui/material';
+import { BoxGradientSx, ContainerGradientSx, appliedDateTextSx, autoCompleteSx, candidateNameAndButtonSx, candidateNameSx, chooseJobAndInterviewContainerSx, chooseJobContainerSx, errorTextSx, interviewSummaryContentSx, interviewSummaryTextSx, mainStackSx, scheduleInterviewButton, scheduleInterviewContainer, scheduleInterviewText, textSx, titleSx } from './ManageInterviewsPageStyle';
+import { Autocomplete, Box, Button, Container, Divider, Stack, TextField, TextareaAutosize, Typography } from '@mui/material';
 import { ManageCandidatesPageGlobalStyle } from '../../../PageStyles';
 import { Candidate, getFilteredCandidates } from '../../../../Firebase/FirebaseFunctions/Candidate';
 import { CandidateJobStatus, getFilteredCandidateJobStatuses } from '../../../../Firebase/FirebaseFunctions/CandidateJobStatus';
@@ -17,6 +17,8 @@ export default function ManageInterviewsPage(props: { candidateId: string, setHo
 	const [allJobs, setAllJobs] = useState<Job[]>([]);
 	const [selecetedJob, setSelectedJob] = useState<Job | null>(null);
 	const [selectedJobError, setSelectedJobError] = useState(false);
+
+	const [interviewIndex, setInterviewIndex] = useState(-1);
 
 	// select job use states
 	const [jobValue, setJobValue] = useState("");
@@ -83,13 +85,11 @@ export default function ManageInterviewsPage(props: { candidateId: string, setHo
 		{
 			setInterviewDialogOpen(false);
 		}
-		if (reason && reason == "submit")
-		{
-
-			candidateJobStatus?.updateStatus("")
-		}
-		console.log("close interview");
 	}
+
+	const handleinterviewSummaryChange = (event) => {
+		console.log(event);
+	} 
 
 	return (
 		<>
@@ -152,8 +152,8 @@ export default function ManageInterviewsPage(props: { candidateId: string, setHo
 									<></>
 								}
 								{selectedJobError && jobValue === "" ?
-									<Box sx={{display: "flex", flexDirection: "row", alignSelf: "start"}}>
-										<ErrorOutline sx={{color: "red"}}/>
+									<Box sx={{ display: "flex", flexDirection: "row", alignSelf: "start" }}>
+										<ErrorOutline sx={{ color: "red" }} />
 										<Typography sx={errorTextSx}>
 											שדה זה הוא חובה
 										</Typography>
@@ -167,17 +167,47 @@ export default function ManageInterviewsPage(props: { candidateId: string, setHo
 							<Box>
 								<Autocomplete
 									disablePortal
-									options={candidateAppliedJobs.map((job) => job._jobNumber.toString() + ", " + job._role + ", " + job._region)}
+									options={["ראיון ראשון", "ראיון שני"]}
 									sx={autoCompleteSx}
 									renderInput={(params) => <TextField {...params} label="בחירת ראיון" />}
 									onInputChange={(event, value) =>
 									{
-
+										if (value === "ראיון ראשון")
+										{
+											setInterviewIndex(0);
+										} else if (value === "ראיון שני")
+										{
+											setInterviewIndex(1);
+										} else
+										{
+											setInterviewIndex(-1);
+										}
 									}}
 								/>
 							</Box>
 						</Box>
 
+						{/* Summary of interview */}
+						{interviewIndex !== -1 && jobValue !== ""?
+							<Box sx={{ display: "flex", flexDirection: "column" }}>
+								<Typography sx={interviewSummaryTextSx} variant='h6'>
+									סיכום ראיון
+								</Typography>
+								<TextField
+									sx={interviewSummaryContentSx}
+									multiline
+									minRows={3}
+									maxRows={5}
+									InputProps={{
+										style: { overflow: 'auto', maxHeight: '300px' },
+									}}
+									value={candidateJobStatus?._interviewsSummery[interviewIndex]}
+									onChange={handleinterviewSummaryChange}
+								/>
+								<Button variant='contained' sx={{ justifySelf: "start", alignSelf: "start" }}>שמירה</Button>
+							</Box>
+							: <></>
+						}
 					</Stack>
 				</Box>
 			</Box>
@@ -214,12 +244,4 @@ const getJobs = async function (candidateId: string, setCandidateAppliedJobs, se
 		return jobNumbers.includes(job._jobNumber);
 	});
 	setCandidateAppliedJobs(jobs)
-}
-
-const updateStatus = function (status)
-{
-	if (status === "זומן לראיון ראשון")
-	{
-		return "עבר ראיון ראשון"
-	}
 }

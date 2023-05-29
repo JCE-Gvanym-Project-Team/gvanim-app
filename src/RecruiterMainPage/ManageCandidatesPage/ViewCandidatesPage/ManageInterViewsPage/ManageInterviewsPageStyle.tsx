@@ -16,6 +16,17 @@ export const candidateNameAndButtonSx: SxProps = {
     flexGrow: '1'
 }
 
+export const interviewSummaryTextSx: SxProps = {
+    fontFamily: ManageCandidatesPageGlobalStyle.textFontFamily,
+    fontWeight: "bold",
+    fontSize:"28px",
+    marginBottom: "1rem"
+}
+
+export const interviewSummaryContentSx: SxProps = {
+    width: "90%"
+}
+
 export const scheduleInterviewButton: SxProps = {
     backgroundColor: ManageCandidatesPageGlobalStyle.editDetailsButtonColor,
     alignSelf: 'center',

@@ -6,7 +6,8 @@ import { DatePicker, LocalizationProvider, MobileTimePicker, TimeField } from "@
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import 'dayjs/locale/he'
 import { Candidate } from "../../../../../Firebase/FirebaseFunctions/Candidate";
-import { CandidateJobStatus, statuses } from "../../../../../Firebase/FirebaseFunctions/CandidateJobStatus";
+import { CandidateJobStatus, allStatus } from "../../../../../Firebase/FirebaseFunctions/CandidateJobStatus";
+import { Recruiter } from "../../../../../Firebase/FirebaseFunctions/Recruiter";
 
 export default function ScheduleInterviewDialog(props: { open, onClose, candidate: Candidate | null, candidateJobStatus: CandidateJobStatus | null })
 {
@@ -34,10 +35,21 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
     const handleSubmit = async (event) =>
     {
         // TODO: Perform submit logic here
-        const interviewDate = date.$d;
-        const interviewTime = time.$d;
-        const link = await candidateJobStatus?.updateStatus(newStatus, interviewDate);
+        const interviewDate: Date = date?.$d;
+        const interviewTime: Date = time?.$d;
+        interviewDate?.setHours(interviewTime.getHours());
+        interviewDate?.setMinutes(interviewTime.getMinutes());
+        await candidateJobStatus?.updateStatus(newStatus, interviewDate);
+        //TODO: replace this with a real recruiter, and a real location
+        console.log(candidate?._phone);
+        const link = await candidateJobStatus?.getWhatsappUrl(
+            new Recruiter("asd@gmail.com", "firstname", "lastname", ["sector1", "sector2"]),
+            interviewDate,
+            "makom"
+        );
+        console.log("link: " + link);
         window.open(link);
+
         onClose(event, "submit");
     };
 
@@ -87,7 +99,7 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
                 </Typography>
                 <Autocomplete
                     disablePortal
-                    options={statuses.filter((key =>
+                    options={allStatus.filter((key =>
                     {
                         return key !== candidateJobStatus?._status && key !== "הועבר למשרה אחרת"
                     }))}

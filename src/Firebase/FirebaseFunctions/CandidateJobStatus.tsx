@@ -223,10 +223,12 @@ export class CandidateJobStatus
     public async getWhatsappUrl(recruiter: Recruiter, interviewDate: Date = new Date(0, 0, 0), place: string = ""): Promise<string>
     {
         const cand = (await getFilteredCandidates(["candidateId"], [this._candidateId])).at(0);
+        console.log(cand);
         const job = (await getFilteredJobs(["jobNumber"], [this._jobNumber.toString()])).at(0);
         if (cand && job)
         {
             const text = getMessage(cand, job, recruiter, this._status, interviewDate, place);
+            console.log(cand._phone);
             if (text.length > 0)
                 return `https://api.whatsapp.com/send?phone=972${cand._phone}&text=${text}`;
         }
@@ -292,8 +294,6 @@ function getMessage(cand: Candidate, job: Job, rec: Recruiter, status: string, i
     {
         message += "לאחר בחינת קורות החיים שלך ואת תהליך הגיוס שעברת הוחלט לנתב אותך למשרה אחרת, נשלח פרטים נוספים בקרוב.";
     }
-    else
-        return "";
     return message.replace('\n', '%0A').replace(' ', '%20');
 }
 

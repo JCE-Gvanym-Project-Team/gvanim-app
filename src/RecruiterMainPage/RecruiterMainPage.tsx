@@ -14,7 +14,7 @@ import AdminPage from "./Components/AdminPage/AdminPage";
 import { getFilteredCandidates } from "../Firebase/FirebaseFunctions/Candidate";
 import ViewCandidatesPage from "./ManageCandidatesPage/ViewCandidatesPage/ViewCandidatesPage";
 import { Box } from "@mui/material";
-import ManageInterviewsPage from './ManageCandidatesPage/ViewCandidatesPage/ManageInterviewsPage/ManageInterviewsPage'
+import ManageInterviewsPage from './ManageCandidatesPage/ViewCandidatesPage/ManageInterviewsPage/ManageInterViewsPage'
 
 
 
