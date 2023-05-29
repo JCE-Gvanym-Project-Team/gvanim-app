@@ -198,7 +198,7 @@ export class CandidateJobStatus {
         replaceData((await this.getPath()), this);
     }
     public async getWhatsappUrl(recruiter: Recruiter, interviewDate: Date = new Date(0, 0, 0), place: string = ""): Promise<string> {
-        const cand = (await getFilteredCandidates(["candidateId"], [this._candidateId])).at(0);
+        const cand = (await getFilteredCandidates(["id"], [this._candidateId])).at(0);
         const job = (await getFilteredJobs(["jobNumber"], [this._jobNumber.toString()])).at(0);
         if (cand && job) {
             const text = getMessage(cand, job, recruiter, this._status, interviewDate, place);
