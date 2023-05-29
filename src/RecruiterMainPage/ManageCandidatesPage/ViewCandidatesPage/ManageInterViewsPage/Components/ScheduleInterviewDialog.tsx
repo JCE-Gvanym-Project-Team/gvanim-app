@@ -31,23 +31,26 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
         setTime(value);
     };
 
-    const handleSubmit = (event) =>
+    const handleSubmit = async (event) =>
     {
         // TODO: Perform submit logic here
-        if (newStatus === "עבר למשרה אחרת"){
-            
-        }
-        console.log(time.$d.getDate());
+        const interviewDate = date.$d;
+        const interviewTime = time.$d;
+        const link = await candidateJobStatus?.updateStatus(newStatus, interviewDate);
+        window.open(link);
         onClose(event, "submit");
     };
 
-    const handleStatusChanged = (status) => {
-        const disabledDateTimeList = ["עבר ראיון ראשון", "עבר ראיון שני","התקבל"];
+    const handleStatusChanged = (status) =>
+    {
+        const disabledDateTimeList = ["עבר ראיון ראשון", "עבר ראיון שני", "התקבל"];
         setNewStatus(status);
-        if (disabledDateTimeList.includes(status)) {
+        if (disabledDateTimeList.includes(status))
+        {
             setTimeDisabled(true);
             setDateDisabled(true);
-        }else{
+        } else
+        {
             setTimeDisabled(false);
             setDateDisabled(false);
         }
@@ -84,7 +87,8 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
                 </Typography>
                 <Autocomplete
                     disablePortal
-                    options={statuses.filter((key => {
+                    options={statuses.filter((key =>
+                    {
                         return key !== candidateJobStatus?._status && key !== "הועבר למשרה אחרת"
                     }))}
                     renderInput={(params) => <TextField {...params} label="סטטוס חדש" />}
@@ -116,9 +120,9 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
             {/* Action Button */}
             <DialogActions sx={dialogActionsSx}>
                 <Button onClick={handleSubmit} variant="contained" sx={submitButtonSx}>
-                    <WhatsApp sx={{marginRight: "0.5rem"}}/>
-                        שליחת הודעה למועמד
-                    </Button>
+                    <WhatsApp sx={{ marginRight: "0.5rem" }} />
+                    שליחת הודעה למועמד
+                </Button>
             </DialogActions>
         </Dialog>
     )
