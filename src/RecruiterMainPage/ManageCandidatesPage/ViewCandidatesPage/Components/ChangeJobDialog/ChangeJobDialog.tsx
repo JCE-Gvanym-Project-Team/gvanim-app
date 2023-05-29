@@ -74,7 +74,7 @@ export default function ChangeJobDialog(props: { open, onClose, candidateApplied
         // remove from chosen "from" job
         const fromCandidateJobStatus = await getFilteredCandidateJobStatuses(["jobNumber", "candidateId"], [fromJobNumber.toString(), candidate ? candidate._id : ""]);        
         await fromCandidateJobStatus[0].updateStatus("הועבר למשרה אחרת");
-        // await candidate?.apply(toJobNumber, fromCandidateJobStatus[0]._about);
+        await candidate?.apply(toJobNumber, fromCandidateJobStatus[0]._about);
 
         // reset values
         setFromJobValue('');
