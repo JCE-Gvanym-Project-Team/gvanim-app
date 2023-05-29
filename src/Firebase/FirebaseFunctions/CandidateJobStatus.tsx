@@ -2,8 +2,12 @@ import { dataref } from "../FirebaseConfig/firebase";
 import { Recomendation } from './Recomendation';
 import { getObjectAtPath, removeObjectAtPath, getFirebaseIdsAtPath, replaceData, appendToDatabase } from "./DBfuncs";
 import { uploadFileToFirestore, getDownloadUrlFromFirestorePath, getFileExtensionsInFolder, deleteFile, fileExists } from "./firestoreFunc";
-import { getFilteredCandidates } from "./Candidate";
+import { Candidate, getFilteredCandidates } from "./Candidate";
+import { Recruiter } from "./Recruiter";
+import { Job, getFilteredJobs } from "./Job";
 const database = dataref;
+export const allStatus = ["הוגשה מועמדות", "זומן לראיון ראשון", "עבר ראיון ראשון", "זומן לראיון שני", "עבר ראיון שני", "התקבל", "הועבר למשרה אחרת", "נדחה", "הפסיק את התהליך"];
+
 export class CandidateJobStatus {
     public _jobNumber: number;
     public _candidateId: string;
@@ -142,7 +146,7 @@ export class CandidateJobStatus {
             }
         }
         if (firebaseId.length > 0)
-            return "/Candidates/" + firebaseId;
+            return "/CandidatesJobStatus/" + firebaseId;
         return "";
     }
     /**
@@ -185,20 +189,23 @@ export class CandidateJobStatus {
      * @param {Date} [interviewDate=this._interviewDate] - The interview date for the candidate job application leave empty if the new satatus not require interview.
      * @returns url link to notify the candidate via whatsapp
      */
-    public async updateStatus(newStatus: string, interviewDate: Date = this._interviewDate): Promise<string> {
+    public async updateStatus(newStatus: string, interviewDate: Date = this._interviewDate): Promise<void> {
         if (!(await this.exists())) {
             console.log("candidate job status not found in the database");
-            return "";
+            return;
         }
         this._status = newStatus;
-        /* todo: notify() candidate via mail with the next interview date */
         replaceData((await this.getPath()), this);
-        const cand = (await getFilteredCandidates(["id"], [this._candidateId])).at(0);
-        let text = `${cand?._firstName} שלום,\n סטטוס מועמדותך שונה ל: ${newStatus}`;
-        const date = `${interviewDate.getDate()}/${interviewDate.getMonth() + 1}/${interviewDate.getFullYear()}`;
-        if (interviewDate !== this._interviewDate)
-            text += `נשמח לקבוע ראיון עמך בתאריך: ${date}` + `בשעה: ${interviewDate.getHours()}:${interviewDate.getMinutes()}`
-        return `https://api.whatsapp.com/send?phone=972${cand?._phone.slice(-9)}&text=${text}`.replace(' ', '%20');
+    }
+    public async getWhatsappUrl(recruiter: Recruiter, interviewDate: Date = new Date(0, 0, 0), place: string = ""): Promise<string> {
+        const cand = (await getFilteredCandidates(["candidateId"], [this._candidateId])).at(0);
+        const job = (await getFilteredJobs(["jobNumber"], [this._jobNumber.toString()])).at(0);
+        if (cand && job) {
+            const text = getMessage(cand, job, recruiter, this._status, interviewDate, place);
+            if (text.length > 0)
+                return `https://api.whatsapp.com/send?phone=972${cand._phone}&text=${text}`;
+        }
+        return "";
     }
 }
 /**
@@ -220,6 +227,40 @@ async function getCandidateJobStatusFromDatabase(): Promise<CandidateJobStatus[]
         console.error(error);
         throw new Error("Failed to fetch candidate job statuses from database.");
     }
+}
+//["הוגשה מועמדות","זומן לראיון ראשון","עבר ראיון ראשון","זומן לראיון שני","עבר ראיון שני","התקבל","הועבר למשרה אחרת","נדחה","הפסיק את התהליך"];
+//       8               7                  6         5          4                      3                  2                  1                  0
+function getMessage(cand: Candidate, job: Job, rec: Recruiter, status: string, interviewDate: Date = new Date(0, 0, 0), place: string = "") {
+    if (status === allStatus[0] || status === allStatus[2] || status === allStatus[4] || status === allStatus[8])
+        return "";
+    let message = `${cand._firstName}`;
+    message += '\nשלום';
+    message += 'שמי ';
+    message += `${rec._firstName},`;
+    message += "\nמעמותת גוונים.";
+    message += "ברצוני לעדכן אותך על מועמדותך למשרה: ";
+    message += `${job._title}\n`;
+    if (interviewDate !== (new Date(0, 0, 0)) && (status === allStatus[1] || status === allStatus[3])) {
+        message += " :נשמח לקבוע עמך ראיון בתאריך";
+        message += `${interviewDate.getDate()}/${interviewDate.getMonth() + 1}\n`;
+        message += "בשעה: ";
+        message += `${interviewDate.getHours()}:${interviewDate.getMinutes()}\n`
+        message += "שייתקיים ב";
+        message += `${place}.\n`;
+        message += `אנא אשר הגעתך לראיון`;
+    }
+    if (status === allStatus[5]) {
+        message += "עמותת גוונים שמחה להודיע לך על קבלתך למשרה"
+    }
+    if (status === allStatus[7]) {
+        message += "לצערנו לא נמשיך עמך בתהליך הגיוס";
+    }
+    if (message === allStatus[6]) {
+        message += "לאחר בחינת קורות החיים שלך ואת תהליך הגיוס שעברת הוחלט לנתב אותך למשרה אחרת, נשלח פרטים נוספים בקרוב.";
+    }
+    else
+        return "";
+    return message.replace('\n', '%0A').replace(' ', '%20');
 }
 
 /**
@@ -292,10 +333,10 @@ export async function getFilteredCandidateJobStatuses(attributes: string[] = [],
         return candidateJobStatuses.sort(sortByApplyDate);
     if (sortBy === "lastUpdate")
         return candidateJobStatuses.sort(sortByLastUpdate);
-    return candidateJobStatuses.map((s)=>new CandidateJobStatus(s._jobNumber,s._candidateId,
-                                        s._status,s._about,s._matchingRate,s._applyDate,
-                                        s._lastUpdate,s._interviewsSummery,s._recomendations,
-                                        s._rejectCause));
+    return candidateJobStatuses.map((s) => new CandidateJobStatus(s._jobNumber, s._candidateId,
+        s._status, s._about, s._matchingRate, s._applyDate,
+        s._lastUpdate, s._interviewsSummery, s._recomendations,
+        s._rejectCause));
 }
 function sortByJobNumber(a: CandidateJobStatus, b: CandidateJobStatus): number {
     return a._jobNumber - b._jobNumber;

@@ -133,9 +133,11 @@ async function testEditCandidate() {
     //const CV = createTextFile("test","this is test file");
     //uploadFileToFirestore(CV,"keep/it","newName.txt");
     //await cand.uploadCv(CV);
-    console.log(await cand.getCvUrl());
+    //console.log(await cand.getCvUrl());
     //await loginAdmin();
     //await cand.edit("newName");
+    let d = new Date();
+    console.log(d.getDate());
 }
 async function testAddRecruiterNoSectors() {
     await loginAdmin();
