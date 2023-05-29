@@ -5,13 +5,15 @@ import { uploadFileToFirestore, getDownloadUrlFromFirestorePath, getFileExtensio
 import { getFilteredCandidates } from "./Candidate";
 const database = dataref;
 
-export let candidateStatuses: Map<string, string> = new Map();
-candidateStatuses.set("זומן לראיון ראשון", "ליוסי בוסי שלום רב, אנחנו שמחים לבשר לך ש...");
-candidateStatuses.set("עבר ראיון ראשון", "message");
-candidateStatuses.set("זומן לראיון שני", "message");
-candidateStatuses.set("עבר ראיון שני", "message");
-candidateStatuses.set("התקבל", "message");
-candidateStatuses.set("עבר למשרה אחרת", "");
+export const statuses = [
+    "הוגשה מועמדות",
+    "זומן לראיון ראשון",
+    "עבר ראיון ראשון",
+    "זומן לראיון שני",
+    "עבר ראיון שני",
+    "התקבל",
+    "הועבר למשרה אחרת"
+]
 
 
 export class CandidateJobStatus

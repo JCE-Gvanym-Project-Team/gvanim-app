@@ -6,9 +6,7 @@ import { DatePicker, LocalizationProvider, MobileTimePicker, TimeField } from "@
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import 'dayjs/locale/he'
 import { Candidate } from "../../../../../Firebase/FirebaseFunctions/Candidate";
-import React from "react";
-import dayjs from "dayjs";
-import { CandidateJobStatus, candidateStatuses } from "../../../../../Firebase/FirebaseFunctions/CandidateJobStatus";
+import { CandidateJobStatus, statuses } from "../../../../../Firebase/FirebaseFunctions/CandidateJobStatus";
 
 export default function ScheduleInterviewDialog(props: { open, onClose, candidate: Candidate | null, candidateJobStatus: CandidateJobStatus | null })
 {
@@ -44,7 +42,7 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
     };
 
     const handleStatusChanged = (status) => {
-        const disabledDateTimeList = ["עבר ראיון ראשון", "עבר ראיון שני","התקבל","עבר למשרה אחרת"];
+        const disabledDateTimeList = ["עבר ראיון ראשון", "עבר ראיון שני","התקבל"];
         setNewStatus(status);
         if (disabledDateTimeList.includes(status)) {
             setTimeDisabled(true);
@@ -86,7 +84,9 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
                 </Typography>
                 <Autocomplete
                     disablePortal
-                    options={Array.from(candidateStatuses.keys()).filter((key => key !== candidateJobStatus?._status))}
+                    options={statuses.filter((key => {
+                        return key !== candidateJobStatus?._status && key !== "הועבר למשרה אחרת"
+                    }))}
                     renderInput={(params) => <TextField {...params} label="סטטוס חדש" />}
                     onInputChange={(event, value) =>
                     {
