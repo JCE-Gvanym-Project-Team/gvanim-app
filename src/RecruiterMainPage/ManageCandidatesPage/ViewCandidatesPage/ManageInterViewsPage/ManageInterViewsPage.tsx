@@ -28,8 +28,11 @@ export default function ManageInterviewsPage(props: { candidateId: string, setHo
 
 	// candidate_job_status after selecting a job
 	const [candidateJobStatus, setCandidateJobStatus] = useState<CandidateJobStatus | null>(null);
-	const [lastScheduleDate, setLastScheduleDate] = useState<Date | null>();
-	const [appliedDate, setAppliedDate] = useState<Date | null>(null);
+
+	// matching rate
+	const [matchingRate, setMatchingRate] = useState(0);
+
+	const [interviewSummary, setInterviewSummary] = useState<string | undefined>("");
 
 	// use effects
 	useEffect(() =>
@@ -63,8 +66,6 @@ export default function ManageInterviewsPage(props: { candidateId: string, setHo
 		}
 		const candidateJobStatuses = await getFilteredCandidateJobStatuses(["jobNumber", "candidateId"], [jobNumber.toString(), candidateId]);
 		setCandidateJobStatus(candidateJobStatuses[0]);
-		setLastScheduleDate(candidateJobStatuses[0]._lastUpdate);
-		setAppliedDate(candidateJobStatuses[0]._applyDate);
 	}
 
 
@@ -87,9 +88,27 @@ export default function ManageInterviewsPage(props: { candidateId: string, setHo
 		}
 	}
 
-	const handleinterviewSummaryChange = (event) =>
+	const handleinterviewSummaryChange = async (event) =>
 	{
-		console.log(event);
+		setInterviewSummary(event.target.value);
+		// save every 15 characters
+		if (interviewSummary?.length && interviewSummary?.length % 15 === 0)
+		{
+			// TODO: add database update here
+			await candidateJobStatus?.editInterviewSummery(interviewSummary, interviewIndex);
+		}
+	}
+
+	const handleSaveButtonClick = async () =>
+	{
+		// TODO: add database update here
+		await candidateJobStatus?.editInterviewSummery(interviewSummary ? interviewSummary : "", interviewIndex);
+	}
+
+	const handleMatchingRateRadioButtons = async (event) =>
+	{
+		//TODO: add database update here
+		setMatchingRate(["1", "2", "3", "4", "5"].includes(event.target.value) ? parseInt(event.target.value) : -1);
 	}
 
 	return (
@@ -130,7 +149,14 @@ export default function ManageInterviewsPage(props: { candidateId: string, setHo
 								<Typography sx={scheduleInterviewText}>
 									{candidateJobStatus?._lastUpdate.toLocaleString()}
 								</Typography>
-								<ScheduleInterviewDialog open={interviewDialogOpen} onClose={scheduleInterviewCloseHandler} candidate={candidateInfo} candidateJobStatus={candidateJobStatus} />
+								<ScheduleInterviewDialog
+									open={interviewDialogOpen}
+									onClose={scheduleInterviewCloseHandler}
+									candidate={candidateInfo}
+									candidateJobStatus={candidateJobStatus}
+									candidateJobs={candidateAppliedJobs}
+									allJobs={allJobs}
+								/>
 							</Box>
 						</Box>
 
@@ -189,9 +215,11 @@ export default function ManageInterviewsPage(props: { candidateId: string, setHo
 										if (value === "ראיון ראשון")
 										{
 											setInterviewIndex(0);
+											setInterviewSummary(candidateJobStatus?._interviewsSummery[0]);
 										} else if (value === "ראיון שני")
 										{
 											setInterviewIndex(1);
+											setInterviewSummary(candidateJobStatus?._interviewsSummery[1]);
 										} else
 										{
 											setInterviewIndex(-1);
@@ -215,13 +243,13 @@ export default function ManageInterviewsPage(props: { candidateId: string, setHo
 									InputProps={{
 										style: { overflow: 'auto', maxHeight: '300px' },
 									}}
-									value={candidateJobStatus?._interviewsSummery[interviewIndex]}
-									onChange={handleinterviewSummaryChange}
+									value={interviewSummary}
+									onInput={handleinterviewSummaryChange}
 								/>
 								{/* Level of compatibility */}
 								<FormControl>
 									<FormLabel>דרגת התאמה (יותר גבוה = יותר מתאים)</FormLabel>
-									<RadioGroup row>
+									<RadioGroup row onChange={handleMatchingRateRadioButtons}>
 										<FormControlLabel value="1" control={<Radio />} label="1" />
 										<FormControlLabel value="2" control={<Radio />} label="2" />
 										<FormControlLabel value="3" control={<Radio />} label="3" />
@@ -231,7 +259,11 @@ export default function ManageInterviewsPage(props: { candidateId: string, setHo
 								</FormControl>
 								{/* form buttons */}
 								<Box sx={interviewSummaryButtonsContainerSx}>
-									<Button variant='contained' sx={{ backgroundColor: GlobalStyle.NavbarBackgroundColor, justifySelf: "start", alignSelf: "start" }}>שמירה</Button>
+									<Button
+										variant='contained'
+										sx={{ backgroundColor: GlobalStyle.NavbarBackgroundColor, justifySelf: "start", alignSelf: "start" }}
+										onClick={handleSaveButtonClick}
+									>שמירה</Button>
 									<Button variant='contained' sx={{ backgroundColor: "green", justifySelf: "start", alignSelf: "start" }}>התקבל לתפקיד</Button>
 								</Box>
 								<Box sx={interviewSummaryRedButtonsContainerSx} >

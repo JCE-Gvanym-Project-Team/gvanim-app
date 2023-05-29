@@ -1,6 +1,6 @@
 import { CSSProperties } from "@mui/material/styles/createTypography";
 import { SxProps } from "@mui/system";
-import { ManageCandidatesPageGlobalStyle } from "../../../../PageStyles";
+import { GlobalStyle, ManageCandidatesPageGlobalStyle } from "../../../../PageStyles";
 
 
 export const dialogSx: SxProps = {
@@ -20,6 +20,18 @@ export const currentStatusTextSx: SxProps = {
     fontFamily: ManageCandidatesPageGlobalStyle.textFontFamily,
     fontWeight: "bold",
     marginBottom: "1rem"
+}
+
+export const changeJobContainerSx: SxProps = {
+    width: { xs: "100%", md: "100%" },
+    display: "flex",
+    flexDirection: { xs: "column", md: "row" },
+    minHeight: "100%"
+}
+
+export const changeJobContainerStyle: CSSProperties = {
+    paddingTop: "1rem",
+    alignItems: "baseline"
 }
 
 export const submitButtonSx: SxProps = {
