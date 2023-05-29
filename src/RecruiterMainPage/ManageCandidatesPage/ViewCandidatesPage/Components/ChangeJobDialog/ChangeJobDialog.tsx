@@ -7,6 +7,7 @@ import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import { CandidateJobStatus, getFilteredCandidateJobStatuses } from '../../../../../Firebase/FirebaseFunctions/CandidateJobStatus';
 import { Candidate } from '../../../../../Firebase/FirebaseFunctions/Candidate';
 import { useNavigate } from 'react-router-dom';
+import { Recomendation } from '../../../../../Firebase/FirebaseFunctions/Recomendation';
 
 export default function ChangeJobDialog(props: { open, onClose, candidateAppliedJobs, allJobs, candidate: Candidate | null })
 {
@@ -31,7 +32,8 @@ export default function ChangeJobDialog(props: { open, onClose, candidateApplied
         setToJobValue(value);
     };
 
-    useEffect(() => {
+    useEffect(() =>
+    {
         setToJobError(false);
         setFromJobError(false);
     }, [])
@@ -70,10 +72,9 @@ export default function ChangeJobDialog(props: { open, onClose, candidateApplied
         }
 
         // remove from chosen "from" job
-        const fromCandidateJobStatus = await getFilteredCandidateJobStatuses(["jobNumber", "candidateId"], [fromJobNumber.toString(), candidate ? candidate._id : ""]);
-        await fromCandidateJobStatus[0].remove();
-        await candidate?.apply(toJobNumber, "don't know what to put in about pls send help");
-
+        const fromCandidateJobStatus = await getFilteredCandidateJobStatuses(["jobNumber", "candidateId"], [fromJobNumber.toString(), candidate ? candidate._id : ""]);        
+        await fromCandidateJobStatus[0].updateStatus("הועבר למשרה אחרת");
+        // await candidate?.apply(toJobNumber, fromCandidateJobStatus[0]._about);
 
         // reset values
         setFromJobValue('');
@@ -127,7 +128,7 @@ export default function ChangeJobDialog(props: { open, onClose, candidateApplied
                 <Autocomplete
                     disablePortal
                     options={allJobs}
-                    sx={{ width: 300 , borderBottom: toJobError ? "1px solid red" : "0px"}}
+                    sx={{ width: 300, borderBottom: toJobError ? "1px solid red" : "0px" }}
                     renderInput={(params) => <TextField {...params} label="למשרה" />}
                     onClick={() => setToJobError(false)}
                     onChange={handleToJobChange}

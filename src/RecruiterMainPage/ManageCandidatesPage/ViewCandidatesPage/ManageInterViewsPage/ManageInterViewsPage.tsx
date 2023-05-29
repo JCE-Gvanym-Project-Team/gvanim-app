@@ -116,13 +116,13 @@ export default function ManageInterviewsPage(props: { candidateId: string, setHo
 							{/* Schedule Interview Button*/}
 							<Box sx={scheduleInterviewContainer}>
 								<Button sx={scheduleInterviewButton} variant="contained" startIcon={<CalendarMonth />} onClick={scheduleInterviewOpenHandler}>
-									קביעת ראיון
+									קביעת ראיון ושינוי סטטוס
 								</Button>
 								<Divider />
 								<Typography sx={scheduleInterviewText}>
 									נשלח לאחרונה ב: {}
 								</Typography>
-								<ScheduleInterviewDialog open={interviewDialogOpen} onClose={scheduleInterviewCloseHandler} candidate={candidateInfo} />
+								<ScheduleInterviewDialog open={interviewDialogOpen} onClose={scheduleInterviewCloseHandler} candidate={candidateInfo} candidateJobStatus={candidateJobStatus}/>
 							</Box>
 						</Box>
 
@@ -200,4 +200,10 @@ const getJobs = async function (candidateId: string, setCandidateAppliedJobs, se
 		return jobNumbers.includes(job._jobNumber);
 	});
 	setCandidateAppliedJobs(jobs)
+}
+
+const updateStatus = function(status){
+	if (status === "זומן לראיון ראשון"){
+		return "עבר ראיון ראשון"
+	}
 }

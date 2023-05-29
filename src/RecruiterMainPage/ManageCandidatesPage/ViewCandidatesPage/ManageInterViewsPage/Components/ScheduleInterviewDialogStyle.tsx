@@ -11,8 +11,15 @@ export const dialogContentSx: SxProps = {
     width: { xs: "100%", md: "500px" },
     display: "flex",
     // flexDirection: { xs: "column", md: "row" },
+    flexDirection: "column",
     justifyContent:"space-evenly",
     minHeight: "100%",
+}
+
+export const currentStatusTextSx: SxProps = {
+    fontFamily: ManageCandidatesPageGlobalStyle.textFontFamily,
+    fontWeight: "bold",
+    marginBottom: "1rem"
 }
 
 export const submitButtonSx: SxProps = {
