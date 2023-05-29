@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { BoxGradientSx, ContainerGradientSx, appliedDateTextSx, autoCompleteSx, candidateNameAndButtonSx, candidateNameSx, chooseJobAndInterviewContainerSx, chooseJobContainerSx, errorTextSx, interviewSummaryContentSx, interviewSummaryTextSx, mainStackSx, scheduleInterviewButton, scheduleInterviewContainer, scheduleInterviewText, textSx, titleSx } from './ManageInterviewsPageStyle';
-import { Autocomplete, Box, Button, Container, Divider, Stack, TextField, TextareaAutosize, Typography } from '@mui/material';
-import { ManageCandidatesPageGlobalStyle } from '../../../PageStyles';
+import { BoxGradientSx, ContainerGradientSx, appliedDateTextSx, autoCompleteSx, candidateNameAndButtonSx, candidateNameSx, chooseJobAndInterviewContainerSx, chooseJobContainerSx, errorTextSx, interviewSummaryButtonsContainerSx, interviewSummaryContentSx, interviewSummaryRedButtonsContainerSx, interviewSummaryTextSx, mainStackSx, scheduleInterviewButton, scheduleInterviewContainer, scheduleInterviewText, textSx, titleSx } from './ManageInterviewsPageStyle';
+import { Autocomplete, Box, Button, Container, Divider, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Stack, TextField, TextareaAutosize, Typography } from '@mui/material';
+import { GlobalStyle, ManageCandidatesPageGlobalStyle } from '../../../PageStyles';
 import { Candidate, getFilteredCandidates } from '../../../../Firebase/FirebaseFunctions/Candidate';
 import { CandidateJobStatus, getFilteredCandidateJobStatuses } from '../../../../Firebase/FirebaseFunctions/CandidateJobStatus';
 import { Job, getFilteredJobs } from '../../../../Firebase/FirebaseFunctions/Job';
@@ -79,7 +79,7 @@ export default function ManageInterviewsPage(props: { candidateId: string, setHo
 		setInterviewDialogOpen(true);
 	}
 
-	const scheduleInterviewCloseHandler = (event, reason, interviewDate) =>
+	const scheduleInterviewCloseHandler = (event, reason) =>
 	{
 		if ((reason && reason !== "backdropClick") || reason === undefined)
 		{
@@ -87,9 +87,10 @@ export default function ManageInterviewsPage(props: { candidateId: string, setHo
 		}
 	}
 
-	const handleinterviewSummaryChange = (event) => {
+	const handleinterviewSummaryChange = (event) =>
+	{
 		console.log(event);
-	} 
+	}
 
 	return (
 		<>
@@ -124,10 +125,23 @@ export default function ManageInterviewsPage(props: { candidateId: string, setHo
 								</Button>
 								<Divider />
 								<Typography sx={scheduleInterviewText}>
-									נשלח לאחרונה ב: { }
+									סטטוס השתנה ב:
+								</Typography>
+								<Typography sx={scheduleInterviewText}>
+									{candidateJobStatus?._lastUpdate.toLocaleString()}
 								</Typography>
 								<ScheduleInterviewDialog open={interviewDialogOpen} onClose={scheduleInterviewCloseHandler} candidate={candidateInfo} candidateJobStatus={candidateJobStatus} />
 							</Box>
+						</Box>
+
+						<Box sx={{ display: 'flex' }}>
+							<Typography sx={textSx} variant='h4'>
+								סטטוס:
+							</Typography>
+
+							<Typography sx={candidateNameSx} variant='h4' >
+								{candidateJobStatus?._status}
+							</Typography>
 						</Box>
 
 						{/* Choose Job and interview*/}
@@ -147,7 +161,7 @@ export default function ManageInterviewsPage(props: { candidateId: string, setHo
 								/>
 								{jobValue !== "" ?
 									<Typography sx={appliedDateTextSx}>
-										הגיש\ה ב: {appliedDate ? appliedDate.getDay() + "/" + appliedDate.getMonth() + "/" + appliedDate.getFullYear() : ""}
+										הגיש\ה ב: {candidateJobStatus?._applyDate.toLocaleDateString()}
 									</Typography> :
 									<></>
 								}
@@ -188,7 +202,7 @@ export default function ManageInterviewsPage(props: { candidateId: string, setHo
 						</Box>
 
 						{/* Summary of interview */}
-						{interviewIndex !== -1 && jobValue !== ""?
+						{interviewIndex !== -1 && jobValue !== "" ?
 							<Box sx={{ display: "flex", flexDirection: "column" }}>
 								<Typography sx={interviewSummaryTextSx} variant='h6'>
 									סיכום ראיון
@@ -204,7 +218,26 @@ export default function ManageInterviewsPage(props: { candidateId: string, setHo
 									value={candidateJobStatus?._interviewsSummery[interviewIndex]}
 									onChange={handleinterviewSummaryChange}
 								/>
-								<Button variant='contained' sx={{ justifySelf: "start", alignSelf: "start" }}>שמירה</Button>
+								{/* Level of compatibility */}
+								<FormControl>
+									<FormLabel>דרגת התאמה (יותר גבוה = יותר מתאים)</FormLabel>
+									<RadioGroup row>
+										<FormControlLabel value="1" control={<Radio />} label="1" />
+										<FormControlLabel value="2" control={<Radio />} label="2" />
+										<FormControlLabel value="3" control={<Radio />} label="3" />
+										<FormControlLabel value="4" control={<Radio />} label="4" />
+										<FormControlLabel value="5" control={<Radio />} label="5" />
+									</RadioGroup>
+								</FormControl>
+								{/* form buttons */}
+								<Box sx={interviewSummaryButtonsContainerSx}>
+									<Button variant='contained' sx={{ backgroundColor: GlobalStyle.NavbarBackgroundColor, justifySelf: "start", alignSelf: "start" }}>שמירה</Button>
+									<Button variant='contained' sx={{ backgroundColor: "green", justifySelf: "start", alignSelf: "start" }}>התקבל לתפקיד</Button>
+								</Box>
+								<Box sx={interviewSummaryRedButtonsContainerSx} >
+									<Button variant='contained' sx={{ marginRight: "2rem", backgroundColor: "red", justifySelf: "start", alignSelf: "start" }}>אינו מתאים לעבוד בחברה</Button>
+									<Button variant='contained' sx={{ backgroundColor: "red", justifySelf: "start", alignSelf: "start" }}>לא מעוניין בתפקיד</Button>
+								</Box>
 							</Box>
 							: <></>
 						}

@@ -19,12 +19,13 @@ export const candidateNameAndButtonSx: SxProps = {
 export const interviewSummaryTextSx: SxProps = {
     fontFamily: ManageCandidatesPageGlobalStyle.textFontFamily,
     fontWeight: "bold",
-    fontSize:"28px",
+    fontSize: "28px",
     marginBottom: "1rem"
 }
 
 export const interviewSummaryContentSx: SxProps = {
-    width: "90%"
+    width: { sx: "100%", md: "90%" },
+    marginBottom: "1rem"
 }
 
 export const scheduleInterviewButton: SxProps = {
@@ -36,12 +37,12 @@ export const scheduleInterviewButton: SxProps = {
 export const chooseJobAndInterviewContainerSx: SxProps = {
     display: "flex",
     flexDirection: "row",
-    justifyContent: {xs: "space-evenly", md:"space-evenly"},
+    justifyContent: "start",
     width: "100%"
 }
 
 export const autoCompleteSx: SxProps = {
-    width: {xs: "40vw", md: "300px"}
+    width: { xs: "40vw", md: "300px" }
 }
 
 export const scheduleInterviewText: SxProps = {
@@ -52,11 +53,27 @@ export const chooseJobContainerSx: SxProps = {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    width: "fit-content"
+    width: "fit-content",
+    marginRight: { sx: "0", md: "3rem" }
 }
 
 export const appliedDateTextSx: SxProps = {
     color: "#6e6e6e"
+}
+
+export const interviewSummaryButtonsContainerSx: SxProps = {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: { sx: "100%", md: "90%" },
+    marginTop: "1rem",
+    marginBottom: "4rem"
+}
+
+export const interviewSummaryRedButtonsContainerSx: SxProps = {
+    width: { sx: "100%", md: "90%" },
+    display: "flex",
+    justifyContent: "end"
 }
 
 export const scheduleInterviewContainer: SxProps = {
