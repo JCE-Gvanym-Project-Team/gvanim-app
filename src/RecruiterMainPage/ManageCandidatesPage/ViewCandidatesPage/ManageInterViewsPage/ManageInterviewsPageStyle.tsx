@@ -30,7 +30,7 @@ export const chooseJobAndInterviewContainerSx: SxProps = {
 }
 
 export const autoCompleteSx: SxProps = {
-    width: {xs: "45vw", md: "300px"}
+    width: {xs: "40vw", md: "300px"}
 }
 
 export const scheduleInterviewText: SxProps = {

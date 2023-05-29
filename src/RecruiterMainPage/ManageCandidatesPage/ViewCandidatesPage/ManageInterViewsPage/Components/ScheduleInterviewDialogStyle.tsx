@@ -15,6 +15,10 @@ export const dialogContentSx: SxProps = {
     minHeight: "100%",
 }
 
+export const submitButtonSx: SxProps = {
+    backgroundColor: "green"
+}
+
 export const dialogContentStyle: CSSProperties = {
     paddingTop: "1rem"
 }
@@ -36,5 +40,6 @@ export const dialogTopAreaSx: SxProps = {
 
 export const dialogActionsSx: SxProps = {
     justifyContent: "start",
-    marginLeft: "1rem"
+    marginLeft: "1rem",
+    alignItems: "center"
 }

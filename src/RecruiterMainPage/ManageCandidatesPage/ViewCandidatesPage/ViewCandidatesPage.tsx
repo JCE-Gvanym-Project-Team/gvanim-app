@@ -11,6 +11,7 @@ import { getFilteredCandidateJobStatuses } from '../../../Firebase/FirebaseFunct
 import NotesPopup from './Components/NotesPopup/NotesPopup';
 import ChangeJobDialog from './Components/ChangeJobDialog/ChangeJobDialog';
 import { Autorenew, EditNote, QuestionAnswer, SpeakerNotes } from '@mui/icons-material';
+import React from 'react';
 
 export default function ViewCandidatesPage(props: {candidateId: string, setHomeActive: any, setReportsActive: any, setCandidatesActive: any, setJobsActive: any})
 {

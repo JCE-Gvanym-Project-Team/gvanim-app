@@ -1,33 +1,36 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, TextField } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, IconButton, TextField } from "@mui/material";
 import { useState } from "react";
-import { dialogActionsSx, dialogContentSx, dialogSx, dialogTitleSx, dialogTopAreaSx } from "./ScheduleInterviewDialogStyle";
+import { dialogActionsSx, dialogContentSx, dialogSx, dialogTitleSx, dialogTopAreaSx, submitButtonSx } from "./ScheduleInterviewDialogStyle";
 import { Close } from "@mui/icons-material";
 import { DatePicker, LocalizationProvider, MobileTimePicker, TimeField } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import 'dayjs/locale/he'
 import { Candidate } from "../../../../../Firebase/FirebaseFunctions/Candidate";
+import React from "react";
+import dayjs from "dayjs";
 
-export default function ScheduleInterviewDialog(props: { open, onClose, candidate: Candidate | null})
+export default function ScheduleInterviewDialog(props: { open, onClose, candidate: Candidate | null })
 {
 
-    const {open, onClose, candidate} = props;
+    const { open, onClose, candidate } = props;
     const [time, setTime] = useState<any>();
     const [date, setDate] = useState<any>();
-    
+
     const handleDateChange = (value) =>
     {
         setDate(value);
     };
 
-    const handleTimeChange = (value) => {
+    const handleTimeChange = (value) =>
+    {
         setTime(value);
     };
 
-    const handleSubmit = () =>
+    const handleSubmit = (event) =>
     {
         // TODO: Perform submit logic here
         console.log(time.$d.getDate());
-        onClose();
+        onClose(event, "submit");
     };
 
 
@@ -61,10 +64,11 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
                         label={'בחירת תאריך'}
                         views={['year', 'month', 'day']}
                         onChange={handleDateChange}
+                        sx={{ marginRight: "1rem" }}
                     />
                     <MobileTimePicker
                         label="בחירת שעה"
-                        views={['hours']}
+                        views={['hours', "minutes"]}
                         onChange={handleTimeChange}
                     />
                 </LocalizationProvider>
@@ -72,7 +76,7 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
 
             {/* Action Button */}
             <DialogActions sx={dialogActionsSx}>
-                <Button onClick={handleSubmit} variant="contained">שליחת זימון בוואצאפ</Button>
+                <Button onClick={handleSubmit} variant="contained" sx={submitButtonSx}>שליחת זימון בוואצאפ</Button>
             </DialogActions>
         </Dialog>
     )

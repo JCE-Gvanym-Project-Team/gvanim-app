@@ -74,9 +74,16 @@ export default function ManageInterviewsPage(props: { candidateId: string, setHo
 		console.log("schedule interview");
 	}
 
-	const scheduleInterviewCloseHandler = () =>
+	const scheduleInterviewCloseHandler = (event, reason, interviewDate) =>
 	{
-		setInterviewDialogOpen(false);
+		if ((reason && reason !== "backdropClick") || reason === undefined)
+		{
+			setInterviewDialogOpen(false);
+		}
+		if (reason && reason == "submit"){
+			
+			candidateJobStatus?.updateStatus("")
+		}
 		console.log("close interview");
 	}
 
@@ -113,7 +120,7 @@ export default function ManageInterviewsPage(props: { candidateId: string, setHo
 								</Button>
 								<Divider />
 								<Typography sx={scheduleInterviewText}>
-									נשלח לאחרונה ב: { }
+									נשלח לאחרונה ב: {}
 								</Typography>
 								<ScheduleInterviewDialog open={interviewDialogOpen} onClose={scheduleInterviewCloseHandler} candidate={candidateInfo} />
 							</Box>
@@ -151,7 +158,7 @@ export default function ManageInterviewsPage(props: { candidateId: string, setHo
 									renderInput={(params) => <TextField {...params} label="בחירת ראיון" />}
 									onInputChange={(event, value) =>
 									{
-										// 
+										
 									}}
 								/>
 							</Box>
