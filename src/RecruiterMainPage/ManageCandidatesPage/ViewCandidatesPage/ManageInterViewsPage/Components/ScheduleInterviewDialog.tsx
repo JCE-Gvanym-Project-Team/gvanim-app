@@ -117,7 +117,7 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
             <DialogActions sx={dialogActionsSx}>
                 <Button onClick={handleSubmit} variant="contained" sx={submitButtonSx}>
                     <WhatsApp sx={{marginRight: "0.5rem"}}/>
-                    "שליחת הודעה למועמד"
+                        שליחת הודעה למועמד
                     </Button>
             </DialogActions>
         </Dialog>

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { BoxGradientSx, ContainerGradientSx, appliedDateTextSx, autoCompleteSx, candidateNameAndButtonSx, candidateNameSx, chooseJobAndInterviewContainerSx, chooseJobContainerSx, mainStackSx, scheduleInterviewButton, scheduleInterviewContainer, scheduleInterviewText, textSx, titleSx } from './ManageInterviewsPageStyle';
+import { BoxGradientSx, ContainerGradientSx, appliedDateTextSx, autoCompleteSx, candidateNameAndButtonSx, candidateNameSx, chooseJobAndInterviewContainerSx, chooseJobContainerSx, errorTextSx, mainStackSx, scheduleInterviewButton, scheduleInterviewContainer, scheduleInterviewText, textSx, titleSx } from './ManageInterviewsPageStyle';
 import { Autocomplete, Box, Button, Container, Divider, Stack, TextField, Typography } from '@mui/material';
 import { ManageCandidatesPageGlobalStyle } from '../../../PageStyles';
 import { Candidate, getFilteredCandidates } from '../../../../Firebase/FirebaseFunctions/Candidate';
 import { CandidateJobStatus, getFilteredCandidateJobStatuses } from '../../../../Firebase/FirebaseFunctions/CandidateJobStatus';
 import { Job, getFilteredJobs } from '../../../../Firebase/FirebaseFunctions/Job';
-import { CalendarMonth } from '@mui/icons-material';
+import { CalendarMonth, ErrorOutline } from '@mui/icons-material';
 import ScheduleInterviewDialog from './Components/ScheduleInterviewDialog';
 
 export default function ManageInterviewsPage(props: { candidateId: string, setHomeActive: any, setReportsActive: any, setCandidatesActive: any, setJobsActive: any })
@@ -57,7 +57,6 @@ export default function ManageInterviewsPage(props: { candidateId: string, setHo
 
 		if (Number.isNaN(jobNumber))
 		{
-			setSelectedJobError(true);
 			return;
 		}
 		const candidateJobStatuses = await getFilteredCandidateJobStatuses(["jobNumber", "candidateId"], [jobNumber.toString(), candidateId]);
@@ -70,8 +69,12 @@ export default function ManageInterviewsPage(props: { candidateId: string, setHo
 	// schedule interview button handler and close handler
 	const scheduleInterviewOpenHandler = () =>
 	{
+		if (jobValue === "")
+		{
+			setSelectedJobError(true);
+			return;
+		}
 		setInterviewDialogOpen(true);
-		console.log("schedule interview");
 	}
 
 	const scheduleInterviewCloseHandler = (event, reason, interviewDate) =>
@@ -80,8 +83,9 @@ export default function ManageInterviewsPage(props: { candidateId: string, setHo
 		{
 			setInterviewDialogOpen(false);
 		}
-		if (reason && reason == "submit"){
-			
+		if (reason && reason == "submit")
+		{
+
 			candidateJobStatus?.updateStatus("")
 		}
 		console.log("close interview");
@@ -120,9 +124,9 @@ export default function ManageInterviewsPage(props: { candidateId: string, setHo
 								</Button>
 								<Divider />
 								<Typography sx={scheduleInterviewText}>
-									נשלח לאחרונה ב: {}
+									נשלח לאחרונה ב: { }
 								</Typography>
-								<ScheduleInterviewDialog open={interviewDialogOpen} onClose={scheduleInterviewCloseHandler} candidate={candidateInfo} candidateJobStatus={candidateJobStatus}/>
+								<ScheduleInterviewDialog open={interviewDialogOpen} onClose={scheduleInterviewCloseHandler} candidate={candidateInfo} candidateJobStatus={candidateJobStatus} />
 							</Box>
 						</Box>
 
@@ -137,6 +141,7 @@ export default function ManageInterviewsPage(props: { candidateId: string, setHo
 									renderInput={(params) => <TextField {...params} label="בחירת משרה" />}
 									onInputChange={(event, value) =>
 									{
+										setSelectedJobError(false);
 										setJobValue(value);
 									}}
 								/>
@@ -144,6 +149,15 @@ export default function ManageInterviewsPage(props: { candidateId: string, setHo
 									<Typography sx={appliedDateTextSx}>
 										הגיש\ה ב: {appliedDate ? appliedDate.getDay() + "/" + appliedDate.getMonth() + "/" + appliedDate.getFullYear() : ""}
 									</Typography> :
+									<></>
+								}
+								{selectedJobError && jobValue === "" ?
+									<Box sx={{display: "flex", flexDirection: "row", alignSelf: "start"}}>
+										<ErrorOutline sx={{color: "red"}}/>
+										<Typography sx={errorTextSx}>
+											שדה זה הוא חובה
+										</Typography>
+									</Box> :
 									<></>
 								}
 							</Box>
@@ -158,7 +172,7 @@ export default function ManageInterviewsPage(props: { candidateId: string, setHo
 									renderInput={(params) => <TextField {...params} label="בחירת ראיון" />}
 									onInputChange={(event, value) =>
 									{
-										
+
 									}}
 								/>
 							</Box>
@@ -202,8 +216,10 @@ const getJobs = async function (candidateId: string, setCandidateAppliedJobs, se
 	setCandidateAppliedJobs(jobs)
 }
 
-const updateStatus = function(status){
-	if (status === "זומן לראיון ראשון"){
+const updateStatus = function (status)
+{
+	if (status === "זומן לראיון ראשון")
+	{
 		return "עבר ראיון ראשון"
 	}
 }

@@ -88,6 +88,11 @@ export const BoxGradientSx: SxProps = {
     zIndex: '-1'
 }
 
+export const errorTextSx: SxProps = {
+    color: "red",
+    fontFamily: ManageCandidatesPageGlobalStyle.textFontFamily
+}
+
 export const ContainerGradientSx: SxProps = {
     marginTop: "1rem",
     marginLeft: { xs: '0', md: "3rem" },
