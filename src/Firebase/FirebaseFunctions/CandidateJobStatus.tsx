@@ -231,7 +231,7 @@ async function getCandidateJobStatusFromDatabase(): Promise<CandidateJobStatus[]
 //["הוגשה מועמדות","זומן לראיון ראשון","עבר ראיון ראשון","זומן לראיון שני","עבר ראיון שני","התקבל","הועבר למשרה אחרת","נדחה","הפסיק את התהליך"];
 //       8               7                  6         5          4                      3                  2                  1                  0
 function getMessage(cand: Candidate, job: Job, rec: Recruiter, status: string, interviewDate: Date = new Date(0, 0, 0), place: string = "") {
-    if (status === allStatus[0] || status === allStatus[2] || status === allStatus[4] || status === allStatus[8])
+    if (!allStatus.includes(status) || status === allStatus[0] || status === allStatus[2] || status === allStatus[4] || status === allStatus[8])
         return "";
     let message = `${cand._firstName}`;
     message += '\nשלום';
@@ -258,8 +258,6 @@ function getMessage(cand: Candidate, job: Job, rec: Recruiter, status: string, i
     if (message === allStatus[6]) {
         message += "לאחר בחינת קורות החיים שלך ואת תהליך הגיוס שעברת הוחלט לנתב אותך למשרה אחרת, נשלח פרטים נוספים בקרוב.";
     }
-    else
-        return "";
     return message.replace('\n', '%0A').replace(' ', '%20');
 }
 
