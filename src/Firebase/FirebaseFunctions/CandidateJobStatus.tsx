@@ -56,7 +56,7 @@ export class CandidateJobStatus {
             return;
         this._recomendations.push(new Recomendation(fullName, phone, eMail));
         const extension = recomendation.name.split('.')[recomendation.name.split('.').length - 1];
-        await uploadFileToFirestore(recomendation, `CandidatesFiles/${this._candidateId}`, `${phone}_REC.${extension}`);
+        await uploadFileToFirestore(recomendation, `CandidatesFiles/${this._candidateId}/rec`, `${phone}_REC.${extension}`);
         replaceData((await this.getPath()), this);
     }
     /**
@@ -65,12 +65,12 @@ export class CandidateJobStatus {
      */
     public async getRecomendationsUrl(): Promise<string[]> {
         let urls: string[] = [];
-        const extentions = await getFileExtensionsInFolder(`CandidatesFiles/${this._candidateId}`);
+        const extentions = await getFileExtensionsInFolder(`CandidatesFiles/${this._candidateId}/rec`);
         const phones = this._recomendations.map((rec) => rec._phone);
         for (let i = 0; i < phones.length; i++)
             for (let j = 0; j < extentions.length; j++)
-                if ((await fileExists(`CandidatesFiles/${this._candidateId}/${phones[i]}_${this._jobNumber}_REC.${extentions[j]}`))) {
-                    let url = await getDownloadUrlFromFirestorePath(`CandidatesFiles/${this._candidateId}/${phones[i]}_${this._jobNumber}_REC.${extentions[j]}`);
+                if ((await fileExists(`CandidatesFiles/${this._candidateId}/rec/${phones[i]}_${this._jobNumber}_REC.${extentions[j]}`))) {
+                    let url = await getDownloadUrlFromFirestorePath(`CandidatesFiles/${this._candidateId}/rec/${phones[i]}_${this._jobNumber}_REC.${extentions[j]}`);
                     urls.push(url);
                 }
         return urls;
@@ -80,12 +80,12 @@ export class CandidateJobStatus {
      * @returns None
      */
     private async deleteAllRecomendations() {
-        const extentions = await getFileExtensionsInFolder(`CandidatesFiles/${this._candidateId}`);
+        const extentions = await getFileExtensionsInFolder(`CandidatesFiles/rec/${this._candidateId}`);
         const phones = this._recomendations.map((rec) => rec._phone);
         for (let i = 0; i < phones.length; i++)
             for (let j = 0; j < extentions.length; j++)
-                if ((await fileExists(`CandidatesFiles/${this._candidateId}/${phones[i]}_${this._jobNumber}_REC.${extentions[j]}`))) {
-                    let path = await getDownloadUrlFromFirestorePath(`CandidatesFiles/${this._candidateId}/${phones[i]}_${this._jobNumber}_REC.${extentions[j]}`);
+                if ((await fileExists(`CandidatesFiles/${this._candidateId}/rec/${phones[i]}_${this._jobNumber}_REC.${extentions[j]}`))) {
+                    let path = await getDownloadUrlFromFirestorePath(`CandidatesFiles/${this._candidateId}/rec/${phones[i]}_${this._jobNumber}_REC.${extentions[j]}`);
                     deleteFile(path);
                 }
     }

@@ -3,10 +3,16 @@ import { isConnected, loginAdmin, loginRecruiter, loguotRecruiter } from "./Auth
 import { Candidate, generateCandidateId, getFilteredCandidates } from "./Candidate";
 import { Job, generateJobNumber, getFilteredJobs } from "./Job";
 import { Recruiter, generateRandomString } from "./Recruiter";
+import { uploadFileToFirestore } from "./firestoreFunc";
 import { Sector } from "./Sector";
 export function sleep(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
+function createTextFile(name: string, content: string): File {
+    const textFile = new File([content], name + ".txt", { type: "text/plain" });
+    return textFile;
+}
+
 async function testSingleJobAddNoConfilct(): Promise<boolean> {
     const jobNumber = await generateJobNumber();
     const title = generateRandomString();
@@ -100,7 +106,7 @@ async function testJobEditNoConflict() {
 async function testJobRemove() {
     let cands = Array<Candidate>;
     for (let i = 0; i < 10; i++) {
-        
+
     }
 }
 async function testAddSingleCandidateNoConflict() {
@@ -123,14 +129,17 @@ async function testEditCandidate() {
     const phone = "0501234567";
     const rating = -1;
     const note = "note content";
-    const cand = new Candidate(await generateCandidateId(),firstName,lastName,phone,mail,rating,note);
-    await cand.add();
+    const cand = new Candidate("28", firstName, lastName, phone, mail, rating, note);
+    //const CV = createTextFile("test","this is test file");
+    //uploadFileToFirestore(CV,"keep/it","newName.txt");
+    //await cand.uploadCv(CV);
+    console.log(await cand.getCvUrl());
     //await loginAdmin();
-    await cand.edit();
+    //await cand.edit("newName");
 }
 async function testAddRecruiterNoSectors() {
     await loginAdmin();
-    let rec = new Recruiter("ex@gmail.com","el","ta");
+    let rec = new Recruiter("ex@gmail.com", "el", "ta");
     await rec.add('123456');
     const status = await rec.exists();
     await rec.remove();
@@ -138,10 +147,10 @@ async function testAddRecruiterNoSectors() {
 }
 async function testLoginRecruiter() {
     await loginAdmin();
-    let rec = new Recruiter("ex@gmail.com","el","ta");
+    let rec = new Recruiter("ex@gmail.com", "el", "ta");
     await rec.add('123456');
     await loguotRecruiter();
-    await loginRecruiter("ex@gmail.com","123456");
+    await loginRecruiter("ex@gmail.com", "123456");
     const status = await isConnected();
     await loguotRecruiter();
     await rec.remove();
@@ -155,4 +164,5 @@ export async function main() {
     //console.log(`testAddSingleCandidateNoConflict(): ${await testAddSingleCandidateNoConflict()}`);
     //console.log(`testAddRecruiterNoSectors(): ${await testAddRecruiterNoSectors()}`);
     //console.log(`testLoginRecruiter(): ${await testLoginRecruiter()}`);
+    testEditCandidate();
 }
