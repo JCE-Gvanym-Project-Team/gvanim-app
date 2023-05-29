@@ -5,6 +5,7 @@ import { Job, generateJobNumber, getFilteredJobs } from '../../../../../Firebase
 import { useLocation, useNavigate } from 'react-router-dom';
 import RemoveCandidateDialog from './../RemoveCandidateDialog/RemoveCandidateDialog';
 import { Candidate, getFilteredCandidates } from '../../../../../Firebase/FirebaseFunctions/Candidate';
+import { loginAdmin } from '../../../../../Firebase/FirebaseFunctions/Authentication';
 
 const Form = styled('form')(({ theme }) => ({
     width: '100%',
@@ -173,7 +174,7 @@ const EditCandidate = (props: { setHomeActive: any, setReportsActive: any, setCa
         {
             const candidates = await getFilteredCandidates(["id"], [state]);
 
-            
+
             setCandidateId(candidates[0]._id);
             setCandidateFirstname(candidates[0]._firstName);
             setCandidateLastname(candidates[0]._lastName);
@@ -206,9 +207,9 @@ const EditCandidate = (props: { setHomeActive: any, setReportsActive: any, setCa
         {
             if (candidateToEdit)
             {
-                candidateToEdit.edit(candidateFirstname, candidateLastname, candidatePhone, candidateMail, candidateGeneralRating);
+                await candidateToEdit.edit(candidateFirstname, candidateLastname, candidatePhone, candidateMail, candidateGeneralRating);
                 //TODO: tell Gavriel to integrate this
-                navigate("/manageCandidates", { state: `השינויים עבור המועמד' ${candidateToEdit._firstName + " " + candidateToEdit._lastName} נשמרו בהצלחה.` });
+                navigate("/manageCandidates/" + candidateToEdit?._id, { state: `השינויים עבור המועמד' ${candidateToEdit._firstName + " " + candidateToEdit._lastName} נשמרו בהצלחה.` });
             }
         }
     }
