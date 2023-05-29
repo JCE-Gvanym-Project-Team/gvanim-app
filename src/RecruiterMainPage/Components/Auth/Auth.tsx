@@ -4,7 +4,7 @@ import "firebase/compat/auth";
 import  { useEffect, useState } from "react"
 import RecruiterMainPage from "../../RecruiterMainPage";
 import NavBar from "../NavBar/NavBar";
-import { loginAdmin, loguotRecruiter } from "../../../Firebase/FirebaseFunctions/Authentication";
+import { loginAdmin, loginRecruiter, loguotRecruiter } from "../../../Firebase/FirebaseFunctions/Authentication";
 import firebase from "../../../Firebase/FirebaseConfig/firebase";
 
 
@@ -47,7 +47,7 @@ export default function Auth () {
   };
 
 
-  const handleLogin = (event) => {
+  const handleLogin = async (event) => {
     clearInputs();
     clearErrors();
     event.preventDefault();
@@ -63,23 +63,10 @@ export default function Auth () {
       setPasswordError(true);
     }
     else {
-      firebase
-        .auth()
-        .signInWithEmailAndPassword(email, password)
-        .catch(error => {
-          // alert(error.code);
-          setAlertHidden(false);
-           console.log(error.code); //the error
-        });
-
-      //  loginAdmin({setAlertHidden});
+      await loginRecruiter(email, password);
     }
 
   };
-
-  // const handlelogout = () => {
-  //   firebase1.auth().signOut();
-  // };
 
 
   useEffect(() => {
