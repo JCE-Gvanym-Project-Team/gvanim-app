@@ -49,7 +49,7 @@ export class Candidate {
      */
     public async getPath() {
         if ((await getFirebaseIdsAtPath('/Candidates')).includes(this._id.toString()))
-            return "/Jobs/" + this._id;
+            return "/Candidates/" + this._id;
         return "";
     }
     /**
@@ -83,7 +83,11 @@ export class Candidate {
      * @param {number} [generalRating=this._generalRating] - The candidate's general rating.
      * @returns None
      */
-    public async edit(firstName: string = this._firstName, lastName: string = this._lastName, phone: string = this._phone, eMail: string = this._eMail, generalRating: number = this._generalRating) {
+    public async edit(firstName: string = this._firstName, lastName: string = this._lastName, phone: string = this._phone, eMail: string = this._eMail, generalRating: number = this._generalRating, note: string = this._note) {
+        if (!(await this.exists())) {
+            console.log(`you must add() candidate before call edit()`);
+            return;
+        }
         if (this._firstName !== firstName || this._lastName !== lastName) {
             const extensions = await getFileExtensionsInFolder(`/CandidatesFiles/${this._id}`);
             for (let i = 0; i < extensions.length; i++)
@@ -95,6 +99,16 @@ export class Candidate {
         this._firstName = firstName;
         this._lastName = lastName;
         this._generalRating = generalRating;
+        this._note = note;
+        if(this._phone!==phone || this._eMail!==eMail){
+            if((await getFilteredCandidates(["eMail","phone"],[eMail,phone])).length===0){
+                this._eMail=eMail;
+                this._phone=phone;
+            }
+            else{
+                console.log(`a candidate alredy exist with the same mail and phone, othe field was chenged`);
+            }
+        }
         replaceData((await this.getPath()), this);
     }
     /**
@@ -102,7 +116,8 @@ export class Candidate {
      * @returns None
      */
     public async add() {
-        if (!(await this.exists()))
+        if (!(await this.exists())
+            && (await getFilteredCandidates(["eMail","phone"],[this._eMail,this._phone])).length===0)
             appendToDatabase(this, "/Candidates", this._id);
         else
             console.log("the candidate already exists");
@@ -115,8 +130,10 @@ export class Candidate {
      * @returns None
      */
     public async apply(jobNumber: number, about: string) {
-        if (!(await this.exists()))
-            this.add();
+        if (!(await this.exists())) {
+            console.log(`you need to add() candidate before call apply()`);
+            return;
+        }
         let candidatuers = new CandidateJobStatus(jobNumber, this._id, "הוגשה מועמדות", about, -1, new Date(), new Date());
         candidatuers.add();
     }

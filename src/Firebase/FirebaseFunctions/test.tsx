@@ -1,6 +1,6 @@
 import { auth } from "firebase-functions/v1";
 import { isConnected, loginAdmin, loginRecruiter, loguotRecruiter } from "./Authentication";
-import { Candidate } from "./Candidate";
+import { Candidate, generateCandidateId, getFilteredCandidates } from "./Candidate";
 import { Job, generateJobNumber, getFilteredJobs } from "./Job";
 import { Recruiter, generateRandomString } from "./Recruiter";
 import { Sector } from "./Sector";
@@ -116,6 +116,18 @@ async function testAddSingleCandidateNoConflict() {
     newCand.remove()
     return status;
 }
+async function testEditCandidate() {
+    const firstName = "el";
+    const lastName = "ta";
+    const mail = "cand@gmail.com";
+    const phone = "0501234567";
+    const rating = -1;
+    const note = "note content";
+    const cand = new Candidate(await generateCandidateId(),firstName,lastName,phone,mail,rating,note);
+    await cand.add();
+    //await loginAdmin();
+    await cand.edit();
+}
 async function testAddRecruiterNoSectors() {
     await loginAdmin();
     let rec = new Recruiter("ex@gmail.com","el","ta");
@@ -142,5 +154,5 @@ export async function main() {
     //console.log(`testJobEditNoConfilct(): ${await testJobEditNoConflict()}`);
     //console.log(`testAddSingleCandidateNoConflict(): ${await testAddSingleCandidateNoConflict()}`);
     //console.log(`testAddRecruiterNoSectors(): ${await testAddRecruiterNoSectors()}`);
-    console.log(`testLoginRecruiter(): ${await testLoginRecruiter()}`);
+    //console.log(`testLoginRecruiter(): ${await testLoginRecruiter()}`);
 }
