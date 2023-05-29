@@ -206,9 +206,10 @@ const EditCandidate = (props: { setHomeActive: any, setReportsActive: any, setCa
         {
             if (candidateToEdit)
             {
+                console.log(candidateToEdit);
                 candidateToEdit.edit(candidateFirstname, candidateLastname, candidatePhone, candidateMail, candidateGeneralRating);
                 //TODO: tell Gavriel to integrate this
-                navigate("/manageCandidates", { state: `השינויים עבור המועמד' ${candidateToEdit._firstName + " " + candidateToEdit._lastName} נשמרו בהצלחה.` });
+                navigate("/manageCandidates/" +candidateToEdit?._id, { state: `השינויים עבור המועמד' ${candidateToEdit._firstName + " " + candidateToEdit._lastName} נשמרו בהצלחה.` });
             }
         }
     }
