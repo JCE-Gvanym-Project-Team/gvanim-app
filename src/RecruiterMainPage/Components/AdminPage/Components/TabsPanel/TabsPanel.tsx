@@ -143,6 +143,7 @@ const MyTabsPanel: React.FC = () => {
 
       <TabPanel value={value} index={4}>
         <Typography component="span" sx={{ fontFamily: "'Noto Sans Hebrew', sans-serif", fontWeight: 600 }} variant='h6'>הוספה / הסרה של שדות</Typography>
+       
       </TabPanel>
       <TabPanel value={value} index={5}>
         Item Six

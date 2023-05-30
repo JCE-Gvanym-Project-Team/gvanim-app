@@ -2,24 +2,16 @@ import React, { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import { Link } from "react-router-dom";
 import ReportPageTable from "./Components/MyTable/MyTable";
+import { Box } from '@mui/material';
+import { BoxGradientSx } from '../ManageJobsPage/ManageJobsPageStyle';
 
 
-function ReportsPage(props: { setHomeActive: any, setReportsActive: any, setCandidatesActive: any, setJobsActive: any })
+function ReportsPage()
 {
-	const { setHomeActive, setReportsActive, setCandidatesActive, setJobsActive } = props;
-	useEffect(() =>
-	{
-		// Code inside this effect will run after the component has rendered
-		setHomeActive(false);
-		setCandidatesActive(false);
-		setReportsActive(true);
-		setJobsActive(false);
-	}, []);
-
-
 
 	return (
 		<>
+		<Box sx={BoxGradientSx} />
 			{/* <Link to="/manageReports"> */}
 			{/* <Button variant="contained" disableElevation >יצירת דו"ח</Button> */}
 			{/* </Link> */}

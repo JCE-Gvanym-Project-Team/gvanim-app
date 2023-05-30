@@ -1,24 +1,14 @@
 import { useState, useEffect } from "react";
 
 import MyTable from "./Components/MyTable/MyTable";
-import { Box, Button, Container, Fab } from "@mui/material";
+import { Box, Button, Container, Fab, Typography } from "@mui/material";
 import MyLoading from "../../Components/MyLoading/MyLoading";
-import { ManageJobPageBoxSx } from "./ManageJobsPageStyle";
+import { BoxGradientSx, ManageJobPageBoxSx } from "./ManageJobsPageStyle";
 import TransitionComponentSnackbar from "./Components/NewJobPage/Components/SuccessSnackBar/SuccessSnackBar";
 import { useLocation } from "react-router-dom";
 
 
-const ManageJobsPage = (props: { setHomeActive: any, setReportsActive: any, setCandidatesActive: any, setJobsActive: any }) => {
-    const { setHomeActive, setReportsActive, setCandidatesActive, setJobsActive } = props;
-    useEffect(() =>
-    {
-        // Code inside this effect will run after the component has rendered
-        setHomeActive(false);
-        setCandidatesActive(false);
-        setReportsActive(false);
-        setJobsActive(true);
-    }, []);
-
+const ManageJobsPage = () => {
     const [loading, setLoading] = useState(true);
     const [dataSize, setDataSize] = useState(0);
     const [open, setOpen] = useState(false);
@@ -47,7 +37,15 @@ const ManageJobsPage = (props: { setHomeActive: any, setReportsActive: any, setC
     else {
         return (
             <>
+                    <Box sx={BoxGradientSx}>
+                        <Box sx={{display: 'flex',flexDirection: 'column', justifyContent: 'center'}}>
+                            <Typography variant="h4" sx={{color: '#fff',fontFamily: "'Noto Sans Hebrew', sans-serif",fontWeight: 500}}>
+                                ניהול משרות
+                            </Typography>
+                        </Box>
+                    </Box>
 
+                    
                 <Box className="ManageJobPage-Body" sx={ManageJobPageBoxSx}>
               
                     {/* <Container sx={MyAvatarContainerSx} maxWidth="sm">

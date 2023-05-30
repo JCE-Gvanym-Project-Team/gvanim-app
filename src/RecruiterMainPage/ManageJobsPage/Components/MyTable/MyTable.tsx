@@ -181,12 +181,7 @@ const GridCustomToolbar = ( {syncState }: {syncState: (stateToSave: GridInitialS
 				<Box sx={{ display: 'flex', flexDirection: 'row-reverse', width: '100%' }}>
 					<Box>
 
-						<Button type="button" endIcon={<ArticleOutlined />} onClick={handleCreatejob} variant='contained' sx={{
-							backgroundColor: 'rgb(52, 71, 103)',
-							":hover": {
-								bgcolor: "rgb(52, 71, 103)",
-							}
-						}} fullWidth>משרה חדשה</Button>
+						<Button type="button" endIcon={<ArticleOutlined />} onClick={handleCreatejob} variant='contained' fullWidth>משרה חדשה</Button>
 
 					</Box>
 				</Box>

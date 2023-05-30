@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import WelcomePage from "./WelcomePage/WelcomePage";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import {  Route, Routes } from "react-router-dom";
 import ManageCandidatesPage from "./ManageCandidatesPage/ManageCandidatesPage";
 import ManageJobsPage from "./ManageJobsPage/ManageJobsPage";
 import ReportsPage from "./ReportsPage/ReportsPage";
@@ -16,12 +16,11 @@ import ViewCandidatesPage from "./ManageCandidatesPage/ViewCandidatesPage/ViewCa
 
 
 
+
+
+
 function RecruiterMainPage({ handlelogout })
 {
-	const [HomeActive, setHomeActive] = useState(false);
-	const [ReportsActive, setReportsActive] = useState(false);
-	const [CandidatesActive, setCandidatesActive] = useState(false);
-	const [JobsActive, setJobsActive] = useState(false);
 	const [allJobs, setAllJobs] = React.useState<any[]>([]);
 	const [candidateIDs, setCandidateIDs] = useState<string[]>([]);
 
@@ -47,10 +46,9 @@ function RecruiterMainPage({ handlelogout })
 	}, []);
 
 	return (
-		<>
-			<NavBar handlelogout={handlelogout} HomeActive={HomeActive} setHomeActive={setHomeActive}
-				ReportsActive={ReportsActive} setReportsActive={setReportsActive} CandidatesActive={CandidatesActive}
-				setCandidatesActive={setCandidatesActive} JobsActive={JobsActive} setJobsActive={setJobsActive} />
+		<>			
+				<NavBar handlelogout={handlelogout} />
+					
 
 			{allJobs.map(job => (<Link key={job.id} to={'/jobs/' + job.id} />))}
 			<Routes>
@@ -59,24 +57,24 @@ function RecruiterMainPage({ handlelogout })
 
 				{allJobs.map((job) => (<Route path={`/jobs/${job.id}`} key={job.id} element={<SingleJob id={job.id}></SingleJob>} />))}
 
-				<Route path="/" element={<WelcomePage setHomeActive={setHomeActive} setReportsActive={setReportsActive} setCandidatesActive={setCandidatesActive} setJobsActive={setJobsActive} />} />
+				<Route path="/" element={<WelcomePage />} />
 				{/* Jobs Routes */}
-				<Route path="/manageJobs" element={<ManageJobsPage setHomeActive={setHomeActive} setReportsActive={setReportsActive} setCandidatesActive={setCandidatesActive} setJobsActive={setJobsActive} />} />
-				<Route path="/createJob" element={<NewJobPage setHomeActive={setHomeActive} setReportsActive={setReportsActive} setCandidatesActive={setCandidatesActive} setJobsActive={setJobsActive} />} />
+				<Route path="/manageJobs" element={<ManageJobsPage  />} />
+				<Route path="/createJob" element={<NewJobPage />} />
 
 				{/* Candidate Routes */}
-				<Route path="/editCandidate" element={<EditCandidate setHomeActive={setHomeActive} setReportsActive={setReportsActive} setCandidatesActive={setCandidatesActive} setJobsActive={setJobsActive} />} />
-				<Route path="/manageCandidates" element={<ManageCandidatesPage setHomeActive={setHomeActive} setReportsActive={setReportsActive} setCandidatesActive={setCandidatesActive} setJobsActive={setJobsActive} />} />
+				<Route path="/editCandidate" element={<EditCandidate />} />
+				<Route path="/manageCandidates" element={<ManageCandidatesPage />} />
 				{candidateIDs.map((candidateId) =>
 				{
 					return (
-						<Route path={"/manageCandidates/" + candidateId} element={<ViewCandidatesPage candidateId={candidateId} setHomeActive={setHomeActive} setReportsActive={setReportsActive} setCandidatesActive={setCandidatesActive} setJobsActive={setJobsActive}/>} key={candidateId} />
+						<Route path={"/manageCandidates/" + candidateId} element={<ViewCandidatesPage candidateId={candidateId} />} key={candidateId} />
 					);
 				})
 				}
 
 				{/* Reports Routes */}
-				<Route path="/reports" element={<ReportsPage setHomeActive={setHomeActive} setReportsActive={setReportsActive} setCandidatesActive={setCandidatesActive} setJobsActive={setJobsActive} />} />
+				<Route path="/reports" element={<ReportsPage />} />
 
 				{/* Admin Routes */}
 				<Route path="/settings" element={<AdminPage />} />

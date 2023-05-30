@@ -13,10 +13,7 @@ const Form = styled('form')(({ theme }) => ({
 }));
 
 
-const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandidatesActive: any, setJobsActive: any }) => {
-
-    const { setHomeActive, setReportsActive, setCandidatesActive, setJobsActive } = props;
-
+const NewJobPage = () => {
     const { state } = useLocation();
 
     // values
@@ -41,10 +38,6 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
 
 
     useEffect(() => {
-
-        // for navbar
-        setHomeActive(false); setCandidatesActive(false);
-        setReportsActive(false); setJobsActive(false);
 
         const getAllJobs = async () => {
             const jobs = await getFilteredJobs();

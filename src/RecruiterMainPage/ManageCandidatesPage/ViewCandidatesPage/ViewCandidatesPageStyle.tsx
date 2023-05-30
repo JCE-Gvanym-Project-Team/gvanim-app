@@ -63,13 +63,11 @@ export const titleSx: SxProps = {
 }
 
 export const BoxGradientSx: SxProps = {
-    position: "absolute",
-    top: '0',
-    left: '0',
-    width: "100%",
-    height: ManageCandidatesPageGlobalStyle.backgroundHeight,
-    background: ManageCandidatesPageGlobalStyle.backgroundGradient,
-    zIndex: '-1'
+    marginTop: '-80px',
+    height: '60vh',
+    display: 'flex',
+    justifyContent: 'center',
+    background: 'linear-gradient(to left, #7795f8, #7795f8,#555abf)',
 }
 
 export const ContainerGradientSx: SxProps = {

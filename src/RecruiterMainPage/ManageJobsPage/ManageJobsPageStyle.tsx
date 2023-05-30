@@ -2,15 +2,18 @@ import { SxProps } from "@mui/material";
 
 export const BoxGradientSx: SxProps = {
     marginTop: '-80px',
-    height: '45vh',
+    height: '60vh',
     display: 'flex',
     justifyContent: 'center',
-    background: 'linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%)',
+    background: 'linear-gradient(to left, #7795f8, #7795f8,#555abf)',
 }
 
 export const ManageJobPageBoxSx: SxProps = {
-    width: 'calc(100% - 48px)',
-    marginLeft: '24px',
+    marginTop: '-20vh',
+    backgroundColor: '#fff',
+    borderRadius: '0.75rem',
+    width: 'calc(100% - 64px)',
+    marginLeft: '32px',
     height: '100%'
 }
 
