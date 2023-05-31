@@ -47,7 +47,7 @@ export default function AdminPage() {
                 }} />
 
                 <Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
-                    right: '-5%',
+                    right: '5%',
                     top: '20%',
                     bottom: 'auto',
                     backgroundColor: 'hsla(0,0%,100%,.1)',
