@@ -79,7 +79,7 @@ const ManageJobsPage = () => {
 
 
                     <Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
-                        right: '-5%',
+                        right: '5%',
                         top: '20%',
                         bottom: 'auto',
                         backgroundColor: 'hsla(0,0%,100%,.1)',
@@ -91,7 +91,7 @@ const ManageJobsPage = () => {
                     }} />
 
                     <Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
-                        left: '-2%',
+                        left: '2%',
                         top: '12%',
                         bottom: 'auto',
                         backgroundColor: 'hsla(0,0%,100%,.1)',

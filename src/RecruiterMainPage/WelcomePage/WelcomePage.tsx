@@ -13,7 +13,7 @@ export default function WelcomePage() {
             <Box sx={BoxGradientSx}>
 
                 <Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
-                    right: '-2%',
+                    right: '2%',
                     left: 'auto',
                     top: '15%',
                     bottom: 'auto',
