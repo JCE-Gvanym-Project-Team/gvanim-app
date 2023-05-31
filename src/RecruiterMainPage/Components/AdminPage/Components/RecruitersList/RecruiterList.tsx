@@ -1,7 +1,8 @@
-import { Avatar, Box, Button, Divider, List, ListItem, ListItemAvatar, ListItemIcon, ListItemText, Typography } from '@mui/material'
+import { Avatar, Box, Button, Divider, IconButton, InputBase, List, ListItem, ListItemAvatar, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material'
 import React from 'react'
 import { ListItemTypographySx, MyPaperSx } from './RecruitersListStyle'
 import RecruiterDialog from './RecruiterDialog/RecruiterDialog';
+import { Search } from '@mui/icons-material';
 
 const recruiters = [
     { fullname: 'יוסי כהן', email: 'yossi324@gmail.com' },
@@ -21,20 +22,46 @@ export default function () {
         <Box>
             <List >
                 {/* this is the header */}
-                <ListItem sx={{ display: 'flex', justifyContent: 'space-between'}}>
-      
-                        <Typography sx={ListItemTypographySx} variant='subtitle1'>
-                            שם המגייס
-                        </Typography>
-            
 
-                        <Box sx={{borderStyle: 'solid'}}>
-                            <Button>
-                                Search
-                            </Button>
-                        </Box>
+                <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+                    <Box
+                        id="searchBarDesktop"
+                        component="form"
+                        sx={{ display: { xs: 'flex', sm: 'none', md: 'none', lg: 'none', xl: 'none' }, flexDirection: 'row-reverse', alignItems: 'center', borderRadius: '0.75rem', backgroundColor: 'transparent', border: '1.5px solid rgba(0, 0, 0, 0.3)', width: { xs: 'unset', sm: 'unset', md: '400px', lg: '600px', xl: '600px' } }}
+                    >
+                        <InputBase
+                            sx={{ ml: 1, flex: 1 }}
+                            placeholder="חיפוש"
+                        />
+                        <IconButton disabled type="button" sx={{ p: '7px' }} aria-label="search">
+                            <Search />
+                        </IconButton>
+                    </Box>
+                </Box>
+                <ListItem sx={{ display: 'flex', justifyContent: 'space-between' }}>
+
+                    <Typography sx={ListItemTypographySx} variant='subtitle1'>
+                        שם המגייס
+                    </Typography>
+
+
+
+                    <Box
+                        id="searchBarDesktop"
+                        component="form"
+                        sx={{ display: { xs: 'none', sm: 'flex', md: 'flex', lg: 'flex', xl: 'flex' }, flexDirection: 'row-reverse', alignItems: 'center', borderRadius: '0.75rem', backgroundColor: 'transparent', border: '1.5px solid rgba(0, 0, 0, 0.3)', width: { xs: 'unset', sm: 'unset', md: '400px', lg: '600px', xl: '600px' } }}
+                    >
+                        <InputBase
+                            sx={{ ml: 1, flex: 1 }}
+                            placeholder="חיפוש"
+                        />
+                        <IconButton disabled type="button" sx={{ p: '7px' }} aria-label="search">
+                            <Search />
+                        </IconButton>
+                    </Box>
+
                     <ListItemIcon>
-                        <ListItemText sx={{paddingRight: '16px', paddingLeft: '16px' }} >
+                        <ListItemText sx={{ paddingRight: '16px', paddingLeft: '16px' }} >
                             <Typography sx={ListItemTypographySx} variant='subtitle1'>
                                 עריכה
                             </Typography>
@@ -51,18 +78,13 @@ export default function () {
 
                     {recruiters.map((recruiter, i) => (
                         <React.Fragment key={i}>
-                            <ListItem>
+                            <ListItemButton disableRipple sx={{ ":hover": { backgroundColor: 'rgba(25, 118, 210, 0.08)' }, ":focus": { backgroundColor: 'rgba(25, 118, 210, 0.08)' } }}>
                                 <ListItemAvatar>
                                     <Avatar />
                                 </ListItemAvatar>
                                 <ListItemText primary={recruiter.fullname} secondary={recruiter.email} />
-                                {/* <ListItemIcon>
-                                    <IconButton onClick={()=>alert('clicked item')}>
-                                        <Edit />
-                                    </IconButton>
-                                </ListItemIcon> */}
                                 <RecruiterDialog />
-                            </ListItem>
+                            </ListItemButton>
                             <Divider />
                         </React.Fragment>
                     ))}

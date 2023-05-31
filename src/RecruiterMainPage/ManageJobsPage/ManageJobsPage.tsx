@@ -141,10 +141,6 @@ const ManageJobsPage = () => {
 
                 <Box className="ManageJobPage-Body" sx={ManageJobPageBoxSx}>
 
-                    {/* <Container sx={MyAvatarContainerSx} maxWidth="sm">
-                        <MyAvatar dataSize={dataSize} />
-                    </Container> */}
-
                     <MyTable setDataSize={setDataSize} />
 
                     <TransitionComponentSnackbar open={open} setOpen={setOpen} message={state} />

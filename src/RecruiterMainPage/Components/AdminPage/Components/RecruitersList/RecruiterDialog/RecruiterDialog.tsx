@@ -58,16 +58,16 @@ export default function RecruiterDialog() {
 		<Box>
 
 			<ListItemIcon>
-					<IconButton onClick={handleClickOpen}>
-						<EditNote sx={{ color: 'rgb(52, 71, 103)' }} />
-					</IconButton>
+				<IconButton onClick={handleClickOpen}>
+					<EditNote sx={{ color: 'rgb(52, 71, 103)' }} />
+				</IconButton>
 
 			</ListItemIcon>
 
 			<Dialog
 				PaperProps={{
 					sx: {
-						maxWidth: { xs: 'xl', sm: 'xl', md: 'md', lg: 'md', xl: 'md' }, maxHeight: '90%',
+						maxWidth: { xs: 'xl', sm: 'xl', md: 'md', lg: 'md', xl: 'md' }, maxHeight: { xs: '100%', sm: '90%' },
 						borderRadius: '0.6rem'
 					}
 				}}
@@ -98,7 +98,7 @@ export default function RecruiterDialog() {
 				</AppBar>
 
 
-				<Stack spacing={3} sx={{ height: '100%', padding: 4 }}>
+				<Stack spacing={3} sx={{ height: '100%', padding: {xs: 1, sm: 4} }}>
 
 					<Stack spacing={2}>
 
@@ -157,7 +157,7 @@ export default function RecruiterDialog() {
 												<SectorChip recruiterSectors={recruiterSectors} setRecruiterSectors={setRecruiterSectors} edit={editSectors} setEdit={setEditSectors} />
 											</Box>
 										</Stack>
-										<Box>
+										<Box display={{ xs: 'none', sm: 'block', md: 'block', lg: 'block', xl: 'block' }}>
 											<Button variant='contained' color='error'>
 												הסר מגייס
 											</Button>
@@ -176,11 +176,15 @@ export default function RecruiterDialog() {
 										))}
 									</Box>
 
-
 								</Stack>
 							</ClickAwayListener>
 
 						</Stack>
+						<Box display={{ xs: 'block', sm: 'none', md: 'none', lg: 'none', xl: 'none' }}>
+							<Button variant='contained' color='error'>
+								הסר מגייס
+							</Button>
+						</Box>
 					</Stack>
 
 

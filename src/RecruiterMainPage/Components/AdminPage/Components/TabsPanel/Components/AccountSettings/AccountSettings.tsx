@@ -14,7 +14,7 @@ export default function AccountSettings() {
                         <label>
                             <Typography component="span" sx={{ fontWeight: 600, fontSize: 13 }}>שם פרטי:</Typography>
                         </label>
-                        <TextField style={{ width: '100%' }} size='small' placeholder="שם פרטי" id="_region" type="text"
+                        <TextField style={{ width: '100%' }} size='small' placeholder="שם פרטי" id="_firstName" type="text"
                             className="form-control" required
                         />
                     </Box>
@@ -23,7 +23,7 @@ export default function AccountSettings() {
                         <label>
                             <Typography component="span" sx={{ fontWeight: 600, fontSize: 13 }}>שם משפחה:</Typography>
                         </label>
-                        <TextField style={{ width: '100%' }} size='small' placeholder="שם משפחה" id="_region" type="text"
+                        <TextField style={{ width: '100%' }} size='small' placeholder="שם משפחה" id="_lastName" type="text"
                             className="form-control" required
                         />
                     </Box>
@@ -35,7 +35,7 @@ export default function AccountSettings() {
                     <label>
                         <Typography component="span" sx={{ fontWeight: 600, fontSize: 13 }}>אימייל:</Typography>
                     </label>
-                    <TextField style={{ width: '100%' }} size='small' placeholder="אימייל" id="_region" type="text"
+                    <TextField style={{ width: '100%' }} size='small' placeholder="אימייל" id="_email" type="text"
                         className="form-control" required
                     />
                 </Box>

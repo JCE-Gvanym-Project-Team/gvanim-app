@@ -38,7 +38,7 @@ export default function NavBar(props: { handlelogout }) {
 
                             </Stack>
                         </Stack>
-                        <Typography sx={{ color: '#344767', fontSize: '0.875rem', lineHeight: '1.625', opacity: 0.8 }} >
+                        <Typography sx={{ color: '#344767', fontSize: '0.875rem', lineHeight: '1.625',opacity: 0.8  }} >
                             ברוך הבא!
                         </Typography>
                     </Stack>

@@ -1,9 +1,9 @@
 import Box from '@mui/material/Box';
 import { Paper, Stack, Typography } from '@mui/material';
 import { MyPaperSx } from './AdminPageStyle';
-import MyTabPanel from './Components/TabsPanel/TabsPanel';
 import { BoxGradientSx } from '../../PageStyles';
 import { Settings } from '@mui/icons-material';
+import TabsPanel from './Components/TabsPanel/TabsPanel';
 
 
 export default function AdminPage() {
@@ -107,7 +107,8 @@ export default function AdminPage() {
             </Box>
 
             <Paper sx={MyPaperSx}>
-                <MyTabPanel />
+
+                <TabsPanel />
             </Paper>
         </>
 
