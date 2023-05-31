@@ -13,13 +13,14 @@ export default function WelcomePage() {
             <Box sx={BoxGradientSx}>
 
                 <Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
-                    right: '4%',
+                    right: '-2%',
                     left: 'auto',
+                    top: '15%',
                     bottom: 'auto',
                     backgroundColor: 'hsla(0,0%,100%,.1)',
                     background: 'hsla(0,0%,100%,.1)',
-                    width: '120px',
-                    height: '120px',
+                    width: '100px',
+                    height: '100px',
                     borderRadius: '50%',
                     position: 'absolute',
                 }} />
@@ -27,10 +28,11 @@ export default function WelcomePage() {
                 <Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
                     right: '10%',
                     left: 'auto',
+                      top: '0%',
                     backgroundColor: 'hsla(0,0%,100%,.1)',
                     background: 'hsla(0,0%,100%,.1)',
-                    width: '200px',
-                    height: '200px',
+                    width: '170px',
+                    height: '170px',
                     borderRadius: '50%',
                     position: 'absolute',
                 }} />
@@ -55,8 +57,8 @@ export default function WelcomePage() {
                     bottom: 'auto',
                     backgroundColor: 'hsla(0,0%,100%,.1)',
                     background: 'hsla(0,0%,100%,.1)',
-                    width: '120px',
-                    height: '120px',
+                    width: '30px',
+                    height: '30px',
                     borderRadius: '50%',
                     position: 'absolute',
                 }} />
