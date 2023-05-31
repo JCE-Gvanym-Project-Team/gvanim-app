@@ -6,7 +6,7 @@ import { NavBarSx } from './NavBarStyle';
 import MyDrawer from './Components/MyDrawer/MyDrawer';
 import MyLogoutDialog from './Components/LogoutDialog';
 
-export default function NavBar3(props: { handlelogout }) {
+export default function NavBar(props: { handlelogout }) {
     const { handlelogout } = props;
     const navigate = useNavigate();
 

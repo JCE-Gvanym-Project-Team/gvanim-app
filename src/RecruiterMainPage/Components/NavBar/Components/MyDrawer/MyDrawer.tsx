@@ -12,7 +12,7 @@ import MyLogoutDialog from '../LogoutDialog';
 import { useNavigate } from "react-router-dom";
 
 
-export default function MyDrawer(props: { handlelogout }) {
+export default function MyDrawer(props: { handlelogout: any }) {
     const { handlelogout } = props;
     const [checked, setChecked] = React.useState(false);
     const [open, setOpen] = React.useState(false); // for the button drawer
