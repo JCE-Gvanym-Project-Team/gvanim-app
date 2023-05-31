@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import WelcomePage from "./WelcomePage/WelcomePage";
 import { Route, Routes } from "react-router-dom";
 import ManageCandidatesPage from "./ManageCandidatesPage/ManageCandidatesPage";
@@ -16,6 +16,7 @@ import ViewCandidatesPage from "./ManageCandidatesPage/ViewCandidatesPage/ViewCa
 import Footer from "./Components/Footer/Footer";
 import { CssBaseline } from "@mui/material";
 import { createContext, useContext, useMemo } from 'react';
+import { Box } from "@mui/material";
 
 
 function RecruiterMainPage({ handlelogout }) {
@@ -61,9 +62,13 @@ function RecruiterMainPage({ handlelogout }) {
 				{/* Candidate Routes */}
 				<Route path="/editCandidate" element={<EditCandidate />} />
 				<Route path="/manageCandidates" element={<ManageCandidatesPage />} />
-				{candidateIDs.map((candidateId) => {
+				{candidateIDs.map((candidateId) =>
+				{	
 					return (
-						<Route path={"/manageCandidates/" + candidateId} element={<ViewCandidatesPage candidateId={candidateId} />} key={candidateId} />
+						<React.Fragment key={candidateId + "fragment"}>
+							<Route path={"/manageCandidates/" + candidateId} element={<ViewCandidatesPage candidateId={candidateId} key={candidateId + "ViewCandidatesPage"}/>} key={candidateId} />
+							<Route path={"/manageCandidates/" + candidateId + "/interviews"} element={<ViewCandidatesPage candidateId={candidateId} />} key={candidateId + "interviews"} />
+						</React.Fragment>
 					);
 				})
 				}

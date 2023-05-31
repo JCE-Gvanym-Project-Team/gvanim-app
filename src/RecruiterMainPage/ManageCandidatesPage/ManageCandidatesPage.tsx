@@ -1,6 +1,7 @@
 import { Box, Button } from "@mui/material";
-import { Candidate } from "../../Firebase/FirebaseFunctions/Candidate";
 import { BoxGradientSx } from "../PageStyles";
+import { Candidate, generateCandidateId, getFilteredCandidates } from "../../Firebase/FirebaseFunctions/Candidate";
+import { loginAdmin } from "../../Firebase/FirebaseFunctions/Authentication";
 
 export default function ManageCandidatesPage()
 {
@@ -14,8 +15,13 @@ export default function ManageCandidatesPage()
     )
 }
 
-const addCandidate = () =>
+const addCandidate = async () =>
 {
-    let newCandidate: Candidate = new Candidate("יוסי", "בוסי", "0566", "example2@gmail.com", 2);
-    newCandidate.apply(35, "he's so good omg");
+    await loginAdmin();
+    let id = await generateCandidateId()
+    let newCandidate: Candidate = new Candidate(id, "דוג", "מה", "05123456", "dogma@gmail.com",1,"notes");
+    let newCandidate2 = await getFilteredCandidates(["id"],["53"]);
+    // await newCandidate2[0].add();
+    await newCandidate2[0].apply(76, "abouttt");
+    
 }

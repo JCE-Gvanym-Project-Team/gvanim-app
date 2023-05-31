@@ -11,6 +11,7 @@ import axios from 'axios';
  * @returns A Promise that resolves when the file has been uploaded and the reference has been added to Firestore.
  */
 export async function uploadFileToFirestore(file: File, path: string, name: string): Promise<void> {
+  console.log(`path: ${path}\nname: ${name}`);
   const storageRef = firebase.storage().ref();
   const fileRef = storageRef.child(`${path}/${name}`);
   const snapshot = await fileRef.put(file);
@@ -22,6 +23,7 @@ export async function uploadFileToFirestore(file: File, path: string, name: stri
   });
   console.log(`File ${name} uploaded to Firestore at path ${path}`);
 }
+
 export async function getDownloadUrlFromFirestorePath(path: string): Promise<string> {
   const storageRef = firebase.storage().ref();
   const fileRef = storageRef.child(path);
@@ -52,12 +54,9 @@ export async function getFileExtensionsInFolder(folderPath: string): Promise<str
 
   for (const file of files.items) {
     const fileSnapshot = await file.getMetadata();
-
-    if (fileSnapshot.contentType?.startsWith('image/') || fileSnapshot.contentType?.startsWith('video/')) {
-      const extension = file.name.split('.').pop();
-      if (extension) {
-        extensions.push(extension);
-      }
+    const extension = file.name.split('.').pop();
+    if (extension) {
+      extensions.push(extension);
     }
   }
 
@@ -69,49 +68,49 @@ export async function deleteFile(path: string) {
 }
 export async function fileExists(path: string) {
   const storageRef = firebase.storage().ref(path);
-  try{
-  const metaData = await storageRef.getMetadata();
-  return metaData !== null;
+  try {
+    const metaData = await storageRef.getMetadata();
+    return metaData !== null;
   }
-  catch(error: any){
+  catch (error: any) {
     return false;
   }
 }
 export async function renameFirestorePath(path: string, newName: string): Promise<void> {
-	try {
-		// Get the original document or collection data
-		const originalData = await getFirestorePathData(path);
+  try {
+    // Get the original document or collection data
+    const originalData = await getFirestorePathData(path);
 
-		// Create a new document or collection at the desired renamed path
-		const newPath = getParentPath(path) + '/' + newName;
-		await createFirestorePath(newPath, originalData);
+    // Create a new document or collection at the desired renamed path
+    const newPath = getParentPath(path) + '/' + newName;
+    await createFirestorePath(newPath, originalData);
 
-		// Delete the original document or collection
-		await deleteFirestorePath(path);
+    // Delete the original document or collection
+    await deleteFirestorePath(path);
 
-		console.log(`Successfully renamed path: ${path} to ${newPath}`);
-	} catch (error) {
-		console.error(`Error renaming path: ${path}`, error);
-	}
+    console.log(`Successfully renamed path: ${path} to ${newPath}`);
+  } catch (error) {
+    console.error(`Error renaming path: ${path}`, error);
+  }
 }
 
 async function getFirestorePathData(path: string): Promise<any> {
-	const url = `https://firestore.googleapis.com/v1/${path}`;
-	const response = await axios.get(url);
-	return response.data;
+  const url = `https://firestore.googleapis.com/v1/${path}`;
+  const response = await axios.get(url);
+  return response.data;
 }
 
 async function createFirestorePath(path: string, data: any): Promise<void> {
-	const url = `https://firestore.googleapis.com/v1/${path}`;
-	await axios.patch(url, data);
+  const url = `https://firestore.googleapis.com/v1/${path}`;
+  await axios.patch(url, data);
 }
 
 async function deleteFirestorePath(path: string): Promise<void> {
-	const url = `https://firestore.googleapis.com/v1/${path}`;
-	await axios.delete(url);
+  const url = `https://firestore.googleapis.com/v1/${path}`;
+  await axios.delete(url);
 }
 
 function getParentPath(path: string): string {
-	const lastSlashIndex = path.lastIndexOf('/');
-	return path.substring(0, lastSlashIndex);
+  const lastSlashIndex = path.lastIndexOf('/');
+  return path.substring(0, lastSlashIndex);
 }
