@@ -65,11 +65,6 @@ export default function CandidatesListFullScreenDialog({ JobId }) {
 
 
 			<Dialog
-				sx={{
-					"& .MuiDialog-container": {
-
-					}
-				}}
 				PaperProps={{
 					sx: {
 						maxWidth: { xs: 'xl', sm: 'xl', md: 'md', lg: 'md', xl: 'md' }, maxHeight: '80%',

@@ -12,7 +12,7 @@ import NotesPopup from './Components/NotesPopup/NotesPopup';
 import ChangeJobDialog from './Components/ChangeJobDialog/ChangeJobDialog';
 import { Autorenew, EditNote, QuestionAnswer, SpeakerNotes } from '@mui/icons-material';
 
-export default function ViewCandidatesPage(props: {candidateId: string, setHomeActive: any, setReportsActive: any, setCandidatesActive: any, setJobsActive: any})
+export default function ViewCandidatesPage(props: {candidateId: string})
 {
 
 	const navigate = useNavigate();
@@ -21,7 +21,7 @@ export default function ViewCandidatesPage(props: {candidateId: string, setHomeA
 	const [dataSize, setDataSize] = useState(0);
 	
 	// get candidate id
-	let {candidateId, setHomeActive, setReportsActive, setCandidatesActive, setJobsActive} = props;
+	let { candidateId } = props;
 
 	// candidate and jobs info
 	const [candidateInfo, setCandidateInfo] = useState<Candidate | null>(null);
@@ -30,11 +30,6 @@ export default function ViewCandidatesPage(props: {candidateId: string, setHomeA
 
 	useEffect(() =>
 	{
-		setHomeActive(false);
-		setReportsActive(false);
-		setCandidatesActive(false);
-		setJobsActive(false);
-
 		// pull candidate from firebase
 		getCandidate(candidateId, setCandidateInfo);
 

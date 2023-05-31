@@ -64,13 +64,6 @@ export default function UserDropMenu(props: {handlelogout: any}) {
         }
     };
 
-    const createHandleMenuClick = (menuItem: string) => {
-        return () => {
-            console.log(`Clicked on ${menuItem}`);
-            setOpen(false);
-            buttonElement?.focus();
-        };
-    };
     return (
         <ClickAwayListener onClickAway={handleClickAway}>
         <div>

@@ -1,285 +1,192 @@
-
-import Toolbar from "@mui/material/Toolbar";
-import { Avatar, Box, Button, Stack, SxProps } from "@mui/material";
-import * as React from 'react';
-import MenuIcon from '@mui/icons-material/Menu';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import { ArticleOutlined, AssessmentOutlined, Home, PeopleAltOutlined, PersonOutline } from "@mui/icons-material";
-import AppBar from '@mui/material/AppBar';
-import CssBaseline from '@mui/material/CssBaseline';
-import Divider from '@mui/material/Divider';
-import Drawer from '@mui/material/Drawer';
-import IconButton from '@mui/material/IconButton';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import Typography from '@mui/material/Typography';
+import React from 'react'
+import { Box, Button, Divider, Link, Stack, Typography } from '@mui/material';
+import { ArticleOutlined, AssessmentOutlined, Home, PeopleAltOutlined, Settings } from '@mui/icons-material';
 import { useNavigate } from "react-router-dom";
-import MyLogoutDialog from "./Components/LogoutDialog";
-import { AppBarSx, BoxDrawerAvatarSx, BoxDrawerSx, BoxNavigationOptionsSx, DividerDrawerSx, ListItemButtonDrawerSx, LogoutButtonBoxSx, NavBarIconColorSx, OpenDrawerIconSx, TypographyDrawerSx, WelcomeUserBoxSx } from "./NavBarStyle";
-import { blue, blueGrey, grey, lightBlue } from "@mui/material/colors";
-import UserDropMenu from "./Components/UserDropMenu/UserDropMenu";
+import { NavBarSx } from './NavBarStyle';
+import MyDrawer from './Components/MyDrawer/MyDrawer';
+import MyLogoutDialog from './Components/LogoutDialog';
+
+export default function NavBar(props: { handlelogout }) {
+	const userFirstName = "משתמש";
+    const { handlelogout } = props;
+    const navigate = useNavigate();
+
+    return (
+        <>
+            <Box sx={NavBarSx}>
 
 
 
-const drawerWidth = 240;
+                <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
+                    <Box id="drawer-button" display={{ xs: 'inline-block', sm: 'inline-block', md: 'inline-block', lg: 'none', xl: 'none' }} sx={{
+                        pt: '0.5rem', pb: '0.5rem', width: '100%'
+                    }}>
+                        <MyDrawer handlelogout={handlelogout} userFirstName={userFirstName} />
+                    </Box>
+
+
+                    <Stack id='welcome-user' display={{ xs: 'none', sm: 'none', md: 'none', lg: 'flex', xl: 'flex' }} sx={{ width: 'fit-content', borderRight: '1px solid rgba(0, 0, 0, 0.125)', paddingLeft: 1, paddingRight: 3 }}>
+                        <Stack direction='row' spacing={1}>
+                            <Typography sx={{ color: '#344767', fontSize: '0.875rem', lineHeight: '1.625',opacity: 0.8 }} >
+                                שלום
+                            </Typography>
+
+                            <Stack direction='row'>
+                                <Typography sx={{ color: 'black', fontSize: '0.9rem', lineHeight: '1.625', fontWeight: 600 }} >
+                                    {userFirstName}
+                                </Typography>
+
+                            </Stack>
+                        </Stack>
+                        <Typography sx={{ color: '#344767', fontSize: '0.875rem', lineHeight: '1.625',opacity: 0.8  }} >
+                            ברוך הבא!
+                        </Typography>
+                    </Stack>
+					
+
+                    <Stack id='items' divider={<Divider sx={{ height: '50%', alignSelf: 'center' }} orientation="vertical" flexItem />} display={{ xs: 'none', sm: 'none', md: 'none', lg: 'flex', xl: 'flex' }} direction='row' spacing={'1.7rem'}>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+
+                            <Stack spacing={1} direction='row' sx={{ height: 'fit-content' }}>
+                                <Link onClick={() => navigate('/')}
+                                    sx={{
+										cursor: 'pointer', 
+                                        ":hover > #home": {
+                                            transition: 'all .2s cubic-bezier(.34,1.61,.7,1.3)',
+                                            transform: 'translateY(-2px)',
+                                        },
+                                        textDecoration: 'unset',
+                                        color: '#344767',
+                                        fontSize: '0.87rem'
+                                    }}>
+                                    <Home id="home" sx={{ fontSize: '1.07rem', marginRight: 1, alignSelf: 'bottom' }} />
+                                    דף הבית
+                                </Link>
+                            </Stack>
+
+                        </Box>
+
+                        <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+
+                            <Stack spacing={1} direction='row' sx={{ height: 'fit-content' }}>
+                                <Link onClick={() => navigate('/manageJobs')}
+                                    sx={{
+										cursor: 'pointer',
+                                        ":hover > #jobsIcon": {
+                                            transition: 'all .2s cubic-bezier(.34,1.61,.7,1.3)',
+                                            transform: 'translateY(-2px)',
+                                        },
+                                        textDecoration: 'unset',
+                                        color: '#344767',
+                                        fontSize: '0.87rem'
+                                    }}
+                                >
+                                    <ArticleOutlined id="jobsIcon" sx={{ fontSize: '1.07rem', marginRight: 1, alignSelf: 'bottom' }} />
+                                    ניהול משרות
+                                </Link>
+                            </Stack>
+
+                        </Box>
+
+                        <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+
+                            <Stack spacing={1} direction='row' sx={{ height: 'fit-content' }}>
+                                <Link onClick={() => navigate('/manageCandidates')}
+                                    sx={{
+										cursor: 'pointer',
+                                        ":hover > #candidatesIcon": {
+                                            transition: 'all .2s cubic-bezier(.34,1.61,.7,1.3)',
+                                            transform: 'translateY(-2px)',
+                                        },
+                                        textDecoration: 'unset',
+                                        color: '#344767',
+                                        fontSize: '0.87rem'
+                                    }}
+                                >
+                                    <PeopleAltOutlined id="candidatesIcon" sx={{ fontSize: '1.07rem', marginRight: 1, alignSelf: 'bottom' }} />
+                                    ניהול מועמדים
+                                </Link>
+                            </Stack>
+
+                        </Box>
+
+                        <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+
+                            <Stack spacing={1} direction='row' sx={{ height: 'fit-content' }}>
+                                <Link onClick={() => navigate('/reports')}
+                                    sx={{
+										cursor: 'pointer',
+                                        ":hover > #reportsIcon": {
+                                            transition: 'all .2s cubic-bezier(.34,1.61,.7,1.3)',
+                                            transform: 'translateY(-2px)',
+                                        },
+                                        textDecoration: 'unset',
+                                        color: '#344767',
+                                        fontSize: '0.87rem'
+                                    }}
+                                >
+                                    <AssessmentOutlined id="reportsIcon" sx={{ fontSize: '1.07rem', marginRight: 1, alignSelf: 'bottom' }} />
+                                    ניהול דוחות
+                                </Link>
+                            </Stack>
+
+                        </Box>
+
+
+                    </Stack>
 
 
 
-const NavBar = (props: {
-	handlelogout: any, HomeActive: any, setHomeActive: any,
-	ReportsActive: any, setReportsActive: any, CandidatesActive: any, setCandidatesActive: any,
-	JobsActive: any, setJobsActive: any
-}) => {
+                    <Box display={{ xs: 'none', sm: 'none', md: 'none', lg: 'flex', xl: 'flex' }} sx={{ flexDirection: 'column', justifyContent: 'center' }}>
+                        <Stack direction='row' sx={{ height: 'fit-content' }}>
 
-	const {
-		handlelogout,
-		HomeActive,
-		setHomeActive,
-		ReportsActive,
-		setReportsActive,
-		CandidatesActive,
-		setCandidatesActive,
-		JobsActive,
-		setJobsActive
-	} = props;
+                            <Button onClick={() => navigate("/settings")} disableRipple sx={{
+                                ":hover": {
+                                    backgroundColor: '#555abf',
+                                    borderColor: '#344767',
+                                    boxShadow: '0 14px 26px -12px rgba(52,71,103,.4), 0 4px 23px 0 rgba(52,71,103,.15), 0 8px 10px -5px rgba(52,71,103,.2)'
+                                },
+                                ":hover > #settings": {
+                                    WebkitAnimation: 'spin 2s linear infinite',
+                                    MozAnimation: 'spin 8s infinite',
+                                    animation: ' spin 8s infinite'
+                                },
+                                backgroundColor: '#555abf',
+                                boxShadow: '0 3px 3px 0 rgba(52,71,103,.15), 0 3px 1px -2px rgba(52,71,103,.2), 0 1px 5px 0 rgba(52,71,103,.15)',
+                                border: 0,
+                                color: '#fff',
+                                mb: 0,
+                                mt: 0,
+                                mr: '0.25rem',
+                                letterSpacing: 0,
+                                backgroundSize: '150%',
+                                backgroundPositionX: '25%',
+                                position: 'relative',
+                                overflow: 'hidden',
+                                WebkitAppearance: 'none',
+                                borderRadius: '0.5rem',
+                                fontSize: '0.8rem',
+                                paddingX: '1rem',
+                                paddingY: '0.375rem',
+                                fontWeight: 600,
+                                margin: '0px 4px 0px 4px',
+                                lineHeight: 1.667,
+                                minWidth: '100px',
+                                height: '32px'
 
-	const navigate = useNavigate();
-	const [mobileOpen, setMobileOpen] = React.useState(false);
+                            }}> <Settings id="settings" sx={{ fontSize: '1rem' }} />
+                                <Typography sx={{ font: '13px Roboto, Helvetica,Arial, sans-serif', margin: '0px 4px 0px 0px', padding: '4px 12px', fontWeight: 600 }}>הגדרות</Typography>
+                            </Button>
 
-	const handleDrawerToggle = () => {
-		setMobileOpen((prevState) => !prevState);
-	};
+                            <MyLogoutDialog handlelogout={handlelogout} isMobile={false} />
 
-	// ############# Sx Props that cant be in another file #########
-	const HomeButtonNavigationSx: SxProps = {
-		"&:hover": {
-			backgroundColor: HomeActive ? 'white' : 'rgb(52, 71, 103)',
-			color: HomeActive ? 'rgb(52, 71, 103)' : 'white',
-			outline: HomeActive ? 'none' : `3px ${blueGrey[300]}`,
-
-		},
-		'&:focus': {
-			border: `solid ${blueGrey[300]}`,
-
-
-		},
-		border: HomeActive ? `3px solid ${blueGrey[300]}` : 'none',
-		borderRadius: '0.6rem',
-		backgroundColor: HomeActive ? 'white' : 'rgb(52, 71, 103)',
-		color: HomeActive ? 'rgb(52, 71, 103)' : 'white'
-	}
-
-	const ReportsButtonNavigationSx: SxProps = {
-		"&:hover": {
-			backgroundColor: ReportsActive ? 'white' : 'rgb(52, 71, 103)',
-			color: ReportsActive ? 'rgb(52, 71, 103)' : 'white',
-			outline: ReportsActive ? 'none' : `3px ${blueGrey[300]}`,
-
-		},
-		'&:focus': {
-			border: `3px solid ${blueGrey[300]}`,
+                        </Stack>
+                    </Box>
+                </Box>
 
 
-		},
-		border: ReportsActive ? `3px solid ${blueGrey[300]}` : 'none',
-		borderRadius: '0.6rem',
-		backgroundColor: ReportsActive ? 'white' : 'rgb(52, 71, 103)',
-		color: ReportsActive ? 'rgb(52, 71, 103)' : 'white'
-	}
+            </Box >
 
-	const CandidatesButtonNavigationSx: SxProps = {
-		"&:hover": {
-			backgroundColor: CandidatesActive ? 'white' : 'rgb(52, 71, 103)',
-			color: CandidatesActive ? 'rgb(52, 71, 103)' : 'white',
-			outline: CandidatesActive ? 'none' : `3px ${blueGrey[300]}`,
-		},
-
-		'&:focus': {
-			border: `solid ${blueGrey[300]}`,
-		},
-
-		border: CandidatesActive ? `3px solid ${blueGrey[300]}` : 'none',
-		borderRadius: '0.6rem',
-		backgroundColor: CandidatesActive ? 'white' : 'rgb(52, 71, 103)',
-		color: CandidatesActive ? 'rgb(52, 71, 103)' : 'white'
-	}
-
-	const JobsButtonNavigationSx: SxProps = {
-		"&:hover": {
-			backgroundColor: JobsActive ? 'white' : 'rgb(52, 71, 103)',
-			color: JobsActive ? 'rgb(52, 71, 103)' : 'white',
-			outline: JobsActive ? 'none' : `3px ${blueGrey[300]}`,
-		},
-
-		'&:focus': {
-			border: `solid ${blueGrey[300]}`,
-		},
-
-		border: JobsActive ? `3px solid ${blueGrey[300]}` : 'none',
-		borderRadius: '0.6rem',
-		backgroundColor: JobsActive ? 'white' : 'rgb(52, 71, 103)',
-		color: JobsActive ? 'rgb(52, 71, 103)' : 'white'
-	}
-
-	const DrawerPaperSx: SxProps = {
-		display: { md: 'block', lg: 'none' },
-		'& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-	}
-	// ######### END Sx Props #######################################
-
-	const handleHomeClick = () => {
-		setReportsActive(false);
-		setCandidatesActive(false);
-		setJobsActive(false);
-		setHomeActive(true);
-		navigate("/");
-	};
-
-	const handleReportsClick = () => {
-		setCandidatesActive(false);
-		setJobsActive(false);
-		setHomeActive(false);
-		setReportsActive(true);
-		navigate("/reports");
-	};
-
-	const handleCandidatesClick = () => {
-		setReportsActive(false);
-		setJobsActive(false);
-		setHomeActive(false);
-		setCandidatesActive(true);
-		navigate("/manageCandidates");
-	};
-
-	const handleJobsClick = () => {
-		setReportsActive(false);
-		setCandidatesActive(false);
-		setHomeActive(false);
-		setJobsActive(true);
-		navigate("/manageJobs");
-	};
-
-	const drawer = (
-		<Box onClick={handleDrawerToggle} sx={BoxDrawerSx}>
-			<Box sx={BoxDrawerAvatarSx}>
-				<Avatar />
-			</Box>
-			<Typography variant="caption" sx={TypographyDrawerSx}>
-				ברוך הבא UserUser.
-			</Typography>
-			
-
-			<Divider sx={DividerDrawerSx} />
-
-			<List>
-				<ListItem disablePadding>
-					<ListItemButton sx={ListItemButtonDrawerSx} onClick={handleHomeClick}>
-						<ListItemText primary='דף הבית' />
-					</ListItemButton>
-				</ListItem>
-
-				<ListItem disablePadding>
-					<ListItemButton sx={ListItemButtonDrawerSx} onClick={handleReportsClick}>
-						<ListItemText primary='דוחות' />
-					</ListItemButton>
-				</ListItem>
-				<ListItem disablePadding>
-					<ListItemButton sx={ListItemButtonDrawerSx} onClick={handleCandidatesClick}>
-						<ListItemText primary='ניהול מועמדים' />
-					</ListItemButton>
-				</ListItem>
-				<ListItem disablePadding>
-					<ListItemButton sx={ListItemButtonDrawerSx}>
-						<ListItemText primary='ניהול משרות' onClick={handleJobsClick} />
-					</ListItemButton>
-				</ListItem>
-
-				<MyLogoutDialog handlelogout={handlelogout} isMobile={true} />
-
-			</List>
-		</Box>
-	);
-
-
-	return (
-		<Box sx={{ display: 'flex', marginTop: '80px' }}>
-			<CssBaseline />
-			<AppBar component="nav" sx={AppBarSx}>
-				<Toolbar>
-					<IconButton
-						color="inherit"
-						aria-label="open drawer"
-						edge="start"
-						onClick={handleDrawerToggle}
-						sx={OpenDrawerIconSx}
-					>
-						<MenuIcon sx={NavBarIconColorSx} />
-					</IconButton>
-
-
-					<Box sx={WelcomeUserBoxSx}>
-
-						<UserDropMenu handlelogout={handlelogout} />
-						<Typography
-							marginLeft={1}
-							sx={{maxWidth: 80,maxHeight: 20}}
-							variant="caption"
-						>
-							ברוך הבא משתמש
-						</Typography>
-				
-
-					</Box>
-
-					<Box sx={BoxNavigationOptionsSx}>
-						<Stack direction="row" spacing={2}>
-							<Button disableRipple startIcon={<Home />} variant="text"
-								sx={HomeButtonNavigationSx}
-								onClick={handleHomeClick}
-							>
-								דף הבית
-							</Button>
-							<Button disableRipple startIcon={<AssessmentOutlined />} variant="text"
-								sx={ReportsButtonNavigationSx}
-								onClick={handleReportsClick}
-							>
-								דוחות
-							</Button>
-							<Button disableRipple startIcon={<PeopleAltOutlined />} variant="text"
-								sx={CandidatesButtonNavigationSx}
-								onClick={handleCandidatesClick}
-							>
-								ניהול מועמדים
-							</Button>
-							<Button disableRipple startIcon={<ArticleOutlined />} variant="text"
-								sx={JobsButtonNavigationSx}
-								onClick={handleJobsClick}
-							>
-								ניהול משרות
-							</Button>
-
-						</Stack>
-					</Box>
-				
-				</Toolbar>
-			</AppBar>
-			<Box component="nav">
-				<Drawer
-					variant="temporary"
-					open={mobileOpen}
-					onClose={handleDrawerToggle}
-					ModalProps={{
-						keepMounted: true, // Better open performance on mobile.
-					}}
-					sx={DrawerPaperSx}
-				>
-					{drawer}
-				</Drawer>
-			</Box>
-		</Box>
-	);
-};
-
-export default NavBar;
+        </>
+    )
+}

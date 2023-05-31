@@ -12,7 +12,7 @@ import
 	useGridApiContext,
 	GridToolbarContainer, heIL, GridFooterContainer, GridToolbarQuickFilter, GridToolbarExportContainer, GridCsvExportMenuItem, GridPrintExportMenuItem
 } from '@mui/x-data-grid';
-import { GridFooterContainerSx, TypographyFooterSx, dataGridContainerStyle, dataGridSx } from './MyTableStyle';
+import { GridFooterContainerSx, TypographyFooterSx, dataGridContainerStyle, dataGridContainerSx, dataGridSx } from './MyTableStyle';
 import CandidatesListFullScreenDialog from '../CandidatesListDialog/CandidatesListDialog';
 import { getFilteredJobs } from '../../../../Firebase/FirebaseFunctions/Job';
 import { useNavigate } from "react-router-dom";
@@ -181,12 +181,7 @@ const GridCustomToolbar = ( {syncState }: {syncState: (stateToSave: GridInitialS
 				<Box sx={{ display: 'flex', flexDirection: 'row-reverse', width: '100%' }}>
 					<Box>
 
-						<Button type="button" endIcon={<ArticleOutlined />} onClick={handleCreatejob} variant='contained' sx={{
-							backgroundColor: 'rgb(52, 71, 103)',
-							":hover": {
-								bgcolor: "rgb(52, 71, 103)",
-							}
-						}} fullWidth>משרה חדשה</Button>
+						<Button type="button" endIcon={<ArticleOutlined />} onClick={handleCreatejob} variant='contained' fullWidth>משרה חדשה</Button>
 
 					</Box>
 				</Box>
@@ -206,13 +201,6 @@ const GridCustomToolbar = ( {syncState }: {syncState: (stateToSave: GridInitialS
 					</GridToolbarExportContainer>
 
 				</Box>
-				{/* 
-                <Box>
-                    <Button color='info' variant='contained' size='small' onClick={handleCreatejob}>משרה חדשה</Button>
-                </Box> */}
-
-
-
 
 			</Box>
 		</GridToolbarContainer>
@@ -270,9 +258,9 @@ export default function MyTable(props: { setDataSize: any }) {
 	const theme = useTheme();
 
 	return (
-		<>
+		
 			<Container className="shadow-lg border rounded"
-				sx={dataGridContainerStyle}
+				sx={dataGridContainerSx}
 				style={dataGridContainerStyle}
 				maxWidth='xl'>
 				<DataGrid
@@ -290,6 +278,6 @@ export default function MyTable(props: { setDataSize: any }) {
 					localeText={heIL.components.MuiDataGrid.defaultProps.localeText}
 					slots={{ noRowsOverlay: CustomNoRowsOverlay, toolbar: GridCustomToolbar, footer: CustomFooter }} />
 
-			</Container></>
+			</Container>
 	);
 }
