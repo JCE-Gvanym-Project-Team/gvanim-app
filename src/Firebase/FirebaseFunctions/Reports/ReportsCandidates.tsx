@@ -18,31 +18,31 @@ export async function filterByRegion(region: string): Promise <Candidate[]> {
 
 
 
-export async function main(filters: any[]): Promise <any[]> {
+//export async function main(filters: any[]): Promise <any[]> {
     // loginAdmin().then(async () => {
         // let job1 = new Job(await generateJobNumber(), '  דרוש עובד סוציאלי', 'עובד סוציאלי', [40, 80], 'חיפה', '1');
         // await job1.add();
         // console.log((await getFilteredJobs()));
     // });
 
-    const cnadidateStation = await filterByStation(filters[0])  
+    //const cnadidateStation = await filterByStation(filters[0])  
     //const candidate = await getFilteredCandidateJobStatuses([], filters[0]);
 
-}
+//}
 
 
 
-export async function filterByStation (choice: string): Promise<Candidate[]>{
-  let candidates: Array<Candidate> = [];
- 
-  if(choice == "not_received_yet"){
-    candidates = await getFilteredCandidateJobStatuses(["status"], [choice]);
-  }
-  else if (choice == "accepted_for_position"){
-
-  }
-  else{ // choice == "all_candidates"
-   
-  }
-
-} 
+// export async function filterByStation (choice: string): Promise<Candidate[]>{
+//   let candidates: Array<Candidate> = [];
+//  
+//   if(choice == "not_received_yet"){
+    // candidates = await getFilteredCandidateJobStatuses(["status"], [choice]);
+//   }
+//   else if (choice == "accepted_for_position"){
+// 
+//   }
+//   else{ // choice == "all_candidates"
+//    
+//   }
+// 
+// } 

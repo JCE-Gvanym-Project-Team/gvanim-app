@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ManageCandidatesPage from "./ManageCandidatesPage/ManageCandidatesPage";
 import ManageJobsPage from "./ManageJobsPage/ManageJobsPage";
 import ReportsPage from "./ReportsPage/ReportsPage";
+import ReportRejection from "./ReportsPage/Components/Reports/RejectionReport";
 import NavBar from "./Components/NavBar/NavBar";
 import NewJobPage from "./ManageJobsPage/Components/NewJobPage/NewJobPage";
 import { getFilteredJobs } from "../Firebase/FirebaseFunctions/Job";
@@ -81,6 +82,7 @@ function RecruiterMainPage({ handlelogout })
 
 				{/* Reports Routes */}
 				<Route path="/reports" element={<ReportsPage setHomeActive={setHomeActive} setReportsActive={setReportsActive} setCandidatesActive={setCandidatesActive} setJobsActive={setJobsActive} />} />
+				<Route path="/rejection" element={<ReportRejection />} />
 
 				{/* Admin Routes */}
 				<Route path="/settings" element={<AdminPage />} />

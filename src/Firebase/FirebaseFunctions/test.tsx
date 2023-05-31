@@ -137,7 +137,7 @@ async function testEditCandidate() {
     //await loginAdmin();
     //await cand.edit("newName");
     let d = new Date();
-    console.log(d.getDate());
+   // console.log(d.getDate());
 }
 async function testAddRecruiterNoSectors() {
     await loginAdmin();
