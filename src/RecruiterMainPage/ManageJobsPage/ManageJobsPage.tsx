@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 
 import MyTable from "./Components/MyTable/MyTable";
-import { Box, Button, Container, Fab, Typography } from "@mui/material";
+import { Box, Button, Container, Fab, Stack, Typography } from "@mui/material";
 import MyLoading from "../../Components/MyLoading/MyLoading";
 import { ManageJobPageBoxSx } from "./ManageJobsPageStyle";
 import TransitionComponentSnackbar from "./Components/NewJobPage/Components/SuccessSnackBar/SuccessSnackBar";
 import { useLocation } from "react-router-dom";
 import { BoxGradientSx } from "../PageStyles";
+import { ArticleOutlined } from "@mui/icons-material";
 
 
 const ManageJobsPage = () => {
@@ -126,9 +127,14 @@ const ManageJobsPage = () => {
                     }} />
 
                     <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                        <Typography variant="h4" sx={{ color: '#fff', fontFamily: "'Noto Sans Hebrew', sans-serif", fontWeight: 500 }}>
+                       <Stack direction='row' spacing={1}>
+                        <Box sx={{display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
+                        <ArticleOutlined sx={{color: '#fff'}} />
+                        </Box>
+                       <Typography variant="h4" sx={{ color: '#fff', fontFamily: "'Noto Sans Hebrew', sans-serif", fontWeight: 500 }}>
                             ניהול משרות
                         </Typography>
+                       </Stack>
                     </Box>
                 </Box>
 

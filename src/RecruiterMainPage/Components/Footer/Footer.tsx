@@ -17,7 +17,7 @@ export default function Footer() {
             </svg>
 
             <Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
-                bottom: '-35%',
+                start: '-35%',
                 right: '4%',
                 left: 'auto',
                 backgroundColor: 'hsla(0,0%,100%,.1)',
@@ -30,8 +30,7 @@ export default function Footer() {
 
             <Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
                 right: '10%',
-                bottom: '-12%',
-                left: 'auto',
+                start: 'auto',
                 backgroundColor: 'hsla(0,0%,100%,.1)',
                 background: 'hsla(0,0%,100%,.1)',
                 width: '180px',
@@ -42,8 +41,6 @@ export default function Footer() {
 
             <Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
                 left: '-2%',
-                right: 'auto',
-                bottom: 'auto',
                 backgroundColor: 'hsla(0,0%,100%,.1)',
                 background: 'hsla(0,0%,100%,.1)',
                 width: '140px',
@@ -53,7 +50,7 @@ export default function Footer() {
             }} />
 
             <Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
-                bottom: '-30%',
+                start: '-30%',
                 left: '10%',
                 right: 'auto',
 
@@ -66,10 +63,7 @@ export default function Footer() {
             }} />
 
             <Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
-                bottom: '-10%',
-                left: '15%',
-                right: 'auto',
-
+                left: '25%',
                 backgroundColor: 'hsla(0,0%,100%,.1)',
                 background: 'hsla(0,0%,100%,.1)',
                 width: '30px',
@@ -78,17 +72,6 @@ export default function Footer() {
                 position: 'absolute',
             }} />
 
-            <Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
-                bottom: '1%',
-                left: '30%',
-                right: 'auto',
-                backgroundColor: 'hsla(0,0%,100%,.1)',
-                background: 'hsla(0,0%,100%,.1)',
-                width: '130px',
-                height: '130px',
-                borderRadius: '50%',
-                position: 'absolute',
-            }} />
 
 
 
