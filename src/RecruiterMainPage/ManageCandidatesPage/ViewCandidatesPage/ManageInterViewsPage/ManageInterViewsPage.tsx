@@ -6,7 +6,7 @@ import { Candidate, getFilteredCandidates } from '../../../../Firebase/FirebaseF
 import { CandidateJobStatus, getFilteredCandidateJobStatuses } from '../../../../Firebase/FirebaseFunctions/CandidateJobStatus';
 import { Job, getFilteredJobs } from '../../../../Firebase/FirebaseFunctions/Job';
 import { CalendarMonth, ErrorOutline } from '@mui/icons-material';
-import ScheduleInterviewDialog from './Components/ScheduleInterviewDialog';
+import ScheduleInterviewDialog from './Components/ScheduleInterviewDialog/ScheduleInterviewDialog';
 
 export default function ManageInterviewsPage(props: { candidateId: string })
 {
@@ -177,7 +177,7 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 										<TextField
 											{...params}
 											label="בחירת משרה"
-											sx = {{
+											sx={{
 												'& .MuiOutlinedInput-root': {
 													'& fieldset': {
 														borderColor: selectedJobError && jobValue === "" ? 'red' : "", // Set the border color here
@@ -270,8 +270,16 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 										variant='contained'
 										sx={{ backgroundColor: GlobalStyle.NavbarBackgroundColor, justifySelf: "start", alignSelf: "start" }}
 										onClick={handleSaveButtonClick}
-									>שמירה</Button>
-								</Box>
+									>שמירה
+									</Button>
+									<Button
+										variant='contained'
+										sx={{ backgroundColor: "red", justifySelf: "start", alignSelf: "start" }}
+										onClick={handleSaveButtonClick}
+									>לא מעוניין\נת במשרה
+									</Button>
+
+								</Box >
 							</Box>
 							: <></>
 						}
