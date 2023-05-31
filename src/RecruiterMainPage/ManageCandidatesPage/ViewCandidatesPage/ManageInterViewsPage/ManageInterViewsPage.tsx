@@ -8,10 +8,10 @@ import { Job, getFilteredJobs } from '../../../../Firebase/FirebaseFunctions/Job
 import { CalendarMonth, ErrorOutline } from '@mui/icons-material';
 import ScheduleInterviewDialog from './Components/ScheduleInterviewDialog';
 
-export default function ManageInterviewsPage(props: { candidateId: string, setHomeActive: any, setReportsActive: any, setCandidatesActive: any, setJobsActive: any })
+export default function ManageInterviewsPage(props: { candidateId: string})
 {
 
-	const { candidateId, setHomeActive, setReportsActive, setCandidatesActive, setJobsActive } = props;
+	const { candidateId } = props;
 	const [candidateInfo, setCandidateInfo] = useState<Candidate | null>(null);
 	const [candidateAppliedJobs, setCandidateAppliedJobs] = useState<Job[]>([]);
 	const [allJobs, setAllJobs] = useState<Job[]>([]);
@@ -37,11 +37,6 @@ export default function ManageInterviewsPage(props: { candidateId: string, setHo
 	// use effects
 	useEffect(() =>
 	{
-		setHomeActive(false);
-		setReportsActive(false);
-		setCandidatesActive(false);
-		setJobsActive(false);
-
 		getCandidate(candidateId, setCandidateInfo);
 		getJobs(candidateId, setCandidateAppliedJobs, setAllJobs);
 	}, [candidateId]);

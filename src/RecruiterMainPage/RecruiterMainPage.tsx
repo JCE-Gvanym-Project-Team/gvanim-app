@@ -68,7 +68,7 @@ function RecruiterMainPage({ handlelogout }) {
 					return (
 						<React.Fragment key={candidateId + "fragment"}>
 							<Route path={"/manageCandidates/" + candidateId} element={<ViewCandidatesPage candidateId={candidateId} key={candidateId + "ViewCandidatesPage"}/>} key={candidateId} />
-							<Route path={"/manageCandidates/" + candidateId + "/interviews"} element={<ViewCandidatesPage candidateId={candidateId} />} key={candidateId + "interviews"} />
+							<Route path={"/manageCandidates/" + candidateId + "/interviews"} element={<ManageInterviewsPage candidateId={candidateId} />} key={candidateId + "interviews"} />
 						</React.Fragment>
 					);
 				})
