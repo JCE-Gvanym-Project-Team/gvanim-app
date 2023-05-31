@@ -12,7 +12,7 @@ import
 	useGridApiContext,
 	GridToolbarContainer, heIL, GridFooterContainer, GridToolbarQuickFilter, GridToolbarExportContainer, GridCsvExportMenuItem, GridPrintExportMenuItem
 } from '@mui/x-data-grid';
-import { GridFooterContainerSx, TypographyFooterSx, dataGridContainerStyle, dataGridSx } from './MyTableStyle';
+import { GridFooterContainerSx, TypographyFooterSx, dataGridContainerStyle, dataGridContainerSx, dataGridSx } from './MyTableStyle';
 import CandidatesListFullScreenDialog from '../CandidatesListDialog/CandidatesListDialog';
 import { getFilteredJobs } from '../../../../Firebase/FirebaseFunctions/Job';
 import { useNavigate } from "react-router-dom";
@@ -258,9 +258,9 @@ export default function MyTable(props: { setDataSize: any }) {
 	const theme = useTheme();
 
 	return (
-		<>
+		
 			<Container className="shadow-lg border rounded"
-				sx={dataGridContainerStyle}
+				sx={dataGridContainerSx}
 				style={dataGridContainerStyle}
 				maxWidth='xl'>
 				<DataGrid
@@ -278,6 +278,6 @@ export default function MyTable(props: { setDataSize: any }) {
 					localeText={heIL.components.MuiDataGrid.defaultProps.localeText}
 					slots={{ noRowsOverlay: CustomNoRowsOverlay, toolbar: GridCustomToolbar, footer: CustomFooter }} />
 
-			</Container></>
+			</Container>
 	);
 }
