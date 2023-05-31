@@ -11,14 +11,16 @@ export class Candidate {
     public _phone: string;
     public _eMail: string;
     public _generalRating: number;
+    public _note: string;
 
-    constructor(firstName: string = "", lastName: string = "", phone: string = "", eMail: string = "", generalRating: number = -1) {
-        this._id = `${eMail}${phone}`.replace('.', '_');
+    constructor(id: string, firstName: string = "", lastName: string = "", phone: string = "", eMail: string = "", generalRating: number = -1, note: string = "") {
+        this._id = id;
         this._firstName = firstName;
         this._lastName = lastName;
         this._phone = phone;
         this._eMail = eMail;
         this._generalRating = generalRating;
+        this._note = note;
     }
     /**
      * Retrieves all the jobs that the user has applied to.
@@ -47,7 +49,7 @@ export class Candidate {
      */
     public async getPath() {
         if ((await getFirebaseIdsAtPath('/Candidates')).includes(this._id.toString()))
-            return "/Jobs/" + this._id;
+            return "/Candidates/" + this._id;
         return "";
     }
     /**
@@ -81,27 +83,32 @@ export class Candidate {
      * @param {number} [generalRating=this._generalRating] - The candidate's general rating.
      * @returns None
      */
-    public async edit(firstName: string = this._firstName, lastName: string = this._lastName, phone: string = this._phone, eMail: string = this._eMail, generalRating: number = this._generalRating) {
+    public async edit(firstName: string = this._firstName, lastName: string = this._lastName, phone: string = this._phone, eMail: string = this._eMail, generalRating: number = this._generalRating, note: string = this._note) {
+        if (!(await this.exists())) {
+            console.log(`you must add() candidate before call edit()`);
+            return;
+        }
         if (this._firstName !== firstName || this._lastName !== lastName) {
-            const extensions = await getFileExtensionsInFolder(`/CandidatesFiles/${this._id}`);
+            const extensions = await getFileExtensionsInFolder(`/CandidatesFiles/${this._id}/cv`);
             for (let i = 0; i < extensions.length; i++)
-                if (await fileExists(`/CandidatesFiles/${this._id}/${this._firstName}_${this._lastName}_CV.${extensions.at(i)}`)) {
-                    renameFirestorePath(`/CandidatesFiles/${this._id}/${this._firstName}_${this._lastName}_CV.${extensions.at(i)}`, `${firstName}_${lastName}_CV.${extensions.at(i)}`);
+                if (await fileExists(`/CandidatesFiles/${this._id}/cv/${this._firstName}_${this._lastName}_CV.${extensions.at(i)}`)) {
+                    renameFirestorePath(`/CandidatesFiles/${this._id}/cv/${this._firstName}_${this._lastName}_CV.${extensions.at(i)}`, `${firstName}_${lastName}_CV.${extensions.at(i)}`);
                     break;
                 }
         }
         this._firstName = firstName;
-        this._lastName = firstName;
+        this._lastName = lastName;
         this._generalRating = generalRating;
-        const newId = `${eMail}${phone}`.replace('.', '_');
-        if ((this._id !== newId) && ((await getFilteredCandidates(["id"], [newId])).length === 0)) {
-            renameFirestorePath(`/CandidatesFiles/${this._id}`, newId);
-            this._id = newId;
-            this._eMail = eMail;
-            this._phone = phone;
+        this._note = note;
+        if(this._phone!==phone || this._eMail!==eMail){
+            if((await getFilteredCandidates(["eMail","phone"],[eMail,phone])).length===0){
+                this._eMail=eMail;
+                this._phone=phone;
+            }
+            else{
+                console.log(`a candidate alredy exist with the same mail and phone, othe field was chenged`);
+            }
         }
-        else
-            console.log("colision detected a candidate already exist with the same phone and eMail");
         replaceData((await this.getPath()), this);
     }
     /**
@@ -109,7 +116,8 @@ export class Candidate {
      * @returns None
      */
     public async add() {
-        if (!(await this.exists()))
+        if (!(await this.exists())
+            && (await getFilteredCandidates(["eMail","phone"],[this._eMail,this._phone])).length===0)
             appendToDatabase(this, "/Candidates", this._id);
         else
             console.log("the candidate already exists");
@@ -122,8 +130,10 @@ export class Candidate {
      * @returns None
      */
     public async apply(jobNumber: number, about: string) {
-        if (!(await this.exists()))
-            this.add();
+        if (!(await this.exists())) {
+            console.log(`you need to add() candidate before call apply()`);
+            return;
+        }
         let candidatuers = new CandidateJobStatus(jobNumber, this._id, "הוגשה מועמדות", about, -1, new Date(), new Date());
         candidatuers.add();
     }
@@ -134,17 +144,17 @@ export class Candidate {
      */
     public async uploadCv(cv: File) {
         const extension = cv.name.split('.')[cv.name.split('.').length - 1];
-        await uploadFileToFirestore(cv, `CandidatesFiles/${this._id}`, `${this._firstName}_${this._lastName}_CV.${extension}`);
+        await uploadFileToFirestore(cv, `CandidatesFiles/${this._id}/cv`, `${this._firstName}_${this._lastName}_CV.${extension}`);
     }
     /**
      * Deletes the CV file of the candidate from the firestore.
      * @returns None
      */
     public async deleteCv() {
-        const extensions = await getFileExtensionsInFolder(`CandidatesFiles/${this._id}`);
+        const extensions = await getFileExtensionsInFolder(`CandidatesFiles/${this._id}/cv`);
         for (let i = 0; i < extensions.length; i++)
-            if ((await `CandidatesFiles/${this._id}/${this._firstName}_${this._lastName}_CV.${extensions.at(i)}`)) {
-                await deleteFile(`CandidatesFiles/${this._id}/${this._firstName}_${this._lastName}_CV.${extensions.at(i)}`);
+            if ((await fileExists(`CandidatesFiles/${this._id}/cv/${this._firstName}_${this._lastName}_CV.${extensions.at(i)}`))) {
+                await deleteFile(`CandidatesFiles/${this._id}/cv/${this._firstName}_${this._lastName}_CV.${extensions.at(i)}`);
                 return;
             }
     }
@@ -154,14 +164,14 @@ export class Candidate {
      * @returns {Promise<string>} - A promise that resolves with the URL of the CV file.
      */
     public async getCvUrl(): Promise<string> {
-        const extensions = await getFileExtensionsInFolder(`CandidatesFiles/${this._id}`);
+        const extensions = await getFileExtensionsInFolder(`CandidatesFiles/${this._id}/cv`);
         for (let i = 0; i < extensions.length; i++) {
-            if ((await getDownloadUrlFromFirestorePath(`CandidatesFiles/${this._id}/${this._firstName}_${this._lastName}_CV.${extensions.at(i)}`)).length > 0) {
-                const url = await getDownloadUrlFromFirestorePath(`CandidatesFiles/${this._id}/${this._firstName}_${this._lastName}_CV.${extensions.at(i)}`);
+            if ((await fileExists(`CandidatesFiles/${this._id}/cv/${this._firstName}_${this._lastName}_CV.${extensions.at(i)}`))) {
+                const url = await getDownloadUrlFromFirestorePath(`CandidatesFiles/${this._id}/cv/${this._firstName}_${this._lastName}_CV.${extensions.at(i)}`);
                 return url;
             }
         }
-        return "";
+        return extensions.length.toString();
     }
 }
 
@@ -184,6 +194,18 @@ async function getCandidatesFromDatabase(): Promise<Candidate[]> {
         console.error(error);
         throw new Error("Failed to fetch candidates from database.");
     }
+}
+export async function generateCandidateId(): Promise<string> {
+    const candidates = await getFilteredCandidates();
+    const len = candidates.length;
+    const candIds: string[] = candidates.map((cand) => cand._id);
+    const min = 10; // minimum number in range
+    const max = len + 100; // maximum number in range
+    let num = Math.floor(Math.random() * (max - min + 1)) + min; // generates a random number between 1 and 10
+    while (candIds.some((id) => id === num.toString())) {
+        num = Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+    return num.toString();
 }
 /**
  * Retrieves a list of candidates from the database that match the given attributes and values.
@@ -234,7 +256,8 @@ export async function getFilteredCandidates(attributes: string[] = [], values: s
         return candidates.sort(sortByEmail);
     if (sortBy === 'generalRating')
         return candidates.sort(sortByGeneralRating);
-    return candidates;
+    return candidates.map((cand) => new Candidate(cand._id, cand._firstName, cand._lastName, cand._phone,
+        cand._eMail, cand._generalRating, cand._note));
 }
 /* compare function for sort */
 function sortByFirstName(a: Candidate, b: Candidate): number {

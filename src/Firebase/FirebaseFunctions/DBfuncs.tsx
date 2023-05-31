@@ -2,7 +2,6 @@ import "firebase/database";
 import { realtimeDB } from "../FirebaseConfig/firebase";
 import { loginAdmin, loginRecruiter } from "./Authentication";
 import { Job, generateJobNumber } from "./Job";
-import { sendEmail } from "./apiBackend";
 import { Candidate } from "./Candidate";
 import { getFilteredCandidateJobStatuses } from "./CandidateJobStatus";
 
@@ -26,6 +25,7 @@ export async function removeObjectAtPath(path: string) {
 	try {
 		const ref = database.ref(path);
 		await ref.remove();
+		console.log(`${path} romoved from DB`);
 	} catch (error) {
 		console.error("Error removing object:", error);
 	}

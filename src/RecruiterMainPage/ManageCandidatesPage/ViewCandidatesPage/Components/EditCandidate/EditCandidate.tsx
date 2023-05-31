@@ -4,6 +4,7 @@ import { BoxGradientSx, MyPaperSx, MyTextFieldStyle } from './EditCandidateStyle
 import { useLocation, useNavigate } from 'react-router-dom';
 import RemoveCandidateDialog from './../RemoveCandidateDialog/RemoveCandidateDialog';
 import { Candidate, getFilteredCandidates } from '../../../../../Firebase/FirebaseFunctions/Candidate';
+import { loginAdmin } from '../../../../../Firebase/FirebaseFunctions/Authentication';
 
 const Form = styled('form')(({ theme }) => ({
     width: '100%',
@@ -38,16 +39,16 @@ const EditCandidate = () =>
         const getCandidateDetails = async () =>
         {
             const candidates = await getFilteredCandidates(["id"], [state]);
-            
+
+
             setCandidateId(candidates[0]._id);
             setCandidateFirstname(candidates[0]._firstName);
             setCandidateLastname(candidates[0]._lastName);
             setCandidatePhone(candidates[0]._phone);
             setCandidateMail(candidates[0]._eMail);
             setCandidateGeneralRating(candidates[0]._generalRating);
-            
-            let candidate = new Candidate(candidates[0]._firstName, candidates[0]._lastName, candidates[0]._phone, candidates[0]._eMail, candidates[0]._generalRating);
-            setCandidateToEdit(candidate);
+
+            setCandidateToEdit(candidates[0]);
         }
 
         if (state !== null)
@@ -72,9 +73,9 @@ const EditCandidate = () =>
         {
             if (candidateToEdit)
             {
-                candidateToEdit.edit(candidateFirstname, candidateLastname, candidatePhone, candidateMail, candidateGeneralRating);
+                await candidateToEdit.edit(candidateFirstname, candidateLastname, candidatePhone, candidateMail, candidateGeneralRating);
                 //TODO: tell Gavriel to integrate this
-                navigate("/manageCandidates", { state: `השינויים עבור המועמד' ${candidateToEdit._firstName + " " + candidateToEdit._lastName} נשמרו בהצלחה.` });
+                navigate("/manageCandidates/" + candidateToEdit?._id, { state: `השינויים עבור המועמד' ${candidateToEdit._firstName + " " + candidateToEdit._lastName} נשמרו בהצלחה.` });
             }
         }
     }

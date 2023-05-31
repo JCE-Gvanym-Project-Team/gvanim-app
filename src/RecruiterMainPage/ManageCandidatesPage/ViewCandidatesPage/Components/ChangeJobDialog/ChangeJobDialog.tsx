@@ -68,32 +68,14 @@ export default function ChangeJobDialog(props: { open, onClose, candidateApplied
 
         // remove from chosen "from" job
         const fromCandidateJobStatus = await getFilteredCandidateJobStatuses(["jobNumber", "candidateId"], [fromJobNumber.toString(), candidate ? candidate._id : ""]);
-        const temp: CandidateJobStatus = new CandidateJobStatus(
-            fromCandidateJobStatus[0]._jobNumber,
-            fromCandidateJobStatus[0]._candidateId,
-            fromCandidateJobStatus[0]._status,
-            fromCandidateJobStatus[0]._about,
-            fromCandidateJobStatus[0]._matchingRate,
-            fromCandidateJobStatus[0]._applyDate,
-            fromCandidateJobStatus[0]._lastUpdate,
-            fromCandidateJobStatus[0]._interviewsSummery,
-            fromCandidateJobStatus[0]._recomendations);
-        await temp.remove();
-
-        const tempCandidate: Candidate = new Candidate(
-            candidate?._firstName,
-            candidate?._lastName,
-            candidate?._phone,
-            candidate?._eMail,
-            candidate?._generalRating);
-
-        await tempCandidate.apply(toJobNumber, "don't know what to put in about pls send help");
+        await fromCandidateJobStatus[0].remove();
+        await candidate?.apply(toJobNumber, "don't know what to put in about pls send help");
 
 
         // reset values
         setFromJobValue('');
         setToJobValue('');
-        navigate("/manageCandidates/" + tempCandidate?._id, { state: tempCandidate?._id });
+        navigate("/manageCandidates/" + candidate?._id, { state: candidate?._id });
         onClose();
     };
 
