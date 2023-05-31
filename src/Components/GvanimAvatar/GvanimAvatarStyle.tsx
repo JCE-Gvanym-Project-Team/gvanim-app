@@ -7,7 +7,7 @@ export const MyBadgeSx: SxProps = {
   }
 
 export const AvatarSx: SxProps = {
-    border: '1px solid #dee2e6', width: 90, height: 90,
+    border: '1px solid #dee2e6', width: 70, height: 70,
 
     '& .MuiAvatar-img': {
         objectFit: 'contain',

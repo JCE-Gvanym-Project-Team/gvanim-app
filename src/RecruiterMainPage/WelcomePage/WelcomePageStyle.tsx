@@ -3,10 +3,12 @@ import { SxProps } from "@mui/material";
 
 export const BoxGradientSx: SxProps = {
     marginTop: '-80px',
-    height: '45vh',
+    height: '65vh',
     display: 'flex',
     justifyContent: 'center',
-    background: 'linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%)',
+    clipPath: 'polygon(0px 0px, 100% 0%, 100% 84%, 0% 100%)',
+    background: 'linear-gradient(310deg, #7795f8,#555abf)',
+    // background: 'linear-gradient(150deg, #7795f8 15%, #6772e5 70%, #555abf 94%)',
     // background: 'radial-gradient(circle at 18.7% 37.8%, rgb(250, 250, 250) 0%, rgb(225, 234, 238) 90%)'
     // background: 'linear-gradient(112.1deg, rgb(32, 38, 57) 11.4%, rgb(63, 76, 119) 70.2%)'
 }
@@ -26,7 +28,7 @@ export const MyPaperSx: SxProps = {
     borderRadius: '0.75rem',
     overflow: 'visible',
     padding: '16px',
-    marginTop: '-116px',
+    marginTop: '-164px',
     marginBottom: '32px',
     backgroundColor: 'rgba(255, 255, 255, 0.8)',
     backdropFilter: 'saturate(200%) blur(30px)',
@@ -68,7 +70,7 @@ export const MyTypographyMainSx: SxProps = {
     verticalAlign: 'unset',
     color: 'rgb(26, 115, 232)',
     letterSpacing: '-0.125px',
-    backgroundImage: 'linear-gradient(195deg, rgb(73, 163, 241), rgb(26, 115, 232))',
+    backgroundImage: 'linear-gradient(to left, #555abf, #7795f8,#555abf)',
     display: 'inline-block',
     backgroundClip: 'text',
     WebkitTextFillColor: 'transparent',
