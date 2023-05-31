@@ -3,9 +3,10 @@ import { useState, useEffect } from "react";
 import MyTable from "./Components/MyTable/MyTable";
 import { Box, Button, Container, Fab, Typography } from "@mui/material";
 import MyLoading from "../../Components/MyLoading/MyLoading";
-import { BoxGradientSx, ManageJobPageBoxSx } from "./ManageJobsPageStyle";
+import { ManageJobPageBoxSx } from "./ManageJobsPageStyle";
 import TransitionComponentSnackbar from "./Components/NewJobPage/Components/SuccessSnackBar/SuccessSnackBar";
 import { useLocation } from "react-router-dom";
+import { BoxGradientSx } from "../PageStyles";
 
 
 const ManageJobsPage = () => {

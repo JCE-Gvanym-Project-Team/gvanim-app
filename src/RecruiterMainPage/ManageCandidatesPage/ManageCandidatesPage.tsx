@@ -1,6 +1,6 @@
 import { Box, Button } from "@mui/material";
 import { Candidate } from "../../Firebase/FirebaseFunctions/Candidate";
-import { BoxGradientSx } from "../ManageJobsPage/ManageJobsPageStyle";
+import { BoxGradientSx } from "../PageStyles";
 
 export default function ManageCandidatesPage()
 {

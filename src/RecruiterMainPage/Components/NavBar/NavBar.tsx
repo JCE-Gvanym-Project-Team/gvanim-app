@@ -47,8 +47,9 @@ export default function NavBar3(props: { handlelogout }) {
                         <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
 
                             <Stack spacing={1} direction='row' sx={{ height: 'fit-content' }}>
-                                <Link href='../'
+                                <Link onClick={() => navigate('/')}
                                     sx={{
+										cursor: 'pointer', 
                                         ":hover > #home": {
                                             transition: 'all .2s cubic-bezier(.34,1.61,.7,1.3)',
                                             transform: 'translateY(-2px)',
@@ -67,8 +68,9 @@ export default function NavBar3(props: { handlelogout }) {
                         <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
 
                             <Stack spacing={1} direction='row' sx={{ height: 'fit-content' }}>
-                                <Link href="../manageJobs"
+                                <Link onClick={() => navigate('/manageJobs')}
                                     sx={{
+										cursor: 'pointer',
                                         ":hover > #jobsIcon": {
                                             transition: 'all .2s cubic-bezier(.34,1.61,.7,1.3)',
                                             transform: 'translateY(-2px)',
@@ -88,8 +90,9 @@ export default function NavBar3(props: { handlelogout }) {
                         <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
 
                             <Stack spacing={1} direction='row' sx={{ height: 'fit-content' }}>
-                                <Link href="../manageCandidates"
+                                <Link onClick={() => navigate('/manageCandidates')}
                                     sx={{
+										cursor: 'pointer',
                                         ":hover > #candidatesIcon": {
                                             transition: 'all .2s cubic-bezier(.34,1.61,.7,1.3)',
                                             transform: 'translateY(-2px)',
@@ -109,8 +112,9 @@ export default function NavBar3(props: { handlelogout }) {
                         <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
 
                             <Stack spacing={1} direction='row' sx={{ height: 'fit-content' }}>
-                                <Link href="../reports"
+                                <Link onClick={() => navigate('/reports')}
                                     sx={{
+										cursor: 'pointer',
                                         ":hover > #reportsIcon": {
                                             transition: 'all .2s cubic-bezier(.34,1.61,.7,1.3)',
                                             transform: 'translateY(-2px)',

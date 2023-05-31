@@ -1,10 +1,12 @@
 import { Box, Divider, Grid, Link, Paper, Stack, Typography } from '@mui/material'
 import { BoxGradientSx, MyGridItemSx, MyGridSx, MyPaperSx, MyTypographyInfoSx, MyTypographyMainSx, MyTypographyTitleSx } from './WelcomePageStyle'
 import { ArrowBack } from '@mui/icons-material';
+import { useNavigate } from "react-router-dom";
 
 
 
 export default function WelcomePage() {
+    const navigate = useNavigate();
 
     return (
         <>
@@ -116,8 +118,9 @@ export default function WelcomePage() {
 
                         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 1 }}>
 
-                            <Link href='../manageJobs'
+                            <Link onClick={()=>navigate("/manageJobs")}
                                 sx={{
+                                    cursor: 'pointer',
                                     ":hover > #arrow": {
                                         transition: 'all .2s cubic-bezier(.34,1.61,.7,1.3)',
                                         transform: 'translateX(5px)',
@@ -163,8 +166,9 @@ export default function WelcomePage() {
 
                         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 1 }}>
 
-                            <Link href='../reports'
+                            <Link onClick={()=>navigate("/reports")}
                                 sx={{
+                                    cursor: 'pointer',
                                     ":hover > #arrow": {
                                         transition: 'all .2s cubic-bezier(.34,1.61,.7,1.3)',
                                         transform: 'translateX(5px)',
@@ -209,8 +213,9 @@ export default function WelcomePage() {
 
                         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 1 }}>
 
-                            <Link href='../manageCandidates'
+                            <Link onClick={()=>navigate("/manageCandidates")} 
                                 sx={{
+                                    cursor: 'pointer',
                                     ":hover > #arrow": {
                                         transition: 'all .2s cubic-bezier(.34,1.61,.7,1.3)',
                                         transform: 'translateX(5px)',

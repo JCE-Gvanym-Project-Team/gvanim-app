@@ -65,10 +65,11 @@ export default function MyLogoutDialog(props: { handlelogout: any, isMobile: Boo
         <div>
             {isMobile ? (
 
-                    <Box id="logout" sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', width: '100%' }}>
+                    <Box id="logout" sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', width: '100%',mb: 1 }}>
                         <Stack spacing={1} direction='row' sx={{ height: 'fit-content' }}>
-                            <Link href='#' onClick={handleClickOpen}
+                            <Link onClick={handleClickOpen}
                                 sx={{
+                                    cursor: 'pointer',
                                     ":hover > #reportsIcon": {
                                         transition: 'all .2s cubic-bezier(.34,1.61,.7,1.3)',
                                         transform: 'translateY(-2px)',

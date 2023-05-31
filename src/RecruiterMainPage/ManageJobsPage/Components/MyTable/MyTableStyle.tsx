@@ -9,15 +9,16 @@ export const MyButtonSx: SxProps = {
 		}
 }
 export const dataGridContainerSx: SxProps = {
-	border: 1,
-	overflow: 'hidden'
+	overflow: 'hidden',
+	border: '1px solid rgba(0, 0, 0, 0.125)',
+	borderRadius: '0.75rem'
 }
 
 export const dataGridContainerStyle = {
 	padding: 0,
 	marginTop: '15px',
 	marginBottom: '15px',
-	maxWidth: "100%"
+	maxWidth: "100%",
 }
 
 export const dataGridSx = (theme: Theme): SxProps => ({

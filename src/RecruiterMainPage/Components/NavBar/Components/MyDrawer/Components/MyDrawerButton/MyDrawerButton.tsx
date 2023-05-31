@@ -1,9 +1,9 @@
 import { Box, IconButton, Stack } from '@mui/material'
 import React from 'react'
 
-export default function (props: {checked: any, setChecked: any}) {
-    const { checked, setChecked } = props;
-    const [open, setOpen] = React.useState(false);
+export default function (props: {checked: any, setChecked: any, open: any, setOpen: any }) {
+    const { checked, setChecked, open, setOpen} = props;
+
 
     const handleClick = () => {
         setOpen(!open);

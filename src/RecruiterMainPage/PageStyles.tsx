@@ -1,3 +1,13 @@
+import { SxProps } from "@mui/material"
+
+export const BoxGradientSx: SxProps = {
+    marginTop: '-80px',
+    height: '65vh',
+    display: 'flex',
+    justifyContent: 'center',
+    background: 'linear-gradient(310deg, #7795f8,#555abf)',
+}
+
 export const GlobalStyle = {
     NavbarBackgroundColor: 'rgb(52, 71, 103)'
 }

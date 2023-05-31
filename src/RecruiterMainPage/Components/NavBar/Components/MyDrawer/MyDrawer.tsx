@@ -6,19 +6,21 @@ import Fade from '@mui/material/Fade';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { Theme } from '@mui/material/styles';
 import { Collapse, Divider, Link, Stack } from '@mui/material';
-import MyDrawerButton from '../MyDrawerButton/MyDrawerButton';
+import MyDrawerButton from './Components/MyDrawerButton/MyDrawerButton';
 import { ArticleOutlined, AssessmentOutlined, Home, LoginOutlined, PeopleAltOutlined, Settings } from '@mui/icons-material';
 import MyLogoutDialog from '../LogoutDialog';
-
+import { useNavigate } from "react-router-dom";
 
 
 export default function MyDrawer(props: { handlelogout }) {
     const { handlelogout } = props;
     const [checked, setChecked] = React.useState(false);
+    const [open, setOpen] = React.useState(false); // for the button drawer
+    const navigate = useNavigate();
 
     return (
         <Box>
-            <MyDrawerButton checked={checked} setChecked={setChecked} />
+            <MyDrawerButton checked={checked} setChecked={setChecked} open={open} setOpen={setOpen} />
 
             <Collapse in={checked}>
 
@@ -26,8 +28,9 @@ export default function MyDrawer(props: { handlelogout }) {
                 <Stack id="items" direction='column' spacing={3} sx={{ width: '100%' }} divider={<Divider sx={{ width: '100%' }} orientation="horizontal" flexItem />}>
 
                     <Box id="home" sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', width: '100%', mt: 2 }}>
-                        <Link href='../'
+                        <Link onClick={()=>{navigate("/"); setChecked(!checked); setOpen(!open);}} 
                             sx={{
+                                cursor: 'pointer',
                                 ":hover > #home": {
                                     transition: 'all .2s cubic-bezier(.34,1.61,.7,1.3)',
                                     transform: 'translateY(-2px)',
@@ -44,8 +47,9 @@ export default function MyDrawer(props: { handlelogout }) {
                     <Box id="managejobs" sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', width: '100%' }}>
 
                         <Stack spacing={1} direction='row' sx={{ height: 'fit-content' }}>
-                            <Link href="../manageJobs"
+                            <Link onClick={()=> {navigate("/manageJobs"); setChecked(!checked); setOpen(!open);}} 
                                 sx={{
+                                    cursor: 'pointer',
                                     ":hover > #jobsIcon": {
                                         transition: 'all .2s cubic-bezier(.34,1.61,.7,1.3)',
                                         transform: 'translateY(-2px)',
@@ -65,8 +69,9 @@ export default function MyDrawer(props: { handlelogout }) {
                     <Box id="managecandidates" sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', width: '100%' }}>
 
                         <Stack spacing={1} direction='row' sx={{ height: 'fit-content' }}>
-                            <Link href="../manageCandidates"
+                            <Link onClick={()=>{navigate("/manageCandidates"); setChecked(!checked); setOpen(!open);}} 
                                 sx={{
+                                    cursor: 'pointer',
                                     ":hover > #candidatesIcon": {
                                         transition: 'all .2s cubic-bezier(.34,1.61,.7,1.3)',
                                         transform: 'translateY(-2px)',
@@ -86,8 +91,9 @@ export default function MyDrawer(props: { handlelogout }) {
                     <Box id="reports" sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', width: '100%' }}>
 
                         <Stack spacing={1} direction='row' sx={{ height: 'fit-content' }}>
-                            <Link href="../reports"
+                            <Link onClick={()=>{navigate("/reports"); setChecked(!checked); setOpen(!open);}} 
                                 sx={{
+                                    cursor: 'pointer',
                                     ":hover > #reportsIcon": {
                                         transition: 'all .2s cubic-bezier(.34,1.61,.7,1.3)',
                                         transform: 'translateY(-2px)',
@@ -107,8 +113,9 @@ export default function MyDrawer(props: { handlelogout }) {
                     <Box id="settings" sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', width: '100%' }}>
 
                         <Stack spacing={1} direction='row' sx={{ height: 'fit-content' }}>
-                            <Link href="../settings"
+                            <Link onClick={()=>{navigate("/settings"); setChecked(!checked); setOpen(!open);}}
                                 sx={{
+                                    cursor: 'pointer',
                                     ":hover > #reportsIcon": {
                                         transition: 'all .2s cubic-bezier(.34,1.61,.7,1.3)',
                                         transform: 'translateY(-2px)',

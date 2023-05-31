@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 import { Link } from "react-router-dom";
 import ReportPageTable from "./Components/MyTable/MyTable";
 import { Box } from '@mui/material';
-import { BoxGradientSx } from '../ManageJobsPage/ManageJobsPageStyle';
+import { BoxGradientSx } from '../PageStyles';
 
 
 function ReportsPage()

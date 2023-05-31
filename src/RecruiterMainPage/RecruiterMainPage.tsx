@@ -13,6 +13,7 @@ import EditCandidate from "./ManageCandidatesPage/ViewCandidatesPage/Components/
 import AdminPage from "./Components/AdminPage/AdminPage";
 import { getFilteredCandidates } from "../Firebase/FirebaseFunctions/Candidate";
 import ViewCandidatesPage from "./ManageCandidatesPage/ViewCandidatesPage/ViewCandidatesPage";
+import Footer from "./Components/Footer/Footer";
 
 
 
@@ -79,6 +80,8 @@ function RecruiterMainPage({ handlelogout })
 				{/* Admin Routes */}
 				<Route path="/settings" element={<AdminPage />} />
 			</Routes>
+
+			<Footer />
 		</>
 
 	);
