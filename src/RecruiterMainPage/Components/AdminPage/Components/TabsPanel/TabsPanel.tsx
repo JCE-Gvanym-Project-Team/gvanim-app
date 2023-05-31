@@ -3,14 +3,12 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
 import { Avatar, Button, Stack } from '@mui/material';
 import AccountSettings from './Components/AccountSettings/AccountSettings';
 import PasswordSettings from './Components/PasswordSettings/PasswordSettings';
-import { ManageAccounts, Password, PeopleAltOutlined, Settings, Summarize } from '@mui/icons-material';
+import { ManageAccounts, Password, PeopleAltOutlined, Summarize } from '@mui/icons-material';
 import Tooltip from '@mui/material/Tooltip';
 import RecruiterList from '../RecruitersList/RecruiterList';
-import SectorChip from '../SectorChip/SectorChip';
 
 interface TabPanelProps {
   children?: React.ReactNode;

@@ -5,9 +5,10 @@ export default function AccountSettings() {
     return (
         <>
 
-            <Stack spacing={1} direction='column' sx={{  mt: 1, padding: 2 }}>
+            <Stack spacing={1} direction='column' sx={{ mt: 1, padding: 2 }}>
 
                 <Stack direction='row'
+                    maxWidth="lg"
                     display={{ xs: 'block', sm: 'block', md: 'block', lg: 'flex', xl: 'flex' }}
                     spacing={{ xs: 0, sm: 0, md: 0, lg: 5, xl: 5 }}>
                     <Box sx={{ width: '100%' }}>
@@ -28,10 +29,10 @@ export default function AccountSettings() {
                         />
                     </Box>
 
-             
+
 
                 </Stack>
-                <Box sx={{ width: '100%' }}>
+                <Box maxWidth='lg'>
                     <label>
                         <Typography component="span" sx={{ fontWeight: 600, fontSize: 13 }}>אימייל:</Typography>
                     </label>
