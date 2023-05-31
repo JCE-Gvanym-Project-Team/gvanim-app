@@ -272,13 +272,6 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 										onClick={handleSaveButtonClick}
 									>שמירה
 									</Button>
-									<Button
-										variant='contained'
-										sx={{ backgroundColor: "red", justifySelf: "start", alignSelf: "start" }}
-										onClick={handleSaveButtonClick}
-									>לא מעוניין\נת במשרה
-									</Button>
-
 								</Box >
 							</Box>
 							: <></>

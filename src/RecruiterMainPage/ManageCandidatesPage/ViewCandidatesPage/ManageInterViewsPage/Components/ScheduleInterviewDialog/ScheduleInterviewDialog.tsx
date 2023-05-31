@@ -1,6 +1,6 @@
 import { Autocomplete, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, IconButton, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { changeJobContainerStyle, changeJobContainerSx, currentStatusTextSx, dialogActionsSx, dialogContentSx, dialogSx, dialogTitleSx, dialogTopAreaSx, submitButtonSx } from "./ScheduleInterviewDialogStyle";
+import { changeJobContainerStyle, changeJobContainerSx, currentStatusTextSx, dialogActionsSx, dialogContentSx, dialogSx, dialogTitleSx, dialogTopAreaSx, locationTextFieldSx, locationTitleSx, submitButtonSx } from "./ScheduleInterviewDialogStyle";
 import { ArrowBack, ArrowDownward, Close, WhatsApp } from "@mui/icons-material";
 import { DatePicker, LocalizationProvider, MobileTimePicker, TimeField } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -17,7 +17,8 @@ const dropdownOptions = [
     "זומן לראיון שני",
     "הועבר למשרה אחרת",
     "התקבל",
-    "נדחה"
+    "נדחה",
+    "לא מעוניין במשרה"
 ]
 
 const disabledDateTimeList = [
@@ -58,7 +59,8 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
         // TODO: Perform submit logic here
         if (newStatus === "הועבר למשרה אחרת")
         {
-            if (fromJobValue === "" && toJobValue === ""){
+            if (fromJobValue === "" && toJobValue === "")
+            {
                 setFromJobError(true);
                 setToJobError(true);
                 return;
@@ -204,6 +206,14 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
                         />
                     </LocalizationProvider>
                 </Box>
+
+                {/* TODO: change message if status = not interested in job */}
+                <Typography sx={locationTitleSx}>
+                    הודעה בוואצאפ
+                </Typography>
+                <TextField
+                    sx={locationTextFieldSx}
+                />
                 <Box sx={{ display: changeJobDialogOpen ? "block" : "none" }}>
                     <Box sx={changeJobContainerSx} style={changeJobContainerStyle}>
                         {/* Change job if the user chose to */}
@@ -248,7 +258,7 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
                                     sx={{
                                         '& .MuiOutlinedInput-root': {
                                             '& fieldset': {
-                                                borderColor: toJobError && toJobValue === ""? 'red' : "", // Set the border color here
+                                                borderColor: toJobError && toJobValue === "" ? 'red' : "", // Set the border color here
                                             }
                                         },
                                     }}
