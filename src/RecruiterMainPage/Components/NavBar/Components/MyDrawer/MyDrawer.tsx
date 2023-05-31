@@ -12,15 +12,15 @@ import MyLogoutDialog from '../LogoutDialog';
 import { useNavigate } from "react-router-dom";
 
 
-export default function MyDrawer(props: { handlelogout: any }) {
-    const { handlelogout } = props;
+export default function MyDrawer(props: { handlelogout: any, userFirstName: any }) {
+    const { handlelogout, userFirstName } = props;
     const [checked, setChecked] = React.useState(false);
     const [open, setOpen] = React.useState(false); // for the button drawer
     const navigate = useNavigate();
 
     return (
         <Box>
-            <MyDrawerButton checked={checked} setChecked={setChecked} open={open} setOpen={setOpen} />
+            <MyDrawerButton checked={checked} setChecked={setChecked} open={open} setOpen={setOpen} userFirstName={userFirstName} />
 
             <Collapse in={checked}>
 

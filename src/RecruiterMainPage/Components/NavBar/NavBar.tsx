@@ -7,6 +7,7 @@ import MyDrawer from './Components/MyDrawer/MyDrawer';
 import MyLogoutDialog from './Components/LogoutDialog';
 
 export default function NavBar(props: { handlelogout }) {
+	const userFirstName = "משתמש";
     const { handlelogout } = props;
     const navigate = useNavigate();
 
@@ -20,28 +21,28 @@ export default function NavBar(props: { handlelogout }) {
                     <Box id="drawer-button" display={{ xs: 'inline-block', sm: 'inline-block', md: 'inline-block', lg: 'none', xl: 'none' }} sx={{
                         pt: '0.5rem', pb: '0.5rem', width: '100%'
                     }}>
-                        <MyDrawer handlelogout={handlelogout} />
+                        <MyDrawer handlelogout={handlelogout} userFirstName={userFirstName} />
                     </Box>
 
 
                     <Stack id='welcome-user' display={{ xs: 'none', sm: 'none', md: 'none', lg: 'flex', xl: 'flex' }} sx={{ width: 'fit-content', borderRight: '1px solid rgba(0, 0, 0, 0.125)', paddingLeft: 1, paddingRight: 3 }}>
                         <Stack direction='row' spacing={1}>
-                            <Typography sx={{ color: '#344767', fontSize: '0.875rem', lineHeight: '1.625' }} >
+                            <Typography sx={{ color: '#344767', fontSize: '0.875rem', lineHeight: '1.625',opacity: 0.8 }} >
                                 שלום
                             </Typography>
 
                             <Stack direction='row'>
-                                <Typography sx={{ color: '#344767', fontSize: '0.875rem', lineHeight: '1.625', fontWeight: 600 }} >
-                                    משתמש
+                                <Typography sx={{ color: 'black', fontSize: '0.9rem', lineHeight: '1.625', fontWeight: 600 }} >
+                                    {userFirstName}
                                 </Typography>
 
                             </Stack>
                         </Stack>
-                        <Typography sx={{ color: '#344767', fontSize: '0.875rem', lineHeight: '1.625' }} >
+                        <Typography sx={{ color: '#344767', fontSize: '0.875rem', lineHeight: '1.625', opacity: 0.8 }} >
                             ברוך הבא!
                         </Typography>
                     </Stack>
-
+					
 
                     <Stack id='items' divider={<Divider sx={{ height: '50%', alignSelf: 'center' }} orientation="vertical" flexItem />} display={{ xs: 'none', sm: 'none', md: 'none', lg: 'flex', xl: 'flex' }} direction='row' spacing={'1.7rem'}>
                         <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
