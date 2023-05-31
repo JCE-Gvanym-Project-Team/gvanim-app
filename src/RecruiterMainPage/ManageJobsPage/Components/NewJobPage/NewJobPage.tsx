@@ -16,6 +16,11 @@ const Form = styled('form')(({ theme }) => ({
 const NewJobPage = () => {
     const { state } = useLocation();
 
+    const getRolesFromDB = () => {
+        const roles = ["מנהל","מהנדס","רופא"];
+        return roles;
+    };
+
     // values
     const [jobName, setJobName] = useState('');
     const [jobRole, setJobRole] = useState('');
@@ -38,7 +43,6 @@ const NewJobPage = () => {
 
 
     useEffect(() => {
-
         const getAllJobs = async () => {
             const jobs = await getFilteredJobs();
 
@@ -71,7 +75,6 @@ const NewJobPage = () => {
 
 
     const handleSubmit = async (event: any) => {
-
         event.preventDefault();
         var description_array = new Array(jobDescription, jobDescriptionSkills, jobAdditionalInfo);
 
