@@ -56,19 +56,39 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
     const handleSubmit = async (event) =>
     {
         // TODO: Perform submit logic here
+        if (newStatus === "הועבר למשרה אחרת")
+        {
+            if (fromJobValue === "" && toJobValue === ""){
+                setFromJobError(true);
+                setToJobError(true);
+                return;
+            }
+
+            if (fromJobValue === "")
+            {
+                setFromJobError(true);
+                return;
+            }
+
+            if (toJobValue === "")
+            {
+                setToJobError(true);
+                return;
+            }
+
+        }
+
         const interviewDate: Date = date?.$d;
         const interviewTime: Date = time?.$d;
         interviewDate?.setHours(interviewTime.getHours());
         interviewDate?.setMinutes(interviewTime.getMinutes());
         await candidateJobStatus?.updateStatus(newStatus, interviewDate);
         //TODO: replace this with a real recruiter, and a real location
-        console.log(candidate?._phone);
         const link = await candidateJobStatus?.getWhatsappUrl(
             new Recruiter("asd@gmail.com", "firstname", "lastname", ["sector1", "sector2"]),
             interviewDate,
             "makom"
         );
-        console.log("link: " + link);
         window.open(link);
 
         onClose(event, "submit");
@@ -103,7 +123,7 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
     const [fromJobValue, setFromJobValue] = useState('');
     const [toJobValue, setToJobValue] = useState('');
     const [fromJobError, setFromJobError] = useState(false);
-    const [toJobError, setToJobError] = useState(true);
+    const [toJobError, setToJobError] = useState(false);
 
 
     useEffect(() =>
@@ -114,7 +134,7 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
 
     const handleFromJobChange = (event, value) =>
     {
-        setFromJobValue(value);
+
     };
 
     const handleToJobChange = (event, value) =>
@@ -189,9 +209,23 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
                         {/* Change job if the user chose to */}
                         <Autocomplete
                             disablePortal
-                            options={candidateJobs}
-                            sx={{width: "50%"}}
-                            renderInput={(params) => <TextField {...params} label="ממשרה" />}
+                            options={candidateJobs.map((job) =>
+                            {
+                                return "מס' " + job._jobNumber + ", " + job._region + ", " + job._role
+                            })}
+                            sx={{ width: { xs: "100%", md: "50%" } }}
+                            renderInput={(params) =>
+                                <TextField
+                                    {...params}
+                                    sx={{
+                                        '& .MuiOutlinedInput-root': {
+                                            '& fieldset': {
+                                                borderColor: fromJobError && fromJobValue === "" ? 'red' : "", // Set the border color here
+                                            }
+                                        },
+                                    }}
+                                    label="ממשרה"
+                                />}
                             onChange={handleFromJobChange}
                             onInputChange={(event, value) =>
                             {
@@ -204,9 +238,23 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
 
                         <Autocomplete
                             disablePortal
-                            options={allJobs}
-                            sx={{width: "50%"}}
-                            renderInput={(params) => <TextField {...params} sx={{ border: toJobError ? "1px solid red" : "0px" }} label="למשרה" />}
+                            options={allJobs.filter(job => !candidateJobs.includes(job)).map((job) =>
+                            {
+                                return "מס' " + job._jobNumber + ", " + job._region + ", " + job._role
+                            })}
+                            sx={{ width: { xs: "100%", md: "50%" } }}
+                            renderInput={(params) =>
+                                <TextField {...params}
+                                    sx={{
+                                        '& .MuiOutlinedInput-root': {
+                                            '& fieldset': {
+                                                borderColor: toJobError && toJobValue === ""? 'red' : "", // Set the border color here
+                                            }
+                                        },
+                                    }}
+                                    label="למשרה"
+                                />
+                            }
                             onClick={() => setToJobError(false)}
                             onChange={handleToJobChange}
                             onInputChange={(event, value) =>

@@ -8,7 +8,7 @@ import { Job, getFilteredJobs } from '../../../../Firebase/FirebaseFunctions/Job
 import { CalendarMonth, ErrorOutline } from '@mui/icons-material';
 import ScheduleInterviewDialog from './Components/ScheduleInterviewDialog';
 
-export default function ManageInterviewsPage(props: { candidateId: string})
+export default function ManageInterviewsPage(props: { candidateId: string })
 {
 
 	const { candidateId } = props;
@@ -173,7 +173,19 @@ export default function ManageInterviewsPage(props: { candidateId: string})
 									disablePortal
 									options={candidateAppliedJobs.map((job) => job._jobNumber.toString() + ", " + job._role + ", " + job._region)}
 									sx={autoCompleteSx}
-									renderInput={(params) => <TextField {...params} label="בחירת משרה" />}
+									renderInput={(params) =>
+										<TextField
+											{...params}
+											label="בחירת משרה"
+											sx = {{
+												'& .MuiOutlinedInput-root': {
+													'& fieldset': {
+														borderColor: selectedJobError && jobValue === "" ? 'red' : "", // Set the border color here
+													}
+												},
+											}}
+										/>
+									}
 									onInputChange={(event, value) =>
 									{
 										setSelectedJobError(false);
@@ -259,11 +271,6 @@ export default function ManageInterviewsPage(props: { candidateId: string})
 										sx={{ backgroundColor: GlobalStyle.NavbarBackgroundColor, justifySelf: "start", alignSelf: "start" }}
 										onClick={handleSaveButtonClick}
 									>שמירה</Button>
-									<Button variant='contained' sx={{ backgroundColor: "green", justifySelf: "start", alignSelf: "start" }}>התקבל לתפקיד</Button>
-								</Box>
-								<Box sx={interviewSummaryRedButtonsContainerSx} >
-									<Button variant='contained' sx={{ marginRight: "2rem", backgroundColor: "red", justifySelf: "start", alignSelf: "start" }}>אינו מתאים לעבוד בחברה</Button>
-									<Button variant='contained' sx={{ backgroundColor: "red", justifySelf: "start", alignSelf: "start" }}>לא מעוניין בתפקיד</Button>
 								</Box>
 							</Box>
 							: <></>
