@@ -11,6 +11,7 @@ import { getFilteredCandidateJobStatuses } from '../../../Firebase/FirebaseFunct
 import NotesPopup from './Components/NotesPopup/NotesPopup';
 import ChangeJobDialog from './Components/ChangeJobDialog/ChangeJobDialog';
 import { Autorenew, EditNote, QuestionAnswer, SpeakerNotes } from '@mui/icons-material';
+import React from 'react';
 
 export default function ViewCandidatesPage(props: {candidateId: string})
 {
@@ -50,22 +51,6 @@ export default function ViewCandidatesPage(props: {candidateId: string})
 		if ((reason && reason !== "backdropClick") || reason === undefined)
 		{
 			setPopupOpen(false);
-		}
-	};
-
-	// change job handler
-	const [changeJobDialogOpen, setChangeJobDialogOpen] = useState(false);
-
-	const openChangeJobDialogHandler = () =>
-	{
-		setChangeJobDialogOpen(true);
-	};
-
-	const closeChangeJobDialogHandler = (event, reason) =>
-	{
-		if ((reason && reason !== "backdropClick") || reason === undefined)
-		{
-			setChangeJobDialogOpen(false);
 		}
 	};
 
@@ -115,32 +100,11 @@ export default function ViewCandidatesPage(props: {candidateId: string})
 						</Box>
 
 
-						{/* text + move to another job button */}
+						{/* text */}
 						<Box sx={candidateNameAndEditButtonContainerSx}>
 							<Typography sx={jobTextSx} variant='h4'>
 								משרות
 							</Typography>
-
-							<Button sx={changeJobButtonSx} variant="contained" startIcon={<Autorenew />} onClick={openChangeJobDialogHandler}>
-								שינוי משרה
-							</Button>
-							<ChangeJobDialog
-								open={changeJobDialogOpen}
-								onClose={closeChangeJobDialogHandler}
-								candidateAppliedJobs={candidateJobs.map(job =>
-								{
-									return job._jobNumber.toString() + ", " + job._role + ", " + job._region;
-								})}
-								// first filter out jobs that they applied to, then map to a nice string for the user
-								allJobs={allJobs.filter(job =>
-								{
-									return !candidateJobs.includes(job);
-								}).map(job =>
-								{
-									return job._jobNumber.toString() + ", " + job._role + ", " + job._region;
-								})}
-								candidate={candidateInfo}
-							/>
 						</Box>
 
 						{/* Jobs table */}
