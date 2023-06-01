@@ -37,7 +37,7 @@ export default function CandidatesListFullScreenDialog({ JobId }) {
 		const _candidates_jobstatus = await getFilteredCandidateJobStatuses(["jobNumber"], [`${JobId}`]);
 
 		const promises = _candidates_jobstatus.map(async (candidateJobStatus) => {
-			const candidate1: Candidate[] = await getFilteredCandidates(["id"], [candidateJobStatus._candidateId]);
+			const candidate1: Candidate[] = await getFilteredCandidates(["id"], [candidateJobStatus?._candidateId]);
 			return [candidate1[0], candidateJobStatus._matchingRate];
 		});
 
@@ -65,11 +65,6 @@ export default function CandidatesListFullScreenDialog({ JobId }) {
 
 
 			<Dialog
-				sx={{
-					"& .MuiDialog-container": {
-
-					}
-				}}
 				PaperProps={{
 					sx: {
 						maxWidth: { xs: 'xl', sm: 'xl', md: 'md', lg: 'md', xl: 'md' }, maxHeight: '80%',

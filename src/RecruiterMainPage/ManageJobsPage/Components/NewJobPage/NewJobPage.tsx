@@ -13,11 +13,13 @@ const Form = styled('form')(({ theme }) => ({
 }));
 
 
-const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandidatesActive: any, setJobsActive: any }) => {
-
-    const { setHomeActive, setReportsActive, setCandidatesActive, setJobsActive } = props;
-
+const NewJobPage = () => {
     const { state } = useLocation();
+
+    const getRolesFromDB = () => {
+        const roles = ["מנהל","מהנדס","רופא"];
+        return roles;
+    };
 
     // values
     const [jobName, setJobName] = useState('');
@@ -41,11 +43,6 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
 
 
     useEffect(() => {
-
-        // for navbar
-        setHomeActive(false); setCandidatesActive(false);
-        setReportsActive(false); setJobsActive(false);
-
         const getAllJobs = async () => {
             const jobs = await getFilteredJobs();
 
@@ -78,7 +75,6 @@ const NewJobPage = (props: { setHomeActive: any, setReportsActive: any, setCandi
 
 
     const handleSubmit = async (event: any) => {
-
         event.preventDefault();
         var description_array = new Array(jobDescription, jobDescriptionSkills, jobAdditionalInfo);
 
