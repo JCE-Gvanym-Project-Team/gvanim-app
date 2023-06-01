@@ -1,45 +1,36 @@
-import { Autocomplete, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, IconButton, TextField, Typography } from "@mui/material";
+import { Autocomplete, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, MenuItem, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { changeJobContainerStyle, changeJobContainerSx, currentStatusTextSx, dialogActionsSx, dialogContentSx, dialogSx, dialogTitleSx, dialogTopAreaSx, submitButtonSx } from "./ScheduleInterviewDialogStyle";
-import { ArrowBack, ArrowDownward, Close, WhatsApp } from "@mui/icons-material";
-import { DatePicker, LocalizationProvider, MobileTimePicker, TimeField } from "@mui/x-date-pickers";
+import { changeJobContainerStyle, changeJobContainerSx, currentStatusTextSx, dialogActionsSx, dialogContentSx, dialogSx, dialogTitleSx, dialogTopAreaSx, locationTextFieldSx, locationTitleSx, submitButtonSx } from "./ScheduleInterviewDialogStyle";
+import { ArrowBack, ArrowDownward, Autorenew, Check, Close, DoneAll, MoodBad, ThumbDown, ThumbUp, WhatsApp } from "@mui/icons-material";
+import { DatePicker, LocalizationProvider, MobileTimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import 'dayjs/locale/he'
 import { Candidate } from "../../../../../../Firebase/FirebaseFunctions/Candidate";
-import { CandidateJobStatus, allStatus } from "../../../../../../Firebase/FirebaseFunctions/CandidateJobStatus";
+import { CandidateJobStatus, allStatus, getFilteredCandidateJobStatuses } from "../../../../../../Firebase/FirebaseFunctions/CandidateJobStatus";
 import { Recruiter } from "../../../../../../Firebase/FirebaseFunctions/Recruiter";
-import ChangeJobDialog from "../../../Components/ChangeJobDialog/ChangeJobDialog";
-import { Job } from "../../../../../../Firebase/FirebaseFunctions/Job";
-
-// this is a list of statuses that the user can change
-const dropdownOptions = [
-    "זומן לראיון ראשון",
-    "זומן לראיון שני",
-    "הועבר למשרה אחרת",
-    "התקבל",
-    "נדחה"
-]
-
-const disabledDateTimeList = [
-    "עבר ראיון ראשון",
-    "עבר ראיון שני",
-    "התקבל",
-    "הועבר למשרה אחרת",
-    "נדחה"
-];
+import { Job, getFilteredJobs } from "../../../../../../Firebase/FirebaseFunctions/Job";
+import { useNavigate } from "react-router-dom";
 
 export default function ScheduleInterviewDialog(props: { open, onClose, candidate: Candidate | null, candidateJobStatus: CandidateJobStatus | null, candidateJobs: Job[], allJobs: Job[] })
 {
 
     const { open, onClose, candidate, candidateJobStatus, candidateJobs, allJobs } = props;
+
     const [time, setTime] = useState<any>();
     const [date, setDate] = useState<any>();
 
-    // disable time and date if status 
-    const [timeDisabled, setTimeDisabled] = useState(false);
-    const [dateDisabled, setDateDisabled] = useState(false);
+    // disable time and date if status doesn't require them
+    const [timeDisabled, setTimeDisabled] = useState(true);
+
+    // disable whatsapp message if there's no need for a message
+    const [disableWhatsappMessage, setDisableWhatsappMessage] = useState(true);
+
+    // for rejection reason textfield
+    const [disableRejectionReason, setDisableRejectionReason] = useState(true);
 
     const [newStatus, setNewStatus] = useState("");
+
+    const navigate = useNavigate();
 
     // time changed 
     const handleDateChange = (value) =>
@@ -52,44 +43,129 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
         setTime(value);
     };
 
-    // save button
-    const handleSubmit = async (event) =>
+    const setDefaults = () =>
     {
-        // TODO: Perform submit logic here
-        const interviewDate: Date = date?.$d;
-        const interviewTime: Date = time?.$d;
-        interviewDate?.setHours(interviewTime.getHours());
-        interviewDate?.setMinutes(interviewTime.getMinutes());
-        await candidateJobStatus?.updateStatus(newStatus, interviewDate);
-        //TODO: replace this with a real recruiter, and a real location
-        console.log(candidate?._phone);
-        const link = await candidateJobStatus?.getWhatsappUrl(
-            new Recruiter("asd@gmail.com", "firstname", "lastname", ["sector1", "sector2"]),
-            interviewDate,
-            "makom"
-        );
-        console.log("link: " + link);
-        window.open(link);
+        setToJobValue("");
+        setFromJobValue("");
+        setDisableRejectionReason(true);
+        setDisableWhatsappMessage(true);
+        setChangeJobDialogOpen(false);
+        setTimeDisabled(true);
+    }
 
+    // submit button handlers
+    const handleSubmitChangeJob = async (event) =>
+    {
+        console.log(fromJobValue);
+        if ((fromJobValue === "" || !fromJobValue) && (toJobValue === "" || !toJobValue))
+        {
+            setFromJobError(true);
+            setToJobError(true);
+            return;
+        }
+
+        if ((fromJobValue === "" || !fromJobValue))
+        {
+            setFromJobError(true);
+            return;
+        }
+
+        if ((toJobValue === "" || !toJobValue))
+        {
+            setToJobError(true);
+            return;
+        }
+
+        // update status in firebase
+        await candidateJobStatus?.updateStatus(newStatus, undefined);
+        const fromJobNumberString = fromJobValue?.match(/\d+/)?.[0];
+        const fromJobNumber = fromJobNumberString ? parseInt(fromJobNumberString) : NaN;
+
+        const toJobNumberString = toJobValue?.match(/\d+/)?.[0];
+        const toJobNumber = toJobNumberString ? parseInt(toJobNumberString) : NaN;
+
+        // actually replace in firebase
+        const fromCandidateJobStatus = (await getFilteredCandidateJobStatuses(["jobNumber", "candidateId"], [fromJobNumber.toString(), candidate ? candidate._id : ""]))[0];
+        fromCandidateJobStatus.updateStatus(allStatus[6], undefined);
+        await candidate?.apply(toJobNumber, fromCandidateJobStatus._about);
+
+        setDefaults();
+        navigate("/manageCandidates/" + candidate?._id, { state: true });
         onClose(event, "submit");
-    };
+    }
+
+    const handleSubmitSaveRejectionReason = async (event) =>
+    {
+        await candidateJobStatus?.updateStatus(newStatus, undefined);
+        setDefaults();
+        onClose(event, "submit");
+    }
+
+    const handleSubmitSendWhatsappMessage = async (event) =>
+    {
+        if (!timeDisabled)
+        {
+            const interviewDate: Date = date?.$d;
+            const interviewTime: Date = time?.$d;
+            interviewDate?.setHours(interviewTime.getHours());
+            interviewDate?.setMinutes(interviewTime.getMinutes());
+            await candidateJobStatus?.updateStatus(newStatus, interviewDate);
+            const link = await candidateJobStatus?.getWhatsappUrl(
+                new Recruiter("asd@gmail.com", "firstname", "lastname", ["sector1", "sector2"]),
+                interviewDate,
+                "makom"
+            );
+
+            window.open(link);
+        } else
+        {
+            await candidateJobStatus?.updateStatus(newStatus, undefined);
+            //TODO: replace this with a real recruiter, and a real location
+        }
+
+        setDefaults();
+        onClose(event, "submit");
+    }
+
+    const handleSubmitSaveStatus = async (event) =>
+    {
+        await candidateJobStatus?.updateStatus(newStatus, undefined);
+        setDefaults();
+        onClose(event, "submit");
+    }
 
     // status changed handler
     const handleStatusChanged = (status) =>
     {
         setNewStatus(status);
+        // remove date and time fields
         if (disabledDateTimeList.includes(status))
         {
             setTimeDisabled(true);
-            setDateDisabled(true);
         } else
         {
             setTimeDisabled(false);
-            setDateDisabled(false);
+        }
+
+        // remove whatsapp message TextField
+        if (noWhatsappMessageList.includes(status))
+        {
+            setDisableWhatsappMessage(true);
+        } else
+        {
+            setDisableWhatsappMessage(false);
+        }
+
+        if (status === allStatus[8])
+        {
+            setDisableRejectionReason(false);
+        } else
+        {
+            setDisableRejectionReason(true);
         }
 
         // change job popup
-        if (status === "הועבר למשרה אחרת")
+        if (status === allStatus[6])
         {
             setChangeJobDialogOpen(true);
         } else
@@ -98,37 +174,20 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
         }
     }
 
-    // change job handlers
+    // change job setters
     const [changeJobDialogOpen, setChangeJobDialogOpen] = useState(false);
     const [fromJobValue, setFromJobValue] = useState('');
     const [toJobValue, setToJobValue] = useState('');
     const [fromJobError, setFromJobError] = useState(false);
-    const [toJobError, setToJobError] = useState(true);
-
-
-    useEffect(() =>
-    {
-        setToJobError(false);
-        setFromJobError(false);
-    }, [])
-
-    const handleFromJobChange = (event, value) =>
-    {
-        setFromJobValue(value);
-    };
-
-    const handleToJobChange = (event, value) =>
-    {
-        setToJobError(false);
-        setFromJobError(false);
-        setToJobValue(value);
-    };
-
-
+    const [toJobError, setToJobError] = useState(false);
 
     return (
         // popup dialog
-        <Dialog open={open} onClose={onClose} sx={dialogSx}>
+        <Dialog open={open} onClose={(event, reason) =>
+        {
+            setDefaults();
+            onClose(event, reason)
+        }} sx={dialogSx}>
             <Box sx={dialogTopAreaSx}>
                 {/* Title */}
                 <DialogTitle sx={dialogTitleSx}>
@@ -141,7 +200,11 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
                     <IconButton
                         edge="start"
                         color="inherit"
-                        onClick={onClose}
+                        onClick={(event) =>
+                        {
+                            setDefaults();
+                            onClose(event, undefined)
+                        }}
                         aria-label="close"
                     >
                         <Close />
@@ -156,45 +219,68 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
                 </Typography>
                 <Autocomplete
                     disablePortal
-                    options={allStatus.filter((key =>
-                    {
-                        return key !== candidateJobStatus?._status && dropdownOptions.includes(key);
-
-                    }))}
+                    getOptionLabel={(option) => option ? option.status : ""}
+                    options={dropdownOptions.filter(option => option?.status !== candidateJobStatus?._status)}
+                    renderOption={(props, option) =>
+                        <MenuItem {...props} sx={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
+                            {option?.icon}
+                            <Typography sx={{ color: option ? option.textColor : "black" }}>
+                                | {option?.status}
+                            </Typography>
+                        </MenuItem>
+                    }
                     renderInput={(params) => <TextField {...params} label="סטטוס חדש" />}
                     onInputChange={(event, value) =>
                     {
                         handleStatusChanged(value);
                     }}
                 />
+
                 <Box sx={{ display: changeJobDialogOpen ? "none" : "flex", flexDirection: "row", marginTop: "1rem" }}>
                     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="he">
                         <DatePicker
                             label={'בחירת תאריך'}
                             views={['year', 'month', 'day']}
                             onChange={handleDateChange}
-                            sx={{ marginRight: "1rem" }}
-                            disabled={dateDisabled}
+                            sx={{ display: timeDisabled ? "none" : "block", marginRight: "1rem" }}
                         />
                         <MobileTimePicker
                             label="בחירת שעה"
                             views={['hours', "minutes"]}
                             onChange={handleTimeChange}
-                            disabled={timeDisabled}
+                            sx={{ display: timeDisabled ? "none" : "block" }}
                         />
                     </LocalizationProvider>
                 </Box>
+
                 <Box sx={{ display: changeJobDialogOpen ? "block" : "none" }}>
                     <Box sx={changeJobContainerSx} style={changeJobContainerStyle}>
                         {/* Change job if the user chose to */}
                         <Autocomplete
                             disablePortal
-                            options={candidateJobs}
-                            sx={{width: "50%"}}
-                            renderInput={(params) => <TextField {...params} label="ממשרה" />}
-                            onChange={handleFromJobChange}
+                            options={candidateJobs.map((job) =>
+                            {
+                                return "מס' " + job._jobNumber + ", " + job._region + ", " + job._role
+                            })}
+                            sx={{ width: { xs: "100%", md: "50%" } }}
+                            renderInput={(params) =>
+                                <TextField
+                                    {...params}
+                                    sx={{
+                                        '& .MuiOutlinedInput-root': {
+                                            '& fieldset': {
+                                                borderColor: fromJobError && fromJobValue === "" ? 'red' : "", // Set the border color here
+                                            }
+                                        },
+                                    }}
+                                    label="ממשרה"
+                                />}
+                            // onChange={handleFromJobChange}
                             onInputChange={(event, value) =>
                             {
+                                if (value !== ""){                                    
+                                    setFromJobError(false);
+                                }
                                 setFromJobValue(value);
                             }}
                         />
@@ -204,36 +290,136 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
 
                         <Autocomplete
                             disablePortal
-                            options={allJobs}
-                            sx={{width: "50%"}}
-                            renderInput={(params) => <TextField {...params} sx={{ border: toJobError ? "1px solid red" : "0px" }} label="למשרה" />}
+                            options={allJobs.filter(job => !candidateJobs.includes(job)).map((job) =>
+                            {
+                                return "מס' " + job._jobNumber + ", " + job._region + ", " + job._role
+                            })}
+                            sx={{ width: { xs: "100%", md: "50%" } }}
+                            renderInput={(params) =>
+                                <TextField {...params}
+                                    sx={{
+                                        '& .MuiOutlinedInput-root': {
+                                            '& fieldset': {
+                                                borderColor: toJobError && toJobValue === "" ? 'red' : "", // Set the border color here
+                                            }
+                                        },
+                                    }}
+                                    label="למשרה"
+                                />
+                            }
                             onClick={() => setToJobError(false)}
-                            onChange={handleToJobChange}
                             onInputChange={(event, value) =>
                             {
+                                if (value !== ""){
+                                    setToJobError(false);
+                                }
                                 setToJobValue(value);
                             }}
                         />
                     </Box>
+                </Box>
+                <Box>
+                    <Typography sx={locationTitleSx}>
+                        {(() =>
+                        {
+                            if (!disableWhatsappMessage && disableRejectionReason)
+                            {
+                                return "הודעה בוואצאפ";
+                            }
+                            if (disableWhatsappMessage && !disableRejectionReason)
+                            {
+                                return "סיבת דחייה"
+                            }
+                        })()}
+                    </Typography>
+                    <TextField
+                        multiline
+                        fullWidth
+                        maxRows={5}
+                        sx={locationTextFieldSx}
+                        style={{ display: disableWhatsappMessage ? "none" : "block" }}
+                    />
+                    <TextField
+                        multiline
+                        fullWidth
+                        maxRows={5}
+                        sx={locationTextFieldSx}
+                        style={{ display: disableRejectionReason ? "none" : "block" }}
+                    />
                 </Box>
             </DialogContent>
 
 
             {/* Action Button */}
             <DialogActions sx={dialogActionsSx}>
+                {(() =>
                 {
-                    !changeJobDialogOpen
-                        ?
-                        <Button onClick={handleSubmit} variant="contained" sx={submitButtonSx}>
-                            <WhatsApp sx={{ marginRight: "0.5rem" }} />
-                            שליחת הודעה למועמד
+                    if (changeJobDialogOpen)
+                    {
+                        return (
+                            <Button onClick={handleSubmitChangeJob} variant="contained" sx={submitButtonSx}>
+                                העברת משרה
+                            </Button>
+                        );
+                    }
+                    if (!disableRejectionReason)
+                    {
+                        return (
+                            <Button onClick={handleSubmitSaveRejectionReason} variant="contained" sx={submitButtonSx}>
+                                שמירה
+                            </Button>
+                        );
+                    }
+                    if (!disableWhatsappMessage)
+                    {
+                        return (
+                            <Button onClick={handleSubmitSendWhatsappMessage} variant="contained" sx={submitButtonSx}>
+                                <WhatsApp sx={{ marginRight: "0.5rem" }} />
+                                שליחת הודעה למועמד
+                            </Button>
+                        );
+                    }
+                    return (
+                        <Button onClick={handleSubmitSaveStatus} variant="contained" sx={{ backgroundColor: "blueviolet" }}>
+                            שמירת סטטוס
                         </Button>
-                        :
-                        <Button onClick={handleSubmit} variant="contained" sx={submitButtonSx}>
-                            העברת משרה
-                        </Button>
-                }
+                    );
+
+                })()}
             </DialogActions>
         </Dialog>
     )
 }
+
+// this is a list of statuses that the user can change to or from
+const dropdownOptions = allStatus.filter((status) => status !== allStatus[0]).map((status) =>
+{
+    if (status === allStatus[1] || status === allStatus[3])
+    {
+        return { status: status, textColor: "#CFAF00", icon: <Check sx={{ color: "#CFAF00" }} /> };
+    }
+    if (status === allStatus[2] || status === allStatus[4])
+    {
+        return { status: status, textColor: "#008000", icon: <DoneAll sx={{ color: "#008000" }} /> };
+    }
+    if (status === allStatus[5])
+    {
+        return { status: status, textColor: "#00AA00", icon: <ThumbUp sx={{ color: "#00AA00", transform: "scaleX(-1)" }} /> };
+    }
+    if (status === allStatus[6])
+    {
+        return { status: status, textColor: "#2196F3", icon: <Autorenew sx={{ color: "#2196F3" }} /> };
+    }
+    if (status === allStatus[7])
+    {
+        return { status: status, textColor: "#FF5733", icon: <ThumbDown sx={{ color: "#FF5733" }} /> };
+    }
+    if (status === allStatus[8])
+    {
+        return { status: status, textColor: "#800000", icon: <MoodBad sx={{ color: "#800000" }} /> };
+    }
+});
+
+const disabledDateTimeList = allStatus.filter((status) => status !== allStatus[1] && status !== allStatus[3])
+
+const noWhatsappMessageList = allStatus.filter((status) => status === allStatus[2] || status === allStatus[4] || status === allStatus[8]);
