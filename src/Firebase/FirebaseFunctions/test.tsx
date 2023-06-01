@@ -5,6 +5,7 @@ import { Job, generateJobNumber, getFilteredJobs } from "./Job";
 import { Recruiter, generateRandomString } from "./Recruiter";
 import { uploadFileToFirestore } from "./firestoreFunc";
 import { Sector } from "./Sector";
+import { CandidateJobStatus } from "./CandidateJobStatus";
 export function sleep(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
