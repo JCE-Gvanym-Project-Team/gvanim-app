@@ -15,7 +15,7 @@ export const allStatus = [
     "התקבל",
     "הועבר למשרה אחרת",
     "נדחה",
-    "הפסיק את התהליך"];
+    "אינו מעוניין במשרה"];
 
 export class CandidateJobStatus
 {
