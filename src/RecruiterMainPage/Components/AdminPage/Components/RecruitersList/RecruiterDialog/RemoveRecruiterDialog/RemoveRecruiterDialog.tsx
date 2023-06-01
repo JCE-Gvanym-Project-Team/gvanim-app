@@ -49,8 +49,8 @@ function BootstrapDialogTitle(props: DialogTitleProps) {
     );
 }
 
-export default function MyJobRemoveDialog(props: { handleDelete: any }) {
-    const { handleDelete } = props;
+export default function RemoveRecruiterDialog(props: { handleRemoveRecruiter: any }) {
+    const { handleRemoveRecruiter } = props;
     const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
@@ -62,12 +62,8 @@ export default function MyJobRemoveDialog(props: { handleDelete: any }) {
 
     return (
         <>
-            <Button type="button" className='mt-3 mb-3' variant='contained' color='error' onClick={handleClickOpen} sx={{
-                width: '10%',
-                backgroundColor: '#c82333',
-                borderColor: '#bd2130'
-            }}>
-                הסר משרה
+            <Button type='submit' onClick={handleClickOpen} variant='contained' color='error'>
+                הסר מגייס
             </Button>
 
             <BootstrapDialog
@@ -81,14 +77,14 @@ export default function MyJobRemoveDialog(props: { handleDelete: any }) {
                 </BootstrapDialogTitle>
                 <DialogContent dividers>
                     <Typography gutterBottom>
-                        האם את/ה בטוח/ה שברצונך להסיר משרה זו לצמיתות?
+                        האם את/ה בטוח/ה שברצונך להסיר את המגייס/ת הנ"ל לצמיתות?
                     </Typography>
                 </DialogContent>
                 <DialogActions>
                     <Button variant='text' autoFocus onClick={handleClose}>
                         ביטול
                     </Button>
-                    <Button variant='text' color='error' type='submit' autoFocus onClick={handleDelete}>
+                    <Button variant='text' color='error' type='submit' autoFocus onClick={handleRemoveRecruiter}>
                         הסר
                     </Button>
                 </DialogActions>

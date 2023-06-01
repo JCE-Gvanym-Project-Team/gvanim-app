@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect } from "react";
 import WelcomePage from "./WelcomePage/WelcomePage";
 import { Route, Routes } from "react-router-dom";
 import ManageCandidatesPage from "./ManageCandidatesPage/ManageCandidatesPage";
@@ -15,8 +15,6 @@ import { getFilteredCandidates } from "../Firebase/FirebaseFunctions/Candidate";
 import ViewCandidatesPage from "./ManageCandidatesPage/ViewCandidatesPage/ViewCandidatesPage";
 import Footer from "./Components/Footer/Footer";
 import { CssBaseline } from "@mui/material";
-import { createContext, useContext, useMemo } from 'react';
-import { Box } from "@mui/material";
 
 
 function RecruiterMainPage({ handlelogout }) {

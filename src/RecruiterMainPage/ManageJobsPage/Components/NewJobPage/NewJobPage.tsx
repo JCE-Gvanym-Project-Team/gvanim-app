@@ -16,11 +16,6 @@ const Form = styled('form')(({ theme }) => ({
 const NewJobPage = () => {
     const { state } = useLocation();
 
-    const getRolesFromDB = () => {
-        const roles = ["מנהל","מהנדס","רופא"];
-        return roles;
-    };
-
     // values
     const [jobName, setJobName] = useState('');
     const [jobRole, setJobRole] = useState('');

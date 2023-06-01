@@ -48,7 +48,7 @@ export default function CandidatesListFullScreenDialog({ JobId }) {
 
 	React.useEffect(() => {
 		getCandidates();
-	}, [])
+	}, []);
 
 	const handleClickOpen = () => {
 		setOpen(true);

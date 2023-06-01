@@ -1,10 +1,8 @@
 import Login from "../../LoginPage/LoginPage";
-
 import "firebase/compat/auth";
 import  { useEffect, useState } from "react"
 import RecruiterMainPage from "../../RecruiterMainPage";
-import NavBar from "../NavBar/NavBar";
-import { loginAdmin, loginRecruiter, loguotRecruiter } from "../../../Firebase/FirebaseFunctions/Authentication";
+import { loginRecruiter, loguotRecruiter } from "../../../Firebase/FirebaseFunctions/Authentication";
 import firebase from "../../../Firebase/FirebaseConfig/firebase";
 
 
@@ -77,7 +75,6 @@ export default function Auth () {
           setUser(user);
         }
         else {
-          setUser('');
           return <RecruiterMainPage handlelogout={loguotRecruiter} />;
         }
       });

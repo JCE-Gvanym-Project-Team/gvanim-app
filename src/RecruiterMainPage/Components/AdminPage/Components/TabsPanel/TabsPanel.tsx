@@ -3,8 +3,8 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { AccountTree, Home, Link, ManageAccounts, Password, PeopleAltOutlined, Summarize } from '@mui/icons-material';
-import { Button, Divider, Stack, Tooltip } from '@mui/material';
+import { AccountTree, Edit, EditNote, Home, Link, ManageAccounts, Password, PeopleAltOutlined, Save, Summarize } from '@mui/icons-material';
+import { Button, Divider, IconButton, ListItemIcon, Stack, Tooltip } from '@mui/material';
 import AccountSettings from './Components/AccountSettings/AccountSettings';
 import PasswordSettings from './Components/PasswordSettings/PasswordSettings';
 import RecruiterList from '../RecruitersList/RecruiterList';
@@ -39,6 +39,10 @@ function a11yProps(index: number) {
 
 export default function TabsPane() {
     const [value, setValue] = React.useState(0);
+
+    const [accountEdit, setAccountEdit] = React.useState(false);
+    const [passwordEdit, setPasswordEdit] = React.useState(false);
+
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
@@ -84,15 +88,29 @@ export default function TabsPane() {
 
                 <Stack p={2} direction='column' spacing={2}>
                     <Box>
-                        <Typography component="span" sx={{ fontFamily: "'Noto Sans Hebrew', sans-serif", fontWeight: 600 }} variant='h6'>  פרטים אישיים  </Typography>
-                        <AccountSettings />
+                        <Stack direction='row'>
+                            <Typography component="div" sx={{ fontFamily: "'Noto Sans Hebrew', sans-serif", fontWeight: 600 }} variant='h6'>  פרטים אישיים  </Typography>
+
+                            <IconButton sx={{ mr: 1 }} onClick={() => setAccountEdit(!accountEdit)}>
+                                {accountEdit ? <Save sx={{ color: 'rgb(52, 71, 103)', fontSize: 20 }} /> : <Edit sx={{ color: 'rgb(52, 71, 103)', fontSize: 20 }} />}
+                            </IconButton>
+                        </Stack>
+
+                        <AccountSettings accountEdit={accountEdit} />
                     </Box>
 
                     <Divider />
 
                     <Box>
+  
+                        <Stack direction='row'>
                         <Typography component="span" sx={{ fontFamily: "'Noto Sans Hebrew', sans-serif", fontWeight: 600 }} variant='h6'>  סיסמה  </Typography>
-                        <PasswordSettings />
+
+                            <IconButton sx={{ mr: 1 }} onClick={() => setPasswordEdit(!passwordEdit)}>
+                                {passwordEdit ? <Save sx={{ color: 'rgb(52, 71, 103)', fontSize: 20 }} /> : <Edit sx={{ color: 'rgb(52, 71, 103)',fontSize: 20 }} />}
+                            </IconButton>
+                        </Stack>
+                        <PasswordSettings passwordEdit={passwordEdit} />
                     </Box>
                 </Stack>
 
@@ -108,11 +126,11 @@ export default function TabsPane() {
             </TabPanel>
 
             <TabPanel value={value} index={2}>
-            <Typography component="span" sx={{ fontFamily: "'Noto Sans Hebrew', sans-serif", fontWeight: 600 }} variant='h6'> ניהול אשכולות </Typography>
+                <Typography component="span" sx={{ fontFamily: "'Noto Sans Hebrew', sans-serif", fontWeight: 600 }} variant='h6'> ניהול אשכולות </Typography>
             </TabPanel>
 
             <TabPanel value={value} index={3}>
-            <Typography component="span" sx={{ fontFamily: "'Noto Sans Hebrew', sans-serif", fontWeight: 600 }} variant='h6'> ניהול שדות </Typography>
+                <Typography component="span" sx={{ fontFamily: "'Noto Sans Hebrew', sans-serif", fontWeight: 600 }} variant='h6'> ניהול שדות </Typography>
             </TabPanel>
         </Box>
     );

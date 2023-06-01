@@ -258,7 +258,7 @@ export default function MyTable(props: { setDataSize: any }) {
 	const theme = useTheme();
 
 	return (
-		
+		<>
 			<Container className="shadow-lg border rounded"
 				sx={dataGridContainerSx}
 				style={dataGridContainerStyle}
@@ -278,6 +278,6 @@ export default function MyTable(props: { setDataSize: any }) {
 					localeText={heIL.components.MuiDataGrid.defaultProps.localeText}
 					slots={{ noRowsOverlay: CustomNoRowsOverlay, toolbar: GridCustomToolbar, footer: CustomFooter }} />
 
-			</Container>
+			</Container></>
 	);
 }
