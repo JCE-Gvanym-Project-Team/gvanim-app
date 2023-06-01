@@ -1,24 +1,15 @@
-import { Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
+import { BoxGradientSx } from "../PageStyles";
 import { Candidate, generateCandidateId, getFilteredCandidates } from "../../Firebase/FirebaseFunctions/Candidate";
-import { useEffect } from "react";
-import ViewCandidatesPage from "./ViewCandidatesPage/ViewCandidatesPage";
 import { loginAdmin } from "../../Firebase/FirebaseFunctions/Authentication";
 
-export default function ManageCandidatesPage(props: { setHomeActive: any, setReportsActive: any, setCandidatesActive: any, setJobsActive: any })
+export default function ManageCandidatesPage()
 {
-    const { setHomeActive, setReportsActive, setCandidatesActive, setJobsActive } = props;
-    useEffect(() =>
-    {
-        // Code inside this effect will run after the component has rendered
-        setHomeActive(false);
-        setCandidatesActive(true);
-        setReportsActive(false);
-        setJobsActive(false);
-    }, []);
 
     return (
         <>
-            <div>ManageCandidatesPage</div>
+        <Box sx={BoxGradientSx} />
+            <div>hi</div>
             <Button onClick={addCandidate}>asdasdasdsa</Button>
         </>
     )

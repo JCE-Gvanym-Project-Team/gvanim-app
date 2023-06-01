@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment } from "react";
 import WelcomePage from "./WelcomePage/WelcomePage";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import ManageCandidatesPage from "./ManageCandidatesPage/ManageCandidatesPage";
 import ManageJobsPage from "./ManageJobsPage/ManageJobsPage";
 import ReportsPage from "./ReportsPage/ReportsPage";
@@ -14,45 +14,40 @@ import EditCandidate from "./ManageCandidatesPage/ViewCandidatesPage/Components/
 import AdminPage from "./Components/AdminPage/AdminPage";
 import { getFilteredCandidates } from "../Firebase/FirebaseFunctions/Candidate";
 import ViewCandidatesPage from "./ManageCandidatesPage/ViewCandidatesPage/ViewCandidatesPage";
+import Footer from "./Components/Footer/Footer";
+import { CssBaseline } from "@mui/material";
+import { createContext, useContext, useMemo } from 'react';
 import { Box } from "@mui/material";
+import ManageInterviewsPage from './ManageCandidatesPage/ViewCandidatesPage/ManageInterviewsPage/ManageInterViewsPage'
 
 
+function RecruiterMainPage({ handlelogout }) {
 
-function RecruiterMainPage({ handlelogout })
-{
-	const [HomeActive, setHomeActive] = useState(false);
-	const [ReportsActive, setReportsActive] = useState(false);
-	const [CandidatesActive, setCandidatesActive] = useState(false);
-	const [JobsActive, setJobsActive] = useState(false);
 	const [allJobs, setAllJobs] = React.useState<any[]>([]);
-	const [candidateIDs, setCandidateIDs] = useState<string[]>([]);
+	const [candidateIDs, setCandidateIDs] = useState<string[]>([])
 
 
-
-	const fetchAllJobs = async () =>
-	{
+	const fetchAllJobs = async () => {
 		const jobs = await getFilteredJobs();
 		const jobsWithId = jobs.map((job) => ({ ...job, id: job._jobNumber }));
 		setAllJobs(jobsWithId);
 	};
 
-	const fetchCandidateIDs = async () =>
-	{
+	const fetchCandidateIDs = async () => {
 		const candidates = await getFilteredCandidates();
 		setCandidateIDs(candidates.map(candidate => candidate._id));
 	}
 
-	useEffect(() =>
-	{
+	useEffect(() => {
 		fetchAllJobs();
 		fetchCandidateIDs();
 	}, []);
 
 	return (
 		<>
-			<NavBar handlelogout={handlelogout} HomeActive={HomeActive} setHomeActive={setHomeActive}
-				ReportsActive={ReportsActive} setReportsActive={setReportsActive} CandidatesActive={CandidatesActive}
-				setCandidatesActive={setCandidatesActive} JobsActive={JobsActive} setJobsActive={setJobsActive} />
+			<CssBaseline />
+			<NavBar handlelogout={handlelogout} />
+
 
 			{allJobs.map(job => (<Link key={job.id} to={'/jobs/' + job.id} />))}
 			<Routes>
@@ -61,32 +56,38 @@ function RecruiterMainPage({ handlelogout })
 
 				{allJobs.map((job) => (<Route path={`/jobs/${job.id}`} key={job.id} element={<SingleJob id={job.id}></SingleJob>} />))}
 
-				<Route path="/" element={<WelcomePage setHomeActive={setHomeActive} setReportsActive={setReportsActive} setCandidatesActive={setCandidatesActive} setJobsActive={setJobsActive} />} />
+				<Route path="/" element={<WelcomePage />} />
 				{/* Jobs Routes */}
-				<Route path="/manageJobs" element={<ManageJobsPage setHomeActive={setHomeActive} setReportsActive={setReportsActive} setCandidatesActive={setCandidatesActive} setJobsActive={setJobsActive} />} />
-				<Route path="/createJob" element={<NewJobPage setHomeActive={setHomeActive} setReportsActive={setReportsActive} setCandidatesActive={setCandidatesActive} setJobsActive={setJobsActive} />} />
+				<Route path="/manageJobs" element={<ManageJobsPage />} />
+				<Route path="/createJob" element={<NewJobPage />} />
 
 				{/* Candidate Routes */}
-				<Route path="/editCandidate" element={<EditCandidate setHomeActive={setHomeActive} setReportsActive={setReportsActive} setCandidatesActive={setCandidatesActive} setJobsActive={setJobsActive} />} />
-				<Route path="/manageCandidates" element={<ManageCandidatesPage setHomeActive={setHomeActive} setReportsActive={setReportsActive} setCandidatesActive={setCandidatesActive} setJobsActive={setJobsActive} />} />
+				<Route path="/editCandidate" element={<EditCandidate />} />
+				<Route path="/manageCandidates" element={<ManageCandidatesPage />} />
 				{candidateIDs.map((candidateId) =>
 				{	
 					return (
 						<React.Fragment key={candidateId + "fragment"}>
-							<Route path={"/manageCandidates/" + candidateId} element={<ViewCandidatesPage candidateId={candidateId} setHomeActive={setHomeActive} setReportsActive={setReportsActive} setCandidatesActive={setCandidatesActive} setJobsActive={setJobsActive} key={candidateId + "ViewCandidatesPage"}/>} key={candidateId} />
-							<Route path={"/manageCandidates/" + candidateId + "/interviews"} element={<ViewCandidatesPage candidateId={candidateId} setHomeActive={setHomeActive} setReportsActive={setReportsActive} setCandidatesActive={setCandidatesActive} setJobsActive={setJobsActive} />} key={candidateId + "interviews"} />
+							<Route path={"/manageCandidates/" + candidateId} element={<ViewCandidatesPage candidateId={candidateId} key={candidateId + "ViewCandidatesPage"}/>} key={candidateId} />
+							<Route path={"/manageCandidates/" + candidateId + "/interviews"} element={<ManageInterviewsPage candidateId={candidateId} />} key={candidateId + "interviews"} />
 						</React.Fragment>
 					);
 				})
 				}
 
 				{/* Reports Routes */}
+<<<<<<< HEAD
 				<Route path="/reports" element={<ReportsPage setHomeActive={setHomeActive} setReportsActive={setReportsActive} setCandidatesActive={setCandidatesActive} setJobsActive={setJobsActive} />} />
 				<Route path="/rejection" element={<ReportRejection />} />
+=======
+				<Route path="/reports" element={<ReportsPage />} />
+>>>>>>> 2b254686e58f50650da2d1322c4ce11dc94c01ca
 
 				{/* Admin Routes */}
 				<Route path="/settings" element={<AdminPage />} />
 			</Routes>
+
+			<Footer />
 		</>
 
 	);

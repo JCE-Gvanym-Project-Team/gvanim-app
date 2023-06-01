@@ -8,8 +8,8 @@ import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
-import { ListItem, ListItemButton, ListItemText } from '@mui/material';
-import { Logout } from '@mui/icons-material';
+import { Box, Link, ListItem, ListItemButton, ListItemText, Stack } from '@mui/material';
+import { LoginOutlined, Logout } from '@mui/icons-material';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -64,17 +64,61 @@ export default function MyLogoutDialog(props: { handlelogout: any, isMobile: Boo
     return (
         <div>
             {isMobile ? (
-                <>
-                    <ListItem disablePadding>
-                        <ListItemButton sx={{ textAlign: 'center' }}>
-                            <ListItemText primary='התנתק' onClick={handleClickOpen} />
-                        </ListItemButton>
-                    </ListItem>
-                </>
 
+                    <Box id="logout" sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', width: '100%',mb: 1 }}>
+                        <Stack spacing={1} direction='row' sx={{ height: 'fit-content' }}>
+                            <Link onClick={handleClickOpen}
+                                sx={{
+                                    cursor: 'pointer',
+                                    ":hover > #reportsIcon": {
+                                        transition: 'all .2s cubic-bezier(.34,1.61,.7,1.3)',
+                                        transform: 'translateY(-2px)',
+                                    },
+                                    textDecoration: 'unset',
+                                    color: '#344767',
+                                    fontSize: '0.87rem'
+                                }}
+                            >
+                                <LoginOutlined id="reportsIcon" sx={{ fontSize: '1.07rem', marginRight: 1, alignSelf: 'bottom' }} />
+                                התנתק
+                            </Link>
+                        </Stack>
+
+                    </Box>
             ) : (
-                <Button color='error' size="large" startIcon={<Logout />} sx={{ width: '100%'}} onClick={handleClickOpen}>
-                    התנתק
+                <Button onClick={handleClickOpen} disableRipple sx={{
+                    ":active": {
+                        backgroundColor: 'transparent',
+                        transform: 'none'
+                    },
+                    ":hover": {
+                        opacity: '0.75',
+                        color: '#e91e63',
+                        backgroundColor: 'transparent',
+                        border: '1px solid #e91e63',
+                        borderRadius: '0.5rem'
+
+                    },
+                    border: '1px solid #e91e63',
+                    color: '#e91e63',
+                    letterSpacing: 0,
+                    backgroundSize: '150%',
+                    backgroundPositionX: '25%',
+                    position: 'relative',
+                    overflow: 'hidden',
+                    WebkitAppearance: 'none',
+                    borderRadius: '0.5rem',
+                    fontSize: '0.85rem',
+                    paddingX: '1rem',
+                    paddingY: '0.375rem',
+                    fontWeight: 600,
+                    margin: '0px 4px 0px 4px',
+                    lineHeight: 1.667,
+                    height: '32px'
+
+                }}>
+
+                    <Typography sx={{ font: '12px Roboto, Helvetica,Arial, sans-serif', margin: '0px 0px 2px 0px', fontWeight: 600 }}>התנתק</Typography>
                 </Button>)
             }
             <BootstrapDialog

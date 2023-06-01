@@ -11,8 +11,9 @@ import { getFilteredCandidateJobStatuses } from '../../../Firebase/FirebaseFunct
 import NotesPopup from './Components/NotesPopup/NotesPopup';
 import ChangeJobDialog from './Components/ChangeJobDialog/ChangeJobDialog';
 import { Autorenew, EditNote, QuestionAnswer, SpeakerNotes } from '@mui/icons-material';
+import React from 'react';
 
-export default function ViewCandidatesPage(props: {candidateId: string, setHomeActive: any, setReportsActive: any, setCandidatesActive: any, setJobsActive: any})
+export default function ViewCandidatesPage(props: {candidateId: string})
 {
 
 	const navigate = useNavigate();
@@ -21,7 +22,7 @@ export default function ViewCandidatesPage(props: {candidateId: string, setHomeA
 	const [dataSize, setDataSize] = useState(0);
 	
 	// get candidate id
-	let {candidateId, setHomeActive, setReportsActive, setCandidatesActive, setJobsActive} = props;
+	let { candidateId } = props;
 
 	// candidate and jobs info
 	const [candidateInfo, setCandidateInfo] = useState<Candidate | null>(null);
@@ -30,11 +31,6 @@ export default function ViewCandidatesPage(props: {candidateId: string, setHomeA
 
 	useEffect(() =>
 	{
-		setHomeActive(false);
-		setReportsActive(false);
-		setCandidatesActive(false);
-		setJobsActive(false);
-
 		// pull candidate from firebase
 		getCandidate(candidateId, setCandidateInfo);
 
@@ -55,22 +51,6 @@ export default function ViewCandidatesPage(props: {candidateId: string, setHomeA
 		if ((reason && reason !== "backdropClick") || reason === undefined)
 		{
 			setPopupOpen(false);
-		}
-	};
-
-	// change job handler
-	const [changeJobDialogOpen, setChangeJobDialogOpen] = useState(false);
-
-	const openChangeJobDialogHandler = () =>
-	{
-		setChangeJobDialogOpen(true);
-	};
-
-	const closeChangeJobDialogHandler = (event, reason) =>
-	{
-		if ((reason && reason !== "backdropClick") || reason === undefined)
-		{
-			setChangeJobDialogOpen(false);
 		}
 	};
 
@@ -120,32 +100,11 @@ export default function ViewCandidatesPage(props: {candidateId: string, setHomeA
 						</Box>
 
 
-						{/* text + move to another job button */}
+						{/* text */}
 						<Box sx={candidateNameAndEditButtonContainerSx}>
 							<Typography sx={jobTextSx} variant='h4'>
 								משרות
 							</Typography>
-
-							<Button sx={changeJobButtonSx} variant="contained" startIcon={<Autorenew />} onClick={openChangeJobDialogHandler}>
-								שינוי משרה
-							</Button>
-							<ChangeJobDialog
-								open={changeJobDialogOpen}
-								onClose={closeChangeJobDialogHandler}
-								candidateAppliedJobs={candidateJobs.map(job =>
-								{
-									return job._jobNumber.toString() + ", " + job._role + ", " + job._region;
-								})}
-								// first filter out jobs that they applied to, then map to a nice string for the user
-								allJobs={allJobs.filter(job =>
-								{
-									return !candidateJobs.includes(job);
-								}).map(job =>
-								{
-									return job._jobNumber.toString() + ", " + job._role + ", " + job._region;
-								})}
-								candidate={candidateInfo}
-							/>
 						</Box>
 
 						{/* Jobs table */}
