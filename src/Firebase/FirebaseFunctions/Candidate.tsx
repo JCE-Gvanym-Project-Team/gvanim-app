@@ -144,7 +144,7 @@ export class Candidate {
      */
     public async uploadCv(cv: File) {
         const extension = cv.name.split('.')[cv.name.split('.').length - 1];
-        await uploadFileToFirestore(cv, `CandidatesFiles/${this._id}/cv`, `${this._firstName}_${this._lastName}_CV.${extension}`);
+        await uploadFileToFirestore(cv, `CandidatesFiles/${this._id}/cv`, `CV.${extension}`);
     }
     /**
      * Deletes the CV file of the candidate from the firestore.
@@ -153,8 +153,8 @@ export class Candidate {
     public async deleteCv() {
         const extensions = await getFileExtensionsInFolder(`CandidatesFiles/${this._id}/cv`);
         for (let i = 0; i < extensions.length; i++)
-            if ((await fileExists(`CandidatesFiles/${this._id}/cv/${this._firstName}_${this._lastName}_CV.${extensions.at(i)}`))) {
-                await deleteFile(`CandidatesFiles/${this._id}/cv/${this._firstName}_${this._lastName}_CV.${extensions.at(i)}`);
+            if ((await fileExists(`CandidatesFiles/${this._id}/cv/CV.${extensions.at(i)}`))) {
+                await deleteFile(`CandidatesFiles/${this._id}/cv/CV.${extensions.at(i)}`);
                 return;
             }
     }
@@ -166,8 +166,8 @@ export class Candidate {
     public async getCvUrl(): Promise<string> {
         const extensions = await getFileExtensionsInFolder(`CandidatesFiles/${this._id}/cv`);
         for (let i = 0; i < extensions.length; i++) {
-            if ((await fileExists(`CandidatesFiles/${this._id}/cv/${this._firstName}_${this._lastName}_CV.${extensions.at(i)}`))) {
-                const url = await getDownloadUrlFromFirestorePath(`CandidatesFiles/${this._id}/cv/${this._firstName}_${this._lastName}_CV.${extensions.at(i)}`);
+            if ((await fileExists(`CandidatesFiles/${this._id}/cv/CV.${extensions.at(i)}`))) {
+                const url = await getDownloadUrlFromFirestorePath(`CandidatesFiles/${this._id}/cv/CV.${extensions.at(i)}`);
                 return url;
             }
         }
