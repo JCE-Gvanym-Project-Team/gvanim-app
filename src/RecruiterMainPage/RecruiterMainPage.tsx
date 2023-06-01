@@ -17,7 +17,7 @@ import Footer from "./Components/Footer/Footer";
 import { CssBaseline } from "@mui/material";
 import { createContext, useContext, useMemo } from 'react';
 import { Box } from "@mui/material";
-import ManageInterviewsPage from './ManageCandidatesPage/ViewCandidatesPage/ManageInterViewsPage/ManageInterViewsPage'
+import ManageInterviewsPage from './ManageCandidatesPage/ViewCandidatesPage/ManageInterviewsPage/ManageInterViewsPage'
 
 
 function RecruiterMainPage({ handlelogout }) {
