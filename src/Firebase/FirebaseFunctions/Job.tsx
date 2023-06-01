@@ -3,7 +3,8 @@ import { realtimeDB } from "../FirebaseConfig/firebase";
 import { Candidate, getFilteredCandidates } from "./Candidate";
 import { appendToDatabase, getFirebaseIdsAtPath, removeObjectAtPath, replaceData } from "./DBfuncs";
 import { Stage } from "./Stage";
-import { Role } from "./Role";
+import { Role, getOpenRoles } from "./Role";
+import { getOpenSectors } from "./Sector";
 const database = realtimeDB;
 
 export class Job {
@@ -74,6 +75,73 @@ export class Job {
         for (let i = 0; i < ids.length; i++)
             candidates.push((await getFilteredCandidates(["id"], [ids[i]])));
         return candidates;
+    }
+    public async updateTitle(title: string) {
+        if (await this.exists()) {
+            this._title = title;
+            replaceData((await this.getPath()), this);
+        }
+    }
+
+    public async updateRole(role: string) {
+        if (await this.exists() && ((await getOpenRoles()).map((r)=>r._name)).includes(role)) {
+            this._role = role;
+            replaceData((await this.getPath()), this);
+        }
+    }
+
+    public async updateScope(scope: Array<number>) {
+        if (await this.exists() && scope.length===2) {
+            if(scope[0]<scope[1])
+                this._scope = scope;
+            else{
+                this._scope[0]=scope[1];
+                this._scope[1]=scope[0];
+            }
+            replaceData((await this.getPath()), this);
+        }
+    }
+
+    public async updateRegion(region: string) {
+        if (await this.exists()) {
+            this._region = region;
+            replaceData((await this.getPath()), this);
+        }
+    }
+
+    public async updateSector(sector: string) {
+        if (await this.exists() && ((await getOpenSectors()).map((s)=>s._name)).includes(sector)) {
+            this._sector = sector;
+            replaceData((await this.getPath()), this);
+        }
+    }
+
+    public async updateDescription(description: string[]) {
+        if (await this.exists()) {
+            this._description = description;
+            replaceData((await this.getPath()), this);
+        }
+    }
+
+    public async updateRequirements(requirements: string) {
+        if (await this.exists()) {
+            this._requirements = requirements;
+            replaceData((await this.getPath()), this);
+        }
+    }
+
+    public async updateOpen(open: boolean) {
+        if (await this.exists()) {
+            this._open = open;
+            replaceData((await this.getPath()), this);
+        }
+    }
+
+    public async updateHighPriority(highPriority: boolean) {
+        if (await this.exists()) {
+            this._highPriority = highPriority;
+            replaceData((await this.getPath()), this);
+        }
     }
     /**
      * Removes the current job from the realtime DB and all associated candidatures.
@@ -320,12 +388,12 @@ function compareByHighPriority(a: Job, b: Job): number {
 }
 
 function compareByViews(a: Job, b: Job): number {
-    let asum =0;
-    let bsum =0;
+    let asum = 0;
+    let bsum = 0;
     for (const [key, value] of Array.from(a._viewsPerPlatform))
-        asum+=value;
+        asum += value;
     for (const [key, value] of Array.from(b._viewsPerPlatform))
-        bsum+=value;
+        bsum += value;
     return bsum - asum;
 }
 function compareByCreationDate(a: Job, b: Job): number {

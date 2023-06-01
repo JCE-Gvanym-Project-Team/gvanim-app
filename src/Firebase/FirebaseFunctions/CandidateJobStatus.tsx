@@ -17,8 +17,7 @@ export const allStatus = [
     "נדחה",
     "אינו מעוניין במשרה"];
 
-export class CandidateJobStatus
-{
+export class CandidateJobStatus {
     public _jobNumber: number;
     public _candidateId: string;
     public _status: string;
@@ -42,8 +41,7 @@ export class CandidateJobStatus
         interviewDate: Date = new Date(0, 0, 0),
         interviewsSummery: Array<string> = ["", ""],
         recomendations: Array<Recomendation> = [],
-        rejectCause = "")
-    {
+        rejectCause = "") {
         this._jobNumber = jobNumber;
         this._candidateId = candidateId;
         this._status = status;
@@ -64,8 +62,7 @@ export class CandidateJobStatus
      * @param {File} recomendation - The file containing the recommendation.
      * @returns None
      */
-    public async addRecomendation(fullName: string, phone: string, eMail: string, recomendation: File)
-    {
+    public async addRecomendation(fullName: string, phone: string, eMail: string, recomendation: File) {
         if (this._recomendations.length >= 3)
             return;
         if (this._recomendations.map((rec) => rec._phone).includes(phone))
@@ -75,12 +72,44 @@ export class CandidateJobStatus
         await uploadFileToFirestore(recomendation, `CandidatesFiles/${this._candidateId}/rec`, `${phone}_REC.${extension}`);
         replaceData((await this.getPath()), this);
     }
+    public async updateAbout(about: string) {
+        if (await this.exists()) {
+            this._about = about;
+            replaceData((await this.getPath()), this);
+        }
+    }
+    public async updateMatchingRate(matchingRate: number) {
+        if (await this.exists()) {
+            this._matchingRate = matchingRate;
+            replaceData((await this.getPath()), this);
+        }
+    }
+
+    public async updateInterviewDate(interviewDate: Date) {
+        if (await this.exists()) {
+            this._interviewDate = interviewDate;
+            replaceData((await this.getPath()), this);
+        }
+    }
+
+    public async updateInterviewsSummery(interviewsSummery: Array<string>) {
+        if (await this.exists()) {
+            this._interviewsSummery = interviewsSummery;
+            replaceData((await this.getPath()), this);
+        }
+    }
+
+    public async updateRejectCause(rejectCause: string) {
+        if (await this.exists()) {
+            this._rejectCause = rejectCause;
+            replaceData((await this.getPath()), this);
+        }
+    }
     /**
      * Retrieves the URLs of the recommendation files for the current candidate.
      * @returns {Promise<string[]>} - An array of URLs for the recommendation files.
      */
-    public async getRecomendationsUrl(): Promise<string[]>
-    {
+    public async getRecomendationsUrl(): Promise<string[]> {
         let urls: string[] = [];
         const extentions = await getFileExtensionsInFolder(`CandidatesFiles/${this._candidateId}/rec`);
         const phones = this._recomendations.map((rec) => rec._phone);
@@ -110,8 +139,7 @@ export class CandidateJobStatus
      * Returns the number of interviews in the interviews summary array.
      * @returns {number} - The number of interviews in the interviews summary array.
      */
-    public getNumOfInterviews()
-    {
+    public getNumOfInterviews() {
         return this._interviewsSummery.length;
     }
     /**
@@ -121,8 +149,7 @@ export class CandidateJobStatus
      * @param {number} index - The index of the summary to replace.
      * @returns None
      */
-    public editInterviewSummery(summery: string, index: number)
-    {
+    public editInterviewSummery(summery: string, index: number) {
         if (index > this.getNumOfInterviews())
             this._interviewsSummery.push(summery);
         else
@@ -149,15 +176,12 @@ export class CandidateJobStatus
      * current candidate and job number.
      * @returns {Promise<string>} - A promise that resolves to the path of the object.
      */
-    private async getPath()
-    {
+    private async getPath() {
         let firebaseId = "";
         let ids = await getFirebaseIdsAtPath("/CandidatesJobStatus");
-        for (let i = 0; i < ids.length; i++)
-        {
+        for (let i = 0; i < ids.length; i++) {
             let stat = await getObjectAtPath("/CandidatesJobStatus/" + ids[i]);
-            if (stat._candidateId === this._candidateId && stat._jobNumber === this._jobNumber)
-            {
+            if (stat._candidateId === this._candidateId && stat._jobNumber === this._jobNumber) {
                 firebaseId = ids[i];
                 break;
             }
@@ -170,8 +194,7 @@ export class CandidateJobStatus
      * Checks if the object exists in realtime DB.
      * @returns {Promise<boolean>} - A promise that resolves to true if the object exists, false otherwise.
      */
-    public async exists()
-    {
+    public async exists() {
         if ((await this.getPath()).length > 0)
             return true;
         return false;
@@ -182,12 +205,10 @@ export class CandidateJobStatus
      * realtime DB.
      * @returns None
      */
-    public async remove()
-    {
+    public async remove() {
         this.deleteAllRecomendations();
         let candidateIds = await getFirebaseIdsAtPath("/CandidatesJobStatus");
-        candidateIds.forEach(async (id) =>
-        {
+        candidateIds.forEach(async (id) => {
             if (((await getObjectAtPath("/CandidatesJobStatus/" + id))._candidateId === this._candidateId) &&
                 ((await getObjectAtPath("/CandidatesJobStatus/" + id))._jobNumber === this._jobNumber))
                 removeObjectAtPath("/CandidatesJobStatus/" + id);
@@ -197,8 +218,7 @@ export class CandidateJobStatus
      * Adds the current object to the realtime DB. 
      * @returns None
      */
-    public async add()
-    {
+    public async add() {
         if (!(await this.exists()))
             appendToDatabase(this, "/CandidatesJobStatus");
         else
@@ -220,8 +240,7 @@ export class CandidateJobStatus
     public async getWhatsappUrl(recruiter: Recruiter, interviewDate: Date = new Date(0, 0, 0), place: string = ""): Promise<string> {
         const cand = (await getFilteredCandidates(["id"], [this._candidateId])).at(0);
         const job = (await getFilteredJobs(["jobNumber"], [this._jobNumber.toString()])).at(0);
-        if (cand && job)
-        {
+        if (cand && job) {
             const text = getMessage(cand, job, recruiter, this._status, interviewDate, place).replace('\n', '%0A').replace(' ', '%20');;
             console.log(cand._phone);
             if (text.length > 0)
@@ -235,21 +254,17 @@ export class CandidateJobStatus
  * @returns {Promise<CandidateJobStatus[]>} - A promise that resolves to an array of candidate job statuses.
  * @throws {Error} - If there is an error fetching the data from the database.
  */
-async function getCandidateJobStatusFromDatabase(): Promise<CandidateJobStatus[]>
-{
-    try
-    {
+async function getCandidateJobStatusFromDatabase(): Promise<CandidateJobStatus[]> {
+    try {
         const snapshot = await database.ref("/CandidatesJobStatus").once("value");
         const candidateJobStatusData = snapshot.val();
         const candidateJobStatuses: CandidateJobStatus[] = [];
-        for (const candidateJobStatusId in candidateJobStatusData)
-        {
+        for (const candidateJobStatusId in candidateJobStatusData) {
             const candidateJobStatus = candidateJobStatusData[candidateJobStatusId];
             candidateJobStatuses.push(candidateJobStatus);
         }
         return candidateJobStatuses;
-    } catch (error)
-    {
+    } catch (error) {
         console.error(error);
         throw new Error("Failed to fetch candidate job statuses from database.");
     }
@@ -271,8 +286,7 @@ export function getMessage(cand: Candidate, job: Job, rec: Recruiter, status: st
     message += '\n';
     message += "ברצוני לעדכן אותך על מועמדותך למשרה: ";
     message += `${job._title}\n`;
-    if (interviewDate !== (new Date(0, 0, 0)) && (status === allStatus[1] || status === allStatus[3]))
-    {
+    if (interviewDate !== (new Date(0, 0, 0)) && (status === allStatus[1] || status === allStatus[3])) {
         message += "נשמח לקבוע עמך ראיון בתאריך ";
         message += `${interviewDate.getDate()}/${interviewDate.getMonth() + 1}\n`;
         message += "בשעה:";
@@ -282,16 +296,13 @@ export function getMessage(cand: Candidate, job: Job, rec: Recruiter, status: st
         message += `${place}.\n`;
         message += `אנא אשר הגעתך לראיון`;
     }
-    if (status === allStatus[5])
-    {
+    if (status === allStatus[5]) {
         message += "עמותת גוונים שמחה להודיע לך על קבלתך למשרה"
     }
-    if (status === allStatus[7])
-    {
+    if (status === allStatus[7]) {
         message += "לצערנו לא נמשיך עמך בתהליך הגיוס";
     }
-    if (status === allStatus[6])
-    {
+    if (status === allStatus[6]) {
         message += "לאחר בחינת קורות החיים שלך ואת תהליך הגיוס שעברת הוחלט לנתב אותך למשרה אחרת, נשלח פרטים נוספים בקרוב.";
     }
     return message;
@@ -304,10 +315,8 @@ export function getMessage(cand: Candidate, job: Job, rec: Recruiter, status: st
  * @param {string} [sortBy=""] - The attribute to sort the results by.
  * @returns {Promise<CandidateJobStatus[]>} - A promise that resolves to an array of filtered candidate job statuses.
  */
-export async function getFilteredCandidateJobStatuses(attributes: string[] = [], values: string[] = [], sortBy: string = "")
-{
-    if (attributes.length !== values.length)
-    {
+export async function getFilteredCandidateJobStatuses(attributes: string[] = [], values: string[] = [], sortBy: string = "") {
+    if (attributes.length !== values.length) {
         console.log("the attributes length not match to values length");
         return [];
     }
@@ -316,50 +325,43 @@ export async function getFilteredCandidateJobStatuses(attributes: string[] = [],
 
     // filtering
     let i = attributes.indexOf("jobNumber");
-    if (i >= 0)
-    {
+    if (i >= 0) {
         candidateJobStatuses = candidateJobStatuses.filter(
             (status) => status._jobNumber === Number(values[i])
         );
     }
     i = attributes.indexOf("candidateId");
-    if (i >= 0)
-    {
+    if (i >= 0) {
         candidateJobStatuses = candidateJobStatuses.filter(
             (status) => status._candidateId === values[i]
         );
     }
     i = attributes.indexOf("status");
-    if (i >= 0)
-    {
+    if (i >= 0) {
         candidateJobStatuses = candidateJobStatuses.filter(
             (status) => status._status === values[i]
         );
     }
     i = attributes.indexOf("matchingRate");
-    if (i >= 0)
-    {
+    if (i >= 0) {
         candidateJobStatuses = candidateJobStatuses.filter(
             (status) => status._matchingRate === Number(values[i])
         );
     }
     i = attributes.indexOf("applyDate");
-    if (i >= 0)
-    {
+    if (i >= 0) {
         candidateJobStatuses = candidateJobStatuses.filter(
             (status) => status._applyDate.toISOString() === values[i]
         );
     }
     i = attributes.indexOf("lastUpdate");
-    if (i >= 0)
-    {
+    if (i >= 0) {
         candidateJobStatuses = candidateJobStatuses.filter(
             (status) => status._lastUpdate.toISOString() === values[i]
         );
     }
     i = attributes.indexOf("rejectCause");
-    if (i >= 0)
-    {
+    if (i >= 0) {
         candidateJobStatuses = candidateJobStatuses.filter(
             (status) => status._rejectCause === values[i]
         );
@@ -376,54 +378,44 @@ export async function getFilteredCandidateJobStatuses(attributes: string[] = [],
         return candidateJobStatuses.sort(sortByApplyDate);
     if (sortBy === "lastUpdate")
         return candidateJobStatuses.sort(sortByLastUpdate);
-    return candidateJobStatuses.map((s) => new CandidateJobStatus(s._jobNumber, 
-                                            s._candidateId, s._status, s._about,
-                                            s._matchingRate, s._applyDate, s._lastUpdate,
-                                            s._interviewDate, s._interviewsSummery,
-                                            s._recomendations, s._rejectCause));
+    return candidateJobStatuses.map((s) => new CandidateJobStatus(s._jobNumber,
+        s._candidateId, s._status, s._about,
+        s._matchingRate, s._applyDate, s._lastUpdate,
+        s._interviewDate, s._interviewsSummery,
+        s._recomendations, s._rejectCause));
 }
-function sortByJobNumber(a: CandidateJobStatus, b: CandidateJobStatus): number
-{
+function sortByJobNumber(a: CandidateJobStatus, b: CandidateJobStatus): number {
     return a._jobNumber - b._jobNumber;
 }
 
-function sortByCandidateId(a: CandidateJobStatus, b: CandidateJobStatus): number
-{
-    if (a._candidateId.toLowerCase() < b._candidateId.toLowerCase())
-    {
+function sortByCandidateId(a: CandidateJobStatus, b: CandidateJobStatus): number {
+    if (a._candidateId.toLowerCase() < b._candidateId.toLowerCase()) {
         return -1;
     }
-    if (a._candidateId.toLowerCase() > b._candidateId.toLowerCase())
-    {
+    if (a._candidateId.toLowerCase() > b._candidateId.toLowerCase()) {
         return 1;
     }
     return 0;
 }
 
-function sortByStatus(a: CandidateJobStatus, b: CandidateJobStatus): number
-{
-    if (a._status.toLowerCase() < b._status.toLowerCase())
-    {
+function sortByStatus(a: CandidateJobStatus, b: CandidateJobStatus): number {
+    if (a._status.toLowerCase() < b._status.toLowerCase()) {
         return -1;
     }
-    if (a._status.toLowerCase() > b._status.toLowerCase())
-    {
+    if (a._status.toLowerCase() > b._status.toLowerCase()) {
         return 1;
     }
     return 0;
 }
 
-function sortByMatchingRate(a: CandidateJobStatus, b: CandidateJobStatus): number
-{
+function sortByMatchingRate(a: CandidateJobStatus, b: CandidateJobStatus): number {
     return b._matchingRate - a._matchingRate;
 }
 
-function sortByApplyDate(a: CandidateJobStatus, b: CandidateJobStatus): number
-{
+function sortByApplyDate(a: CandidateJobStatus, b: CandidateJobStatus): number {
     return a._applyDate.getTime() - b._applyDate.getTime();
 }
 
-function sortByLastUpdate(a: CandidateJobStatus, b: CandidateJobStatus): number
-{
+function sortByLastUpdate(a: CandidateJobStatus, b: CandidateJobStatus): number {
     return a._lastUpdate.getTime() - b._lastUpdate.getTime();
 }
