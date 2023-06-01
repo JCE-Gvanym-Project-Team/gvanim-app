@@ -1,14 +1,14 @@
-import { Autocomplete, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, IconButton, MenuItem, TextField, Typography } from "@mui/material";
+import { Autocomplete, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, MenuItem, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { changeJobContainerStyle, changeJobContainerSx, currentStatusTextSx, dialogActionsSx, dialogContentSx, dialogSx, dialogTitleSx, dialogTopAreaSx, locationTextFieldSx, locationTitleSx, submitButtonSx } from "./ScheduleInterviewDialogStyle";
-import { ArrowBack, ArrowDownward, Autorenew, Check, Close, MoodBad, ThumbDown, WhatsApp } from "@mui/icons-material";
+import { ArrowBack, ArrowDownward, Autorenew, Check, Close, DoneAll, MoodBad, ThumbDown, ThumbUp, WhatsApp } from "@mui/icons-material";
 import { DatePicker, LocalizationProvider, MobileTimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import 'dayjs/locale/he'
 import { Candidate } from "../../../../../../Firebase/FirebaseFunctions/Candidate";
-import { CandidateJobStatus, allStatus } from "../../../../../../Firebase/FirebaseFunctions/CandidateJobStatus";
+import { CandidateJobStatus, allStatus, getFilteredCandidateJobStatuses } from "../../../../../../Firebase/FirebaseFunctions/CandidateJobStatus";
 import { Recruiter } from "../../../../../../Firebase/FirebaseFunctions/Recruiter";
-import { Job } from "../../../../../../Firebase/FirebaseFunctions/Job";
+import { Job, getFilteredJobs } from "../../../../../../Firebase/FirebaseFunctions/Job";
 
 export default function ScheduleInterviewDialog(props: { open, onClose, candidate: Candidate | null, candidateJobStatus: CandidateJobStatus | null, candidateJobs: Job[], allJobs: Job[] })
 {
@@ -39,34 +39,62 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
         setTime(value);
     };
 
-    // submit button handlers
-    const handleSubmitChangeJob = (event) =>
+    const setDefaults = () =>
     {
-        if (fromJobValue === "" && toJobValue === "")
+        setToJobValue("");
+        setFromJobValue("");
+        setDisableRejectionReason(true);
+        setDisableWhatsappMessage(true);
+        setChangeJobDialogOpen(false);
+        setTimeDisabled(true);
+    }
+
+    // submit button handlers
+    const handleSubmitChangeJob = async (event) =>
+    {
+        console.log(fromJobValue);
+        if ((fromJobValue === "" || !fromJobValue) && (toJobValue === "" || !toJobValue))
         {
             setFromJobError(true);
             setToJobError(true);
             return;
         }
 
-        if (fromJobValue === "")
+        if ((fromJobValue === "" || !fromJobValue))
         {
             setFromJobError(true);
             return;
         }
 
-        if (toJobValue === "")
+        if ((toJobValue === "" || !toJobValue))
         {
             setToJobError(true);
             return;
         }
 
+        // // update status in firebase
+        // await candidateJobStatus?.updateStatus(newStatus, undefined);
+        // const fromJobNumberString = fromJobValue?.match(/\d+/)?.[0];
+        // const fromJobNumber = fromJobNumberString ? parseInt(fromJobNumberString) : NaN;
+
+        // const toJobNumberString = toJobValue?.match(/\d+/)?.[0];
+        // const toJobNumber = toJobNumberString ? parseInt(toJobNumberString) : NaN;
+
+        // // actually replace in firebase
+        // const fromCandidateJobStatus = (await getFilteredCandidateJobStatuses(["jobNumber", "candidateId"], [fromJobNumber.toString(), candidate ? candidate._id : ""]))[0];
+        // fromCandidateJobStatus.updateStatus(allStatus[6], undefined);
+        // await candidate?.apply(toJobNumber, fromCandidateJobStatus[0]._about);
+
+
+        setDefaults();
         onClose(event, "submit");
     }
 
     const handleSubmitSaveRejectionReason = async (event) =>
     {
         await candidateJobStatus?.updateStatus(newStatus, undefined);
+        setDefaults();
+        onClose(event, "submit");
     }
 
     const handleSubmitSendWhatsappMessage = async (event) =>
@@ -91,12 +119,14 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
             //TODO: replace this with a real recruiter, and a real location
         }
 
+        setDefaults();
         onClose(event, "submit");
     }
 
     const handleSubmitSaveStatus = async (event) =>
     {
         await candidateJobStatus?.updateStatus(newStatus, undefined);
+        setDefaults();
         onClose(event, "submit");
     }
 
@@ -138,39 +168,26 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
         {
             setChangeJobDialogOpen(false);
         }
+        if (status === "" || status === null)
+        {
+
+        }
     }
 
-    // change job handlers
+    // change job setters
     const [changeJobDialogOpen, setChangeJobDialogOpen] = useState(false);
     const [fromJobValue, setFromJobValue] = useState('');
     const [toJobValue, setToJobValue] = useState('');
     const [fromJobError, setFromJobError] = useState(false);
     const [toJobError, setToJobError] = useState(false);
 
-
-    useEffect(() =>
-    {
-        setToJobError(false);
-        setFromJobError(false);
-    }, [])
-
-    const handleFromJobChange = (event, value) =>
-    {
-        //TODO: THIS
-    };
-
-    const handleToJobChange = (event, value) =>
-    {
-        setToJobError(false);
-        setFromJobError(false);
-        setToJobValue(value);
-    };
-
-
-
     return (
         // popup dialog
-        <Dialog open={open} onClose={onClose} sx={dialogSx}>
+        <Dialog open={open} onClose={(event, reason) =>
+        {
+            setDefaults();
+            onClose(event, reason)
+        }} sx={dialogSx}>
             <Box sx={dialogTopAreaSx}>
                 {/* Title */}
                 <DialogTitle sx={dialogTitleSx}>
@@ -183,7 +200,11 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
                     <IconButton
                         edge="start"
                         color="inherit"
-                        onClick={onClose}
+                        onClick={(event) =>
+                        {
+                            setDefaults();
+                            onClose(event, undefined)
+                        }}
                         aria-label="close"
                     >
                         <Close />
@@ -203,9 +224,8 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
                     renderOption={(props, option) =>
                         <MenuItem {...props} sx={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
                             {option?.icon}
-                            <Divider />
                             <Typography sx={{ color: option ? option.textColor : "black" }}>
-                                {option?.status}
+                                | {option?.status}
                             </Typography>
                         </MenuItem>
                     }
@@ -255,9 +275,12 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
                                     }}
                                     label="ממשרה"
                                 />}
-                            onChange={handleFromJobChange}
+                            // onChange={handleFromJobChange}
                             onInputChange={(event, value) =>
                             {
+                                if (value !== ""){                                    
+                                    setFromJobError(false);
+                                }
                                 setFromJobValue(value);
                             }}
                         />
@@ -285,9 +308,11 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
                                 />
                             }
                             onClick={() => setToJobError(false)}
-                            onChange={handleToJobChange}
                             onInputChange={(event, value) =>
                             {
+                                if (value !== ""){
+                                    setToJobError(false);
+                                }
                                 setToJobValue(value);
                             }}
                         />
@@ -308,10 +333,16 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
                         })()}
                     </Typography>
                     <TextField
+                        multiline
+                        fullWidth
+                        maxRows={5}
                         sx={locationTextFieldSx}
                         style={{ display: disableWhatsappMessage ? "none" : "block" }}
                     />
                     <TextField
+                        multiline
+                        fullWidth
+                        maxRows={5}
                         sx={locationTextFieldSx}
                         style={{ display: disableRejectionReason ? "none" : "block" }}
                     />
@@ -363,13 +394,17 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
 // this is a list of statuses that the user can change to or from
 const dropdownOptions = allStatus.filter((status) => status !== allStatus[0]).map((status) =>
 {
-    if (status === allStatus[1] || status === allStatus[2] || status === allStatus[3] || status === allStatus[4])
+    if (status === allStatus[1] || status === allStatus[3])
     {
-        return { status: status, textColor: "#4CAF50", icon: <Check sx={{ color: "#4CAF50" }} /> };
+        return { status: status, textColor: "#CFAF00", icon: <Check sx={{ color: "#CFAF00" }} /> };
+    }
+    if (status === allStatus[2] || status === allStatus[4])
+    {
+        return { status: status, textColor: "#008000", icon: <DoneAll sx={{ color: "#008000" }} /> };
     }
     if (status === allStatus[5])
     {
-        return { status: status, textColor: "#008000", icon: <Check sx={{ color: "#008000" }} /> };
+        return { status: status, textColor: "#00AA00", icon: <ThumbUp sx={{ color: "#00AA00", transform: "scaleX(-1)" }} /> };
     }
     if (status === allStatus[6])
     {

@@ -50,6 +50,7 @@ export default function NotesPopup(props: { open, onClose, candidate: Candidate 
                     autoFocus
                     multiline
                     minRows={5}
+                    maxRows={10}
                     variant="outlined"
                     value={formData}
                     onChange={handleChange}

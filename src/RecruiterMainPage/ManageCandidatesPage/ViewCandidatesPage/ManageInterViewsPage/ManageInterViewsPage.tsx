@@ -34,6 +34,8 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 
 	const [interviewSummary, setInterviewSummary] = useState<string | undefined>("");
 
+	const [hideChooseInterview, setHideChooseInterview] = useState(true);
+
 	// use effects
 	useEffect(() =>
 	{
@@ -57,8 +59,10 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 
 		if (Number.isNaN(jobNumber))
 		{
+			setHideChooseInterview(true);
 			return;
 		}
+		setHideChooseInterview(false);
 		const candidateJobStatuses = await getFilteredCandidateJobStatuses(["jobNumber", "candidateId"], [jobNumber.toString(), candidateId]);
 		setCandidateJobStatus(candidateJobStatuses[0]);
 	}
@@ -211,7 +215,7 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 
 
 							{/* Choose Interview */}
-							<Box>
+							<Box sx={{display: hideChooseInterview ? "none" : "block"}}>
 								<Autocomplete
 									disablePortal
 									options={["ראיון ראשון", "ראיון שני"]}
