@@ -6,7 +6,7 @@ import { DatePicker, LocalizationProvider, MobileTimePicker } from "@mui/x-date-
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import 'dayjs/locale/he'
 import { Candidate } from "../../../../../../Firebase/FirebaseFunctions/Candidate";
-import { CandidateJobStatus, allStatus, getFilteredCandidateJobStatuses } from "../../../../../../Firebase/FirebaseFunctions/CandidateJobStatus";
+import { CandidateJobStatus, allStatus, getFilteredCandidateJobStatuses, getMessage } from "../../../../../../Firebase/FirebaseFunctions/CandidateJobStatus";
 import { Recruiter } from "../../../../../../Firebase/FirebaseFunctions/Recruiter";
 import { Job, getFilteredJobs } from "../../../../../../Firebase/FirebaseFunctions/Job";
 import { useNavigate } from "react-router-dom";
@@ -89,6 +89,16 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
         fromCandidateJobStatus.updateStatus(allStatus[6], undefined);
         await candidate?.apply(toJobNumber, fromCandidateJobStatus._about);
 
+        // send whatsapp message
+        // TODO: continue here
+        const link = await candidateJobStatus?.getWhatsappUrl(
+            new Recruiter("asd@gmail.com", "firstname", "lastname", ["sector1", "sector2"]),
+            undefined,
+            "makom"
+        );
+
+        window.open(link);
+
         setDefaults();
         navigate("/manageCandidates/" + candidate?._id, { state: true });
         onClose(event, "submit");
@@ -110,6 +120,7 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
             interviewDate?.setHours(interviewTime.getHours());
             interviewDate?.setMinutes(interviewTime.getMinutes());
             await candidateJobStatus?.updateStatus(newStatus, interviewDate);
+            //TODO: replace this with a real recruiter, and a real location
             const link = await candidateJobStatus?.getWhatsappUrl(
                 new Recruiter("asd@gmail.com", "firstname", "lastname", ["sector1", "sector2"]),
                 interviewDate,
@@ -120,7 +131,6 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
         } else
         {
             await candidateJobStatus?.updateStatus(newStatus, undefined);
-            //TODO: replace this with a real recruiter, and a real location
         }
 
         setDefaults();
@@ -278,7 +288,8 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
                             // onChange={handleFromJobChange}
                             onInputChange={(event, value) =>
                             {
-                                if (value !== ""){                                    
+                                if (value !== "")
+                                {
                                     setFromJobError(false);
                                 }
                                 setFromJobValue(value);
@@ -310,7 +321,8 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
                             onClick={() => setToJobError(false)}
                             onInputChange={(event, value) =>
                             {
-                                if (value !== ""){
+                                if (value !== "")
+                                {
                                     setToJobError(false);
                                 }
                                 setToJobValue(value);
