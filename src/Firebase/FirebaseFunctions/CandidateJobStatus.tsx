@@ -307,7 +307,9 @@ export function getMessage(cand: Candidate, job: Job, rec: Recruiter, status: st
     }
     return message;
 }
-
+export async function getAllRejectCause() {
+    return Array.from(new Set((await getFilteredCandidateJobStatuses()).map((s)=>s._rejectCause)));
+}
 /**
  * Retrieves candidate job statuses from the database and filters them based on the given attributes and values.
  * @param {string[]} [attributes=[]] - An array of attributes to filter by.
