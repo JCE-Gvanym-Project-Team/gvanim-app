@@ -88,14 +88,6 @@ export class Candidate {
             console.log(`you must add() candidate before call edit()`);
             return;
         }
-        if (this._firstName !== firstName || this._lastName !== lastName) {
-            const extensions = await getFileExtensionsInFolder(`/CandidatesFiles/${this._id}/cv`);
-            for (let i = 0; i < extensions.length; i++)
-                if (await fileExists(`/CandidatesFiles/${this._id}/cv/${this._firstName}_${this._lastName}_CV.${extensions.at(i)}`)) {
-                    renameFirestorePath(`/CandidatesFiles/${this._id}/cv/${this._firstName}_${this._lastName}_CV.${extensions.at(i)}`, `${firstName}_${lastName}_CV.${extensions.at(i)}`);
-                    break;
-                }
-        }
         this._firstName = firstName;
         this._lastName = lastName;
         this._generalRating = generalRating;
