@@ -5,7 +5,7 @@ import { Job, generateJobNumber, getFilteredJobs } from "./Job";
 import { Recruiter, generateRandomString } from "./Recruiter";
 import { uploadFileToFirestore } from "./firestoreFunc";
 import { Sector } from "./Sector";
-import { CandidateJobStatus } from "./CandidateJobStatus";
+import { CandidateJobStatus, getMessage, allStatus } from "./CandidateJobStatus";
 export function sleep(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -165,6 +165,12 @@ async function testEditRecruiter() {
     await rec.add('123456');
     rec.edit("new","name");
 }
+async function testMessgaeFormat() {
+    let cand = new Candidate("73645","דוג","מה");
+    let job = new Job(45,"כותרת");
+    let rec = new Recruiter("re@gmil.com","גברת","גוונים");
+    console.log(getMessage(cand, job, rec, allStatus[6],new Date(),"מיקום כלשהו"));
+}
 export async function main() {
     //console.log(`testSingleJobAddNoConfilct(): ${await testSingleJobAddNoConfilct()}`);
     //console.log(`testSingleJobAddConfilct(): ${await testSingleJobAddConfilct()}`);
@@ -174,4 +180,5 @@ export async function main() {
     //console.log(`testAddRecruiterNoSectors(): ${await testAddRecruiterNoSectors()}`);
     //console.log(`testLoginRecruiter(): ${await testLoginRecruiter()}`);
     //testEditRecruiter();
+    //testMessgaeFormat();
 }
