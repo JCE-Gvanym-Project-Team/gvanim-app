@@ -20,35 +20,17 @@ import dayjs, { Dayjs } from 'dayjs';
 
 
 export default function RejectionReport() {
-  // Create report 
+  // Create report
   const createReport = (rejectionCause, region, role, startDate, endDate) => {
-    console.log(rejectionCause);
-    console.log(region);
-    console.log(role);
-    console.log(startDate);
-    console.log(endDate);
-
-    const dates: Date[] = [];
-    const selectedDates = document.querySelectorAll('.MuiPickersDay-daySelected');
-
-    selectedDates.forEach((date) => {
-      const ariaLabel = date.getAttribute('aria-label');
-      if (ariaLabel !== null) {
-        const parsedDate = new Date(ariaLabel);
-        if (!isNaN(parsedDate.getTime())) {
-          dates.push(parsedDate);
-        }
-      }
-    });
-
-    rejection(rejectionCause, dates)
-    // .then((result) => {
-    // console.log(result);
-    // })
-    // .catch((error) => {
-    // console.log(error);
-    // });
-  };
+  // קריאה לפונקציה rejection ושמירת התוצאה במשתנה result
+  const result = rejection(rejectionCause, region, role, startDate, endDate)
+  .then((result) => {
+    console.log(result);
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+};
 
   // const 
   const [rejectionCause, setRejectionCause] = React.useState(''); // הוסף משתנה סטייט חדש עבור הסיבה לדחייה
