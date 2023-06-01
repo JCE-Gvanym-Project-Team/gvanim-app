@@ -18,7 +18,7 @@ import Footer from "./Components/Footer/Footer";
 import { CssBaseline } from "@mui/material";
 import { createContext, useContext, useMemo } from 'react';
 import { Box } from "@mui/material";
-import ManageInterviewsPage from './ManageCandidatesPage/ViewCandidatesPage/ManageInterviewsPage/ManageInterViewsPage'
+import ManageInterviewsPage from './ManageCandidatesPage/ViewCandidatesPage/ManageInterViewsPage/ManageInterViewsPage'
 
 
 function RecruiterMainPage({ handlelogout }) {
@@ -76,12 +76,8 @@ function RecruiterMainPage({ handlelogout }) {
 				}
 
 				{/* Reports Routes */}
-<<<<<<< HEAD
-				<Route path="/reports" element={<ReportsPage setHomeActive={setHomeActive} setReportsActive={setReportsActive} setCandidatesActive={setCandidatesActive} setJobsActive={setJobsActive} />} />
-				<Route path="/rejection" element={<ReportRejection />} />
-=======
 				<Route path="/reports" element={<ReportsPage />} />
->>>>>>> 2b254686e58f50650da2d1322c4ce11dc94c01ca
+				<Route path="/rejection" element={<ReportRejection />} />
 
 				{/* Admin Routes */}
 				<Route path="/settings" element={<AdminPage />} />

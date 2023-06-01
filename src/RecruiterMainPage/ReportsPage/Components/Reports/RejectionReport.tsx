@@ -16,16 +16,32 @@ import { BootstrapInput } from '../../ReportPageStyle';
 import { MenuItem, Select, SelectChangeEvent, TextField } from '@mui/material';
 import rejection from '../../../../Firebase/FirebaseFunctions/Reports/Rejection';
 import dayjs, { Dayjs } from 'dayjs';
-
+import { Candidate, Job, generateJobNumber, getFilteredJobs, loginAdmin } from '../../../../Firebase/FirebaseFunctions/functionIndex';
+import { getFilteredCandidateJobStatuses, getFilteredCandidates, CandidateJobStatus} from '../../../../Firebase/FirebaseFunctions/functionIndex';
 
 
 export default function RejectionReport() {
+  //main();
+
   // Create report
-  const createReport = (rejectionCause, region, role, startDate, endDate) => {
-  // קריאה לפונקציה rejection ושמירת התוצאה במשתנה result
-  const result = rejection(rejectionCause, region, role, startDate, endDate)
+  const createReport = (rejectionCause_ind, sector_ind, role_ind, startDate, endDate) => {
+  // checking if the user select the all the buttons
+  const isDateSelected = startDate && endDate; // בדיקה האם תאריכים נבחרו
+
+  if (!rejectionCause || !region || !role || !startDate || !endDate) {
+    // הצגת הודעת שגיאה או סימון למשתמש שהפרמטרים הם חובה
+    alert('יש למלא את כל השדות');
+    return;
+  }
+
+
+  const rejectionCauseArr = ["פערים כספיים", "פערים על היקף משרה", "חוסר התאמה", "כל הסיבות"];
+  const regionArr = ["מרכז", "צפון", "דרום", "כל הארץ"];
+  const roleArr = ["מנהל", "עובד סוציאלי", "מתנדב" , "כל התפקידים"];
+  
+  const result = rejection(rejectionCauseArr[rejectionCause_ind/10-1], regionArr[sector_ind/10 -1], roleArr[role_ind/10 -1], startDate, endDate)
   .then((result) => {
-    console.log(result);
+    //console.log(result);
   })
   .catch((error) => {
     console.log(error);
@@ -97,9 +113,9 @@ export default function RejectionReport() {
           label="rejectionCause" // שנה את הערך של label ל-rejectionCause
           onChange={handleChangeRegion}
         >
-          <MenuItem value={10}>ירושלים</MenuItem>
-          <MenuItem value={20}>שדרות</MenuItem>
-          <MenuItem value={30}>חיפה והצפון</MenuItem>
+          <MenuItem value={10}>מרכז</MenuItem>
+          <MenuItem value={20}>צפון</MenuItem>
+          <MenuItem value={30}>דרום</MenuItem>
           <MenuItem value={40}>כל הארץ</MenuItem>
         </Select>
       </FormControl>
@@ -143,4 +159,24 @@ export default function RejectionReport() {
       <Button onClick={() => createReport(rejectionCause, region, role, startDate, endDate)} variant="contained" disableElevation>צור דו"ח</Button>
     </FormControl>
   );
+
 }
+
+
+
+export async function main(){
+    loginAdmin().then(async () => {
+        // let job1 = new Job(await generateJobNumber(), "דרוש מנהל", "מנהל", [0,100], "", "דרום");
+        // let job2 = new Job(await generateJobNumber(), "דרוש עובד סוצאלי", "עובד סוציאלי", [0,100], "", "צפון");
+        // let job3 = new Job(await generateJobNumber(), " דרוש מתנדב ", "מתנדב", [0,100], "", "מרכז");
+        // let job4 = new Job(await generateJobNumber(), "דרוש מנהל", "מנהל", [0,100], "", "דרום");
+        // job1.add();
+        // job2.add();
+        // job3.add();
+        // job4.add();
+        await console.log((await getFilteredJobs()));
+    });
+
+
+}
+
