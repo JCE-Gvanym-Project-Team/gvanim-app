@@ -32,17 +32,17 @@ export class CandidateJobStatus
     public _rejectCause: string;
 
     constructor(
-        jobNumber: number = -1,
-        candidateId: string = "",
-        status: string = "",
+        jobNumber: number,
+        candidateId: string,
+        status: string = allStatus[0],
         about: string = "",
         matchingRate: number = -1,
-        applyDate: Date = new Date(0, 0, 0),
-        lastUpdate: Date = new Date(0, 0, 0),
+        applyDate: Date = new Date(),
+        lastUpdate: Date = new Date(),
+        interviewDate: Date = new Date(0, 0, 0),
         interviewsSummery: Array<string> = ["", ""],
         recomendations: Array<Recomendation> = [],
-        rejectCause = ""
-    )
+        rejectCause = "")
     {
         this._jobNumber = jobNumber;
         this._candidateId = candidateId;
@@ -50,7 +50,7 @@ export class CandidateJobStatus
         this._matchingRate = matchingRate;
         this._applyDate = applyDate;
         this._lastUpdate = lastUpdate;
-        this._interviewDate = new Date();
+        this._interviewDate = interviewDate;
         this._interviewsSummery = interviewsSummery;
         this._about = about;
         this._recomendations = recomendations;
@@ -127,6 +127,7 @@ export class CandidateJobStatus
             this._interviewsSummery.push(summery);
         else
             this._interviewsSummery[index] = summery;
+        this.edit();
     }
 
     /**
@@ -136,14 +137,11 @@ export class CandidateJobStatus
      * @param {string} [candidateId=this._candidateId] - The new candidate ID to set, dont use this paarmeter.
      * @returns None
      */
-    public async edit(matchingRate: number = this._matchingRate, about: string = this._about, candidateId: string = this._candidateId)
-    {
-        if (candidateId.length > 0)
-            this._candidateId = candidateId;
-        if (about.length > 0)
-            this._about = about;
-        if (matchingRate >= 0)
-            this._matchingRate = matchingRate;
+    public async edit(matchingRate: number = this._matchingRate, about: string = this._about, interviewDate: Date = this._interviewDate, rejectCause: string = this._rejectCause) {
+        this._matchingRate = matchingRate;
+        this._interviewDate = interviewDate;
+        this._about = about;
+        this._rejectCause = rejectCause;
         replaceData((await this.getPath()), this);
     }
     /**
@@ -373,10 +371,11 @@ export async function getFilteredCandidateJobStatuses(attributes: string[] = [],
         return candidateJobStatuses.sort(sortByApplyDate);
     if (sortBy === "lastUpdate")
         return candidateJobStatuses.sort(sortByLastUpdate);
-    return candidateJobStatuses.map((s) => new CandidateJobStatus(s._jobNumber, s._candidateId,
-        s._status, s._about, s._matchingRate, s._applyDate,
-        s._lastUpdate, s._interviewsSummery, s._recomendations,
-        s._rejectCause));
+    return candidateJobStatuses.map((s) => new CandidateJobStatus(s._jobNumber, 
+                                            s._candidateId, s._status, s._about,
+                                            s._matchingRate, s._applyDate, s._lastUpdate,
+                                            s._interviewDate, s._interviewsSummery,
+                                            s._recomendations, s._rejectCause));
 }
 function sortByJobNumber(a: CandidateJobStatus, b: CandidateJobStatus): number
 {

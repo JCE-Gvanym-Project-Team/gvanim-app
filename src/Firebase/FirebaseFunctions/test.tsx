@@ -5,6 +5,7 @@ import { Job, generateJobNumber, getFilteredJobs } from "./Job";
 import { Recruiter, generateRandomString } from "./Recruiter";
 import { uploadFileToFirestore } from "./firestoreFunc";
 import { Sector } from "./Sector";
+import { CandidateJobStatus } from "./CandidateJobStatus";
 export function sleep(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -158,6 +159,12 @@ async function testLoginRecruiter() {
     await rec.remove();
     return status;
 }
+async function testEditRecruiter() {
+    await loginAdmin();
+    let rec = new Recruiter("ex@gmail.com", "el", "ta");
+    await rec.add('123456');
+    rec.edit("new","name");
+}
 export async function main() {
     //console.log(`testSingleJobAddNoConfilct(): ${await testSingleJobAddNoConfilct()}`);
     //console.log(`testSingleJobAddConfilct(): ${await testSingleJobAddConfilct()}`);
@@ -166,5 +173,5 @@ export async function main() {
     //console.log(`testAddSingleCandidateNoConflict(): ${await testAddSingleCandidateNoConflict()}`);
     //console.log(`testAddRecruiterNoSectors(): ${await testAddRecruiterNoSectors()}`);
     //console.log(`testLoginRecruiter(): ${await testLoginRecruiter()}`);
-    testEditCandidate();
+    //testEditRecruiter();
 }
