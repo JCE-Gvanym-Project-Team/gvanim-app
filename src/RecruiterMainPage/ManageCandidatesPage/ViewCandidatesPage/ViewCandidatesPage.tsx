@@ -13,14 +13,13 @@ import ChangeJobDialog from './Components/ChangeJobDialog/ChangeJobDialog';
 import { Autorenew, EditNote, QuestionAnswer, SpeakerNotes } from '@mui/icons-material';
 import React from 'react';
 
-export default function ViewCandidatesPage(props: {candidateId: string})
-{
+export default function ViewCandidatesPage(props: { candidateId: string }) {
 
 	const navigate = useNavigate();
-	
+
 	// get jobs data size
 	const [dataSize, setDataSize] = useState(0);
-	
+
 	// get candidate id
 	let { candidateId } = props;
 
@@ -29,8 +28,7 @@ export default function ViewCandidatesPage(props: {candidateId: string})
 	const [candidateJobs, setCandidateJobs] = useState<Job[]>([]);
 	const [allJobs, setAllJobs] = useState<Job[]>([]);
 
-	useEffect(() =>
-	{
+	useEffect(() => {
 		// pull candidate from firebase
 		getCandidate(candidateId, setCandidateInfo);
 
@@ -40,23 +38,21 @@ export default function ViewCandidatesPage(props: {candidateId: string})
 
 	// comments popup handlers
 	const [popupOpen, setPopupOpen] = useState(false);
+	const [initialData, setInitialData] = useState<string | undefined>("");
 
-	const commentsPopupOpenHandler = () =>
-	{
+	const commentsPopupOpenHandler = () => {
+		setInitialData(candidateInfo?._note);
 		setPopupOpen(true);
 	};
 
-	const commentsPopupCloseHandler = (event, reason) =>
-	{
-		if ((reason && reason !== "backdropClick") || reason === undefined)
-		{
+	const commentsPopupCloseHandler = (event, reason) => {
+		if ((reason && reason !== "backdropClick") || reason === undefined) {
 			setPopupOpen(false);
 		}
 	};
 
 	// edit candidate handler
-	const editCandidateHandler = () =>
-	{
+	const editCandidateHandler = () => {
 		navigate("/editCandidate", { state: candidateId });
 	}
 
@@ -123,7 +119,7 @@ export default function ViewCandidatesPage(props: {candidateId: string})
 							<Button sx={notesButtonSx} variant="contained" onClick={commentsPopupOpenHandler} startIcon={<SpeakerNotes />}>
 								הערות
 							</Button>
-							<NotesPopup open={popupOpen} onClose={commentsPopupCloseHandler} />
+							<NotesPopup open={popupOpen} onClose={commentsPopupCloseHandler} candidate={candidateInfo} initialData={initialData}/>
 						</Box>
 
 					</Stack>
@@ -133,26 +129,21 @@ export default function ViewCandidatesPage(props: {candidateId: string})
 	)
 }
 
-const getCandidate = function (candidateId: string, setCandidateInfo)
-{
+const getCandidate = function (candidateId: string, setCandidateInfo) {
 	const promise = getFilteredCandidates(["id"], [candidateId]);
-	promise.then((candidates) =>
-	{
+	promise.then((candidates) => {
 		setCandidateInfo(candidates[0]);
-	}).catch((error) =>
-	{
+	}).catch((error) => {
 		console.error(error);
 	});
 }
 
-const getJobs = async function (candidateId: string, setCandidateJobs, setAllJobs)
-{
+const getJobs = async function (candidateId: string, setCandidateJobs, setAllJobs) {
 	// get a list of all job numbers
 	// for the jobs this candidate applied to
 	const candidateJobStatuses = await getFilteredCandidateJobStatuses(["candidateId"], [candidateId]);
 	let jobNumbers: number[] = [];
-	candidateJobStatuses.forEach(element =>
-	{
+	candidateJobStatuses.forEach(element => {
 		jobNumbers.push(element._jobNumber);
 	});
 
@@ -162,8 +153,7 @@ const getJobs = async function (candidateId: string, setCandidateJobs, setAllJob
 
 	// filter them by the list of job numbers 
 	// we got from the previous request to firebase
-	jobs = jobs.filter(job =>
-	{
+	jobs = jobs.filter(job => {
 		return jobNumbers.includes(job._jobNumber);
 	});
 	setCandidateJobs(jobs)
