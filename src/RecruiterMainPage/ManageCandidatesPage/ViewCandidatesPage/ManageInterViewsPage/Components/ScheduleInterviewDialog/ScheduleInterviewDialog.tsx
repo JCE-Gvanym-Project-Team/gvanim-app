@@ -9,11 +9,13 @@ import { Candidate } from "../../../../../../Firebase/FirebaseFunctions/Candidat
 import { CandidateJobStatus, allStatus, getFilteredCandidateJobStatuses } from "../../../../../../Firebase/FirebaseFunctions/CandidateJobStatus";
 import { Recruiter } from "../../../../../../Firebase/FirebaseFunctions/Recruiter";
 import { Job, getFilteredJobs } from "../../../../../../Firebase/FirebaseFunctions/Job";
+import { useNavigate } from "react-router-dom";
 
 export default function ScheduleInterviewDialog(props: { open, onClose, candidate: Candidate | null, candidateJobStatus: CandidateJobStatus | null, candidateJobs: Job[], allJobs: Job[] })
 {
 
     const { open, onClose, candidate, candidateJobStatus, candidateJobs, allJobs } = props;
+
     const [time, setTime] = useState<any>();
     const [date, setDate] = useState<any>();
 
@@ -27,6 +29,8 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
     const [disableRejectionReason, setDisableRejectionReason] = useState(true);
 
     const [newStatus, setNewStatus] = useState("");
+
+    const navigate = useNavigate();
 
     // time changed 
     const handleDateChange = (value) =>
@@ -72,21 +76,21 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
             return;
         }
 
-        // // update status in firebase
-        // await candidateJobStatus?.updateStatus(newStatus, undefined);
-        // const fromJobNumberString = fromJobValue?.match(/\d+/)?.[0];
-        // const fromJobNumber = fromJobNumberString ? parseInt(fromJobNumberString) : NaN;
+        // update status in firebase
+        await candidateJobStatus?.updateStatus(newStatus, undefined);
+        const fromJobNumberString = fromJobValue?.match(/\d+/)?.[0];
+        const fromJobNumber = fromJobNumberString ? parseInt(fromJobNumberString) : NaN;
 
-        // const toJobNumberString = toJobValue?.match(/\d+/)?.[0];
-        // const toJobNumber = toJobNumberString ? parseInt(toJobNumberString) : NaN;
+        const toJobNumberString = toJobValue?.match(/\d+/)?.[0];
+        const toJobNumber = toJobNumberString ? parseInt(toJobNumberString) : NaN;
 
-        // // actually replace in firebase
-        // const fromCandidateJobStatus = (await getFilteredCandidateJobStatuses(["jobNumber", "candidateId"], [fromJobNumber.toString(), candidate ? candidate._id : ""]))[0];
-        // fromCandidateJobStatus.updateStatus(allStatus[6], undefined);
-        // await candidate?.apply(toJobNumber, fromCandidateJobStatus[0]._about);
-
+        // actually replace in firebase
+        const fromCandidateJobStatus = (await getFilteredCandidateJobStatuses(["jobNumber", "candidateId"], [fromJobNumber.toString(), candidate ? candidate._id : ""]))[0];
+        fromCandidateJobStatus.updateStatus(allStatus[6], undefined);
+        await candidate?.apply(toJobNumber, fromCandidateJobStatus._about);
 
         setDefaults();
+        navigate("/manageCandidates/" + candidate?._id, { state: true });
         onClose(event, "submit");
     }
 
@@ -167,10 +171,6 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
         } else
         {
             setChangeJobDialogOpen(false);
-        }
-        if (status === "" || status === null)
-        {
-
         }
     }
 
