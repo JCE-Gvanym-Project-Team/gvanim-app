@@ -42,14 +42,8 @@ export class CandidateJobStatus
         interviewDate: Date = new Date(0, 0, 0),
         interviewsSummery: Array<string> = ["", ""],
         recomendations: Array<Recomendation> = [],
-<<<<<<< HEAD
-        rejectCause: string = ""
-    ) {
-=======
-        rejectCause = ""
-    )
+        rejectCause = "")
     {
->>>>>>> 2b254686e58f50650da2d1322c4ce11dc94c01ca
         this._jobNumber = jobNumber;
         this._candidateId = candidateId;
         this._status = status;
@@ -143,22 +137,11 @@ export class CandidateJobStatus
      * @param {string} [candidateId=this._candidateId] - The new candidate ID to set, dont use this paarmeter.
      * @returns None
      */
-<<<<<<< HEAD
     public async edit(matchingRate: number = this._matchingRate, about: string = this._about, interviewDate: Date = this._interviewDate, rejectCause: string = this._rejectCause) {
         this._matchingRate = matchingRate;
         this._interviewDate = interviewDate;
         this._about = about;
         this._rejectCause = rejectCause;
-=======
-    public async edit(matchingRate: number = this._matchingRate, about: string = this._about, candidateId: string = this._candidateId)
-    {
-        if (candidateId.length > 0)
-            this._candidateId = candidateId;
-        if (about.length > 0)
-            this._about = about;
-        if (matchingRate >= 0)
-            this._matchingRate = matchingRate;
->>>>>>> 2b254686e58f50650da2d1322c4ce11dc94c01ca
         replaceData((await this.getPath()), this);
     }
     /**
