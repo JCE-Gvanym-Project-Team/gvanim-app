@@ -1,6 +1,4 @@
 import * as React from 'react';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
@@ -20,33 +18,42 @@ import { Candidate, Job, generateJobNumber, getFilteredJobs, loginAdmin } from '
 import { getFilteredCandidateJobStatuses, getFilteredCandidates, CandidateJobStatus} from '../../../../Firebase/FirebaseFunctions/functionIndex';
 
 
+
 export default function RejectionReport() {
   //main();
 
-  // Create report
   const createReport = (rejectionCause_ind, sector_ind, role_ind, startDate, endDate) => {
-  // checking if the user select the all the buttons
-  const isDateSelected = startDate && endDate; // בדיקה האם תאריכים נבחרו
-
-  if (!rejectionCause || !region || !role || !startDate || !endDate) {
-    // הצגת הודעת שגיאה או סימון למשתמש שהפרמטרים הם חובה
-    alert('יש למלא את כל השדות');
-    return;
-  }
-
-
-  const rejectionCauseArr = ["פערים כספיים", "פערים על היקף משרה", "חוסר התאמה", "כל הסיבות"];
-  const regionArr = ["מרכז", "צפון", "דרום", "כל הארץ"];
-  const roleArr = ["מנהל", "עובד סוציאלי", "מתנדב" , "כל התפקידים"];
+    // checking if the user select all the buttons
+    const isDateSelected = startDate && endDate;
   
-  const result = rejection(rejectionCauseArr[rejectionCause_ind/10-1], regionArr[sector_ind/10 -1], roleArr[role_ind/10 -1], startDate, endDate)
-  .then((result) => {
-    //console.log(result);
-  })
-  .catch((error) => {
-    console.log(error);
-  });
-};
+    if (!rejectionCause_ind || !sector_ind || !role_ind || !isDateSelected) {
+      // displaying an error message or indicating to the user that the parameters are mandatory
+      alert('יש למלא את כל השדות');
+      return;
+    }
+  
+    const rejectionCauseArr = ["פערים כספיים", "פערים על היקף משרה", "חוסר התאמה", "כל הסיבות"];
+    const regionArr = ["מרכז", "צפון", "דרום", "כל הארץ"];
+    const roleArr = ["מנהל", "עובד סוציאלי", "מתנדב", "כל התפקידים"];
+  
+    const rejectionCause = rejectionCauseArr[Math.floor(rejectionCause_ind / 10) - 1];
+    const sector = regionArr[Math.floor(sector_ind / 10) - 1];
+    const role = roleArr[Math.floor(role_ind / 10) - 1];
+  
+    const formattedStartDate = startDate.toDate();
+    const formattedEndDate = endDate.toDate();
+  
+    const result = rejection(rejectionCause, sector, role, formattedStartDate, formattedEndDate)
+      .then((result) => {
+        // handle the result
+        console.log(result);
+      })
+      .catch((error) => {
+        // handle the error
+        console.log(error);
+      });
+  };
+  
 
   // const 
   const [rejectionCause, setRejectionCause] = React.useState(''); // הוסף משתנה סטייט חדש עבור הסיבה לדחייה
@@ -54,6 +61,7 @@ export default function RejectionReport() {
   const [role, setRole] = React.useState('');
   const [startDate, setStartDate] = React.useState('');
   const [endDate, setEndDate] = React.useState('');
+  
 
 
   // handls
@@ -156,7 +164,7 @@ export default function RejectionReport() {
         </DemoContainer>
       </LocalizationProvider>
       {/* create report */}
-      <Button onClick={() => createReport(rejectionCause, region, role, startDate, endDate)} variant="contained" disableElevation>צור דו"ח</Button>
+      <a href="#" id="download-report-button" download="report1.xlsx" onClick={() => createReport(rejectionCause, region, role, startDate, endDate)}>צור דו"ח</a>
     </FormControl>
   );
 
@@ -166,14 +174,18 @@ export default function RejectionReport() {
 
 export async function main(){
     loginAdmin().then(async () => {
-        // let job1 = new Job(await generateJobNumber(), "דרוש מנהל", "מנהל", [0,100], "", "דרום");
-        // let job2 = new Job(await generateJobNumber(), "דרוש עובד סוצאלי", "עובד סוציאלי", [0,100], "", "צפון");
-        // let job3 = new Job(await generateJobNumber(), " דרוש מתנדב ", "מתנדב", [0,100], "", "מרכז");
-        // let job4 = new Job(await generateJobNumber(), "דרוש מנהל", "מנהל", [0,100], "", "דרום");
-        // job1.add();
-        // job2.add();
-        // job3.add();
-        // job4.add();
+        let jobstatus1 = new CandidateJobStatus(20, "47", "נדחה",  "", 1,  new Date(2023, 6, 25),new Date(2023, 6, 25),  ["", ""], [], "פערים על היקף משרה"  );
+        let jobstatus2 = new CandidateJobStatus(19, "70", "נדחה",  "", 1,  new Date(2023, 6, 20), new Date(2023, 6, 25),  ["", ""], [], "אחר" );
+        let jobstatus3 = new CandidateJobStatus(12, "125", "נדחה",  "", 1,  new Date(2023, 6, 19), new Date(2023, 6, 25),  ["", ""], [], "פערים על היקף משרה" );
+        jobstatus1.add();
+        jobstatus2.add();
+        jobstatus3.add();
+        //  let job1 = new Job(await generateJobNumber(), "דרוש מנהל", "מנהל", [0,100], "", "דרום");
+        //  let job2 = new Job(await generateJobNumber(), "דרוש עובד סוצאלי", "עובד סוציאלי", [0,100], "", "צפון");
+        //  let job3 = new Job(await generateJobNumber(), "דרוש מתנדב ", "מתנדב", [0,100], "", "מרכז");
+        //  job1.add();
+        //  job2.add();
+        //  job3.add();
         await console.log((await getFilteredJobs()));
     });
 
