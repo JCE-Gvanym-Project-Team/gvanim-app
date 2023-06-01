@@ -1,21 +1,13 @@
 import * as React from 'react';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
 import InputLabel from '@mui/material/InputLabel';
-import { styled } from '@mui/material/styles';
-import InputBase from '@mui/material/InputBase';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import Button from '@mui/material/Button';
-import { BootstrapInput } from '../../ReportPageStyle';
-import { MenuItem, Select, SelectChangeEvent, TextField } from '@mui/material';
+import { MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import rejection from '../../../../Firebase/FirebaseFunctions/Reports/Rejection';
-import dayjs, { Dayjs } from 'dayjs';
-import { Candidate, Job, generateJobNumber, getFilteredJobs, loginAdmin } from '../../../../Firebase/FirebaseFunctions/functionIndex';
-import { getFilteredCandidateJobStatuses, getFilteredCandidates, CandidateJobStatus} from '../../../../Firebase/FirebaseFunctions/functionIndex';
+import { getFilteredJobs, loginAdmin } from '../../../../Firebase/FirebaseFunctions/functionIndex';
 import * as XLSX from 'xlsx';
 
 
