@@ -5,11 +5,11 @@ import { ArrowBack, ArrowDownward, Close, WhatsApp } from "@mui/icons-material";
 import { DatePicker, LocalizationProvider, MobileTimePicker, TimeField } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import 'dayjs/locale/he'
-import { Candidate } from "../../../../../Firebase/FirebaseFunctions/Candidate";
-import { CandidateJobStatus, allStatus } from "../../../../../Firebase/FirebaseFunctions/CandidateJobStatus";
-import { Recruiter } from "../../../../../Firebase/FirebaseFunctions/Recruiter";
-import ChangeJobDialog from "../../Components/ChangeJobDialog/ChangeJobDialog";
-import { Job } from "../../../../../Firebase/FirebaseFunctions/Job";
+import { Candidate } from "../../../../../../Firebase/FirebaseFunctions/Candidate";
+import { CandidateJobStatus, allStatus } from "../../../../../../Firebase/FirebaseFunctions/CandidateJobStatus";
+import { Recruiter } from "../../../../../../Firebase/FirebaseFunctions/Recruiter";
+import ChangeJobDialog from "../../../Components/ChangeJobDialog/ChangeJobDialog";
+import { Job } from "../../../../../../Firebase/FirebaseFunctions/Job";
 
 // this is a list of statuses that the user can change
 const dropdownOptions = [
