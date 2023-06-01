@@ -9,18 +9,16 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Job, getFilteredJobs } from '../../../Firebase/FirebaseFunctions/Job';
 import { getFilteredCandidateJobStatuses } from '../../../Firebase/FirebaseFunctions/CandidateJobStatus';
 import NotesPopup from './Components/NotesPopup/NotesPopup';
-import ChangeJobDialog from './Components/ChangeJobDialog/ChangeJobDialog';
-import { Autorenew, EditNote, QuestionAnswer, SpeakerNotes } from '@mui/icons-material';
-import React from 'react';
+import { EditNote, QuestionAnswer, SpeakerNotes } from '@mui/icons-material';
 
-export default function ViewCandidatesPage(props: {candidateId: string})
+export default function ViewCandidatesPage(props: { candidateId: string })
 {
 
 	const navigate = useNavigate();
-	
+
 	// get jobs data size
 	const [dataSize, setDataSize] = useState(0);
-	
+
 	// get candidate id
 	let { candidateId } = props;
 
@@ -28,6 +26,7 @@ export default function ViewCandidatesPage(props: {candidateId: string})
 	const [candidateInfo, setCandidateInfo] = useState<Candidate | null>(null);
 	const [candidateJobs, setCandidateJobs] = useState<Job[]>([]);
 	const [allJobs, setAllJobs] = useState<Job[]>([]);
+	const { state } = useLocation();
 
 	useEffect(() =>
 	{
@@ -38,11 +37,22 @@ export default function ViewCandidatesPage(props: {candidateId: string})
 		getJobs(candidateId, setCandidateJobs, setAllJobs);
 	}, [candidateId])
 
+
+	const {reachedViaNavigate} = state;	
+	useEffect(() =>
+	{
+		if (reachedViaNavigate){
+			getJobs(candidateId, setCandidateJobs, setAllJobs);
+		}
+	}, [reachedViaNavigate])
+
 	// comments popup handlers
 	const [popupOpen, setPopupOpen] = useState(false);
+	const [initialData, setInitialData] = useState<string | undefined>("");
 
 	const commentsPopupOpenHandler = () =>
 	{
+		setInitialData(candidateInfo?._note);
 		setPopupOpen(true);
 	};
 
@@ -61,7 +71,8 @@ export default function ViewCandidatesPage(props: {candidateId: string})
 	}
 
 	// move to interviews page handler
-	const interviewsPageHandler = (id) => {
+	const interviewsPageHandler = (id) =>
+	{
 		navigate("/manageCandidates/" + id + "/interviews");
 	}
 
@@ -115,7 +126,8 @@ export default function ViewCandidatesPage(props: {candidateId: string})
 							<Button sx={recommendationsButtonSx} variant="contained" startIcon={<EditIcon />}>
 								ממליצים
 							</Button>
-							<Button sx={interviewsButtonSx} variant="contained" startIcon={<QuestionAnswer />} onClick={() => {
+							<Button sx={interviewsButtonSx} variant="contained" startIcon={<QuestionAnswer />} onClick={() =>
+							{
 								interviewsPageHandler(candidateId);
 							}}>
 								ראיונות
@@ -123,7 +135,7 @@ export default function ViewCandidatesPage(props: {candidateId: string})
 							<Button sx={notesButtonSx} variant="contained" onClick={commentsPopupOpenHandler} startIcon={<SpeakerNotes />}>
 								הערות
 							</Button>
-							<NotesPopup open={popupOpen} onClose={commentsPopupCloseHandler} />
+							<NotesPopup open={popupOpen} onClose={commentsPopupCloseHandler} candidate={candidateInfo} initialData={initialData} />
 						</Box>
 
 					</Stack>

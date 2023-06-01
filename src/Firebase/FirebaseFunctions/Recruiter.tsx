@@ -77,10 +77,10 @@ export class Recruiter {
 		}
 		await appendToDatabase(this, "/Recruiters", this._id);
 	}
-	public async edit(email: string = this._email, firstName: string = this._firstName, lastName: string = this._lastName) {
+	public async edit(firstName: string = this._firstName, lastName: string = this._lastName) {
 		this._firstName = firstName;
 		this._lastName = lastName;
-		replaceData(`/Recruiter/${this._id}`, this);
+		replaceData(`/Recruiters/${this._id}`, this);
 	}
 	/**
 	 * Add permissions to a sector. 
