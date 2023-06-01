@@ -2,32 +2,18 @@ import { Autocomplete, Box, Button, Dialog, DialogActions, DialogContent, Dialog
 import { useEffect, useState } from "react";
 import { changeJobContainerStyle, changeJobContainerSx, currentStatusTextSx, dialogActionsSx, dialogContentSx, dialogSx, dialogTitleSx, dialogTopAreaSx, locationTextFieldSx, locationTitleSx, submitButtonSx } from "./ScheduleInterviewDialogStyle";
 import { ArrowBack, ArrowDownward, Close, WhatsApp } from "@mui/icons-material";
-import { DatePicker, LocalizationProvider, MobileTimePicker, TimeField } from "@mui/x-date-pickers";
+import { DatePicker, LocalizationProvider, MobileTimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import 'dayjs/locale/he'
 import { Candidate } from "../../../../../../Firebase/FirebaseFunctions/Candidate";
 import { CandidateJobStatus, allStatus } from "../../../../../../Firebase/FirebaseFunctions/CandidateJobStatus";
 import { Recruiter } from "../../../../../../Firebase/FirebaseFunctions/Recruiter";
-import ChangeJobDialog from "../../../Components/ChangeJobDialog/ChangeJobDialog";
 import { Job } from "../../../../../../Firebase/FirebaseFunctions/Job";
 
 // this is a list of statuses that the user can change
-const dropdownOptions = [
-    "זומן לראיון ראשון",
-    "זומן לראיון שני",
-    "הועבר למשרה אחרת",
-    "התקבל",
-    "נדחה",
-    "לא מעוניין במשרה"
-]
+const dropdownOptions = allStatus.filter((status) => status != allStatus[0])
 
-const disabledDateTimeList = [
-    "עבר ראיון ראשון",
-    "עבר ראיון שני",
-    "התקבל",
-    "הועבר למשרה אחרת",
-    "נדחה"
-];
+const disabledDateTimeList = allStatus.filter((status) => status != allStatus[1] && status != allStatus[3])
 
 export default function ScheduleInterviewDialog(props: { open, onClose, candidate: Candidate | null, candidateJobStatus: CandidateJobStatus | null, candidateJobs: Job[], allJobs: Job[] })
 {
