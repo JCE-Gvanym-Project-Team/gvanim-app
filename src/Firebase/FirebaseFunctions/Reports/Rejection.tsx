@@ -18,6 +18,10 @@ export default async function rejection(rejectionCause: string, sector: string, 
   for (let i = 0; i < _candidatesJobStatuses.length; i++) {
     let candidate = _candidatesJobStatuses[i];
 
+    console.log("candidate: " +  candidate._applyDate);
+    console.log(startDate);
+    console.log(endDate);
+    
     if (dayjs(candidate._applyDate).isBetween(dayjs(startDate), dayjs(endDate), null, '[]')) {
       let job = (await getFilteredJobs(["jobNumber"], [candidate._jobNumber.toString()])).at(0);
       if (job != undefined && (candidate._rejectCause == rejectionCause || rejectionCause == 'כל הסיבות') &&
@@ -27,15 +31,16 @@ export default async function rejection(rejectionCause: string, sector: string, 
     }
   }
 
-  // Create a workbook and worksheet
-  const workbook = XLSX.utils.book_new();
-  const worksheet = XLSX.utils.json_to_sheet(resultCandidate);
+  //Create a workbook and worksheet
+  // //st workbook = XLSX.utils.book_new();
+  // //st worksheet = XLSX.utils.json_to_sheet(resultCandidate);
 
-  // Add the worksheet to the workbook
-  XLSX.utils.book_append_sheet(workbook, worksheet, "Candidates");
+  //Add the worksheet to the workbook
+  // //X.utils.book_append_sheet(workbook, worksheet, "Candidates");
 
-  // Write the workbook to a file
-  XLSX.writeFile(workbook, "candidates.xlsx");
+  //Write the workbook to a file
+  // //X.writeFile(workbook, "candidates.xlsx");
 
+  console.log(resultCandidate);
   return resultCandidate;
 }
