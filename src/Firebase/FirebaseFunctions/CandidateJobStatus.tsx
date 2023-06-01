@@ -208,7 +208,6 @@ export class CandidateJobStatus
      * Updates the status of the candidate job application and replaces the data in the realtime DB.
      * @param {string} newStatus - The new status to update the candidate job application to.
      * @param {Date} [interviewDate=this._interviewDate] - The interview date for the candidate job application leave empty if the new satatus not require interview.
-     * @returns url link to notify the candidate via whatsapp
      */
     public async updateStatus(newStatus: string, interviewDate: Date = this._interviewDate): Promise<void> {
         if (!(await this.exists())) {
@@ -223,7 +222,7 @@ export class CandidateJobStatus
         const job = (await getFilteredJobs(["jobNumber"], [this._jobNumber.toString()])).at(0);
         if (cand && job)
         {
-            const text = getMessage(cand, job, recruiter, this._status, interviewDate, place);
+            const text = getMessage(cand, job, recruiter, this._status, interviewDate, place).replace('\n', '%0A').replace(' ', '%20');;
             console.log(cand._phone);
             if (text.length > 0)
                 return `https://api.whatsapp.com/send?phone=972${cand._phone}&text=${text}`;
@@ -257,21 +256,27 @@ async function getCandidateJobStatusFromDatabase(): Promise<CandidateJobStatus[]
 }
 //["הוגשה מועמדות","זומן לראיון ראשון","עבר ראיון ראשון","זומן לראיון שני","עבר ראיון שני","התקבל","הועבר למשרה אחרת","נדחה","הפסיק את התהליך"];
 //       8               7                  6         5          4                      3                  2                  1                  0
-function getMessage(cand: Candidate, job: Job, rec: Recruiter, status: string, interviewDate: Date = new Date(0, 0, 0), place: string = "") {
+export function getMessage(cand: Candidate, job: Job, rec: Recruiter, status: string, interviewDate: Date = new Date(0, 0, 0), place: string = "") {
     if (!allStatus.includes(status) || status === allStatus[0] || status === allStatus[2] || status === allStatus[4] || status === allStatus[8])
         return "";
-    let message = `${cand._firstName}`;
-    message += '\nשלום';
-    message += 'שמי ';
-    message += `${rec._firstName},`;
-    message += "\nמעמותת גוונים.";
+    let message = `${cand._firstName} `;
+    message += 'שלום';
+    message += '\n';
+    message += 'שמי';
+    message += ' ';
+    message += `${rec._firstName}`;
+    message += ", ";
+    message += "מעמותת גוונים";
+    message += "."
+    message += '\n';
     message += "ברצוני לעדכן אותך על מועמדותך למשרה: ";
     message += `${job._title}\n`;
     if (interviewDate !== (new Date(0, 0, 0)) && (status === allStatus[1] || status === allStatus[3]))
     {
-        message += " :נשמח לקבוע עמך ראיון בתאריך";
+        message += "נשמח לקבוע עמך ראיון בתאריך ";
         message += `${interviewDate.getDate()}/${interviewDate.getMonth() + 1}\n`;
-        message += "בשעה: ";
+        message += "בשעה:";
+        message += ' ';
         message += `${interviewDate.getHours()}:${interviewDate.getMinutes()}\n`
         message += "שייתקיים ב";
         message += `${place}.\n`;
@@ -285,11 +290,11 @@ function getMessage(cand: Candidate, job: Job, rec: Recruiter, status: string, i
     {
         message += "לצערנו לא נמשיך עמך בתהליך הגיוס";
     }
-    if (message === allStatus[6])
+    if (status === allStatus[6])
     {
         message += "לאחר בחינת קורות החיים שלך ואת תהליך הגיוס שעברת הוחלט לנתב אותך למשרה אחרת, נשלח פרטים נוספים בקרוב.";
     }
-    return message.replace('\n', '%0A').replace(' ', '%20');
+    return message;
 }
 
 /**
