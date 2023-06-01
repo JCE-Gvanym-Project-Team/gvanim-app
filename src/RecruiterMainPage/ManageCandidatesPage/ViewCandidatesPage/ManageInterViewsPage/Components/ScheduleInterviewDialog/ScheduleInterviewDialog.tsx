@@ -6,15 +6,15 @@ import { DatePicker, LocalizationProvider, MobileTimePicker } from "@mui/x-date-
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import 'dayjs/locale/he'
 import { Candidate } from "../../../../../../Firebase/FirebaseFunctions/Candidate";
-import { CandidateJobStatus, allStatus, getFilteredCandidateJobStatuses } from "../../../../../../Firebase/FirebaseFunctions/CandidateJobStatus";
+import { CandidateJobStatus, allStatus, getFilteredCandidateJobStatuses, getMessage } from "../../../../../../Firebase/FirebaseFunctions/CandidateJobStatus";
 import { Recruiter } from "../../../../../../Firebase/FirebaseFunctions/Recruiter";
 import { Job, getFilteredJobs } from "../../../../../../Firebase/FirebaseFunctions/Job";
 import { useNavigate } from "react-router-dom";
 
-export default function ScheduleInterviewDialog(props: { open, onClose, candidate: Candidate | null, candidateJobStatus: CandidateJobStatus | null, candidateJobs: Job[], allJobs: Job[] })
+export default function ScheduleInterviewDialog(props: { open, onClose, candidate: Candidate | null, candidateJobStatus: CandidateJobStatus | null, candidateJobs: Job[], allJobs: Job[], chosenJobValue: string })
 {
 
-    const { open, onClose, candidate, candidateJobStatus, candidateJobs, allJobs } = props;
+    const { open, onClose, candidate, candidateJobStatus, candidateJobs, allJobs, chosenJobValue } = props;
 
     const [time, setTime] = useState<any>();
     const [date, setDate] = useState<any>();
@@ -56,7 +56,6 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
     // submit button handlers
     const handleSubmitChangeJob = async (event) =>
     {
-        console.log(fromJobValue);
         if ((fromJobValue === "" || !fromJobValue) && (toJobValue === "" || !toJobValue))
         {
             setFromJobError(true);
@@ -76,8 +75,6 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
             return;
         }
 
-        // update status in firebase
-        await candidateJobStatus?.updateStatus(newStatus, undefined);
         const fromJobNumberString = fromJobValue?.match(/\d+/)?.[0];
         const fromJobNumber = fromJobNumberString ? parseInt(fromJobNumberString) : NaN;
 
@@ -90,8 +87,10 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
         await candidate?.apply(toJobNumber, fromCandidateJobStatus._about);
 
         setDefaults();
-        navigate("/manageCandidates/" + candidate?._id, { state: true });
+
         onClose(event, "submit");
+
+        navigate("/manageCandidates/" + candidate?._id, { state: true });
     }
 
     const handleSubmitSaveRejectionReason = async (event) =>
@@ -154,6 +153,11 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
         } else
         {
             setDisableWhatsappMessage(false);
+            const temp = new Candidate(candidate ? candidate._id : "", candidate?._firstName, candidate?._lastName, candidate?._phone, candidate?._eMail, candidate?._generalRating, candidate?._note);
+            const tempRecruiter = new Recruiter("recruiteremail@gmail.com", "firstname", "lastname", ["asd", "asdasd"]);
+            const jobNumberString = chosenJobValue?.match(/\d+/)?.[0];
+            const jobNumber = jobNumberString ? parseInt(jobNumberString) : NaN;
+            console.log("message: " + getMessage(temp, (allJobs.filter((job) => job._jobNumber === jobNumber))[0], tempRecruiter, candidateJobStatus ? candidateJobStatus._status : "", candidateJobStatus?._interviewDate, "makom"));
         }
 
         if (status === allStatus[8])
@@ -278,7 +282,8 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
                             // onChange={handleFromJobChange}
                             onInputChange={(event, value) =>
                             {
-                                if (value !== ""){                                    
+                                if (value !== "")
+                                {
                                     setFromJobError(false);
                                 }
                                 setFromJobValue(value);
@@ -310,7 +315,8 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
                             onClick={() => setToJobError(false)}
                             onInputChange={(event, value) =>
                             {
-                                if (value !== ""){
+                                if (value !== "")
+                                {
                                     setToJobError(false);
                                 }
                                 setToJobValue(value);

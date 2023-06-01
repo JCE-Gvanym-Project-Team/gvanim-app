@@ -156,6 +156,7 @@ export default function ManageInterviewsPage(props: { candidateId: string})
 									candidateJobStatus={candidateJobStatus}
 									candidateJobs={candidateAppliedJobs}
 									allJobs={allJobs}
+									chosenJobValue={jobValue}
 								/>
 							</Box>
 						</Box>
