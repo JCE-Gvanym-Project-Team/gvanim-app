@@ -6,7 +6,7 @@ import { Candidate, getFilteredCandidates } from '../../../../Firebase/FirebaseF
 import { CandidateJobStatus, getFilteredCandidateJobStatuses } from '../../../../Firebase/FirebaseFunctions/CandidateJobStatus';
 import { Job, getFilteredJobs } from '../../../../Firebase/FirebaseFunctions/Job';
 import { CalendarMonth, ErrorOutline } from '@mui/icons-material';
-import ScheduleInterviewDialog from './Components/ScheduleInterviewDialog';
+import ScheduleInterviewDialog from './Components/ScheduleInterviewDialog/ScheduleInterviewDialog';
 
 export default function ManageInterviewsPage(props: { candidateId: string})
 {
