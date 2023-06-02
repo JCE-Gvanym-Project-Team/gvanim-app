@@ -116,8 +116,10 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 	const handleSaveButtonClick = async () =>
 	{
 		// TODO: add database update here
+		setLoading(true);
 		await candidateJobStatus?.editInterviewSummery(interviewSummary ? interviewSummary : "", interviewIndex);
-		const a = candidateJobStatus?.updateMatchingRate(matchingRate);
+		await candidateJobStatus?.updateMatchingRate(matchingRate);
+		setLoading(false);
 	}
 
 	const handleMatchingRateRadioButtons = async (event) =>
@@ -302,7 +304,7 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 								{/* Level of compatibility */}
 								<FormControl>
 									<FormLabel>דרגת התאמה (יותר גבוה = יותר מתאים)</FormLabel>
-									<RadioGroup row onChange={handleMatchingRateRadioButtons}>
+									<RadioGroup row value={candidateJobStatus?._matchingRate?.toString()} onChange={handleMatchingRateRadioButtons}>
 										<FormControlLabel value="1" control={<Radio />} label="1" />
 										<FormControlLabel value="2" control={<Radio />} label="2" />
 										<FormControlLabel value="3" control={<Radio />} label="3" />
