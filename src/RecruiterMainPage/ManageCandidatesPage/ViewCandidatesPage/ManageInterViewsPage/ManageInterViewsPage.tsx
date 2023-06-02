@@ -121,7 +121,7 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 		await candidateJobStatus?.updateMatchingRate(matchingRate);
 		setLoading(false);
 	}
-
+	
 	const handleMatchingRateRadioButtons = async (event) =>
 	{
 		setMatchingRate(["1", "2", "3", "4", "5"].includes(event.target.value) ? parseInt(event.target.value) : -1);
@@ -266,6 +266,7 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 									renderInput={(params) => <TextField {...params} label="בחירת ראיון" />}
 									onInputChange={(event, value) =>
 									{
+										setMatchingRate(candidateJobStatus? candidateJobStatus?._matchingRate : -1);
 										if (value === "ראיון ראשון")
 										{
 											setInterviewIndex(0);
@@ -274,6 +275,7 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 										{
 											setInterviewIndex(1);
 											setInterviewSummary(candidateJobStatus?._interviewsSummery[1]);
+
 										} else
 										{
 											setInterviewIndex(-1);
@@ -304,7 +306,7 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 								{/* Level of compatibility */}
 								<FormControl>
 									<FormLabel>דרגת התאמה (יותר גבוה = יותר מתאים)</FormLabel>
-									<RadioGroup row value= {candidateJobStatus?._matchingRate?.toString()} onChange={handleMatchingRateRadioButtons}>
+									<RadioGroup row value={matchingRate.toString()} onChange={handleMatchingRateRadioButtons}>
 										<FormControlLabel value="1" control={<Radio />} label="1" />
 										<FormControlLabel value="2" control={<Radio />} label="2" />
 										<FormControlLabel value="3" control={<Radio />} label="3" />
