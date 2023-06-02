@@ -1,18 +1,27 @@
 import { Close } from '@mui/icons-material';
-import { Box,  Dialog, DialogContent, DialogTitle, IconButton } from '@mui/material';
+import { Box, Button, Dialog, DialogContent, DialogTitle, IconButton } from '@mui/material';
 import { useEffect, useState } from 'react'
 import { dialogContentStyle, dialogContentSx, dialogSx, dialogTitleSx, dialogTopAreaSx } from './RecommendersDialogStyle';
 import { CandidateJobStatus } from '../../../../../Firebase/FirebaseFunctions/CandidateJobStatus';
 
-export default function RecommendersDialog(props: {open, onClose, candidateJobStatus: CandidateJobStatus | null})
+export default function RecommendersDialog(props: { open, onClose, jobId: string })
 {
-    const {open, onClose, candidateJobStatus} = props;
+    const { open, onClose, jobId } = props;
 
-    const [recommenders, setRecommenders] = useState<any[]>();
+    const [recommenders, setRecommenders] = useState<string[] | undefined>();
 
-    useEffect(() => {
+    const getRecommendationsURLs = async function () {
+        // TODO: use getfilteredcandidatejobstatus and then use
+        // this commented code because it actually works, but firebase code needs fixing
+        // const a = await candidateJobStatus?.getRecomendationsUrl();
+        // console.log("asd: " + a);
+    }
 
-    }, [])
+    useEffect(() =>
+    {
+        console.log('use effect');
+        getRecommendationsURLs();
+    }, [jobId, open])
 
     return (
         // popup dialog
@@ -40,7 +49,9 @@ export default function RecommendersDialog(props: {open, onClose, candidateJobSt
 
             {/* */}
             <DialogContent sx={dialogContentSx} style={dialogContentStyle}>
-                
+                <Button>
+                    {recommenders}
+                </Button>
             </DialogContent>
         </Dialog>
     )
