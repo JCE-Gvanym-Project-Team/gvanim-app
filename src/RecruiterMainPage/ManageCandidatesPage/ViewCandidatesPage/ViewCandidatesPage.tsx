@@ -25,7 +25,6 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 	// candidate and jobs info
 	const [candidateInfo, setCandidateInfo] = useState<Candidate | null>(null);
 	const [candidateJobs, setCandidateJobs] = useState<Job[]>([]);
-	const [allJobs, setAllJobs] = useState<Job[]>([]);
 	const { state } = useLocation();
 
 	useEffect(() =>
@@ -34,17 +33,16 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 		getCandidate(candidateId, setCandidateInfo);
 
 		// get list of all jobs for this candidate
-		getJobs(candidateId, setCandidateJobs, setAllJobs);
+		getJobs(candidateId, setCandidateJobs);
 	}, [candidateId])
 
-
-	const {reachedViaNavigate} = state;	
 	useEffect(() =>
 	{
-		if (reachedViaNavigate){
-			getJobs(candidateId, setCandidateJobs, setAllJobs);
-		}
-	}, [reachedViaNavigate])
+		// pull candidate from firebase
+		getCandidate(candidateId, setCandidateInfo);
+		
+		getJobs(candidateId, setCandidateJobs);
+	}, [])
 
 	// comments popup handlers
 	const [popupOpen, setPopupOpen] = useState(false);
@@ -119,7 +117,7 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 						</Box>
 
 						{/* Jobs table */}
-						<JobsTable setDataSize={setDataSize} jobs={candidateJobs} />
+						<JobsTable setDataSize={setDataSize} candidateJobs={candidateJobs} />
 
 						{/* Bottom Buttons */}
 						<Box sx={candidateNameAndEditButtonContainerSx}>
@@ -157,7 +155,7 @@ const getCandidate = function (candidateId: string, setCandidateInfo)
 	});
 }
 
-const getJobs = async function (candidateId: string, setCandidateJobs, setAllJobs)
+const getJobs = async function (candidateId: string, setCandidateJobs)
 {
 	// get a list of all job numbers
 	// for the jobs this candidate applied to
@@ -170,7 +168,6 @@ const getJobs = async function (candidateId: string, setCandidateJobs, setAllJob
 
 	// get all jobs from firebase
 	let jobs = await getFilteredJobs();
-	setAllJobs(jobs);
 
 	// filter them by the list of job numbers 
 	// we got from the previous request to firebase
