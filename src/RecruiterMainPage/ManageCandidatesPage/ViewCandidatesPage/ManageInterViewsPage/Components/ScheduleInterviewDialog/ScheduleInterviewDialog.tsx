@@ -10,7 +10,6 @@ import { CandidateJobStatus, allStatus, getAllRejectCause, getFilteredCandidateJ
 import { Recruiter } from "../../../../../../Firebase/FirebaseFunctions/Recruiter";
 import { Job, getFilteredJobs } from "../../../../../../Firebase/FirebaseFunctions/Job";
 import { useNavigate } from "react-router-dom";
-import NotInterestedReason from "../NotInterestedReason/NotInterstedReason";
 
 const filter = createFilterOptions<string>();
 
@@ -112,11 +111,7 @@ export default function ScheduleInterviewDialog(props: {
 
         // send whatsapp message
         // TODO: continue here
-        const link = await candidateJobStatus?.getWhatsappUrl(
-            new Recruiter("asd@gmail.com", "firstname", "lastname", ["sector1", "sector2"]),
-            undefined,
-            "makom"
-        );
+        const link = await candidateJobStatus?.getWhatsappUrl("asd");
 
         window.open(link);
 
@@ -154,13 +149,8 @@ export default function ScheduleInterviewDialog(props: {
             const interviewTime: Date = time?.$d;
             interviewDate?.setHours(interviewTime.getHours());
             interviewDate?.setMinutes(interviewTime.getMinutes());
-            candidateJobStatus?.updateStatus(newStatus, interviewDate);
-            //TODO: replace this with a real recruiter, and a real location
-            const link = await candidateJobStatus?.getWhatsappUrl(
-                new Recruiter("asd@gmail.com", "firstname", "lastname", ["sector1", "sector2"]),
-                interviewDate,
-                "makom"
-            );
+            await candidateJobStatus?.updateStatus(newStatus, interviewDate);
+            const link = await candidateJobStatus?.getWhatsappUrl("שדג");
 
             window.open(link);
         } else

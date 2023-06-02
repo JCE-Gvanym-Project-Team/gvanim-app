@@ -107,7 +107,6 @@ export default function AdminPage() {
             </Box>
 
             <Paper sx={MyPaperSx}>
-
                 <TabsPanel />
             </Paper>
         </>

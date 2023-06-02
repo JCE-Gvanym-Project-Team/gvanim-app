@@ -10,7 +10,7 @@ export const ListItemTypographySx: SxProps = {
 
 export const MyPaperSx: SxProps = {
     height: 'fit-content',
-    maxHeight: 500, 
+    maxHeight: 510, 
     borderTop: '1px solid rgba(0, 0, 0, 0.125)',
     borderTopRightRadius: '0.75rem',
     borderTopLeftRadius: '0.75rem',

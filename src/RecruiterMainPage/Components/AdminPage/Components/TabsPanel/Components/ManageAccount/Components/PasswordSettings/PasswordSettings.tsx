@@ -1,7 +1,9 @@
 import { Box, Button, FormGroup, Stack, TextField, Typography } from '@mui/material'
 import React from 'react'
 
-export default function PasswordSettings() {
+export default function PasswordSettings(props: { passwordEdit: any }) {
+    const { passwordEdit } = props;
+
     return (
         <>
             <Stack direction='column' spacing={1} sx={{ width: '100%', mt: 1, padding: 2 }}>
@@ -16,7 +18,7 @@ export default function PasswordSettings() {
                                 <Typography sx={{ fontWeight: 600, fontSize: 13 }}>סיסמה נוכחית:</Typography>
                             </label>
 
-                            <TextField style={{ width: '100%' }} size='small' placeholder="סיסמה נוכחית" type="password"
+                            <TextField disabled={!passwordEdit} style={{ width: '100%' }} size='small' placeholder="סיסמה נוכחית" type="password"
                             />
                         </Box>
 
@@ -25,7 +27,7 @@ export default function PasswordSettings() {
                                 <Typography sx={{ fontWeight: 600, fontSize: 13 }}>אימות סיסמה נוכחית:</Typography>
                             </label>
 
-                            <TextField style={{ width: '100%' }} size='small' placeholder="אימות סיסמה נוכחית" type="password"
+                            <TextField disabled={!passwordEdit} style={{ width: '100%' }} size='small' placeholder="אימות סיסמה נוכחית" type="password"
                             />
                         </Box>
                 </Stack>
@@ -39,7 +41,7 @@ export default function PasswordSettings() {
                             <Typography sx={{ fontWeight: 600, fontSize: 13 }}>סיסמה חדשה:</Typography>
                         </label>
 
-                        <TextField style={{ width: '100%' }} size='small' placeholder="סיסמה חדשה" type="password"
+                        <TextField disabled={!passwordEdit} style={{ width: '100%' }} size='small' placeholder="סיסמה חדשה" type="password"
                         />
                     </Box>
 
@@ -48,7 +50,7 @@ export default function PasswordSettings() {
                             <Typography sx={{ fontWeight: 600, fontSize: 13 }}>אימות סיסמה חדשה:</Typography>
                         </label>
 
-                        <TextField style={{ width: '100%' }} size='small' placeholder="אימות סיסמה חדשה" type="password"
+                        <TextField disabled={!passwordEdit} style={{ width: '100%' }} size='small' placeholder="אימות סיסמה חדשה" type="password"
                         />
                     </Box>
                 </Stack>
@@ -56,7 +58,7 @@ export default function PasswordSettings() {
             </Stack>
 
             <Box sx={{ padding: 2, width: '100%', display: 'flex', justifyContent: 'end' }}>
-                <Button variant='contained'> עדכן </Button>
+                <Button disabled={!passwordEdit} variant='contained'> עדכן </Button>
             </Box>
         </>
     )

@@ -28,6 +28,7 @@ export const dataGridSx = (theme: Theme): SxProps => ({
 	boxShadow: 2,
 	"&.MuiDataGrid-root .MuiDataGrid-cell:focus-within": {
 		outline: "none !important",
+
 	},
 	border: 0,
 	color:
@@ -51,6 +52,9 @@ export const dataGridSx = (theme: Theme): SxProps => ({
 	},
 	'& .MuiDataGrid-iconSeparator': {
 		display: 'none',
+	},
+	'& .MuiDataGrid-columnHeader': {
+		borderBottom: `1px solid ${theme.palette.mode === 'light' ? '#f0f0f0' : '#303030'}`,
 	},
 	'& .MuiDataGrid-columnHeader, .MuiDataGrid-cell': {
 		borderRight: `1px solid ${theme.palette.mode === 'light' ? '#f0f0f0' : '#303030'}`,

@@ -1,15 +1,12 @@
 import * as React from 'react';
 import { Theme, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import Chip from '@mui/material/Chip';
-import { IconButton, Input, Stack } from '@mui/material';
-import { Edit, Save } from '@mui/icons-material';
-import { MyPaperSx } from './SectorChipStyle';
+import { Input, Stack } from '@mui/material';
+
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -45,14 +42,15 @@ function getStyles(name: string, personName: readonly string[], theme: Theme) {
   };
 }
 
-export default function SectorChip(props: { recruiterSectors: string[], setRecruiterSectors: any, edit: any, setEdit: any }) {
-  const { recruiterSectors, setRecruiterSectors, edit, setEdit } = props;
+export default function SectorChips(props: { recruiterSectors: string[], setRecruiterSectors: any, setSaveButton: any}) {
+  const { recruiterSectors, setRecruiterSectors, setSaveButton } = props;
   const theme = useTheme();
 
 
 
 
   const handleChange = (event: SelectChangeEvent<typeof recruiterSectors>) => {
+    setSaveButton(true);
     const {
       target: { value },
     } = event;
@@ -63,20 +61,16 @@ export default function SectorChip(props: { recruiterSectors: string[], setRecru
   };
 
   return (
-    <Box>
+    <Box sx={{ width: '100%' }}>
       <Stack spacing={1} direction="row">
-        <IconButton onClick={() => setEdit(!edit)}>
-          {edit ? <Save sx={{color: 'rgb(52, 71, 103)'}} /> : <Edit sx={{color: 'rgb(52, 71, 103)'}} />}
-        </IconButton>
 
-        <FormControl sx={{width: 200 }}>
-        <InputLabel disabled={!edit} variant='standard'>אשכולות</InputLabel>
+        <FormControl 		sx={{ width: '100%'}}>
+        <InputLabel  variant='standard'>אשכולות</InputLabel>
           <Select
-            size='small'
             multiple
             value={recruiterSectors}
             onChange={handleChange}
-            input={<Input disabled={!edit} />}
+            input={<Input size='small' />}
             MenuProps={MenuProps}
           >
             {names.map((name) => (

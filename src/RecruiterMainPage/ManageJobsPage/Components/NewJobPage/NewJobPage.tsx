@@ -16,11 +16,6 @@ const Form = styled('form')(({ theme }) => ({
 const NewJobPage = () => {
     const { state } = useLocation();
 
-    const getRolesFromDB = () => {
-        const roles = ["מנהל","מהנדס","רופא"];
-        return roles;
-    };
-
     // values
     const [jobName, setJobName] = useState('');
     const [jobRole, setJobRole] = useState('');
@@ -58,6 +53,8 @@ const NewJobPage = () => {
             setJobDescriptionSkills(_JobToEdit[0]._description[1]);
             setJobAdditionalInfo(_JobToEdit[0]._description[2]);
             setJobScope(_JobToEdit[0]._scope);
+
+        
 
         }
 
