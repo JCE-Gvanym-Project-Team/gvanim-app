@@ -11,11 +11,33 @@ export default function MyChip(props: { jobId: string, candidate: Candidate | nu
     {
         setCandidateJobStatus((await getFilteredCandidateJobStatuses(["jobNumber", "candidateId"], [jobId, candidate ? candidate._id : ""]))[0])
     }
+
+    const getChipStyle = function(matchingRate) {
+        if (matchingRate === 5){
+            return {backgroundColor: "#00EE00", color: "black"}
+        }
+        if (matchingRate === 4){
+            return {backgroundColor: "#00D800", color: "black"}
+        }
+        if (matchingRate === 3){
+            return {backgroundColor: "#EEEE00", color: "black"}
+        }
+        if (matchingRate === 2){
+            return {backgroundColor: "#FFA500", color: "black"}
+        }
+        if (matchingRate === 1){
+            return {backgroundColor: "#FF0000", color: "black"}
+        }
+    }
+
     useEffect(() =>
     {
         getCandidateJobStatus();
     }, [jobId]);
     return (
-        <Chip label={candidateJobStatus?._matchingRate === -1 ? "לא דורג" : candidateJobStatus?._matchingRate} />
+        <Chip
+            label={candidateJobStatus?._matchingRate === -1 ? "לא דורג" : candidateJobStatus?._matchingRate}
+            sx={getChipStyle(candidateJobStatus?._matchingRate)}
+        />
     )
 }
