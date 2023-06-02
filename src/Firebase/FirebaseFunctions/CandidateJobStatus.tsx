@@ -241,7 +241,7 @@ export class CandidateJobStatus {
         const cand = (await getFilteredCandidates(["id"], [this._candidateId])).at(0);
         if (cand) {
             if (text.length > 0)
-                return `https://api.whatsapp.com/send?phone=972${cand._phone}&text=${text}`;
+                return `https://api.whatsapp.com/send?phone=972${cand._phone}&text=${text.replace(' ','%20').replace('\n','%0A')}`;
         }
         return "";
     }
