@@ -49,7 +49,7 @@ function BootstrapDialogTitle(props: DialogTitleProps) {
     );
 }
 
-export default function RemoveRecruiterDialog(props: { handleRemoveRecruiter: any }) {
+export default function RemoveConfirmPopup(props: { handleRemoveRecruiter: any }) {
     const { handleRemoveRecruiter } = props;
     const [open, setOpen] = React.useState(false);
 

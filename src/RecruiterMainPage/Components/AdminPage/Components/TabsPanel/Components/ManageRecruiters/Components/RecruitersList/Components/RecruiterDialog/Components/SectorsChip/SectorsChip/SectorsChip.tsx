@@ -42,7 +42,7 @@ function getStyles(name: string, personName: readonly string[], theme: Theme) {
   };
 }
 
-export default function SectorChip(props: { recruiterSectors: string[], setRecruiterSectors: any, setSaveButton: any}) {
+export default function SectorChips(props: { recruiterSectors: string[], setRecruiterSectors: any, setSaveButton: any}) {
   const { recruiterSectors, setRecruiterSectors, setSaveButton } = props;
   const theme = useTheme();
 

@@ -1,10 +1,11 @@
 import { Avatar, Box, Button, Divider, IconButton, InputBase, List, ListItem, ListItemAvatar, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material'
 import React from 'react'
-import { ListItemTypographySx, MyPaperSx } from './RecruitersListStyle'
-import RecruiterDialog from './RecruiterDialog/RecruiterDialog';
 import { Search } from '@mui/icons-material';
-import { Recruiter, getRecruitersFromDatabase } from '../../../../../Firebase/FirebaseFunctions/Recruiter';
-import TransitionComponentSnackbar from '../SuccessSnackBar/SuccessSnackBar';
+import { Recruiter, getRecruitersFromDatabase } from '../../../../../../../../../Firebase/FirebaseFunctions/Recruiter';
+import { ListItemTypographySx, MyPaperSx } from './RecruitersListStyle';
+import RecruiterDialog from './Components/RecruiterDialog/RecruiterDialog';
+import SuccessSnackBar from '../SuccessSnackBar/SuccessSnackBar';
+
 
 
 const recruiters = [
@@ -143,7 +144,7 @@ export default function RecruitersList() {
                 </Box>
 
             </List>
-            <TransitionComponentSnackbar openSnackBar={openSnackBar} setOpenSnackBar={setOpenSnackBar} message={message} />
+            <SuccessSnackBar openSnackBar={openSnackBar} setOpenSnackBar={setOpenSnackBar} message={message} />
         </Box>
     )
 }

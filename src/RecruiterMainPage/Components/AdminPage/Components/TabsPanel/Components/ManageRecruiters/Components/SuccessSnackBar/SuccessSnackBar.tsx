@@ -5,9 +5,9 @@ import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import CloseIcon from '@mui/icons-material/Close';
 import Snackbar from '@mui/base/Snackbar';
 import { SnackbarCloseReason } from '@mui/base/useSnackbar';
-import { Button, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 
-export default function TransitionComponentSnackbar(props: { openSnackBar: any, setOpenSnackBar: any, message: any }) {
+export default function SuccessSnackBar(props: { openSnackBar: any, setOpenSnackBar: any, message: any }) {
   // const [open, setOpen] = React.useState(false);
   const { openSnackBar, setOpenSnackBar, message} = props;
   const [exited, setExited] = React.useState(true);

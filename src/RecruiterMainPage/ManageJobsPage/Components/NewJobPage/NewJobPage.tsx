@@ -54,6 +54,8 @@ const NewJobPage = () => {
             setJobAdditionalInfo(_JobToEdit[0]._description[2]);
             setJobScope(_JobToEdit[0]._scope);
 
+        
+
         }
 
         if (state !== null) { // edit job

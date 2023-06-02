@@ -10,7 +10,7 @@ import
 	GridInitialState,
 	useGridRootProps,
 	useGridApiContext,
-	GridToolbarContainer, heIL, GridFooterContainer, GridToolbarQuickFilter, GridToolbarExportContainer, GridCsvExportMenuItem, GridPrintExportMenuItem
+	GridToolbarContainer, heIL, GridFooterContainer, GridToolbarQuickFilter, GridToolbarExportContainer, GridPrintExportMenuItem
 } from '@mui/x-data-grid';
 import { GridFooterContainerSx, TypographyFooterSx, dataGridContainerStyle, dataGridContainerSx, dataGridSx } from './MyTableStyle';
 import CandidatesListFullScreenDialog from '../CandidatesListDialog/CandidatesListDialog';
@@ -119,7 +119,8 @@ const columns: GridColDef[] = [
 		field: '_jobNumber',
 		headerName: "מס' משרה",
 		width: 150,
-		align: 'left'
+		headerAlign: 'center',
+		align: 'center'
 	},
 
 	{
@@ -127,7 +128,8 @@ const columns: GridColDef[] = [
 		headerName: 'איזור',
 		width: 200,
 		editable: false,
-		align: 'left',
+		headerAlign: 'center',
+		align: 'center'
 
 
     },
@@ -135,15 +137,15 @@ const columns: GridColDef[] = [
         field: '_role',
         headerName: 'תפקיד',
         width: 300,
-        editable: false,
-        align: 'left',
+		headerAlign: 'center',
+		align: 'center'
     },
     {
         field: '_scope',
         headerName: 'אחוז משרה',
         width: 150,
-        editable: false,
-        align: 'left',
+		headerAlign: 'center',
+		align: 'center'
     },
     {
         field: 'candidates',
@@ -151,7 +153,8 @@ const columns: GridColDef[] = [
         description: 'עמודה זו אינה ניתנת למיון',
         sortable: false,
         editable: false,
-        align: 'left',
+		headerAlign: 'center',
+		align: 'center',
         width: 300,
         renderCell: (job) => {
 			const { id } = job.row;

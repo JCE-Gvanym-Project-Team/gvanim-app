@@ -6,12 +6,14 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
 import { TransitionProps } from '@mui/material/transitions';
-import { Box, Button, Chip, Divider, ListItemIcon, Stack, TextField, Tooltip, Typography } from '@mui/material';
-import { Save, Edit, EditNote } from '@mui/icons-material';
-import SectorChip from '../../SectorChip/SectorChip';
+import { Box, Button, Chip, Divider, ListItemIcon, Stack, TextField, Typography } from '@mui/material';
+import { EditNote } from '@mui/icons-material';
 import { MyFieldsSx } from './RecruiterDialogStyle';
-import { Recruiter, getRecruitersFromDatabase } from '../../../../../../Firebase/FirebaseFunctions/Recruiter';
-import RemoveRecruiterDialog from './RemoveRecruiterDialog/RemoveRecruiterDialog';
+
+import RemoveConfirmPopup from './Components/RemoveConfirmPopup/RemoveConfirmPopup';
+import { Recruiter } from '../../../../../../../../../../../Firebase/FirebaseFunctions/Recruiter';
+import SectorsChip from './Components/SectorsChip/SectorsChip/SectorsChip';
+
 
 
 const recruiter_sectors = [
@@ -165,7 +167,7 @@ export default function RecruiterDialog(props: { recruitersList: Recruiter[], se
 											</Box>
 
 											<Box sx={{ display: 'flex', justifyContent: 'center' }}>
-												<SectorChip recruiterSectors={recruiterSectors} setRecruiterSectors={setRecruiterSectors} setSaveButton={setSaveButton} />
+												<SectorsChip recruiterSectors={recruiterSectors} setRecruiterSectors={setRecruiterSectors} setSaveButton={setSaveButton} />
 											</Box>
 										</Stack>
 									</Box>
@@ -197,7 +199,7 @@ export default function RecruiterDialog(props: { recruitersList: Recruiter[], se
 				<Divider />
 				<Stack spacing={1} direction='row' sx={{ padding: 2, display: 'flex', justifyContent: 'space-between' }}>
 					<Box>
-						<RemoveRecruiterDialog handleRemoveRecruiter={handleRemoveRecruiter} />
+						<RemoveConfirmPopup handleRemoveRecruiter={handleRemoveRecruiter} />
 					</Box>
 
 					<Button disabled={!saveButton} onClick={handleSave} variant='contained' color='primary'>
