@@ -235,6 +235,7 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 											setChooseInterviewIndexKey("0");
 										}
 										setInterviewSummary("");
+										setInterviewIndex(-1);
 										setJobValue(value);
 									}}
 								/>
