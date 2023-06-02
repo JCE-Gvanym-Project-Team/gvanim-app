@@ -91,7 +91,7 @@ export default function JobsTable(props: { setDataSize: any, candidateJobs: any,
 		{
 			field: '_role',
 			headerName: 'תפקיד',
-			width: 300,
+			width: 150,
 			editable: false,
 			align: 'left',
 		},
@@ -103,26 +103,13 @@ export default function JobsTable(props: { setDataSize: any, candidateJobs: any,
 			align: 'left',
 		},
 		{
-			field: 'candidates',
-			headerName: 'מועמדים שניגשו',
-			description: 'עמודה זו אינה ניתנת למיון',
-			sortable: false,
-			editable: false,
-			align: 'left',
-			width: 300,
-			renderCell: (job) =>
-			{
-				const { id } = job.row;
-				return <CandidatesListFullScreenDialog JobId={id} />;
-			},
-		},
-		{
 			field: '_matchingRate',
 			headerName: 'דרגת התאמה',
 			width: 150,
 			editable: false,
 			align: 'left',
-			filterable: true,
+			filterable: false,
+			sortable: false,
 			renderCell: (job) =>
 			{
 				return (
@@ -155,6 +142,20 @@ export default function JobsTable(props: { setDataSize: any, candidateJobs: any,
 						<RecommendersDialog open={recommendersDialogOpen} onClose={closeRecommendersDialog} jobId={job.id.toString()} />
 					</>
 				);
+			},
+		},
+		{
+			field: 'candidates',
+			headerName: 'מועמדים שניגשו',
+			description: 'עמודה זו אינה ניתנת למיון',
+			sortable: false,
+			editable: false,
+			align: 'left',
+			width: 300,
+			renderCell: (job) =>
+			{
+				const { id } = job.row;
+				return <CandidatesListFullScreenDialog JobId={id} />;
 			},
 		},
 	];
