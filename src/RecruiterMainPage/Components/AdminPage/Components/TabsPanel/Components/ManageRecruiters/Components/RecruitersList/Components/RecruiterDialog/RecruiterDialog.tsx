@@ -60,8 +60,9 @@ export default function RecruiterDialog(props: { recruitersList: Recruiter[], se
 
 	}
 	const handleSave = () => {
-		recruiter.edit(email, firstName, lastName);  // one more argument is needed (Sectors)
-		setOpen(false);
+		// recruiter.edit(email, firstName, lastName);  // one more argument is needed (Sectors)
+		// setOpen(false);
+		alert("need to implement");
 	};
 
 	const handleClickOpen = () => {
