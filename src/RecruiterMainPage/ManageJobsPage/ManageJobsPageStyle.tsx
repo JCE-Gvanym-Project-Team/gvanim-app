@@ -4,7 +4,6 @@ export const ManageJobPageBoxSx: SxProps = {
     marginTop: '-20vh',
     backgroundColor: '#fff',
     borderRadius: '1.5rem',
-    // width: 'calc(100% - 64px)',
     width: '100%',
     height: '100%'
 }

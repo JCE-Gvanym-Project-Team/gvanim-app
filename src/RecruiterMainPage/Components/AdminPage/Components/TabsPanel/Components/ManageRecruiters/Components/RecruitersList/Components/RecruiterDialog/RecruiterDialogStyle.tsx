@@ -11,5 +11,7 @@ export const MyFieldsSx: SxProps = {
     height: 'fit-content',
     border: '1px solid rgba(0, 0, 0, 0.125)',
     borderRadius: '1rem',
-    padding: 5,
+    paddingRight: 5,
+    paddingLeft: 5,
+    paddingTop: 5,
 }
