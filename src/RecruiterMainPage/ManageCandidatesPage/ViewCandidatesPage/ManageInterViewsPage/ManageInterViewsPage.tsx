@@ -7,7 +7,7 @@ import { CandidateJobStatus, allStatus, getFilteredCandidateJobStatuses } from '
 import { Job, getFilteredJobs } from '../../../../Firebase/FirebaseFunctions/Job';
 import { CalendarMonth, ErrorOutline } from '@mui/icons-material';
 import ScheduleInterviewDialog from './Components/ScheduleInterviewDialog/ScheduleInterviewDialog';
-import MyLoading from '../../../../Components/MyLoading/MyLoading';
+import MyLoading2ndVersion from '../../../../Components/MyLoading2ndVersion/MyLoading2ndVersion';
 export default function ManageInterviewsPage(props: { candidateId: string })
 {
 
@@ -38,8 +38,14 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 	// flag to hide the choose interview option
 	const [hideChooseInterview, setHideChooseInterview] = useState(true);
 
-	// key to rerender 
-	const [chooseInterviewIndexKey, setChooseInterviewIndexKey] = useState("");
+	// key to rerender choose interview
+	const [chooseInterviewIndexKey, setChooseInterviewIndexKey] = useState("0");
+
+	// key to rerender entire page
+	const [rerenderKey, setRerenderKey] = useState("");
+
+	// while we're waiting for firebase, load
+	const [loading, setLoading] = useState(false);
 
 	// use effects
 	useEffect(() =>
@@ -53,6 +59,10 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 	{
 		handleChooseJob();
 	}, [jobValue])
+
+	useEffect(() => {
+		setJobValue("");
+	}, [rerenderKey])
 
 	// autcomplete job select
 	const handleChooseJob = async function ()
@@ -116,7 +126,8 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 	}
 
 	return (
-		<>
+		loading ? <MyLoading2ndVersion /> :
+		<React.Fragment key={rerenderKey}>
 			{/* background div */}
 			<Box sx={BoxGradientSx} />
 
@@ -158,10 +169,12 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 									onClose={scheduleInterviewCloseHandler}
 									candidate={candidateInfo}
 									candidateJobStatus={candidateJobStatus}
-									setCandidateJobStatus={setCandidateJobStatus}
 									candidateJobs={candidateAppliedJobs}
 									allJobs={allJobs}
 									chosenJobValue={jobValue}
+									rerenderKey={rerenderKey}
+									setRerenderKey={setRerenderKey}
+									setLoading={setLoading}
 								/>
 							</Box>
 						</Box>
@@ -312,7 +325,7 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 					</Stack>
 				</Box>
 			</Box>
-		</>
+		</React.Fragment>
 	)
 }
 
