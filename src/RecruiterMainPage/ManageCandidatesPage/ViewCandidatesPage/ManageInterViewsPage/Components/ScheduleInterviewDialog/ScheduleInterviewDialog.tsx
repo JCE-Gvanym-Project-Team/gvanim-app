@@ -1,23 +1,47 @@
-import { Autocomplete, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, MenuItem, TextField, Typography } from "@mui/material";
+import { Autocomplete, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, MenuItem, TextField, Typography, createFilterOptions } from "@mui/material";
 import { useEffect, useState } from "react";
 import { changeJobContainerStyle, changeJobContainerSx, currentStatusTextSx, dialogActionsSx, dialogContentSx, dialogSx, dialogTitleSx, dialogTopAreaSx, locationTextFieldSx, locationTitleSx, submitButtonSx } from "./ScheduleInterviewDialogStyle";
-import { ArrowBack, ArrowDownward, Autorenew, Check, Close, DoneAll, MoodBad, ThumbDown, ThumbUp, WhatsApp } from "@mui/icons-material";
+import { ArrowBack, ArrowDownward, Autorenew, Check, Close, DoneAll, ElevatorSharp, MoodBad, ThumbDown, ThumbUp, WhatsApp } from "@mui/icons-material";
 import { DatePicker, LocalizationProvider, MobileTimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import 'dayjs/locale/he'
 import { Candidate } from "../../../../../../Firebase/FirebaseFunctions/Candidate";
-import { CandidateJobStatus, allStatus, getFilteredCandidateJobStatuses, getMessage } from "../../../../../../Firebase/FirebaseFunctions/CandidateJobStatus";
+import { CandidateJobStatus, allStatus, getAllRejectCause, getFilteredCandidateJobStatuses, getMessage } from "../../../../../../Firebase/FirebaseFunctions/CandidateJobStatus";
 import { Recruiter } from "../../../../../../Firebase/FirebaseFunctions/Recruiter";
 import { Job, getFilteredJobs } from "../../../../../../Firebase/FirebaseFunctions/Job";
 import { useNavigate } from "react-router-dom";
 
-export default function ScheduleInterviewDialog(props: { open, onClose, candidate: Candidate | null, candidateJobStatus: CandidateJobStatus | null, candidateJobs: Job[], allJobs: Job[], chosenJobValue: string })
-{
+const filter = createFilterOptions<string>();
 
-    const { open, onClose, candidate, candidateJobStatus, candidateJobs, allJobs, chosenJobValue } = props;
+
+export default function ScheduleInterviewDialog(props: {
+    open,
+    onClose,
+    candidate: Candidate | null,
+    candidateJobStatus: CandidateJobStatus | null,
+    candidateJobs: Job[],
+    allJobs: Job[],
+    chosenJobValue: string,
+    rerenderKey,
+    setRerenderKey,
+    setLoading
+})
+{
+    const { open,
+        onClose,
+        candidate,
+        candidateJobStatus,
+        candidateJobs,
+        allJobs,
+        chosenJobValue,
+        rerenderKey,
+        setRerenderKey,
+        setLoading
+    } = props;
 
     const [time, setTime] = useState<any>();
     const [date, setDate] = useState<any>();
+    const [interviewDate, setInterviewDate] = useState<any>();
 
     // disable time and date if status doesn't require them
     const [timeDisabled, setTimeDisabled] = useState(true);
@@ -27,6 +51,10 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
 
     // for rejection reason textfield
     const [disableRejectionReason, setDisableRejectionReason] = useState(true);
+    const [rejectionReasons, setRejectionReasons] = useState<string[]>([]);
+    const [chosenRejectionReasonValue, setChosenRejectionReasonValue] = useState("");
+
+    const [whatsappMessage, setWhatsappMessage] = useState("");
 
     const [newStatus, setNewStatus] = useState("");
 
@@ -36,11 +64,26 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
     const handleDateChange = (value) =>
     {
         setDate(value);
+        const chosenDate: Date = value?.$d;
+        const chosenTime: Date = time?.$d;
+        chosenDate?.setHours(chosenTime ? chosenTime.getHours() : 0);
+        chosenDate?.setMinutes(chosenTime ? chosenTime.getMinutes() : 0);
+        setInterviewDate(chosenDate);
+
+        setWhatsappMessage(getWhatsappMessage(candidate, chosenJobValue, allJobs, newStatus, chosenDate));
     };
 
     const handleTimeChange = (value) =>
     {
         setTime(value);
+        const chosenDate: Date = date?.$d;
+        const chosenTime: Date = value?.$d;
+        chosenTime?.setFullYear(chosenDate ? chosenDate.getFullYear() : 0);
+        chosenTime?.setMonth(chosenDate ? chosenDate.getMonth() : 0);
+        chosenTime?.setDate(chosenDate ? chosenDate.getDate() : 0);
+        setInterviewDate(chosenDate);
+
+        setWhatsappMessage(getWhatsappMessage(candidate, chosenJobValue, allJobs, newStatus, chosenTime));
     };
 
     const setDefaults = () =>
@@ -81,10 +124,18 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
         const toJobNumberString = toJobValue?.match(/\d+/)?.[0];
         const toJobNumber = toJobNumberString ? parseInt(toJobNumberString) : NaN;
 
-        // actually replace in firebase
+        // change job in firebase
         const fromCandidateJobStatus = (await getFilteredCandidateJobStatuses(["jobNumber", "candidateId"], [fromJobNumber.toString(), candidate ? candidate._id : ""]))[0];
         fromCandidateJobStatus.updateStatus(allStatus[6], undefined);
+        setLoading(true);
         await candidate?.apply(toJobNumber, fromCandidateJobStatus._about);
+        rerender(rerenderKey, setRerenderKey);
+        setLoading(false);
+
+        // send whatsapp message
+        const link = await candidateJobStatus?.getWhatsappUrl(whatsappMessage);
+
+        window.open(link);
 
         setDefaults();
 
@@ -95,28 +146,39 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
 
     const handleSubmitSaveRejectionReason = async (event) =>
     {
+        if (chosenRejectionReasonValue !== "")
+        {
+            if (chosenRejectionReasonValue.includes("אחר: "))
+            {
+                candidateJobStatus?.updateRejectCause(chosenRejectionReasonValue.replace("אחר: ", ""));
+            } else
+            {
+                candidateJobStatus?.updateRejectCause(chosenRejectionReasonValue);
+            }
+        }
+        setLoading(true);
         await candidateJobStatus?.updateStatus(newStatus, undefined);
+        rerender(rerenderKey, setRerenderKey);
+        setLoading(false);
         setDefaults();
         onClose(event, "submit");
     }
 
     const handleSubmitSendWhatsappMessage = async (event) =>
     {
+        setLoading(true);
         if (!timeDisabled)
         {
-            const interviewDate: Date = date?.$d;
-            const interviewTime: Date = time?.$d;
-            interviewDate?.setHours(interviewTime.getHours());
-            interviewDate?.setMinutes(interviewTime.getMinutes());
             await candidateJobStatus?.updateStatus(newStatus, interviewDate);
-            const link = await candidateJobStatus?.getWhatsappUrl("שדג");
-
-            window.open(link);
         } else
         {
             await candidateJobStatus?.updateStatus(newStatus, undefined);
-            //TODO: replace this with a real recruiter, and a real location
         }
+        const link = await candidateJobStatus?.getWhatsappUrl(whatsappMessage);
+        rerender(rerenderKey, setRerenderKey);
+        setLoading(false);
+        setDefaults();
+        window.open(link);
 
         setDefaults();
         onClose(event, "submit");
@@ -124,13 +186,16 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
 
     const handleSubmitSaveStatus = async (event) =>
     {
+        setLoading(true);
         await candidateJobStatus?.updateStatus(newStatus, undefined);
+        rerender(rerenderKey, setRerenderKey);
+        setLoading(false);
         setDefaults();
         onClose(event, "submit");
     }
 
     // status changed handler
-    const handleStatusChanged = (status) =>
+    const handleStatusChanged = async (status) =>
     {
         setNewStatus(status);
         // remove date and time fields
@@ -149,16 +214,12 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
         } else
         {
             setDisableWhatsappMessage(false);
-            const temp = new Candidate(candidate ? candidate._id : "", candidate?._firstName, candidate?._lastName, candidate?._phone, candidate?._eMail, candidate?._generalRating, candidate?._note);
-            const tempRecruiter = new Recruiter("recruiteremail@gmail.com", "firstname", "lastname", ["asd", "asdasd"]);
-            const jobNumberString = chosenJobValue?.match(/\d+/)?.[0];
-            const jobNumber = jobNumberString ? parseInt(jobNumberString) : NaN;
-            console.log("message: " + getMessage(temp, (allJobs.filter((job) => job._jobNumber === jobNumber))[0], tempRecruiter, candidateJobStatus ? candidateJobStatus._status : "", candidateJobStatus?._interviewDate, "makom"));
         }
 
         if (status === allStatus[8])
         {
             setDisableRejectionReason(false);
+            setRejectionReasons(await getAllRejectCause());
         } else
         {
             setDisableRejectionReason(true);
@@ -172,6 +233,12 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
         {
             setChangeJobDialogOpen(false);
         }
+    }
+
+    // whatsapp message handler
+    const handleWhatsappMessageOnInput = (event) =>
+    {
+        setWhatsappMessage(event.target.value);
     }
 
     // change job setters
@@ -232,6 +299,17 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
                     renderInput={(params) => <TextField {...params} label="סטטוס חדש" />}
                     onInputChange={(event, value) =>
                     {
+                        // set whatsapp message
+                        const temp = new Candidate(candidate ? candidate._id : "", candidate?._firstName, candidate?._lastName, candidate?._phone, candidate?._eMail, candidate?._generalRating, candidate?._note);
+
+                        // todo: get real recruiter here
+                        const tempRecruiter = new Recruiter("recruiteremail@gmail.com", "firstname", "lastname", ["asd", "asdasd"]);
+                        const jobNumberString = chosenJobValue?.match(/\d+/)?.[0];
+                        const jobNumber = jobNumberString ? parseInt(jobNumberString) : NaN;
+                        const chosenJob = (allJobs.filter((job) => job._jobNumber === jobNumber))[0];
+
+                        setWhatsappMessage(getWhatsappMessage(candidate, chosenJobValue, allJobs, value, interviewDate));
+
                         handleStatusChanged(value);
                     }}
                 />
@@ -335,19 +413,43 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
                         })()}
                     </Typography>
                     <TextField
+                        value={whatsappMessage}
                         multiline
                         fullWidth
                         maxRows={5}
                         sx={locationTextFieldSx}
                         style={{ display: disableWhatsappMessage ? "none" : "block" }}
+                        onInput={handleWhatsappMessageOnInput}
                     />
-                    <TextField
-                        multiline
-                        fullWidth
-                        maxRows={5}
-                        sx={locationTextFieldSx}
-                        style={{ display: disableRejectionReason ? "none" : "block" }}
-                    />
+
+                    {/* rejection reasons */}
+                    <Box sx={{ display: disableRejectionReason ? "none" : "block" }}>
+                        <Autocomplete
+
+                            onChange={(event, newValue) =>
+                            {
+                                if (newValue && newValue !== "")
+                                {
+                                    setChosenRejectionReasonValue(newValue);
+                                }
+                            }}
+                            filterOptions={(options, params) =>
+                            {
+                                const filtered = filter(options, params);
+
+                                if (Object.keys(filtered).length === 0)
+                                {
+                                    filtered.push("אחר: " + params.inputValue);
+                                }
+
+                                return filtered;
+                            }}
+                            options={rejectionReasons}
+                            renderOption={(props, option) => <li {...props}>{option}</li>}
+                            sx={{ width: { xs: "100%", md: "50%" } }}
+                            renderInput={(params) => <TextField {...params} label="" />}
+                        />
+                    </Box>
                 </Box>
             </DialogContent>
 
@@ -425,3 +527,27 @@ const dropdownOptions = allStatus.filter((status) => status !== allStatus[0]).ma
 const disabledDateTimeList = allStatus.filter((status) => status !== allStatus[1] && status !== allStatus[3])
 
 const noWhatsappMessageList = allStatus.filter((status) => status === allStatus[2] || status === allStatus[4] || status === allStatus[8]);
+
+const rerender = function (rerenderKey, setRerenderKey)
+{
+    if (rerenderKey === "0")
+    {
+        setRerenderKey("1");
+    } else
+    {
+        setRerenderKey("0");
+    }
+}
+
+const getWhatsappMessage = function (candidate, chosenJobValue, allJobs, status, interviewDate)
+{
+    const temp = new Candidate(candidate ? candidate._id : "", candidate?._firstName, candidate?._lastName, candidate?._phone, candidate?._eMail, candidate?._generalRating, candidate?._note);
+
+    // todo: get real recruiter here
+    const tempRecruiter = new Recruiter("recruiteremail@gmail.com", "firstname", "lastname", ["asd", "asdasd"]);
+    const jobNumberString = chosenJobValue?.match(/\d+/)?.[0];
+    const jobNumber = jobNumberString ? parseInt(jobNumberString) : NaN;
+    const chosenJob = (allJobs.filter((job) => job._jobNumber === jobNumber))[0];
+
+    return getMessage(temp, chosenJob, tempRecruiter, status, interviewDate, "makom");
+}

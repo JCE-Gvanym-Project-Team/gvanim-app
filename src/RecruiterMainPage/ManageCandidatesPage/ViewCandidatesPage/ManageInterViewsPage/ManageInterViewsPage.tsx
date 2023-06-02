@@ -3,11 +3,12 @@ import { BoxGradientSx, ContainerGradientSx, appliedDateTextSx, autoCompleteSx, 
 import { Autocomplete, Box, Button, Container, Divider, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Stack, TextField, TextareaAutosize, Typography } from '@mui/material';
 import { GlobalStyle, ManageCandidatesPageGlobalStyle } from '../../../PageStyles';
 import { Candidate, getFilteredCandidates } from '../../../../Firebase/FirebaseFunctions/Candidate';
-import { CandidateJobStatus, getFilteredCandidateJobStatuses } from '../../../../Firebase/FirebaseFunctions/CandidateJobStatus';
+import { CandidateJobStatus, allStatus, getFilteredCandidateJobStatuses } from '../../../../Firebase/FirebaseFunctions/CandidateJobStatus';
 import { Job, getFilteredJobs } from '../../../../Firebase/FirebaseFunctions/Job';
 import { CalendarMonth, ErrorOutline } from '@mui/icons-material';
 import ScheduleInterviewDialog from './Components/ScheduleInterviewDialog/ScheduleInterviewDialog';
-export default function ManageInterviewsPage(props: { candidateId: string})
+import MyLoading2ndVersion from '../../../../Components/MyLoading2ndVersion/MyLoading2ndVersion';
+export default function ManageInterviewsPage(props: { candidateId: string })
 {
 
 	const { candidateId } = props;
@@ -31,17 +32,26 @@ export default function ManageInterviewsPage(props: { candidateId: string})
 	// matching rate
 	const [matchingRate, setMatchingRate] = useState(0);
 
+	// interview summary text field
 	const [interviewSummary, setInterviewSummary] = useState<string | undefined>("");
 
+	// flag to hide the choose interview option
 	const [hideChooseInterview, setHideChooseInterview] = useState(true);
 
-	const [chooseInterviewIndexKey, setChooseInterviewIndexKey] = useState("");
+	// key to rerender choose interview
+	const [chooseInterviewIndexKey, setChooseInterviewIndexKey] = useState("0");
+
+	// key to rerender entire page
+	const [rerenderKey, setRerenderKey] = useState("");
+
+	// while we're waiting for firebase, load
+	const [loading, setLoading] = useState(false);
 
 	// use effects
 	useEffect(() =>
 	{
 		getCandidate(candidateId, setCandidateInfo);
-		getJobs(candidateId,setCandidateAppliedJobs, setAllJobs);
+		getJobs(candidateId, setCandidateAppliedJobs, setAllJobs);
 	}, [candidateId]);
 
 
@@ -49,6 +59,10 @@ export default function ManageInterviewsPage(props: { candidateId: string})
 	{
 		handleChooseJob();
 	}, [jobValue])
+
+	useEffect(() => {
+		setJobValue("");
+	}, [rerenderKey])
 
 	// autcomplete job select
 	const handleChooseJob = async function ()
@@ -102,17 +116,20 @@ export default function ManageInterviewsPage(props: { candidateId: string})
 	const handleSaveButtonClick = async () =>
 	{
 		// TODO: add database update here
+		setLoading(true);
 		await candidateJobStatus?.editInterviewSummery(interviewSummary ? interviewSummary : "", interviewIndex);
+		await candidateJobStatus?.updateMatchingRate(matchingRate);
+		setLoading(false);
 	}
 
 	const handleMatchingRateRadioButtons = async (event) =>
 	{
-		//TODO: add database update here
 		setMatchingRate(["1", "2", "3", "4", "5"].includes(event.target.value) ? parseInt(event.target.value) : -1);
 	}
 
 	return (
-		<>
+		loading ? <MyLoading2ndVersion /> :
+		<React.Fragment key={rerenderKey}>
 			{/* background div */}
 			<Box sx={BoxGradientSx} />
 
@@ -157,6 +174,9 @@ export default function ManageInterviewsPage(props: { candidateId: string})
 									candidateJobs={candidateAppliedJobs}
 									allJobs={allJobs}
 									chosenJobValue={jobValue}
+									rerenderKey={rerenderKey}
+									setRerenderKey={setRerenderKey}
+									setLoading={setLoading}
 								/>
 							</Box>
 						</Box>
@@ -166,8 +186,20 @@ export default function ManageInterviewsPage(props: { candidateId: string})
 								סטטוס:
 							</Typography>
 
+							<Box sx={{display: jobValue ? "block" : "none"}}>
 							<Typography sx={candidateNameSx} variant='h4' >
 								{candidateJobStatus?._status}
+							</Typography>
+							</Box>
+						</Box>
+
+						<Box sx={{ display: candidateJobStatus?._status === allStatus[8] && jobValue ? 'flex' : "none" }}>
+							<Typography sx={textSx} variant='h4'>
+								סיבת דחייה:
+							</Typography>
+
+							<Typography sx={candidateNameSx} variant='h4' >
+								{candidateJobStatus?._rejectCause}
 							</Typography>
 						</Box>
 
@@ -195,9 +227,11 @@ export default function ManageInterviewsPage(props: { candidateId: string})
 									onInputChange={(event, value) =>
 									{
 										setSelectedJobError(false);
-										if (chooseInterviewIndexKey === "0"){
+										if (chooseInterviewIndexKey === "0")
+										{
 											setChooseInterviewIndexKey("1");
-										}else{
+										} else
+										{
 											setChooseInterviewIndexKey("0");
 										}
 										setInterviewSummary("");
@@ -223,7 +257,7 @@ export default function ManageInterviewsPage(props: { candidateId: string})
 
 
 							{/* Choose Interview */}
-							<Box sx={{display: hideChooseInterview ? "none" : "block"}}>
+							<Box sx={{ display: hideChooseInterview ? "none" : "block" }}>
 								<Autocomplete
 									key={chooseInterviewIndexKey}
 									disablePortal
@@ -270,7 +304,7 @@ export default function ManageInterviewsPage(props: { candidateId: string})
 								{/* Level of compatibility */}
 								<FormControl>
 									<FormLabel>דרגת התאמה (יותר גבוה = יותר מתאים)</FormLabel>
-									<RadioGroup row onChange={handleMatchingRateRadioButtons}>
+									<RadioGroup row value={candidateJobStatus?._matchingRate?.toString()} onChange={handleMatchingRateRadioButtons}>
 										<FormControlLabel value="1" control={<Radio />} label="1" />
 										<FormControlLabel value="2" control={<Radio />} label="2" />
 										<FormControlLabel value="3" control={<Radio />} label="3" />
@@ -293,7 +327,7 @@ export default function ManageInterviewsPage(props: { candidateId: string})
 					</Stack>
 				</Box>
 			</Box>
-		</>
+		</React.Fragment>
 	)
 }
 
