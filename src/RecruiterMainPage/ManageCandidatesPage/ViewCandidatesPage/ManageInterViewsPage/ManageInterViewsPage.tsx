@@ -3,11 +3,12 @@ import { BoxGradientSx, ContainerGradientSx, appliedDateTextSx, autoCompleteSx, 
 import { Autocomplete, Box, Button, Container, Divider, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Stack, TextField, TextareaAutosize, Typography } from '@mui/material';
 import { GlobalStyle, ManageCandidatesPageGlobalStyle } from '../../../PageStyles';
 import { Candidate, getFilteredCandidates } from '../../../../Firebase/FirebaseFunctions/Candidate';
-import { CandidateJobStatus, getFilteredCandidateJobStatuses } from '../../../../Firebase/FirebaseFunctions/CandidateJobStatus';
+import { CandidateJobStatus, allStatus, getFilteredCandidateJobStatuses } from '../../../../Firebase/FirebaseFunctions/CandidateJobStatus';
 import { Job, getFilteredJobs } from '../../../../Firebase/FirebaseFunctions/Job';
 import { CalendarMonth, ErrorOutline } from '@mui/icons-material';
 import ScheduleInterviewDialog from './Components/ScheduleInterviewDialog/ScheduleInterviewDialog';
-export default function ManageInterviewsPage(props: { candidateId: string})
+import MyLoading from '../../../../Components/MyLoading/MyLoading';
+export default function ManageInterviewsPage(props: { candidateId: string })
 {
 
 	const { candidateId } = props;
@@ -31,17 +32,20 @@ export default function ManageInterviewsPage(props: { candidateId: string})
 	// matching rate
 	const [matchingRate, setMatchingRate] = useState(0);
 
+	// interview summary text field
 	const [interviewSummary, setInterviewSummary] = useState<string | undefined>("");
 
+	// flag to hide the choose interview option
 	const [hideChooseInterview, setHideChooseInterview] = useState(true);
 
+	// key to rerender 
 	const [chooseInterviewIndexKey, setChooseInterviewIndexKey] = useState("");
 
 	// use effects
 	useEffect(() =>
 	{
 		getCandidate(candidateId, setCandidateInfo);
-		getJobs(candidateId,setCandidateAppliedJobs, setAllJobs);
+		getJobs(candidateId, setCandidateAppliedJobs, setAllJobs);
 	}, [candidateId]);
 
 
@@ -103,11 +107,11 @@ export default function ManageInterviewsPage(props: { candidateId: string})
 	{
 		// TODO: add database update here
 		await candidateJobStatus?.editInterviewSummery(interviewSummary ? interviewSummary : "", interviewIndex);
+		const a = candidateJobStatus?.updateMatchingRate(matchingRate);
 	}
 
 	const handleMatchingRateRadioButtons = async (event) =>
 	{
-		//TODO: add database update here
 		setMatchingRate(["1", "2", "3", "4", "5"].includes(event.target.value) ? parseInt(event.target.value) : -1);
 	}
 
@@ -154,6 +158,7 @@ export default function ManageInterviewsPage(props: { candidateId: string})
 									onClose={scheduleInterviewCloseHandler}
 									candidate={candidateInfo}
 									candidateJobStatus={candidateJobStatus}
+									setCandidateJobStatus={setCandidateJobStatus}
 									candidateJobs={candidateAppliedJobs}
 									allJobs={allJobs}
 									chosenJobValue={jobValue}
@@ -166,8 +171,20 @@ export default function ManageInterviewsPage(props: { candidateId: string})
 								סטטוס:
 							</Typography>
 
+							<Box sx={{display: jobValue ? "block" : "none"}}>
 							<Typography sx={candidateNameSx} variant='h4' >
 								{candidateJobStatus?._status}
+							</Typography>
+							</Box>
+						</Box>
+
+						<Box sx={{ display: candidateJobStatus?._status === allStatus[8] && jobValue ? 'flex' : "none" }}>
+							<Typography sx={textSx} variant='h4'>
+								סיבת דחייה:
+							</Typography>
+
+							<Typography sx={candidateNameSx} variant='h4' >
+								{candidateJobStatus?._rejectCause}
 							</Typography>
 						</Box>
 
@@ -195,9 +212,11 @@ export default function ManageInterviewsPage(props: { candidateId: string})
 									onInputChange={(event, value) =>
 									{
 										setSelectedJobError(false);
-										if (chooseInterviewIndexKey === "0"){
+										if (chooseInterviewIndexKey === "0")
+										{
 											setChooseInterviewIndexKey("1");
-										}else{
+										} else
+										{
 											setChooseInterviewIndexKey("0");
 										}
 										setInterviewSummary("");
@@ -223,7 +242,7 @@ export default function ManageInterviewsPage(props: { candidateId: string})
 
 
 							{/* Choose Interview */}
-							<Box sx={{display: hideChooseInterview ? "none" : "block"}}>
+							<Box sx={{ display: hideChooseInterview ? "none" : "block" }}>
 								<Autocomplete
 									key={chooseInterviewIndexKey}
 									disablePortal

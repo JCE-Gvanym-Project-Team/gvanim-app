@@ -1,4 +1,4 @@
-import { Autocomplete, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, MenuItem, TextField, Typography } from "@mui/material";
+import { Autocomplete, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, MenuItem, TextField, Typography, createFilterOptions } from "@mui/material";
 import { useEffect, useState } from "react";
 import { changeJobContainerStyle, changeJobContainerSx, currentStatusTextSx, dialogActionsSx, dialogContentSx, dialogSx, dialogTitleSx, dialogTopAreaSx, locationTextFieldSx, locationTitleSx, submitButtonSx } from "./ScheduleInterviewDialogStyle";
 import { ArrowBack, ArrowDownward, Autorenew, Check, Close, DoneAll, MoodBad, ThumbDown, ThumbUp, WhatsApp } from "@mui/icons-material";
@@ -6,15 +6,36 @@ import { DatePicker, LocalizationProvider, MobileTimePicker } from "@mui/x-date-
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import 'dayjs/locale/he'
 import { Candidate } from "../../../../../../Firebase/FirebaseFunctions/Candidate";
-import { CandidateJobStatus, allStatus, getFilteredCandidateJobStatuses, getMessage } from "../../../../../../Firebase/FirebaseFunctions/CandidateJobStatus";
+import { CandidateJobStatus, allStatus, getAllRejectCause, getFilteredCandidateJobStatuses, getMessage } from "../../../../../../Firebase/FirebaseFunctions/CandidateJobStatus";
 import { Recruiter } from "../../../../../../Firebase/FirebaseFunctions/Recruiter";
 import { Job, getFilteredJobs } from "../../../../../../Firebase/FirebaseFunctions/Job";
 import { useNavigate } from "react-router-dom";
+import NotInterestedReason from "../NotInterestedReason/NotInterstedReason";
 
-export default function ScheduleInterviewDialog(props: { open, onClose, candidate: Candidate | null, candidateJobStatus: CandidateJobStatus | null, candidateJobs: Job[], allJobs: Job[], chosenJobValue: string })
+const filter = createFilterOptions<string>();
+
+
+export default function ScheduleInterviewDialog(props: {
+    open,
+    onClose,
+    candidate: Candidate | null,
+    candidateJobStatus: CandidateJobStatus | null,
+    candidateJobs: Job[],
+    allJobs: Job[],
+    chosenJobValue: string,
+    setCandidateJobStatus
+})
 {
 
-    const { open, onClose, candidate, candidateJobStatus, candidateJobs, allJobs, chosenJobValue } = props;
+    const { open,
+        onClose,
+        candidate,
+        candidateJobStatus,
+        setCandidateJobStatus,
+        candidateJobs,
+        allJobs,
+        chosenJobValue
+    } = props;
 
     const [time, setTime] = useState<any>();
     const [date, setDate] = useState<any>();
@@ -27,6 +48,9 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
 
     // for rejection reason textfield
     const [disableRejectionReason, setDisableRejectionReason] = useState(true);
+    const [rejectionReasons, setRejectionReasons] = useState<string[]>([]);
+    const [rejectionReasonValue, setRejectionReasonValue] = useState<string | null>(null);
+    const [chosenRejectionReasonValue, setChosenRejectionReasonValue] = useState("");
 
     const [newStatus, setNewStatus] = useState("");
 
@@ -105,7 +129,19 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
 
     const handleSubmitSaveRejectionReason = async (event) =>
     {
-        await candidateJobStatus?.updateStatus(newStatus, undefined);
+        if (chosenRejectionReasonValue !== "")
+        {
+            if (chosenRejectionReasonValue.includes("אחר: "))
+            {
+                candidateJobStatus?.updateRejectCause(chosenRejectionReasonValue.replace("אחר: ", ""));
+            } else
+            {
+                candidateJobStatus?.updateRejectCause(chosenRejectionReasonValue);
+            }
+        }
+        candidateJobStatus?.updateStatus(newStatus, undefined).then(() => {
+            setCandidateJobStatus(candidateJobStatus);
+        });
         setDefaults();
         onClose(event, "submit");
     }
@@ -118,7 +154,7 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
             const interviewTime: Date = time?.$d;
             interviewDate?.setHours(interviewTime.getHours());
             interviewDate?.setMinutes(interviewTime.getMinutes());
-            await candidateJobStatus?.updateStatus(newStatus, interviewDate);
+            candidateJobStatus?.updateStatus(newStatus, interviewDate);
             //TODO: replace this with a real recruiter, and a real location
             const link = await candidateJobStatus?.getWhatsappUrl(
                 new Recruiter("asd@gmail.com", "firstname", "lastname", ["sector1", "sector2"]),
@@ -129,7 +165,7 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
             window.open(link);
         } else
         {
-            await candidateJobStatus?.updateStatus(newStatus, undefined);
+            candidateJobStatus?.updateStatus(newStatus, undefined);
         }
 
         setDefaults();
@@ -144,7 +180,7 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
     }
 
     // status changed handler
-    const handleStatusChanged = (status) =>
+    const handleStatusChanged = async (status) =>
     {
         setNewStatus(status);
         // remove date and time fields
@@ -167,12 +203,14 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
             const tempRecruiter = new Recruiter("recruiteremail@gmail.com", "firstname", "lastname", ["asd", "asdasd"]);
             const jobNumberString = chosenJobValue?.match(/\d+/)?.[0];
             const jobNumber = jobNumberString ? parseInt(jobNumberString) : NaN;
-            console.log("message: " + getMessage(temp, (allJobs.filter((job) => job._jobNumber === jobNumber))[0], tempRecruiter, candidateJobStatus ? candidateJobStatus._status : "", candidateJobStatus?._interviewDate, "makom"));
+            const chosenJob = (allJobs.filter((job) => job._jobNumber === jobNumber))[0];
+            console.log("message: " + getMessage(temp, chosenJob, tempRecruiter, candidateJobStatus ? candidateJobStatus._status : "", candidateJobStatus?._interviewDate, "makom"));
         }
 
         if (status === allStatus[8])
         {
             setDisableRejectionReason(false);
+            setRejectionReasons(await getAllRejectCause());
         } else
         {
             setDisableRejectionReason(true);
@@ -355,13 +393,35 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
                         sx={locationTextFieldSx}
                         style={{ display: disableWhatsappMessage ? "none" : "block" }}
                     />
-                    <TextField
-                        multiline
-                        fullWidth
-                        maxRows={5}
-                        sx={locationTextFieldSx}
-                        style={{ display: disableRejectionReason ? "none" : "block" }}
-                    />
+
+                    {/* rejection reasons */}
+                    <Box sx={{ display: disableRejectionReason ? "none" : "block" }}>
+                        <Autocomplete
+
+                            onChange={(event, newValue) =>
+                            {
+                                if (newValue && newValue !== "")
+                                {
+                                    setChosenRejectionReasonValue(newValue);
+                                }
+                            }}
+                            filterOptions={(options, params) =>
+                            {
+                                const filtered = filter(options, params);
+
+                                if (Object.keys(filtered).length === 0)
+                                {
+                                    filtered.push("אחר: " + params.inputValue);
+                                }
+
+                                return filtered;
+                            }}
+                            options={rejectionReasons}
+                            renderOption={(props, option) => <li {...props}>{option}</li>}
+                            sx={{ width: { xs: "100%", md: "50%" } }}
+                            renderInput={(params) => <TextField {...params} label="" />}
+                        />
+                    </Box>
                 </Box>
             </DialogContent>
 

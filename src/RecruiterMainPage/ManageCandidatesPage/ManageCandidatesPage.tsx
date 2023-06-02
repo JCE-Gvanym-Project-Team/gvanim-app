@@ -20,8 +20,10 @@ const addCandidate = async () =>
     await loginAdmin();
     let id = await generateCandidateId()
     let newCandidate: Candidate = new Candidate(id, "דוג", "מה", "05123456", "dogma@gmail.com",1,"notes");
-    let newCandidate2 = await getFilteredCandidates(["id"],["53"]);
-    // await newCandidate2[0].add();
-    await newCandidate2[0].apply(76, "abouttt");
+    await newCandidate.add();
+    newCandidate.apply(49,"ABOUT");
+    // let newCandidate2 = await getFilteredCandidates(["id"],["53"]);
+    // // await newCandidate2[0].add();
+    // await newCandidate2[0].apply(49, "abouttt");
     
 }
