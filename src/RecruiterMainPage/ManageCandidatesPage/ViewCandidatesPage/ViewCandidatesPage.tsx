@@ -117,13 +117,10 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 						</Box>
 
 						{/* Jobs table */}
-						<JobsTable setDataSize={setDataSize} candidateJobs={candidateJobs} />
+						<JobsTable setDataSize={setDataSize} candidateJobs={candidateJobs} candidateInfo={candidateInfo}/>
 
 						{/* Bottom Buttons */}
 						<Box sx={candidateNameAndEditButtonContainerSx}>
-							<Button sx={recommendationsButtonSx} variant="contained" startIcon={<EditIcon />}>
-								ממליצים
-							</Button>
 							<Button sx={interviewsButtonSx} variant="contained" startIcon={<QuestionAnswer />} onClick={() =>
 							{
 								interviewsPageHandler(candidateId);

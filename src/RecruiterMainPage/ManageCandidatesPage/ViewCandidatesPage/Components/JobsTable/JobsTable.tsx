@@ -13,11 +13,13 @@ import
 } from '@mui/x-data-grid';
 import { GridFooterContainerSx, TypographyFooterSx, dataGridContainerStyle, dataGridContainerSx, dataGridSx } from './JobsTableStyle';
 import { useNavigate } from "react-router-dom";
-import { ArticleOutlined } from '@mui/icons-material';
+import { ArticleOutlined, Edit, QuestionAnswer, Recommend } from '@mui/icons-material';
 import CandidatesListFullScreenDialog from '../../../../ManageJobsPage/Components/CandidatesListDialog/CandidatesListDialog';
 import MyDropMenu from '../../../../ManageJobsPage/Components/MyDropMenu/MyDropMenu';
 import { Job, getFilteredJobs } from '../../../../../Firebase/FirebaseFunctions/Job';
-import { getFilteredCandidateJobStatuses } from '../../../../../Firebase/FirebaseFunctions/functionIndex';
+import { Candidate, CandidateJobStatus, getFilteredCandidateJobStatuses } from '../../../../../Firebase/FirebaseFunctions/functionIndex';
+import { interviewsButtonSx, recommendationsButtonSx } from '../../ViewCandidatesPageStyle';
+import RecommendersDialog from '../RecommendersDialog/RecommendersDialog';
 
 
 
@@ -94,77 +96,6 @@ function CustomNoRowsOverlay()
 	);
 }
 
-
-
-const columns: GridColDef[] = [
-
-	{
-		field: 'תפריט',
-		headerName: '',
-		width: 50,
-		hideSortIcons: true,
-		filterable: false,
-		hideable: false,
-		disableColumnMenu: true,
-		disableExport: true,
-		editable: false,
-
-		renderCell: (job) =>
-		{
-			return <MyDropMenu JobId={job.id} />;
-		},
-
-
-	},
-
-	{
-		field: '_jobNumber',
-		headerName: "מס' משרה",
-		width: 150,
-		align: 'left'
-	},
-
-	{
-		field: '_region',
-		headerName: 'איזור',
-		width: 200,
-		editable: false,
-		align: 'left',
-
-
-	},
-	{
-		field: '_role',
-		headerName: 'תפקיד',
-		width: 300,
-		editable: false,
-		align: 'left',
-	},
-	{
-		field: '_scope',
-		headerName: 'אחוז משרה',
-		width: 150,
-		editable: false,
-		align: 'left',
-	},
-	{
-		field: 'candidates',
-		headerName: 'מועמדים שניגשו',
-		description: 'עמודה זו אינה ניתנת למיון',
-		sortable: false,
-		editable: false,
-		align: 'left',
-		width: 300,
-		renderCell: (job) =>
-		{
-			const { id } = job.row;
-			return <CandidatesListFullScreenDialog JobId={id} />;
-		},
-		// valueGetter: (params: GridValueGetterParams) =>
-		//     `${params.row.firstName || ''} ${params.row.lastName || ''}`,
-	},
-];
-
 const GridCustomToolbar = ({ syncState }: { syncState: (stateToSave: GridInitialState) => void; }) => 
 {
 	const rootProps = useGridRootProps();
@@ -218,11 +149,136 @@ function getScopeFormated(scope: number[] | null)
 
 }
 
-export default function JobsTable(props: { setDataSize: any, candidateJobs: any })
+export default function JobsTable(props: { setDataSize: any, candidateJobs: any, candidateInfo: Candidate | null })
 {
-	const { setDataSize, candidateJobs } = props;
+	const { setDataSize, candidateJobs, candidateInfo } = props;
 	const navigate = useNavigate();
 	const [allJobs, setAllJobs] = React.useState<any[]>([]);
+
+	// recommenders dialog
+	const [recommendersDialogOpen, setRecommendersDialogOpen] = React.useState(false);
+
+	const openRecommendersDialog = () =>
+	{
+		setRecommendersDialogOpen(true);
+	}
+
+	const closeRecommendersDialog = (event, reason) =>
+	{
+		if ((reason && reason !== "backdropClick") || reason === undefined)
+		{
+			setRecommendersDialogOpen(false);
+		}
+	}
+
+	// candidate job status
+	const [candidateJobStatus, setCandidateJobStatus] = React.useState<CandidateJobStatus | null>(null);
+
+	// candidate
+	const [candidate, setCandidate] = React.useState<Candidate | null>(null);
+
+	// columns object
+	const columns: GridColDef[] = [
+
+		{
+			field: 'תפריט',
+			headerName: '',
+			width: 50,
+			hideSortIcons: true,
+			filterable: false,
+			hideable: false,
+			disableColumnMenu: true,
+			disableExport: true,
+			editable: false,
+
+			renderCell: (job) =>
+			{
+				return <MyDropMenu JobId={job.id} />;
+			},
+		},
+
+		{
+			field: '_jobNumber',
+			headerName: "מס' משרה",
+			width: 150,
+			align: 'left'
+		},
+
+		{
+			field: '_region',
+			headerName: 'איזור',
+			width: 200,
+			editable: false,
+			align: 'left',
+
+
+		},
+		{
+			field: '_role',
+			headerName: 'תפקיד',
+			width: 300,
+			editable: false,
+			align: 'left',
+		},
+		{
+			field: '_scope',
+			headerName: 'אחוז משרה',
+			width: 150,
+			editable: false,
+			align: 'left',
+		},
+		{
+			field: 'candidates',
+			headerName: 'מועמדים שניגשו',
+			description: 'עמודה זו אינה ניתנת למיון',
+			sortable: false,
+			editable: false,
+			align: 'left',
+			width: 300,
+			renderCell: (job) =>
+			{
+				const { id } = job.row;
+				return <CandidatesListFullScreenDialog JobId={id} />;
+			},
+		},
+		{
+			field: '_matchingRate',
+			headerName: 'אחוז משרה',
+			width: 150,
+			editable: false,
+			align: 'left',
+			renderCell: (job) =>
+			{
+				return <Button sx={recommendationsButtonSx} variant="contained" startIcon={<Recommend />}>
+					asd
+				</Button>;
+			}
+		},
+		{
+			field: '_recommenders',
+			headerName: '',
+			width: 200,
+			hideSortIcons: true,
+			filterable: false,
+			hideable: false,
+			disableColumnMenu: true,
+			disableExport: true,
+			editable: false,
+
+			renderCell: (job) =>
+			{
+				getFilteredCandidateJobStatuses(["jobNumber", "candidateId"], [job.id.toString(), candidate ? candidate._id : ""])
+				return (
+					<>
+						<Button sx={recommendationsButtonSx} variant="contained" startIcon={<Recommend />} onClick={openRecommendersDialog}>
+							ממליצים
+						</Button>
+						<RecommendersDialog open={recommendersDialogOpen} onClose={closeRecommendersDialog} candidateJobStatus={candidateJobStatus} />
+					</>
+				);
+			},
+		},
+	];
 
 	const fetchAllJobs = async () =>
 	{
@@ -233,6 +289,7 @@ export default function JobsTable(props: { setDataSize: any, candidateJobs: any 
 	React.useEffect(() =>
 	{
 		fetchAllJobs();
+		setCandidate(candidateInfo);
 	}, [candidateJobs])
 
 	const CustomFooter = () =>
