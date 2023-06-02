@@ -22,24 +22,28 @@ import ManageInterviewsPage from "./ManageCandidatesPage/ViewCandidatesPage/Mana
 
 
 
-function RecruiterMainPage({ handlelogout }) {
+function RecruiterMainPage({ handlelogout })
+{
 
 	const [allJobs, setAllJobs] = React.useState<any[]>([]);
 	const [candidateIDs, setCandidateIDs] = useState<string[]>([])
 
 
-	const fetchAllJobs = async () => {
+	const fetchAllJobs = async () =>
+	{
 		const jobs = await getFilteredJobs();
 		const jobsWithId = jobs.map((job) => ({ ...job, id: job._jobNumber }));
 		setAllJobs(jobsWithId);
 	};
 
-	const fetchCandidateIDs = async () => {
+	const fetchCandidateIDs = async () =>
+	{
 		const candidates = await getFilteredCandidates();
 		setCandidateIDs(candidates.map(candidate => candidate._id));
 	}
 
-	useEffect(() => {
+	useEffect(() =>
+	{
 		fetchAllJobs();
 		fetchCandidateIDs();
 	}, []);
@@ -52,9 +56,6 @@ function RecruiterMainPage({ handlelogout }) {
 
 			{allJobs.map(job => (<Link key={job.id} to={'/jobs/' + job.id} />))}
 			<Routes>
-
-
-
 				{allJobs.map((job) => (<Route path={`/jobs/${job.id}`} key={job.id} element={<SingleJob id={job.id}></SingleJob>} />))}
 
 				<Route path="/" element={<WelcomePage />} />
@@ -66,11 +67,11 @@ function RecruiterMainPage({ handlelogout }) {
 				<Route path="/editCandidate" element={<EditCandidate />} />
 				<Route path="/manageCandidates" element={<ManageCandidatesPage />} />
 				{candidateIDs.map((candidateId) =>
-				{	
+				{
 					return (
 						<React.Fragment key={candidateId + "fragment"}>
-							<Route path={"/manageCandidates/" + candidateId} element={<ViewCandidatesPage candidateId={candidateId} key={candidateId + "ViewCandidatesPage"}/>} key={candidateId} />
-							<Route path={"/manageCandidates/" + candidateId + "/interviews"} element={<ManageInterviewsPage candidateId={candidateId} key={candidateId + "ViewCandidatesPage"}/>} key={candidateId + "interviews"} />
+							<Route path={"/manageCandidates/" + candidateId} element={<ViewCandidatesPage candidateId={candidateId} key={candidateId + "ViewCandidatesPage"} />} key={candidateId} />
+							<Route path={"/manageCandidates/" + candidateId + "/interviews"} element={<ManageInterviewsPage candidateId={candidateId} key={candidateId + "ViewCandidatesPage"} />} key={candidateId + "interviews"} />
 						</React.Fragment>
 					);
 				})
