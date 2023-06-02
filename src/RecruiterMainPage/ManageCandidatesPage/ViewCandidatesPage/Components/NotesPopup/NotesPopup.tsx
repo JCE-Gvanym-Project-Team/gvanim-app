@@ -1,20 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Typography, Box, IconButton } from '@mui/material';
 import { dialogActionsSx, dialogContentSx, dialogSx, dialogTitleSx, dialogTopAreaSx } from './NotesPopupStyles';
 import CloseIcon from '@mui/icons-material/Close';
+import { Candidate } from '../../../../../Firebase/FirebaseFunctions/Candidate';
 
-export default function NotesPopup({ open, onClose })
-{
+export default function NotesPopup(props: { open, onClose, candidate: Candidate | null, initialData: string | undefined }) {
+    const { open, onClose, candidate, initialData } = props;
     const [formData, setFormData] = useState('');
-    const handleChange = (event) =>
-    {
+    const handleChange = (event) => {
         setFormData(event.target.value);
     };
 
-    const handleSave = () =>
-    {
-        // TODO: Perform save logic here
-        console.log(formData);
+    useEffect(() => {
+        setFormData(initialData ? initialData : "");
+    },[initialData]);
+
+    const handleSave = () => {
+        candidate?.edit(candidate._firstName, candidate._lastName, candidate._phone,candidate._eMail,candidate._generalRating, formData);
         onClose();
     };
 
@@ -48,6 +50,7 @@ export default function NotesPopup({ open, onClose })
                     autoFocus
                     multiline
                     minRows={5}
+                    maxRows={10}
                     variant="outlined"
                     value={formData}
                     onChange={handleChange}

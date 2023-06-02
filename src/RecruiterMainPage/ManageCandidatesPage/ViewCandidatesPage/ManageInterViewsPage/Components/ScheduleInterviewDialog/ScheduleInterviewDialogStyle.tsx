@@ -1,10 +1,10 @@
 import { CSSProperties } from "@mui/material/styles/createTypography";
 import { SxProps } from "@mui/system";
-import { GlobalStyle, ManageCandidatesPageGlobalStyle } from "../../../../PageStyles";
+import { GlobalStyle, ManageCandidatesPageGlobalStyle } from "../../../../../PageStyles";
 
 
 export const dialogSx: SxProps = {
-    
+
 }
 
 export const dialogContentSx: SxProps = {
@@ -12,8 +12,17 @@ export const dialogContentSx: SxProps = {
     display: "flex",
     // flexDirection: { xs: "column", md: "row" },
     flexDirection: "column",
-    justifyContent:"space-evenly",
+    justifyContent: "space-evenly",
     minHeight: "100%",
+}
+
+export const locationTitleSx: SxProps = {
+    fontFamily: ManageCandidatesPageGlobalStyle.textFontFamily,
+    marginTop: "1rem"
+}
+
+export const locationTextFieldSx: SxProps = {
+
 }
 
 export const currentStatusTextSx: SxProps = {

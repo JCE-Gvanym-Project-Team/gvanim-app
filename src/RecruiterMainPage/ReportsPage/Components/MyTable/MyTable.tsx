@@ -52,7 +52,7 @@ const columns: GridColDef[] = [
 ];
 
 const rows = [
-    { id: 1, name: "מועמדים לפי תאריכים"},
+    { id: 1, name: "מועדמים שנדחו"},
     { id: 2, name: "משרות לפי תאריכים"}
 ];
 
@@ -88,7 +88,7 @@ function getScopeFormated(scope: number[] | null) {
 export default function MyTable() {
     const onRowClick = (event, row) => {
         // if(row.id === 1)
-          window.location.href = `/Reports_1`;
+          window.location.href = `/rejection`;
              
       };  
     const theme = useTheme();

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { BoxGradientSx, ContainerGradientSx, appliedDateTextSx, autoCompleteSx, candidateNameAndButtonSx, candidateNameSx, chooseJobAndInterviewContainerSx, chooseJobContainerSx, errorTextSx, interviewSummaryButtonsContainerSx, interviewSummaryContentSx, interviewSummaryRedButtonsContainerSx, interviewSummaryTextSx, mainStackSx, scheduleInterviewButton, scheduleInterviewContainer, scheduleInterviewText, textSx, titleSx } from './ManageInterviewsPageStyle';
 import { Autocomplete, Box, Button, Container, Divider, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Stack, TextField, TextareaAutosize, Typography } from '@mui/material';
 import { GlobalStyle, ManageCandidatesPageGlobalStyle } from '../../../PageStyles';
@@ -6,8 +6,7 @@ import { Candidate, getFilteredCandidates } from '../../../../Firebase/FirebaseF
 import { CandidateJobStatus, getFilteredCandidateJobStatuses } from '../../../../Firebase/FirebaseFunctions/CandidateJobStatus';
 import { Job, getFilteredJobs } from '../../../../Firebase/FirebaseFunctions/Job';
 import { CalendarMonth, ErrorOutline } from '@mui/icons-material';
-import ScheduleInterviewDialog from './Components/ScheduleInterviewDialog';
-
+import ScheduleInterviewDialog from './Components/ScheduleInterviewDialog/ScheduleInterviewDialog';
 export default function ManageInterviewsPage(props: { candidateId: string})
 {
 
@@ -34,11 +33,15 @@ export default function ManageInterviewsPage(props: { candidateId: string})
 
 	const [interviewSummary, setInterviewSummary] = useState<string | undefined>("");
 
+	const [hideChooseInterview, setHideChooseInterview] = useState(true);
+
+	const [chooseInterviewIndexKey, setChooseInterviewIndexKey] = useState("");
+
 	// use effects
 	useEffect(() =>
 	{
 		getCandidate(candidateId, setCandidateInfo);
-		getJobs(candidateId, setCandidateAppliedJobs, setAllJobs);
+		getJobs(candidateId,setCandidateAppliedJobs, setAllJobs);
 	}, [candidateId]);
 
 
@@ -46,7 +49,6 @@ export default function ManageInterviewsPage(props: { candidateId: string})
 	{
 		handleChooseJob();
 	}, [jobValue])
-
 
 	// autcomplete job select
 	const handleChooseJob = async function ()
@@ -57,8 +59,10 @@ export default function ManageInterviewsPage(props: { candidateId: string})
 
 		if (Number.isNaN(jobNumber))
 		{
+			setHideChooseInterview(true);
 			return;
 		}
+		setHideChooseInterview(false);
 		const candidateJobStatuses = await getFilteredCandidateJobStatuses(["jobNumber", "candidateId"], [jobNumber.toString(), candidateId]);
 		setCandidateJobStatus(candidateJobStatuses[0]);
 	}
@@ -81,6 +85,7 @@ export default function ManageInterviewsPage(props: { candidateId: string})
 		{
 			setInterviewDialogOpen(false);
 		}
+		getJobs(candidateId, setCandidateAppliedJobs, setAllJobs);
 	}
 
 	const handleinterviewSummaryChange = async (event) =>
@@ -151,6 +156,7 @@ export default function ManageInterviewsPage(props: { candidateId: string})
 									candidateJobStatus={candidateJobStatus}
 									candidateJobs={candidateAppliedJobs}
 									allJobs={allJobs}
+									chosenJobValue={jobValue}
 								/>
 							</Box>
 						</Box>
@@ -173,10 +179,28 @@ export default function ManageInterviewsPage(props: { candidateId: string})
 									disablePortal
 									options={candidateAppliedJobs.map((job) => job._jobNumber.toString() + ", " + job._role + ", " + job._region)}
 									sx={autoCompleteSx}
-									renderInput={(params) => <TextField {...params} label="בחירת משרה" />}
+									renderInput={(params) =>
+										<TextField
+											{...params}
+											label="בחירת משרה"
+											sx={{
+												'& .MuiOutlinedInput-root': {
+													'& fieldset': {
+														borderColor: selectedJobError && jobValue === "" ? 'red' : "", // Set the border color here
+													}
+												},
+											}}
+										/>
+									}
 									onInputChange={(event, value) =>
 									{
 										setSelectedJobError(false);
+										if (chooseInterviewIndexKey === "0"){
+											setChooseInterviewIndexKey("1");
+										}else{
+											setChooseInterviewIndexKey("0");
+										}
+										setInterviewSummary("");
 										setJobValue(value);
 									}}
 								/>
@@ -199,8 +223,9 @@ export default function ManageInterviewsPage(props: { candidateId: string})
 
 
 							{/* Choose Interview */}
-							<Box>
+							<Box sx={{display: hideChooseInterview ? "none" : "block"}}>
 								<Autocomplete
+									key={chooseInterviewIndexKey}
 									disablePortal
 									options={["ראיון ראשון", "ראיון שני"]}
 									sx={autoCompleteSx}
@@ -218,6 +243,7 @@ export default function ManageInterviewsPage(props: { candidateId: string})
 										} else
 										{
 											setInterviewIndex(-1);
+											setInterviewSummary("");
 										}
 									}}
 								/>
@@ -258,13 +284,9 @@ export default function ManageInterviewsPage(props: { candidateId: string})
 										variant='contained'
 										sx={{ backgroundColor: GlobalStyle.NavbarBackgroundColor, justifySelf: "start", alignSelf: "start" }}
 										onClick={handleSaveButtonClick}
-									>שמירה</Button>
-									<Button variant='contained' sx={{ backgroundColor: "green", justifySelf: "start", alignSelf: "start" }}>התקבל לתפקיד</Button>
-								</Box>
-								<Box sx={interviewSummaryRedButtonsContainerSx} >
-									<Button variant='contained' sx={{ marginRight: "2rem", backgroundColor: "red", justifySelf: "start", alignSelf: "start" }}>אינו מתאים לעבוד בחברה</Button>
-									<Button variant='contained' sx={{ backgroundColor: "red", justifySelf: "start", alignSelf: "start" }}>לא מעוניין בתפקיד</Button>
-								</Box>
+									>שמירה
+									</Button>
+								</Box >
 							</Box>
 							: <></>
 						}

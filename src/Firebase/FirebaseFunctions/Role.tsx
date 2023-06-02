@@ -70,7 +70,7 @@ import { removeObjectAtPath, getFirebaseIdsAtPath, replaceData, appendToDatabase
 			const role = rolesData[roleId];
 			roles.push(role);
 		}
-		return roles;
+		return roles.map((r)=>new Role(r._name,r._open));
 	} catch (error) {
 		console.error(error);
 		throw new Error("Failed to fetch roles from database.");

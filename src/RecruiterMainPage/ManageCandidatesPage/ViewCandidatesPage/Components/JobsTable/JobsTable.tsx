@@ -1,19 +1,23 @@
 import * as React from 'react';
 import Typography from '@mui/material/Typography';
-import { Box, Container, styled, useTheme } from '@mui/material';
-import MyDropMenu from '../../../../ManageJobsPage/Components/MyDropMenu/MyDropMenu';
+import { Box, Button, Container, Stack, styled, useTheme } from '@mui/material';
 import
 {
 	DataGrid, GridToolbarFilterButton,
 	GridColDef, GridToolbarDensitySelector,
 	GridToolbarColumnsButton,
 	GridInitialState,
-	GridToolbarContainer, heIL, GridFooterContainer, GridToolbarQuickFilter, GridToolbarExportContainer, GridPrintExportMenuItem
+	useGridRootProps,
+	useGridApiContext,
+	GridToolbarContainer, heIL, GridFooterContainer, GridToolbarQuickFilter, GridToolbarExportContainer, GridCsvExportMenuItem, GridPrintExportMenuItem
 } from '@mui/x-data-grid';
-import { GridFooterContainerSx, TypographyFooterSx, dataGridContainerStyle, dataGridSx } from './JobsTableStyle';
-import CandidatesListFullScreenDialog from '../../../../ManageJobsPage/Components/CandidatesListDialog/CandidatesListDialog';
+import { GridFooterContainerSx, TypographyFooterSx, dataGridContainerStyle, dataGridContainerSx, dataGridSx } from './JobsTableStyle';
 import { useNavigate } from "react-router-dom";
+import { ArticleOutlined } from '@mui/icons-material';
+import CandidatesListFullScreenDialog from '../../../../ManageJobsPage/Components/CandidatesListDialog/CandidatesListDialog';
+import MyDropMenu from '../../../../ManageJobsPage/Components/MyDropMenu/MyDropMenu';
 import { Job, getFilteredJobs } from '../../../../../Firebase/FirebaseFunctions/Job';
+import { getFilteredCandidateJobStatuses } from '../../../../../Firebase/FirebaseFunctions/functionIndex';
 
 
 
@@ -163,11 +167,31 @@ const columns: GridColDef[] = [
 
 const GridCustomToolbar = ({ syncState }: { syncState: (stateToSave: GridInitialState) => void; }) => 
 {
+	const rootProps = useGridRootProps();
+	const apiRef = useGridApiContext();
+	const navigate = useNavigate();
+
+	const handleCreatejob = () =>
+	{
+		navigate("/createJob", { state: null });
+	}
 
 	return (
 		<GridToolbarContainer>
+			<Stack direction='row' sx={{ width: '100%' }}>
+				<Box sx={{ width: '100%' }}>
+					<GridToolbarQuickFilter variant='outlined' size='small' sx={{ width: '100%' }} />
+				</Box>
+				<Box sx={{ display: 'flex', flexDirection: 'row-reverse', width: '100%' }}>
+					<Box>
 
-			<GridToolbarQuickFilter variant='outlined' size='small' />
+						<Button type="button" endIcon={<ArticleOutlined />} onClick={handleCreatejob} variant='contained' fullWidth>משרה חדשה</Button>
+
+					</Box>
+				</Box>
+
+			</Stack>
+
 
 			<Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', borderBottomColor: 'rgba(224, 224, 224, 1)' }}>
 
@@ -194,20 +218,22 @@ function getScopeFormated(scope: number[] | null)
 
 }
 
-export default function JobsTable(props: { setDataSize: any, jobs: Job[] })
+export default function JobsTable(props: { setDataSize: any, candidateJobs: any })
 {
-	const { setDataSize, jobs } = props;
-	const [allJobs, setAllJobs] = React.useState<any[]>([]);
+	const { setDataSize, candidateJobs } = props;
 	const navigate = useNavigate();
+	const [allJobs, setAllJobs] = React.useState<any[]>([]);
 
 	const fetchAllJobs = async () =>
 	{
-		const jobs = await getFilteredJobs();
-		const jobsWithId = jobs.map((job) => ({ ...job, id: job._jobNumber, _scope: getScopeFormated(job._scope) }));
+		const jobsWithId = candidateJobs.map((job) => ({ ...job, id: job._jobNumber, _scope: getScopeFormated(job._scope) }));
 		setAllJobs(jobsWithId);
-
 	};
 
+	React.useEffect(() =>
+	{
+		fetchAllJobs();
+	}, [candidateJobs])
 
 	const CustomFooter = () =>
 	{
@@ -234,36 +260,30 @@ export default function JobsTable(props: { setDataSize: any, jobs: Job[] })
 
 
 
-	React.useEffect(() =>
-	{
-		let jobsWithId = jobs.map((job) => ({ ...job, id: job._jobNumber, _scope: getScopeFormated(job._scope) }));
-		setAllJobs(jobsWithId);
-	}, [jobs]);
-
 
 	const theme = useTheme();
 
 	return (
-		<>
-			<Container className="shadow-lg border rounded"
-				sx={dataGridContainerStyle}
-				style={dataGridContainerStyle}
-				maxWidth='xl'>
-				<DataGrid
-					sx={dataGridSx(theme)}
-					rows={allJobs}
-					columns={columns}
-					onRowDoubleClick={(job) => navigate(`../jobs/${job.id}`)}
 
-					// checkboxSelection
-					// disableRowSelectionOnClick
-					// disableColumnMenu
-					hideFooterSelectedRowCount
-					hideFooterPagination
-					// hideFooter
-					localeText={heIL.components.MuiDataGrid.defaultProps.localeText}
-					slots={{ noRowsOverlay: CustomNoRowsOverlay, toolbar: GridCustomToolbar, footer: CustomFooter }} />
+		<Container className="shadow-lg border rounded"
+			sx={dataGridContainerSx}
+			style={dataGridContainerStyle}
+			maxWidth='xl'>
+			<DataGrid
+				sx={dataGridSx(theme)}
+				rows={allJobs}
+				columns={columns}
+				onRowDoubleClick={(job) => navigate(`../jobs/${job.id}`)}
 
-			</Container></>
+				// checkboxSelection
+				// disableRowSelectionOnClick
+				// disableColumnMenu
+				hideFooterSelectedRowCount
+				hideFooterPagination
+				// hideFooter
+				localeText={heIL.components.MuiDataGrid.defaultProps.localeText}
+				slots={{ noRowsOverlay: CustomNoRowsOverlay, toolbar: GridCustomToolbar, footer: CustomFooter }} />
+
+		</Container>
 	);
 }
