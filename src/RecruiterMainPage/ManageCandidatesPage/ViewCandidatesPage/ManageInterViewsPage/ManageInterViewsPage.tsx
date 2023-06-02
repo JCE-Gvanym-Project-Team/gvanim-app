@@ -7,7 +7,6 @@ import { CandidateJobStatus, getFilteredCandidateJobStatuses } from '../../../..
 import { Job, getFilteredJobs } from '../../../../Firebase/FirebaseFunctions/Job';
 import { CalendarMonth, ErrorOutline } from '@mui/icons-material';
 import ScheduleInterviewDialog from './Components/ScheduleInterviewDialog/ScheduleInterviewDialog';
-
 export default function ManageInterviewsPage(props: { candidateId: string})
 {
 
@@ -157,6 +156,7 @@ export default function ManageInterviewsPage(props: { candidateId: string})
 									candidateJobStatus={candidateJobStatus}
 									candidateJobs={candidateAppliedJobs}
 									allJobs={allJobs}
+									chosenJobValue={jobValue}
 								/>
 							</Box>
 						</Box>
