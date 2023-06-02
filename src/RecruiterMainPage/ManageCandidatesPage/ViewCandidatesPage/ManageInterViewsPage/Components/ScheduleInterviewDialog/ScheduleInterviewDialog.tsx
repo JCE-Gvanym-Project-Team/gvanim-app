@@ -66,11 +66,11 @@ export default function ScheduleInterviewDialog(props: {
         setDate(value);
         const chosenDate: Date = value?.$d;
         const chosenTime: Date = time?.$d;
-        chosenDate?.setHours(chosenTime.getHours());
-        chosenDate?.setMinutes(chosenTime.getMinutes());
+        chosenDate?.setHours(chosenTime ? chosenTime.getHours() : 0);
+        chosenDate?.setMinutes(chosenTime ? chosenTime.getMinutes() : 0);
         setInterviewDate(chosenDate);
 
-        setWhatsappMessage(getWhatsappMessage(candidate,chosenJobValue, allJobs, newStatus,chosenDate));
+        setWhatsappMessage(getWhatsappMessage(candidate, chosenJobValue, allJobs, newStatus, chosenDate));
     };
 
     const handleTimeChange = (value) =>
@@ -78,11 +78,12 @@ export default function ScheduleInterviewDialog(props: {
         setTime(value);
         const chosenDate: Date = date?.$d;
         const chosenTime: Date = value?.$d;
-        chosenDate?.setHours(chosenTime.getHours());
-        chosenDate?.setMinutes(chosenTime.getMinutes());
+        chosenTime?.setFullYear(chosenDate ? chosenDate.getFullYear() : 0);
+        chosenTime?.setMonth(chosenDate ? chosenDate.getMonth() : 0);
+        chosenTime?.setDate(chosenDate ? chosenDate.getDate() : 0);
         setInterviewDate(chosenDate);
 
-        setWhatsappMessage(getWhatsappMessage(candidate,chosenJobValue, allJobs, newStatus,chosenDate));
+        setWhatsappMessage(getWhatsappMessage(candidate, chosenJobValue, allJobs, newStatus, chosenTime));
     };
 
     const setDefaults = () =>
@@ -123,14 +124,16 @@ export default function ScheduleInterviewDialog(props: {
         const toJobNumberString = toJobValue?.match(/\d+/)?.[0];
         const toJobNumber = toJobNumberString ? parseInt(toJobNumberString) : NaN;
 
-        // actually replace in firebase
+        // change job in firebase
         const fromCandidateJobStatus = (await getFilteredCandidateJobStatuses(["jobNumber", "candidateId"], [fromJobNumber.toString(), candidate ? candidate._id : ""]))[0];
         fromCandidateJobStatus.updateStatus(allStatus[6], undefined);
+        setLoading(true);
         await candidate?.apply(toJobNumber, fromCandidateJobStatus._about);
+        rerender(rerenderKey, setRerenderKey);
+        setLoading(false);
 
         // send whatsapp message
-        // TODO: continue here
-        const link = await candidateJobStatus?.getWhatsappUrl("asd");
+        const link = await candidateJobStatus?.getWhatsappUrl(whatsappMessage);
 
         window.open(link);
 
@@ -163,23 +166,19 @@ export default function ScheduleInterviewDialog(props: {
 
     const handleSubmitSendWhatsappMessage = async (event) =>
     {
+        setLoading(true);
         if (!timeDisabled)
         {
-            const interviewDate: Date = date?.$d;
-            const interviewTime: Date = time?.$d;
-            interviewDate?.setHours(interviewTime.getHours());
-            interviewDate?.setMinutes(interviewTime.getMinutes());
-            setLoading(true);
             await candidateJobStatus?.updateStatus(newStatus, interviewDate);
-            const link = await candidateJobStatus?.getWhatsappUrl(whatsappMessage);
-            rerender(rerenderKey, setRerenderKey);
-            setLoading(false);
-            setDefaults();
-            window.open(link);
         } else
         {
-            candidateJobStatus?.updateStatus(newStatus, undefined);
+            await candidateJobStatus?.updateStatus(newStatus, undefined);
         }
+        const link = await candidateJobStatus?.getWhatsappUrl(whatsappMessage);
+        rerender(rerenderKey, setRerenderKey);
+        setLoading(false);
+        setDefaults();
+        window.open(link);
 
         setDefaults();
         onClose(event, "submit");
@@ -187,7 +186,10 @@ export default function ScheduleInterviewDialog(props: {
 
     const handleSubmitSaveStatus = async (event) =>
     {
+        setLoading(true);
         await candidateJobStatus?.updateStatus(newStatus, undefined);
+        rerender(rerenderKey, setRerenderKey);
+        setLoading(false);
         setDefaults();
         onClose(event, "submit");
     }
