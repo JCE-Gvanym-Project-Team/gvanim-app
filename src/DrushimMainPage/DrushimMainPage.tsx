@@ -22,6 +22,8 @@ export default function DrushimMainPage()
 
 	return (
 		<>
+			{/* All Jobs Page Route*/}
+			<CssBaseline />
 			<Routes>
 				{/* All Jobs Page Route*/}
 				<Route path='jobs' element={<AllJobsPage />} />
