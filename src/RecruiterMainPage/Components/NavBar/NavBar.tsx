@@ -48,7 +48,7 @@ export default function NavBar(props: { handlelogout }) {
                         <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
 
                             <Stack spacing={1} direction='row' sx={{ height: 'fit-content' }}>
-                                <Link onClick={() => navigate('/')}
+                                <Link onClick={() => navigate('/management')}
                                     sx={{
 										cursor: 'pointer', 
                                         ":hover > #home": {
@@ -69,7 +69,7 @@ export default function NavBar(props: { handlelogout }) {
                         <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
 
                             <Stack spacing={1} direction='row' sx={{ height: 'fit-content' }}>
-                                <Link onClick={() => navigate('/manageJobs')}
+                                <Link onClick={() => navigate('/management/manageJobs')}
                                     sx={{
 										cursor: 'pointer',
                                         ":hover > #jobsIcon": {
@@ -91,7 +91,7 @@ export default function NavBar(props: { handlelogout }) {
                         <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
 
                             <Stack spacing={1} direction='row' sx={{ height: 'fit-content' }}>
-                                <Link onClick={() => navigate('/manageCandidates')}
+                                <Link onClick={() => navigate('/management/manageCandidates')}
                                     sx={{
 										cursor: 'pointer',
                                         ":hover > #candidatesIcon": {
@@ -113,7 +113,7 @@ export default function NavBar(props: { handlelogout }) {
                         <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
 
                             <Stack spacing={1} direction='row' sx={{ height: 'fit-content' }}>
-                                <Link onClick={() => navigate('/reports')}
+                                <Link onClick={() => navigate('/management/reports')}
                                     sx={{
 										cursor: 'pointer',
                                         ":hover > #reportsIcon": {
@@ -140,7 +140,7 @@ export default function NavBar(props: { handlelogout }) {
                     <Box display={{ xs: 'none', sm: 'none', md: 'none', lg: 'flex', xl: 'flex' }} sx={{ flexDirection: 'column', justifyContent: 'center' }}>
                         <Stack direction='row' sx={{ height: 'fit-content' }}>
 
-                            <Button onClick={() => navigate("/settings")} disableRipple sx={{
+                            <Button onClick={() => navigate("/management/settings")} disableRipple sx={{
                                 ":hover": {
                                     backgroundColor: '#555abf',
                                     borderColor: '#344767',

@@ -24,7 +24,6 @@ import ManageInterviewsPage from "./ManageCandidatesPage/ViewCandidatesPage/Mana
 
 function RecruiterMainPage({ handlelogout })
 {
-
 	const [allJobs, setAllJobs] = React.useState<any[]>([]);
 	const [candidateIDs, setCandidateIDs] = useState<string[]>([])
 
@@ -48,44 +47,45 @@ function RecruiterMainPage({ handlelogout })
 		fetchCandidateIDs();
 	}, []);
 
+
 	return (
 		<>
+
 			<CssBaseline />
 			<NavBar handlelogout={handlelogout} />
-
-
-			{allJobs.map(job => (<Link key={job.id} to={'/jobs/' + job.id} />))}
+			{allJobs.map(job => (<Link key={job.id} to={'/management/jobs/' + job.id} />))}
 			<Routes>
-				{allJobs.map((job) => (<Route path={`/jobs/${job.id}`} key={job.id} element={<SingleJob id={job.id}></SingleJob>} />))}
+				{allJobs.map((job) => (<Route path={`jobs/${job.id}`} key={job.id} element={<SingleJob id={job.id}></SingleJob>} />))}
 
-				<Route path="/" element={<WelcomePage />} />
+				<Route path="" element={<WelcomePage />} />
 				{/* Jobs Routes */}
-				<Route path="/manageJobs" element={<ManageJobsPage />} />
-				<Route path="/createJob" element={<NewJobPage />} />
+				<Route path="manageJobs" element={<ManageJobsPage />} />
+				<Route path="createJob" element={<NewJobPage />} />
 
 				{/* Candidate Routes */}
-				<Route path="/editCandidate" element={<EditCandidate />} />
-				<Route path="/manageCandidates" element={<ManageCandidatesPage />} />
+				<Route path="editCandidate" element={<EditCandidate />} />
+				<Route path="manageCandidates" element={<ManageCandidatesPage />} />
 				{candidateIDs.map((candidateId) =>
 				{
 					return (
 						<React.Fragment key={candidateId + "fragment"}>
-							<Route path={"/manageCandidates/" + candidateId} element={<ViewCandidatesPage candidateId={candidateId} key={candidateId + "ViewCandidatesPage"} />} key={candidateId} />
-							<Route path={"/manageCandidates/" + candidateId + "/interviews"} element={<ManageInterviewsPage candidateId={candidateId} key={candidateId + "ViewCandidatesPage"} />} key={candidateId + "interviews"} />
+							<Route path={"manageCandidates/" + candidateId} element={<ViewCandidatesPage candidateId={candidateId} key={candidateId + "ViewCandidatesPage"} />} key={candidateId} />
+							<Route path={"manageCandidates/" + candidateId + "/interviews"} element={<ManageInterviewsPage candidateId={candidateId} key={candidateId + "ViewCandidatesPage"} />} key={candidateId + "interviews"} />
 						</React.Fragment>
 					);
 				})
 				}
 
 				{/* Reports Routes */}
-				<Route path="/reports" element={<ReportsPage />} />
-				<Route path="/rejection" element={<ReportRejection />} />
+				<Route path="reports" element={<ReportsPage />} />
+				<Route path="reports/rejection" element={<ReportRejection />} />
 
 				{/* Admin Routes */}
-				<Route path="/settings" element={<AdminPage />} />
-			</Routes>
+				<Route path="settings" element={<AdminPage />} />
 
+			</Routes>
 			<Footer />
+
 		</>
 
 	);

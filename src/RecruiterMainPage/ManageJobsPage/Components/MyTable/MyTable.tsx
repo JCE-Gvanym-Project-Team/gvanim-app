@@ -172,7 +172,7 @@ const GridCustomToolbar = ( {syncState }: {syncState: (stateToSave: GridInitialS
 	const navigate = useNavigate();
 
     const handleCreatejob = () => {
-        navigate("/createJob", { state: null });
+        navigate("/management/createJob", { state: null });
     }
 
 	return (
@@ -270,7 +270,7 @@ export default function MyTable(props: { setDataSize: any }) {
 					sx={dataGridSx(theme)}
 					rows={allJobs}
 					columns={columns}
-					onRowDoubleClick={(job) => navigate(`../jobs/${job.id}`)}
+					onRowDoubleClick={(job) => navigate(`/career/jobs/${job.id}`)}
 
 					// checkboxSelection
 					// disableRowSelectionOnClick
