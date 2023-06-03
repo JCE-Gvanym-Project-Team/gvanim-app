@@ -57,8 +57,11 @@ function App()
 				}
 				/>
 
-				{/* redirect */}
-				<Route path='*' element={
+				{/* Redirects */}
+				<Route path='/' element={
+					<Navigate to='/career/jobs' />
+				} />
+				<Route path='/career' element={
 					<Navigate to='/career/jobs' />
 				} />
 			</Routes>

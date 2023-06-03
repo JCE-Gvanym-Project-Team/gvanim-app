@@ -11,6 +11,7 @@ import {
     GridToolbarContainer, heIL, GridFooterContainer
 } from '@mui/x-data-grid';
 import { GridFooterContainerSx, TypographyFooterSx, dataGridContainerStyle, dataGridSx } from './MyTableStyle';
+import { useNavigate } from 'react-router-dom';
 // import { getFilteredJobs } from '../../../../Firebase/FirebaseFunctions/Job';
 
 
@@ -86,9 +87,10 @@ function getScopeFormated(scope: number[] | null) {
 }
 
 export default function MyTable() {
+    const navigate = useNavigate();
     const onRowClick = (event, row) => {
         // if(row.id === 1)
-          window.location.href = `/rejection`;
+          navigate(`rejection`);
              
       };  
     const theme = useTheme();
