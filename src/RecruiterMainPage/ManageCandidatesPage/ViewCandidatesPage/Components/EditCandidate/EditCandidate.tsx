@@ -75,7 +75,7 @@ const EditCandidate = () =>
             {
                 await candidateToEdit.edit(candidateFirstname, candidateLastname, candidatePhone, candidateMail, candidateGeneralRating);
                 //TODO: tell Gavriel to integrate this
-                navigate("/manageCandidates/" + candidateToEdit?._id, { state: `השינויים עבור המועמד' ${candidateToEdit._firstName + " " + candidateToEdit._lastName} נשמרו בהצלחה.` });
+                navigate("/management/manageCandidates/" + candidateToEdit?._id, { state: `השינויים עבור המועמד' ${candidateToEdit._firstName + " " + candidateToEdit._lastName} נשמרו בהצלחה.` });
             }
         }
     }
@@ -86,7 +86,7 @@ const EditCandidate = () =>
         {
             candidateToEdit.remove();
             console.log(`candidate (id: ${candidateToEdit._id}) deleted successfully`);
-            navigate("/manageCandidates", { state: `המועמד' ${candidateToEdit._firstName + " " + candidateToEdit._lastName} הוסרה בהצלחה.` });
+            navigate("/management/manageCandidates", { state: `המועמד' ${candidateToEdit._firstName + " " + candidateToEdit._lastName} הוסרה בהצלחה.` });
         }
     }
 

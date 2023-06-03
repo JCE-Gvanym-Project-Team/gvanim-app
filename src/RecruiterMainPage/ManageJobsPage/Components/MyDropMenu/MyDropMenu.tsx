@@ -42,7 +42,7 @@ export default function MyDropMenu(props: { JobId: any })
     {
         setOpen(false);
         buttonElement?.focus();
-        navigate("/createJob", { state: JobId });
+        navigate("/management/createJob", { state: JobId });
     }
 
     const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>) =>
@@ -123,7 +123,7 @@ export default function MyDropMenu(props: { JobId: any })
                 slotProps={{ listbox: { id: 'simple-menu' } }}
             >
                 <Typography variant='caption' sx={{fontSize: 10,fontWeight: 600, padding: 1}}>אפשרויות</Typography>
-                <StyledMenuItem onClick={() => navigate(`../jobs/${JobId}`)}>
+                <StyledMenuItem onClick={() => navigate(`/career/jobs/${JobId}`)}>
                 
                     <ListItemIcon>
                         <Assignment sx={MenuItemIconSx} />

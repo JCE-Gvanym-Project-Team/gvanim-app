@@ -28,7 +28,7 @@ export default function MyDrawer(props: { handlelogout: any, userFirstName: any 
                 <Stack id="items" direction='column' spacing={3} sx={{ width: '100%' }} divider={<Divider sx={{ width: '100%' }} orientation="horizontal" flexItem />}>
                     <Box sx={{ mt: 1 }} />
                     <Box id="home" sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', width: '100%', mt: 2 }}>
-                        <Link onClick={() => { navigate("/"); setChecked(!checked); setOpen(!open); }}
+                        <Link onClick={() => { navigate("/management/"); setChecked(!checked); setOpen(!open); }}
                             sx={{
                                 cursor: 'pointer',
                                 ":hover > #home": {
@@ -47,7 +47,7 @@ export default function MyDrawer(props: { handlelogout: any, userFirstName: any 
                     <Box id="managejobs" sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', width: '100%' }}>
 
                         <Stack spacing={1} direction='row' sx={{ height: 'fit-content' }}>
-                            <Link onClick={() => { navigate("/manageJobs"); setChecked(!checked); setOpen(!open); }}
+                            <Link onClick={() => { navigate("/management/manageJobs"); setChecked(!checked); setOpen(!open); }}
                                 sx={{
                                     cursor: 'pointer',
                                     ":hover > #jobsIcon": {
@@ -69,7 +69,7 @@ export default function MyDrawer(props: { handlelogout: any, userFirstName: any 
                     <Box id="managecandidates" sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', width: '100%' }}>
 
                         <Stack spacing={1} direction='row' sx={{ height: 'fit-content' }}>
-                            <Link onClick={() => { navigate("/manageCandidates"); setChecked(!checked); setOpen(!open); }}
+                            <Link onClick={() => { navigate("/management/manageCandidates"); setChecked(!checked); setOpen(!open); }}
                                 sx={{
                                     cursor: 'pointer',
                                     ":hover > #candidatesIcon": {
@@ -91,7 +91,7 @@ export default function MyDrawer(props: { handlelogout: any, userFirstName: any 
                     <Box id="reports" sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', width: '100%' }}>
 
                         <Stack spacing={1} direction='row' sx={{ height: 'fit-content' }}>
-                            <Link onClick={() => { navigate("/reports"); setChecked(!checked); setOpen(!open); }}
+                            <Link onClick={() => { navigate("/management/reports"); setChecked(!checked); setOpen(!open); }}
                                 sx={{
                                     cursor: 'pointer',
                                     ":hover > #reportsIcon": {
@@ -113,7 +113,7 @@ export default function MyDrawer(props: { handlelogout: any, userFirstName: any 
                     <Box id="settings" sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', width: '100%' }}>
 
                         <Stack spacing={1} direction='row' sx={{ height: 'fit-content' }}>
-                            <Link onClick={() => { navigate("/settings"); setChecked(!checked); setOpen(!open); }}
+                            <Link onClick={() => { navigate("/management/settings"); setChecked(!checked); setOpen(!open); }}
                                 sx={{
                                     cursor: 'pointer',
                                     ":hover > #reportsIcon": {

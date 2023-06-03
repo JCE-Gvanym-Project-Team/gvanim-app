@@ -95,7 +95,7 @@ export default function UserDropMenu(props: {handlelogout: any}) {
                 slotProps={{ listbox: { id: 'simple-menu' } }}
             >
   
-                <Button size="large" startIcon={<Settings />} sx={{ width: '100%', color: 'rgb(52, 71, 103)'}} onClick={() => {navigate("/settings"); setOpen(false);}}>
+                <Button size="large" startIcon={<Settings />} sx={{ width: '100%', color: 'rgb(52, 71, 103)'}} onClick={() => {navigate("/management/settings"); setOpen(false);}}>
                     הגדרות 
                 </Button>
                 <Divider />

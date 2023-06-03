@@ -141,7 +141,7 @@ export default function ScheduleInterviewDialog(props: {
 
         onClose(event, "submit");
 
-        navigate("/manageCandidates/" + candidate?._id, { state: true });
+        navigate("/management/manageCandidates/" + candidate?._id, { state: true });
     }
 
     const handleSubmitSaveRejectionReason = async (event) =>
