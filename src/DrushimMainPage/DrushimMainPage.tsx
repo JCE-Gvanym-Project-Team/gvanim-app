@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { Job, getFilteredJobs } from '../Firebase/FirebaseFunctions/functionIndex';
+import AllJobsPage from './AllJobsPage/AllJobsPage';
+import OneJobPage from './OneJobPage/OneJobPage';
+import { CssBaseline } from '@mui/material';
 
 
 export default function DrushimMainPage()
@@ -18,12 +21,14 @@ export default function DrushimMainPage()
 	}, [])
 
 	return (
-		<Routes>
+		<>
 			{/* All Jobs Page Route*/}
-			<Route path='/career/jobs' />
+			<Routes>
+				<Route path='jobs' element={<AllJobsPage />} />
 
-			{/* One Job Pages Routes */}
-			{jobs.map(job =><Route path={'/career/jobs/' + job._jobNumber} /> )}
-		</Routes>
+				{/* One Job Pages Routes */}
+				{jobs.map(job => <Route path={'jobs/' + job._jobNumber} element={<OneJobPage />} key={job._jobNumber}/>)}
+			</Routes>
+		</>
 	)
 }
