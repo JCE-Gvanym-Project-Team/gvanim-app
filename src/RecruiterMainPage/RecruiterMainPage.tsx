@@ -84,7 +84,6 @@ function RecruiterMainPage({ handlelogout })
 				{/* Admin Routes */}
 				<Route path="/settings" element={<AdminPage />} />
 			</Routes>
-
 			<Footer />
 		</>
 
