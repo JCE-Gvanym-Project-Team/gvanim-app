@@ -25,10 +25,11 @@ export default function DrushimMainPage()
 			{/* All Jobs Page Route*/}
 			<CssBaseline />
 			<Routes>
+				{/* All Jobs Page Route*/}
 				<Route path='jobs' element={<AllJobsPage />} />
 
 				{/* One Job Pages Routes */}
-				{jobs.map(job => <Route path={'jobs/' + job._jobNumber} element={<OneJobPage />} key={job._jobNumber}/>)}
+				{jobs.map(job => <Route path={'jobs/' + job._jobNumber} element={<OneJobPage />} key={job._jobNumber} />)}
 			</Routes>
 		</>
 	)
