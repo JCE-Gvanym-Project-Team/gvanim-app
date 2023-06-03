@@ -5,7 +5,6 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 // RTL - Right to Left imports
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import rtlPlugin from 'stylis-plugin-rtl';
 import { prefixer } from 'stylis';
 import { CacheProvider } from '@emotion/react';
@@ -17,9 +16,6 @@ const cacheRtl = createCache({
   key: 'muirtl',
   stylisPlugins: [prefixer, rtlPlugin],
 });
-const theme = createTheme({
-  direction: 'rtl',
-});
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -28,11 +24,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <CacheProvider value={cacheRtl}>
-      <ThemeProvider theme={theme}>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </ThemeProvider>
+      <BrowserRouter >
+        <App />
+      </BrowserRouter>
     </CacheProvider>
   </React.StrictMode>
 );

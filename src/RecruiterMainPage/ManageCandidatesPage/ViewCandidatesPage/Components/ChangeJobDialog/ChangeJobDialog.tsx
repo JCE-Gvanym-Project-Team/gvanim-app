@@ -79,7 +79,7 @@ export default function ChangeJobDialog(props: { open, onClose, candidateApplied
         // reset values
         setFromJobValue('');
         setToJobValue('');
-        navigate("/manageCandidates/" + candidate?._id, { state: candidate?._id });
+        navigate("/management/manageCandidates/" + candidate?._id, { state: candidate?._id });
         onClose();
     };
 

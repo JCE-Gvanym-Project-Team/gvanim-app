@@ -70,13 +70,13 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 	// edit candidate handler
 	const editCandidateHandler = () =>
 	{
-		navigate("/editCandidate", { state: candidateId });
+		navigate("/management/editCandidate", { state: candidateId });
 	}
 
 	// move to interviews page handler
 	const interviewsPageHandler = (id) =>
 	{
-		navigate("/manageCandidates/" + id + "/interviews");
+		navigate("/management/manageCandidates/" + id + "/interviews");
 	}
 
 	// general rating
