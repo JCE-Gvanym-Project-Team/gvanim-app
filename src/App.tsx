@@ -2,7 +2,7 @@ import Auth from './RecruiterMainPage/Components/Auth/Auth';
 import DrushimMainPage from './DrushimMainPage/DrushimMainPage';
 import { main } from './Firebase/FirebaseFunctions/test';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Link, Navigate, Route, Routes } from 'react-router-dom';
 import { ColorModeContext, useMode } from './DrushimMainPage/theme';
 import { CssBaseline, Switch } from '@mui/material';
 import WelcomePage from './RecruiterMainPage/WelcomePage/WelcomePage';
@@ -31,55 +31,10 @@ const recruitersPageTheme = createTheme({
 function App()
 {
 
-	// ------------------- FOR RECRUITERS PAGE -------------------
-	const [allJobs, setAllJobs] = React.useState<any[]>([]);
-	const [candidateIDs, setCandidateIDs] = useState<string[]>([])
-
-
-	const fetchAllJobs = async () =>
-	{
-		const jobs = await getFilteredJobs();
-		const jobsWithId = jobs.map((job) => ({ ...job, id: job._jobNumber }));
-		setAllJobs(jobsWithId);
-	};
-
-	const fetchCandidateIDs = async () =>
-	{
-		const candidates = await getFilteredCandidates();
-		setCandidateIDs(candidates.map(candidate => candidate._id));
-	}
-
-	useEffect(() =>
-	{
-		fetchAllJobs();
-		fetchCandidateIDs();
-	}, []);
-
-	const handlelogout = () =>
-	{
-
-	}
-	// ------------------- FOR RECRUITERS PAGE -------------------
-
-
-
-	// ------------------- FOR DRUSHIM PAGE -------------------
+	// for drushim page
 	const temp = useMode();
 	const drushimPageTheme = temp[0];
 	const colorMode = temp[1];
-
-	const [jobs, setJobs] = useState<Job[]>([]);
-
-	const fetchJobs = async () =>
-	{
-		setJobs(await getFilteredJobs());
-	}
-
-	useEffect(() =>
-	{
-		fetchJobs();
-	}, [])
-	// ------------------- FOR DRUSHIM PAGE -------------------
 
 	return (
 		<>
@@ -101,6 +56,11 @@ function App()
 					</ColorModeContext.Provider >
 				}
 				/>
+
+				{/* redirect */}
+				<Route path='*' element={
+					<Navigate to='/career/jobs' />
+				} />
 			</Routes>
 		</>
 	);
