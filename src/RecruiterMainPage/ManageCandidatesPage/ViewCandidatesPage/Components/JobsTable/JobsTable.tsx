@@ -103,9 +103,25 @@ export default function JobsTable(props: { setDataSize: any, candidateJobs: any,
 			align: 'left',
 		},
 		{
+			field: 'status',
+			headerName: 'סטטוס',
+			description: 'עמודה זו אינה ניתנת למיון',
+			sortable: false,
+			editable: false,
+			align: 'left',
+			width: 200,
+			renderCell: (job) =>
+			{
+				return (
+					<MyChip jobId={job.id.toString()} candidate={candidateInfo} purpose={"status"}/>
+				);
+			},
+		},
+		{
 			field: '_matchingRate',
 			headerName: 'דרגת התאמה',
-			width: 150,
+			description: 'עמודה זו אינה ניתנת למיון',
+			width: 100,
 			editable: false,
 			align: 'left',
 			filterable: false,
@@ -113,14 +129,15 @@ export default function JobsTable(props: { setDataSize: any, candidateJobs: any,
 			renderCell: (job) =>
 			{
 				return (
-					<MyChip jobId={job.id.toString()} candidate={candidateInfo} />
+					<MyChip jobId={job.id.toString()} candidate={candidateInfo} purpose={"matching rate"}/>
 				);
 			}
 		},
 		{
 			field: '_recommenders',
 			headerName: '',
-			width: 200,
+			description: 'עמודה זו אינה ניתנת למיון',
+			width: 150,
 			hideSortIcons: true,
 			filterable: false,
 			hideable: false,
@@ -157,7 +174,7 @@ export default function JobsTable(props: { setDataSize: any, candidateJobs: any,
 				const { id } = job.row;
 				return <CandidatesListFullScreenDialog JobId={id} />;
 			},
-		},
+		}
 	];
 
 	const fetchAllJobs = async () =>
