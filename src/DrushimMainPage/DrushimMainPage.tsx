@@ -1,10 +1,11 @@
 import React from 'react'
+import { Routes } from 'react-router-dom'
 
 
 export default function DrushimMainPage() {
   return (
-    <div>
+    <Routes>
       
-    </div>
+    </Routes>
   )
 }
