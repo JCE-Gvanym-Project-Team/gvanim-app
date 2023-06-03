@@ -1,8 +1,25 @@
 rules_version = '2';
-service firebase.storage {
-  match /b/{bucket}/o {
-    match /{allPaths=**} {
-      allow read, write: if false;
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow everyone to create new files if the folder has less than 3 files
+    match /CandidatesFiles/{id}/rec/{fileId} {
+      allow create: if isFolderUnderRecLimit();
     }
+  match /CandidatesFiles/{id}/cv/{fileId} {
+        allow create: if isFolderUnderCvLimit();
+      }
+    // Allow authenticated users to read, replace, and delete files
+    match /CandidatesFiles/{id}/{type}/{fileId} {
+      allow read, update, delete: if request.auth != null;
+    }
+  }
+  
+  function isFolderUnderRecLimit() {
+    // Check if the folder has less than 3 files
+    return request.resource.data.size() < 3;
+  }
+  function isFolderUnderCvLimit() {
+    // Check if the folder has less than 3 files
+    return request.resource.data.size() < 3;
   }
 }

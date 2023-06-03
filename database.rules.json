@@ -1,6 +1,45 @@
 {
   "rules": {
-    ".read": "now < 1684789200000", 
-    ".write": "now < 1684789200000"
+    "Jobs":{
+      		".read": true,
+          "$jobId": {
+        		".write": "(root.child('Admins/' + auth.uid).exists())||(root.child('Sectors').child(root.child('Jobs').child($jobId).child('_sector').val()).child('_recruitersUid').child(auth.uid).exists())"
+      		}
+    },
+    
+    "Recruiters":{
+      	".write": "root.child('Admins/' + auth.uid).exists()",
+        ".read": "auth.uid !== null"
+    },
+      
+    "Candidates":{
+      ".write": "!data.exists() && newData.exists() || auth.uid !== null",
+      ".read": "auth != null"
+    },
+    "CandidatesJobStatus":{
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "Roles":{
+      ".read": "auth != null",
+      ".write": "(auth != null && !data.exists() && newData.exists()) || root.child('admins/' + auth.uid).exists()"
+    },
+    "Stages":{
+      ".write": "root.child('admins/' + auth.uid).exists()",
+      ".read": "auth != null"
+    },
+    "Admins":{
+      ".write": false,
+      ".read": false
+    },
+      "Sectors":{
+        ".write": "root.child('Admins/' + auth.uid).exists()",
+        ".read": "root.child('Admins/' + auth.uid).exists()"
+    },
+    	"RecUid":{
+        ".write": "root.child('Admins/' + auth.uid).exists()",
+        ".read": "root.child('Admins/' + auth.uid).exists()"
+    }
   }
 }
+
