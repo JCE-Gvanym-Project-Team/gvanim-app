@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Button, Typography, Box, Stack } from '@mui/material'
+import { Button, Typography, Box, Stack, Rating } from '@mui/material'
 import EditIcon from '@mui/icons-material/Edit';
 import { editButtonSx, textSx, titleSx, mainStackSx, ContainerGradientSx, candidateNameSx, BoxGradientSx, candidateNameAndEditButtonContainerSx, jobTextSx, notesButtonSx, interviewsButtonSx, changeJobButtonSx, recommendationsButtonSx } from './ViewCandidatesPageStyle';
 import { ManageCandidatesPageGlobalStyle } from '../../PageStyles';
@@ -7,7 +7,7 @@ import JobsTable from './Components/JobsTable/JobsTable';
 import { Candidate, getFilteredCandidates } from '../../../Firebase/FirebaseFunctions/Candidate';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Job, getFilteredJobs } from '../../../Firebase/FirebaseFunctions/Job';
-import { getFilteredCandidateJobStatuses } from '../../../Firebase/FirebaseFunctions/CandidateJobStatus';
+import { CandidateJobStatus, getFilteredCandidateJobStatuses } from '../../../Firebase/FirebaseFunctions/CandidateJobStatus';
 import NotesPopup from './Components/NotesPopup/NotesPopup';
 import { EditNote, QuestionAnswer, SpeakerNotes } from '@mui/icons-material';
 
@@ -38,9 +38,14 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 
 	useEffect(() =>
 	{
+		setGeneralRating(candidateInfo?._generalRating ? candidateInfo?._generalRating : -1);
+	}, [candidateInfo]);
+
+	useEffect(() =>
+	{
 		// pull candidate from firebase
 		getCandidate(candidateId, setCandidateInfo);
-		
+
 		getJobs(candidateId, setCandidateJobs);
 	}, [])
 
@@ -65,14 +70,17 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 	// edit candidate handler
 	const editCandidateHandler = () =>
 	{
-		navigate("/editCandidate", { state: candidateId });
+		navigate("/management/editCandidate", { state: candidateId });
 	}
 
 	// move to interviews page handler
 	const interviewsPageHandler = (id) =>
 	{
-		navigate("/manageCandidates/" + id + "/interviews");
+		navigate("/management/manageCandidates/" + id + "/interviews");
 	}
+
+	// general rating
+	const [generalRating, setGeneralRating] = useState(0);
 
 	return (
 		<>
@@ -87,6 +95,19 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 						<Typography sx={titleSx} variant='h2'>
 							צפייה במועמד
 						</Typography>
+
+						<Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", alignSelf: "start" }}>
+							<Typography component="legend" sx={jobTextSx} style={{ fontSize: "24px" }}>דרגה כללית</Typography>
+							<Rating
+								value={generalRating}
+								onChange={(event, newValue) =>
+								{
+									candidateInfo?.updateGeneralRating(newValue ? newValue : -1);
+									setGeneralRating(newValue ? newValue : -1);
+								}}
+								size='large'
+							/>
+						</Box>
 
 						{/* Box for candidate name and 
 					 	/* edit button to make them on the same line */}
@@ -117,13 +138,10 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 						</Box>
 
 						{/* Jobs table */}
-						<JobsTable setDataSize={setDataSize} candidateJobs={candidateJobs} />
+						<JobsTable setDataSize={setDataSize} candidateJobs={candidateJobs} candidateInfo={candidateInfo} />
 
 						{/* Bottom Buttons */}
 						<Box sx={candidateNameAndEditButtonContainerSx}>
-							<Button sx={recommendationsButtonSx} variant="contained" startIcon={<EditIcon />}>
-								ממליצים
-							</Button>
 							<Button sx={interviewsButtonSx} variant="contained" startIcon={<QuestionAnswer />} onClick={() =>
 							{
 								interviewsPageHandler(candidateId);

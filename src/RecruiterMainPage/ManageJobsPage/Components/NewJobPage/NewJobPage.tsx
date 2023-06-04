@@ -16,11 +16,6 @@ const Form = styled('form')(({ theme }) => ({
 const NewJobPage = () => {
     const { state } = useLocation();
 
-    const getRolesFromDB = () => {
-        const roles = ["מנהל","מהנדס","רופא"];
-        return roles;
-    };
-
     // values
     const [jobName, setJobName] = useState('');
     const [jobRole, setJobRole] = useState('');
@@ -59,6 +54,8 @@ const NewJobPage = () => {
             setJobAdditionalInfo(_JobToEdit[0]._description[2]);
             setJobScope(_JobToEdit[0]._scope);
 
+        
+
         }
 
         if (state !== null) { // edit job
@@ -84,7 +81,7 @@ const NewJobPage = () => {
 
             _job.edit(_job._title = jobName, _job._role = jobRole, _job._scope = jobScope, _job._region = jobRegion,
                 _job._sector = jobState, _job._description = description_array, _job._requirements = jobRequirements, true, false);
-            navigate("/manageJobs", { state: `השינויים עבור משרה מס' ${_job._jobNumber} נשמרו בהצלחה.` });
+            navigate("/management/manageJobs", { state: `השינויים עבור משרה מס' ${_job._jobNumber} נשמרו בהצלחה.` });
         }
         //add
         else {
@@ -113,7 +110,7 @@ const NewJobPage = () => {
                     + 'Job Scope: ' + jobScope[0].toString() + '% - ' + jobScope[1].toString() + '%' + '\n'
                 );
 
-                navigate("/manageJobs", { state: `משרה מס' ${job1._jobNumber} נוספה בהצלחה.` });
+                navigate("/management/manageJobs", { state: `משרה מס' ${job1._jobNumber} נוספה בהצלחה.` });
             }
         }
     }
@@ -121,7 +118,7 @@ const NewJobPage = () => {
     const handleDelete = () => {
         JobToEdit[0].remove();
         console.log(`job (id: ${JobToEdit[0]._jobNumber}) deleted successfully`);
-        navigate("/manageJobs", { state: `משרה מס' ${JobToEdit[0]._jobNumber} הוסרה בהצלחה.` });
+        navigate("/management/manageJobs", { state: `משרה מס' ${JobToEdit[0]._jobNumber} הוסרה בהצלחה.` });
     }
 
     return (

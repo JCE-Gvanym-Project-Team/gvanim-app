@@ -1,12 +1,14 @@
 import Login from "../../LoginPage/LoginPage";
-
 import "firebase/compat/auth";
 import  { useEffect, useState } from "react"
 import RecruiterMainPage from "../../RecruiterMainPage";
-import NavBar from "../NavBar/NavBar";
-import { loginAdmin, loginRecruiter, loguotRecruiter } from "../../../Firebase/FirebaseFunctions/Authentication";
+import { loginRecruiter, loguotRecruiter } from "../../../Firebase/FirebaseFunctions/Authentication";
 import firebase from "../../../Firebase/FirebaseConfig/firebase";
+import { createTheme } from "@mui/material";
 
+const recruitersPageTheme = createTheme({
+	direction: 'rtl',
+});
 
 export default function Auth () {
   const [email, setEmail] = useState('');
@@ -77,7 +79,6 @@ export default function Auth () {
           setUser(user);
         }
         else {
-          setUser('');
           return <RecruiterMainPage handlelogout={loguotRecruiter} />;
         }
       });

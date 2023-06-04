@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 import MyTable from "./Components/MyTable/MyTable";
-import { Box, Button, Container, Fab, Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import MyLoading from "../../Components/MyLoading/MyLoading";
 import { ManageJobPageBoxSx } from "./ManageJobsPageStyle";
 import TransitionComponentSnackbar from "./Components/NewJobPage/Components/SuccessSnackBar/SuccessSnackBar";
@@ -17,18 +17,16 @@ const ManageJobsPage = () => {
 
     const { state } = useLocation();
 
+        // for the snackbar
+        if (state !== null) {
+            setOpen(true);
+        }
 
 
     useEffect(() => {
         setLoading(true);
         setTimeout(() => {
             setLoading(false);
-
-            // for the snackbar
-            if (state !== null) {
-                setOpen(true);
-            }
-
         }, 1000);
     }, []);
 
