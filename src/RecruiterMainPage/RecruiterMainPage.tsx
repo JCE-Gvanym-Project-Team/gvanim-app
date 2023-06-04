@@ -4,7 +4,7 @@ import { Route, Routes } from "react-router-dom";
 import ManageCandidatesPage from "./ManageCandidatesPage/ManageCandidatesPage";
 import ManageJobsPage from "./ManageJobsPage/ManageJobsPage";
 import ReportsPage from "./ReportsPage/ReportsPage";
-import ReportRejection from "./ReportsPage/Components/Reports/RejectionReport";
+import ReportRejection from "./ReportsPage/Components/Reports/RejectionReportform";
 import NavBar from "./Components/NavBar/NavBar";
 import NewJobPage from "./ManageJobsPage/Components/NewJobPage/NewJobPage";
 import { getFilteredJobs } from "../Firebase/FirebaseFunctions/Job";
@@ -18,7 +18,7 @@ import Footer from "./Components/Footer/Footer";
 import { CssBaseline } from "@mui/material";
 import { createContext, useContext, useMemo } from 'react';
 import { Box } from "@mui/material";
-import ManageInterviewsPage from './ManageCandidatesPage/ViewCandidatesPage/ManageInterviewsPage/ManageInterViewsPage'
+import ManageInterviewsPage from './ManageCandidatesPage/ViewCandidatesPage/ManageInterViewsPage/ManageInterViewsPage'
 
 
 function RecruiterMainPage({ handlelogout }) {

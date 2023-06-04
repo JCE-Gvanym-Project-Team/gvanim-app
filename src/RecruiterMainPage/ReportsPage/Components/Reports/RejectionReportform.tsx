@@ -14,17 +14,12 @@ import * as XLSX from 'xlsx';
 
 
 
-export default function RejectionReport() {
+export default function RejectionReportForm() {
   //main();
 
   const createReport = (rejectionCause_ind, sector_ind, role_ind, startDate, endDate) => {
     // checking if the user select all the buttons
     const isDateSelected = startDate && endDate;
-    console.log(rejectionCause_ind);
-    console.log(sector_ind);
-    console.log(role_ind);
-    console.log(startDate);
-    console.log(endDate);
 
     if (!rejectionCause_ind || !sector_ind || !role_ind || !isDateSelected) {
       // displaying an error message or indicating to the user that the parameters are mandatory
@@ -45,7 +40,10 @@ export default function RejectionReport() {
 
     const result = rejection(rejectionCause, sector, role, formattedStartDate, formattedEndDate)
       .then((result) => {
-        exportToExcel(result , "rejection_report");
+        if(result.length === 0)
+           alert("אין נתונים להצגה");
+        else   
+           exportToExcel(result , "rejection_report");
       })
       .catch((error) => {
         // handle the error
@@ -116,8 +114,8 @@ export default function RejectionReport() {
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
-          value={region} // שנה את הערך של value ל-rejectionCause
-          label="rejectionCause" // שנה את הערך של label ל-rejectionCause
+          value={region} 
+          label="rejectionCause" 
           onChange={handleChangeRegion}
         >
           <MenuItem value={10}>מרכז</MenuItem>
