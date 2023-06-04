@@ -1,13 +1,13 @@
 rules_version="2";
 service firebase.storage {
   match /b/{bucket}/o {
-    match /CandidatesFiles/{id}/cv/{document=**} {
-      allow read, write: if request.auth != null;
-    	allow create: if resource == null;
+    match /CandidatesFiles/{id}/rec/{file}{
+    	allow read, write: if request.auth != null && file.matches('^05[0-9]{8}_[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}$_REC.') && (file.matches('.pdf$') || file.matches('.docx$') || file.matches('.doc$'));
+      allow create: if resource == null && file.matches('^05[0-9]{8}_[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}$_REC.') && (file.matches('.pdf$') || file.matches('.docx$') || file.matches('.doc$'));
     }
-    match /CandidatesFiles/{id}/rec/{document=**} {
-      allow read, write: if request.auth != null;
-      allow create: if resource == null || list(/CandidatesFiles/id/rec).size() < 3;
+    match /CandidatesFiles/{id}/cv/{file}{
+    	allow read, write: if request.auth != null && (file.matches('^CV.pdf$') || file.matches('^CV.docx$') || file.matches('^CV.doc$'));
+      allow create: if resource == null && (file.matches('^CV.pdf$') || file.matches('^CV.docx$') || file.matches('^CV.doc$'));
     }
   }
 }
