@@ -113,8 +113,8 @@ const columns: GridColDef[] = [
     disableExport: true,
     editable: false,
 
-    renderCell: (job) => {
-      return <MyDropMenu JobId={job.id} />;
+    renderCell: (candidate) => {
+      return <MyDropMenu CandidateId={candidate.id} />;
     },
   },
 
@@ -178,7 +178,7 @@ const GridCustomToolbar = ({
               variant="contained"
               fullWidth
             >
-              מועמד חדשה
+              מועמד חדש
             </Button>
           </Box>
         </Box>
@@ -208,15 +208,7 @@ const GridCustomToolbar = ({
   );
 };
 
-function getScopeFormated(scope: number[] | null) {
-  return scope === null
-    ? "0-100"
-    : scope[0].toString() === scope[1].toString()
-    ? scope[0].toString() + "%"
-    : scope[1].toString() + "% - " + scope[0].toString() + "%";
-}
-
-export default function MyTable(props: { setDataSize: any }) {
+export default function CandidateTable(props: { setDataSize: any }) {
   const { setDataSize } = props;
   const [allCandidates, setAllCandidates] = React.useState<any[]>([]);
   const navigate = useNavigate();
@@ -266,7 +258,9 @@ export default function MyTable(props: { setDataSize: any }) {
           sx={dataGridSx(theme)}
           rows={allCandidates}
           columns={columns}
-          onRowDoubleClick={(job) => navigate(`/career/jobs/${job.id}`)}
+          onRowDoubleClick={(candidate) =>
+            navigate(`/career/candidates/${candidate.id}`)
+          }
           // checkboxSelection
           // disableRowSelectionOnClick
           // disableColumnMenu

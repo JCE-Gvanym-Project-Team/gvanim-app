@@ -25,10 +25,10 @@ function MenuSection({ children, label }: MenuSectionProps) {
   );
 }
 
-export default function MyDropMenu(props: { JobId: any }) {
+export default function MyDropMenu(props: { CandidateId: any }) {
   const navigate = useNavigate();
 
-  const { JobId } = props;
+  const { CandidateId } = props;
   const [buttonElement, setButtonElement] =
     React.useState<HTMLButtonElement | null>(null);
   const [isOpen, setOpen] = React.useState(false);
@@ -42,7 +42,7 @@ export default function MyDropMenu(props: { JobId: any }) {
   const handleEditClick = () => {
     setOpen(false);
     buttonElement?.focus();
-    navigate("/management/createJob", { state: JobId });
+    navigate("/management/createCandidate", { state: CandidateId });
   };
 
   const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -119,7 +119,7 @@ export default function MyDropMenu(props: { JobId: any }) {
         >
           אפשרויות
         </Typography>
-        <StyledMenuItem onClick={() => navigate(`/career/jobs/${JobId}`)}>
+        <StyledMenuItem onClick={() => navigate(`/career/jobs/${CandidateId}`)}>
           <ListItemIcon>
             <Assignment sx={MenuItemIconSx} />
 
