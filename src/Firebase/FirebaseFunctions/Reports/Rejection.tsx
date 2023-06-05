@@ -25,6 +25,5 @@ export default async function rejection(rejectionCause: string, sector: string, 
     }
   }
 
-  console.log(resultCandidate);
   return resultCandidate;
 }

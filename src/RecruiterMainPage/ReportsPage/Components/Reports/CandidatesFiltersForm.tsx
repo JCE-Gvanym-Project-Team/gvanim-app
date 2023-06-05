@@ -9,37 +9,42 @@ import { Box, MenuItem, Radio, Select, SelectChangeEvent } from '@mui/material';
 import rejection from '../../../../Firebase/FirebaseFunctions/Reports/Rejection';
 import { getFilteredJobs, loginAdmin } from '../../../../Firebase/FirebaseFunctions/functionIndex';
 import { exportToExcel } from '../../../../Firebase/FirebaseFunctions/Reports/GlobalFunctions'
-
+import CandidateByFilters from '../../../../Firebase/FirebaseFunctions/Reports/CandidatesFilters';
+import {formContainerStyles} from '../../ReportPageStyle';
 
 
 
 export default function CandidateFiltersForm() {
     //main();
 
-    const createReport = (status_ind, timeOnStatus_ind, region_ind, role_ind, selectGarde, startDate, endDate) => {
+    const createReport = (status_ind, timeOnStatus_ind, sector_ind, role_ind, selectGarde, startDate, endDate) => {
         // checking if the user select all the buttons
         const isDateSelected = startDate && endDate;
 
-        if (!status_ind || !timeOnStatus_ind || !region_ind || role_ind || selectGarde || !isDateSelected) {
+        if (!status_ind || !timeOnStatus_ind || !sector_ind || role_ind || selectGarde || !isDateSelected) {
             // displaying an error message or indicating to the user that the parameters are mandatory
             alert('יש למלא את כל השדות');
             return;
         }
 
-        const rejectionCauseArr = ["פערים כספיים", "פערים על היקף משרה", "חוסר התאמה", "כל הסיבות"];
+        const statusChiseArr = ["הוגשה מועמדות", "זומן לראיון ראשון" ,"עבר ראיון ראשון", "זומן לראיון שני", "עבר ראיון שני"+
+        "התקבל", "הועבר למשרה אחרת","נדחה" , "אינו מעוניין במשרה", "בחר כל הסטטוסים"];
+        const timeThatOnCurrentStatusArr = ["שבוע", "חודש", "כל זמן"];
         const regionArr = ["מרכז", "צפון", "דרום", "כל הארץ"];
         const roleArr = ["מנהל", "עובד סוציאלי", "מתנדב", "כל התפקידים"];
 
-        const rejectionCause = rejectionCauseArr[Math.floor(rejectionCause_ind / 10) - 1];
+        const status = statusChiseArr[Math.floor(status_ind / 10) - 1];
+        const timeOnStatus = timeThatOnCurrentStatusArr[Math.floor(timeOnStatus_ind / 10) - 1];
         const sector = regionArr[Math.floor(sector_ind / 10) - 1];
         const role = roleArr[Math.floor(role_ind / 10) - 1];
 
         const formattedStartDate = startDate.toDate();
         const formattedEndDate = endDate.toDate();
 
-        const result = rejection(rejectionCause, sector, role, formattedStartDate, formattedEndDate)
+        const result = CandidateByFilters(status, timeOnStatus ,sector, role, formattedStartDate, formattedEndDate)
             .then((result) => {
-                exportToExcel(result, "rejection_report");
+                console.log(result);
+               // exportToExcel(result, "Candidate");
             })
             .catch((error) => {
                 // handle the error
@@ -92,8 +97,8 @@ export default function CandidateFiltersForm() {
 
 
     return (
-
-        <FormControl>
+        <div style={formContainerStyles}>
+        <FormControl  >
             {/* select the status */}
             <FormControl fullWidth>
                 <InputLabel id="demo-simple-select-label">בחר סטטוס </InputLabel>
@@ -113,7 +118,7 @@ export default function CandidateFiltersForm() {
                     <MenuItem value={70}>הועבר למשרה אחרת</MenuItem>
                     <MenuItem value={80}>נדחה</MenuItem>
                     <MenuItem value={90}>אינו מעוניין במשרה</MenuItem>
-                    <MenuItem value={100}>בחר כל</MenuItem>
+                    <MenuItem value={100}>בחר כל הסטטוסים</MenuItem>
 
                 </Select>
             </FormControl>
@@ -209,9 +214,9 @@ export default function CandidateFiltersForm() {
 
             {/* create report */}
             <button onClick={() => createReport(status, timeOnStatus, region, role, selectGarde, startDate, endDate)}>צור דוח</button>
-
-            {/* <a href="#" id="download-report-button" download="report1.xlsx" onClick={() => createReport(rejectionCause, region, role, startDate, endDate)}>צור דו"ח</a> */}
+       
         </FormControl>
+        </div>
     );
 
 }

@@ -8,13 +8,10 @@ import {
     GridInitialState, GridToolbarExport,
     useGridRootProps, GridApi,
     useGridApiContext, GridKeyValue, GridValueGetterParams,
-    GridToolbarContainer, heIL, GridFooterContainer
+    GridToolbarContainer, heIL, GridFooterContainer, GridRowParams
 } from '@mui/x-data-grid';
 import { GridFooterContainerSx, TypographyFooterSx, dataGridContainerStyle, dataGridSx } from './MyTableStyle';
 import { useNavigate } from 'react-router-dom';
-// import { getFilteredJobs } from '../../../../Firebase/FirebaseFunctions/Job';
-
-
 
 function GridCustomToolbar({
     syncState,
@@ -25,7 +22,6 @@ function GridCustomToolbar({
     const apiRef = useGridApiContext();
 
     return (
-
         <GridToolbarContainer>
             <GridToolbarFilterButton />
             <GridToolbarColumnsButton />
@@ -48,51 +44,49 @@ const columns: GridColDef[] = [
         disableExport: true,
         editable: false,
         valueGetter: (params: GridValueGetterParams) =>
-        `${params.row.name || ''}`,
-        },
+            `${params.row.name || ''}`,
+    },
 ];
 
 const rows = [
-    { id: 1, name: "מועדמים שנדחו"},
-    { id: 2, name: "משרות לפי תאריכים"}
+    { id: 1, name: "מועדמים שנדחו" },
+    { id: 2, name: "מועמדים על פי פילטרים" },
 ];
 
-
-
-
 function CustomFooter() {
-
     const [dataSize, setDataSize] = React.useState(3);
 
     return (
         <GridFooterContainer sx={GridFooterContainerSx}>
-
             <Typography variant='subtitle2' sx={TypographyFooterSx}>
                 מס' משרות:
             </Typography>
-
             <Typography variant='subtitle2' sx={TypographyFooterSx}>
                 {dataSize}
             </Typography>
-
         </GridFooterContainer>
     );
 };
 
-
-function getScopeFormated(scope: number[] | null) {
-
-    return scope === null ? '0-100' : scope[0].toString() + '-' + scope[1].toString();
-
-}
-
 export default function MyTable() {
     const navigate = useNavigate();
-    const onRowClick = (event, row) => {
-        // if(row.id === 1)
-          navigate(`rejection`);
-             
-      };  
+
+    const onRowClick = (params, event) => {
+        const actions = {
+            1: () => navigate('rejection'),
+            2: () => navigate('CandidateByFilters')
+            // הוסיפו פעולות נוספות כרצונכם לפי הערכים הנדרשים
+        };
+
+        const id = params.row.id;
+        console.log(id);
+        const action = actions[id];
+
+        if (action) {
+            action();
+        }
+    };
+
     const theme = useTheme();
 
     return (
@@ -105,11 +99,11 @@ export default function MyTable() {
                     sx={dataGridSx(theme)}
                     rows={rows}
                     columns={columns}
-                    onRowClick={onRowClick}                    
+                    onRowClick={onRowClick}
                     hideFooterSelectedRowCount
                     hideFooterPagination
                     localeText={heIL.components.MuiDataGrid.defaultProps.localeText}
                     slots={{ toolbar: GridCustomToolbar, footer: CustomFooter }} />
-            </Container></>
-    );
-}
+                    </Container></>
+                    );
+                    }

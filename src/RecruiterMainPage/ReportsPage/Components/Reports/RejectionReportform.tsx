@@ -85,6 +85,7 @@ export default function RejectionReportForm() {
 
 
   return (
+    <div style={formContainerStyles}>
     <FormControl>
       <h1>ד"וח מועמדים שנדחו</h1>
 
@@ -165,6 +166,7 @@ export default function RejectionReportForm() {
 
       {/* <a href="#" id="download-report-button" download="report1.xlsx" onClick={() => createReport(rejectionCause, region, role, startDate, endDate)}>צור דו"ח</a> */}
     </FormControl>
+    </div>
   );
 
 }

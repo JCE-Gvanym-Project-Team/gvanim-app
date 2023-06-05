@@ -40,3 +40,14 @@ export const BootstrapInput = styled(InputBase)(({ theme }) => ({
       },
     },
   }));
+
+
+  export const formContainerStyles = {
+    width: '600px',
+    height: '400px',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    minHeight: '100vh',
+    marginRight: '30%'
+  };

@@ -1,20 +1,67 @@
-import { Candidate } from "../Candidate";
-import { Job, loginAdmin, getFilteredCandidateJobStatuses, generateJobNumber, getFilteredJobs, loginRecruiter } from "../functionIndex";
+import { CandidateJobStatus } from "../CandidateJobStatus";
+import { getFilteredCandidateJobStatuses, getFilteredJobs } from "../functionIndex";
+import dayjs from 'dayjs';
+import isBetween from 'dayjs/plugin/isBetween';
 
 
+//         const result = CandidateByFilters(status, timeOnStatus ,sector, role, formattedStartDate, formattedEndDate)
 
-export async function filterByRegion(region: string): Promise <Candidate[]> {
-    const jobs = await getFilteredJobs(['region'], [region]);
-    let candidates: Array<Candidate> = [];
-    for (let i = 0; i < jobs.length; i++) {
-        let job = jobs[i];
-        let cands = await job.getCandidates();
-        for (let j = 0; j < candidates.length; j++) {
-            candidates.push(cands[j]);
-        }
+
+export default async function CandidateByFilters(status: string, timeOnStatus:string, sector: string, role: string, startDate: Date, endDate: Date): Promise<CandidateJobStatus[]> {
+    const _candidatesJobStatuses = await getFilteredCandidateJobStatuses(['status'], ['נדחה']);
+    
+    // Create an array to store candidates with the specified rejection cause
+    const resultCandidate: CandidateJobStatus[] = [];
+  
+    for (let i = 0; i < _candidatesJobStatuses.length; i++) {
+      let candidate = _candidatesJobStatuses[i]
+      
+      if (dayjs(candidate._applyDate).isBetween(dayjs(startDate), dayjs(endDate), null, '[]')) {
+        let job = (await getFilteredJobs(["jobNumber"], [candidate._jobNumber.toString()])).at(0);
+        
+        // if (job != undefined && (candidate._rejectCause == rejectionCause || rejectionCause == 'כל הסיבות') &&
+            // (job._role == role || role == "כל התפקידים") && (job._sector == sector || sector == 'כל הארץ')) {
+        //   resultCandidate.push(candidate);
+        // }
+      }
     }
-    return candidates;
-}
+  
+    console.log(resultCandidate);
+    return resultCandidate;
+  }
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// export async function filterByRegion(region: string): Promise <Candidate[]> {
+//     const jobs = await getFilteredJobs(['region'], [region]);
+//     let candidates: Array<Candidate> = [];
+//     for (let i = 0; i < jobs.length; i++) {
+//         let job = jobs[i];
+//         let cands = await job.getCandidates();
+//         for (let j = 0; j < candidates.length; j++) {
+//             candidates.push(cands[j]);
+//         }
+//     }
+//     return candidates;
+// }
 
 
 
