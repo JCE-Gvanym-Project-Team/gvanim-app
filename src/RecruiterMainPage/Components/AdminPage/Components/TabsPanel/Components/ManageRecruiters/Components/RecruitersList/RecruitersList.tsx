@@ -31,7 +31,7 @@ export default function RecruitersList() {
     const [searchValue, setSearchValue] = React.useState("");
     const [refreshData, setRefreshData] = React.useState(false);
     // snackabr
-    const [ openSnackBar, setOpenSnackBar ] = React.useState(false); 
+    const [openSnackBar, setOpenSnackBar] = React.useState(false);
     const [message, setMessage] = React.useState("");
 
     const handleChange = (event: any) => {
@@ -41,9 +41,9 @@ export default function RecruitersList() {
     const isContain = (sectors: string[]) => {
         var bool = false;
 
-        if(sectors === null || sectors.length === 0) { return bool }
+        if (sectors === null || sectors.length === 0) { return bool }
 
-        sectors.forEach(sec => {bool = bool || sec.includes(searchValue)});
+        sectors.forEach(sec => { bool = bool || sec.includes(searchValue) });
 
         return bool;
     }
@@ -131,14 +131,23 @@ export default function RecruitersList() {
 
                     ).map((filtered_recruiter, i) => (
                         <React.Fragment key={filtered_recruiter._id}>
-                            <ListItemButton key={filtered_recruiter._id} disableRipple sx={{ ":hover": { backgroundColor: 'rgba(25, 118, 210, 0.08)' }, ":focus": { backgroundColor: 'rgba(25, 118, 210, 0.08)' } }}>
+                            <ListItemButton key={filtered_recruiter._id} disableRipple sx={{
+                                ":hover": { backgroundColor: 'rgba(25, 118, 210, 0.08)' },
+                                ":focus": { backgroundColor: 'rgba(25, 118, 210, 0.08)' },
+                                // height: '50px',
+                            }}>
                                 <ListItemAvatar>
                                     <Avatar />
                                 </ListItemAvatar>
                                 <ListItemText primary={filtered_recruiter._firstName + ' ' + filtered_recruiter._lastName} secondary={filtered_recruiter._email} />
+                            <Box sx={{paddingRight: '16px', paddingLeft: '16px'}}>
+                                <Box sx={{ width: '80px',display: 'flex',justifyContent: 'center'}}>
                                 <RecruiterDialog recruiter={filtered_recruiter} recruitersList={recruitersList} setRecruitersList={setRecruitersList} setOpenSnackBar={setOpenSnackBar} setMessage={setMessage} />
+                                </Box>
+                              
+                            </Box>
                             </ListItemButton>
-                            {recruitersList.length === i + 1 ? <></> : <Divider /> }
+                            {recruitersList.length === i + 1 ? <></> : <Divider />}
                         </React.Fragment>
                     ))}
                 </Box>
