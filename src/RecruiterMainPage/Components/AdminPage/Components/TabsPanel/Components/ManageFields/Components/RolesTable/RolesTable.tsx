@@ -10,7 +10,6 @@ import {
     GridToolbarContainer,
     GridToolbarQuickFilter,
     GridEventListener,
-    GridRowParams
 
 } from '@mui/x-data-grid';
 import { GridFooterContainerSx, TypographyFooterSx } from '../../../../../../../../ManageJobsPage/Components/MyTable/MyTableStyle';
