@@ -109,11 +109,7 @@ export default function ScheduleInterviewDialog(props: { open, onClose, candidat
             interviewDate?.setHours(interviewTime.getHours());
             interviewDate?.setMinutes(interviewTime.getMinutes());
             await candidateJobStatus?.updateStatus(newStatus, interviewDate);
-            const link = await candidateJobStatus?.getWhatsappUrl(
-                new Recruiter("asd@gmail.com", "firstname", "lastname", ["sector1", "sector2"]),
-                interviewDate,
-                "makom"
-            );
+            const link = await candidateJobStatus?.getWhatsappUrl("שדג");
 
             window.open(link);
         } else
