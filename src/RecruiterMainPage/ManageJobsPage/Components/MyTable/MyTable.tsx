@@ -180,7 +180,7 @@ const GridCustomToolbar = ( {syncState }: {syncState: (stateToSave: GridInitialS
 	const navigate = useNavigate();
 
     const handleCreatejob = () => {
-        navigate("/createJob", { state: null });
+        navigate("/management/createJob", { state: null });
     }
 
 	return (

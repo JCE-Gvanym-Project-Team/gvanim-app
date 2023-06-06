@@ -120,7 +120,7 @@ export default function WelcomePage() {
 
                         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 1 }}>
 
-                            <Link onClick={()=>navigate("/manageJobs")}
+                            <Link onClick={()=>navigate("/management/manageJobs")}
                                 sx={{
                                     cursor: 'pointer',
                                     ":hover > #arrow": {
@@ -168,7 +168,7 @@ export default function WelcomePage() {
 
                         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 1 }}>
 
-                            <Link onClick={()=>navigate("/reports")}
+                            <Link onClick={()=>navigate("/management/reports")}
                                 sx={{
                                     cursor: 'pointer',
                                     ":hover > #arrow": {
@@ -215,7 +215,7 @@ export default function WelcomePage() {
 
                         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 1 }}>
 
-                            <Link onClick={()=>navigate("/manageCandidates")} 
+                            <Link onClick={()=>navigate("/management/manageCandidates")} 
                                 sx={{
                                     cursor: 'pointer',
                                     ":hover > #arrow": {

@@ -4,7 +4,11 @@ import  { useEffect, useState } from "react"
 import RecruiterMainPage from "../../RecruiterMainPage";
 import { loginRecruiter, loguotRecruiter } from "../../../Firebase/FirebaseFunctions/Authentication";
 import firebase from "../../../Firebase/FirebaseConfig/firebase";
+import { createTheme } from "@mui/material";
 
+const recruitersPageTheme = createTheme({
+	direction: 'rtl',
+});
 
 export default function Auth () {
   const [email, setEmail] = useState('');
