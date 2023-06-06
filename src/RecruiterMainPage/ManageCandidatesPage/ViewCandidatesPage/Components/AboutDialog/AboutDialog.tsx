@@ -2,8 +2,9 @@ import { Close } from '@mui/icons-material';
 import { Box, Button, Dialog, DialogContent, DialogTitle, IconButton } from '@mui/material';
 import React from 'react'
 import { dialogContentStyle, dialogContentSx, dialogSx, dialogTitleSx, dialogTopAreaSx } from './AboutDialogStyle';
+import { Candidate } from '../../../../../Firebase/FirebaseFunctions/Candidate';
 
-export default function AboutDialog(props: { open, onClose })
+export default function AboutDialog(props: { open, onClose, candidate: Candidate | null})
 {
 
     const { open, onClose } = props;

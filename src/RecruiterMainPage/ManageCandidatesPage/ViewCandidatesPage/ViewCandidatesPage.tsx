@@ -11,6 +11,7 @@ import { Job, getFilteredJobs } from '../../../Firebase/FirebaseFunctions/Job';
 import { CandidateJobStatus, getFilteredCandidateJobStatuses } from '../../../Firebase/FirebaseFunctions/CandidateJobStatus';
 import NotesPopup from './Components/NotesPopup/NotesPopup';
 import { AccountCircle, ArticleOutlined, EditNote, QuestionAnswer, SpeakerNotes } from '@mui/icons-material';
+import AboutDialog from './Components/AboutDialog/AboutDialog';
 
 export default function ViewCandidatesPage(props: { candidateId: string })
 {
@@ -222,6 +223,7 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 							</Box>
 						</Box>
 
+						<AboutDialog open={true} onClose={() => {}} candidate={candidateInfo}/>
 
 						{/* text */}
 						<Box sx={candidateNameAndEditButtonContainerSx}>
