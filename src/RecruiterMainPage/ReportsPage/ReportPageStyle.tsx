@@ -51,3 +51,9 @@ export const BootstrapInput = styled(InputBase)(({ theme }) => ({
     minHeight: '100vh',
     marginRight: '30%'
   };
+
+
+  export const radioStyle = {
+    display: 'flex',
+    gap: '16px' 
+  }

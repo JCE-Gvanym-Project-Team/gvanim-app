@@ -10,6 +10,7 @@ import rejection from '../../../../Firebase/FirebaseFunctions/Reports/Rejection'
 import { getFilteredJobs, loginAdmin } from '../../../../Firebase/FirebaseFunctions/functionIndex';
 import { exportToExcel } from '../../../../Firebase/FirebaseFunctions/Reports/GlobalFunctions'
 import * as XLSX from 'xlsx';
+import { formContainerStyles } from '../../ReportPageStyle';
 
 
 
@@ -161,10 +162,10 @@ export default function RejectionReportForm() {
           />
         </DemoContainer>
       </LocalizationProvider>
+      
       {/* create report */}
       <button onClick={() => createReport(rejectionCause, region, role, startDate, endDate)}>צור דוח</button>
 
-      {/* <a href="#" id="download-report-button" download="report1.xlsx" onClick={() => createReport(rejectionCause, region, role, startDate, endDate)}>צור דו"ח</a> */}
     </FormControl>
     </div>
   );

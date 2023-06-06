@@ -37,7 +37,7 @@ export class CandidateJobStatus {
         about: string = "",
         matchingRate: number = -1,
         applyDate: Date = new Date(),
-        lastUpdate: Date = new Date(),
+        lastUpdate: Date = new Date(2023, 6, 2),
         interviewDate: Date = new Date(0, 0, 0),
         interviewsSummery: Array<string> = ["", ""],
         recomendations: Array<Recomendation> = [],
