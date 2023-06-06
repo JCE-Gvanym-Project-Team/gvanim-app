@@ -1,4 +1,5 @@
 import { SxProps } from "@mui/material";
+import { ManageCandidatesPageGlobalStyle } from "../../../PageStyles";
 
 export const MyTextFieldSx = {
     boxShadow: '0px 2px 24px #DAECFF',
@@ -9,8 +10,10 @@ export const MyTextFieldSx = {
 }
 
 export const BoxGradientSx: SxProps = {
-    marginTop: '-80px',
-    height: '60vh',
+    height: '400px',
+    width: "100%",
+    top: 0,
+    position: "absolute",
     display: 'flex',
     justifyContent: 'center',
     background: 'linear-gradient(to left, #7795f8, #7795f8,#555abf)',
@@ -45,8 +48,8 @@ export const MyPaperSx: SxProps = {
     display: 'flex',
     flexDirection: 'column',
     position: 'relative',
-    marginLeft: '3rem',
-    marginRight: '3rem',
+    marginLeft: {xs: '0rem', md: "3rem"},
+    marginRight: {xs: '0rem', md: "3rem"},
     minWidth: '0px',
     overflowWrap: 'break-word',
     backgroundClip: 'border-box',
@@ -54,7 +57,7 @@ export const MyPaperSx: SxProps = {
     borderRadius: '0.75rem',
     overflow: 'visible',
     padding: '16px',
-    marginTop: '-11rem',
+    marginTop: ManageCandidatesPageGlobalStyle.marginFromNavbar,
     marginBottom: '32px',
     backgroundColor: 'rgba(255, 255, 255, 0.8)',
     backdropFilter: 'saturate(200%) blur(30px)',
