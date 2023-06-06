@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Typography from '@mui/material/Typography';
-import { Box, Button, Chip, Container, Stack, styled, useTheme } from '@mui/material';
+import { Box, Button, Container, Stack, styled, useTheme } from '@mui/material';
 import
 {
 	DataGrid, GridToolbarFilterButton,
@@ -9,16 +9,15 @@ import
 	GridInitialState,
 	useGridRootProps,
 	useGridApiContext,
-	GridToolbarContainer, heIL, GridFooterContainer, GridToolbarQuickFilter, GridToolbarExportContainer, GridCsvExportMenuItem, GridPrintExportMenuItem
+	GridToolbarContainer, heIL, GridFooterContainer, GridToolbarQuickFilter, GridToolbarExportContainer, GridPrintExportMenuItem
 } from '@mui/x-data-grid';
 import { GridFooterContainerSx, TypographyFooterSx, dataGridContainerStyle, dataGridContainerSx, dataGridSx } from './JobsTableStyle';
 import { useNavigate } from "react-router-dom";
-import { ArticleOutlined, Edit, QuestionAnswer, Recommend } from '@mui/icons-material';
+import { ArticleOutlined, PictureAsPdfSharp, Recommend } from '@mui/icons-material';
 import CandidatesListFullScreenDialog from '../../../../ManageJobsPage/Components/CandidatesListDialog/CandidatesListDialog';
 import MyDropMenu from '../../../../ManageJobsPage/Components/MyDropMenu/MyDropMenu';
-import { Job, getFilteredJobs } from '../../../../../Firebase/FirebaseFunctions/Job';
 import { Candidate, CandidateJobStatus, getFilteredCandidateJobStatuses } from '../../../../../Firebase/FirebaseFunctions/functionIndex';
-import { interviewsButtonSx, recommendationsButtonSx } from '../../ViewCandidatesPageStyle';
+import { recommendationsButtonSx } from '../../ViewCandidatesPageStyle';
 import RecommendersDialog from '../RecommendersDialog/RecommendersDialog';
 import MyChip from '../MyChip/MyChip';
 
@@ -96,13 +95,6 @@ export default function JobsTable(props: { setDataSize: any, candidateJobs: any,
 			align: 'left',
 		},
 		{
-			field: '_scope',
-			headerName: 'אחוז משרה',
-			width: 150,
-			editable: false,
-			align: 'left',
-		},
-		{
 			field: 'status',
 			headerName: 'סטטוס',
 			description: 'עמודה זו אינה ניתנת למיון',
@@ -113,7 +105,7 @@ export default function JobsTable(props: { setDataSize: any, candidateJobs: any,
 			renderCell: (job) =>
 			{
 				return (
-					<MyChip jobId={job.id.toString()} candidate={candidateInfo} purpose={"status"}/>
+					<MyChip jobId={job.id.toString()} candidate={candidateInfo} purpose={"status"} />
 				);
 			},
 		},
@@ -129,13 +121,13 @@ export default function JobsTable(props: { setDataSize: any, candidateJobs: any,
 			renderCell: (job) =>
 			{
 				return (
-					<MyChip jobId={job.id.toString()} candidate={candidateInfo} purpose={"matching rate"}/>
+					<MyChip jobId={job.id.toString()} candidate={candidateInfo} purpose={"matching rate"} />
 				);
 			}
 		},
 		{
-			field: '_recommenders',
-			headerName: '',
+			field: '_CVs',
+			headerName: 'קורות חיים',
 			description: 'עמודה זו אינה ניתנת למיון',
 			width: 150,
 			hideSortIcons: true,
@@ -153,10 +145,46 @@ export default function JobsTable(props: { setDataSize: any, candidateJobs: any,
 				});
 				return (
 					<>
-						<Button sx={recommendationsButtonSx} variant="contained" startIcon={<Recommend />} onClick={openRecommendersDialog}>
+						<Button sx={recommendationsButtonSx} 
+						variant="outlined" 
+						startIcon={<PictureAsPdfSharp />} 
+						onClick={() => {
+							// TODO: add CV functionality here
+						}}>
+							קו"ח
+						</Button>
+					</>
+				);
+			},
+		},
+		{
+			field: '_recommenders',
+			headerName: 'ממליצים',
+			description: 'עמודה זו אינה ניתנת למיון',
+			width: 150,
+			hideSortIcons: true,
+			filterable: false,
+			hideable: false,
+			disableColumnMenu: true,
+			disableExport: true,
+			editable: false,
+
+			renderCell: (job) =>
+			{
+				getFilteredCandidateJobStatuses(["jobNumber", "candidateId"], [job.id.toString(), candidate ? candidate._id : ""]).then(result =>
+				{
+					setCandidateJobStatus(result[0]);
+				});
+				return (
+					<>
+						<Button sx={recommendationsButtonSx} variant="outlined" startIcon={<Recommend />} onClick={openRecommendersDialog}>
 							ממליצים
 						</Button>
-						<RecommendersDialog open={recommendersDialogOpen} onClose={closeRecommendersDialog} jobId={job.id.toString()} />
+						<RecommendersDialog
+							open={recommendersDialogOpen}
+							onClose={closeRecommendersDialog}
+							jobId={job.id.toString()}
+							candidateId={candidateInfo?._id !} />
 					</>
 				);
 			},
@@ -174,7 +202,14 @@ export default function JobsTable(props: { setDataSize: any, candidateJobs: any,
 				const { id } = job.row;
 				return <CandidatesListFullScreenDialog JobId={id} />;
 			},
-		}
+		},
+		{
+			field: '_scope',
+			headerName: 'אחוז משרה',
+			width: 150,
+			editable: false,
+			align: 'left',
+		},
 	];
 
 	const fetchAllJobs = async () =>
@@ -328,19 +363,6 @@ const GridCustomToolbar = ({ syncState }: { syncState: (stateToSave: GridInitial
 
 	return (
 		<GridToolbarContainer>
-			<Stack direction='row' sx={{ width: '100%' }}>
-				<Box sx={{ width: '100%' }}>
-					<GridToolbarQuickFilter variant='outlined' size='small' sx={{ width: '100%' }} />
-				</Box>
-				<Box sx={{ display: 'flex', flexDirection: 'row-reverse', width: '100%' }}>
-					<Box>
-
-						<Button type="button" endIcon={<ArticleOutlined />} onClick={handleCreatejob} variant='contained' fullWidth>משרה חדשה</Button>
-
-					</Box>
-				</Box>
-
-			</Stack>
 
 
 			<Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', borderBottomColor: 'rgba(224, 224, 224, 1)' }}>

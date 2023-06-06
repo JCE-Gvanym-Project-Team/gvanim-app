@@ -18,7 +18,7 @@ export const changeJobButtonSx: SxProps = {
 }
 
 export const recommendationsButtonSx: SxProps = {
-    backgroundColor: ManageCandidatesPageGlobalStyle.recommendationsButtonColor,
+    // backgroundColor: ManageCandidatesPageGlobalStyle.recommendationsButtonColor,
     alignSelf: 'center'
 }
 

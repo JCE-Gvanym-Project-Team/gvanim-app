@@ -24,7 +24,7 @@ export const interviewSummaryTextSx: SxProps = {
 }
 
 export const interviewSummaryContentSx: SxProps = {
-    width: { sx: "100%", md: "90%" },
+    width: { sx: "100%", md: "100%" },
     marginBottom: "1rem"
 }
 

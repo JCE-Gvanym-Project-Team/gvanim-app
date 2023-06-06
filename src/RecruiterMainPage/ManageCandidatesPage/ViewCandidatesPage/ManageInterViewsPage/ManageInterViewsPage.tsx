@@ -242,7 +242,7 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 
 				{/* glass container */}
 				<Box>
-					<Box sx={{ marginLeft: "3rem", marginRight: "3rem" }}>
+					<Box sx={{ marginLeft: { xs: "0", md: "3rem" }, marginRight: { xs: "0", md: "3rem" } }} >
 						<Stack direction={'column'} sx={mainStackSx} spacing={6}>
 
 							<Box sx={candidateNameAndButtonSx}>
@@ -425,7 +425,7 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 						</Stack>
 					</Box>
 				</Box>
-			</React.Fragment>
+			</React.Fragment >
 	)
 }
 
