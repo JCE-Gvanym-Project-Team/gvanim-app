@@ -1,5 +1,6 @@
 import { SxProps } from "@mui/material";
 import { CSSProperties } from "@mui/material/styles/createTypography";
+import { ManageCandidatesPageGlobalStyle } from "../../../../PageStyles";
 
 export const MyTextFieldSx = {
     boxShadow: '0px 2px 24px #DAECFF',
@@ -10,11 +11,13 @@ export const MyTextFieldSx = {
 }
 
 export const BoxGradientSx: SxProps = {
-    marginTop: '-80px',
-    height: '45vh',
+    height: '400px',
+    width: "100%",
+    top: 0,
+    position: "absolute",
     display: 'flex',
     justifyContent: 'center',
-    background: 'linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%)',
+    background: 'linear-gradient(to left, #7795f8, #7795f8,#555abf)',
 }
 
 export const MyTitleBoxSx: SxProps = {
@@ -41,7 +44,7 @@ export const MyTitleBoxSx: SxProps = {
 }
 
 export const MyPaperSx: SxProps = {
-    width: {sm:"100%" , md: "60%", lg: "60%", xl: "40%"},
+    width: { sm: "100%", md: "60%", lg: "60%", xl: "40%" },
     height: 'fit-content',
     color: 'rgba(0, 0, 0, 0.87)',
     transition: 'box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
@@ -57,7 +60,7 @@ export const MyPaperSx: SxProps = {
     borderRadius: '0.75rem',
     overflow: 'visible',
     padding: '16px',
-    marginTop: '-11rem',
+    marginTop: ManageCandidatesPageGlobalStyle.marginFromNavbar,
     marginBottom: '32px',
     backgroundColor: 'rgba(255, 255, 255, 0.8)',
     backdropFilter: 'saturate(200%) blur(30px)',
@@ -75,17 +78,17 @@ export const MyTextFieldStyle: CSSProperties = {
     color: "#24292f",
     border: "1px solid #d0d7de",
     boxShadow: "0px 2px 24px #DAECFF",
-  
-    "&:hover" : {
-      borderColor: "#3399FF"
+
+    "&:hover": {
+        borderColor: "#3399FF"
     },
-  
-    "&:focus" : {
-      borderColor: "#3399FF",
-      boxShadow: "0 0 0 3px #b6daff"
+
+    "&:focus": {
+        borderColor: "#3399FF",
+        boxShadow: "0 0 0 3px #b6daff"
     },
-  
-    "&:focus-visible" : {
-      outline: 0
+
+    "&:focus-visible": {
+        outline: 0
     }
 }
