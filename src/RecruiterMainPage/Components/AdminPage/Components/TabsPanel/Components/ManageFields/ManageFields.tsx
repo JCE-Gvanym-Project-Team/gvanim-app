@@ -1,22 +1,20 @@
-import { Grid, Typography } from "@mui/material";
-import RolesTable from "./Components/RolesTable";
-import SectorsTable from "./Components/SectorsTable";
-
-
+import { Divider, Grid, Stack, Typography } from "@mui/material";
+import RolesTable from "./Components/RolesTable/RolesTable";
+import SectorsTable from "./Components/SectorsTable/SectorsTable";
 
 export default function ManageFields() {
 
 
     return (
-        <Grid container spacing={{ md: 5, lg: 6, xl: 9 }} padding={3}>
-            <Grid item xs={12} md={6}>
+        <Stack direction={{xs: 'column',sm: 'column',md: 'column',lg: 'row',xl: 'row',}} divider={<Divider />} spacing={{xs: 4, sm: 4, md: 4, lg: 2, xl: 2}} padding={{xs: 0, sm: 0, md: 0, lg: 2, xl: 2}}>
+            <Grid sx={{ width: '100%', height: '100%'}}>
                 <Typography sx={{ fontFamily: "'Noto Sans Hebrew', sans-serif", fontWeight: 600, padding: 1, paddingRight: 2 }} variant='h6'> תפקידים </Typography>
                 <RolesTable />
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid sx={{width: '100%',height: '100%'}}>
                 <Typography sx={{ fontFamily: "'Noto Sans Hebrew', sans-serif", fontWeight: 600, padding: 1, paddingRight: 2 }} variant='h6'> אשכולות </Typography>
                 <SectorsTable />
             </Grid>
-        </Grid>
+        </Stack>
     );
 }

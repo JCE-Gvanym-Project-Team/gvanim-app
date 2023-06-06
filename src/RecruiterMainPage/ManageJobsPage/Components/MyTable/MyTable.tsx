@@ -4,15 +4,27 @@ import { Box, Button, Container, Stack, styled, useTheme } from '@mui/material';
 import MyDropMenu from '../MyDropMenu/MyDropMenu';
 import
 {
-	DataGrid, GridToolbarFilterButton,
-	GridColDef, GridToolbarDensitySelector,
+	DataGrid, 
+	GridToolbarFilterButton,
+	GridColDef, 
+	GridToolbarDensitySelector,
 	GridToolbarColumnsButton,
 	GridInitialState,
-	useGridRootProps,
-	useGridApiContext,
-	GridToolbarContainer, heIL, GridFooterContainer, GridToolbarQuickFilter, GridToolbarExportContainer, GridPrintExportMenuItem
+	GridToolbarContainer,
+	GridFooterContainer,
+	GridToolbarQuickFilter,
+	GridToolbarExportContainer,
+	GridPrintExportMenuItem,
+	heIL,
+
 } from '@mui/x-data-grid';
-import { GridFooterContainerSx, TypographyFooterSx, dataGridContainerStyle, dataGridContainerSx, dataGridSx } from './MyTableStyle';
+import { 
+	GridFooterContainerSx, 
+	TypographyFooterSx, 
+	dataGridContainerStyle, 
+	dataGridContainerSx, 
+	dataGridSx 
+} from './MyTableStyle';
 import CandidatesListFullScreenDialog from '../CandidatesListDialog/CandidatesListDialog';
 import { getFilteredJobs } from '../../../../Firebase/FirebaseFunctions/Job';
 import { useNavigate } from "react-router-dom";
@@ -119,8 +131,8 @@ const columns: GridColDef[] = [
 		field: '_jobNumber',
 		headerName: "מס' משרה",
 		width: 150,
-		headerAlign: 'center',
-		align: 'center'
+		headerAlign: 'left',
+		align: 'left'
 	},
 
 	{
@@ -128,8 +140,8 @@ const columns: GridColDef[] = [
 		headerName: 'איזור',
 		width: 200,
 		editable: false,
-		headerAlign: 'center',
-		align: 'center'
+		headerAlign: 'left',
+		align: 'left'
 
 
     },
@@ -137,8 +149,8 @@ const columns: GridColDef[] = [
         field: '_role',
         headerName: 'תפקיד',
         width: 300,
-		headerAlign: 'center',
-		align: 'center'
+		headerAlign: 'left',
+		align: 'left'
     },
     {
         field: '_scope',
@@ -160,15 +172,11 @@ const columns: GridColDef[] = [
 			const { id } = job.row;
 			return <CandidatesListFullScreenDialog JobId={id} />;
         },
-        // valueGetter: (params: GridValueGetterParams) =>
-        //     `${params.row.firstName || ''} ${params.row.lastName || ''}`,
     },
 ];
 
 const GridCustomToolbar = ( {syncState }: {syncState: (stateToSave: GridInitialState) => void;}) => 
 {
-	const rootProps = useGridRootProps();
-	const apiRef = useGridApiContext();
 	const navigate = useNavigate();
 
     const handleCreatejob = () => {
@@ -271,13 +279,8 @@ export default function MyTable(props: { setDataSize: any }) {
 					rows={allJobs}
 					columns={columns}
 					onRowDoubleClick={(job) => navigate(`../jobs/${job.id}`)}
-
-					// checkboxSelection
-					// disableRowSelectionOnClick
-					// disableColumnMenu
 					hideFooterSelectedRowCount
 					hideFooterPagination
-					// hideFooter
 					localeText={heIL.components.MuiDataGrid.defaultProps.localeText}
 					slots={{ noRowsOverlay: CustomNoRowsOverlay, toolbar: GridCustomToolbar, footer: CustomFooter }} />
 
