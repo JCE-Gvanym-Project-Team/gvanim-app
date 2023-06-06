@@ -79,7 +79,7 @@ function RecruiterMainPage({ handlelogout })
 
 				{/* Reports Routes */}
 				<Route path="reports" element={<ReportsPage />} />
-				<Route path="reports/rejection" element={<ReportRejection />} />
+				{/* <Route path="reports/rejection" element={<ReportRejection />} /> */}
 				<Route path="reports/CandidateByFilters" element={<CandidateFiltersForm />} />
 
 				{/* Admin Routes */}

@@ -49,8 +49,8 @@ const columns: GridColDef[] = [
 ];
 
 const rows = [
-    { id: 1, name: "מועדמים שנדחו" },
-    { id: 2, name: "מועמדים על פי פילטרים" },
+    // { id: 1, name: "מועדמים שנדחו" },
+    { id: 1, name: "מועמדים על פי פילטרים" },
 ];
 
 function CustomFooter() {
@@ -73,8 +73,8 @@ export default function MyTable() {
 
     const onRowClick = (params, event) => {
         const actions = {
-            1: () => navigate('rejection'),
-            2: () => navigate('CandidateByFilters')
+            1: () => navigate('CandidateByFilters'),
+            // 2: () => navigate('CandidateByFilters')
             // הוסיפו פעולות נוספות כרצונכם לפי הערכים הנדרשים
         };
 
