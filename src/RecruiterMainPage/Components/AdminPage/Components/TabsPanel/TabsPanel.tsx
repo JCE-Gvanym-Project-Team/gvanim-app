@@ -48,7 +48,7 @@ export default function TabsPane() {
         <Box sx={{ width: '100%' }}>
 
 
-            <Tabs id="mobileTabs" value={value} onChange={handleChange} centered sx={{ display: { xs: 'flex', sm: 'none', md: 'none', lg: 'none', xl: 'none' }, borderBottom: '1px solid rgba(0, 0, 0, 0.12)' }}>
+            <Tabs id="mobileTabs" value={value} onChange={handleChange} centered sx={{ display: { xs: 'flex', sm: 'none', md: 'none', lg: 'none', xl: 'none' }}}>
                 <Tooltip title={'הגדרות משתמש'}>
                     <Tab disableRipple icon={<ManageAccounts />} {...a11yProps(0)} />
                 </Tooltip>
@@ -62,7 +62,7 @@ export default function TabsPane() {
                 </Tooltip>
             </Tabs>
 
-            <Tabs id="desktopTabs" value={value} onChange={handleChange} centered sx={{ display: { xs: 'none', sm: 'flex', md: 'flex', lg: 'flex', xl: 'flex' }, paddingBottom: 0, borderBottom: '1px solid rgba(0, 0, 0, 0.12)' }}>
+            <Tabs id="desktopTabs" value={value} onChange={handleChange} centered sx={{ display: { xs: 'none', sm: 'flex', md: 'flex', lg: 'flex', xl: 'flex' }, paddingBottom: 0 }}>
 
                 <Tab disableRipple label="הגדרות משתמש" {...a11yProps(0)} />
 
