@@ -1,7 +1,6 @@
 import { SxProps } from "@mui/material";
 
 export const ManageJobPageBoxSx: SxProps = {
-    marginTop: '-20vh',
     backgroundColor: '#fff',
     width: '100%',
     height: '100%'

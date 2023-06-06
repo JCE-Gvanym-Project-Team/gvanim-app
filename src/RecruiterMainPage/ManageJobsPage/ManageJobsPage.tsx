@@ -10,31 +10,37 @@ import { BoxGradientSx } from "../PageStyles";
 import { ArticleOutlined } from "@mui/icons-material";
 
 
-const ManageJobsPage = () => {
+const ManageJobsPage = () =>
+{
     const [loading, setLoading] = useState(true);
     const [dataSize, setDataSize] = useState(0);
     const [open, setOpen] = useState(false);
 
     const { state } = useLocation();
 
-        // for the snackbar
-        if (state !== null) {
-            setOpen(true);
-        }
+    // for the snackbar
+    if (state !== null)
+    {
+        setOpen(true);
+    }
 
 
-    useEffect(() => {
+    useEffect(() =>
+    {
         setLoading(true);
-        setTimeout(() => {
+        setTimeout(() =>
+        {
             setLoading(false);
         }, 1000);
     }, []);
 
 
-    if (loading) {
+    if (loading)
+    {
         return (<MyLoading />);
     }
-    else {
+    else
+    {
         return (
             <>
                 <Box sx={BoxGradientSx}>
@@ -124,15 +130,15 @@ const ManageJobsPage = () => {
                         position: 'absolute',
                     }} />
 
-                    <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                       <Stack direction='row' spacing={1}>
-                        <Box sx={{display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
-                        <ArticleOutlined sx={{color: '#fff'}} />
-                        </Box>
-                       <Typography variant="h4" sx={{ color: '#fff', fontFamily: "'Noto Sans Hebrew', sans-serif", fontWeight: 500 }}>
-                            ניהול משרות
-                        </Typography>
-                       </Stack>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', top:"165px", position:"absolute"}}>
+                        <Stack direction='row' spacing={1}>
+                            <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                                <ArticleOutlined sx={{ color: '#fff' }} />
+                            </Box>
+                            <Typography variant="h4" sx={{ color: '#fff', fontFamily: "'Noto Sans Hebrew', sans-serif", fontWeight: 500 }}>
+                                ניהול משרות
+                            </Typography>
+                        </Stack>
                     </Box>
                 </Box>
 

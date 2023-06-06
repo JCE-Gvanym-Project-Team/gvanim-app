@@ -1,11 +1,12 @@
 import { SxProps } from "@mui/material"
 
 export const BoxGradientSx: SxProps = {
-    marginTop: '-80px',
-    height: '65vh',
+    height: '300px',
+    width: "100%",
+    top: 0,
     display: 'flex',
     justifyContent: 'center',
-    background: 'linear-gradient(310deg, #7795f8,#555abf)',
+    background: 'linear-gradient(to left, #7795f8, #7795f8,#555abf)',
 }
 
 export const GlobalStyle = {

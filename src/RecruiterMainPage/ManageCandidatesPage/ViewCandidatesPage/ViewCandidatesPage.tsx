@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Button, Typography, Box, Stack, Rating } from '@mui/material'
 import EditIcon from '@mui/icons-material/Edit';
-import { editButtonSx, textSx, titleSx, mainStackSx, ContainerGradientSx, candidateNameSx, BoxGradientSx, candidateNameAndEditButtonContainerSx, jobTextSx, notesButtonSx, interviewsButtonSx, changeJobButtonSx, recommendationsButtonSx } from './ViewCandidatesPageStyle';
+import { editButtonSx, textSx, titleSx, mainStackSx, ContainerGradientSx, candidateNameSx, candidateNameAndEditButtonContainerSx, jobTextSx, notesButtonSx, interviewsButtonSx, changeJobButtonSx, recommendationsButtonSx } from './ViewCandidatesPageStyle';
+import { BoxGradientSx } from '../../PageStyles';
 import { ManageCandidatesPageGlobalStyle } from '../../PageStyles';
 import JobsTable from './Components/JobsTable/JobsTable';
 import { Candidate, getFilteredCandidates } from '../../../Firebase/FirebaseFunctions/Candidate';
@@ -171,7 +172,7 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 					position: 'absolute',
 				}} />
 
-				<Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+				<Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', top:"165px", position:"absolute"}}>
 					<Stack direction='row' spacing={1}>
 						<Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
 							<AccountCircle sx={{ color: '#fff' }} />
