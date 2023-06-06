@@ -220,7 +220,7 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 						position: 'absolute',
 					}} />
 
-					<Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', top:"165px", position:"absolute" }}>
+					<Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', top: "165px", position: "absolute" }}>
 						<Stack direction='row' spacing={1}>
 							<Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
 								<QuestionAnswer sx={{ color: '#fff' }} />
@@ -229,23 +229,22 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 								ראיונות
 							</Typography>
 						</Stack>
+						<Divider />
+						{/* Candidate Name */}
+						<Box sx={{ display: 'flex', alignSelf: "center" }}>
+							<Typography sx={candidateNameSx} variant='h3' >
+								{candidateInfo?._firstName + " " + candidateInfo?._lastName}
+							</Typography>
+
+						</Box>
 					</Box>
 				</Box>
 
 				{/* glass container */}
 				<Box>
-					<Box sx={{marginLeft: "3rem", marginRight: "3rem"}}>
+					<Box sx={{ marginLeft: "3rem", marginRight: "3rem" }}>
 						<Stack direction={'column'} sx={mainStackSx} spacing={6}>
 
-							{/* Candidate Name */}
-							<Box sx={{ display: 'flex', alignSelf: "center", alignItems: "center" }}>
-								<Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignSelf: "center" }}>
-									<AccountCircle sx={{ fontSize: '3rem' }} />
-								</Box>
-								<Typography sx={candidateNameSx} variant='h2' >
-									{candidateInfo?._firstName + " " + candidateInfo?._lastName}
-								</Typography>
-							</Box>
 							<Box sx={candidateNameAndButtonSx}>
 
 								{/* Schedule Interview Button*/}

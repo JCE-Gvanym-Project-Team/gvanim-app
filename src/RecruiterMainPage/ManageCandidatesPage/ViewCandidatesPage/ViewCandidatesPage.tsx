@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Button, Typography, Box, Stack, Rating } from '@mui/material'
+import { Button, Typography, Box, Stack, Rating, Divider } from '@mui/material'
 import EditIcon from '@mui/icons-material/Edit';
 import { editButtonSx, textSx, titleSx, mainStackSx, ContainerGradientSx, candidateNameSx, candidateNameAndEditButtonContainerSx, jobTextSx, notesButtonSx, interviewsButtonSx, changeJobButtonSx, recommendationsButtonSx } from './ViewCandidatesPageStyle';
 import { BoxGradientSx } from '../../PageStyles';
@@ -172,7 +172,7 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 					position: 'absolute',
 				}} />
 
-				<Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', top:"165px", position:"absolute"}}>
+				<Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', top: "165px", position: "absolute" }}>
 					<Stack direction='row' spacing={1}>
 						<Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
 							<AccountCircle sx={{ color: '#fff' }} />
@@ -181,24 +181,22 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 							צפייה במועמד
 						</Typography>
 					</Stack>
+					<Divider />
+					{/* Candidate Name */}
+					<Box sx={{ display: 'flex', alignSelf: "center" }}>
+						<Typography sx={candidateNameSx} variant='h3' >
+							{candidateInfo?._firstName + " " + candidateInfo?._lastName}
+						</Typography>
+
+					</Box>
 				</Box>
 			</Box>
 
 			{/* glass container */}
 			<Box >
-				<Box sx={{marginRight: "3rem", marginLeft: "3rem"}}>
+				<Box sx={{ marginRight: "3rem", marginLeft: "3rem" }}>
 					<Stack direction={'column'} sx={mainStackSx} spacing={6}>
 
-						{/* Candidate Name */}
-						<Box sx={{ display: 'flex', alignSelf: "center" }}>
-							<Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignSelf: "center" }}>
-								<AccountCircle sx={{ fontSize: '3rem' }} />
-							</Box>
-							<Typography sx={candidateNameSx} variant='h2' >
-								{candidateInfo?._firstName + " " + candidateInfo?._lastName}
-							</Typography>
-
-						</Box>
 
 						<Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
 
