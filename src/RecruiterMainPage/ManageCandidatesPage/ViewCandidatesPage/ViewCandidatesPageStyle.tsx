@@ -65,7 +65,6 @@ export const BoxGradientSx: SxProps = {
     height: '400px',
     width: "100%",
     top: 0,
-    position: "absolute",
     display: 'flex',
     justifyContent: 'center',
     background: 'linear-gradient(to left, #7795f8, #7795f8,#555abf)',

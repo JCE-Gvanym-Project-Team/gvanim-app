@@ -184,8 +184,8 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 			</Box>
 
 			{/* glass container */}
-			<Box sx={{ marginTop: ManageCandidatesPageGlobalStyle.marginFromNavbar }}>
-				<Box sx={ContainerGradientSx}>
+			<Box >
+				<Box sx={{marginRight: "3rem", marginLeft: "3rem"}}>
 					<Stack direction={'column'} sx={mainStackSx} spacing={6}>
 
 						{/* Candidate Name */}

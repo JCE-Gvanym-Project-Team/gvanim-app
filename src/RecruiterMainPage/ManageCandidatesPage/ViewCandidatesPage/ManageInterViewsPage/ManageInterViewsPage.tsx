@@ -232,8 +232,8 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 				</Box>
 
 				{/* glass container */}
-				<Box sx={{ marginTop: ManageCandidatesPageGlobalStyle.marginFromNavbar }}>
-					<Box sx={ContainerGradientSx}>
+				<Box>
+					<Box sx={{marginLeft: "3rem", marginRight: "3rem"}}>
 						<Stack direction={'column'} sx={mainStackSx} spacing={6}>
 
 							{/* Candidate Name */}
