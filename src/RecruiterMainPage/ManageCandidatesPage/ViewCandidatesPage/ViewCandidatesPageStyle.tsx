@@ -35,8 +35,7 @@ export const textSx: SxProps = {
 export const candidateNameAndEditButtonContainerSx: SxProps = {
     display: 'flex',
     justifyContent: 'space-between',
-    justifySelf: 'stretch',
-    flexGrow: '1'
+    justifySelf: 'stretch'
 }
 
 export const jobTextSx: SxProps = {
@@ -63,8 +62,10 @@ export const titleSx: SxProps = {
 }
 
 export const BoxGradientSx: SxProps = {
-    marginTop: '-80px',
-    height: '60vh',
+    height: '400px',
+    width: "100%",
+    top: 0,
+    position: "absolute",
     display: 'flex',
     justifyContent: 'center',
     background: 'linear-gradient(to left, #7795f8, #7795f8,#555abf)',

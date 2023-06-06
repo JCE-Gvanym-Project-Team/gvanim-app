@@ -81,11 +81,14 @@ export default function MyChip(props: { jobId: string, candidate: Candidate | nu
                 label={candidateJobStatus?._status}
                 icon={statusChipStyle?.icon}
                 sx={{ color: statusChipStyle?.textColor, backgroundColor: "white" }}
+                variant='outlined'
             />
             :
             <Chip
                 label={candidateJobStatus?._matchingRate === -1 ? "לא דורג" : candidateJobStatus?._matchingRate}
                 sx={getChipStyle(candidateJobStatus?._matchingRate)}
+                variant='outlined'
+
             />
     )
 }
