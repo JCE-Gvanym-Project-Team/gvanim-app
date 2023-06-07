@@ -53,8 +53,8 @@ function BootstrapDialogTitle(props: DialogTitleProps) {
     );
 }
 
-export default function ChangeStatusSectorDialog(props: { setSnackbar: any, row: any }) {
-    const { setSnackbar, row } = props;
+export default function ChangeStatusSectorDialog(props: { setSnackbar: any, row: any, setLoading: any }) {
+    const { setSnackbar, row, setLoading } = props;
     const { sector_status, sector_name } = row;
 
     const fromStatus = sector_status ? `פתוח` : `סגור`;
@@ -64,15 +64,18 @@ export default function ChangeStatusSectorDialog(props: { setSnackbar: any, row:
 
 
     const handleStatusChange = () => {
-        let sectorToEdit: Sector = new Sector(sector_name, sector_status); 
+        let sectorToEdit: Sector = new Sector(sector_name, sector_status);
 
-         sectorToEdit.edit(sector_name,!sector_status);
+        setLoading(true)
+        sectorToEdit.edit(sector_name, !sector_status);
+        setLoading(false);
+        
 
         setOpen(false);
-        
+
         setSnackbar({ children: `סטטוס האשכול '${sector_name}' שונה בהצלחה`, severity: 'success' });
 
-        row!.sector_status = !sector_status; 
+        row!.sector_status = !sector_status;
     };
 
     const handleClickOpen = () => {
@@ -88,12 +91,12 @@ export default function ChangeStatusSectorDialog(props: { setSnackbar: any, row:
             {sector_status ? (
                 <Tooltip title="סגור אשכול">
 
-                        <Chip onClick={handleClickOpen} sx={{padding: 0.5}} label={'פתוח'}size='small'  color="success" icon={<LockOpen sx={{fontSize: 'small'}} />} />
+                    <Chip onClick={handleClickOpen} variant='outlined' sx={{ padding: 0.5 }} label={'פתוח'} size='small' color="success" icon={<LockOpen sx={{ fontSize: 'small' }} />} />
 
                 </Tooltip>
             ) : (
                 <Tooltip title="פתח אשכול">
-                      <Chip onClick={handleClickOpen} sx={{padding: 0.65}} label={'סגור'} size='small' color="error" icon={<Lock sx={{fontSize: 'small'}} />} />
+                    <Chip onClick={handleClickOpen} variant='outlined' sx={{ padding: 0.65 }} label={'סגור'} size='small' color="error" icon={<Lock sx={{ fontSize: 'small' }} />} />
                 </Tooltip>
 
             )}
@@ -109,7 +112,7 @@ export default function ChangeStatusSectorDialog(props: { setSnackbar: any, row:
                 </BootstrapDialogTitle>
                 <DialogContent dividers>
                     <Typography gutterBottom>
-                        האם את/ה בטוח/ה שברצונך לשנות את סטטוס האשכול <strong style={{textDecoration: 'underline'}}>'{sector_name}'</strong> ממצב <strong style={{textDecoration: 'underline'}}>{fromStatus}</strong> למצב <strong style={{textDecoration: 'underline'}}>{toStatus}</strong> ?
+                        האם את/ה בטוח/ה שברצונך לשנות את סטטוס האשכול <strong style={{ textDecoration: 'underline' }}>'{sector_name}'</strong> ממצב <strong style={{ textDecoration: 'underline' }}>{fromStatus}</strong> למצב <strong style={{ textDecoration: 'underline' }}>{toStatus}</strong> ?
                     </Typography>
                 </DialogContent>
                 <DialogActions>

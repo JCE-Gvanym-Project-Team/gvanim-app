@@ -17,15 +17,13 @@ import
 		GridPrintExportMenuItem,
 		heIL,
 
-	} from '@mui/x-data-grid';
-import
-	{
-		GridFooterContainerSx,
-		TypographyFooterSx,
-		dataGridContainerStyle,
-		dataGridContainerSx,
-		dataGridSx
-	} from './MyTableStyle';
+} from '@mui/x-data-grid';
+import {
+	GridFooterContainerSx,
+	TypographyFooterSx,
+	dataGridContainerSx,
+	dataGridSx
+} from './MyTableStyle';
 import CandidatesListFullScreenDialog from '../CandidatesListDialog/CandidatesListDialog';
 import { getFilteredJobs } from '../../../../Firebase/FirebaseFunctions/Job';
 import { useNavigate } from "react-router-dom";
