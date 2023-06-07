@@ -12,6 +12,7 @@ import NotesPopup from './Components/NotesPopup/NotesPopup';
 import { AccountCircle, ArticleOutlined, EditNote, PictureAsPdfSharp, QuestionAnswer, SpeakerNotes } from '@mui/icons-material';
 import AboutDialog from './Components/AboutDialog/AboutDialog';
 import MyLoading from '../../../Components/MyLoading/MyLoading';
+import RecommendersDialog from './Components/RecommendersDialog/RecommendersDialog';
 
 export default function ViewCandidatesPage(props: { candidateId: string })
 {
@@ -21,8 +22,6 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 
 	// get jobs data size
 	const [dataSize, setDataSize] = useState(0);
-
-	const [aboutDialogOpen, setAboutDialogOpen] = useState(false);
 
 	// get candidate id
 	let { candidateId } = props;
@@ -88,6 +87,30 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 
 	// general rating
 	const [generalRating, setGeneralRating] = useState(0);
+
+	// AboutDialog
+	const [aboutDialogOpen, setAboutDialogOpen] = useState(false);
+	const [aboutDialogJobId, setAboutDialogJobId] = useState("");
+	// onClose for AboutDialog
+	const aboutDialogonClose = (event, reason) =>
+	{
+		if ((reason && reason !== "backdropClick") || reason === undefined)
+		{
+			setAboutDialogOpen(false);
+		}
+	}
+
+	// RecommendersDialog
+	const [recommendersDialogOpen, setRecommendersDialogOpen] = useState(false);
+	const [recommendersDialogJobId, setRecommendersDialogJobId] = useState("");
+
+	const closeRecommendersDialog = (event, reason) =>
+	{
+		if ((reason && reason !== "backdropClick") || reason === undefined)
+		{
+			setRecommendersDialogOpen(false);
+		}
+	}
 
 	return (
 		<>
@@ -224,6 +247,14 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 
 									<Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
 
+										{ /* edit button to make them on the same line */}
+										<Box sx={candidateNameAndEditButtonContainerSx}>
+											{/* Edit Button */}
+											<Button sx={editButtonSx} variant="contained" startIcon={<EditNote />} onClick={editCandidateHandler}>
+												עריכת פרטים
+											</Button>
+										</Box>
+
 										<Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
 											<Typography component="legend" sx={jobTextSx} style={{ fontSize: "24px" }}>דרגת התאמה כללית</Typography>
 											<Rating
@@ -237,17 +268,22 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 											/>
 										</Box>
 
-										{ /* edit button to make them on the same line */}
-										<Box sx={candidateNameAndEditButtonContainerSx}>
-											{/* Edit Button */}
-											<Button sx={editButtonSx} variant="contained" startIcon={<EditNote />} onClick={editCandidateHandler}>
-												עריכת פרטים
-											</Button>
-										</Box>
 									</Box>
 
-										<Divider />
-									<Box sx={{display: "flex", justifyContent: "space-between"}}>
+									<Divider />
+
+									{/* Dialogs */}
+									<AboutDialog open={aboutDialogOpen} onClose={aboutDialogonClose} candidate={candidateInfo} jobId={aboutDialogJobId} />
+
+									<RecommendersDialog
+										open={recommendersDialogOpen}
+										onClose={closeRecommendersDialog}
+										jobId={recommendersDialogJobId}
+										candidateId={candidateInfo?._id!}
+									/>
+
+
+									<Box sx={{ display: "flex", justifyContent: "space-between" }}>
 										<Button sx={recommendationsButtonSx}
 											variant="outlined"
 											startIcon={<PictureAsPdfSharp />}
@@ -267,7 +303,19 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 									</Box>
 
 									{/* Jobs table */}
-									<JobsTable setDataSize={setDataSize} candidateJobs={candidateJobs} candidateInfo={candidateInfo} />
+									<JobsTable
+										setDataSize={setDataSize}
+										candidateJobs={candidateJobs}
+										candidateInfo={candidateInfo}
+										// about dialog
+										setAboutDialogOpen={setAboutDialogOpen}
+										aboutDialogOnClose={aboutDialogonClose}
+										setAboutDialogJobId={setAboutDialogJobId}
+										// recommenders dialog
+										setRecommendersDialogOpen={setRecommendersDialogOpen}
+										setRecommendersDialogJobId={setRecommendersDialogJobId}
+										closeRecommendersDialog={closeRecommendersDialog}
+									/>
 
 									{/* Bottom Buttons */}
 									<Box sx={candidateNameAndEditButtonContainerSx}>

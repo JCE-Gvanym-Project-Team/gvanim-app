@@ -26,7 +26,7 @@ export default function AboutDialog(props: { open, onClose, candidate: Candidate
             <Box sx={dialogTopAreaSx}>
                 {/* Title */}
                 <DialogTitle sx={dialogTitleSx}>
-                    ספר לנו על עצמך
+                    ספר עליך
                 </DialogTitle>
 
                 <Box sx={{ display: "flex", justifyContent: "end" }}>
@@ -44,9 +44,9 @@ export default function AboutDialog(props: { open, onClose, candidate: Candidate
             </Box>
 
 
-            {/*  */}
+            {/* about text */}
             <DialogContent sx={dialogContentSx} style={dialogContentStyle}>
-                <Typography sx={{ fontFamily: ManageCandidatesPageGlobalStyle.textFontFamily, alignSelf: "center" }}>
+                <Typography sx={{ fontFamily: ManageCandidatesPageGlobalStyle.textFontFamily, alignSelf: "center", maxWidth: "100%", overflowWrap: "break-word"}}>
                     {candidateJobStatus?._about}
                 </Typography>
             </DialogContent>

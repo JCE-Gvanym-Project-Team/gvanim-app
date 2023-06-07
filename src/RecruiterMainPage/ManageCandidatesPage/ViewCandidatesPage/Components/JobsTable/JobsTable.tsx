@@ -13,7 +13,7 @@ import
 } from '@mui/x-data-grid';
 import { GridFooterContainerSx, TypographyFooterSx, dataGridContainerStyle, dataGridContainerSx, dataGridSx } from './JobsTableStyle';
 import { useNavigate } from "react-router-dom";
-import { ArticleOutlined, PictureAsPdfSharp, Recommend } from '@mui/icons-material';
+import { ArticleOutlined, Notes, PictureAsPdfSharp, Recommend, Sms } from '@mui/icons-material';
 import CandidatesListFullScreenDialog from '../../../../ManageJobsPage/Components/CandidatesListDialog/CandidatesListDialog';
 import MyDropMenu from '../../../../ManageJobsPage/Components/MyDropMenu/MyDropMenu';
 import { Candidate, CandidateJobStatus, getFilteredCandidateJobStatuses } from '../../../../../Firebase/FirebaseFunctions/functionIndex';
@@ -24,26 +24,37 @@ import AboutDialog from '../AboutDialog/AboutDialog';
 
 
 
-export default function JobsTable(props: { setDataSize: any, candidateJobs: any, candidateInfo: Candidate | null })
+export default function JobsTable(props: {
+	setDataSize: any,
+	candidateJobs: any,
+	candidateInfo: Candidate | null,
+	// about dialog
+	setAboutDialogOpen,
+	aboutDialogOnClose,
+	setAboutDialogJobId,
+	// recommenders dialog
+	setRecommendersDialogOpen,
+	setRecommendersDialogJobId,
+	closeRecommendersDialog
+
+})
 {
-	const { setDataSize, candidateJobs, candidateInfo } = props;
+	const { setDataSize,
+		candidateJobs,
+		candidateInfo,
+		setAboutDialogOpen,
+		aboutDialogOnClose,
+		setAboutDialogJobId,
+		setRecommendersDialogOpen,
+		setRecommendersDialogJobId,
+		closeRecommendersDialog
+	} = props;
 	const navigate = useNavigate();
 	const [allJobs, setAllJobs] = React.useState<any[]>([]);
-
-	// recommenders dialog
-	const [recommendersDialogOpen, setRecommendersDialogOpen] = React.useState(false);
 
 	const openRecommendersDialog = () =>
 	{
 		setRecommendersDialogOpen(true);
-	}
-
-	const closeRecommendersDialog = (event, reason) =>
-	{
-		if ((reason && reason !== "backdropClick") || reason === undefined)
-		{
-			setRecommendersDialogOpen(false);
-		}
 	}
 
 	// candidate job status
@@ -51,18 +62,6 @@ export default function JobsTable(props: { setDataSize: any, candidateJobs: any,
 
 	// candidate
 	const [candidate, setCandidate] = React.useState<Candidate | null>(null);
-
-	// AboutDialog
-	const [aboutDialogOpen, setAboutDialogOpen] = React.useState(false);
-
-	// onClose for AboutDialog
-	const aboutDialogonClose = (event, reason) =>
-	{
-		if ((reason && reason !== "backdropClick") || reason === undefined)
-		{
-			setAboutDialogOpen(false);
-		}
-	}
 
 	// columns object
 	const columns: GridColDef[] = [
@@ -139,7 +138,7 @@ export default function JobsTable(props: { setDataSize: any, candidateJobs: any,
 			}
 		},
 		{
-			field: '_recommenders',
+			field: '_about',
 			headerName: 'ספר לנו עליך',
 			description: 'עמודה זו אינה ניתנת למיון',
 			width: 150,
@@ -152,22 +151,18 @@ export default function JobsTable(props: { setDataSize: any, candidateJobs: any,
 
 			renderCell: (job) =>
 			{
-				getFilteredCandidateJobStatuses(["jobNumber", "candidateId"], [job.id.toString(), candidate ? candidate._id : ""]).then(result =>
-				{
-					setCandidateJobStatus(result[0]);
-				});
+				setAboutDialogJobId(job.id.toString());
 				return (
 					<>
 						<Button sx={recommendationsButtonSx}
 							variant="outlined"
-							startIcon={<PictureAsPdfSharp />}
+							startIcon={<Sms />}
 							onClick={() =>
 							{
 								setAboutDialogOpen(true);
 							}}>
-							ספר על עצמך
+							ספר עליך
 						</Button>
-						<AboutDialog open={aboutDialogOpen} onClose={aboutDialogonClose} candidate={candidateInfo} jobId={job.id.toString()}/>
 					</>
 				);
 			},
@@ -186,16 +181,12 @@ export default function JobsTable(props: { setDataSize: any, candidateJobs: any,
 
 			renderCell: (job) =>
 			{
+				setRecommendersDialogJobId(job.id);
 				return (
 					<>
 						<Button sx={recommendationsButtonSx} variant="outlined" startIcon={<Recommend />} onClick={openRecommendersDialog}>
 							ממליצים
 						</Button>
-						<RecommendersDialog
-							open={recommendersDialogOpen}
-							onClose={closeRecommendersDialog}
-							jobId={job.id.toString()}
-							candidateId={candidateInfo?._id!} />
 					</>
 				);
 			},
