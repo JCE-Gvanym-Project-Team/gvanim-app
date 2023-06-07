@@ -7,10 +7,6 @@ import firebase from "../../../Firebase/FirebaseConfig/firebase";
 import { createTheme } from "@mui/material";
 import MyLoading from "../../../Components/MyLoading/MyLoading";
 
-const recruitersPageTheme = createTheme({
-  direction: 'rtl',
-});
-
 export default function Auth() {
   const [loading, setLoading] = useState(true);
 
