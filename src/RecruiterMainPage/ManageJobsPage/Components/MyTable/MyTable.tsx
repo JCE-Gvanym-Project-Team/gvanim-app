@@ -20,7 +20,6 @@ import {
 import {
 	GridFooterContainerSx,
 	TypographyFooterSx,
-	dataGridContainerStyle,
 	dataGridContainerSx,
 	dataGridSx
 } from './MyTableStyle';
