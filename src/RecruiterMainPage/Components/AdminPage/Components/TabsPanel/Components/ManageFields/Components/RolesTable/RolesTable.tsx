@@ -1,18 +1,24 @@
 import * as React from 'react';
 import Typography from '@mui/material/Typography';
-import { Alert, AlertProps, Box, Button, IconButton, Snackbar, Stack, SxProps, Theme, Tooltip, styled, useTheme } from '@mui/material';
+import { Alert, AlertProps, Box, LinearProgress, Snackbar, Stack, SxProps, Theme, alpha, styled, useTheme } from '@mui/material';
 import {
     DataGrid,
     GridColDef,
     heIL,
-    GridFooterContainer,
     GridRowSelectionModel,
     GridToolbarContainer,
     GridToolbarQuickFilter,
     GridEventListener,
+    gridPageCountSelector,
+    gridPageSelector,
+    useGridApiContext,
+    useGridSelector,
+    gridClasses,
 
 } from '@mui/x-data-grid';
-import { GridFooterContainerSx, TypographyFooterSx } from '../../../../../../../../ManageJobsPage/Components/MyTable/MyTableStyle';
+import Pagination from '@mui/material/Pagination';
+import PaginationItem from '@mui/material/PaginationItem';
+import { TypographyFooterSx } from '../../../../../../../../ManageJobsPage/Components/MyTable/MyTableStyle';
 import MyRoleRemoveDialog from './Components/RemoveRoleDialog';
 import AddRoleDialog from './Components/AddRoleDialog';
 import { Role, getAllRoles } from '../../../../../../../../../Firebase/FirebaseFunctions/Role';
@@ -98,14 +104,22 @@ function CustomNoRowsOverlay() {
 
 
 
-const dataGridSx = (theme: Theme): SxProps => ({
-    height: '500px',
+const ODD_OPACITY = 0.2;
+
+const MyDataGrid = (theme: Theme): SxProps => ({
+    height: '503px',
     border: '1px solid rgba(0, 0, 0, 0.125)',
     borderRadius: '0.5rem',
     overflow: 'hidden',
     "&.MuiDataGrid-root .MuiDataGrid-cell:focus-within": {
         outline: "none !important",
 
+    },
+    "&.MuiDataGrid-root .MuiDataGrid-row:focus-within": {
+        background: alpha(
+            theme.palette.primary.main,
+            ODD_OPACITY + theme.palette.action.selectedOpacity,
+        ),
     },
 
     color:
@@ -126,6 +140,7 @@ const dataGridSx = (theme: Theme): SxProps => ({
     letterSpacing: 'normal',
     '& .MuiDataGrid-columnsContainer': {
         backgroundColor: theme.palette.mode === 'light' ? '#fafafa' : '#1d1d1d',
+        borderBottom: `1px solid ${theme.palette.mode === 'light' ? '#f0f0f0' : '#303030'}`,
     },
     '& .MuiDataGrid-iconSeparator': {
         display: 'none',
@@ -135,6 +150,7 @@ const dataGridSx = (theme: Theme): SxProps => ({
     },
     '& .MuiDataGrid-columnHeader, .MuiDataGrid-cell': {
         borderRight: `1px solid ${theme.palette.mode === 'light' ? '#f0f0f0' : '#303030'}`,
+        borderBottom: `1px solid ${theme.palette.mode === 'light' ? '#f0f0f0' : '#303030'}`,
     },
     '& .MuiDataGrid-columnsContainer, .MuiDataGrid-cell': {
         borderBottom: `1px solid ${theme.palette.mode === 'light' ? '#f0f0f0' : '#303030'
@@ -146,12 +162,66 @@ const dataGridSx = (theme: Theme): SxProps => ({
     },
     '& .MuiPaginationItem-root': {
         borderRadius: 0,
-    }
+    },
+    [`& .${gridClasses.row}.even`]: {
+        backgroundColor: theme.palette.grey[100],
+        '&:hover, &.Mui-hovered': {
+            backgroundColor: alpha(theme.palette.primary.main, ODD_OPACITY),
+            '@media (hover: none)': {
+                backgroundColor: 'transparent',
+            },
+        },
+        '&.Mui-selected': {
+            backgroundColor: alpha(
+                theme.palette.primary.main,
+                ODD_OPACITY + theme.palette.action.selectedOpacity,
+            ),
+            '&:hover, &.Mui-hovered': {
+                backgroundColor: alpha(
+                    theme.palette.primary.main,
+                    ODD_OPACITY +
+                    theme.palette.action.selectedOpacity +
+                    theme.palette.action.hoverOpacity,
+                ),
+                // Reset on touch devices, it doesn't add specificity
+                '@media (hover: none)': {
+                    backgroundColor: alpha(
+                        theme.palette.primary.main,
+                        ODD_OPACITY + theme.palette.action.selectedOpacity,
+                    ),
+                },
+            },
+        },
+    },
 });
 
 
+function CustomPagination() {
+    const apiRef = useGridApiContext();
+    const page = useGridSelector(apiRef, gridPageSelector);
+    const pageCount = useGridSelector(apiRef, gridPageCountSelector);
+
+    return (
+        <Pagination
+            color="primary"
+            variant="outlined"
+            shape="rounded"
+            page={page + 1}
+            count={pageCount}
+            // @ts-expect-error
+            renderItem={(props2) => <PaginationItem {...props2} disableRipple />}
+            onChange={(event: React.ChangeEvent<unknown>, value: number) =>
+                apiRef.current.setPage(value - 1)
+            }
+        />
+    );
+}
+
+const PAGE_SIZE = 10;
 
 export default function RolesTable() {
+    const [loading, setLoading] = React.useState(true);
+
     const [rows, setRows] = React.useState<any>([]);
     const [rowSelectionModel, setRowSelectionModel] = React.useState<GridRowSelectionModel>([]);
     const [snackbar, setSnackbar] = React.useState<Pick<AlertProps, 'children' | 'severity'> | null>(null);
@@ -180,7 +250,12 @@ export default function RolesTable() {
             }
             else {
                 let role: Role = new Role(roleName, roleStatus === 1 ? true : false);
+
+                setLoading(true);
+
                 role.add(); // add to data base
+
+                setLoading(false);
 
                 setRows([...rows, { id: rows.length, role_name: roleName, role_status: (roleStatus === 1 ? true : false) }]); //refresh table
 
@@ -190,6 +265,7 @@ export default function RolesTable() {
 
         // delete role
         const handleDelete = async () => {
+            setLoading(true);
 
             const roles = await getAllRoles();
             const roleToRemove = roles.filter((role) => role._name === selectedRowParams?.currentRow?.role_name)!;
@@ -200,8 +276,11 @@ export default function RolesTable() {
                 return role !== selectedRowParams?.currentRow;
             });
 
+            setLoading(false);
+
             setRows(updateRows);
 
+          
 
             setSnackbar({ children: `התפקיד "${selectedRowParams?.currentRow?.role_name}" נמחק בהצלחה`, severity: 'success' });
 
@@ -234,23 +313,36 @@ export default function RolesTable() {
 
     const CustomFooter = () => {
         return (
-            <GridFooterContainer sx={GridFooterContainerSx}>
+            <Stack direction='row' justifyContent='space-between' alignItems='center' padding={1}>
+                <Box >
+                    <Box display='flex' flexDirection='row'>
 
-                <Typography variant='subtitle2' sx={TypographyFooterSx}>
-                    מס' תפקידים:
-                </Typography>
+                        <Typography variant='body2' sx={TypographyFooterSx}>
+                            <strong>{rows.length}</strong>
+                        </Typography>
 
-                <Typography variant='subtitle2' sx={TypographyFooterSx}>
-                    {rows.length}
-                </Typography>
+                        <Typography variant='body2' sx={TypographyFooterSx}>
+                            תפקידים
+                        </Typography>
 
-            </GridFooterContainer>
+                    </Box>
+
+                </Box>
+
+                <Box >
+                    <CustomPagination />
+                </Box>
+            </Stack>
         );
     };
 
     const fetchAllRoles = async () => {
+        setLoading(true);
+
         const roles = await getAllRoles();
         setRows(roles.map((role, i) => ({ id: i, role_name: role._name, role_status: role._open })));
+
+        setLoading(false);
     }
 
     React.useEffect(() => {
@@ -282,7 +374,7 @@ export default function RolesTable() {
 
             renderCell: (role) => {
                 return <Stack direction='row' padding={0}>
-                    <ChangeStatusRoleDialog setSnackbar={setSnackbar} row={role.row} />
+                    <ChangeStatusRoleDialog setSnackbar={setSnackbar} row={role.row} setLoading={setLoading} />
 
 
 
@@ -293,22 +385,33 @@ export default function RolesTable() {
         },
     ];
 
+    const [paginationModel, setPaginationModel] = React.useState({
+        pageSize: PAGE_SIZE,
+        page: 0,
+    });
 
     const theme = useTheme();
     return (
 
         <>
             <DataGrid
+                getRowClassName={(params) =>
+                    params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+                }
                 density='compact'
-                sx={dataGridSx(theme)}
+                paginationModel={paginationModel}
+                onPaginationModelChange={setPaginationModel}
+                pageSizeOptions={[PAGE_SIZE]}
+                sx={MyDataGrid(theme)}
                 rows={rows}
                 columns={columns}
                 getRowId={(row) => row.id}
                 disableColumnMenu
                 hideFooterSelectedRowCount
-                hideFooterPagination
+                loading={loading}
+
                 localeText={heIL.components.MuiDataGrid.defaultProps.localeText}
-                slots={{ noRowsOverlay: CustomNoRowsOverlay, toolbar: GridCustomToolbar, footer: CustomFooter }}
+                slots={{ noRowsOverlay: CustomNoRowsOverlay, toolbar: GridCustomToolbar, footer: CustomFooter, pagination: CustomPagination, loadingOverlay: LinearProgress }}
                 onRowClick={handleRowClick}
                 onRowSelectionModelChange={(newRowSelectionModel) => {
                     setRowSelectionModel(newRowSelectionModel);

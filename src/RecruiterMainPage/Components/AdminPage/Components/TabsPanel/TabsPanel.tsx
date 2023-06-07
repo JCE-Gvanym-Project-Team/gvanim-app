@@ -104,6 +104,5 @@ export default function TabsPane() {
         </Box>
 
     )} </>);
-    // }
 }
 

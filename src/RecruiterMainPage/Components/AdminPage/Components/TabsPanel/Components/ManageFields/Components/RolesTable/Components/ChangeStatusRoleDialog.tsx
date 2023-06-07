@@ -52,8 +52,8 @@ function BootstrapDialogTitle(props: DialogTitleProps) {
     );
 }
 
-export default function ChangeStatusRoleDialog(props: { setSnackbar: any, row: any }) {
-    const { setSnackbar, row } = props;
+export default function ChangeStatusRoleDialog(props: { setSnackbar: any, row: any, setLoading: any  }) {
+    const { setSnackbar, row, setLoading } = props;
     const { role_status, role_name } = row;
 
     const fromStatus = role_status ? `פתוח` : `סגור`;
@@ -65,7 +65,9 @@ export default function ChangeStatusRoleDialog(props: { setSnackbar: any, row: a
     const handleStatusChange = () => {
         let roleToEdit: Role = new Role(role_name, role_status); 
 
+        setLoading(true);
         roleToEdit.edit(!role_status);
+        setLoading(false);
 
         setOpen(false);
         
@@ -87,12 +89,12 @@ export default function ChangeStatusRoleDialog(props: { setSnackbar: any, row: a
             {role_status ? (
                 <Tooltip title="סגור תפקיד">
 
-                        <Chip onClick={handleClickOpen} sx={{padding: 0.5}} label={'פתוח'}size='small'  color="success" icon={<LockOpen sx={{fontSize: 'small'}} />} />
+                        <Chip onClick={handleClickOpen} variant='outlined' sx={{padding: 0.5}} label={'פתוח'}size='small'  color="success" icon={<LockOpen sx={{fontSize: 'small'}} />} />
 
                 </Tooltip>
             ) : (
                 <Tooltip title="פתח תפקיד">
-                      <Chip onClick={handleClickOpen} sx={{padding: 0.65}} label={'סגור'} size='small' color="error" icon={<Lock sx={{fontSize: 'small'}} />} />
+                      <Chip onClick={handleClickOpen} variant='outlined' sx={{padding: 0.65}} label={'סגור'} size='small' color="error" icon={<Lock sx={{fontSize: 'small'}} />} />
                 </Tooltip>
 
             )}

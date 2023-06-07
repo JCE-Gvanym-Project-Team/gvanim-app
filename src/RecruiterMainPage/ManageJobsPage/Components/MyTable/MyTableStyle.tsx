@@ -70,16 +70,16 @@ export const dataGridSx = (theme: Theme): SxProps => ({
 });
 
 export const TypographyFooterSx: SxProps = {
-	fontWeight: '500',
+	fontWeight: '400',
 	marginLeft: '8px',
-	color: 'rgb(62, 80, 96)',
+	color: 'black',
 	fontFamily: '"IBM Plex Sans", -apple-system, BlinkMacSystemFont,"Segoe UI", "Roboto", "Helvetica Neue", "Arial", "sans-serif", "Apple Color Emoji","Segoe UI Emoji", "Segoe UI Symbol"'
 }
 
 export const GridFooterContainerSx: SxProps = {
 	width: '100%',
 	display: 'flex',
-	justifyContent: 'center'
+	justifyContent: 'space-between'
 }
 
 
