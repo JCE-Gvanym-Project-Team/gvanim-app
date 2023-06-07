@@ -1,6 +1,5 @@
 import * as React from 'react';
-import Typography from '@mui/material/Typography';
-import { Alert, AlertProps, Box, Button, LinearProgress, Snackbar, Stack, SxProps, Theme, alpha, styled, useTheme } from '@mui/material';
+import { Alert, AlertProps, Box, Button, Chip, LinearProgress, Snackbar, Stack, SxProps, Theme, alpha, styled, useTheme } from '@mui/material';
 import MyDropMenu from '../MyDropMenu/MyDropMenu';
 import {
 	DataGrid,
@@ -16,13 +15,13 @@ import {
 	gridPageSelector,
 	useGridApiContext,
 	useGridSelector,
+	GridColumnHeaders,
 	gridClasses,
+	GridRow,
 	heIL,
 
 } from '@mui/x-data-grid';
-import {
-	TypographyFooterSx,
-} from './MyTableStyle';
+
 import Pagination from '@mui/material/Pagination';
 import PaginationItem from '@mui/material/PaginationItem';
 import CandidatesListFullScreenDialog from '../CandidatesListDialog/CandidatesListDialog';
@@ -30,12 +29,49 @@ import { getFilteredJobs } from '../../../../Firebase/FirebaseFunctions/Job';
 import { useNavigate } from "react-router-dom";
 import { ArticleOutlined } from '@mui/icons-material';
 import MyLoading from '../../../../Components/MyLoading/MyLoading';
+import { unstable_useForkRef as useForkRef } from '@mui/utils';
 
 
+
+// -------------------Use Memorie for better performance----------------------------------------------------
+const TraceUpdates = React.forwardRef<any, any>((props, ref) => {
+	const { Component, ...other } = props;
+	const rootRef = React.useRef<HTMLElement>();
+	const handleRef = useForkRef(rootRef, ref);
+
+	React.useEffect(() => {
+		const root = rootRef.current;
+		root!.classList.add('updating');
+		root!.classList.add('updated');
+
+		const timer = setTimeout(() => {
+			root!.classList.remove('updating');
+		}, 360);
+
+		return () => {
+			clearTimeout(timer);
+		};
+	});
+
+	return <Component ref={handleRef} {...other} />;
+});
+
+const RowWithTracer = React.forwardRef((props, ref) => {
+	return <TraceUpdates ref={ref} Component={GridRow} {...props} />;
+});
+
+const ColumnHeadersWithTracer = React.forwardRef((props, ref) => {
+	return <TraceUpdates ref={ref} Component={GridColumnHeaders} {...props} />;
+});
+
+const MemoizedRow = React.memo(RowWithTracer);
+const MemoizedColumnHeaders = React.memo(ColumnHeadersWithTracer);
+
+// ---------------------------------------------------------------------------------------------------------
 const ODD_OPACITY = 0.2;
 const MyDataGrid = (theme: Theme): SxProps => ({
 	padding: 0.5,
-	height: '615px',
+	height: '618px',
 	border: '1px solid rgba(0, 0, 0, 0.125)',
 	borderTopRightRadius: 0,
 	borderTopLeftRadius: 0,
@@ -196,7 +232,6 @@ function CustomNoRowsOverlay() {
 }
 
 
-
 const columns: GridColDef[] = [
 
 	{
@@ -309,30 +344,52 @@ function getScopeFormated(scope: number[] | null) {
 
 }
 
-function CustomPagination() {
+const CustomPaginationAndFooter = () => {
 	const apiRef = useGridApiContext();
 	const page = useGridSelector(apiRef, gridPageSelector);
 	const pageCount = useGridSelector(apiRef, gridPageCountSelector);
+	const rowsCount = apiRef.current.getRowsCount();
+
 
 	return (
-		<Pagination
-			color="primary"
-			variant="outlined"
-			shape="rounded"
-			page={page + 1}
-			count={pageCount}
-			// @ts-expect-error
-			renderItem={(props2) => <PaginationItem {...props2} disableRipple />}
-			onChange={(event: React.ChangeEvent<unknown>, value: number) =>
-				apiRef.current.setPage(value - 1)
-			}
-		/>
+		<Stack direction='row' justifyContent='space-between' alignItems='center' padding={1}>
+			<Box >
+				<Box display='flex' flexDirection='row'>
+					<Chip
+				
+						label={rowsCount + ' משרות'}
+						
+					
+					sx={{fontWeight: 'bold'}}
+						color= 'primary'
+						size='small'
+						variant="outlined"
+					/>
+				</Box>
+
+			</Box>
+
+			<Box >
+				<Pagination
+					color="primary"
+					variant="outlined"
+					shape="rounded"
+					page={page + 1}
+					count={pageCount}
+					// @ts-expect-error
+					renderItem={(props2) => <PaginationItem {...props2} disableRipple />}
+					onChange={(event: React.ChangeEvent<unknown>, value: number) =>
+						apiRef.current.setPage(value - 1)
+					}
+				/>
+			</Box>
+		</Stack>
+
 	);
-}
+};
 
-const PAGE_SIZE = 15;
 
-export default function MyTable(props: { setDataSize: any }) {
+export default function MyTable() {
 
 	const [snackbar, setSnackbar] = React.useState<Pick<AlertProps, 'children' | 'severity'> | null>(null);
 	const [pageloading, setPageLoading] = React.useState(true);
@@ -353,45 +410,10 @@ export default function MyTable(props: { setDataSize: any }) {
 
 	};
 
-
-	const CustomFooter = () => {
-
-		return (
-			<Stack direction='row' justifyContent='space-between' alignItems='center' padding={1}>
-				<Box >
-					<Box display='flex' flexDirection='row'>
-
-						<Typography variant='body2' sx={TypographyFooterSx}>
-							<strong>{rows.length}</strong>
-						</Typography>
-
-						<Typography variant='body2' sx={TypographyFooterSx}>
-							משרות
-						</Typography>
-
-					</Box>
-
-				</Box>
-
-				<Box >
-					<CustomPagination />
-				</Box>
-			</Stack>
-
-		);
-	};
-
-
-
 	React.useEffect(() => {
 		setPageLoading(false);
 		fetchAllJobs();
 	}, []);
-
-	const [paginationModel, setPaginationModel] = React.useState({
-		pageSize: PAGE_SIZE,
-		page: 0,
-	});
 
 	const handleCloseSnackbar = () => setSnackbar(null);
 
@@ -403,24 +425,28 @@ export default function MyTable(props: { setDataSize: any }) {
 				<>
 
 					<DataGrid
-						getRowClassName={(params) =>
-							params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-						}
-
-						paginationModel={paginationModel}
-						onPaginationModelChange={setPaginationModel}
-						pageSizeOptions={[PAGE_SIZE]}
+						getRowClassName={(params) =>params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'}
+						autoPageSize
 
 						sx={MyDataGrid(theme)}
 						rows={rows}
 						columns={columns}
 						onRowDoubleClick={(job) => navigate(`../jobs/${job.id}`)}
 						hideFooterSelectedRowCount
+						rowCount={rows.length}
+
 						getRowId={(row) => row.id}
 						localeText={heIL.components.MuiDataGrid.defaultProps.localeText}
 
 						loading={dataloading}
-						slots={{ noRowsOverlay: CustomNoRowsOverlay, toolbar: GridCustomToolbar, pagination: CustomPagination, footer: CustomFooter, loadingOverlay: LinearProgress }}
+						slots={{
+							noRowsOverlay: CustomNoRowsOverlay,
+							toolbar: GridCustomToolbar,
+							footer: CustomPaginationAndFooter,
+							loadingOverlay: LinearProgress,
+							row: MemoizedRow,
+							columnHeaders: MemoizedColumnHeaders,
+						}}
 
 					/>
 					{!!snackbar && (
