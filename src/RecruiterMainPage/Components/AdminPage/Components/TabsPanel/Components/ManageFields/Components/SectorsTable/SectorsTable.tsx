@@ -1,27 +1,124 @@
 import * as React from 'react';
 import Typography from '@mui/material/Typography';
-import { Alert, AlertProps, Box, Snackbar, Stack, SxProps, Theme, styled, useTheme } from '@mui/material';
+import { Alert, AlertProps, Box, LinearProgress, Snackbar, Stack, SxProps, Theme, alpha, styled, useTheme } from '@mui/material';
 import {
     DataGrid,
     GridColDef,
     heIL,
-    GridFooterContainer,
     GridRowSelectionModel,
     GridToolbarContainer,
     GridToolbarQuickFilter,
     GridEventListener,
-
+    gridPageCountSelector,
+    gridPageSelector,
+    useGridApiContext,
+    useGridSelector,
+    gridClasses,
+    
 } from '@mui/x-data-grid';
-import { GridFooterContainerSx, TypographyFooterSx } from '../../../../../../../../ManageJobsPage/Components/MyTable/MyTableStyle';
+import Pagination from '@mui/material/Pagination';
+import PaginationItem from '@mui/material/PaginationItem';
+import { TypographyFooterSx } from '../../../../../../../../ManageJobsPage/Components/MyTable/MyTableStyle';
 import { Sector, getAllSectors } from '../../../../../../../../../Firebase/FirebaseFunctions/Sector';
 import AddSectorDialog from './Components/AddSectorDialog';
 import MySectorRemoveDialog from './Components/RemoveSectorDialog';
 import ChangeStatusSectorDialog from './Components/ChangeStatusSectorDialog';
 
 
+
 interface SelectedRowParams {
     currentRow: any;
 }
+
+const ODD_OPACITY = 0.2;
+const MyDataGrid = (theme: Theme): SxProps => ({
+    height: '503px',
+    border: '1px solid rgba(0, 0, 0, 0.125)',
+    borderRadius: '0.5rem',
+    overflow: 'hidden',
+    "&.MuiDataGrid-root .MuiDataGrid-cell:focus-within": {
+        outline: "none !important",
+
+    },
+    "&.MuiDataGrid-root .MuiDataGrid-row:focus-within": {
+        background: alpha(
+            theme.palette.primary.main,
+            ODD_OPACITY + theme.palette.action.selectedOpacity,
+        ),
+    },
+
+    color:
+        theme.palette.mode === 'light' ? 'rgba(0,0,0,.85)' : 'rgba(255,255,255,0.85)',
+    fontFamily: [
+        '-apple-system',
+        'BlinkMacSystemFont',
+        '"Segoe UI"',
+        'Roboto',
+        '"Helvetica Neue"',
+        'Arial',
+        'sans-serif',
+        '"Apple Color Emoji"',
+        '"Segoe UI Emoji"',
+        '"Segoe UI Symbol"',
+    ].join(','),
+    WebkitFontSmoothing: 'auto',
+    letterSpacing: 'normal',
+    '& .MuiDataGrid-columnsContainer': {
+        backgroundColor: theme.palette.mode === 'light' ? '#fafafa' : '#1d1d1d',
+        borderBottom: `1px solid ${theme.palette.mode === 'light' ? '#f0f0f0' : '#303030'}`,
+    },
+    '& .MuiDataGrid-iconSeparator': {
+        display: 'none',
+    },
+    '& .MuiDataGrid-columnHeader': {
+        borderBottom: `1px solid ${theme.palette.mode === 'light' ? '#f0f0f0' : '#303030'}`,
+    },
+    '& .MuiDataGrid-columnHeader, .MuiDataGrid-cell': {
+        borderRight: `1px solid ${theme.palette.mode === 'light' ? '#f0f0f0' : '#303030'}`,
+        borderBottom: `1px solid ${theme.palette.mode === 'light' ? '#f0f0f0' : '#303030'}`,
+    },
+    '& .MuiDataGrid-columnsContainer, .MuiDataGrid-cell': {
+        borderBottom: `1px solid ${theme.palette.mode === 'light' ? '#f0f0f0' : '#303030'
+            }`,
+    },
+    '& .MuiDataGrid-cell': {
+        color:
+            theme.palette.mode === 'light' ? 'rgba(0,0,0,.85)' : 'rgba(255,255,255,0.65)',
+    },
+    '& .MuiPaginationItem-root': {
+        borderRadius: 0,
+    },
+    [`& .${gridClasses.row}.even`]: {
+        backgroundColor: theme.palette.grey[100],
+        '&:hover, &.Mui-hovered': {
+            backgroundColor: alpha(theme.palette.primary.main, ODD_OPACITY),
+            '@media (hover: none)': {
+                backgroundColor: 'transparent',
+            },
+        },
+        '&.Mui-selected': {
+            backgroundColor: alpha(
+                theme.palette.primary.main,
+                ODD_OPACITY + theme.palette.action.selectedOpacity,
+            ),
+            '&:hover, &.Mui-hovered': {
+                backgroundColor: alpha(
+                    theme.palette.primary.main,
+                    ODD_OPACITY +
+                    theme.palette.action.selectedOpacity +
+                    theme.palette.action.hoverOpacity,
+                ),
+                // Reset on touch devices, it doesn't add specificity
+                '@media (hover: none)': {
+                    backgroundColor: alpha(
+                        theme.palette.primary.main,
+                        ODD_OPACITY + theme.palette.action.selectedOpacity,
+                    ),
+                },
+            },
+        },
+    },
+});
 
 const StyledGridOverlay = styled('div')(({ theme }) => ({
     display: 'flex',
@@ -94,62 +191,34 @@ function CustomNoRowsOverlay() {
     );
 }
 
+//--------------
+function CustomPagination() {
+    const apiRef = useGridApiContext();
+    const page = useGridSelector(apiRef, gridPageSelector);
+    const pageCount = useGridSelector(apiRef, gridPageCountSelector);
 
+    return (
+        <Pagination
+            color="primary"
+            variant="outlined"
+            shape="rounded"
+            page={page + 1}
+            count={pageCount}
+            // @ts-expect-error
+            renderItem={(props2) => <PaginationItem {...props2} disableRipple />}
+            onChange={(event: React.ChangeEvent<unknown>, value: number) =>
+                apiRef.current.setPage(value - 1)
+            }
+        />
+    );
+}
+//------------------
 
-const dataGridSx = (theme: Theme): SxProps => ({
-    height: '500px',
-    border: '1px solid rgba(0, 0, 0, 0.125)',
-    borderRadius: '0.5rem',
-    overflow: 'hidden',
-    "&.MuiDataGrid-root .MuiDataGrid-cell:focus-within": {
-        outline: "none !important",
-
-    },
-
-    color:
-        theme.palette.mode === 'light' ? 'rgba(0,0,0,.85)' : 'rgba(255,255,255,0.85)',
-    fontFamily: [
-        '-apple-system',
-        'BlinkMacSystemFont',
-        '"Segoe UI"',
-        'Roboto',
-        '"Helvetica Neue"',
-        'Arial',
-        'sans-serif',
-        '"Apple Color Emoji"',
-        '"Segoe UI Emoji"',
-        '"Segoe UI Symbol"',
-    ].join(','),
-    WebkitFontSmoothing: 'auto',
-    letterSpacing: 'normal',
-    '& .MuiDataGrid-columnsContainer': {
-        backgroundColor: theme.palette.mode === 'light' ? '#fafafa' : '#1d1d1d',
-    },
-    '& .MuiDataGrid-iconSeparator': {
-        display: 'none',
-    },
-    '& .MuiDataGrid-columnHeader': {
-        borderBottom: `1px solid ${theme.palette.mode === 'light' ? '#f0f0f0' : '#303030'}`,
-    },
-    '& .MuiDataGrid-columnHeader, .MuiDataGrid-cell': {
-        borderRight: `1px solid ${theme.palette.mode === 'light' ? '#f0f0f0' : '#303030'}`,
-    },
-    '& .MuiDataGrid-columnsContainer, .MuiDataGrid-cell': {
-        borderBottom: `1px solid ${theme.palette.mode === 'light' ? '#f0f0f0' : '#303030'
-            }`,
-    },
-    '& .MuiDataGrid-cell': {
-        color:
-            theme.palette.mode === 'light' ? 'rgba(0,0,0,.85)' : 'rgba(255,255,255,0.65)',
-    },
-    '& .MuiPaginationItem-root': {
-        borderRadius: 0,
-    }
-});
-
-
+const PAGE_SIZE = 10;
 
 export default function SectorsTable() {
+    const [loading, setLoading] = React.useState(true);
+
     const [rows, setRows] = React.useState<any>([]);
     const [rowSelectionModel, setRowSelectionModel] = React.useState<GridRowSelectionModel>([]);
     const [snackbar, setSnackbar] = React.useState<Pick<AlertProps, 'children' | 'severity'> | null>(null);
@@ -178,7 +247,12 @@ export default function SectorsTable() {
             }
             else {
                 let sector: Sector = new Sector(sectorName, sectorStatus === 1 ? true : false);
+
+                setLoading(true);
+
                 sector.add(); // add to data base
+
+                setLoading(false);
 
                 setRows([...rows, { id: rows.length, sector_name: sectorName, sector_status: (sectorStatus === 1 ? true : false) }]); //refresh table
                 setSnackbar({ children: `האשכול '${sectorName}' נוסף בהצלחה.`, severity: 'success' });
@@ -188,6 +262,7 @@ export default function SectorsTable() {
 
         // delete sector
         const handleDelete = async () => {
+            setLoading(true);
 
             const sectors = await getAllSectors();
             const sectorToRemove = sectors.filter((sector) => sector._name === selectedRowParams?.currentRow?.sector_name)!;
@@ -198,8 +273,11 @@ export default function SectorsTable() {
                 return sector !== selectedRowParams?.currentRow;
             });
 
+            setLoading(false);
+
             setRows(updateRows);
 
+        
 
             setSnackbar({ children: `האשכול "${selectedRowParams?.currentRow?.sector_name}" נמחק בהצלחה`, severity: 'success' });
 
@@ -217,9 +295,6 @@ export default function SectorsTable() {
                             <AddSectorDialog sectorName={sectorName} setSectorName={setSectorName} sectorStatus={sectorStatus} setSectorStatus={setSectorStatus} handleAdd={handleAdd} />
                         </Box>
 
-                        {/* <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'start' }}>
-                            <EditSectorDialog selectedRowParams={selectedRowParams} sectorName={sectorName} setSectorName={setSectorName} sectorStatus={sectorStatus} setSectorStatus={setSectorStatus} handleUpdate={handleUpdate} />
-                        </Box> */}
 
                         <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'start' }}>
                             <MySectorRemoveDialog handleDelete={handleDelete} selectedRowParams={selectedRowParams} />
@@ -236,23 +311,38 @@ export default function SectorsTable() {
 
     const CustomFooter = () => {
         return (
-            <GridFooterContainer sx={GridFooterContainerSx}>
+            <Stack direction='row' justifyContent='space-between' alignItems='center' padding={1}>
+                <Box >
+                    <Box display='flex' flexDirection='row'>
 
-                <Typography variant='subtitle2' sx={TypographyFooterSx}>
-                    מס' אשכולות:
-                </Typography>
+                        <Typography variant='body2' sx={TypographyFooterSx}>
+                            <strong>{rows.length}</strong>
+                        </Typography>
 
-                <Typography variant='subtitle2' sx={TypographyFooterSx}>
-                    {rows.length}
-                </Typography>
+                        <Typography variant='body2' sx={TypographyFooterSx}>
+                            אשכולות
+                        </Typography>
 
-            </GridFooterContainer>
+                    </Box>
+
+                </Box>
+
+                <Box >
+                    <CustomPagination />
+                </Box>
+            </Stack>
+
         );
     };
 
     const fetchAllSectors = async () => {
+        setLoading(true);
+
         const sectors = await getAllSectors();
         setRows(sectors.map((sector, i) => ({ id: i, sector_name: sector._name, sector_status: sector._open })));
+
+        setLoading(false);
+
     }
 
     React.useEffect(() => {
@@ -270,7 +360,7 @@ export default function SectorsTable() {
             headerAlign: 'left',
 
             sortable: true,
-            editable: true,
+            editable: false,
             align: 'left',
             minWidth: 241,
         },
@@ -284,7 +374,7 @@ export default function SectorsTable() {
 
             renderCell: (sector) => {
                 return <Stack direction='row' padding={0}>
-                    <ChangeStatusSectorDialog setSnackbar={setSnackbar} row={sector.row} />
+                    <ChangeStatusSectorDialog setSnackbar={setSnackbar} row={sector.row} setLoading={setLoading} />
                 </Stack >;
             },
 
@@ -292,22 +382,34 @@ export default function SectorsTable() {
         },
     ];
 
+    const [paginationModel, setPaginationModel] = React.useState({
+        pageSize: PAGE_SIZE,
+        page: 0,
+    });
 
     const theme = useTheme();
     return (
 
         <>
             <DataGrid
+                getRowClassName={(params) =>
+                    params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+                }
                 density='compact'
-                sx={dataGridSx(theme)}
+                paginationModel={paginationModel}
+                onPaginationModelChange={setPaginationModel}
+                pageSizeOptions={[PAGE_SIZE]}
+
+                sx={MyDataGrid(theme)}
                 rows={rows}
                 columns={columns}
                 getRowId={(row) => row.id}
                 disableColumnMenu
+                loading={loading}
                 hideFooterSelectedRowCount
-                hideFooterPagination
+
                 localeText={heIL.components.MuiDataGrid.defaultProps.localeText}
-                slots={{ noRowsOverlay: CustomNoRowsOverlay, toolbar: GridCustomToolbar, footer: CustomFooter }}
+                slots={{ noRowsOverlay: CustomNoRowsOverlay, toolbar: GridCustomToolbar, pagination: CustomPagination, footer: CustomFooter, loadingOverlay: LinearProgress }}
                 onRowClick={handleRowClick}
                 onRowSelectionModelChange={(newRowSelectionModel) => {
                     setRowSelectionModel(newRowSelectionModel);
