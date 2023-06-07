@@ -11,6 +11,9 @@ export const MyButtonSx: SxProps = {
 export const dataGridContainerSx: SxProps = {
 	overflow: 'hidden',
 	border: '1px solid rgba(0, 0, 0, 0.125)',
+	display:"flex",
+	justifyContent: "stretch",
+	alignItems: "center"
 }
 
 export const dataGridContainerStyle = {

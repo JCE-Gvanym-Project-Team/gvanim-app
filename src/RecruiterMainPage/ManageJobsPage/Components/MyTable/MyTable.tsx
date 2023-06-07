@@ -8,15 +8,12 @@ import {
 	GridColDef,
 	GridToolbarDensitySelector,
 	GridToolbarColumnsButton,
+	GridInitialState,
 	GridToolbarContainer,
+	GridFooterContainer,
 	GridToolbarQuickFilter,
 	GridToolbarExportContainer,
 	GridPrintExportMenuItem,
-	gridPageCountSelector,
-	gridPageSelector,
-	useGridApiContext,
-	useGridSelector,
-	gridClasses,
 	heIL,
 
 } from '@mui/x-data-grid';
@@ -148,7 +145,8 @@ const StyledGridOverlay = styled('div')(({ theme }) => ({
 	},
 }));
 
-function CustomNoRowsOverlay() {
+function CustomNoRowsOverlay()
+{
 	return (
 		<StyledGridOverlay>
 			<svg
@@ -210,7 +208,8 @@ const columns: GridColDef[] = [
 		disableExport: true,
 		editable: false,
 
-		renderCell: (job) => {
+		renderCell: (job) =>
+		{
 			return <MyDropMenu JobId={job.id} />;
 		},
 	},
@@ -256,17 +255,19 @@ const columns: GridColDef[] = [
 		headerAlign: 'center',
 		align: 'center',
 		width: 300,
-		renderCell: (job) => {
+		renderCell: (job) =>
+		{
 			const { id } = job.row;
 			return <CandidatesListFullScreenDialog JobId={id} />;
 		},
 	},
 ];
 
-const GridCustomToolbar = () => {
+const GridCustomToolbar = ({ syncState }: { syncState: (stateToSave: GridInitialState) => void; }) => {
 	const navigate = useNavigate();
 
-	const handleCreatejob = () => {
+	const handleCreatejob = () =>
+	{
 		navigate("/management/createJob", { state: null });
 	}
 
@@ -303,47 +304,20 @@ const GridCustomToolbar = () => {
 	);
 };
 
-function getScopeFormated(scope: number[] | null) {
+function getScopeFormated(scope: number[] | null)
+{
 
 	return scope === null ? '0-100' : scope[0].toString() === scope[1].toString() ? scope[0].toString() + '%' : scope[1].toString() + '% - ' + scope[0].toString() + '%';
 
 }
 
-function CustomPagination() {
-	const apiRef = useGridApiContext();
-	const page = useGridSelector(apiRef, gridPageSelector);
-	const pageCount = useGridSelector(apiRef, gridPageCountSelector);
-
-	return (
-		<Pagination
-			color="primary"
-			variant="outlined"
-			shape="rounded"
-			page={page + 1}
-			count={pageCount}
-			// @ts-expect-error
-			renderItem={(props2) => <PaginationItem {...props2} disableRipple />}
-			onChange={(event: React.ChangeEvent<unknown>, value: number) =>
-				apiRef.current.setPage(value - 1)
-			}
-		/>
-	);
-}
-
-const PAGE_SIZE = 15;
-
 export default function MyTable(props: { setDataSize: any }) {
-
-	const [snackbar, setSnackbar] = React.useState<Pick<AlertProps, 'children' | 'severity'> | null>(null);
-	const [pageloading, setPageLoading] = React.useState(true);
-	const [dataloading, setDataLoading] = React.useState(true);
-	const [rows, setRows] = React.useState<any>([]);
-
+	const { setDataSize } = props;
+	const [loading, setLoading] = React.useState(true);
+	const [allJobs, setAllJobs] = React.useState<any[]>([]);
 	const navigate = useNavigate();
 
 	const fetchAllJobs = async () => {
-		setDataLoading(true);
-
 		const jobs = await getFilteredJobs();
 		const jobsWithId = jobs.map((job) => ({ ...job, id: job._jobNumber, _scope: getScopeFormated(job._scope) }));
 
@@ -355,6 +329,10 @@ export default function MyTable(props: { setDataSize: any }) {
 
 
 	const CustomFooter = () => {
+		React.useEffect(() => {
+			setDataSize(allJobs.length);
+		}, []);
+
 
 		return (
 			<Stack direction='row' justifyContent='space-between' alignItems='center' padding={1}>
@@ -384,7 +362,6 @@ export default function MyTable(props: { setDataSize: any }) {
 
 
 	React.useEffect(() => {
-		setPageLoading(false);
 		fetchAllJobs();
 	}, []);
 
@@ -401,38 +378,19 @@ export default function MyTable(props: { setDataSize: any }) {
 		<>
 			{pageloading ? (<MyLoading loading={pageloading} setLoading={setPageLoading} />) : (
 				<>
+					<Box
+						sx={dataGridContainerSx}
 
-					<DataGrid
-						getRowClassName={(params) =>
-							params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-						}
-
-						paginationModel={paginationModel}
-						onPaginationModelChange={setPaginationModel}
-						pageSizeOptions={[PAGE_SIZE]}
-
-						sx={MyDataGrid(theme)}
-						rows={rows}
-						columns={columns}
-						onRowDoubleClick={(job) => navigate(`../jobs/${job.id}`)}
-						hideFooterSelectedRowCount
-						getRowId={(row) => row.id}
-						localeText={heIL.components.MuiDataGrid.defaultProps.localeText}
-
-						loading={dataloading}
-						slots={{ noRowsOverlay: CustomNoRowsOverlay, toolbar: GridCustomToolbar, pagination: CustomPagination, footer: CustomFooter, loadingOverlay: LinearProgress }}
-
-					/>
-					{!!snackbar && (
-						<Snackbar
-							open
-							anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-							onClose={handleCloseSnackbar}
-							autoHideDuration={6000}
-						>
-							<Alert {...snackbar} onClose={handleCloseSnackbar} />
-						</Snackbar>
-					)}
+						maxWidth='xl'>
+						<DataGrid
+							sx={dataGridSx(theme)}
+							rows={allJobs}
+							columns={columns}
+							onRowDoubleClick={(job) => navigate(`../jobs/${job.id}`)}
+							hideFooterSelectedRowCount
+							hideFooterPagination
+							localeText={heIL.components.MuiDataGrid.defaultProps.localeText}
+							slots={{ noRowsOverlay: CustomNoRowsOverlay, toolbar: GridCustomToolbar, footer: CustomFooter }} />
 
 				</>
 			)}
