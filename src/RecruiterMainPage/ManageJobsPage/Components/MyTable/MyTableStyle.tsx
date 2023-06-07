@@ -15,16 +15,14 @@ export const dataGridContainerSx: SxProps = {
 
 export const dataGridContainerStyle = {
 	padding: 0,
-	marginTop: '15px',
 	marginBottom: '15px',
-	maxWidth: "100%",
+	width: "100%",
 }
 
 export const dataGridSx = (theme: Theme): SxProps => ({
-	padding: 1,
+	padding: 0.5,
 	height: 'calc(100vh - 112px)',	
 	overflow: 'hidden',
-	boxShadow: 2,
 	"&.MuiDataGrid-root .MuiDataGrid-cell:focus-within": {
 		outline: "none !important",
 

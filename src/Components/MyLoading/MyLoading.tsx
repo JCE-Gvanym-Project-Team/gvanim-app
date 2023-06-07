@@ -3,15 +3,15 @@ import { Avatar, Backdrop, Box } from "@mui/material";
 import "./MyLoading.css"
 import React, { useEffect } from "react";
 
+//    const [loading, setLoading] = React.useState(true);
+const MyLoading = (props: {loading: any, setLoading: any}) => {
+const { loading, setLoading } = props;
 
-const MyLoading = () => {
-    const [loading, setLoading] = React.useState(true);
-
-    useEffect(() => {
-        setTimeout(() => {
-            setLoading(false);
-        }, 1000);
-    }, []);
+    // useEffect(() => {
+    //     setTimeout(() => {
+    //         setLoading(false);
+    //     }, 1000);
+    // }, []);
 
   
     return (
@@ -28,8 +28,6 @@ const MyLoading = () => {
                         }
                     }} />
                 </Backdrop>
-
-
             </Box>
         </Box>
     );
