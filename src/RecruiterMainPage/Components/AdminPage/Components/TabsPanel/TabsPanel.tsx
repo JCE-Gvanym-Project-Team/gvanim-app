@@ -7,7 +7,6 @@ import { Tooltip } from '@mui/material';
 import ManageFields from './Components/ManageFields/ManageFields';
 import ManageAccount from './Components/ManageAccount/ManageAccount';
 import ManageRecruiters from './Components/ManageRecruiters/ManageRecruiters';
-import EnhancedTable from './Components/TableTest';
 import MyLoading from '../../../../../Components/MyLoading/MyLoading';
 
 interface TabPanelProps {
@@ -88,7 +87,6 @@ export default function TabsPane() {
             <TabPanel value={value} index={1}>
 
                 {/* <ManageRecruiters /> */}
-                <EnhancedTable />
 
             </TabPanel>
 
@@ -97,7 +95,6 @@ export default function TabsPane() {
 
 
                 <ManageFields />
-
 
             </TabPanel>
 

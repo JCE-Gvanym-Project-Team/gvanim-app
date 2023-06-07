@@ -12,7 +12,6 @@ import { ArticleOutlined } from "@mui/icons-material";
 
 const ManageJobsPage = () => {
     const [loading, setLoading] = useState(true);
-    const [dataSize, setDataSize] = useState(0);
     const [open, setOpen] = useState(false);
 
     const { state } = useLocation();
@@ -141,7 +140,7 @@ const ManageJobsPage = () => {
 
                         <Box className="ManageJobPage-Body" sx={ManageJobPageBoxSx}>
 
-                            <MyTable setDataSize={setDataSize} />
+                            <MyTable />
 
                             <TransitionComponentSnackbar open={open} setOpen={setOpen} message={state} />
                         </Box>
