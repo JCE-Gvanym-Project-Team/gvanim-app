@@ -115,8 +115,8 @@ export class CandidateJobStatus {
         const phones = this._recomendations.map((rec) => rec._phone);
         for (let i = 0; i < phones.length; i++)
             for (let j = 0; j < extentions.length; j++)
-                if ((await fileExists(`CandidatesFiles/${this._candidateId}/rec/${phones[i]}_${this._jobNumber}_REC.${extentions[j]}`))) {
-                    let url = await getDownloadUrlFromFirestorePath(`CandidatesFiles/${this._candidateId}/rec/${phones[i]}_${this._jobNumber}_REC.${extentions[j]}`);
+                if ((await fileExists(`CandidatesFiles/${this._candidateId}/rec/${phones[i]}_REC.${extentions[j]}`))) {
+                    let url = await getDownloadUrlFromFirestorePath(`CandidatesFiles/${this._candidateId}/rec/${phones[i]}_REC.${extentions[j]}`);
                     urls.push(url);
                 }
         return urls;
