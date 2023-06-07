@@ -170,7 +170,7 @@ export class Candidate {
             return;
         }
         let candidatuers = new CandidateJobStatus(jobNumber, this._id, "הוגשה מועמדות", about, -1, new Date(), new Date());
-        candidatuers.add();
+        await candidatuers.add();
     }
     /**
      * Uploads a candidate's CV file to Firestore.
