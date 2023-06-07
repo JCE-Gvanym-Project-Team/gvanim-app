@@ -221,5 +221,5 @@ export async function main() {
     //testEditRecruiter();
     //testMessgaeFormat();
     //testGetRecomendationsUrl();
-    ..testGetCvUrl();
+    //testGetCvUrl();
 }
