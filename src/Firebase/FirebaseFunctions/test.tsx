@@ -3,7 +3,7 @@ import { isConnected, loginAdmin, loginRecruiter, loguotRecruiter } from "./Auth
 import { Candidate, generateCandidateId, getFilteredCandidates } from "./Candidate";
 import { Job, generateJobNumber, getFilteredJobs } from "./Job";
 import { Recruiter, generateRandomString } from "./Recruiter";
-import { uploadFileToFirestore } from "./firestoreFunc";
+import { getFileExtensionsInFolder, uploadFileToFirestore } from "./firestoreFunc";
 import { Sector } from "./Sector";
 import { CandidateJobStatus, getMessage, allStatus, getFilteredCandidateJobStatuses } from "./CandidateJobStatus";
 import { convertTypeAcquisitionFromJson } from "typescript";
@@ -205,6 +205,11 @@ async function testGetRecomendationsUrl() {
     cand.remove();
     job.remove();
 }
+async function testGetCvUrl() {
+    await loginAdmin();
+    let cand = new Candidate("53");
+    console.log((await cand.getCvUrl()));
+}
 export async function main() {
     //console.log(`testSingleJobAddNoConfilct(): ${await testSingleJobAddNoConfilct()}`);
     //console.log(`testSingleJobAddConfilct(): ${await testSingleJobAddConfilct()}`);
@@ -216,4 +221,5 @@ export async function main() {
     //testEditRecruiter();
     //testMessgaeFormat();
     //testGetRecomendationsUrl();
+    ..testGetCvUrl();
 }
