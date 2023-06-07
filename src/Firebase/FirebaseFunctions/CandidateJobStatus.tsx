@@ -40,7 +40,7 @@ export class CandidateJobStatus {
         lastUpdate: Date = new Date(),
         interviewDate: Date = new Date(0, 0, 0),
         interviewsSummery: Array<string> = ["", ""],
-        recomendations: Array<Recomendation> = [],
+        recomendations: Array<Recomendation> = new Array<Recomendation>(),
         rejectCause = "") {
         this._jobNumber = jobNumber;
         this._candidateId = candidateId;
@@ -69,7 +69,7 @@ export class CandidateJobStatus {
             return;
         this._recomendations.push(new Recomendation(fullName, phone, eMail));
         const extension = recomendation.name.split('.')[recomendation.name.split('.').length - 1];
-        await uploadFileToFirestore(recomendation, `CandidatesFiles/${this._candidateId}/rec`, `${phone}_REC.${extension}`);
+        uploadFileToFirestore(recomendation, `CandidatesFiles/${this._candidateId}/rec`, `${phone}_${this._jobNumber}_REC.${extension}`);
         replaceData((await this.getPath()), this);
     }
     public async updateAbout(about: string) {
@@ -113,10 +113,11 @@ export class CandidateJobStatus {
         let urls: string[] = [];
         const extentions = await getFileExtensionsInFolder(`CandidatesFiles/${this._candidateId}/rec`);
         const phones = this._recomendations.map((rec) => rec._phone);
+        console.log(phones);
         for (let i = 0; i < phones.length; i++)
             for (let j = 0; j < extentions.length; j++)
-                if ((await fileExists(`CandidatesFiles/${this._candidateId}/rec/${phones[i]}_REC.${extentions[j]}`))) {
-                    let url = await getDownloadUrlFromFirestorePath(`CandidatesFiles/${this._candidateId}/rec/${phones[i]}_REC.${extentions[j]}`);
+                if ((await fileExists(`CandidatesFiles/${this._candidateId}/rec/${phones[i]}_${this._jobNumber}_REC.${extentions[j]}`))) {
+                    let url = await getDownloadUrlFromFirestorePath(`CandidatesFiles/${this._candidateId}/rec/${phones[i]}_${this._jobNumber}_REC.${extentions[j]}`);
                     urls.push(url);
                 }
         return urls;
