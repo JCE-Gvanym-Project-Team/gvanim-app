@@ -1,6 +1,5 @@
 import * as React from 'react';
-import Typography from '@mui/material/Typography';
-import { Alert, AlertProps, Box, LinearProgress, Snackbar, Stack, SxProps, Theme, alpha, styled, useTheme } from '@mui/material';
+import { Alert, AlertProps, Box, Chip, LinearProgress, Snackbar, Stack, SxProps, Theme, alpha, styled, useTheme } from '@mui/material';
 import {
     DataGrid,
     GridColDef,
@@ -13,23 +12,61 @@ import {
     gridPageSelector,
     useGridApiContext,
     useGridSelector,
+    GridColumnHeaders,
+    GridRow,
     gridClasses,
 
 } from '@mui/x-data-grid';
 import Pagination from '@mui/material/Pagination';
 import PaginationItem from '@mui/material/PaginationItem';
-import { TypographyFooterSx } from '../../../../../../../../ManageJobsPage/Components/MyTable/MyTableStyle';
+import { unstable_useForkRef as useForkRef } from '@mui/utils';
 import MyRoleRemoveDialog from './Components/RemoveRoleDialog';
 import AddRoleDialog from './Components/AddRoleDialog';
 import { Role, getAllRoles } from '../../../../../../../../../Firebase/FirebaseFunctions/Role';
 import ChangeStatusRoleDialog from './Components/ChangeStatusRoleDialog';
+import MyLoading from '../../../../../../../../../Components/MyLoading/MyLoading';
 
 interface SelectedRowParams {
     currentRow: any;
 }
-interface EditGridCustomToolbar {
-    selectedRowParams?: SelectedRowParams;
-}
+
+
+
+// -------------------Use Memorie for better performance----------------------------------------------------
+const TraceUpdates = React.forwardRef<any, any>((props, ref) => {
+    const { Component, ...other } = props;
+    const rootRef = React.useRef<HTMLElement>();
+    const handleRef = useForkRef(rootRef, ref);
+
+    React.useEffect(() => {
+        const root = rootRef.current;
+        root!.classList.add('updating');
+        root!.classList.add('updated');
+
+        const timer = setTimeout(() => {
+            root!.classList.remove('updating');
+        }, 360);
+
+        return () => {
+            clearTimeout(timer);
+        };
+    });
+
+    return <Component ref={handleRef} {...other} />;
+});
+
+const RowWithTracer = React.forwardRef((props, ref) => {
+    return <TraceUpdates ref={ref} Component={GridRow} {...props} />;
+});
+
+const ColumnHeadersWithTracer = React.forwardRef((props, ref) => {
+    return <TraceUpdates ref={ref} Component={GridColumnHeaders} {...props} />;
+});
+
+const MemoizedRow = React.memo(RowWithTracer);
+const MemoizedColumnHeaders = React.memo(ColumnHeadersWithTracer);
+
+// ---------------------------------------------------------------------------------------------------------
 
 const StyledGridOverlay = styled('div')(({ theme }) => ({
     display: 'flex',
@@ -102,8 +139,6 @@ function CustomNoRowsOverlay() {
     );
 }
 
-
-
 const ODD_OPACITY = 0.2;
 
 const MyDataGrid = (theme: Theme): SxProps => ({
@@ -161,7 +196,7 @@ const MyDataGrid = (theme: Theme): SxProps => ({
             theme.palette.mode === 'light' ? 'rgba(0,0,0,.85)' : 'rgba(255,255,255,0.65)',
     },
     '& .MuiPaginationItem-root': {
-        borderRadius: 0,
+        borderRadius: '35%',
     },
     [`& .${gridClasses.row}.even`]: {
         backgroundColor: theme.palette.grey[100],
@@ -195,32 +230,50 @@ const MyDataGrid = (theme: Theme): SxProps => ({
     },
 });
 
-
-function CustomPagination() {
+const CustomPaginationAndFooter = () => {
     const apiRef = useGridApiContext();
     const page = useGridSelector(apiRef, gridPageSelector);
     const pageCount = useGridSelector(apiRef, gridPageCountSelector);
+    const rowsCount = apiRef.current.getRowsCount();
+
 
     return (
-        <Pagination
-            color="primary"
-            variant="outlined"
-            shape="rounded"
-            page={page + 1}
-            count={pageCount}
-            // @ts-expect-error
-            renderItem={(props2) => <PaginationItem {...props2} disableRipple />}
-            onChange={(event: React.ChangeEvent<unknown>, value: number) =>
-                apiRef.current.setPage(value - 1)
-            }
-        />
-    );
-}
+        <Stack direction='row' justifyContent='space-between' alignItems='center' padding={1}>
+            <Box >
+                <Box display='flex' flexDirection='row'>
+                    <Chip
+                        label={rowsCount + ' תפקידים'}
+                        sx={{ fontWeight: 'bold' }}
+                        size='small'
+                        variant="outlined"
+                    />
+                </Box>
 
-const PAGE_SIZE = 10;
+            </Box>
+
+            <Box >
+                <Pagination
+                    color="primary"
+                    variant="outlined"
+                    shape="rounded"
+                    page={page + 1}
+                    count={pageCount}
+                    // @ts-expect-error
+                    renderItem={(props2) => <PaginationItem {...props2} disableRipple />}
+                    onChange={(event: React.ChangeEvent<unknown>, value: number) =>
+                        apiRef.current.setPage(value - 1)
+                    }
+                />
+            </Box>
+        </Stack>
+
+    );
+};
+
 
 export default function RolesTable() {
-    const [loading, setLoading] = React.useState(true);
+    const [pageloading, setPageLoading] = React.useState(true);
+    const [dataLoading, setDataLoading] = React.useState(true);
 
     const [rows, setRows] = React.useState<any>([]);
     const [rowSelectionModel, setRowSelectionModel] = React.useState<GridRowSelectionModel>([]);
@@ -251,11 +304,11 @@ export default function RolesTable() {
             else {
                 let role: Role = new Role(roleName, roleStatus === 1 ? true : false);
 
-                setLoading(true);
+                setDataLoading(true);
 
                 role.add(); // add to data base
 
-                setLoading(false);
+                setDataLoading(false);
 
                 setRows([...rows, { id: rows.length, role_name: roleName, role_status: (roleStatus === 1 ? true : false) }]); //refresh table
 
@@ -265,7 +318,7 @@ export default function RolesTable() {
 
         // delete role
         const handleDelete = async () => {
-            setLoading(true);
+            setDataLoading(true);
 
             const roles = await getAllRoles();
             const roleToRemove = roles.filter((role) => role._name === selectedRowParams?.currentRow?.role_name)!;
@@ -276,11 +329,11 @@ export default function RolesTable() {
                 return role !== selectedRowParams?.currentRow;
             });
 
-            setLoading(false);
+            setDataLoading(false);
 
             setRows(updateRows);
 
-          
+
 
             setSnackbar({ children: `התפקיד "${selectedRowParams?.currentRow?.role_name}" נמחק בהצלחה`, severity: 'success' });
 
@@ -309,43 +362,17 @@ export default function RolesTable() {
     };
 
 
-
-
-    const CustomFooter = () => {
-        return (
-            <Stack direction='row' justifyContent='space-between' alignItems='center' padding={1}>
-                <Box >
-                    <Box display='flex' flexDirection='row'>
-
-                        <Typography variant='body2' sx={TypographyFooterSx}>
-                            <strong>{rows.length}</strong>
-                        </Typography>
-
-                        <Typography variant='body2' sx={TypographyFooterSx}>
-                            תפקידים
-                        </Typography>
-
-                    </Box>
-
-                </Box>
-
-                <Box >
-                    <CustomPagination />
-                </Box>
-            </Stack>
-        );
-    };
-
     const fetchAllRoles = async () => {
-        setLoading(true);
+        setDataLoading(true);
 
         const roles = await getAllRoles();
         setRows(roles.map((role, i) => ({ id: i, role_name: role._name, role_status: role._open })));
 
-        setLoading(false);
+        setDataLoading(false);
     }
 
     React.useEffect(() => {
+        setPageLoading(false);
         fetchAllRoles();
     }, []);
 
@@ -374,7 +401,7 @@ export default function RolesTable() {
 
             renderCell: (role) => {
                 return <Stack direction='row' padding={0}>
-                    <ChangeStatusRoleDialog setSnackbar={setSnackbar} row={role.row} setLoading={setLoading} />
+                    <ChangeStatusRoleDialog setSnackbar={setSnackbar} row={role.row} setLoading={setDataLoading} />
 
 
 
@@ -385,54 +412,64 @@ export default function RolesTable() {
         },
     ];
 
-    const [paginationModel, setPaginationModel] = React.useState({
-        pageSize: PAGE_SIZE,
-        page: 0,
-    });
 
     const theme = useTheme();
     return (
-
         <>
-            <DataGrid
-                getRowClassName={(params) =>
-                    params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-                }
-                density='compact'
-                paginationModel={paginationModel}
-                onPaginationModelChange={setPaginationModel}
-                pageSizeOptions={[PAGE_SIZE]}
-                sx={MyDataGrid(theme)}
-                rows={rows}
-                columns={columns}
-                getRowId={(row) => row.id}
-                disableColumnMenu
-                hideFooterSelectedRowCount
-                loading={loading}
 
-                localeText={heIL.components.MuiDataGrid.defaultProps.localeText}
-                slots={{ noRowsOverlay: CustomNoRowsOverlay, toolbar: GridCustomToolbar, footer: CustomFooter, pagination: CustomPagination, loadingOverlay: LinearProgress }}
-                onRowClick={handleRowClick}
-                onRowSelectionModelChange={(newRowSelectionModel) => {
-                    setRowSelectionModel(newRowSelectionModel);
-                }}
-                slotProps={{
-                    toolbar: { selectedRowParams, setSelectedRowParams }
-                    ,
-                }}
-                rowSelectionModel={rowSelectionModel}
-            />
-            {!!snackbar && (
-                <Snackbar
-                    open
-                    anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-                    onClose={handleCloseSnackbar}
-                    autoHideDuration={6000}
-                >
-                    <Alert {...snackbar} onClose={handleCloseSnackbar} />
-                </Snackbar>
+            {pageloading ? (
+                <MyLoading loading={pageloading} setLoading={setPageLoading} />
+            ) : (
+                <>
+                    <DataGrid
+                        getRowClassName={(params) =>
+                            params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+                        }
+                        autoPageSize
+                        density='compact'
+
+                        sx={MyDataGrid(theme)}
+                        rows={rows}
+                        columns={columns}
+                        getRowId={(row) => row.id}
+                        disableColumnMenu
+                        loading={dataLoading}
+                        hideFooterSelectedRowCount
+
+                        localeText={heIL.components.MuiDataGrid.defaultProps.localeText}
+                        slots={{
+                            noRowsOverlay: CustomNoRowsOverlay,
+                            toolbar: GridCustomToolbar,
+                            footer: CustomPaginationAndFooter,
+                            loadingOverlay: LinearProgress,
+                            row: MemoizedRow,
+                            columnHeaders: MemoizedColumnHeaders,
+                        }}
+                        onRowClick={handleRowClick}
+                        onRowSelectionModelChange={(newRowSelectionModel) => {
+                            setRowSelectionModel(newRowSelectionModel);
+                        }}
+                        slotProps={{
+                            toolbar: { selectedRowParams, setSelectedRowParams }
+                            ,
+                        }}
+                        rowSelectionModel={rowSelectionModel}
+                    />
+                    {!!snackbar && (
+                        <Snackbar
+                            open
+                            anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                            onClose={handleCloseSnackbar}
+                            autoHideDuration={6000}
+                        >
+                            <Alert {...snackbar} onClose={handleCloseSnackbar} />
+                        </Snackbar>
+                    )}
+                </>
             )}
+
         </>
+
     );
 }
 

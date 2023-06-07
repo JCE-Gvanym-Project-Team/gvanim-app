@@ -5,7 +5,8 @@ import { Job, generateJobNumber, getFilteredJobs } from "./Job";
 import { Recruiter, generateRandomString } from "./Recruiter";
 import { uploadFileToFirestore } from "./firestoreFunc";
 import { Sector } from "./Sector";
-import { CandidateJobStatus, getMessage, allStatus } from "./CandidateJobStatus";
+import { CandidateJobStatus, getMessage, allStatus, getFilteredCandidateJobStatuses } from "./CandidateJobStatus";
+import { convertTypeAcquisitionFromJson } from "typescript";
 export function sleep(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -171,6 +172,39 @@ async function testMessgaeFormat() {
     let rec = new Recruiter("re@gmil.com","גברת","גוונים");
     console.log(getMessage(cand, job, rec, allStatus[6],new Date(),"מיקום כלשהו"));
 }
+async function testGetRecomendationsUrl() {
+    await loginAdmin();
+    let lastCand = new Candidate("44");
+    let lastJob = new Job(105);
+    await lastCand.remove();
+    await lastJob.remove();
+    const candId = await generateCandidateId();
+    const jobId = await generateJobNumber();
+    let cand = new Candidate(candId,"","",generateRandomString(),generateRandomString());
+    let job = new Job(jobId);
+    await cand.add();
+    await job.add();
+    await cand.apply(jobId,"");
+    let sLocal = new CandidateJobStatus(jobId, candId);
+    while(!(await sLocal.exists()));
+    let s = (await getFilteredCandidateJobStatuses(["candidateId","jobNumber"],[candId,jobId.toString()]))[0];
+    console.log(s); 
+    let f = new File([],"uevwuv.pdf");
+    await sleep(5000);
+    if(s===undefined){
+        await cand.remove();
+        await job.remove();
+        console.log('s is undefined');
+        return;
+    }
+    await s.addRecomendation("aziz","0501234567","ex@gmail.com", f);
+    console.log(s); 
+    s = (await getFilteredCandidateJobStatuses(["candidateId","jobNumber"],[candId,jobId.toString()]))[0];
+    console.log(s);
+    console.log(await s.getRecomendationsUrl());
+    cand.remove();
+    job.remove();
+}
 export async function main() {
     //console.log(`testSingleJobAddNoConfilct(): ${await testSingleJobAddNoConfilct()}`);
     //console.log(`testSingleJobAddConfilct(): ${await testSingleJobAddConfilct()}`);
@@ -181,4 +215,5 @@ export async function main() {
     //console.log(`testLoginRecruiter(): ${await testLoginRecruiter()}`);
     //testEditRecruiter();
     //testMessgaeFormat();
+    //testGetRecomendationsUrl();
 }
