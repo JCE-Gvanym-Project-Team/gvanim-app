@@ -106,22 +106,23 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 
 	const handleinterviewSummaryChange = async (event) =>
 	{
+
 		setInterviewSummary(event.target.value);
 		// save every 15 characters
 		if (interviewSummary?.length && interviewSummary?.length % 15 === 0)
 		{
-			// TODO: add database update here
 			await candidateJobStatus?.editInterviewSummery(interviewSummary, interviewIndex);
 		}
+
 	}
 
 	const handleSaveButtonClick = async () =>
 	{
-		// TODO: add database update here
 		setLoading(true);
 		await candidateJobStatus?.editInterviewSummery(interviewSummary ? interviewSummary : "", interviewIndex);
 		await candidateJobStatus?.updateMatchingRate(matchingRate);
 		setLoading(false);
+		setRerenderKey(rerenderKey === "1" ? "0" : "1");
 	}
 
 	const handleMatchingRateRadioButtons = async (event) =>
@@ -264,6 +265,7 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 								</Box>
 							</Box>
 
+							{/* status and change status */}
 							<Box sx={{ display: 'flex', flexDirection: "row", justifyContent: "space-between" }}>
 
 
@@ -287,17 +289,17 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 									</Typography>
 								</Box>
 							</Box>
-
 							<Box sx={{ display: candidateJobStatus?._status === allStatus[8] && jobValue ? 'flex' : "none" }}>
 								<Typography sx={textSx} variant='h4'>
 									סיבת דחייה:
 								</Typography>
 
-								<Typography sx={candidateNameSx} variant='h4' >
+								<Typography variant='h4' sx={textSx} style={{ marginRight: "1rem" }}>
 									{candidateJobStatus?._rejectCause}
 								</Typography>
 							</Box>
 
+							<Divider />
 							{/* Choose Job and interview*/}
 							<Box sx={chooseJobAndInterviewContainerSx}>
 								{/* Choose Job */}

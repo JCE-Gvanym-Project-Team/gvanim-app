@@ -20,6 +20,7 @@ import { Candidate, CandidateJobStatus, getFilteredCandidateJobStatuses } from '
 import { recommendationsButtonSx } from '../../ViewCandidatesPageStyle';
 import RecommendersDialog from '../RecommendersDialog/RecommendersDialog';
 import MyChip from '../MyChip/MyChip';
+import AboutDialog from '../AboutDialog/AboutDialog';
 
 
 
@@ -50,6 +51,18 @@ export default function JobsTable(props: { setDataSize: any, candidateJobs: any,
 
 	// candidate
 	const [candidate, setCandidate] = React.useState<Candidate | null>(null);
+
+	// AboutDialog
+	const [aboutDialogOpen, setAboutDialogOpen] = React.useState(false);
+
+	// onClose for AboutDialog
+	const aboutDialogonClose = (event, reason) =>
+	{
+		if ((reason && reason !== "backdropClick") || reason === undefined)
+		{
+			setAboutDialogOpen(false);
+		}
+	}
 
 	// columns object
 	const columns: GridColDef[] = [
@@ -126,8 +139,8 @@ export default function JobsTable(props: { setDataSize: any, candidateJobs: any,
 			}
 		},
 		{
-			field: '_CVs',
-			headerName: 'קורות חיים',
+			field: '_recommenders',
+			headerName: 'ספר לנו עליך',
 			description: 'עמודה זו אינה ניתנת למיון',
 			width: 150,
 			hideSortIcons: true,
@@ -145,14 +158,16 @@ export default function JobsTable(props: { setDataSize: any, candidateJobs: any,
 				});
 				return (
 					<>
-						<Button sx={recommendationsButtonSx} 
-						variant="outlined" 
-						startIcon={<PictureAsPdfSharp />} 
-						onClick={() => {
-							// TODO: add CV functionality here
-						}}>
-							קו"ח
+						<Button sx={recommendationsButtonSx}
+							variant="outlined"
+							startIcon={<PictureAsPdfSharp />}
+							onClick={() =>
+							{
+								setAboutDialogOpen(true);
+							}}>
+							ספר על עצמך
 						</Button>
+						<AboutDialog open={aboutDialogOpen} onClose={aboutDialogonClose} candidate={candidateInfo} jobId={job.id.toString()}/>
 					</>
 				);
 			},
@@ -171,10 +186,6 @@ export default function JobsTable(props: { setDataSize: any, candidateJobs: any,
 
 			renderCell: (job) =>
 			{
-				getFilteredCandidateJobStatuses(["jobNumber", "candidateId"], [job.id.toString(), candidate ? candidate._id : ""]).then(result =>
-				{
-					setCandidateJobStatus(result[0]);
-				});
 				return (
 					<>
 						<Button sx={recommendationsButtonSx} variant="outlined" startIcon={<Recommend />} onClick={openRecommendersDialog}>
@@ -184,7 +195,7 @@ export default function JobsTable(props: { setDataSize: any, candidateJobs: any,
 							open={recommendersDialogOpen}
 							onClose={closeRecommendersDialog}
 							jobId={job.id.toString()}
-							candidateId={candidateInfo?._id !} />
+							candidateId={candidateInfo?._id!} />
 					</>
 				);
 			},
