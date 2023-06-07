@@ -22,7 +22,7 @@ export default function RecommendersDialog(props: { open, onClose, jobId: string
     useEffect(() =>
     {        
         getRecommendationsURLs();
-    }, [jobId, open])
+    }, [open])
 
     return (
         // popup dialog
