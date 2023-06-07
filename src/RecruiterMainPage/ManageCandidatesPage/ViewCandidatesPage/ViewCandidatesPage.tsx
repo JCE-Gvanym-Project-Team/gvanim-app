@@ -13,6 +13,7 @@ import { AccountCircle, ArticleOutlined, EditNote, PictureAsPdfSharp, QuestionAn
 import AboutDialog from './Components/AboutDialog/AboutDialog';
 import MyLoading from '../../../Components/MyLoading/MyLoading';
 import RecommendersDialog from './Components/RecommendersDialog/RecommendersDialog';
+import JobsTable2 from './Components/JobsTable/JobsTable';
 
 export default function ViewCandidatesPage(props: { candidateId: string })
 {
@@ -303,7 +304,7 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 									</Box>
 
 									{/* Jobs table */}
-									<JobsTable
+									<JobsTable2
 										setDataSize={setDataSize}
 										candidateJobs={candidateJobs}
 										candidateInfo={candidateInfo}
