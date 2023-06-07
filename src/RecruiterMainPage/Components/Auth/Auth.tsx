@@ -1,16 +1,15 @@
 import Login from "../../LoginPage/LoginPage";
 import "firebase/compat/auth";
-import  { useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import RecruiterMainPage from "../../RecruiterMainPage";
 import { loginRecruiter, loguotRecruiter } from "../../../Firebase/FirebaseFunctions/Authentication";
 import firebase from "../../../Firebase/FirebaseConfig/firebase";
 import { createTheme } from "@mui/material";
+import MyLoading from "../../../Components/MyLoading/MyLoading";
 
-const recruitersPageTheme = createTheme({
-	direction: 'rtl',
-});
+export default function Auth() {
+  const [loading, setLoading] = useState(true);
 
-export default function Auth () {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [user, setUser] = useState('');
@@ -78,9 +77,10 @@ export default function Auth () {
           clearInputs();
           setUser(user);
         }
-        else {
-          return <RecruiterMainPage handlelogout={loguotRecruiter} />;
-        }
+        // else {
+        //   return <RecruiterMainPage handlelogout={loguotRecruiter} />;
+        // }
+        setLoading(false);
       });
     };
 
@@ -91,24 +91,39 @@ export default function Auth () {
   return (
     <>
       {user ? (
-        <RecruiterMainPage handlelogout={loguotRecruiter} />
-      ) : (
-
-            <Login
-              email={email}
-              setEmail={setEmail}
-              password={password}
-              setPassword={setPassword}
-              handleLogin={handleLogin}
-              handleSignup={handleSignup}
-              hasAccount={hasAccount}
-              setHasAccount={setHasAccount}
-              emailError={emailError}
-              passwordError={passwordError}
-              validated={validated}
-              alertHidden={alertHidden}
-            />
+        <>
+          {loading ? (
+            <MyLoading loading={loading} setLoading={setLoading} />
           )
+            : (
+              <RecruiterMainPage handlelogout={loguotRecruiter} />
+            )}
+        </>
+
+      ) : (
+        <>
+          {loading ? (
+            <MyLoading loading={loading} setLoading={setLoading} />
+          )
+            : (
+              <Login
+                email={email}
+                setEmail={setEmail}
+                password={password}
+                setPassword={setPassword}
+                handleLogin={handleLogin}
+                handleSignup={handleSignup}
+                hasAccount={hasAccount}
+                setHasAccount={setHasAccount}
+                emailError={emailError}
+                passwordError={passwordError}
+                validated={validated}
+                alertHidden={alertHidden}
+              />
+            )}
+        </>
+
+      )
       }
     </>
 

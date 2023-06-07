@@ -11,20 +11,21 @@ export const MyButtonSx: SxProps = {
 export const dataGridContainerSx: SxProps = {
 	overflow: 'hidden',
 	border: '1px solid rgba(0, 0, 0, 0.125)',
+	display:"flex",
+	justifyContent: "stretch",
+	alignItems: "center"
 }
 
 export const dataGridContainerStyle = {
 	padding: 0,
-	marginTop: '15px',
 	marginBottom: '15px',
-	maxWidth: "100%",
+	width: "100%",
 }
 
 export const dataGridSx = (theme: Theme): SxProps => ({
-	padding: 1,
+	padding: 0.5,
 	height: 'calc(100vh - 112px)',	
 	overflow: 'hidden',
-	boxShadow: 2,
 	"&.MuiDataGrid-root .MuiDataGrid-cell:focus-within": {
 		outline: "none !important",
 
@@ -72,16 +73,16 @@ export const dataGridSx = (theme: Theme): SxProps => ({
 });
 
 export const TypographyFooterSx: SxProps = {
-	fontWeight: '500',
+	fontWeight: '400',
 	marginLeft: '8px',
-	color: 'rgb(62, 80, 96)',
+	color: 'black',
 	fontFamily: '"IBM Plex Sans", -apple-system, BlinkMacSystemFont,"Segoe UI", "Roboto", "Helvetica Neue", "Arial", "sans-serif", "Apple Color Emoji","Segoe UI Emoji", "Segoe UI Symbol"'
 }
 
 export const GridFooterContainerSx: SxProps = {
 	width: '100%',
 	display: 'flex',
-	justifyContent: 'center'
+	justifyContent: 'space-between'
 }
 
 

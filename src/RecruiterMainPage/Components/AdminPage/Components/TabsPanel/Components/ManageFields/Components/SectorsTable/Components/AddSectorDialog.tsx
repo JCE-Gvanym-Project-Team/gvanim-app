@@ -7,7 +7,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
 import { TransitionProps } from '@mui/material/transitions';
 import { Box, Button, Divider, FormControl, InputLabel, MenuItem, Select, Stack, SxProps, TextField, Typography } from '@mui/material';
-import { Add, Edit } from '@mui/icons-material';
+import { Add } from '@mui/icons-material';
 
 
 const MyFieldsSx: SxProps = {

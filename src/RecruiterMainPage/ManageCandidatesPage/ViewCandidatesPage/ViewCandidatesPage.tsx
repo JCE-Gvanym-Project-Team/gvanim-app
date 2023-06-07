@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Button, Typography, Box, Stack, Rating } from '@mui/material'
-import EditIcon from '@mui/icons-material/Edit';
 import { editButtonSx, textSx, titleSx, mainStackSx, ContainerGradientSx, candidateNameSx, candidateNameAndEditButtonContainerSx, jobTextSx, notesButtonSx, interviewsButtonSx, changeJobButtonSx, recommendationsButtonSx } from './ViewCandidatesPageStyle';
 import { BoxGradientSx } from '../../PageStyles';
-import { ManageCandidatesPageGlobalStyle } from '../../PageStyles';
 import JobsTable from './Components/JobsTable/JobsTable';
 import { Candidate, getFilteredCandidates } from '../../../Firebase/FirebaseFunctions/Candidate';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -11,9 +9,11 @@ import { Job, getFilteredJobs } from '../../../Firebase/FirebaseFunctions/Job';
 import { CandidateJobStatus, getFilteredCandidateJobStatuses } from '../../../Firebase/FirebaseFunctions/CandidateJobStatus';
 import NotesPopup from './Components/NotesPopup/NotesPopup';
 import { AccountCircle, ArticleOutlined, EditNote, QuestionAnswer, SpeakerNotes } from '@mui/icons-material';
+import MyLoading from '../../../Components/MyLoading/MyLoading';
 
 export default function ViewCandidatesPage(props: { candidateId: string })
 {
+    const [loading, setLoading] = useState(true);
 
 	const navigate = useNavigate();
 
@@ -48,6 +48,8 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 		getCandidate(candidateId, setCandidateInfo);
 
 		getJobs(candidateId, setCandidateJobs);
+
+		setLoading(false);
 	}, [])
 
 	// comments popup handlers
@@ -85,6 +87,12 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 
 	return (
 		<>
+		{loading ? 
+		(
+			 <MyLoading loading={loading} setLoading={setLoading} />
+		) : 
+		(
+			<>
 			<Box sx={BoxGradientSx}>
 
 				<Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
@@ -100,7 +108,8 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 				}} />
 
 				<Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
-					right: '10%',
+					top: '-7%',
+					right: '20%',
 					left: 'auto',
 					backgroundColor: 'hsla(0,0%,100%,.1)',
 					background: 'hsla(0,0%,100%,.1)',
@@ -126,19 +135,19 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 
 				<Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
 					right: '5%',
-					top: '20%',
+					top: '30%',
 					bottom: 'auto',
 					backgroundColor: 'hsla(0,0%,100%,.1)',
 					background: 'hsla(0,0%,100%,.1)',
-					width: '120px',
-					height: '120px',
+					width: '150px',
+					height: '150px',
 					borderRadius: '50%',
 					position: 'absolute',
 				}} />
 
 				<Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
 					left: '2%',
-					top: '12%',
+					top: '16%',
 					bottom: 'auto',
 					backgroundColor: 'hsla(0,0%,100%,.1)',
 					background: 'hsla(0,0%,100%,.1)',
@@ -168,6 +177,17 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 					background: 'hsla(0,0%,100%,.1)',
 					width: '60px',
 					height: '60px',
+					borderRadius: '50%',
+					position: 'absolute',
+				}} />
+						<Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
+					left: '45%',
+					top: '16%',
+					bottom: 'auto',
+					backgroundColor: 'hsla(0,0%,100%,.1)',
+					background: 'hsla(0,0%,100%,.1)',
+					width: '30px',
+					height: '30px',
 					borderRadius: '50%',
 					position: 'absolute',
 				}} />
@@ -253,6 +273,9 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 				</Box>
 			</Box>
 		</>
+		)}
+		</>
+
 	)
 }
 

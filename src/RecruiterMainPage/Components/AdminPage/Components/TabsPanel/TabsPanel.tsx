@@ -7,6 +7,8 @@ import { Tooltip } from '@mui/material';
 import ManageFields from './Components/ManageFields/ManageFields';
 import ManageAccount from './Components/ManageAccount/ManageAccount';
 import ManageRecruiters from './Components/ManageRecruiters/ManageRecruiters';
+import EnhancedTable from './Components/TableTest';
+import MyLoading from '../../../../../Components/MyLoading/MyLoading';
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -37,6 +39,7 @@ function a11yProps(index: number) {
 }
 
 export default function TabsPane() {
+    const [loading, setLoading] = React.useState(true);
     const [value, setValue] = React.useState(0);
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
@@ -44,11 +47,14 @@ export default function TabsPane() {
 
 
 
-    return (
+    React.useEffect(() => {
+        setLoading(false);
+    }, []);
+
+
+    return (<>{loading ? (<MyLoading loading={loading} setLoading={setLoading} />) : (
         <Box sx={{ width: '100%' }}>
-
-
-            <Tabs id="mobileTabs" value={value} onChange={handleChange} centered sx={{ display: { xs: 'flex', sm: 'none', md: 'none', lg: 'none', xl: 'none' }}}>
+            <Tabs id="mobileTabs" value={value} onChange={handleChange} centered sx={{ display: { xs: 'flex', sm: 'none', md: 'none', lg: 'none', xl: 'none' } }}>
                 <Tooltip title={'הגדרות משתמש'}>
                     <Tab disableRipple icon={<ManageAccounts />} {...a11yProps(0)} />
                 </Tooltip>
@@ -81,7 +87,8 @@ export default function TabsPane() {
 
             <TabPanel value={value} index={1}>
 
-                <ManageRecruiters />
+                {/* <ManageRecruiters /> */}
+                <EnhancedTable />
 
             </TabPanel>
 
@@ -91,8 +98,11 @@ export default function TabsPane() {
 
                 <ManageFields />
 
+
             </TabPanel>
 
         </Box>
-    );
+
+    )} </>);
 }
+
