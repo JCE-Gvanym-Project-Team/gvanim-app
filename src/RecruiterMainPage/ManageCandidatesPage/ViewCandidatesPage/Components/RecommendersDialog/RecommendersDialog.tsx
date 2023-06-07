@@ -1,26 +1,27 @@
-import { Close } from '@mui/icons-material';
-import { Box, Button, Dialog, DialogContent, DialogTitle, IconButton } from '@mui/material';
+import { Close, FileCopy, Key } from '@mui/icons-material';
+import { Box, Button, Dialog, DialogContent, DialogTitle, Divider, IconButton, Typography } from '@mui/material';
 import { useEffect, useState } from 'react'
 import { dialogContentStyle, dialogContentSx, dialogSx, dialogTitleSx, dialogTopAreaSx } from './RecommendersDialogStyle';
 import { CandidateJobStatus, getFilteredCandidateJobStatuses } from '../../../../../Firebase/FirebaseFunctions/CandidateJobStatus';
+import React from 'react';
+import { ManageCandidatesPageGlobalStyle } from '../../../../PageStyles';
 
 export default function RecommendersDialog(props: { open, onClose, jobId: string, candidateId: string })
 {
     const { open, onClose, jobId, candidateId } = props;
 
-    const [recommenders, setRecommenders] = useState<string[] | undefined>();
+    const [recommendersLinks, setRecommendersLinks] = useState<string[] | undefined>();
+    const [candidateJobStatus, setCandidateJobStatus] = useState<CandidateJobStatus | null>(null);
 
-    const getRecommendationsURLs = async function () {
-        // TODO: use getfilteredcandidatejobstatus and then use
-        // this commented code because it actually works, but firebase code needs fixing
-        const candidateJobStatus = (await getFilteredCandidateJobStatuses(["jobNumber", "candidateId"], [jobId, candidateId]))[0]
-        const a = await candidateJobStatus?.getRecomendationsUrl();
-        console.log(candidateJobStatus?._jobNumber);
-        console.log("asd: " + a);
+    const getRecommendationsURLs = async function ()
+    {
+        const candJobStatus = (await getFilteredCandidateJobStatuses(["jobNumber", "candidateId"], [jobId, candidateId]))[0]
+        setCandidateJobStatus(candJobStatus);
+        setRecommendersLinks(await candJobStatus?.getRecomendationsUrl());
     }
 
     useEffect(() =>
-    {        
+    {
         getRecommendationsURLs();
     }, [open])
 
@@ -30,7 +31,7 @@ export default function RecommendersDialog(props: { open, onClose, jobId: string
             <Box sx={dialogTopAreaSx}>
                 {/* Title */}
                 <DialogTitle sx={dialogTitleSx}>
-                    העברת משרה
+                    ממליצים
                 </DialogTitle>
 
                 <Box sx={{ display: "flex", justifyContent: "end" }}>
@@ -50,9 +51,71 @@ export default function RecommendersDialog(props: { open, onClose, jobId: string
 
             {/* List of recommenders */}
             <DialogContent sx={dialogContentSx} style={dialogContentStyle}>
-                <Button>
-                    {recommenders}
-                </Button>
+
+                <Box sx={{ display: "flex", flexDirection: "column", alignItems: "start", width: "100%" }}>
+                    {candidateJobStatus?._recomendations.map((recommendation, index) =>
+                    {
+                        return (
+                            <React.Fragment key={index + "Fragment"}>
+                                <Box key={index + "box"} sx={{
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    justifyContent: "space-between",
+                                    marginTop: "1rem",
+                                    width: "100%"
+                                }}>
+                                    <Box sx={{ display: "flex", flexDirection: "column" }} key={index + "box2"}>
+                                        <Typography
+                                            sx={{
+                                                fontFamily: ManageCandidatesPageGlobalStyle.textFontFamily,
+                                                fontWeight: "bold"
+                                            }}
+                                            key={index + "typography1"}
+                                        >
+                                            שם: {recommendation._fullName}
+                                        </Typography >
+
+                                        <Typography
+                                            sx={{
+                                                fontFamily: ManageCandidatesPageGlobalStyle.textFontFamily,
+                                                fontWeight: "bold"
+                                            }}
+                                            key={index + "typography2"}
+                                        >
+                                            טלפון: {recommendation._phone}
+                                        </Typography >
+
+                                        <Typography
+                                            sx={{
+                                                fontFamily: ManageCandidatesPageGlobalStyle.textFontFamily,
+                                                fontWeight: "bold"
+                                            }}
+                                            key={index + "typography3"}
+                                        >
+                                            אימייל:  {recommendation._eMail}
+                                        </Typography >
+                                    </Box>
+
+                                    <Button
+                                    sx={{marginLeft: "1rem"}}
+                                        variant='outlined'
+                                        onClick={() =>
+                                        {
+                                            window.open(recommendersLinks ? recommendersLinks[index] : "");
+                                        }}
+                                        key={index + "Button"}
+                                    >
+                                        <FileCopy />
+                                        קובץ מצורף
+                                    </Button>
+
+                                </Box>
+
+                            </React.Fragment>
+                        )
+                    })}
+                </Box>
+
             </DialogContent>
         </Dialog>
     )

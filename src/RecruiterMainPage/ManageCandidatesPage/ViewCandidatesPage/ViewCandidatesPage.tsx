@@ -242,7 +242,7 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 
 						{/* glass container */}
 						<Box >
-							<Box sx={{ marginRight: "3rem", marginLeft: "3rem" }}>
+							<Box sx={{ marginRight: {xs: "0", md:"3rem"}, marginLeft: {xs: "0", md:"3rem"} }}>
 								<Stack direction={'column'} sx={mainStackSx} spacing={6}>
 
 
@@ -285,13 +285,22 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 
 
 									<Box sx={{ display: "flex", justifyContent: "space-between" }}>
-										<Button sx={recommendationsButtonSx}
-											variant="outlined"
+										<Button sx={{
+											color: "white",
+											backgroundColor: "#3333ff"
+										}}
+										
+											variant="contained"
 											startIcon={<PictureAsPdfSharp />}
-											onClick={() =>
+											onClick={async () =>
 											{
-												// TODO: add CV functionality here
-											}}>
+												setLoading(true);
+												const cvLink = (await candidateInfo?.getCvUrl()!);
+												setLoading(false);
+												window.open(cvLink);
+												
+											}}
+										>
 											קו"ח
 										</Button>
 									</Box>

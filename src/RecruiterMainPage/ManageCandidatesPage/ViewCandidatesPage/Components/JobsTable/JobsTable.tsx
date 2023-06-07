@@ -155,7 +155,7 @@ export default function JobsTable2(props: {
                 setAboutDialogJobId(job.id.toString());
                 return (
                     <>
-                        <Button sx={recommendationsButtonSx}
+                        <Button
                             variant="outlined"
                             startIcon={<Sms />}
                             onClick={() =>
@@ -182,10 +182,13 @@ export default function JobsTable2(props: {
 
             renderCell: (job) =>
             {
-                setRecommendersDialogJobId(job.id);
                 return (
                     <>
-                        <Button sx={recommendationsButtonSx} variant="outlined" startIcon={<Recommend />} onClick={openRecommendersDialog}>
+                        <Button sx={recommendationsButtonSx} variant="outlined" startIcon={<Recommend />} onClick={() =>
+                        {
+                            setRecommendersDialogJobId(job.id);
+                            openRecommendersDialog();
+                        }}>
                             ממליצים
                         </Button>
                     </>
@@ -322,7 +325,7 @@ const TraceUpdates = React.forwardRef<any, any>((props, ref) =>
         {
             clearTimeout(timer);
         };
-    });
+    }, []);
 
     return <Component ref={handleRef} {...other} />;
 });

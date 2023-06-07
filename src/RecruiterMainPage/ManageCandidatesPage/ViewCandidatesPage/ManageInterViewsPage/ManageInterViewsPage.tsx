@@ -8,7 +8,7 @@ import { CandidateJobStatus, allStatus, getFilteredCandidateJobStatuses } from '
 import { Job, getFilteredJobs } from '../../../../Firebase/FirebaseFunctions/Job';
 import { AccountCircle, CalendarMonth, ErrorOutline, QuestionAnswer } from '@mui/icons-material';
 import ScheduleInterviewDialog from './Components/ScheduleInterviewDialog/ScheduleInterviewDialog';
-import MyLoading2ndVersion from '../../../../Components/MyLoading2ndVersion/MyLoading2ndVersion';
+import MyLoading from '../../../../Components/MyLoading/MyLoading';
 export default function ManageInterviewsPage(props: { candidateId: string })
 {
 
@@ -131,7 +131,7 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 	}
 
 	return (
-		loading ? <MyLoading2ndVersion /> :
+		loading ? <MyLoading loading={loading} setLoading={setLoading}/> :
 			<React.Fragment key={rerenderKey}>
 				{/* background div */}
 				<Box sx={BoxGradientSx}>

@@ -19,7 +19,9 @@ export const changeJobButtonSx: SxProps = {
 
 export const recommendationsButtonSx: SxProps = {
     // backgroundColor: ManageCandidatesPageGlobalStyle.recommendationsButtonColor,
-    alignSelf: 'center'
+    alignSelf: 'center',
+    color: "#339933",
+    borderColor: "#339933"
 }
 
 export const interviewsButtonSx: SxProps = {
@@ -42,7 +44,7 @@ export const jobTextSx: SxProps = {
     color: 'black',
     fontFamily: ManageCandidatesPageGlobalStyle.textFontFamily,
     marginTop: '1rem'
-    
+
 }
 
 export const candidateNameSx: SxProps = {
@@ -73,11 +75,11 @@ export const BoxGradientSx: SxProps = {
 
 export const ContainerGradientSx: SxProps = {
     marginTop: "1rem",
-    marginLeft: {xs: '0', md: "3rem"},
-    marginRight: {xs: '0', md: "3rem"},
+    marginLeft: { xs: '0', md: "3rem" },
+    marginRight: { xs: '0', md: "3rem" },
     paddingBottom: '32px',
-    paddingLeft: {xs: '0', md: "3rem"},
-    paddingRight: {xs: '0', md: "3rem"},
+    paddingLeft: { xs: '0', md: "3rem" },
+    paddingRight: { xs: '0', md: "3rem" },
     paddingTop: "-300px",
     border: '1px solid rgba(0, 0, 0, 0.125)',
     borderRadius: '0.75rem',

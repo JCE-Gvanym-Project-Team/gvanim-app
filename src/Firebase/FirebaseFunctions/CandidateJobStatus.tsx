@@ -113,7 +113,6 @@ export class CandidateJobStatus {
         let urls: string[] = [];
         const extentions = await getFileExtensionsInFolder(`CandidatesFiles/${this._candidateId}/rec`);
         const phones = this._recomendations.map((rec) => rec._phone);
-        console.log(phones);
         for (let i = 0; i < phones.length; i++)
             for (let j = 0; j < extentions.length; j++)
                 if ((await fileExists(`CandidatesFiles/${this._candidateId}/rec/${phones[i]}_${this._jobNumber}_REC.${extentions[j]}`))) {

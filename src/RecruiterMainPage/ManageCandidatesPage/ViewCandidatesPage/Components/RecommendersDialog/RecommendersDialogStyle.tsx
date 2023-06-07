@@ -8,7 +8,7 @@ export const dialogSx: SxProps = {
 }
 
 export const dialogContentSx: SxProps = {
-    width: { xs: "100%", md: "100%" },
+    width: {xs: "100%", md:"500px"},
     display: "flex",
     flexDirection: { xs: "column", md: "row" },
     alignItems: "center",
