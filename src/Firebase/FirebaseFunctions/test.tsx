@@ -173,11 +173,6 @@ async function testMessgaeFormat() {
     console.log(getMessage(cand, job, rec, allStatus[6],new Date(),"מיקום כלשהו"));
 }
 async function testGetRecomendationsUrl() {
-    await loginAdmin();
-    let lastCand = new Candidate("44");
-    let lastJob = new Job(105);
-    await lastCand.remove();
-    await lastJob.remove();
     const candId = await generateCandidateId();
     const jobId = await generateJobNumber();
     let cand = new Candidate(candId,"","",generateRandomString(),generateRandomString());
@@ -210,6 +205,12 @@ async function testGetCvUrl() {
     let cand = new Candidate("53");
     console.log((await cand.getCvUrl()));
 }
+async function testAddRecomendation() {
+    const f = new File([],'jgcc.pdf');
+    let s = (await getFilteredCandidateJobStatuses(["jobNumber","candidateId"],["32","53"]))[0];
+    console.log(s);
+    console.log(await s.getRecomendationsUrl());
+}
 export async function main() {
     //console.log(`testSingleJobAddNoConfilct(): ${await testSingleJobAddNoConfilct()}`);
     //console.log(`testSingleJobAddConfilct(): ${await testSingleJobAddConfilct()}`);
@@ -222,4 +223,5 @@ export async function main() {
     //testMessgaeFormat();
     //testGetRecomendationsUrl();
     //testGetCvUrl();
+    testAddRecomendation();
 }
