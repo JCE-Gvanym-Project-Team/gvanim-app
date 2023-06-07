@@ -9,18 +9,20 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Job, getFilteredJobs } from '../../../Firebase/FirebaseFunctions/Job';
 import { CandidateJobStatus, getFilteredCandidateJobStatuses } from '../../../Firebase/FirebaseFunctions/CandidateJobStatus';
 import NotesPopup from './Components/NotesPopup/NotesPopup';
-import { AccountCircle, ArticleOutlined, EditNote, QuestionAnswer, SpeakerNotes } from '@mui/icons-material';
+import { AccountCircle, ArticleOutlined, EditNote, PictureAsPdfSharp, QuestionAnswer, SpeakerNotes } from '@mui/icons-material';
 import AboutDialog from './Components/AboutDialog/AboutDialog';
 import MyLoading from '../../../Components/MyLoading/MyLoading';
 
 export default function ViewCandidatesPage(props: { candidateId: string })
 {
-    const [loading, setLoading] = useState(true);
+	const [loading, setLoading] = useState(true);
 
 	const navigate = useNavigate();
 
 	// get jobs data size
 	const [dataSize, setDataSize] = useState(0);
+
+	const [aboutDialogOpen, setAboutDialogOpen] = useState(false);
 
 	// get candidate id
 	let { candidateId } = props;
@@ -89,192 +91,203 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 
 	return (
 		<>
-		{loading ? 
-		(
-			 <MyLoading loading={loading} setLoading={setLoading} />
-		) : 
-		(
-			<>
-			<Box sx={BoxGradientSx}>
+			{loading ?
+				(
+					<MyLoading loading={loading} setLoading={setLoading} />
+				) :
+				(
+					<>
+						<Box sx={BoxGradientSx}>
 
-				<Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
-					right: '4%',
-					left: 'auto',
-					bottom: 'auto',
-					backgroundColor: 'hsla(0,0%,100%,.1)',
-					background: 'hsla(0,0%,100%,.1)',
-					width: '120px',
-					height: '120px',
-					borderRadius: '50%',
-					position: 'absolute',
-				}} />
+							<Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
+								right: '4%',
+								left: 'auto',
+								bottom: 'auto',
+								backgroundColor: 'hsla(0,0%,100%,.1)',
+								background: 'hsla(0,0%,100%,.1)',
+								width: '120px',
+								height: '120px',
+								borderRadius: '50%',
+								position: 'absolute',
+							}} />
 
-				<Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
-					top: '-7%',
-					right: '20%',
-					left: 'auto',
-					backgroundColor: 'hsla(0,0%,100%,.1)',
-					background: 'hsla(0,0%,100%,.1)',
-					width: '200px',
-					height: '200px',
-					borderRadius: '50%',
-					position: 'absolute',
-				}} />
+							<Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
+								top: '-7%',
+								right: '20%',
+								left: 'auto',
+								backgroundColor: 'hsla(0,0%,100%,.1)',
+								background: 'hsla(0,0%,100%,.1)',
+								width: '200px',
+								height: '200px',
+								borderRadius: '50%',
+								position: 'absolute',
+							}} />
 
-				<Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
-					left: '40%',
-					top: '-1%',
-					right: 'auto',
-					bottom: 'auto',
-					backgroundColor: 'hsla(0,0%,100%,.1)',
-					background: 'hsla(0,0%,100%,.1)',
-					width: '60px',
-					height: '60px',
-					borderRadius: '50%',
-					position: 'absolute',
-				}} />
-
-
-				<Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
-					right: '5%',
-					top: '30%',
-					bottom: 'auto',
-					backgroundColor: 'hsla(0,0%,100%,.1)',
-					background: 'hsla(0,0%,100%,.1)',
-					width: '150px',
-					height: '150px',
-					borderRadius: '50%',
-					position: 'absolute',
-				}} />
-
-				<Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
-					left: '2%',
-					top: '16%',
-					bottom: 'auto',
-					backgroundColor: 'hsla(0,0%,100%,.1)',
-					background: 'hsla(0,0%,100%,.1)',
-					width: '120px',
-					height: '120px',
-					borderRadius: '50%',
-					position: 'absolute',
-				}} />
-
-				<Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
-					left: '4%',
-					top: '8%',
-					bottom: 'auto',
-					backgroundColor: 'hsla(0,0%,100%,.1)',
-					background: 'hsla(0,0%,100%,.1)',
-					width: '80px',
-					height: '80px',
-					borderRadius: '50%',
-					position: 'absolute',
-				}} />
-
-				<Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
-					left: '25%',
-					top: '12%',
-					bottom: 'auto',
-					backgroundColor: 'hsla(0,0%,100%,.1)',
-					background: 'hsla(0,0%,100%,.1)',
-					width: '60px',
-					height: '60px',
-					borderRadius: '50%',
-					position: 'absolute',
-				}} />
-						<Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
-					left: '45%',
-					top: '16%',
-					bottom: 'auto',
-					backgroundColor: 'hsla(0,0%,100%,.1)',
-					background: 'hsla(0,0%,100%,.1)',
-					width: '30px',
-					height: '30px',
-					borderRadius: '50%',
-					position: 'absolute',
-				}} />
-
-				<Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', top: "165px", position: "absolute" }}>
-					<Stack direction='row' spacing={1}>
-						<Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-							<AccountCircle sx={{ color: '#fff' }} />
-						</Box>
-						<Typography variant="h4" sx={{ color: '#fff', fontFamily: "'Noto Sans Hebrew', sans-serif", fontWeight: 500 }}>
-							צפייה במועמד
-						</Typography>
-					</Stack>
-					<Divider />
-					{/* Candidate Name */}
-					<Box sx={{ display: 'flex', alignSelf: "center" }}>
-						<Typography sx={candidateNameSx} variant='h3' >
-							{candidateInfo?._firstName + " " + candidateInfo?._lastName}
-						</Typography>
-
-					</Box>
-				</Box>
-			</Box>
-
-			{/* glass container */}
-			<Box >
-				<Box sx={{ marginRight: "3rem", marginLeft: "3rem" }}>
-					<Stack direction={'column'} sx={mainStackSx} spacing={6}>
+							<Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
+								left: '40%',
+								top: '-1%',
+								right: 'auto',
+								bottom: 'auto',
+								backgroundColor: 'hsla(0,0%,100%,.1)',
+								background: 'hsla(0,0%,100%,.1)',
+								width: '60px',
+								height: '60px',
+								borderRadius: '50%',
+								position: 'absolute',
+							}} />
 
 
-						<Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
+							<Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
+								right: '5%',
+								top: '30%',
+								bottom: 'auto',
+								backgroundColor: 'hsla(0,0%,100%,.1)',
+								background: 'hsla(0,0%,100%,.1)',
+								width: '150px',
+								height: '150px',
+								borderRadius: '50%',
+								position: 'absolute',
+							}} />
 
-							<Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-								<Typography component="legend" sx={jobTextSx} style={{ fontSize: "24px" }}>דרגת התאמה כללית</Typography>
-								<Rating
-									value={generalRating}
-									onChange={(event, newValue) =>
-									{
-										candidateInfo?.updateGeneralRating(newValue ? newValue : -1);
-										setGeneralRating(newValue ? newValue : -1);
-									}}
-									size='large'
-								/>
-							</Box>
+							<Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
+								left: '2%',
+								top: '16%',
+								bottom: 'auto',
+								backgroundColor: 'hsla(0,0%,100%,.1)',
+								background: 'hsla(0,0%,100%,.1)',
+								width: '120px',
+								height: '120px',
+								borderRadius: '50%',
+								position: 'absolute',
+							}} />
 
-							{ /* edit button to make them on the same line */}
-							<Box sx={candidateNameAndEditButtonContainerSx}>
-								{/* Edit Button */}
-								<Button sx={editButtonSx} variant="contained" startIcon={<EditNote />} onClick={editCandidateHandler}>
-									עריכת פרטים
-								</Button>
+							<Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
+								left: '4%',
+								top: '8%',
+								bottom: 'auto',
+								backgroundColor: 'hsla(0,0%,100%,.1)',
+								background: 'hsla(0,0%,100%,.1)',
+								width: '80px',
+								height: '80px',
+								borderRadius: '50%',
+								position: 'absolute',
+							}} />
+
+							<Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
+								left: '25%',
+								top: '12%',
+								bottom: 'auto',
+								backgroundColor: 'hsla(0,0%,100%,.1)',
+								background: 'hsla(0,0%,100%,.1)',
+								width: '60px',
+								height: '60px',
+								borderRadius: '50%',
+								position: 'absolute',
+							}} />
+							<Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
+								left: '45%',
+								top: '16%',
+								bottom: 'auto',
+								backgroundColor: 'hsla(0,0%,100%,.1)',
+								background: 'hsla(0,0%,100%,.1)',
+								width: '30px',
+								height: '30px',
+								borderRadius: '50%',
+								position: 'absolute',
+							}} />
+
+							<Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', top: "165px", position: "absolute" }}>
+								<Stack direction='row' spacing={1}>
+									<Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+										<AccountCircle sx={{ color: '#fff' }} />
+									</Box>
+									<Typography variant="h4" sx={{ color: '#fff', fontFamily: "'Noto Sans Hebrew', sans-serif", fontWeight: 500 }}>
+										צפייה במועמד
+									</Typography>
+								</Stack>
+								<Divider />
+								{/* Candidate Name */}
+								<Box sx={{ display: 'flex', alignSelf: "center" }}>
+									<Typography sx={candidateNameSx} variant='h3' >
+										{candidateInfo?._firstName + " " + candidateInfo?._lastName}
+									</Typography>
+
+								</Box>
 							</Box>
 						</Box>
 
-						<AboutDialog open={true} onClose={() => {}} candidate={candidateInfo}/>
+						{/* glass container */}
+						<Box >
+							<Box sx={{ marginRight: "3rem", marginLeft: "3rem" }}>
+								<Stack direction={'column'} sx={mainStackSx} spacing={6}>
 
-						{/* text */}
-						<Box sx={candidateNameAndEditButtonContainerSx}>
-							<Typography sx={jobTextSx} variant='h4'>
-								משרות
-							</Typography>
+
+									<Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
+
+										<Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+											<Typography component="legend" sx={jobTextSx} style={{ fontSize: "24px" }}>דרגת התאמה כללית</Typography>
+											<Rating
+												value={generalRating}
+												onChange={(event, newValue) =>
+												{
+													candidateInfo?.updateGeneralRating(newValue ? newValue : -1);
+													setGeneralRating(newValue ? newValue : -1);
+												}}
+												size='large'
+											/>
+										</Box>
+
+										{ /* edit button to make them on the same line */}
+										<Box sx={candidateNameAndEditButtonContainerSx}>
+											{/* Edit Button */}
+											<Button sx={editButtonSx} variant="contained" startIcon={<EditNote />} onClick={editCandidateHandler}>
+												עריכת פרטים
+											</Button>
+										</Box>
+									</Box>
+
+										<Divider />
+									<Box sx={{display: "flex", justifyContent: "space-between"}}>
+										<Button sx={recommendationsButtonSx}
+											variant="outlined"
+											startIcon={<PictureAsPdfSharp />}
+											onClick={() =>
+											{
+												// TODO: add CV functionality here
+											}}>
+											קו"ח
+										</Button>
+									</Box>
+
+									{/* text */}
+									<Box sx={candidateNameAndEditButtonContainerSx}>
+										<Typography sx={jobTextSx} variant='h4'>
+											משרות
+										</Typography>
+									</Box>
+
+									{/* Jobs table */}
+									<JobsTable setDataSize={setDataSize} candidateJobs={candidateJobs} candidateInfo={candidateInfo} />
+
+									{/* Bottom Buttons */}
+									<Box sx={candidateNameAndEditButtonContainerSx}>
+										<Button sx={interviewsButtonSx} variant="contained" startIcon={<QuestionAnswer />} onClick={() =>
+										{
+											interviewsPageHandler(candidateId);
+										}}>
+											ראיונות
+										</Button>
+										<Button sx={notesButtonSx} variant="contained" onClick={commentsPopupOpenHandler} startIcon={<SpeakerNotes />}>
+											הערות
+										</Button>
+										<NotesPopup open={popupOpen} onClose={commentsPopupCloseHandler} candidate={candidateInfo} initialData={initialData} />
+									</Box>
+
+								</Stack>
+							</Box>
 						</Box>
-
-						{/* Jobs table */}
-						<JobsTable setDataSize={setDataSize} candidateJobs={candidateJobs} candidateInfo={candidateInfo} />
-
-						{/* Bottom Buttons */}
-						<Box sx={candidateNameAndEditButtonContainerSx}>
-							<Button sx={interviewsButtonSx} variant="contained" startIcon={<QuestionAnswer />} onClick={() =>
-							{
-								interviewsPageHandler(candidateId);
-							}}>
-								ראיונות
-							</Button>
-							<Button sx={notesButtonSx} variant="contained" onClick={commentsPopupOpenHandler} startIcon={<SpeakerNotes />}>
-								הערות
-							</Button>
-							<NotesPopup open={popupOpen} onClose={commentsPopupCloseHandler} candidate={candidateInfo} initialData={initialData} />
-						</Box>
-
-					</Stack>
-				</Box>
-			</Box>
-		</>
-		)}
+					</>
+				)}
 		</>
 
 	)
