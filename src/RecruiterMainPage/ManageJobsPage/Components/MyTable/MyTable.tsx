@@ -2,28 +2,30 @@ import * as React from 'react';
 import Typography from '@mui/material/Typography';
 import { Box, Button, Container, Stack, styled, useTheme } from '@mui/material';
 import MyDropMenu from '../MyDropMenu/MyDropMenu';
-import {
-	DataGrid,
-	GridToolbarFilterButton,
-	GridColDef,
-	GridToolbarDensitySelector,
-	GridToolbarColumnsButton,
-	GridInitialState,
-	GridToolbarContainer,
-	GridFooterContainer,
-	GridToolbarQuickFilter,
-	GridToolbarExportContainer,
-	GridPrintExportMenuItem,
-	heIL,
+import
+	{
+		DataGrid,
+		GridToolbarFilterButton,
+		GridColDef,
+		GridToolbarDensitySelector,
+		GridToolbarColumnsButton,
+		GridInitialState,
+		GridToolbarContainer,
+		GridFooterContainer,
+		GridToolbarQuickFilter,
+		GridToolbarExportContainer,
+		GridPrintExportMenuItem,
+		heIL,
 
-} from '@mui/x-data-grid';
-import {
-	GridFooterContainerSx,
-	TypographyFooterSx,
-	dataGridContainerStyle,
-	dataGridContainerSx,
-	dataGridSx
-} from './MyTableStyle';
+	} from '@mui/x-data-grid';
+import
+	{
+		GridFooterContainerSx,
+		TypographyFooterSx,
+		dataGridContainerStyle,
+		dataGridContainerSx,
+		dataGridSx
+	} from './MyTableStyle';
 import CandidatesListFullScreenDialog from '../CandidatesListDialog/CandidatesListDialog';
 import { getFilteredJobs } from '../../../../Firebase/FirebaseFunctions/Job';
 import { useNavigate } from "react-router-dom";
@@ -57,7 +59,8 @@ const StyledGridOverlay = styled('div')(({ theme }) => ({
 	},
 }));
 
-function CustomNoRowsOverlay() {
+function CustomNoRowsOverlay()
+{
 	return (
 		<StyledGridOverlay>
 			<svg
@@ -119,7 +122,8 @@ const columns: GridColDef[] = [
 		disableExport: true,
 		editable: false,
 
-		renderCell: (job) => {
+		renderCell: (job) =>
+		{
 			return <MyDropMenu JobId={job.id} />;
 		},
 
@@ -167,17 +171,20 @@ const columns: GridColDef[] = [
 		headerAlign: 'center',
 		align: 'center',
 		width: 300,
-		renderCell: (job) => {
+		renderCell: (job) =>
+		{
 			const { id } = job.row;
 			return <CandidatesListFullScreenDialog JobId={id} />;
 		},
 	},
 ];
 
-const GridCustomToolbar = ({ syncState }: { syncState: (stateToSave: GridInitialState) => void; }) => {
+const GridCustomToolbar = ({ syncState }: { syncState: (stateToSave: GridInitialState) => void; }) =>
+{
 	const navigate = useNavigate();
 
-	const handleCreatejob = () => {
+	const handleCreatejob = () =>
+	{
 		navigate("/management/createJob", { state: null });
 	}
 
@@ -216,19 +223,22 @@ const GridCustomToolbar = ({ syncState }: { syncState: (stateToSave: GridInitial
 	);
 };
 
-function getScopeFormated(scope: number[] | null) {
+function getScopeFormated(scope: number[] | null)
+{
 
 	return scope === null ? '0-100' : scope[0].toString() === scope[1].toString() ? scope[0].toString() + '%' : scope[1].toString() + '% - ' + scope[0].toString() + '%';
 
 }
 
-export default function MyTable(props: { setDataSize: any }) {
+export default function MyTable(props: { setDataSize: any })
+{
 	const { setDataSize } = props;
 	const [loading, setLoading] = React.useState(true);
 	const [allJobs, setAllJobs] = React.useState<any[]>([]);
 	const navigate = useNavigate();
 
-	const fetchAllJobs = async () => {
+	const fetchAllJobs = async () =>
+	{
 		const jobs = await getFilteredJobs();
 		const jobsWithId = jobs.map((job) => ({ ...job, id: job._jobNumber, _scope: getScopeFormated(job._scope) }));
 		setAllJobs(jobsWithId);
@@ -236,8 +246,10 @@ export default function MyTable(props: { setDataSize: any }) {
 	};
 
 
-	const CustomFooter = () => {
-		React.useEffect(() => {
+	const CustomFooter = () =>
+	{
+		React.useEffect(() =>
+		{
 			setDataSize(allJobs.length);
 		}, []);
 
@@ -259,7 +271,8 @@ export default function MyTable(props: { setDataSize: any }) {
 
 
 
-	React.useEffect(() => {
+	React.useEffect(() =>
+	{
 		fetchAllJobs();
 		setLoading(false);
 	}, []);
@@ -273,13 +286,12 @@ export default function MyTable(props: { setDataSize: any }) {
 				<>
 					<Box
 						sx={dataGridContainerSx}
-
-						maxWidth='xl'>
+					>
 						<DataGrid
 							sx={dataGridSx(theme)}
 							rows={allJobs}
 							columns={columns}
-							onRowDoubleClick={(job) => navigate(`../jobs/${job.id}`)}
+							onRowDoubleClick={(job) => navigate(`/career/jobs/${job.id}`)}
 							hideFooterSelectedRowCount
 							hideFooterPagination
 							localeText={heIL.components.MuiDataGrid.defaultProps.localeText}
