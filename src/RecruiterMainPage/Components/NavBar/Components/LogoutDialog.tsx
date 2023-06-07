@@ -8,8 +8,8 @@ import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
-import { Box, Link, ListItem, ListItemButton, ListItemText, Stack } from '@mui/material';
-import { LoginOutlined, Logout } from '@mui/icons-material';
+import { Box, Link, Stack } from '@mui/material';
+import { LoginOutlined } from '@mui/icons-material';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -139,7 +139,7 @@ export default function MyLogoutDialog(props: { handlelogout: any, isMobile: Boo
                     <Button variant='text' autoFocus onClick={handleClose}>
                         ביטול
                     </Button>
-                    <Button variant='text' color='error' type='submit' autoFocus onClick={handlelogout}>
+                    <Button variant='text' color='error' type='submit' autoFocus onClick={()=>{handleClose(); handlelogout(); window.location.reload();}}>
                         התנתק
                     </Button>
                 </DialogActions>
