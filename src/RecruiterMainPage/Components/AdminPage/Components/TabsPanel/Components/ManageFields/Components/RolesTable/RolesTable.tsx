@@ -27,9 +27,6 @@ import ChangeStatusRoleDialog from './Components/ChangeStatusRoleDialog';
 interface SelectedRowParams {
     currentRow: any;
 }
-interface EditGridCustomToolbar {
-    selectedRowParams?: SelectedRowParams;
-}
 
 const StyledGridOverlay = styled('div')(({ theme }) => ({
     display: 'flex',
@@ -102,8 +99,6 @@ function CustomNoRowsOverlay() {
     );
 }
 
-
-
 const ODD_OPACITY = 0.2;
 
 const MyDataGrid = (theme: Theme): SxProps => ({
@@ -161,7 +156,7 @@ const MyDataGrid = (theme: Theme): SxProps => ({
             theme.palette.mode === 'light' ? 'rgba(0,0,0,.85)' : 'rgba(255,255,255,0.65)',
     },
     '& .MuiPaginationItem-root': {
-        borderRadius: 0,
+        borderRadius: '35%',
     },
     [`& .${gridClasses.row}.even`]: {
         backgroundColor: theme.palette.grey[100],

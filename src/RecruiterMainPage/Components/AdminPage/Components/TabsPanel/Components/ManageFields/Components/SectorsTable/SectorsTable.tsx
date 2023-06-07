@@ -14,7 +14,7 @@ import {
     useGridApiContext,
     useGridSelector,
     gridClasses,
-    
+
 } from '@mui/x-data-grid';
 import Pagination from '@mui/material/Pagination';
 import PaginationItem from '@mui/material/PaginationItem';
@@ -86,7 +86,7 @@ const MyDataGrid = (theme: Theme): SxProps => ({
             theme.palette.mode === 'light' ? 'rgba(0,0,0,.85)' : 'rgba(255,255,255,0.65)',
     },
     '& .MuiPaginationItem-root': {
-        borderRadius: 0,
+        borderRadius: '35%',
     },
     [`& .${gridClasses.row}.even`]: {
         backgroundColor: theme.palette.grey[100],
@@ -277,7 +277,7 @@ export default function SectorsTable() {
 
             setRows(updateRows);
 
-        
+
 
             setSnackbar({ children: `האשכול "${selectedRowParams?.currentRow?.sector_name}" נמחק בהצלחה`, severity: 'success' });
 

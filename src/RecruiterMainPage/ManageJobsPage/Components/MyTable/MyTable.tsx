@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Typography from '@mui/material/Typography';
-import { Box, Button, Container, Stack, styled, useTheme } from '@mui/material';
+import { Alert, AlertProps, Box, Button, LinearProgress, Snackbar, Stack, SxProps, Theme, alpha, styled, useTheme } from '@mui/material';
 import MyDropMenu from '../MyDropMenu/MyDropMenu';
 import {
 	DataGrid,
@@ -8,21 +8,23 @@ import {
 	GridColDef,
 	GridToolbarDensitySelector,
 	GridToolbarColumnsButton,
-	GridInitialState,
 	GridToolbarContainer,
-	GridFooterContainer,
 	GridToolbarQuickFilter,
 	GridToolbarExportContainer,
 	GridPrintExportMenuItem,
+	gridPageCountSelector,
+	gridPageSelector,
+	useGridApiContext,
+	useGridSelector,
+	gridClasses,
 	heIL,
 
 } from '@mui/x-data-grid';
 import {
-	GridFooterContainerSx,
 	TypographyFooterSx,
-	dataGridContainerSx,
-	dataGridSx
 } from './MyTableStyle';
+import Pagination from '@mui/material/Pagination';
+import PaginationItem from '@mui/material/PaginationItem';
 import CandidatesListFullScreenDialog from '../CandidatesListDialog/CandidatesListDialog';
 import { getFilteredJobs } from '../../../../Firebase/FirebaseFunctions/Job';
 import { useNavigate } from "react-router-dom";
@@ -30,7 +32,97 @@ import { ArticleOutlined } from '@mui/icons-material';
 import MyLoading from '../../../../Components/MyLoading/MyLoading';
 
 
+const ODD_OPACITY = 0.2;
+const MyDataGrid = (theme: Theme): SxProps => ({
+	padding: 0.5,
+	height: '615px',
+	border: '1px solid rgba(0, 0, 0, 0.125)',
+	borderTopRightRadius: 0,
+	borderTopLeftRadius: 0,
+	overflow: 'hidden',
+	"&.MuiDataGrid-root .MuiDataGrid-cell:focus-within": {
+		outline: "none !important",
 
+	},
+	"&.MuiDataGrid-root .MuiDataGrid-row:focus-within": {
+		background: alpha(
+			theme.palette.primary.main,
+			ODD_OPACITY + theme.palette.action.selectedOpacity,
+		),
+	},
+
+	color:
+		theme.palette.mode === 'light' ? 'rgba(0,0,0,.85)' : 'rgba(255,255,255,0.85)',
+	fontFamily: [
+		'-apple-system',
+		'BlinkMacSystemFont',
+		'"Segoe UI"',
+		'Roboto',
+		'"Helvetica Neue"',
+		'Arial',
+		'sans-serif',
+		'"Apple Color Emoji"',
+		'"Segoe UI Emoji"',
+		'"Segoe UI Symbol"',
+	].join(','),
+	WebkitFontSmoothing: 'auto',
+	letterSpacing: 'normal',
+	'& .MuiDataGrid-columnsContainer': {
+		backgroundColor: theme.palette.mode === 'light' ? '#fafafa' : '#1d1d1d',
+		borderBottom: `1px solid ${theme.palette.mode === 'light' ? '#f0f0f0' : '#303030'}`,
+	},
+	'& .MuiDataGrid-iconSeparator': {
+		display: 'none',
+	},
+	'& .MuiDataGrid-columnHeader': {
+		borderBottom: `1px solid ${theme.palette.mode === 'light' ? '#f0f0f0' : '#303030'}`,
+	},
+	'& .MuiDataGrid-columnHeader, .MuiDataGrid-cell': {
+		borderRight: `1px solid ${theme.palette.mode === 'light' ? '#f0f0f0' : '#303030'}`,
+		borderBottom: `1px solid ${theme.palette.mode === 'light' ? '#f0f0f0' : '#303030'}`,
+	},
+	'& .MuiDataGrid-columnsContainer, .MuiDataGrid-cell': {
+		borderBottom: `1px solid ${theme.palette.mode === 'light' ? '#f0f0f0' : '#303030'
+			}`,
+	},
+	'& .MuiDataGrid-cell': {
+		color:
+			theme.palette.mode === 'light' ? 'rgba(0,0,0,.85)' : 'rgba(255,255,255,0.65)',
+	},
+	'& .MuiPaginationItem-root': {
+		borderRadius: '35%',
+	},
+	[`& .${gridClasses.row}.even`]: {
+		backgroundColor: theme.palette.grey[100],
+		'&:hover, &.Mui-hovered': {
+			backgroundColor: alpha(theme.palette.primary.main, ODD_OPACITY),
+			'@media (hover: none)': {
+				backgroundColor: 'transparent',
+			},
+		},
+		'&.Mui-selected': {
+			backgroundColor: alpha(
+				theme.palette.primary.main,
+				ODD_OPACITY + theme.palette.action.selectedOpacity,
+			),
+			'&:hover, &.Mui-hovered': {
+				backgroundColor: alpha(
+					theme.palette.primary.main,
+					ODD_OPACITY +
+					theme.palette.action.selectedOpacity +
+					theme.palette.action.hoverOpacity,
+				),
+				// Reset on touch devices, it doesn't add specificity
+				'@media (hover: none)': {
+					backgroundColor: alpha(
+						theme.palette.primary.main,
+						ODD_OPACITY + theme.palette.action.selectedOpacity,
+					),
+				},
+			},
+		},
+	},
+});
 
 const StyledGridOverlay = styled('div')(({ theme }) => ({
 	display: 'flex',
@@ -121,8 +213,6 @@ const columns: GridColDef[] = [
 		renderCell: (job) => {
 			return <MyDropMenu JobId={job.id} />;
 		},
-
-
 	},
 
 	{
@@ -173,7 +263,7 @@ const columns: GridColDef[] = [
 	},
 ];
 
-const GridCustomToolbar = ({ syncState }: { syncState: (stateToSave: GridInitialState) => void; }) => {
+const GridCustomToolbar = () => {
 	const navigate = useNavigate();
 
 	const handleCreatejob = () => {
@@ -195,8 +285,6 @@ const GridCustomToolbar = ({ syncState }: { syncState: (stateToSave: GridInitial
 				</Box>
 
 			</Stack>
-
-
 			<Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', borderBottomColor: 'rgba(224, 224, 224, 1)' }}>
 
 				<Box>
@@ -221,70 +309,131 @@ function getScopeFormated(scope: number[] | null) {
 
 }
 
+function CustomPagination() {
+	const apiRef = useGridApiContext();
+	const page = useGridSelector(apiRef, gridPageSelector);
+	const pageCount = useGridSelector(apiRef, gridPageCountSelector);
+
+	return (
+		<Pagination
+			color="primary"
+			variant="outlined"
+			shape="rounded"
+			page={page + 1}
+			count={pageCount}
+			// @ts-expect-error
+			renderItem={(props2) => <PaginationItem {...props2} disableRipple />}
+			onChange={(event: React.ChangeEvent<unknown>, value: number) =>
+				apiRef.current.setPage(value - 1)
+			}
+		/>
+	);
+}
+
+const PAGE_SIZE = 15;
+
 export default function MyTable(props: { setDataSize: any }) {
-	const { setDataSize } = props;
-	const [loading, setLoading] = React.useState(true);
-	const [allJobs, setAllJobs] = React.useState<any[]>([]);
+
+	const [snackbar, setSnackbar] = React.useState<Pick<AlertProps, 'children' | 'severity'> | null>(null);
+	const [pageloading, setPageLoading] = React.useState(true);
+	const [dataloading, setDataLoading] = React.useState(true);
+	const [rows, setRows] = React.useState<any>([]);
+
 	const navigate = useNavigate();
 
 	const fetchAllJobs = async () => {
+		setDataLoading(true);
+
 		const jobs = await getFilteredJobs();
 		const jobsWithId = jobs.map((job) => ({ ...job, id: job._jobNumber, _scope: getScopeFormated(job._scope) }));
-		setAllJobs(jobsWithId);
+
+		setRows(jobsWithId);
+
+		setDataLoading(false);
 
 	};
 
 
 	const CustomFooter = () => {
-		React.useEffect(() => {
-			setDataSize(allJobs.length);
-		}, []);
-
 
 		return (
-			<GridFooterContainer sx={GridFooterContainerSx}>
+			<Stack direction='row' justifyContent='space-between' alignItems='center' padding={1}>
+				<Box >
+					<Box display='flex' flexDirection='row'>
 
-				<Typography variant='subtitle2' sx={TypographyFooterSx}>
-					מס' משרות:
-				</Typography>
+						<Typography variant='body2' sx={TypographyFooterSx}>
+							<strong>{rows.length}</strong>
+						</Typography>
 
-				<Typography variant='subtitle2' sx={TypographyFooterSx}>
-					{allJobs.length}
-				</Typography>
+						<Typography variant='body2' sx={TypographyFooterSx}>
+							משרות
+						</Typography>
 
-			</GridFooterContainer>
+					</Box>
+
+				</Box>
+
+				<Box >
+					<CustomPagination />
+				</Box>
+			</Stack>
+
 		);
 	};
 
 
 
 	React.useEffect(() => {
+		setPageLoading(false);
 		fetchAllJobs();
-		setLoading(false);
 	}, []);
 
+	const [paginationModel, setPaginationModel] = React.useState({
+		pageSize: PAGE_SIZE,
+		page: 0,
+	});
+
+	const handleCloseSnackbar = () => setSnackbar(null);
 
 	const theme = useTheme();
 
 	return (
 		<>
-			{loading ? (<MyLoading loading={loading} setLoading={setLoading} />) : (
+			{pageloading ? (<MyLoading loading={pageloading} setLoading={setPageLoading} />) : (
 				<>
-					<Box
-						sx={dataGridContainerSx}
 
-						maxWidth='xl'>
-						<DataGrid
-							sx={dataGridSx(theme)}
-							rows={allJobs}
-							columns={columns}
-							onRowDoubleClick={(job) => navigate(`../jobs/${job.id}`)}
-							hideFooterSelectedRowCount
-							hideFooterPagination
-							localeText={heIL.components.MuiDataGrid.defaultProps.localeText}
-							slots={{ noRowsOverlay: CustomNoRowsOverlay, toolbar: GridCustomToolbar, footer: CustomFooter }} />
+					<DataGrid
+						getRowClassName={(params) =>
+							params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+						}
 
-					</Box>
+						paginationModel={paginationModel}
+						onPaginationModelChange={setPaginationModel}
+						pageSizeOptions={[PAGE_SIZE]}
+
+						sx={MyDataGrid(theme)}
+						rows={rows}
+						columns={columns}
+						onRowDoubleClick={(job) => navigate(`../jobs/${job.id}`)}
+						hideFooterSelectedRowCount
+						getRowId={(row) => row.id}
+						localeText={heIL.components.MuiDataGrid.defaultProps.localeText}
+
+						loading={dataloading}
+						slots={{ noRowsOverlay: CustomNoRowsOverlay, toolbar: GridCustomToolbar, pagination: CustomPagination, footer: CustomFooter, loadingOverlay: LinearProgress }}
+
+					/>
+					{!!snackbar && (
+						<Snackbar
+							open
+							anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+							onClose={handleCloseSnackbar}
+							autoHideDuration={6000}
+						>
+							<Alert {...snackbar} onClose={handleCloseSnackbar} />
+						</Snackbar>
+					)}
+
 				</>
 			)}
 		</>
