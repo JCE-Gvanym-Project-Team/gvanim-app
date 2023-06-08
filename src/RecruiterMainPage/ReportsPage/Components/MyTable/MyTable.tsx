@@ -51,6 +51,7 @@ const columns: GridColDef[] = [
 const rows = [
     // { id: 1, name: "מועדמים שנדחו" },
     { id: 1, name: "מועמדים על פי פילטרים" },
+    { id: 2, name: "משרות על פי פילטרים" },
 ];
 
 function CustomFooter() {
@@ -74,7 +75,7 @@ export default function MyTable() {
     const onRowClick = (params, event) => {
         const actions = {
             1: () => navigate('CandidateByFilters'),
-            // 2: () => navigate('CandidateByFilters')
+            2: () => navigate('JobsByFilters')
             // הוסיפו פעולות נוספות כרצונכם לפי הערכים הנדרשים
         };
 

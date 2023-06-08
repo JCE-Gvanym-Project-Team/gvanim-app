@@ -20,7 +20,7 @@ import { createContext, useContext, useMemo } from 'react';
 import { Box } from "@mui/material";
 import ManageInterviewsPage from './ManageCandidatesPage/ViewCandidatesPage/ManageInterViewsPage/ManageInterViewsPage'
 import CandidateFiltersForm from "./ReportsPage/Components/Reports/CandidatesFiltersForm";
-
+import JobsFiltersForm  from "./ReportsPage/Components/Reports/JobsFitersForm"
 
 
 function RecruiterMainPage({ handlelogout })
@@ -79,6 +79,7 @@ function RecruiterMainPage({ handlelogout })
 
 				{/* Reports Routes */}
 				<Route path="reports" element={<ReportsPage />} />
+				<Route path="reports/JobsByFilters" element={<JobsFiltersForm/>} />
 				{/* <Route path="reports/rejection" element={<ReportRejection />} /> */}
 				<Route path="reports/CandidateByFilters" element={<CandidateFiltersForm />} />
 

@@ -100,8 +100,10 @@ export default function CandidateFiltersForm() {
     return (
         <div style={formContainerStyles}>
             <FormControl  >
+            <br />
+            <br />
                 <h1>ד"וח מועמדים על פי פילטרים</h1>
-
+                <br />
                 {/* select the status */}
                 <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">בחר סטטוס</InputLabel>
@@ -126,7 +128,7 @@ export default function CandidateFiltersForm() {
                     </Select>
                 </FormControl>
 
-
+                <br />
                 {/* זמן שהוא על הסטטוס הנוכחי*/}
                 <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">בחירת הזמן שהוא על הטטוס הנוכחי</InputLabel>
@@ -143,7 +145,7 @@ export default function CandidateFiltersForm() {
                     </Select>
                 </FormControl>
 
-
+                <br />
 
                 {/* אשכול*/}
                 <FormControl fullWidth>
@@ -162,7 +164,7 @@ export default function CandidateFiltersForm() {
                     </Select>
                 </FormControl>
 
-
+                <br />
 
                 {/* select role */}
                 <FormControl fullWidth>
@@ -180,7 +182,7 @@ export default function CandidateFiltersForm() {
                         <MenuItem value={40}>כל התפקידים</MenuItem>
                     </Select>
                 </FormControl>
-
+                <br />
 
                 {/* select include grade */}
                 <RadioGroup
@@ -194,6 +196,7 @@ export default function CandidateFiltersForm() {
                         <FormControlLabel value="no" control={<Radio />} label="אל תכלול" />
                     </div>
                 </RadioGroup>
+                <br />
 
                 {/* select include mathcing rate */}
                 <RadioGroup
@@ -207,7 +210,7 @@ export default function CandidateFiltersForm() {
                         <FormControlLabel value="no" control={<Radio />} label="אל תכלול" />
                     </div>
                 </RadioGroup>
-
+<br />
                 {/* select time */}
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer components={['DatePicker', 'DatePicker']}>
@@ -224,6 +227,7 @@ export default function CandidateFiltersForm() {
                     </DemoContainer>
                 </LocalizationProvider>
 
+                <br />
                 {/* create report */}
                 
                 <button onClick={() => createReport(status, timeOnStatus, sector, role, includeGrade ,includeInterviewDate, startDate, endDate)}>צור דוח</button>
