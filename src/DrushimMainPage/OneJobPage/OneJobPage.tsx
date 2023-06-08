@@ -1,4 +1,4 @@
-import { ArrowBack, Label, Redo } from '@mui/icons-material'
+import { ArrowBack, Label, LocationOn, Redo } from '@mui/icons-material'
 import { Box, Button, Divider, Input, TextField, Typography, useTheme } from '@mui/material'
 import React, { useContext, useEffect, useState } from 'react'
 import { ColorModeContext, colorTokens } from '../theme';
@@ -95,7 +95,7 @@ export default function OneJobPage()
             <Box
                 sx={{
                     display: "flex",
-                    flexDirection: "row",
+                    flexDirection: {xs: "column", md: "row"},
                     justifyContent: "stretch",
                     backgroundColor: "background.main",
                     marginTop: "0.5rem"
@@ -109,7 +109,8 @@ export default function OneJobPage()
                         flexDirection: "column",
                         backgroundColor: "background.box",
                         flex: 8,
-                        marginRight: "0.5rem"
+                        marginRight: {xs: "0", md: "0.5rem"},
+                        marginBottom: {xs: "0.5rem", md: "0"}
                     }}
                 >
                     {/* description */}
@@ -124,7 +125,7 @@ export default function OneJobPage()
                         </Typography>
 
                         <Divider sx={{
-                            marginRight: "54rem",
+                            marginRight: "3rem",
                             backgroundColor: "primary.faded"
                         }} />
 
@@ -147,7 +148,7 @@ export default function OneJobPage()
                             דרישות המשרה
                         </Typography>
                         <Divider sx={{
-                            marginRight: "53rem",
+                            marginRight: "3rem",
                             backgroundColor: "primary.faded"
 
                         }} />
@@ -159,6 +160,7 @@ export default function OneJobPage()
                     </Box>
 
                 </Box>
+
                 {/* job stats */}
                 <Box
                     sx={{
@@ -166,7 +168,89 @@ export default function OneJobPage()
                         flex: 4
                     }}
                 >
-                    asd
+                    {/* job location */}
+                    <Box
+                        sx={{
+                            padding: "1rem",
+                            display: "flex",
+                            flexDirection: "row"
+                        }}
+                    >
+                        <Typography variant='h2'>
+                            מיקום:
+                        </Typography>
+                        <Typography
+                            sx={{
+                                marginLeft: "1rem"
+                            }}
+                            variant='h2'
+                        >
+                            {job?._region}
+                        </Typography>
+                    </Box>
+
+                    {/* job role */}
+                    <Box
+                        sx={{
+                            padding: "1rem",
+                            display: "flex",
+                            flexDirection: "row"
+                        }}
+                    >
+                        <Typography variant='h2'>
+                            תפקיד:
+                        </Typography>
+                        <Typography
+                            sx={{
+                                marginLeft: "1rem"
+                            }}
+                            variant='h2'
+                        >
+                            {job?._role}
+                        </Typography>
+                    </Box>
+
+                    {/* job scope */}
+                    <Box
+                        sx={{
+                            padding: "1rem",
+                            display: "flex",
+                            flexDirection: "row"
+                        }}
+                    >
+                        <Typography variant='h2'>
+                            היקף משרה:
+                        </Typography>
+                        <Typography
+                            sx={{
+                                marginLeft: "1rem"
+                            }}
+                            variant='h2'
+                        >
+                            {job?._scope.slice(0).reverse().map((num, index) => index !== job._scope.length - 1 ? num + "% - " : num + "%")}
+                        </Typography>
+                    </Box>
+
+                    {/* job ID */}
+                    <Box
+                        sx={{
+                            padding: "1rem",
+                            display: "flex",
+                            flexDirection: "row"
+                        }}
+                    >
+                        <Typography variant='h2'>
+                            מס' משרה:
+                        </Typography>
+                        <Typography
+                            sx={{
+                                marginLeft: "1rem"
+                            }}
+                            variant='h2'
+                        >
+                            {job?._jobNumber}
+                        </Typography>
+                    </Box>
                 </Box>
 
             </Box>
