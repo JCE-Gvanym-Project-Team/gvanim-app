@@ -1,27 +1,28 @@
 @echo off
+
 call npm run build
-setlocal enabledelayedexpansion
+@REM setlocal enabledelayedexpansion
 
-set search=/gvanim-app/
-set replacement=
+@REM set search=/gvanim-app/
+@REM set replacement=
 
-cd build
+@REM cd build
 
-set inputfile=index.html
-set outputfile=index_modified.html
+@REM set inputfile=index.html
+@REM set outputfile=index_modified.html
 
-if exist %outputfile% del %outputfile%
+@REM if exist %outputfile% del %outputfile%
 
-for /f "tokens=*" %%a in ('type "%inputfile%" ^| find /v ""') do (
-  set "line=%%a"
-  set "line=!line:%search%=%replacement%!"
-  echo !line!>>%outputfile%
-)
+@REM for /f "tokens=*" %%a in ('type "%inputfile%" ^| find /v ""') do (
+@REM   set "line=%%a"
+@REM   set "line=!line:%search%=%replacement%!"
+@REM   echo !line!>>%outputfile%
+@REM )
 
-del %inputfile%
-ren %outputfile% %inputfile%
+@REM del %inputfile%
+@REM ren %outputfile% %inputfile%
 
-cd ..
+@REM cd ..
 
 call firebase deploy
 
