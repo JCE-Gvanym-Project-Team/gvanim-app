@@ -11,15 +11,21 @@ export default function ManageCandidatesPage()
     {
         const file = event.target.files[0];
         let johanson = (await getFilteredCandidateJobStatuses(["jobNumber", "candidateId"], ["32", "53"]))[0];
-        johanson.addRecomendation("Pog", "0444444", "mail@gail.com", file)
+        await johanson.addRecomendation("Pog", "0444444", "mail@gail.com", file);
     };
+
+    const handleCVUpload = async (event) => {
+        const file = event.target.files[0];
+        let johanson = (await getFilteredCandidates(["id"], ["53"]))[0];
+        johanson.uploadCv(file);
+    }
 
     const addCandidate = async () =>
     {
         await loginAdmin();
         let id = await generateCandidateId()
         let newCandidate: Candidate = new Candidate(id, "דוג", "מה", "05123456", "dogma@gmail.com", 1, "notes");
-        let dogma = (await getFilteredCandidates(["id"], ["28"]))[0];
+        let dogma = (await getFilteredCandidates(["id"], ["53"]))[0];
         dogma.apply(32,"abu");
         // await newCandidate.add();
         // newCandidate.apply(49, "ABOUT");
@@ -28,6 +34,8 @@ export default function ManageCandidatesPage()
         // await newCandidate2[0].apply(49, "abouttt");
 
     }
+
+    
 
     return (
         <>
@@ -43,6 +51,18 @@ export default function ManageCandidatesPage()
                     type="file"
                     hidden
                     onChange={handleFileUpload}
+                />
+            </Button>
+
+            <Button
+                variant="contained"
+                component="label"
+            >
+                הוסף קו"ח
+                <input
+                    type="file"
+                    hidden
+                    onChange={handleCVUpload}
                 />
             </Button>
         </>

@@ -16,11 +16,9 @@ import { getFilteredCandidates } from "../Firebase/FirebaseFunctions/Candidate";
 import ViewCandidatesPage from "./ManageCandidatesPage/ViewCandidatesPage/ViewCandidatesPage";
 import Footer from "./Components/Footer/Footer";
 import { CssBaseline } from "@mui/material";
-import { createContext, useContext, useMemo } from 'react';
-import { Box } from "@mui/material";
-import ManageInterviewsPage from './ManageCandidatesPage/ViewCandidatesPage/ManageInterViewsPage/ManageInterViewsPage'
 import CandidateFiltersForm from "./ReportsPage/Components/Reports/CandidatesFiltersForm";
 import JobsFiltersForm  from "./ReportsPage/Components/Reports/JobsFitersForm"
+
 
 
 function RecruiterMainPage({ handlelogout })

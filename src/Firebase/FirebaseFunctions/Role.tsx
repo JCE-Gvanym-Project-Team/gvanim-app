@@ -49,7 +49,7 @@ import { removeObjectAtPath, getFirebaseIdsAtPath, replaceData, appendToDatabase
      * @returns None
      */
     public async add() {
-        if ((await this.exists()))
+        if (!(await this.exists()))
             appendToDatabase(this, "/Roles", this._name);
         else
             console.log("the Rloe already exists");
