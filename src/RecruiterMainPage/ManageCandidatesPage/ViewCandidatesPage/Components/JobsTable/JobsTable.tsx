@@ -266,7 +266,7 @@ export default function JobsTable2(props: {
                             sx={MyDataGrid(theme)}
                             rows={rows}
                             columns={columns}
-                            onRowDoubleClick={(job) => navigate(`/career/jobs/${job.id}`)}
+                            onRowDoubleClick={(job) => navigate(`/career/jobs/${job.id}`, { state: job.id })}
                             hideFooterSelectedRowCount
                             rowCount={rows.length}
 

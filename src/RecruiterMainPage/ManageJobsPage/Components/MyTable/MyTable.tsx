@@ -1,26 +1,27 @@
 import * as React from 'react';
 import { Alert, AlertProps, Box, Button, Chip, LinearProgress, Snackbar, Stack, SxProps, Theme, alpha, styled, useTheme } from '@mui/material';
 import MyDropMenu from '../MyDropMenu/MyDropMenu';
-import {
-	DataGrid,
-	GridToolbarFilterButton,
-	GridColDef,
-	GridToolbarDensitySelector,
-	GridToolbarColumnsButton,
-	GridToolbarContainer,
-	GridToolbarQuickFilter,
-	GridToolbarExportContainer,
-	GridPrintExportMenuItem,
-	gridPageCountSelector,
-	gridPageSelector,
-	useGridApiContext,
-	useGridSelector,
-	GridColumnHeaders,
-	gridClasses,
-	GridRow,
-	heIL,
+import
+	{
+		DataGrid,
+		GridToolbarFilterButton,
+		GridColDef,
+		GridToolbarDensitySelector,
+		GridToolbarColumnsButton,
+		GridToolbarContainer,
+		GridToolbarQuickFilter,
+		GridToolbarExportContainer,
+		GridPrintExportMenuItem,
+		gridPageCountSelector,
+		gridPageSelector,
+		useGridApiContext,
+		useGridSelector,
+		GridColumnHeaders,
+		gridClasses,
+		GridRow,
+		heIL,
 
-} from '@mui/x-data-grid';
+	} from '@mui/x-data-grid';
 
 import Pagination from '@mui/material/Pagination';
 import PaginationItem from '@mui/material/PaginationItem';
@@ -34,21 +35,25 @@ import { unstable_useForkRef as useForkRef } from '@mui/utils';
 
 
 // -------------------Use Memorie for better performance----------------------------------------------------
-const TraceUpdates = React.forwardRef<any, any>((props, ref) => {
+const TraceUpdates = React.forwardRef<any, any>((props, ref) =>
+{
 	const { Component, ...other } = props;
 	const rootRef = React.useRef<HTMLElement>();
 	const handleRef = useForkRef(rootRef, ref);
 
-	React.useEffect(() => {
+	React.useEffect(() =>
+	{
 		const root = rootRef.current;
 		root!.classList.add('updating');
 		root!.classList.add('updated');
 
-		const timer = setTimeout(() => {
+		const timer = setTimeout(() =>
+		{
 			root!.classList.remove('updating');
 		}, 360);
 
-		return () => {
+		return () =>
+		{
 			clearTimeout(timer);
 		};
 	});
@@ -56,11 +61,13 @@ const TraceUpdates = React.forwardRef<any, any>((props, ref) => {
 	return <Component ref={handleRef} {...other} />;
 });
 
-const RowWithTracer = React.forwardRef((props, ref) => {
+const RowWithTracer = React.forwardRef((props, ref) =>
+{
 	return <TraceUpdates ref={ref} Component={GridRow} {...props} />;
 });
 
-const ColumnHeadersWithTracer = React.forwardRef((props, ref) => {
+const ColumnHeadersWithTracer = React.forwardRef((props, ref) =>
+{
 	return <TraceUpdates ref={ref} Component={GridColumnHeaders} {...props} />;
 });
 
@@ -184,7 +191,8 @@ const StyledGridOverlay = styled('div')(({ theme }) => ({
 	},
 }));
 
-function CustomNoRowsOverlay() {
+function CustomNoRowsOverlay()
+{
 	return (
 		<StyledGridOverlay>
 			<svg
@@ -245,7 +253,8 @@ const columns: GridColDef[] = [
 		disableExport: true,
 		editable: false,
 
-		renderCell: (job) => {
+		renderCell: (job) =>
+		{
 			return <MyDropMenu JobId={job.id} />;
 		},
 	},
@@ -291,17 +300,20 @@ const columns: GridColDef[] = [
 		headerAlign: 'center',
 		align: 'center',
 		width: 300,
-		renderCell: (job) => {
+		renderCell: (job) =>
+		{
 			const { id } = job.row;
 			return <CandidatesListFullScreenDialog JobId={id} />;
 		},
 	},
 ];
 
-const GridCustomToolbar = () => {
+const GridCustomToolbar = () =>
+{
 	const navigate = useNavigate();
 
-	const handleCreatejob = () => {
+	const handleCreatejob = () =>
+	{
 		navigate("/management/createJob", { state: null });
 	}
 
@@ -338,13 +350,15 @@ const GridCustomToolbar = () => {
 	);
 };
 
-function getScopeFormated(scope: number[] | null) {
+function getScopeFormated(scope: number[] | null)
+{
 
 	return scope === null ? '0-100' : scope[0].toString() === scope[1].toString() ? scope[0].toString() + '%' : scope[1].toString() + '% - ' + scope[0].toString() + '%';
 
 }
 
-const CustomPaginationAndFooter = () => {
+const CustomPaginationAndFooter = () =>
+{
 	const apiRef = useGridApiContext();
 	const page = useGridSelector(apiRef, gridPageSelector);
 	const pageCount = useGridSelector(apiRef, gridPageCountSelector);
@@ -356,12 +370,12 @@ const CustomPaginationAndFooter = () => {
 			<Box >
 				<Box display='flex' flexDirection='row'>
 					<Chip
-				
+
 						label={rowsCount + ' משרות'}
-						
-					
-					sx={{fontWeight: 'bold'}}
-						color= 'primary'
+
+
+						sx={{ fontWeight: 'bold' }}
+						color='primary'
 						size='small'
 						variant="outlined"
 					/>
@@ -389,7 +403,8 @@ const CustomPaginationAndFooter = () => {
 };
 
 
-export default function MyTable() {
+export default function MyTable()
+{
 
 	const [snackbar, setSnackbar] = React.useState<Pick<AlertProps, 'children' | 'severity'> | null>(null);
 	const [pageloading, setPageLoading] = React.useState(true);
@@ -398,7 +413,8 @@ export default function MyTable() {
 
 	const navigate = useNavigate();
 
-	const fetchAllJobs = async () => {
+	const fetchAllJobs = async () =>
+	{
 		setDataLoading(true);
 
 		const jobs = await getFilteredJobs();
@@ -410,7 +426,8 @@ export default function MyTable() {
 
 	};
 
-	React.useEffect(() => {
+	React.useEffect(() =>
+	{
 		setPageLoading(false);
 		fetchAllJobs();
 	}, []);
@@ -425,13 +442,13 @@ export default function MyTable() {
 				<>
 
 					<DataGrid
-						getRowClassName={(params) =>params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'}
+						getRowClassName={(params) => params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'}
 						autoPageSize
 
 						sx={MyDataGrid(theme)}
 						rows={rows}
 						columns={columns}
-						onRowDoubleClick={(job) => navigate(`../jobs/${job.id}`)}
+						onRowDoubleClick={(job) => navigate(`/career/jobs/${job.id}`, { state: job.id })}
 						hideFooterSelectedRowCount
 						rowCount={rows.length}
 
