@@ -98,7 +98,7 @@ export default function OneJobPage()
                     flexDirection: { xs: "column", md: "row" },
                     justifyContent: "stretch",
                     backgroundColor: "background.main",
-                    marginTop: "1rem"
+                    marginTop: "1rem",
                 }}
             >
 
@@ -106,7 +106,7 @@ export default function OneJobPage()
                 <Box
                     sx={{
                         display: "flex",
-                        flexDirection: "column",
+                        flexDirection: {xs: "column", md: "row"},
                         backgroundColor: "background.box",
                         flex: 8,
                         marginRight: { xs: "0", md: "1rem" },
@@ -116,7 +116,8 @@ export default function OneJobPage()
                     {/* description */}
                     <Box
                         sx={{
-                            padding: "1rem"
+                            padding: "1rem",
+                            flex: 7
                         }}
                     >
                         <Typography variant="h1">
@@ -143,7 +144,8 @@ export default function OneJobPage()
                     <Box
                         sx={{
                             backgroundColor: "background.box",
-                            padding: "1rem"
+                            padding: "1rem",
+                            flex: 5
                         }}
                     >
                         <Typography variant="h1">
@@ -293,6 +295,8 @@ export default function OneJobPage()
                         flexDirection: "row",
                         justifyContent: "center",
                         padding: "1rem",
+                        paddingLeft: {xs: "0", md: "1rem"},
+                        paddingRight: {xs: "0", md: "1rem"}
                     }}
                 >
                     {/* Firstname and Lastname */}
@@ -300,7 +304,7 @@ export default function OneJobPage()
                         sx={{
                             display: "flex",
                             flexDirection: { xs: "column", md: "row" },
-                            marginRight: { xs: "0", md: "5rem" }
+                            marginRight: { xs: "1rem", md: "5rem" }
                         }}
                     >
                         {/* Firstname */}
@@ -327,7 +331,7 @@ export default function OneJobPage()
                                 size='medium'
                                 sx={{
                                     backgroundColor: "background.boxInner",
-                                    input: {color: "primary.main"}
+                                    input: { color: "primary.main" }
                                 }}
                             />
 
@@ -365,9 +369,10 @@ export default function OneJobPage()
                             <TextField
                                 variant='filled'
                                 size='medium'
+                                type='email'
                                 sx={{
                                     backgroundColor: "background.boxInner",
-                                    input: {color: "primary.main"}
+                                    input: { color: "primary.main" }
                                 }}
                             />
                         </Box>
@@ -376,8 +381,22 @@ export default function OneJobPage()
                 </Box>
 
                 {/* About */}
-                <Box>
-
+                <Box
+                    sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        marginTop: "1rem"
+                    }}
+                >
+                    <TextField
+                        label="ספר/י על עצמך"
+                        multiline
+                        rows={10}
+                        sx={{
+                            width: { xs: "100%", md: "90%" },
+                            marginBottom: "1rem"
+                        }}
+                    />
                 </Box>
 
                 {/* Recommenders */}
