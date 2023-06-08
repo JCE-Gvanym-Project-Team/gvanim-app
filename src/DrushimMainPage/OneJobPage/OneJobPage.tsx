@@ -33,8 +33,8 @@ export default function OneJobPage()
                 flexDirection: "column",
                 alignItems: "stretch",
                 justifyContent: "stretch",
-                marginLeft: { xs: "0", md: "2rem" },
-                marginRight: { xs: "0", md: "2rem" },
+                marginLeft: { xs: "0", md: "0.2rem" },
+                marginRight: { xs: "0", md: "0.2rem" },
                 backgroundColor: "background.main"
             }}
         >
@@ -83,7 +83,7 @@ export default function OneJobPage()
 
                 <Typography
                     sx={{
-                        color: "primary.title"
+                        color: "primary.main"
                     }}
                     variant='h3'
                 >
@@ -95,10 +95,10 @@ export default function OneJobPage()
             <Box
                 sx={{
                     display: "flex",
-                    flexDirection: {xs: "column", md: "row"},
+                    flexDirection: { xs: "column", md: "row" },
                     justifyContent: "stretch",
                     backgroundColor: "background.main",
-                    marginTop: "0.5rem"
+                    marginTop: "1rem"
                 }}
             >
 
@@ -109,14 +109,13 @@ export default function OneJobPage()
                         flexDirection: "column",
                         backgroundColor: "background.box",
                         flex: 8,
-                        marginRight: {xs: "0", md: "0.5rem"},
-                        marginBottom: {xs: "0.5rem", md: "0"}
+                        marginRight: { xs: "0", md: "1rem" },
+                        marginBottom: { xs: "1rem", md: "0" }
                     }}
                 >
                     {/* description */}
                     <Box
                         sx={{
-                            backgroundColor: "background.box",
                             padding: "1rem"
                         }}
                     >
@@ -132,6 +131,9 @@ export default function OneJobPage()
                         <Typography
                             variant='h3'
                             marginTop={"0.5rem"}
+                            sx={{
+                                backgroundColor: "background.boxInner"
+                            }}
                         >
                             {job?._description}
                         </Typography>
@@ -154,7 +156,11 @@ export default function OneJobPage()
                         }} />
                         <Typography
                             variant='h3'
-                            marginTop={"0.5rem"}>
+                            marginTop={"0.5rem"}
+                            sx={{
+                                backgroundColor: "background.boxInner"
+                            }}
+                        >
                             {job?._requirements}
                         </Typography>
                     </Box>
@@ -181,7 +187,8 @@ export default function OneJobPage()
                         </Typography>
                         <Typography
                             sx={{
-                                marginLeft: "1rem"
+                                marginLeft: "1rem",
+                                backgroundColor: "background.boxInner"
                             }}
                             variant='h2'
                         >
@@ -202,7 +209,8 @@ export default function OneJobPage()
                         </Typography>
                         <Typography
                             sx={{
-                                marginLeft: "1rem"
+                                marginLeft: "1rem",
+                                backgroundColor: "background.boxInner"
                             }}
                             variant='h2'
                         >
@@ -223,7 +231,8 @@ export default function OneJobPage()
                         </Typography>
                         <Typography
                             sx={{
-                                marginLeft: "1rem"
+                                marginLeft: "1rem",
+                                backgroundColor: "background.boxInner"
                             }}
                             variant='h2'
                         >
@@ -244,7 +253,8 @@ export default function OneJobPage()
                         </Typography>
                         <Typography
                             sx={{
-                                marginLeft: "1rem"
+                                marginLeft: "1rem",
+                                backgroundColor: "background.boxInner"
                             }}
                             variant='h2'
                         >
@@ -255,6 +265,132 @@ export default function OneJobPage()
 
             </Box>
 
+            {/* Apply Text */}
+            <Typography
+                variant='h2'
+                sx={{
+                    alignSelf: "center",
+                    marginTop: "1rem"
+                }}
+            >
+                להגשת מועמדות
+            </Typography>
+
+            {/* Candidate Details */}
+            <Box
+                sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    backgroundColor: "background.box",
+                    marginTop: "0.5rem"
+                }}
+            >
+
+                {/* Details */}
+                <Box
+                    sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "center",
+                        padding: "1rem",
+                    }}
+                >
+                    {/* Firstname and Lastname */}
+                    <Box
+                        sx={{
+                            display: "flex",
+                            flexDirection: { xs: "column", md: "row" },
+                            marginRight: { xs: "0", md: "5rem" }
+                        }}
+                    >
+                        {/* Firstname */}
+                        <Box>
+                            <Typography variant='h4'>
+                                שם פרטי:
+                            </Typography>
+                            <TextField>
+
+                            </TextField>
+                        </Box>
+
+                        {/* Lastname */}
+                        <Box
+                            sx={{
+                                marginLeft: { xs: "0", md: "5rem" }
+                            }}
+                        >
+                            <Typography variant='h4'>
+                                שם משפחה:
+                            </Typography>
+                            <TextField
+                                variant='outlined'
+                                size='medium'
+                                sx={{
+                                    backgroundColor: "background.boxInner",
+                                    input: {color: "primary.main"}
+                                }}
+                            />
+
+
+                        </Box>
+
+                    </Box>
+
+                    {/* Phone and Email */}
+                    <Box
+                        sx={{
+                            display: "flex",
+                            flexDirection: { xs: "column", md: "row" }
+                        }}
+                    >
+                        {/* Phone */}
+                        <Box>
+                            <Typography variant='h4'>
+                                טלפון
+                            </Typography>
+                            <TextField>
+
+                            </TextField>
+                        </Box>
+
+                        {/* Email */}
+                        <Box
+                            sx={{
+                                marginLeft: { xs: "0", md: "5rem" }
+                            }}
+                        >
+                            <Typography variant='h4'>
+                                אימייל
+                            </Typography>
+                            <TextField
+                                variant='filled'
+                                size='medium'
+                                sx={{
+                                    backgroundColor: "background.boxInner",
+                                    input: {color: "primary.main"}
+                                }}
+                            />
+                        </Box>
+
+                    </Box>
+                </Box>
+
+                {/* About */}
+                <Box>
+
+                </Box>
+
+                {/* Recommenders */}
+                <Box>
+
+                </Box>
+
+                {/* Buttons */}
+                <Box>
+
+                </Box>
+
+            </Box>
 
             <Button
                 color='secondary'

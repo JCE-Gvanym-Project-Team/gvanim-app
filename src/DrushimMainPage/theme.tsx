@@ -28,7 +28,8 @@ export const colorTokens = (mode) =>
                 600: "#101624",
                 700: "#0c101b",
                 800: "#080b12",
-                900: "#040509"
+                900: "#040509",
+                1000: "#000000"
             },
             greens: {
                 100: "#dbf5ee",
@@ -138,7 +139,7 @@ export const themeSettings = (mode) =>
                 mode: mode,
                 primary: {
                     main: colors.primary[100],
-                    title: colors.primary[1000]
+                    faded: colors.primary[900]
                 },
                 secondary: {
                     main: colors.blues[500]
@@ -156,7 +157,7 @@ export const themeSettings = (mode) =>
             },
             typography: {
                 fontFamily: ["'Noto Sans Hebrew'", "sans-serif"].join(","),
-                fontSize: 12,
+                fontSize: 20,
                 h1: {
                     fontFamily: ["'Noto Sans Hebrew'", "sans-serif"].join(","),
                     fontSize: 40
@@ -191,8 +192,7 @@ export const themeSettings = (mode) =>
                 mode: mode,
                 primary: {
                     main: colors.primary[100],
-                    title: colors.primary[500],
-                    faded: colors.primary[800]
+                    faded: colors.primary[900]
                 },
                 secondary: {
                     main: colors.blues[500]
@@ -210,7 +210,7 @@ export const themeSettings = (mode) =>
             },
             typography: {
                 fontFamily: ["'Noto Sans Hebrew'", "sans-serif"].join(","),
-                fontSize: 12,
+                fontSize: 20,
                 h1: {
                     fontFamily: ["'Noto Sans Hebrew'", "sans-serif"].join(","),
                     fontSize: 40
