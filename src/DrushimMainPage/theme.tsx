@@ -130,13 +130,15 @@ export const colorTokens = (mode) =>
 export const themeSettings = (mode) =>
 {
     const colors = colorTokens(mode);
+
     if (mode === "dark")
     {
         return {
             palette: {
                 mode: mode,
                 primary: {
-                    main: colors.primary[500]
+                    main: colors.primary[100],
+                    title: colors.primary[1000]
                 },
                 secondary: {
                     main: colors.blues[500]
@@ -147,7 +149,9 @@ export const themeSettings = (mode) =>
                     light: colors.grey[100]
                 },
                 background: {
-                    default: colors.primary[500]
+                    default: colors.primary[500],
+                    box: colors.grey[800],
+                    boxInner: colors.grey[700]
                 }
             },
             typography: {
@@ -186,7 +190,9 @@ export const themeSettings = (mode) =>
             palette: {
                 mode: mode,
                 primary: {
-                    main: colors.primary[100]
+                    main: colors.primary[100],
+                    title: colors.primary[500],
+                    faded: colors.primary[800]
                 },
                 secondary: {
                     main: colors.blues[500]
@@ -197,7 +203,9 @@ export const themeSettings = (mode) =>
                     light: colors.grey[100]
                 },
                 background: {
-                    default: colors.grey[1000]
+                    main: colors.grey[1000],
+                    box: colors.grey[800],
+                    boxInner: colors.grey[700],
                 }
             },
             typography: {
