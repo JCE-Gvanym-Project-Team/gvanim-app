@@ -3,7 +3,7 @@ import { isConnected, loginAdmin, loginRecruiter, loguotRecruiter } from "./Auth
 import { Candidate, generateCandidateId, getFilteredCandidates } from "./Candidate";
 import { Job, generateJobNumber, getFilteredJobs } from "./Job";
 import { Recruiter, generateRandomString } from "./Recruiter";
-import { uploadFileToFirestore } from "./firestoreFunc";
+import { getFileExtensionsInFolder, uploadFileToFirestore } from "./firestoreFunc";
 import { Sector } from "./Sector";
 import { CandidateJobStatus, getMessage, allStatus, getFilteredCandidateJobStatuses } from "./CandidateJobStatus";
 import { convertTypeAcquisitionFromJson } from "typescript";
@@ -173,11 +173,6 @@ async function testMessgaeFormat() {
     console.log(getMessage(cand, job, rec, allStatus[6],new Date(),"מיקום כלשהו"));
 }
 async function testGetRecomendationsUrl() {
-    await loginAdmin();
-    let lastCand = new Candidate("44");
-    let lastJob = new Job(105);
-    await lastCand.remove();
-    await lastJob.remove();
     const candId = await generateCandidateId();
     const jobId = await generateJobNumber();
     let cand = new Candidate(candId,"","",generateRandomString(),generateRandomString());
@@ -205,6 +200,17 @@ async function testGetRecomendationsUrl() {
     cand.remove();
     job.remove();
 }
+async function testGetCvUrl() {
+    await loginAdmin();
+    let cand = new Candidate("53");
+    console.log((await cand.getCvUrl()));
+}
+async function testAddRecomendation() {
+    const f = new File([],'jgcc.pdf');
+    let s = (await getFilteredCandidateJobStatuses(["jobNumber","candidateId"],["32","53"]))[0];
+    console.log(s);
+    console.log(await s.getRecomendationsUrl());
+}
 export async function main() {
     //console.log(`testSingleJobAddNoConfilct(): ${await testSingleJobAddNoConfilct()}`);
     //console.log(`testSingleJobAddConfilct(): ${await testSingleJobAddConfilct()}`);
@@ -216,4 +222,6 @@ export async function main() {
     //testEditRecruiter();
     //testMessgaeFormat();
     //testGetRecomendationsUrl();
+    //testGetCvUrl();
+    testAddRecomendation();
 }

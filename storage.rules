@@ -2,11 +2,12 @@ rules_version="2";
 service firebase.storage {
   match /b/{bucket}/o {
     match /CandidatesFiles/{id}/rec/{file}{
-    	allow read, write: if request.auth != null && file.matches('^05[0-9]{8}_[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}$_REC.') && (file.matches('.pdf$') || file.matches('.docx$') || file.matches('.doc$'));
-      allow create: if resource == null && file.matches('^05[0-9]{8}_[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}$_REC.') && (file.matches('.pdf$') || file.matches('.docx$') || file.matches('.doc$'));
+    	allow read, write, delete: if request.auth != null ;
+      allow create: if resource == null && (file.matches('.*\\.pdf$') || file.matches('.*\\.docx$') || file.matches('.*\\.doc$')) && file.matches('^05[0-9]{8}_[0-9]{2,}_REC\\..*$');
     }
     match /CandidatesFiles/{id}/cv/{file}{
-    	allow read, write: if request.auth != null && (file.matches('^CV.pdf$') || file.matches('^CV.docx$') || file.matches('^CV.doc$'));
+    	allow read: if request.auth != null;
+    	allow write, update: if request.auth != null && (file.matches('^CV.pdf$') || file.matches('^CV.docx$') || file.matches('^CV.doc$'));
       allow create: if resource == null && (file.matches('^CV.pdf$') || file.matches('^CV.docx$') || file.matches('^CV.doc$'));
     }
   }
