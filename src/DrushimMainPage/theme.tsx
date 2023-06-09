@@ -153,6 +153,9 @@ export const themeSettings = (mode) =>
                     default: colors.primary[500],
                     box: colors.grey[800],
                     boxInner: colors.grey[700]
+                },
+                error: {
+                    main: colors.reds[100]
                 }
             },
             typography: {
