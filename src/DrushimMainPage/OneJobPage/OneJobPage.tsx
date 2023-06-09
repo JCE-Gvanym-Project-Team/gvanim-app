@@ -137,9 +137,9 @@ export default function OneJobPage()
 
         if (!checkRecommenders())
         {
+            console.log(recommendersErrors);
             return;
         }
-        return;
 
         setLoading(true);
         const newCandidateId = await generateCandidateId();
@@ -191,7 +191,7 @@ export default function OneJobPage()
     const checkRecommenders = () =>
     {
         let result = false;
-        return recommendersList?.map((recommender, index) =>
+        recommendersList?.map((recommender, index) =>
         {
             const recommenderInfo = recommender[0];
             const file = recommender[1];
@@ -222,6 +222,7 @@ export default function OneJobPage()
                 return result && true
             }
         }, result)
+        return result;
     }
 
     return (
@@ -862,8 +863,33 @@ export default function OneJobPage()
                                                                     null,
                                                                     index
                                                                 );
+
+                                                                // remove error message
+                                                                setRecommendersErrors(
+                                                                    recommendersErrors.map((recommenderError, ind) =>
+                                                                    {
+                                                                        if (index === ind)
+                                                                        {
+                                                                            return [false, recommenderError[1]];
+                                                                        } else
+                                                                        {
+                                                                            return [recommenderError[0], recommenderError[1]];
+                                                                        }
+                                                                    })
+                                                                );
                                                             }}
                                                         />
+                                                        <Box sx={{
+                                                            display: recommendersErrors[index][0] ? "flex" : "none",
+                                                            flexDirection: "row",
+                                                            alignItems: "center"
+                                                        }}>
+                                                            <ErrorOutlineRounded sx={{ fontSize: "24px", color: "error.main" }} />
+
+                                                            <Typography variant='h4' color={"error.main"}>
+                                                                שדה זה הוא חובה
+                                                            </Typography>
+                                                        </Box>
                                                     </Box>
                                                     {/* Recommender email */}
                                                     <Box sx={{ marginRight: "1rem" }}>
@@ -873,6 +899,13 @@ export default function OneJobPage()
                                                             אימייל:
                                                         </Typography>
                                                         <TextField
+                                                            sx={{
+                                                                '& .MuiOutlinedInput-root': {
+                                                                    '& fieldset': {
+                                                                        borderColor: recommendersErrors[index][1] ? 'error.main' : "primary.main",
+                                                                    }
+                                                                },
+                                                            }}
                                                             onChange={(event) =>
                                                             {
                                                                 const currentRecommender = recommendersList[index][0];
@@ -884,9 +917,33 @@ export default function OneJobPage()
                                                                     null,
                                                                     index
                                                                 );
-                                                            }}
 
+                                                                // remove error message
+                                                                setRecommendersErrors(
+                                                                    recommendersErrors.map((recommenderError, ind) =>
+                                                                    {
+                                                                        if (index === ind)
+                                                                        {
+                                                                            return [recommenderError[0], false];
+                                                                        } else
+                                                                        {
+                                                                            return [recommenderError[0], recommenderError[1]];
+                                                                        }
+                                                                    })
+                                                                );
+                                                            }}
                                                         />
+                                                        <Box sx={{
+                                                            display: recommendersErrors[index][1] ? "flex" : "none",
+                                                            flexDirection: "row",
+                                                            alignItems: "center"
+                                                        }}>
+                                                            <ErrorOutlineRounded sx={{ fontSize: "24px", color: "error.main" }} />
+
+                                                            <Typography variant='h4' color={"error.main"}>
+                                                                שדה זה הוא חובה
+                                                            </Typography>
+                                                        </Box>
                                                     </Box>
                                                 </Box>
 
