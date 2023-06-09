@@ -1,12 +1,12 @@
-import { AddBoxSharp, ArrowBack, AttachFile, BorderColor, DeleteForeverOutlined, ErrorOutlineRounded, KeyboardReturnOutlined, Label, LocationOn, Redo, Send } from '@mui/icons-material'
-import { Box, Button, Divider, Input, TextField, Typography, useTheme } from '@mui/material'
-import React, { useContext, useEffect, useRef, useState } from 'react'
-import { ColorModeContext, colorTokens } from '../theme';
+import { AddBoxSharp, AttachFile, DeleteForeverOutlined, ErrorOutlineRounded, Redo, Send } from '@mui/icons-material';
+import { Box, Button, Divider, Input, TextField, Typography, useTheme } from '@mui/material';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import MyLoading from '../../Components/MyLoading/MyLoading';
 import { Job, getFilteredJobs } from '../../Firebase/FirebaseFunctions/Job';
 import { Recomendation } from '../../Firebase/FirebaseFunctions/Recomendation';
 import { Candidate, generateCandidateId, getFilteredCandidateJobStatuses } from '../../Firebase/FirebaseFunctions/functionIndex';
-import MyLoading from '../../Components/MyLoading/MyLoading';
+import { ColorModeContext, colorTokens } from '../theme';
 
 
 const ABOUT_MAX_LENGTH = 1000;
