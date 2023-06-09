@@ -1,11 +1,11 @@
-import { AddBoxSharp, ArrowBack, AttachFile, BorderColor, DeleteForeverOutlined, ErrorOutlineRounded, Label, LocationOn, Redo, Send } from '@mui/icons-material'
+import { AddBoxSharp, ArrowBack, AttachFile, BorderColor, DeleteForeverOutlined, ErrorOutlineRounded, KeyboardReturnOutlined, Label, LocationOn, Redo, Send } from '@mui/icons-material'
 import { Box, Button, Divider, Input, TextField, Typography, useTheme } from '@mui/material'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { ColorModeContext, colorTokens } from '../theme';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Job, getFilteredJobs } from '../../Firebase/FirebaseFunctions/Job';
 import { Recomendation } from '../../Firebase/FirebaseFunctions/Recomendation';
-import { Candidate, generateCandidateId } from '../../Firebase/FirebaseFunctions/functionIndex';
+import { Candidate, generateCandidateId, getFilteredCandidateJobStatuses } from '../../Firebase/FirebaseFunctions/functionIndex';
 import MyLoading from '../../Components/MyLoading/MyLoading';
 
 
@@ -36,6 +36,14 @@ export default function OneJobPage()
     // recommenders
     const [numRecommenders, setNumRecommenders] = useState(0);
     const [recommendersList, setRecommendersList] = useState<Array<[Recomendation | null, File | null]>>();
+    const [recommendersErrors, setRecommendersErrors] = useState<boolean[][]>
+        ([
+            // index 0 = phone error. index 1 = email error
+            [false, false],
+            [false, false],
+            [false, false]
+        ]
+        );
 
     // changes recommendersList at the given index
     const updateRecommendersListAtIndex = function (newRecommendation: Recomendation | null, newFile: File | null, index: number)
@@ -105,7 +113,7 @@ export default function OneJobPage()
             setCandidateSurnameError(false);
         }
 
-        if (candidatePhone === "")
+        if (candidatePhone === "" || !isPhoneValid(candidatePhone))
         {
             setCandidatePhoneError(true);
         } else
@@ -113,7 +121,7 @@ export default function OneJobPage()
             setCandidatePhoneError(false);
         }
 
-        if (candidateEmail === "")
+        if (candidateEmail === "" || !isEmailValid(candidateEmail))
         {
             setCandidateEmailError(true);
         } else
@@ -127,9 +135,16 @@ export default function OneJobPage()
             return;
         }
 
+        if (!checkRecommenders())
+        {
+            return;
+        }
+        return;
+
         setLoading(true);
+        const newCandidateId = await generateCandidateId();
         const newCandidate = new Candidate(
-            await generateCandidateId(),
+            newCandidateId,
             candidateName,
             candidateSurname,
             candidatePhone,
@@ -137,11 +152,76 @@ export default function OneJobPage()
             -1,
             aboutText
         );
+        // add candidate
         await newCandidate.add();
+        // add recommenders and CV
+        const candidateJobStatus = (await getFilteredCandidateJobStatuses(["jobNumber", "candidateId"], [job?._jobNumber.toString()!, newCandidateId]))[0];
+        recommendersList?.forEach((recommender) =>
+        {
+            const recommenderInfo = recommender[0];
+            const file = recommender[1];
+            if (recommenderInfo && file)
+            {
+
+            }
+        })
+
         await newCandidate.apply(job?._jobNumber!, aboutText);
+
         setLoading(false);
 
         // TODO: add success message here
+    }
+
+    const isPhoneValid = (phone: string) =>
+    {
+        return /^(?:(?:(\+?972|\(\+?972\)|\+?\(972\))(?:\s|\.|-)?([1-9]\d?))|(0[23489]{1})|(0[57]{1}[0-9]))(?:\s|\.|-)?([^0\D]{1}\d{2}(?:\s|\.|-)?\d{4})$/gm.test(phone);
+    }
+
+    const isEmailValid = (email: string) =>
+    {
+        return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email);
+    }
+
+    /**
+     * checks whether the phone and email provided 
+     * by the user for each recommender is valid. 
+     * @returns false if any of them are invalid (and updates recommendersErrors). true otherwise.
+     */
+    const checkRecommenders = () =>
+    {
+        let result = false;
+        return recommendersList?.map((recommender, index) =>
+        {
+            const recommenderInfo = recommender[0];
+            const file = recommender[1];
+            if (!recommenderInfo && !file)
+            {
+                return result && true;
+            } else
+            {
+                let emailValid = isEmailValid(recommenderInfo?._eMail!);
+                let phoneValid = isPhoneValid(recommenderInfo?._phone!);
+                if (!emailValid || !phoneValid)
+                {
+                    // set errors for appropriate index
+                    setRecommendersErrors(
+                        recommendersErrors.map((recommenderError, errorIndex) =>
+                        {
+                            if (errorIndex === index)
+                            {
+                                return [!phoneValid, !emailValid];
+                            } else
+                            {
+                                return [recommenderError[0], recommenderError[1]];
+                            }
+                        })
+                    )
+                    return result && false;
+                }
+                return result && true
+            }
+        }, result)
     }
 
     return (
@@ -435,10 +515,9 @@ export default function OneJobPage()
                                     sx={{
                                         '& .MuiOutlinedInput-root': {
                                             '& fieldset': {
-                                                borderColor: candidateNameError ? 'error.main' : "primary.main", 
+                                                borderColor: candidateNameError ? 'error.main' : "primary.main",
                                             }
                                         },
-                                        // TODO: add this to all other fields
                                     }}
                                     color={candidateNameError ? 'error' : "primary"}
                                     onChange={(event) =>
@@ -452,7 +531,7 @@ export default function OneJobPage()
                                     flexDirection: "row",
                                     alignItems: "center"
                                 }}>
-                                    <ErrorOutlineRounded sx={{ fontSize: "24px", color: "error.main"}} />
+                                    <ErrorOutlineRounded sx={{ fontSize: "24px", color: "error.main" }} />
 
                                     <Typography variant='h4' color={"error.main"}>
                                         שדה זה הוא חובה
@@ -471,17 +550,31 @@ export default function OneJobPage()
                                 </Typography>
                                 <TextField
                                     variant='outlined'
-                                    size='medium'
                                     sx={{
-                                        backgroundColor: "background.boxInner",
-                                        input: { color: "primary.main" }
+                                        '& .MuiOutlinedInput-root': {
+                                            '& fieldset': {
+                                                borderColor: candidateSurnameError ? 'error.main' : "primary.main",
+                                            }
+                                        },
                                     }}
+                                    color={candidateSurnameError ? 'error' : "primary"}
                                     onChange={(event) =>
                                     {
+                                        setCandidateSurnameError(false);
                                         setCandidateSurname(event.target.value);
                                     }}
                                 />
+                                <Box sx={{
+                                    display: candidateSurnameError ? "flex" : "none",
+                                    flexDirection: "row",
+                                    alignItems: "center"
+                                }}>
+                                    <ErrorOutlineRounded sx={{ fontSize: "24px", color: "error.main" }} />
 
+                                    <Typography variant='h4' color={"error.main"}>
+                                        שדה זה הוא חובה
+                                    </Typography>
+                                </Box>
 
                             </Box>
 
@@ -500,11 +593,31 @@ export default function OneJobPage()
                                     טלפון:
                                 </Typography>
                                 <TextField
+                                    sx={{
+                                        '& .MuiOutlinedInput-root': {
+                                            '& fieldset': {
+                                                borderColor: candidatePhoneError ? 'error.main' : "primary.main",
+                                            }
+                                        },
+                                    }}
+                                    color={candidatePhoneError ? 'error' : "primary"}
                                     onChange={(event) =>
                                     {
+                                        setCandidatePhoneError(false);
                                         setCandidatePhone(event.target.value);
                                     }}
                                 />
+                                <Box sx={{
+                                    display: candidatePhoneError ? "flex" : "none",
+                                    flexDirection: "row",
+                                    alignItems: "center"
+                                }}>
+                                    <ErrorOutlineRounded sx={{ fontSize: "24px", color: "error.main" }} />
+
+                                    <Typography variant='h4' color={"error.main"}>
+                                        שדה זה הוא חובה
+                                    </Typography>
+                                </Box>
                             </Box>
 
                             {/* Email */}
@@ -517,18 +630,33 @@ export default function OneJobPage()
                                     אימייל:
                                 </Typography>
                                 <TextField
-                                    variant='filled'
-                                    size='medium'
+                                    variant='outlined'
                                     type='email'
                                     sx={{
-                                        backgroundColor: "background.boxInner",
-                                        input: { color: "primary.main" }
+                                        '& .MuiOutlinedInput-root': {
+                                            '& fieldset': {
+                                                borderColor: candidateEmailError ? 'error.main' : "primary.main",
+                                            }
+                                        },
                                     }}
+                                    color={candidateEmailError ? 'error' : "primary"}
                                     onChange={(event) =>
                                     {
+                                        setCandidateEmailError(false);
                                         setCandidateEmail(event.target.value);
                                     }}
                                 />
+                                <Box sx={{
+                                    display: candidateEmailError ? "flex" : "none",
+                                    flexDirection: "row",
+                                    alignItems: "center"
+                                }}>
+                                    <ErrorOutlineRounded sx={{ fontSize: "24px", color: "error.main" }} />
+
+                                    <Typography variant='h4' color={"error.main"}>
+                                        שדה זה הוא חובה
+                                    </Typography>
+                                </Box>
                             </Box>
 
                         </Box>
