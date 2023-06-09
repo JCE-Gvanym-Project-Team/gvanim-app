@@ -191,6 +191,7 @@ export default function OneJobPage()
     const checkRecommenders = () =>
     {
         let result = false;
+        let recommendersErrorsResult = recommendersErrors;
         recommendersList?.map((recommender, index) =>
         {
             const recommenderInfo = recommender[0];
@@ -205,23 +206,22 @@ export default function OneJobPage()
                 if (!emailValid || !phoneValid)
                 {
                     // set errors for appropriate index
-                    setRecommendersErrors(
-                        recommendersErrors.map((recommenderError, errorIndex) =>
+                    recommendersErrorsResult = recommendersErrorsResult.map((recommenderError, errorIndex) =>
+                    {
+                        if (errorIndex === index)
                         {
-                            if (errorIndex === index)
-                            {
-                                return [!phoneValid, !emailValid];
-                            } else
-                            {
-                                return [recommenderError[0], recommenderError[1]];
-                            }
-                        })
-                    )
+                            return [!phoneValid, !emailValid];
+                        } else
+                        {
+                            return [recommenderError[0], recommenderError[1]];
+                        }
+                    });
                     return result && false;
                 }
                 return result && true
             }
         }, result)
+        setRecommendersErrors(recommendersErrorsResult);
         return result;
     }
 
@@ -716,7 +716,7 @@ export default function OneJobPage()
                     >
 
                         <Typography variant='h2' justifySelf={"center"}>
-                            הוספת ממליצים
+                            ממליצים
                         </Typography>
 
                         {/* List of recommenders */}
@@ -852,6 +852,13 @@ export default function OneJobPage()
                                                             טלפון:
                                                         </Typography>
                                                         <TextField
+                                                            sx={{
+                                                                '& .MuiOutlinedInput-root': {
+                                                                    '& fieldset': {
+                                                                        borderColor: recommendersErrors[index][0] ? 'error.main' : "primary.main",
+                                                                    }
+                                                                },
+                                                            }}
                                                             onChange={(event) =>
                                                             {
                                                                 const currentRecommender = recommendersList[index][0];
