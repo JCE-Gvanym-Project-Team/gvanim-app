@@ -289,8 +289,8 @@ const NewJobPage = () => {
 
                                             <Form noValidate={true} onSubmit={handleSubmit} sx={{ width: '100%', mt: 3 }} >
                                                 <Stack
-                                                    // divider={<Divider orientation='vertical' flexItem />}
-                                                    justifyContent='start'
+                                                     divider={<Divider orientation='vertical' flexItem />}
+                                                    justifyContent='space-evenly'
                                                     direction={{ xs: 'column', sm: 'column', md: 'column', lg: 'row', xl: 'row' }}
                                                     spacing={{ xs: 2, sm: 2, md: 2, lg: 8, xl: 8 }}
                                                 >
