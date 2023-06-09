@@ -3,10 +3,34 @@ import { Theme } from '@mui/material/styles';
 
 
 export const MyButtonSx: SxProps = {
-		backgroundColor: 'rgb(52, 71, 103)',
-		":hover": {
-			bgcolor: "rgb(52, 71, 103)",
-		}
+    ":active": {
+		backgroundColor: 'transparent',
+		transform: 'none'
+	},
+	":hover": {
+		opacity: '0.75',
+		color: '#555abf',
+		backgroundColor: 'transparent',
+		border: '1px solid #555abf',
+		borderRadius: '0.5rem'
+
+	},
+	border: '1px solid #555abf',
+	color: '#555abf',
+	letterSpacing: 0,
+	backgroundSize: '150%',
+	backgroundPositionX: '25%',
+	position: 'relative',
+	overflow: 'hidden',
+	WebkitAppearance: 'none',
+	borderRadius: '0.5rem',
+	fontSize: '0.85rem',
+	paddingX: '1rem',
+	paddingY: '0.375rem',
+	fontWeight: 600,
+	margin: '0px 4px 0px 4px',
+	lineHeight: 1.667,
+	height: '32px'
 }
 export const dataGridContainerSx: SxProps = {
 	overflow: 'hidden',

@@ -9,22 +9,15 @@ import { Assignment, Edit, Label, MoreVert, Print } from '@mui/icons-material';
 import { MenuItemIconSx, MenuItemTypographySx, MoreVertSx, blue, grey } from './MyDropManuStyle';
 import { useNavigate } from 'react-router-dom';
 import { Link } from "react-router-dom";
+import { Job } from '../../../../Firebase/FirebaseFunctions/Job';
 
-function MenuSection({ children, label }: MenuSectionProps)
-{
-    return (
-        <MenuSectionRoot>
-            <MenuSectionLabel>{label}</MenuSectionLabel>
-            {children}
-        </MenuSectionRoot>
-    );
-}
 
-export default function MyDropMenu(props: { JobId: any })
+export default function MyDropMenu(props: { job: Job })
 {
+    const { job } = props;
     const navigate = useNavigate();
 
-    const { JobId } = props;
+
     const [buttonElement, setButtonElement] = React.useState<HTMLButtonElement | null>(
         null,
     );
@@ -42,7 +35,7 @@ export default function MyDropMenu(props: { JobId: any })
     {
         setOpen(false);
         buttonElement?.focus();
-        navigate("/management/createJob", { state: JobId });
+        navigate("/management/createJob", { state: { job: job }});
     }
 
     const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>) =>
@@ -85,16 +78,6 @@ export default function MyDropMenu(props: { JobId: any })
         }
     };
 
-    const createHandleMenuClick = (menuItem: string) =>
-    {
-
-        return () =>
-        {
-            console.log(`Clicked on ${menuItem}`);
-            setOpen(false);
-            buttonElement?.focus();
-        };
-    };
 
     return (
         <Box>
@@ -123,7 +106,7 @@ export default function MyDropMenu(props: { JobId: any })
                 slotProps={{ listbox: { id: 'simple-menu' } }}
             >
                 <Typography variant='caption' sx={{fontSize: 10,fontWeight: 600, padding: 1}}>אפשרויות</Typography>
-                <StyledMenuItem onClick={() => navigate(`/career/jobs/${JobId}`)}>
+                <StyledMenuItem onClick={() => navigate(`/career/jobs/${job?._jobNumber}`)}>
                 
                     <ListItemIcon>
                         <Assignment sx={MenuItemIconSx} />

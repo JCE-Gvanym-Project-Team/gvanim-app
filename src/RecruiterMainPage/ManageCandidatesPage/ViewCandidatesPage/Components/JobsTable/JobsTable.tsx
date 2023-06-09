@@ -68,7 +68,7 @@ export default function JobsTable(props: { setDataSize: any, candidateJobs: any,
 
 			renderCell: (job) =>
 			{
-				return <MyDropMenu JobId={job.id} />;
+				return <MyDropMenu job={job.row} />;
 			},
 		},
 

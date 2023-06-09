@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Alert, AlertProps, Box, Button, Chip, LinearProgress, Snackbar, Stack, SxProps, Theme, alpha, styled, useTheme } from '@mui/material';
+import { Box, Button, Chip, LinearProgress, Snackbar, Stack, SxProps, Theme, Typography, alpha, styled, useTheme } from '@mui/material';
 import MyDropMenu from '../MyDropMenu/MyDropMenu';
 import {
 	DataGrid,
@@ -25,11 +25,12 @@ import {
 import Pagination from '@mui/material/Pagination';
 import PaginationItem from '@mui/material/PaginationItem';
 import CandidatesListFullScreenDialog from '../CandidatesListDialog/CandidatesListDialog';
-import { getFilteredJobs } from '../../../../Firebase/FirebaseFunctions/Job';
+import { Job, getFilteredJobs } from '../../../../Firebase/FirebaseFunctions/Job';
 import { useNavigate } from "react-router-dom";
-import { ArticleOutlined } from '@mui/icons-material';
+import { ArticleOutlined, LockOpen, Lock } from '@mui/icons-material';
 import MyLoading from '../../../../Components/MyLoading/MyLoading';
 import { unstable_useForkRef as useForkRef } from '@mui/utils';
+import { MyButtonSx } from './MyTableStyle';
 
 
 
@@ -231,7 +232,6 @@ function CustomNoRowsOverlay() {
 	);
 }
 
-
 const columns: GridColDef[] = [
 
 	{
@@ -246,42 +246,76 @@ const columns: GridColDef[] = [
 		editable: false,
 
 		renderCell: (job) => {
-			return <MyDropMenu JobId={job.id} />;
+			return <MyDropMenu job={job?.row} />;
 		},
 	},
 
 	{
 		field: '_jobNumber',
 		headerName: "מס' משרה",
-		width: 150,
-		headerAlign: 'left',
-		align: 'left'
+		width: 110,
+		headerAlign: 'center',
+		align: 'center',
+		// renderCell: (job) => { return <strong>{job?.row?._jobNumber}</strong> }
 	},
+	{
+		field: '_status',
+		headerName: 'סטטוס',
+		description: 'סטטוס המשרה',
+		sortable: true,
+		editable: false,
+		headerAlign: 'center',
+		align: 'center',
+		width: 120,
+		renderCell: (job) => {
+			const { _open } = job.row;
+			return (
+				<>
+					{_open ?
+						<Chip variant='outlined' sx={{ padding: 0.5 }} label={'פתוח'} color="success" icon={<LockOpen sx={{ fontSize: 'medium' }} />} />
+						:
+						<Chip variant='outlined' sx={{ padding: 0.8 }} label={'סגור'} color="error" icon={<Lock sx={{ fontSize: 'medium' }} />} />
+					}
+				</>);
+		},
+	},
+
 
 	{
 		field: '_region',
 		headerName: 'איזור',
 		width: 200,
 		editable: false,
-		headerAlign: 'left',
-		align: 'left'
+		headerAlign: 'center',
+		align: 'center',
 
 
 	},
 	{
 		field: '_role',
 		headerName: 'תפקיד',
-		width: 300,
-		headerAlign: 'left',
-		align: 'left'
+		width: 350,
+		headerAlign: 'center',
+		align: 'center',
+	},
+	{
+		field: '_sector',
+		headerName: 'אשכול',
+		width: 250,
+		headerAlign: 'center',
+		align: 'center',
+		renderCell: (job) => { return <>{job?.row?._sector}</> }
 	},
 	{
 		field: '_scope',
 		headerName: 'אחוז משרה',
 		width: 150,
 		headerAlign: 'center',
-		align: 'center'
+		align: 'center',
+		renderCell: (job) => { return getScopeFormated(job?.row._scope); }
+
 	},
+
 	{
 		field: 'candidates',
 		headerName: 'מועמדים שניגשו',
@@ -290,7 +324,7 @@ const columns: GridColDef[] = [
 		editable: false,
 		headerAlign: 'center',
 		align: 'center',
-		width: 300,
+		width: 200,
 		renderCell: (job) => {
 			const { id } = job.row;
 			return <CandidatesListFullScreenDialog JobId={id} />;
@@ -313,8 +347,10 @@ const GridCustomToolbar = () => {
 				</Box>
 				<Box sx={{ display: 'flex', flexDirection: 'row-reverse', width: '100%' }}>
 					<Box>
+						<Button onClick={handleCreatejob} disableRipple sx={MyButtonSx}>
 
-						<Button type="button" endIcon={<ArticleOutlined />} onClick={handleCreatejob} variant='contained' fullWidth>משרה חדשה</Button>
+							<Typography sx={{ font: '12px Roboto, Helvetica,Arial, sans-serif', margin: '0px 0px 2px 0px', fontWeight: 600 }}>משרה חדשה</Typography>
+						</Button>
 
 					</Box>
 				</Box>
@@ -352,22 +388,11 @@ const CustomPaginationAndFooter = () => {
 
 
 	return (
-		<Stack direction='row' justifyContent='space-between' alignItems='center' padding={1}>
-			<Box >
-				<Box display='flex' flexDirection='row'>
-					<Chip
-				
-						label={rowsCount + ' משרות'}
-						
-					
-					sx={{fontWeight: 'bold'}}
-						color= 'primary'
-						size='small'
-						variant="outlined"
-					/>
-				</Box>
-
-			</Box>
+		<Stack direction={{xs: 'column', sm: 'column',md: 'column',lg: 'row-reverse', xl: 'row-reverse' }} 
+		justifyContent='space-between' 
+		alignItems='center' 
+		spacing={2}
+		padding={1} >
 
 			<Box >
 				<Pagination
@@ -383,6 +408,14 @@ const CustomPaginationAndFooter = () => {
 					}
 				/>
 			</Box>
+
+			<Box>
+					<Chip
+						label={rowsCount + ' משרות'}
+						sx={{ fontWeight: 'bold', borderRadius: '0.5rem', color: 'black' }}
+						variant="outlined"
+					/>
+				</Box>
 		</Stack>
 
 	);
@@ -390,24 +423,18 @@ const CustomPaginationAndFooter = () => {
 
 
 export default function MyTable() {
-
-	const [snackbar, setSnackbar] = React.useState<Pick<AlertProps, 'children' | 'severity'> | null>(null);
 	const [pageloading, setPageLoading] = React.useState(true);
 	const [dataloading, setDataLoading] = React.useState(true);
-	const [rows, setRows] = React.useState<any>([]);
+	const [rows, setRows] = React.useState<Job[]>([]);
 
 	const navigate = useNavigate();
 
 	const fetchAllJobs = async () => {
 		setDataLoading(true);
 
-		const jobs = await getFilteredJobs();
-		const jobsWithId = jobs.map((job) => ({ ...job, id: job._jobNumber, _scope: getScopeFormated(job._scope) }));
-
-		setRows(jobsWithId);
+		setRows(await getFilteredJobs());
 
 		setDataLoading(false);
-
 	};
 
 	React.useEffect(() => {
@@ -415,7 +442,6 @@ export default function MyTable() {
 		fetchAllJobs();
 	}, []);
 
-	const handleCloseSnackbar = () => setSnackbar(null);
 
 	const theme = useTheme();
 
@@ -425,17 +451,17 @@ export default function MyTable() {
 				<>
 
 					<DataGrid
-						getRowClassName={(params) =>params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'}
+						getRowClassName={(params) => params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'}
 						autoPageSize
 
 						sx={MyDataGrid(theme)}
 						rows={rows}
 						columns={columns}
-						onRowDoubleClick={(job) => navigate(`../jobs/${job.id}`)}
+						onRowDoubleClick={(job) => navigate(`/career/jobs/${job.id}`)}
 						hideFooterSelectedRowCount
 						rowCount={rows.length}
 
-						getRowId={(row) => row.id}
+						getRowId={(row) => row._jobNumber}
 						localeText={heIL.components.MuiDataGrid.defaultProps.localeText}
 
 						loading={dataloading}
@@ -449,16 +475,7 @@ export default function MyTable() {
 						}}
 
 					/>
-					{!!snackbar && (
-						<Snackbar
-							open
-							anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-							onClose={handleCloseSnackbar}
-							autoHideDuration={6000}
-						>
-							<Alert {...snackbar} onClose={handleCloseSnackbar} />
-						</Snackbar>
-					)}
+
 
 				</>
 			)}
