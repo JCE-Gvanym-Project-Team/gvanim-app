@@ -1,9 +1,13 @@
-import { ArrowBack, Label, LocationOn, Redo } from '@mui/icons-material'
+import { AddBoxSharp, ArrowBack, AttachFile, DeleteForeverOutlined, Label, LocationOn, Redo } from '@mui/icons-material'
 import { Box, Button, Divider, Input, TextField, Typography, useTheme } from '@mui/material'
 import React, { useContext, useEffect, useState } from 'react'
 import { ColorModeContext, colorTokens } from '../theme';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Job, getFilteredJobs } from '../../Firebase/FirebaseFunctions/Job';
+import { Recomendation } from '../../Firebase/FirebaseFunctions/Recomendation';
+
+const ABOUT_MAX_LENGTH = 1000;
+const MAX_RECOMMENDERS = 3;
 
 export default function OneJobPage()
 {
@@ -16,6 +20,7 @@ export default function OneJobPage()
     const colors = colorTokens(theme.palette.mode);
     const colorMode = useContext(ColorModeContext);
 
+    // get current job from URL
     const fetchJobs = async () =>
     {
         setJob((await getFilteredJobs(["jobNumber"], [getJobIdFromUrl(state.pathname)]))[0]);
@@ -25,6 +30,17 @@ export default function OneJobPage()
     {
         fetchJobs();
     }, [state])
+
+    // about text field
+    const [aboutNumChars, setAboutNumChars] = useState(0);
+
+    // recommenders
+    const [numRecommenders, setNumRecommenders] = useState(3);
+    const recommendersList = [
+        [null, null],
+        [null, null],
+        [null, null]
+    ]; // list of recommenders and attached files
 
     return (
         <Box
@@ -106,7 +122,7 @@ export default function OneJobPage()
                 <Box
                     sx={{
                         display: "flex",
-                        flexDirection: {xs: "column", md: "row"},
+                        flexDirection: { xs: "column", md: "row" },
                         backgroundColor: "background.box",
                         flex: 8,
                         marginRight: { xs: "0", md: "1rem" },
@@ -284,7 +300,7 @@ export default function OneJobPage()
                     display: "flex",
                     flexDirection: "column",
                     backgroundColor: "background.box",
-                    marginTop: "0.5rem"
+                    marginTop: "0.5rem",
                 }}
             >
 
@@ -295,8 +311,8 @@ export default function OneJobPage()
                         flexDirection: "row",
                         justifyContent: "center",
                         padding: "1rem",
-                        paddingLeft: {xs: "0", md: "1rem"},
-                        paddingRight: {xs: "0", md: "1rem"}
+                        paddingLeft: { xs: "0", md: "1rem" },
+                        paddingRight: { xs: "0", md: "1rem" }
                     }}
                 >
                     {/* Firstname and Lastname */}
@@ -312,9 +328,7 @@ export default function OneJobPage()
                             <Typography variant='h4'>
                                 שם פרטי:
                             </Typography>
-                            <TextField>
-
-                            </TextField>
+                            <TextField />
                         </Box>
 
                         {/* Lastname */}
@@ -350,7 +364,7 @@ export default function OneJobPage()
                         {/* Phone */}
                         <Box>
                             <Typography variant='h4'>
-                                טלפון
+                                טלפון:
                             </Typography>
                             <TextField>
 
@@ -364,7 +378,7 @@ export default function OneJobPage()
                             }}
                         >
                             <Typography variant='h4'>
-                                אימייל
+                                אימייל:
                             </Typography>
                             <TextField
                                 variant='filled'
@@ -384,23 +398,235 @@ export default function OneJobPage()
                 <Box
                     sx={{
                         display: "flex",
+                        flexDirection: "column",
                         justifyContent: "center",
+                        alignItems: "center",
                         marginTop: "1rem"
                     }}
                 >
                     <TextField
-                        label="ספר/י על עצמך"
+                        label="ספר/י לנו עליך"
                         multiline
                         rows={10}
                         sx={{
+                            width: { xs: "100%", md: "90%" }
+                        }}
+                        inputProps={{
+                            maxLength: ABOUT_MAX_LENGTH
+                        }}
+                        onChange={(event) =>
+                        {
+                            setAboutNumChars(event?.target.value.length);
+                        }}
+                    />
+                    <Box
+                        sx={{
+                            display: "flex",
+                            flexDirection: "row",
+                            justifyContent: "end",
                             width: { xs: "100%", md: "90%" },
                             marginBottom: "1rem"
                         }}
-                    />
+                    >
+                        <Typography variant='h4'>
+                            {aboutNumChars} / {ABOUT_MAX_LENGTH}
+                        </Typography>
+                    </Box>
                 </Box>
 
                 {/* Recommenders */}
-                <Box>
+                <Box
+                    sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center"
+                    }}
+                >
+
+                    <Typography variant='h2' justifySelf={"center"}>
+                        הוספת ממליצים
+                    </Typography>
+
+                    {/* List of recommenders */}
+                    <Box sx={{
+                        backgroundColor: "background.boxInner",
+                        display: "flex",
+                        flexDirection: "column",
+                        padding: "1rem",
+                        alignItems: "center",
+                    }}
+                    >
+                        {Array.from({ length: numRecommenders }, (_, index) => index).map((element, index) =>
+                        {
+                            return (
+                                <Box sx={{
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    width: "100%",
+                                    marginBottom: "1rem"
+                                }}
+                                    key={index + "box"}
+                                >
+
+                                    <Button 
+                                    sx={{
+                                        display: {xs: "none", md: "flex"}
+                                    }}
+                                    >
+                                        <DeleteForeverOutlined />
+                                    </Button>
+                                    {/* Recommender */}
+                                    <Box
+                                        sx={{
+                                            backgroundColor: "background.box",
+                                            display: "flex",
+                                            flexDirection: "row",
+                                            justifyContent: "space-between",
+                                            padding: "1rem",
+                                            paddingTop: "0",
+                                            paddingBottom: "1rem",
+                                        }}>
+
+                                        {/* name + phone + email + buttons*/}
+                                        <Box
+                                            sx={{
+                                                display: "flex",
+                                                flexDirection: { xs: "column", md: "row" }
+                                            }}
+                                        >
+                                            {/* mobile delete + attach file buttons */}
+                                            <Box
+                                                sx={{
+                                                    display: { xs: "flex", md: "none" },
+                                                    flexDirection: "row",
+                                                    justifyContent: "space-between"
+                                                }}
+                                            >
+                                                {/* mobile attach file button */}
+                                                <Button
+                                                    variant='outlined'
+                                                    sx={{
+                                                        display: { xs: "block", md: "none" }
+                                                    }}
+                                                >
+                                                    <AttachFile
+                                                        sx={{ fontSize: "24px" }}
+                                                    />
+                                                    <Typography
+                                                        variant='h4'
+                                                        sx={{
+                                                            display: { xs: "none", md: "block" }
+                                                        }}>
+                                                        הוספת קובץ
+                                                    </Typography>
+                                                </Button>
+
+                                                {/* Remove recommender button */}
+                                                <Button>
+                                                    <DeleteForeverOutlined />
+                                                </Button>
+                                            </Box>
+
+                                            {/* Recommender name */}
+                                            <Box
+                                                sx={{
+                                                    display: "flex",
+                                                    flexDirection: "column",
+                                                    marginRight: "1rem"
+                                                }}
+                                            >
+                                                <Typography
+                                                    variant='h4'
+                                                >
+                                                    שם:
+                                                </Typography>
+                                                <TextField />
+                                            </Box>
+
+                                            {/* Recommender phone */}
+                                            <Box
+                                                sx={{
+                                                    marginRight: "1rem"
+                                                }}>
+                                                <Typography
+                                                    variant='h4'
+                                                >
+                                                    טלפון:
+                                                </Typography>
+                                                <TextField />
+                                            </Box>
+                                            {/* Recommender email */}
+                                            <Box sx={{ marginRight: "1rem" }}>
+                                                <Typography
+                                                    variant='h4'
+                                                >
+                                                    אימייל:
+                                                </Typography>
+                                                <TextField />
+                                            </Box>
+                                        </Box>
+
+                                        {/* Attach recommender file button */}
+                                        <Box
+                                            sx={{
+                                                display: "flex",
+                                                flexDirection: "row",
+                                                height: "72%",
+                                                alignSelf: "end",
+                                            }}
+                                        >
+                                            {/* PC button */}
+                                            <Button
+                                                variant='outlined'
+                                                sx={{
+                                                    display: { xs: "none", md: "flex" }
+                                                }}
+                                            >
+                                                <AttachFile
+                                                    sx={{ fontSize: "24px" }}
+                                                />
+                                                <Typography
+                                                    variant='h4'
+                                                    sx={{
+                                                        display: { xs: "none", md: "block" }
+                                                    }}>
+                                                    הוספת קובץ
+                                                </Typography>
+                                            </Button>
+                                        </Box>
+
+                                    </Box>
+                                </Box>
+                            );
+                        })}
+
+                        {/* Add recommender button */}
+                        <Box
+                            sx={{
+                                width: "95%",
+                                display: numRecommenders >= MAX_RECOMMENDERS + 90 ? "none" : "block"
+                            }}>
+
+                            <Button
+                                sx={{
+                                    alignSelf: "start"
+                                }}
+                                onClick={() =>
+                                {
+                                    if (numRecommenders >= MAX_RECOMMENDERS)
+                                    {
+                                        setNumRecommenders(MAX_RECOMMENDERS);
+                                        return;
+                                    }
+                                    setNumRecommenders(numRecommenders + 1);
+                                }}
+                            >
+                                <AddBoxSharp />
+                                הוספת ממליץ
+                            </Button>
+                        </Box>
+
+                    </Box>
 
                 </Box>
 
