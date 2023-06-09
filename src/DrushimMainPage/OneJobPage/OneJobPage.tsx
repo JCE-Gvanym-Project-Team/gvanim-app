@@ -42,8 +42,7 @@ export default function OneJobPage()
             [false, false],
             [false, false],
             [false, false]
-        ]
-        );
+        ]);
 
     // changes recommendersList at the given index
     const updateRecommendersListAtIndex = function (newRecommendation: Recomendation | null, newFile: File | null, index: number)
@@ -75,11 +74,12 @@ export default function OneJobPage()
     const [aboutText, setAboutText] = useState("");
 
     // recommender file input ref
-    const recommenderFileInputRef = useRef<HTMLInputElement>(null);
+    const recommenderFileInputRefs = useRef<HTMLInputElement[]>([]);
 
     // CV file
     const cvFileInputRef = useRef<HTMLInputElement>(null);
     const [cvFile, setCvFile] = useState<File | null>(null);
+    const [cvFileError, setCvFileError] = useState(false);
 
     useEffect(() =>
     {
@@ -123,6 +123,7 @@ export default function OneJobPage()
 
         if (candidateEmail === "" || !isEmailValid(candidateEmail))
         {
+            console.log("here");
             setCandidateEmailError(true);
         } else
         {
@@ -134,6 +135,13 @@ export default function OneJobPage()
             console.log(candidateNameError);
             return;
         }
+
+        if (!cvFile)
+        {
+            setCvFileError(true);
+            return;
+        }
+        setCvFileError(false);
 
         if (!checkRecommenders())
         {
@@ -154,17 +162,26 @@ export default function OneJobPage()
         );
         // add candidate
         await newCandidate.add();
+
         // add recommenders and CV
         const candidateJobStatus = (await getFilteredCandidateJobStatuses(["jobNumber", "candidateId"], [job?._jobNumber.toString()!, newCandidateId]))[0];
-        recommendersList?.forEach((recommender) =>
+        recommendersList?.forEach(async (recommender) =>
         {
             const recommenderInfo = recommender[0];
             const file = recommender[1];
-            if (recommenderInfo && file)
+            if (recommenderInfo)
             {
-
+                if (!file)
+                {
+                    await candidateJobStatus.addRecomendation(recommenderInfo._fullName, recommenderInfo._phone, recommenderInfo._eMail, new File([''], ''));
+                } else
+                {
+                    await candidateJobStatus.addRecomendation(recommenderInfo._fullName, recommenderInfo._phone, recommenderInfo._eMail, file);
+                }
             }
         })
+
+        newCandidate.uploadCv(cvFile);
 
         await newCandidate.apply(job?._jobNumber!, aboutText);
 
@@ -180,7 +197,7 @@ export default function OneJobPage()
 
     const isEmailValid = (email: string) =>
     {
-        return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email);
+        return /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email);
     }
 
     /**
@@ -190,7 +207,7 @@ export default function OneJobPage()
      */
     const checkRecommenders = () =>
     {
-        let result = false;
+        let result = true;
         let recommendersErrorsResult = recommendersErrors;
         recommendersList?.map((recommender, index) =>
         {
@@ -966,12 +983,16 @@ export default function OneJobPage()
                                                     {/* PC add recommender file button */}
                                                     <Input
                                                         type="file"
-                                                        inputRef={recommenderFileInputRef}
+                                                        inputRef={(input) => (recommenderFileInputRefs.current[index] = input)}
                                                         style={{ display: 'none' }}
-                                                        onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                                                        onChange={(event) =>
                                                         {
-                                                            const files = event.target.files!;
-                                                            updateRecommendersListAtIndex(recommendersList[index][0], files[0], index);
+                                                            const inputElement = event.target as HTMLInputElement;
+                                                            const files = inputElement.files;
+                                                            if (files && files.length > 0)
+                                                            {
+                                                                updateRecommendersListAtIndex(recommendersList[index][0], files[0], index);
+                                                            }
                                                         }}
                                                     />
                                                     <Button
@@ -981,9 +1002,9 @@ export default function OneJobPage()
                                                         onClick={() =>
                                                         {
                                                             // trigger input onChange
-                                                            if (recommenderFileInputRef.current)
+                                                            if (recommenderFileInputRefs.current[index])
                                                             {
-                                                                recommenderFileInputRef.current.click();
+                                                                recommenderFileInputRefs.current[index]?.click()
                                                             }
                                                         }}
 
@@ -1007,7 +1028,7 @@ export default function OneJobPage()
                                                             {/* display filename to the user */}
                                                             <Typography variant='h6'>
                                                                 {recommendersList[index][1]?.name.length! > 20 ? '...' : ''}
-                                                                {recommendersList[index][1]?.name.slice(0, 20)}
+                                                                {recommendersList[index][1] ? recommendersList[index][1]?.name.slice(0, 20) : ""}
                                                             </Typography>
                                                         </Box>
                                                     </Button>
@@ -1119,8 +1140,21 @@ export default function OneJobPage()
                                         {cvFile?.name.slice(0, 10)}
                                         {cvFile?.name.length! > 10 ? '...' : ''}
                                     </Typography>
+
+
                                 </Box>
                             </Button>
+                            <Box sx={{
+                                display: cvFileError ? "flex" : "none",
+                                flexDirection: "row",
+                                alignItems: "center"
+                            }}>
+                                <ErrorOutlineRounded sx={{ fontSize: "24px", color: "error.main" }} />
+
+                                <Typography variant='h4' color={"error.main"}>
+                                    שדה זה הוא חובה
+                                </Typography>
+                            </Box>
                         </Box>
 
                         <Button
