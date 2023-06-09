@@ -1,11 +1,12 @@
 import { SxProps } from "@mui/material"
 
 export const BoxGradientSx: SxProps = {
-    marginTop: '-80px',
-    height: '65vh',
+    height: '300px',
+    width: "100%",
+    top: 0,
     display: 'flex',
     justifyContent: 'center',
-    background: 'linear-gradient(310deg, #7795f8,#555abf)',
+    background: 'linear-gradient(to left, #7795f8, #7795f8,#555abf)',
 }
 
 export const GlobalStyle = {
@@ -19,7 +20,7 @@ export const ManageJobsPageGlobalStyle = {
 export const ManageCandidatesPageGlobalStyle = {
     // View Candidate
     textFontFamily: "'Noto Sans Hebrew', sans-serif",
-    marginFromNavbar: '6rem',
+    marginFromNavbar: '20rem',
     backgroundGradient: 'linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%)',
     backgroundHeight: "45vh",
 

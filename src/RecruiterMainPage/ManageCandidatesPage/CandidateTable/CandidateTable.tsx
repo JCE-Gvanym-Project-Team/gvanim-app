@@ -26,9 +26,9 @@ import {
   dataGridSx,
 } from "./CandidateTableStyle";
 import { getFilteredCandidates } from "../../../Firebase/FirebaseFunctions/Candidate";
+import { getFilteredJobs } from "../../../Firebase/FirebaseFunctions/Job";
 import { useNavigate } from "react-router-dom";
 import { ArticleOutlined } from "@mui/icons-material";
-import ManageJobsPage from "../../ManageJobsPage/ManageJobsPage";
 
 const StyledGridOverlay = styled("div")(({ theme }) => ({
   display: "flex",
@@ -124,16 +124,25 @@ const columns: GridColDef[] = [
     width: 150,
     headerAlign: "center",
     align: "center",
+    renderCell: (params) => {
+      const navigate = useNavigate();
+      return (
+        <Button
+          onClick={() => navigate(`/candidate/${params.row._candidateName}`)}
+        >
+          {params.row._candidateName}
+        </Button>
+      );
+    },
   },
-
   {
     field: "_jobNumber",
     headerName: "מס' משרה",
     width: 150,
     headerAlign: "center",
     align: "center",
+    valueGetter: (params) => getAppliedJobs(params.row.id),
   },
-
   {
     field: "_region",
     headerName: "איזור",
@@ -141,6 +150,15 @@ const columns: GridColDef[] = [
     editable: false,
     headerAlign: "center",
     align: "center",
+    valueGetter: async (params) => {
+      const appliedJobs = await getAppliedJobs(params.row.id);
+      const regions = await Promise.all(
+        appliedJobs.map((job) =>
+          getFilteredJobs(["jobNumber"], [job], "region")
+        )
+      );
+      return regions.join(", ");
+    },
   },
 ];
 
@@ -218,6 +236,8 @@ export default function CandidateTable(props: { setDataSize: any }) {
     const candidatesWithId = candidates.map((candidate) => ({
       ...candidate,
       id: candidate._id,
+      firstName: candidate._firstName,
+      lastName: candidate._lastName,
     }));
     setAllCandidates(candidatesWithId);
   };
@@ -277,4 +297,13 @@ export default function CandidateTable(props: { setDataSize: any }) {
       </Container>
     </>
   );
+}
+async function getAppliedJobs(this: any, id: any) {
+  let jobs;
+  let statArr = await this.getCandidatures();
+  let jobIds = statArr.map((stat) => stat._jobNumber);
+  jobIds.forEach((id) =>
+    jobs.push(getFilteredJobs(["jobNumber"], [id.toString()]))
+  );
+  return jobs;
 }

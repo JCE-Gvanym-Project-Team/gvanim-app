@@ -23,7 +23,7 @@ import AllJobsPage from './DrushimMainPage/AllJobsPage/AllJobsPage';
 import OneJobPage from './DrushimMainPage/OneJobPage/OneJobPage';
 import RecruiterMainPage from './RecruiterMainPage/RecruiterMainPage';
 
-main();
+//main();
 const recruitersPageTheme = createTheme({
 	direction: 'rtl',
 });

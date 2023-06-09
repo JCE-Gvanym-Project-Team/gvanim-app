@@ -40,7 +40,7 @@ export class CandidateJobStatus {
         lastUpdate: Date = new Date(),
         interviewDate: Date = new Date(0, 0, 0),
         interviewsSummery: Array<string> = ["", ""],
-        recomendations: Array<Recomendation> = [],
+        recomendations: Array<Recomendation> = new Array<Recomendation>(),
         rejectCause = "") {
         this._jobNumber = jobNumber;
         this._candidateId = candidateId;
@@ -69,7 +69,7 @@ export class CandidateJobStatus {
             return;
         this._recomendations.push(new Recomendation(fullName, phone, eMail));
         const extension = recomendation.name.split('.')[recomendation.name.split('.').length - 1];
-        await uploadFileToFirestore(recomendation, `CandidatesFiles/${this._candidateId}/rec`, `${phone}_REC.${extension}`);
+        uploadFileToFirestore(recomendation, `CandidatesFiles/${this._candidateId}/rec`, `${phone}_${this._jobNumber}_REC.${extension}`);
         replaceData((await this.getPath()), this);
     }
     public async updateAbout(about: string) {

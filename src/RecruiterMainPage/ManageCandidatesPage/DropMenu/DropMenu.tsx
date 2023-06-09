@@ -27,7 +27,6 @@ function MenuSection({ children, label }: MenuSectionProps) {
 
 export default function MyDropMenu(props: { CandidateId: any }) {
   const navigate = useNavigate();
-
   const { CandidateId } = props;
   const [buttonElement, setButtonElement] =
     React.useState<HTMLButtonElement | null>(null);
@@ -42,7 +41,7 @@ export default function MyDropMenu(props: { CandidateId: any }) {
   const handleEditClick = () => {
     setOpen(false);
     buttonElement?.focus();
-    navigate("/management/createCandidate", { state: CandidateId });
+    navigate("/management/editCandidate", { state: CandidateId });
   };
 
   const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {

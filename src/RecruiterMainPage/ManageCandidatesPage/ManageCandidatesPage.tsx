@@ -20,16 +20,6 @@ const ManageJobsPage = () => {
     setOpen(true);
   }
 
-  useEffect(() => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-  }, []);
-
-  if (loading) {
-    return <MyLoading />;
-  } else {
     return (
       <>
         <Box sx={BoxGradientSx}>

@@ -1,25 +1,14 @@
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    // Allow everyone to create new files if the folder has less than 3 files
-    match /CandidatesFiles/{id}/rec/{fileId} {
-      allow create: if isFolderUnderRecLimit();
+rules_version="2";
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /CandidatesFiles/{id}/rec/{file}{
+    	allow read, write, delete: if request.auth != null ;
+      allow create: if resource == null && (file.matches('.*\\.pdf$') || file.matches('.*\\.docx$') || file.matches('.*\\.doc$')) && file.matches('^05[0-9]{8}_[0-9]{2,}_REC\\..*$');
     }
-  match /CandidatesFiles/{id}/cv/{fileId} {
-        allow create: if isFolderUnderCvLimit();
-      }
-    // Allow authenticated users to read, replace, and delete files
-    match /CandidatesFiles/{id}/{type}/{fileId} {
-      allow read, update, delete: if request.auth != null;
+    match /CandidatesFiles/{id}/cv/{file}{
+    	allow read: if request.auth != null;
+    	allow write, update: if request.auth != null && (file.matches('^CV.pdf$') || file.matches('^CV.docx$') || file.matches('^CV.doc$'));
+      allow create: if resource == null && (file.matches('^CV.pdf$') || file.matches('^CV.docx$') || file.matches('^CV.doc$'));
     }
-  }
-  
-  function isFolderUnderRecLimit() {
-    // Check if the folder has less than 3 files
-    return request.resource.data.size() < 3;
-  }
-  function isFolderUnderCvLimit() {
-    // Check if the folder has less than 3 files
-    return request.resource.data.size() < 3;
   }
 }

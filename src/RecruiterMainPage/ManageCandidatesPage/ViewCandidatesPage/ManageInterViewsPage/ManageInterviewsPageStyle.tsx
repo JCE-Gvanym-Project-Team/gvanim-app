@@ -24,7 +24,7 @@ export const interviewSummaryTextSx: SxProps = {
 }
 
 export const interviewSummaryContentSx: SxProps = {
-    width: { sx: "100%", md: "90%" },
+    width: { sx: "100%", md: "100%" },
     marginBottom: "1rem"
 }
 
@@ -91,10 +91,11 @@ export const jobTextSx: SxProps = {
 }
 
 export const candidateNameSx: SxProps = {
-    color: 'black',
     fontFamily: ManageCandidatesPageGlobalStyle.textFontFamily,
     textDecoration: "bold",
     marginLeft: '1rem',
+    fontWeight: "bold",
+    color: "#fff"
 
 }
 
@@ -107,13 +108,12 @@ export const titleSx: SxProps = {
 }
 
 export const BoxGradientSx: SxProps = {
-    position: "absolute",
-    top: '0',
-    left: '0',
+    height: '400px',
     width: "100%",
-    height: ManageCandidatesPageGlobalStyle.backgroundHeight,
-    background: ManageCandidatesPageGlobalStyle.backgroundGradient,
-    zIndex: '-1'
+    top: 0,
+    display: 'flex',
+    justifyContent: 'center',
+    background: 'linear-gradient(to left, #7795f8, #7795f8,#555abf)',
 }
 
 export const errorTextSx: SxProps = {

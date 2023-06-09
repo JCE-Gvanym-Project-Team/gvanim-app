@@ -13,7 +13,8 @@ const Form = styled('form')(({ theme }) => ({
 }));
 
 
-const NewJobPage = () => {
+const NewJobPage = () =>
+{
     const { state } = useLocation();
 
     // values
@@ -37,8 +38,10 @@ const NewJobPage = () => {
 
 
 
-    useEffect(() => {
-        const getAllJobs = async () => {
+    useEffect(() =>
+    {
+        const getAllJobs = async () =>
+        {
             const jobs = await getFilteredJobs();
 
             let _JobToEdit = jobs.filter(job => job._jobNumber === state);
@@ -54,11 +57,12 @@ const NewJobPage = () => {
             setJobAdditionalInfo(_JobToEdit[0]._description[2]);
             setJobScope(_JobToEdit[0]._scope);
 
-        
+
 
         }
 
-        if (state !== null) { // edit job
+        if (state !== null)
+        { // edit job
             setNewJob(false);
             getAllJobs();
         }
@@ -71,12 +75,14 @@ const NewJobPage = () => {
     const navigate = useNavigate();
 
 
-    const handleSubmit = async (event: any) => {
+    const handleSubmit = async (event: any) =>
+    {
         event.preventDefault();
         var description_array = new Array(jobDescription, jobDescriptionSkills, jobAdditionalInfo);
 
         //edit
-        if (state !== null) {
+        if (state !== null)
+        {
             let _job = JobToEdit[0];
 
             _job.edit(_job._title = jobName, _job._role = jobRole, _job._scope = jobScope, _job._region = jobRegion,
@@ -84,15 +90,18 @@ const NewJobPage = () => {
             navigate("/management/manageJobs", { state: `השינויים עבור משרה מס' ${_job._jobNumber} נשמרו בהצלחה.` });
         }
         //add
-        else {
+        else
+        {
 
-            if (jobName.length === 0 || jobRole.length === 0 || jobRegion.length === 0 || jobState.length === 0 || jobRequirements.length === 0) {
+            if (jobName.length === 0 || jobRole.length === 0 || jobRegion.length === 0 || jobState.length === 0 || jobRequirements.length === 0)
+            {
 
                 if (jobName.length === 0) { setErrorJobName(true); } if (jobRegion.length === 0) { setErrorJobRegion(true); }
                 if (jobRole.length === 0) { setErrorJobRole(true); } if (jobState.length === 0) { setErrorJobState(true); }
                 if (jobRequirements.length === 0) { setErrorJobRequirements(true); }
             }
-            else {
+            else
+            {
 
 
                 let job1 = new Job(await generateJobNumber(), jobName, jobRole, jobScope, jobRegion, jobState, description_array, jobRequirements, true, false);
@@ -115,7 +124,8 @@ const NewJobPage = () => {
         }
     }
 
-    const handleDelete = () => {
+    const handleDelete = () =>
+    {
         JobToEdit[0].remove();
         console.log(`job (id: ${JobToEdit[0]._jobNumber}) deleted successfully`);
         navigate("/management/manageJobs", { state: `משרה מס' ${JobToEdit[0]._jobNumber} הוסרה בהצלחה.` });
@@ -123,14 +133,100 @@ const NewJobPage = () => {
 
     return (
         <>
-            <Box sx={BoxGradientSx}></Box>
+            <Box sx={BoxGradientSx}>
+
+                <Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
+                    right: '4%',
+                    left: 'auto',
+                    bottom: 'auto',
+                    backgroundColor: 'hsla(0,0%,100%,.1)',
+                    background: 'hsla(0,0%,100%,.1)',
+                    width: '120px',
+                    height: '120px',
+                    borderRadius: '50%',
+                    position: 'absolute',
+                }} />
+
+                <Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
+                    right: '10%',
+                    left: 'auto',
+                    backgroundColor: 'hsla(0,0%,100%,.1)',
+                    background: 'hsla(0,0%,100%,.1)',
+                    width: '200px',
+                    height: '200px',
+                    borderRadius: '50%',
+                    position: 'absolute',
+                }} />
+
+                <Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
+                    left: '40%',
+                    top: '-1%',
+                    right: 'auto',
+                    bottom: 'auto',
+                    backgroundColor: 'hsla(0,0%,100%,.1)',
+                    background: 'hsla(0,0%,100%,.1)',
+                    width: '60px',
+                    height: '60px',
+                    borderRadius: '50%',
+                    position: 'absolute',
+                }} />
+
+
+                <Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
+                    right: '5%',
+                    top: '20%',
+                    bottom: 'auto',
+                    backgroundColor: 'hsla(0,0%,100%,.1)',
+                    background: 'hsla(0,0%,100%,.1)',
+                    width: '120px',
+                    height: '120px',
+                    borderRadius: '50%',
+                    position: 'absolute',
+                }} />
+
+                <Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
+                    left: '2%',
+                    top: '12%',
+                    bottom: 'auto',
+                    backgroundColor: 'hsla(0,0%,100%,.1)',
+                    background: 'hsla(0,0%,100%,.1)',
+                    width: '120px',
+                    height: '120px',
+                    borderRadius: '50%',
+                    position: 'absolute',
+                }} />
+
+                <Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
+                    left: '4%',
+                    top: '8%',
+                    bottom: 'auto',
+                    backgroundColor: 'hsla(0,0%,100%,.1)',
+                    background: 'hsla(0,0%,100%,.1)',
+                    width: '80px',
+                    height: '80px',
+                    borderRadius: '50%',
+                    position: 'absolute',
+                }} />
+
+                <Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
+                    left: '25%',
+                    top: '12%',
+                    bottom: 'auto',
+                    backgroundColor: 'hsla(0,0%,100%,.1)',
+                    background: 'hsla(0,0%,100%,.1)',
+                    width: '60px',
+                    height: '60px',
+                    borderRadius: '50%',
+                    position: 'absolute',
+                }} />
+            </Box>
 
             <Box sx={MyPaperSx}>
 
                 <Box>
                     <Container>
                         <Box >
-                            
+
                             <Box className="col-md-12">
                                 <Box className="section-title">
 
@@ -159,7 +255,8 @@ const NewJobPage = () => {
                                                     className="form-control" required
                                                     value={jobName}
                                                     error={errorJobName}
-                                                    onChange={(e) => {
+                                                    onChange={(e) =>
+                                                    {
                                                         setJobName(e.target.value);
                                                         if (jobName.length > 0 && errorJobName) { setErrorJobName(false); }
                                                     }}
@@ -174,7 +271,8 @@ const NewJobPage = () => {
                                                     className="form-control" required
                                                     value={jobRole}
                                                     error={errorJobRole}
-                                                    onChange={(e) => {
+                                                    onChange={(e) =>
+                                                    {
                                                         setJobRole(e.target.value);
                                                         if (jobRole.length > 0 && errorJobRole) { setErrorJobRole(false); }
                                                     }}
@@ -194,11 +292,12 @@ const NewJobPage = () => {
                                                 <label>
                                                     <Typography sx={{ fontWeight: 600, fontSize: 13 }}>איזור:</Typography>
                                                 </label>
-                                                <TextField style={{ width: '100%' }}  size='small' placeholder="איזור (region)" id="_region" type="text"
+                                                <TextField style={{ width: '100%' }} size='small' placeholder="איזור (region)" id="_region" type="text"
                                                     className="form-control" required
                                                     value={jobRegion}
                                                     error={errorJobRegion}
-                                                    onChange={(e) => {
+                                                    onChange={(e) =>
+                                                    {
                                                         setJobRegion(e.target.value);
                                                         if (jobRegion.length > 0 && errorJobRegion) { setErrorJobRegion(false); }
                                                     }}
@@ -216,7 +315,8 @@ const NewJobPage = () => {
                                                     required
                                                     error={errorJobState}
                                                     value={jobState}
-                                                    onChange={(e) => {
+                                                    onChange={(e) =>
+                                                    {
                                                         setJobState(e.target.value);
                                                         if (jobState.length > 0 && errorJobState) { setErrorJobState(false); }
                                                     }}
@@ -237,7 +337,8 @@ const NewJobPage = () => {
                                                 className="form-control" required
                                                 error={errorJobRequirements}
                                                 value={jobRequirements}
-                                                onChange={(e) => {
+                                                onChange={(e) =>
+                                                {
                                                     setJobRequirements(e.target.value);
                                                     if (jobRequirements.length > 0 && errorJobRequirements) { setErrorJobRequirements(false); }
                                                 }}
