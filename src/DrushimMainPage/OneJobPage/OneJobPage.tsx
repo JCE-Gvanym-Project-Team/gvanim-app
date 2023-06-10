@@ -279,20 +279,6 @@ export default function OneJobPage()
 
     const setDefaults = () =>
     {
-        // reset candidate details
-        setCandidateName("");
-        setCandidateNameError(false);
-        setCandidateSurname("");
-        setCandidateSurnameError(false);
-        setCandidatePhone("");
-        setCandidatePhoneError(false);
-        setCandidateEmail("");
-        setCandidateEmailError(false);
-
-        // reset about text
-        setAboutNumChars(0);
-        setAboutText("");
-
         // reset cv file
         setCvFileError(false);
         setCvFile(null);
