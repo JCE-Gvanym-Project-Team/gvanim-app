@@ -219,10 +219,15 @@ export class CandidateJobStatus {
      * @returns None
      */
     public async add() {
-        if (!(await this.exists()))
-            appendToDatabase(this, "/CandidatesJobStatus");
-        else
+        if (!(await this.exists())){
+            await appendToDatabase(this, "/CandidatesJobStatus");
+            return true;
+        }
+        else{
             console.log("the CandidatesJobStatus already exists");
+            return false;
+
+        }
     }
     /**
      * Updates the status of the candidate job application and replaces the data in the realtime DB.

@@ -20,11 +20,14 @@ import {
 import Pagination from '@mui/material/Pagination';
 import PaginationItem from '@mui/material/PaginationItem';
 import { Sector, getAllSectors } from '../../../../../../../../../Firebase/FirebaseFunctions/Sector';
-import AddSectorDialog from './Components/AddSectorDialog';
-import MySectorRemoveDialog from './Components/RemoveSectorDialog';
-import ChangeStatusSectorDialog from './Components/ChangeStatusSectorDialog';
 import { unstable_useForkRef as useForkRef } from '@mui/utils';
+import AddSectorDialog from '../../../ManageFields/Components/SectorsTable/Components/AddSectorDialog';
 import MyLoading from '../../../../../../../../../Components/MyLoading/MyLoading';
+import MySectorRemoveDialog from '../../../ManageFields/Components/SectorsTable/Components/RemoveSectorDialog';
+import ChangeStatusSectorDialog from '../../../ManageFields/Components/SectorsTable/Components/ChangeStatusSectorDialog';
+import { Recruiter, getRecruitersFromDatabase } from '../../../../../../../../../Firebase/FirebaseFunctions/Recruiter';
+import RecruiterDialog from './Components/RecruiterDialog/RecruiterDialog';
+
 
 
 interface SelectedRowParams {
@@ -33,9 +36,9 @@ interface SelectedRowParams {
 
 const ODD_OPACITY = 0.2;
 const MyDataGrid = (theme: Theme): SxProps => ({
-    height: '503px',
+    height: '600px',
     border: '1px solid rgba(0, 0, 0, 0.125)',
-    borderRadius: '0.5rem',
+    borderRadius: 0,
     overflow: 'hidden',
     "&.MuiDataGrid-root .MuiDataGrid-cell:focus-within": {
         outline: "none !important",
@@ -187,7 +190,7 @@ function CustomNoRowsOverlay() {
                     </g>
                 </g>
             </svg>
-            <Box sx={{ mt: 1 }}>אין אשכולות</Box>
+            <Box sx={{ mt: 1 }}>אין מגייסים</Box>
         </StyledGridOverlay>
     );
 }
@@ -225,7 +228,7 @@ const CustomPaginationAndFooter = () => {
 
 			<Box>
 					<Chip
-						label={rowsCount + ' אשכולות'}
+						label={rowsCount + ' מגייסים'}
 						sx={{ fontWeight: 'bold', borderRadius: '0.5rem', color: 'black' }}
 						variant="outlined"
 					/>
@@ -273,7 +276,7 @@ const MemoizedColumnHeaders = React.memo(ColumnHeadersWithTracer);
 
 // ---------------------------------------------------------------------------------------------------------
 
-export default function SectorsTable() {
+export default function Temp() {
     const [pageloading, setPageLoading] = React.useState(true);
     const [dataLoading, setDataLoading] = React.useState(true);
 
@@ -294,25 +297,28 @@ export default function SectorsTable() {
     //------------------------------------------------------------------------------------------------
     const GridCustomToolbar = () => {
 
-        // for add new sector
-        const [sectorName, setSectorName] = React.useState("");
-        const [sectorStatus, setSectorStatus] = React.useState<string | number>(1);
+        // for add new recruiter
+        const [email, setEmail] = React.useState<string>('');
+        const [firstName, setFirstName] = React.useState<string>('');
+        const [lastName, setLastName] = React.useState<string>('');
+        const [sectors, setSectors] = React.useState<string[]>([]);
+        // const [sectorStatus, setSectorStatus] = React.useState<string | number>(1);
 
         // add sector
         const handleAdd = () => {
-            if (rows.filter((row: any) => row.sector_name === sectorName).length !== 0) {
-                setSnackbar({ children: `כבר 'קיים אשכול בשם '${sectorName}'.`, severity: 'error' });
+            if (rows.filter((row: any) => row?._email === email).length !== 0) {
+                setSnackbar({ children: `כבר 'קיים מגייס תחת כתובת האימייל '${email}'.`, severity: 'error' });
             }
             else {
                 setDataLoading(true);
 
-                let sector: Sector = new Sector(sectorName, sectorStatus === 1 ? true : false);
+                let sector: Recruiter = new Recruiter(email, firstName, lastName, sectors);
                 sector.add(); // add to data base
-                setRows([...rows, { id: rows.length, sector_name: sectorName, sector_status: (sectorStatus === 1 ? true : false) }]); //refresh table
+                setRows([...rows, { id: rows.length, _firstName: firstName, _lastName: lastName, _email: email, _sectors: sectors }]); //refresh table
 
                 setDataLoading(false);
 
-                setSnackbar({ children: `האשכול '${sectorName}' נוסף בהצלחה.`, severity: 'success' });
+                setSnackbar({ children: `המגייס בשם '${firstName + lastName}' נוסף בהצלחה.`, severity: 'success' });
             }
         };
 
@@ -321,33 +327,44 @@ export default function SectorsTable() {
         const handleDelete = async () => {
             setDataLoading(true);
 
-            const sectors = await getAllSectors();
-            const sectorToRemove = sectors.filter((sector) => sector._name === selectedRowParams?.currentRow?.sector_name)!;
+            const recruiters = await getRecruitersFromDatabase();
+            const recruiterToRemove = recruiters.filter((recruiter) => recruiter._email === selectedRowParams?.currentRow?._email)!;
 
-            sectorToRemove[0]?.remove();
+            recruiterToRemove[0]?.remove();
 
-            const updateRows = rows.filter(function (sector: any) {
-                return sector !== selectedRowParams?.currentRow;
+            const updateRows = rows.filter(function (recruiter: any) {
+                return recruiter !== selectedRowParams?.currentRow;
             });
 
             setRows(updateRows);
 
             setDataLoading(false);
 
-            setSnackbar({ children: `האשכול "${selectedRowParams?.currentRow?.sector_name}" נמחק בהצלחה`, severity: 'success' });
+            setSnackbar({ children: `המגייס/ת "${selectedRowParams?.currentRow?._firstName} ${selectedRowParams?.currentRow?._lastName}" נמחק/ה בהצלחה מהמערכת.`, severity: 'success' });
 
         }
 
 
         return (
-            <GridToolbarContainer>
+            <GridToolbarContainer sx={{mb: 2}}>
                 <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', }}>
 
-                    <GridToolbarQuickFilter size='small' sx={{ padding: 1 }} />
+                    <GridToolbarQuickFilter variant='outlined' size='small' sx={{
+                         
+                         padding: 1 ,
+                         '& .muirtl-2ehmn7-MuiInputBase-root-MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {
+							borderRadius: '0.75rem',
+							border: '1px solid rgba(0, 0, 0, 0.23)',
+						},
+						'& .muirtl-ptiqhd-MuiSvgIcon-root': {
+							color: 'rgba(0, 0, 0, 0.23)'
+						},
+                         }} />
 
                     <Stack direction='row'>
                         <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'start' }}>
-                            <AddSectorDialog sectorName={sectorName} setSectorName={setSectorName} sectorStatus={sectorStatus} setSectorStatus={setSectorStatus} handleAdd={handleAdd} />
+                            {/* <AddSectorDialog sectorName={sectorName} setSectorName={setSectorName} sectorStatus={sectorStatus} setSectorStatus={setSectorStatus} handleAdd={handleAdd} /> */}
+                            <RecruiterDialog recruiterRow={selectedRowParams?.currentRow} recruiters={rows} setRecruiters={setRows} setSnackbar={setSnackbar} isEdit={false} />
                         </Box>
 
 
@@ -362,11 +379,11 @@ export default function SectorsTable() {
     };
 
 
-    const fetchAllSectors = async () => {
+    const fetchAllRecruiters = async () => {
         setDataLoading(true);
 
-        const sectors = await getAllSectors();
-        setRows(sectors.map((sector, i) => ({ id: i, sector_name: sector._name, sector_status: sector._open })));
+        const recruiters = await getRecruitersFromDatabase();
+        setRows(recruiters.map((recruiter, i) => ({ id: i, _firstName: recruiter._firstName, _lastName: recruiter._lastName, _email: recruiter._email, _sectors: recruiter._sectors })));
 
         setDataLoading(false);
 
@@ -374,39 +391,75 @@ export default function SectorsTable() {
 
     React.useEffect(() => {
         setPageLoading(false);
-        fetchAllSectors();
+        fetchAllRecruiters();
     }, []);
 
 
     const handleCloseSnackbar = () => setSnackbar(null);
 
     const columns: GridColDef[] = [
-
         {
-            field: 'sector_name',
-            headerName: "שם האשכול",
-            headerAlign: 'left',
+            field: '_edit',
+            headerName: "",
+            headerAlign: 'center',
+            sortable: true,
+            editable: false,
+            align: 'center',
+            minWidth: 50,
+            renderCell: (sector) => {
+                    return <RecruiterDialog recruiters={rows} setRecruiters={setRows} recruiterRow={sector?.row} setSnackbar={setSnackbar} isEdit={true} />;
+                },
+    
+            
+        },
+        {
+            field: '_firstName',
+            headerName: "שם פרטי",
+            headerAlign: 'center',
 
             sortable: true,
             editable: false,
-            align: 'left',
-            minWidth: 241,
+            align: 'center',
+            minWidth: 150,
         },
         {
-            field: 'sector_status',
-            headerName: 'סטטוס',
+            field: '_lastName',
+            headerName: "שם משפחה",
+            headerAlign: 'center',
+
+            sortable: true,
+            editable: false,
+            align: 'center',
+            minWidth: 150,
+        },
+        {
+            field: '_email',
+            headerName: 'אימייל',
             headerAlign: 'center',
             align: 'center',
             sortable: true,
             editable: false,
+            minWidth: 300,
 
-            renderCell: (sector) => {
-                return <Stack direction='row' padding={0}>
-                    <ChangeStatusSectorDialog setSnackbar={setSnackbar} row={sector.row} setLoading={setDataLoading} />
-                </Stack >;
-            },
+            // renderCell: (sector) => {
+            //     return <Stack direction='row' padding={0}>
+            //         {/* <ChangeStatusSectorDialog setSnackbar={setSnackbar} row={sector.row} setLoading={setDataLoading} /> */}
+            //         omer2212@walla.com
+            //     </Stack >;
+            // },
 
 
+        },
+        
+        {
+            field: '_sectors',
+            headerName: "אשכולות",
+            headerAlign: 'center',
+
+            sortable: true,
+            editable: false,
+            align: 'center',
+            minWidth: 300,
         },
     ];
 

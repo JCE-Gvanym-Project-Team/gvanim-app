@@ -158,7 +158,7 @@ export async function getRecruitersFromDatabase(): Promise<Recruiter[]> {
 }
 /**
  * Generates a random string of 12 characters using a set of allowed characters.
- * Useful for generating random passwordsץ
+ * Useful for generating random passwords
  * @returns {string} A random string of 12 characters.
  */
 export function generateRandomString(): string {

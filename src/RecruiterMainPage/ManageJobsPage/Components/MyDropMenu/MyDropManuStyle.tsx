@@ -1,11 +1,5 @@
 import { SxProps, Theme } from "@mui/material";
 
-// menu button icon
-export const MoreVertSx: SxProps = {
-    fontSize: '17px',
-    color: 'rgb(45, 56, 67)'
-}
-
 export const MenuItemIconSx: SxProps = {
     color: 'rgb(62, 80, 96)',
     marginRight: 1, fontSize: 'large'
