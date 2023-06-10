@@ -218,6 +218,9 @@ export const themeSettings = (mode) =>
                 },
                 error: {
                     main: colors.reds[500]
+                },
+                success: {
+                    main: colors.greens[500]
                 }
             },
             typography: {

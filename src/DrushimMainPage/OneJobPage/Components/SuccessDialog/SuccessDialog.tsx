@@ -1,52 +1,45 @@
-import { Close } from '@mui/icons-material';
-import { Box, Dialog, DialogContent, DialogTitle, IconButton, Typography } from '@mui/material';
-import React from 'react'
-import { dialogContentStyle, dialogContentSx, dialogSx, dialogTopAreaSx } from './SuccessDialogStyle';
+import * as React from 'react';
+
+
+
+
+import Check from '@mui/icons-material/Check';
+import Close from '@mui/icons-material/Close';
+import Warning from '@mui/icons-material/Warning';
+import { Alert, Box, Button, CircularProgress, IconButton, LinearProgress, Stack, Typography } from '@mui/material';
+import { AspectRatio } from '@mui/icons-material';
 
 export default function SuccessDialog(props: { open, onClose })
 {
-
     const { open, onClose } = props;
-
     return (
-        <Dialog open={open} onClose={onClose} sx={dialogSx} >
-            <Box sx={dialogTopAreaSx}>
-                {/* Title */}
-                <DialogTitle>
-                    <Typography>
-
-                        ספר עליך
+        <Box
+        sx={{
+            width: "500px"
+        }}
+        >
+            <Alert
+                variant="filled"
+                sx={{ alignItems: 'flex-start', '--Alert-gap': '1rem' }}
+            >
+                <Box sx={{ flex: 1 }}>
+                    <Typography sx={{ mt: 1 }}>
+                        מועמדותך נקלטה בהצלחה
                     </Typography>
-                </DialogTitle>
-
-                <Box sx={{ display: "flex", justifyContent: "end" }}>
-
-                    {/* Close button */}
-                    <IconButton
-                        edge="start"
-                        color="inherit"
-                        onClick={(event) => { onClose(event, undefined); }}
-                        aria-label="close"
-                    >
-                        <Close />
-                    </IconButton>
+                    <Typography sx={{ mt: 1 }}>
+                        האם תרצה\י להגיש למשרות נוספות?
+                    </Typography>
+                    <Box sx={{ mt: 2, display: 'flex', justifyContent: 'space-between', gap: 1 }}>
+                        <Button variant="outlined">
+                            לא
+                        </Button>
+                        <Button variant="contained" >
+                            כן
+                        </Button>
+                    </Box>
                 </Box>
-            </Box>
+            </Alert>
+        </Box>
 
-
-            {/* about text */}
-            <DialogContent sx={dialogContentSx} style={dialogContentStyle}>
-                <Typography
-                    sx={{
-                        alignSelf: "center",
-                        maxWidth: "100%",
-                        overflowWrap: "break-word"
-                    }}
-                    variant='h4'
-                    >
-                        שדגשדגשדג
-                </Typography>
-            </DialogContent>
-        </Dialog>
-    )
+    );
 }

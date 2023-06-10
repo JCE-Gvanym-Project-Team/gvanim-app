@@ -22,7 +22,7 @@ export default function OneJobPage()
 
     const state = useLocation();
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const theme = useTheme();
     const colors = colorTokens(theme.palette.mode);
@@ -133,6 +133,8 @@ export default function OneJobPage()
         setRecommendersList(temp);
 
         setDefaults();
+
+        setLoading(false);
     }, [state])
 
     // submit
