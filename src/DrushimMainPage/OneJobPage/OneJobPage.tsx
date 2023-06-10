@@ -1,12 +1,16 @@
-import { AddBoxSharp, ArrowBack, AttachFile, BorderColor, DeleteForeverOutlined, ErrorOutlineRounded, KeyboardReturnOutlined, Label, LocationOn, Redo, Send } from '@mui/icons-material'
-import { Box, Button, Divider, Input, TextField, Typography, useTheme } from '@mui/material'
-import React, { useContext, useEffect, useRef, useState } from 'react'
-import { ColorModeContext, colorTokens } from '../theme';
+import { AddBoxSharp, AttachFile, DeleteForeverOutlined, ErrorOutlineRounded, Redo, Send } from '@mui/icons-material';
+import { Box, Button, Divider, Input, TextField, Typography, useTheme } from '@mui/material';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import MyLoading from '../../Components/MyLoading/MyLoading';
 import { Job, getFilteredJobs } from '../../Firebase/FirebaseFunctions/Job';
 import { Recomendation } from '../../Firebase/FirebaseFunctions/Recomendation';
-import { Candidate, generateCandidateId, getFilteredCandidateJobStatuses } from '../../Firebase/FirebaseFunctions/functionIndex';
-import MyLoading from '../../Components/MyLoading/MyLoading';
+import { Candidate, generateCandidateId, getFilteredCandidateJobStatuses, getFilteredCandidates } from '../../Firebase/FirebaseFunctions/functionIndex';
+import { ColorModeContext, colorTokens } from '../theme';
+import AreYouSureDialog from './Components/AreYouSureDialog/AreYouSureDialog';
+import SuccessDialog from './Components/SuccessDialog/SuccessDialog';
+import ErrorDialog from './Components/ErrorDialog/ErrorDialog';
+
 
 
 const ABOUT_MAX_LENGTH = 1000;
@@ -18,11 +22,47 @@ export default function OneJobPage()
 
     const state = useLocation();
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const theme = useTheme();
     const colors = colorTokens(theme.palette.mode);
     const colorMode = useContext(ColorModeContext);
+
+    // dialogs
+    const [successDialogOpen, setSuccessDialogOpen] = useState(false);
+    const [errorDialogOpen, setErrorDialogOpen] = useState(false);
+    const [areYouSureDialogOpen, setAreYouSureDialogOpen] = useState(false);
+    const [areYouSureDialogIndex, setAreYouSureDialogIndex] = useState(0);
+    const [areYouSureDialogRecommenderName, setAreYouSureDialogRecommenderName] = useState("");
+
+    const successDialogOnClose = (event, reason) =>
+    {
+        if ((reason && reason !== "backdropClick") || reason === undefined)
+        {
+            setSuccessDialogOpen(false);
+        }
+    }
+
+    const errorDialogOnClose = (event, reason) =>
+    {
+        if ((reason && reason !== "backdropClick") || reason === undefined)
+        {
+            setErrorDialogOpen(false);
+        }
+    }
+
+    const areYouSureDialogOnClose = (event, reason, index, areYouSureValue) =>
+    {
+        if ((reason && reason !== "backdropClick") || reason === undefined)
+        {
+            setAreYouSureDialogOpen(false);
+        }
+        if (areYouSureValue)
+        {
+            updateRecommendersListAtIndex(null, null, index);
+            setNumRecommenders(numRecommenders - 1);
+        }
+    }
 
     // get current job from URL
     const fetchJob = async () =>
@@ -91,6 +131,10 @@ export default function OneJobPage()
             temp.push([null, null])
         }
         setRecommendersList(temp);
+
+        setDefaults();
+
+        setLoading(false);
     }, [state])
 
     // submit
@@ -123,7 +167,6 @@ export default function OneJobPage()
 
         if (candidateEmail === "" || !isEmailValid(candidateEmail))
         {
-            console.log("here");
             setCandidateEmailError(true);
         } else
         {
@@ -145,13 +188,15 @@ export default function OneJobPage()
 
         if (!checkRecommenders())
         {
+            console.log("here");
             console.log(recommendersErrors);
             return;
         }
 
+        // insert candidate into database
         setLoading(true);
-        const newCandidateId = await generateCandidateId();
-        const newCandidate = new Candidate(
+        let newCandidateId = await generateCandidateId();
+        let newCandidate = new Candidate(
             newCandidateId,
             candidateName,
             candidateSurname,
@@ -160,11 +205,24 @@ export default function OneJobPage()
             -1,
             aboutText
         );
-        // add candidate
-        await newCandidate.add();
+        // add candidate, or get existing candidate
+        if (!await newCandidate.add())
+        {
+            newCandidate = (await getFilteredCandidates(["eMail", "phone"], [candidateEmail, candidatePhone]))[0];
+            newCandidateId = newCandidate._id;
+        }
 
+        // apply 
+        if (!await newCandidate.apply(job?._jobNumber!, aboutText))
+        {
+            setLoading(false);
+            setErrorDialogOpen(true);
+            return;
+        }
+        // TODO: it only adds one recommender, and the file is incorrect
         // add recommenders and CV
-        const candidateJobStatus = (await getFilteredCandidateJobStatuses(["jobNumber", "candidateId"], [job?._jobNumber.toString()!, newCandidateId]))[0];
+        let candidateJobStatus = (await getFilteredCandidateJobStatuses(["jobNumber", "candidateId"], [job?._jobNumber.toString()!, newCandidateId]))[0];
+
         recommendersList?.forEach(async (recommender) =>
         {
             const recommenderInfo = recommender[0];
@@ -182,12 +240,12 @@ export default function OneJobPage()
         })
 
         newCandidate.uploadCv(cvFile);
-
-        await newCandidate.apply(job?._jobNumber!, aboutText);
-
         setLoading(false);
 
         // TODO: add success message here
+
+        // set defaults values
+        setDefaults();
     }
 
     const isPhoneValid = (phone: string) =>
@@ -200,6 +258,41 @@ export default function OneJobPage()
         return /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email);
     }
 
+    const setDefaults = () =>
+    {
+        // reset candidate details
+        setCandidateName("");
+        setCandidateNameError(false);
+        setCandidateSurname("");
+        setCandidateSurnameError(false);
+        setCandidatePhone("");
+        setCandidatePhoneError(false);
+        setCandidateEmail("");
+        setCandidateEmailError(false);
+
+        // reset about text
+        setAboutNumChars(0);
+        setAboutText("");
+
+        // reset cv file
+        setCvFileError(false);
+        setCvFile(null);
+
+        // reset recommenders
+        for (let index = 0; index < numRecommenders; index++)
+        {
+            updateRecommendersListAtIndex(null, null, index);
+
+        }
+        setNumRecommenders(0);
+        setRecommendersErrors(
+            recommendersErrors.map(() =>
+            {
+                return [false, false]
+            })
+        );
+    }
+
     /**
      * checks whether the phone and email provided 
      * by the user for each recommender is valid. 
@@ -209,7 +302,7 @@ export default function OneJobPage()
     {
         let result = true;
         let recommendersErrorsResult = recommendersErrors;
-        recommendersList?.map((recommender, index) =>
+        recommendersList?.forEach((recommender, index) =>
         {
             const recommenderInfo = recommender[0];
             const file = recommender[1];
@@ -233,11 +326,11 @@ export default function OneJobPage()
                             return [recommenderError[0], recommenderError[1]];
                         }
                     });
-                    return result && false;
+                    result = result && false;
                 }
-                return result && true
+                result = result && true;
             }
-        }, result)
+        })
         setRecommendersErrors(recommendersErrorsResult);
         return result;
     }
@@ -319,60 +412,95 @@ export default function OneJobPage()
                     }}
                 >
 
-                    {/* description and requirements */}
+                    {/* Description, requirements, stats and additional info */}
                     <Box
                         sx={{
                             display: "flex",
-                            flexDirection: { xs: "column", md: "row" },
+                            flexDirection: "column",
                             backgroundColor: "background.box",
                             flex: 8,
                             marginRight: { xs: "0", md: "1rem" },
                             marginBottom: { xs: "1rem", md: "0" }
                         }}
                     >
-                        {/* description */}
+                        {/* description and requirements */}
                         <Box
                             sx={{
-                                padding: "1rem",
-                                flex: 7
+                                display: "flex",
+                                flexDirection: { xs: "column", md: "row" }
                             }}
                         >
-                            <Typography variant="h1">
-                                תיאור המשרה
-                            </Typography>
 
-                            <Divider sx={{
-                                marginRight: "3rem",
-                                backgroundColor: "primary.faded"
-                            }} />
-
-                            <Typography
-                                variant='h3'
-                                marginTop={"0.5rem"}
+                            {/* description */}
+                            <Box
                                 sx={{
-                                    backgroundColor: "background.boxInner"
+                                    padding: "1rem",
+                                    flex: 7
                                 }}
                             >
-                                {job?._description}
-                            </Typography>
+                                <Typography variant="h1">
+                                    תיאור המשרה
+                                </Typography>
+
+                                <Divider sx={{
+                                    marginRight: "3rem",
+                                    backgroundColor: "primary.faded"
+                                }} />
+
+                                <Typography
+                                    variant='h3'
+                                    marginTop={"0.5rem"}
+                                    sx={{
+                                        backgroundColor: "background.boxInner"
+                                    }}
+                                >
+                                    {job?._description?.length! >= 1 ? job?._description[0] : ""}
+                                </Typography>
+                            </Box>
+
+                            {/* requirements */}
+                            <Box
+                                sx={{
+                                    backgroundColor: "background.box",
+                                    padding: "1rem",
+                                    flex: 5
+                                }}
+                            >
+                                <Typography variant="h1">
+                                    דרישות המשרה
+                                </Typography>
+                                <Divider sx={{
+                                    marginRight: "3rem",
+                                    backgroundColor: "primary.faded"
+
+                                }} />
+                                <Typography
+                                    variant='h3'
+                                    marginTop={"0.5rem"}
+                                    sx={{
+                                        backgroundColor: "background.boxInner"
+                                    }}
+                                >
+                                    {job?._requirements}
+                                </Typography>
+                            </Box>
                         </Box>
 
-                        {/* requirements */}
+                        {/* Additional Info */}
                         <Box
                             sx={{
-                                backgroundColor: "background.box",
-                                padding: "1rem",
-                                flex: 5
+                                display: job?._description?.length! >= 2 ? "none" : "block"
                             }}
                         >
                             <Typography variant="h1">
-                                דרישות המשרה
+                                מידע נוסף
                             </Typography>
+
                             <Divider sx={{
                                 marginRight: "3rem",
                                 backgroundColor: "primary.faded"
-
                             }} />
+
                             <Typography
                                 variant='h3'
                                 marginTop={"0.5rem"}
@@ -380,7 +508,7 @@ export default function OneJobPage()
                                     backgroundColor: "background.boxInner"
                                 }}
                             >
-                                {job?._requirements}
+                                {job?._description?.length! >= 2 ? job?._description[1] : ""}
                             </Typography>
                         </Box>
 
@@ -552,7 +680,7 @@ export default function OneJobPage()
                                     <ErrorOutlineRounded sx={{ fontSize: "24px", color: "error.main" }} />
 
                                     <Typography variant='h4' color={"error.main"}>
-                                        שדה זה הוא חובה
+                                        שדה זה שגוי
                                     </Typography>
                                 </Box>
                             </Box>
@@ -590,7 +718,7 @@ export default function OneJobPage()
                                     <ErrorOutlineRounded sx={{ fontSize: "24px", color: "error.main" }} />
 
                                     <Typography variant='h4' color={"error.main"}>
-                                        שדה זה הוא חובה
+                                        שדה זה שגוי
                                     </Typography>
                                 </Box>
 
@@ -633,7 +761,7 @@ export default function OneJobPage()
                                     <ErrorOutlineRounded sx={{ fontSize: "24px", color: "error.main" }} />
 
                                     <Typography variant='h4' color={"error.main"}>
-                                        שדה זה הוא חובה
+                                        שדה זה שגוי
                                     </Typography>
                                 </Box>
                             </Box>
@@ -672,7 +800,7 @@ export default function OneJobPage()
                                     <ErrorOutlineRounded sx={{ fontSize: "24px", color: "error.main" }} />
 
                                     <Typography variant='h4' color={"error.main"}>
-                                        שדה זה הוא חובה
+                                        שדה זה שגוי
                                     </Typography>
                                 </Box>
                             </Box>
@@ -758,7 +886,7 @@ export default function OneJobPage()
                                                 width: "100%",
                                                 marginBottom: index >= MAX_RECOMMENDERS - 1 ? "0" : "1rem"
                                             }}
-                                            key={index + "box"}
+                                            key={index + "recommendersBox"}
                                         >
 
                                             {/* delete recommender button */}
@@ -768,12 +896,20 @@ export default function OneJobPage()
                                                 }}
                                                 onClick={() =>
                                                 {
-                                                    updateRecommendersListAtIndex(null, null, index);
-                                                    setNumRecommenders(numRecommenders - 1);
+                                                    setAreYouSureDialogIndex(index);
+                                                    setAreYouSureDialogOpen(true);
+                                                    setAreYouSureDialogRecommenderName(recommender[0]?._fullName!);
                                                 }}
                                             >
                                                 <DeleteForeverOutlined />
                                             </Button>
+                                            {/* are you sure you want to delete recommender dialog */}
+                                            <AreYouSureDialog
+                                                open={areYouSureDialogOpen}
+                                                onClose={areYouSureDialogOnClose}
+                                                recommenderName={areYouSureDialogRecommenderName}
+                                                index={areYouSureDialogIndex}
+                                            />
                                             {/* Recommender */}
                                             <Box
                                                 sx={{
@@ -911,7 +1047,7 @@ export default function OneJobPage()
                                                             <ErrorOutlineRounded sx={{ fontSize: "24px", color: "error.main" }} />
 
                                                             <Typography variant='h4' color={"error.main"}>
-                                                                שדה זה הוא חובה
+                                                                שדה זה שגוי
                                                             </Typography>
                                                         </Box>
                                                     </Box>
@@ -965,7 +1101,7 @@ export default function OneJobPage()
                                                             <ErrorOutlineRounded sx={{ fontSize: "24px", color: "error.main" }} />
 
                                                             <Typography variant='h4' color={"error.main"}>
-                                                                שדה זה הוא חובה
+                                                                שדה זה שגוי
                                                             </Typography>
                                                         </Box>
                                                     </Box>
@@ -1102,6 +1238,7 @@ export default function OneJobPage()
                                 {
                                     const files = event.target.files!;
                                     setCvFile(files[0]);
+                                    setCvFileError(false);
                                 }}
                             />
                             <Button
@@ -1183,6 +1320,10 @@ export default function OneJobPage()
                 >
                     Toggle Theme
                 </Button>
+
+                {/* Dialogs */}
+                <ErrorDialog open={errorDialogOpen} onClose={errorDialogOnClose} />
+                <SuccessDialog open={successDialogOpen} onClose={successDialogOnClose} />
             </Box>
     );
 }
