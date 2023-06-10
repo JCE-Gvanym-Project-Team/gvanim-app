@@ -8,6 +8,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { Checkbox, Chip, FormLabel, Input, ListItemText, OutlinedInput, Stack, TextField } from '@mui/material';
 import { MyPaperSx } from './SectorsChipStyle';
 import SelectInput from '@mui/material/Select/SelectInput';
+import { getSectors } from '../../../../../../../../../../../../../../Firebase/FirebaseFunctions/DBfuncs';
 
 
 const ITEM_HEIGHT = 48;
@@ -48,22 +49,22 @@ export default function SectorChips(props: { recruiterSectors: string[], setRecr
   const { recruiterSectors, setRecruiterSectors, setSaveButton } = props;
   const theme = useTheme();
 
-  const [sectorsSelection, setSectorsSelection] = React.useState<string[]>([]);
-
+  const [sectors, setSectors] = React.useState<string[]>([]);
 
   const handleChange = (event: SelectChangeEvent<typeof recruiterSectors>) => {
     setSaveButton(true);
     const {
       target: { value },
     } = event;
-    setSectorsSelection(
+    setRecruiterSectors(
       // On autofill we get a stringified value.
       typeof value === 'string' ? value.split(',') : value,
     );
   };
 
-    const fetchSectors = () => {
-     recruiterSectors !== null && setSectorsSelection(recruiterSectors)
+    const fetchSectors = async () => {
+
+    setSectors(await getSectors());
   };
 
   React.useEffect(() => {
@@ -80,7 +81,7 @@ export default function SectorChips(props: { recruiterSectors: string[], setRecr
           multiple
           size='small'
           label="אשכולות"
-          value={sectorsSelection}
+          value={recruiterSectors}
           multiline
           onChange={handleChange}
           input={<OutlinedInput />}
@@ -88,9 +89,9 @@ export default function SectorChips(props: { recruiterSectors: string[], setRecr
           MenuProps={MenuProps}
           required
         >
-          {recruiterSectors.map((sector) => (
+          {sectors.map((sector) => (
             <MenuItem key={sector} value={sector}>
-              <Checkbox checked={sectorsSelection.indexOf(sector) > -1} />
+              <Checkbox checked={recruiterSectors.indexOf(sector) > -1} />
               <ListItemText primary={sector} />
             </MenuItem>
           ))}
@@ -100,8 +101,8 @@ export default function SectorChips(props: { recruiterSectors: string[], setRecr
 
 
       <Box sx={MyPaperSx}>
-        {sectorsSelection?.map((value) => (
-          <Chip color='primary' key={value} label={value} />
+        {recruiterSectors?.map((sector) => (
+          <Chip sx={{borderRadius: '0.375rem'}} color='info' key={sector} label={sector} onDelete={() => setRecruiterSectors(recruiterSectors.filter((value) => value.toString() !== sector.toString())) } />
         ))}
     </Box>
 
