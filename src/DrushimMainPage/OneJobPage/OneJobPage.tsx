@@ -28,7 +28,7 @@ export default function OneJobPage()
     const colorMode = useContext(ColorModeContext);
 
     // dialogs
-    const [successDialogOpen, setSuccessDialogOpen] = useState(true);
+    const [successDialogOpen, setSuccessDialogOpen] = useState(false);
     const [errorDialogOpen, setErrorDialogOpen] = useState(false);
     const [areYouSureDialogOpen, setAreYouSureDialogOpen] = useState(false);
     const [areYouSureDialogIndex, setAreYouSureDialogIndex] = useState(0);
@@ -36,8 +36,9 @@ export default function OneJobPage()
 
     const successDialogOnClose = (event, reason, sendDataToAllJobsPage) =>
     {
-        if ((reason && reason !== "backdropClick") || reason === undefined)
+        if ((reason && reason !== "backdropClick" && reason !== "clickaway") || reason === undefined)
         {
+            console.log(sendDataToAllJobsPage);
             if (sendDataToAllJobsPage)
             {
                 const state = {
@@ -238,7 +239,6 @@ export default function OneJobPage()
             setErrorDialogOpen(true);
             return;
         }
-        // TODO: it only adds one recommender, and the file is incorrect
         // add recommenders and CV
         let candidateJobStatus = (await getFilteredCandidateJobStatuses(["jobNumber", "candidateId"], [job?._jobNumber.toString()!, newCandidateId]))[0];
 
@@ -260,9 +260,9 @@ export default function OneJobPage()
 
         newCandidate.uploadCv(cvFile);
         setLoading(false);
-
-        // TODO: add success message here
-
+        
+        setSuccessDialogOpen(true);
+        
         // set defaults values
         setDefaults();
     }

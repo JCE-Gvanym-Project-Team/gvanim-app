@@ -8,32 +8,18 @@ export default function SuccessDialog(props: { open, onClose })
     return (
         <Snackbar
             open={open}
-            onClose={onClose}
-            action={
-                <React.Fragment>
-                    <Button color="secondary" size="small" onClick={onClose}>
-                        UNDO
-                    </Button>
-                    <IconButton
-                        aria-label="close"
-                        color="inherit"
-                        sx={{ p: 0.5 }}
-                        onClick={onClose}
-                    >
-                        <Close />
-                    </IconButton>
-                </React.Fragment>
-            }
+            onClose={(event, reason) => {onClose(event, reason, false)}}
+            anchorOrigin={{vertical: "bottom", horizontal: "center"}}
         >
             <Alert
                 variant="filled"
-                sx={{ alignItems: 'flex-start', '--Alert-gap': '1rem' }}
+                sx={{ alignItems: 'flex-start' }}
                 action={
                     <React.Fragment>
                         <IconButton
                             aria-label="close"
                             color="inherit"
-                            sx={{ p: 0.5 }}
+                            sx={{ p: 0 }}
                             onClick={onClose}
                         >
                             <Close />
@@ -42,13 +28,13 @@ export default function SuccessDialog(props: { open, onClose })
                 }
             >
                 <Box sx={{ flex: 1 }}>
-                    <Typography sx={{ mt: 1 }}>
+                    <Typography variant='h3'>
                         מועמדותך נקלטה בהצלחה
                     </Typography>
-                    <Typography sx={{ mt: 1 }}>
-                        האם תרצה\י להגיש מועמדות למשרות נוספות?
+                    <Typography variant='h4' sx={{ mt: 1 }}>
+                        האם תרצה/י להגיש מועמדות למשרות נוספות?
                     </Typography>
-                    <Box sx={{ mt: 2, display: 'flex', justifyContent: 'space-between', gap: 1 }}>
+                    <Box sx={{ mt: 2, display: 'flex', justifyContent: 'space-between' }}>
                         <Button
                             variant="contained"
                             sx={{
@@ -58,13 +44,13 @@ export default function SuccessDialog(props: { open, onClose })
                                     color: "primary.textBright"
                                 }
                             }}
-                            onClick={onClose}>
+                            onClick={(event) => {onClose(event, undefined, true)}}>
                             כן
                         </Button>
                         <Button 
                         variant="outlined" 
 
-                        onClick={onClose}>
+                        onClick={(event) => {onClose(event, undefined, false)}}>
                             לא
                         </Button>
                     </Box>
