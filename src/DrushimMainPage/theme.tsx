@@ -160,6 +160,9 @@ export const themeSettings = (mode) =>
                 },
                 error: {
                     main: colors.reds[500]
+                },
+                success: {
+                    main: colors.greens[600]
                 }
             },
             typography: {
@@ -203,6 +206,7 @@ export const themeSettings = (mode) =>
                     faded: colors.primary[900]
                 },
                 secondary: {
+                    dark: colors.blues[200],
                     main: colors.blues[500],
                     half: colors.blues[700]
                 },
@@ -220,7 +224,8 @@ export const themeSettings = (mode) =>
                     main: colors.reds[500]
                 },
                 success: {
-                    main: colors.greens[500]
+                    main: colors.greens[600],
+                    secondary: colors.greens[300]
                 }
             },
             typography: {
