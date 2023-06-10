@@ -44,6 +44,20 @@ export default function RoleSingleSelection(props: { jobSector: any ,setJobSecto
         <div>
             <FormControl sx={{ width: '100%' }}>
                 <Select
+                sx={{            '& .muirtl-jedpe8-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.muirtl-jedpe8-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.muirtl-jedpe8-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input': {
+                    font: 'small-caption',
+                },
+    
+                '& .muirtl-1d3z3hw-MuiOutlinedInput-notchedOutline': {
+                    borderRadius: '0.375rem !important'
+                },
+
+                '& .muirtl-hfutr2-MuiSvgIcon-root-MuiSelect-icon': {
+                    color: '#7795f8 !important'
+                },
+                '& .muirtl-bpeome-MuiSvgIcon-root-MuiSelect-icon': {
+                    color: '#7795f8 !important'
+                },}}
                     size='small'
                     value={jobSector}
                     onChange={handleChange}

@@ -5,7 +5,10 @@ import FormControl from '@mui/material/FormControl';
 import ListItemText from '@mui/material/ListItemText';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
-import { Sector, getOpenSectors } from '../../../../../../Firebase/FirebaseFunctions/Sector';
+import { Sector, getOpenSectors } from '../../../../../../../../../../../../../Firebase/FirebaseFunctions/Sector';
+import { Box, Chip } from '@mui/material';
+import { MyPaperSx } from '../../../../RecruitersTableStyle';
+
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -32,11 +35,11 @@ const sectors = [
   'Kelly Snyder',
 ];
 
-export default function MultipleSectorSelect(props: {setJobSector: any, errorJobState: any, setErrorJobState: any}) {
-  const { setJobSector, errorJobState, setErrorJobState} = props;
+export default function MultipleSectorSelect(props: {recruiterSectors: string[], setRecruiterSectors: any, error: any, setError: any, setSaveButton: any }) {
+  const { recruiterSectors,setRecruiterSectors, error, setError} = props;
 
-  const [sectorSelection, setSectorSelection] = React.useState<string[]>([]);
-  const [sectors, setSectors] = React.useState<Sector[]>([]);
+  const [sectorSelection, setSectorSelection] = React.useState<string[]>(recruiterSectors);
+
 
   const handleChange = (event: SelectChangeEvent<typeof sectorSelection>) => {
     const {
@@ -46,22 +49,22 @@ export default function MultipleSectorSelect(props: {setJobSector: any, errorJob
       // On autofill we get a stringified value.
       typeof value === 'string' ? value.split(',') : value,
     );
-
-    setJobSector(sectorSelection);
     
-    if (value?.length > 0 && errorJobState) { setErrorJobState(false); }
+    if (value?.length > 0 && error) { setError(false); }
   };
 
-  const fetchSectors = async () => {
-    setSectors(await getOpenSectors());
-  };
+  // const fetchSectors = async () => {
+  //   setSectors(await getOpenSectors());
+  // };
 
   React.useEffect(() => {
-    fetchSectors();
+    // fetchSectors();
+    console.log('here');
+    console.log(recruiterSectors);
   }, []);
 
   return (
-    <div>
+    <Box sx={{ width: '100%' }}>
       <FormControl sx={{ width: '100%', maxWidth: '100%' }}>
         <Select
           multiple
@@ -72,19 +75,25 @@ export default function MultipleSectorSelect(props: {setJobSector: any, errorJob
           input={<OutlinedInput />}
           renderValue={(selected) => selected.join(', ')}
           MenuProps={MenuProps}
-
           required
-          error={errorJobState}
+          error={error}
 
         >
-          {sectors.map((sector) => (
-            <MenuItem key={sector._name} value={sector._name}>
-              <Checkbox checked={sectorSelection.indexOf(sector._name) > -1} />
-              <ListItemText primary={sector._name} />
+          {recruiterSectors.map((sector) => (
+            <MenuItem key={sector} value={sector}>
+              <Checkbox checked={sectorSelection.indexOf(sector) > -1} />
+              <ListItemText primary={sector} />
             </MenuItem>
           ))}
         </Select>
       </FormControl>
-    </div>
+
+
+      <Box sx={MyPaperSx}>
+        {recruiterSectors?.map((value) => (
+          <Chip color='primary' onDelete={() => { setSectorSelection(recruiterSectors.filter((sector) => sector !== value)) }} key={value} label={value} />
+        ))}
+      </Box>
+    </Box>
   );
 }

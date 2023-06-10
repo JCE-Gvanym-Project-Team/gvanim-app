@@ -21,7 +21,7 @@ const MenuProps = {
 };
 
 
-export default function RoleSingleSelection(props: { jobRole: any ,setJobRole: any, error: any, setError: any} ) {
+export default function RoleSingleSelection(props: { jobRole: any, setJobRole: any, error: any, setError: any }) {
     const { jobRole, setJobRole, error, setError } = props;
 
     const [roles, setRoles] = React.useState<Role[]>([]);
@@ -44,10 +44,27 @@ export default function RoleSingleSelection(props: { jobRole: any ,setJobRole: a
         <div>
             <FormControl sx={{ width: '100%' }}>
                 <Select
+                    sx={{
+                        '& .muirtl-jedpe8-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.muirtl-jedpe8-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.muirtl-jedpe8-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input': {
+                            font: 'small-caption',
+                        },
+            
+                        '& .muirtl-1d3z3hw-MuiOutlinedInput-notchedOutline': {
+                            borderRadius: '0.375rem !important'
+                        },
+        
+                        '& .muirtl-hfutr2-MuiSvgIcon-root-MuiSelect-icon': {
+                            color: '#7795f8 !important'
+                        },
+                        '& .muirtl-bpeome-MuiSvgIcon-root-MuiSelect-icon': {
+                            color: '#7795f8 !important'
+                        },
+                  
+                    }}
                     size='small'
                     value={jobRole}
                     onChange={handleChange}
-                    input={<OutlinedInput />}
+                    input={<OutlinedInput  />}
                     renderValue={(selected) => selected.toLowerCase().toString()}
                     MenuProps={MenuProps}
                     error={error}

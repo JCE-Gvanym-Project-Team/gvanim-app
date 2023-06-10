@@ -1,6 +1,6 @@
-import { Box, Button, Container, Divider, FormControlLabel, FormHelperText, Stack, Switch, TextField, TextareaAutosize, Typography, alpha, styled } from '@mui/material'
+import { Box, Button, Container, Divider, FormControlLabel, FormHelperText, FormLabel, Stack, Switch, TextField, TextareaAutosize, Typography, alpha, styled } from '@mui/material'
 import { useEffect, useState } from 'react'
-import { BoxGradientSx, MyPaperSx, SwitchPaperSx } from './NewJobStyle'
+import { BoxGradientSx, MyLabelSx, MyPaperSx, MyTextFieldSx, SwitchPaperSx } from './NewJobStyle'
 import JobScopeSlider from './Components/ScopeSlider/ScopeSlider';
 import { Job, generateJobNumber, getFilteredJobs } from '../../../../Firebase/FirebaseFunctions/Job';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -62,8 +62,8 @@ const NewJobPage = () => {
 
         if ((state?.job?._scope?.length === 2) && (typeof state?.job?._scope[0] === 'number') && (typeof state?.job?._scope[1] === 'number')) { setJobScope(state?.job?._scope); }
 
-        if (typeof state?.job?._open === 'boolean') {console.log('YES'); setJobOpen(state?.job?._open); }
-        
+        if (typeof state?.job?._open === 'boolean') { console.log('YES'); setJobOpen(state?.job?._open); }
+
         if (typeof state?.job?._highPriority === 'boolean') { setJobPriority(state?.job?._highPriority); }
 
         setLoading(true);
@@ -289,7 +289,7 @@ const NewJobPage = () => {
 
                                             <Form noValidate={true} onSubmit={handleSubmit} sx={{ width: '100%', mt: 3 }} >
                                                 <Stack
-                                                     divider={<Divider orientation='vertical' flexItem />}
+                                                    divider={<Divider orientation='vertical' flexItem />}
                                                     justifyContent='space-evenly'
                                                     direction={{ xs: 'column', sm: 'column', md: 'column', lg: 'row', xl: 'row' }}
                                                     spacing={{ xs: 2, sm: 2, md: 2, lg: 8, xl: 8 }}
@@ -311,8 +311,8 @@ const NewJobPage = () => {
                                                                 הגדר כ-'משרה חמה'
                                                             </Typography>
                                                             <Switch
-                                                                      checked={jobPriority}
-                                                                      onChange={() => setJobPriority(!jobPriority)}
+                                                                checked={jobPriority}
+                                                                onChange={() => setJobPriority(!jobPriority)}
                                                                 sx={{
                                                                     '& .MuiSwitch-switchBase.Mui-checked': {
                                                                         color: '#7795f8',
@@ -321,8 +321,8 @@ const NewJobPage = () => {
                                                                     '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
                                                                         backgroundColor: '#7795f8',
                                                                     },
-                                                                }} 
-                                                                />
+                                                                }}
+                                                            />
                                                         </Stack>
 
                                                         <FormHelperText security="invalid" style={{ marginRight: 0, marginTop: 0, fontSize: 10 }}>
@@ -337,7 +337,7 @@ const NewJobPage = () => {
                                                             paddingRight: 4,
                                                             paddingLeft: 4,
                                                             boxShadow: 'rgba(27, 31, 35, 0.15) 0px 0px 0px 1px',
-                                                            
+
                                                         }}>
 
                                                         <Stack direction='row' justifyContent='space-between' spacing={3}
@@ -349,7 +349,7 @@ const NewJobPage = () => {
                                                                 checked={jobOpen}
                                                                 onChange={() => setJobOpen(!jobOpen)}
                                                                 sx={{
-                                                            
+
                                                                     '& .MuiSwitch-switchBase.Mui-checked': {
                                                                         color: '#7795f8',
 
@@ -358,13 +358,12 @@ const NewJobPage = () => {
                                                                         backgroundColor: '#7795f8',
                                                                     },
                                                                 }}
-                                                                defaultChecked
                                                             />
                                                         </Stack>
 
 
                                                         <FormHelperText security="invalid" style={{ marginRight: 0, marginTop: 0, fontSize: 10 }}>
-                                                          אפשרות זו תגדיר האם המשרה תופיע / לא תופיע באתר.</FormHelperText>
+                                                            אפשרות זו תגדיר האם המשרה תופיע / לא תופיע באתר.</FormHelperText>
                                                     </Stack>
 
 
@@ -378,12 +377,41 @@ const NewJobPage = () => {
                                                     display={{ xs: 'block', sm: 'block', md: 'block', lg: 'flex', xl: 'flex' }}
                                                     spacing={{ xs: 0, sm: 0, md: 0, lg: 2, xl: 2 }} >
                                                     <Box sx={{ width: '100%' }} >
-                                                        <label>
-                                                            <Typography sx={{ fontWeight: 600, fontSize: 13 }}>כותרת המשרה:<text style={{ color: '#e91e63', fontWeight: 600 }}>*</text></Typography>
-                                                        </label>
+                                                        <FormLabel sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'start' }}>
+                                                            <Typography sx={MyLabelSx}>כותרת המשרה:</Typography>
+                                                            <Typography sx={{ fontSize: 14, color: '#e91e63' }}>*</Typography>
+                                                        </FormLabel>
 
-                                                        <TextField style={{ width: '100%' }} size='small' id="_JobName" type="text"
-                                                            className="form-control" required
+                                                        <TextField
+                                                            sx={{
+                                                                '& .muirtl-9ddj71-MuiInputBase-root-MuiOutlinedInput-root': {
+                                                                    borderRadius: '0.375rem',
+                                                                    font: 'small-caption',
+                                                                },
+                                                                '& .muirtl-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input': {
+                                                                    ':focus': {
+                                                                        boxShadow: '0 0 0 0.2rem #c0cefc',
+                                                                        backgroundColor: '#fff',
+                                                                        border: '1px solid #7795f8',
+                                                                        borderRadius: '0.375rem',
+                                                                        outline: 0,
+                                                                    },
+                                                                },
+                                                                '& .muirtl-9ddj71-MuiInputBase-root-MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+                                                                    border: '1px solid #7795f8'
+                                                                },
+
+                                                                '& .muirtl-9ddj71-MuiInputBase-root-MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline': {
+                                                                    borderColor: 'rgba(220,53,69)'
+
+                                                                },
+                                                                '& .muirtl-9ddj71-MuiInputBase-root-MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                                                    border: '1px',
+                                                                },
+                                                            }}
+                                                            style={{ width: '100%' }} size='small' id="_JobName" type="text"
+                                                            required
+                                                            autoComplete='off'
                                                             value={jobName}
                                                             error={errorJobName}
                                                             onChange={(e) => {
@@ -391,16 +419,44 @@ const NewJobPage = () => {
                                                                 if (jobName.length > 0 && errorJobName) { setErrorJobName(false); }
                                                             }}
                                                         />
-                                                        <FormHelperText hidden={!errorJobName} security="invalid" style={{ color: '#ef5350', marginRight: 0, marginTop: 0 }}>זהו שדה חובה.</FormHelperText>
-                                                        <FormHelperText hidden={errorJobName} security="invalid" style={{ marginRight: 0, marginTop: 0, fontSize: 10 }}>
+                                                        <FormHelperText hidden={!errorJobName} security="invalid" style={{ color: '#ef5350', marginRight: '2px', marginTop: 0 }}>זהו שדה חובה.</FormHelperText>
+                                                        <FormHelperText hidden={errorJobName} security="invalid" style={{ marginRight: '2px', marginTop: 0, fontSize: 10 }}>
                                                             יופיע בתור הכותרת של הכרטיסייה.</FormHelperText>
                                                     </Box>
                                                     <Box sx={{ width: '100%' }} >
-                                                        <label>
-                                                            <Typography sx={{ fontWeight: 600, fontSize: 13 }}>איזור:<text style={{ color: '#e91e63', fontWeight: 600 }}>*</text></Typography>
-                                                        </label>
-                                                        <TextField style={{ width: '100%' }} size='small' id="_region" type="text"
-                                                            className="form-control" required
+                                                        <FormLabel sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'start' }}>
+                                                            <Typography sx={MyLabelSx}>איזור:</Typography>
+                                                            <Typography sx={{ fontSize: 14, color: '#e91e63' }}>*</Typography>
+                                                        </FormLabel>
+                                                        <TextField
+                                                            sx={{
+                                                                '& .muirtl-9ddj71-MuiInputBase-root-MuiOutlinedInput-root': {
+                                                                    borderRadius: '0.375rem',
+                                                                    font: 'small-caption',
+                                                                },
+                                                                '& .muirtl-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input': {
+                                                                    ':focus': {
+                                                                        boxShadow: '0 0 0 0.2rem #c0cefc',
+                                                                        backgroundColor: '#fff',
+                                                                        border: '1px solid #7795f8',
+                                                                        borderRadius: '0.375rem',
+                                                                        outline: 0,
+                                                                    },
+                                                                },
+                                                                '& .muirtl-9ddj71-MuiInputBase-root-MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+                                                                    border: '1px solid #7795f8'
+                                                                },
+
+                                                                '& .muirtl-9ddj71-MuiInputBase-root-MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline': {
+                                                                    borderColor: 'rgba(220,53,69)'
+
+                                                                },
+                                                                '& .muirtl-9ddj71-MuiInputBase-root-MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                                                    border: '1px',
+                                                                },
+                                                            }}
+                                                            style={{ width: '100%' }} size='small' id="_region" type="text"
+                                                            required
                                                             value={jobRegion}
                                                             error={errorJobRegion}
                                                             onChange={(e) => {
@@ -409,7 +465,7 @@ const NewJobPage = () => {
                                                             }}
                                                         />
 
-                                                        <FormHelperText hidden={!errorJobRegion} security="invalid" style={{ color: '#ef5350', marginRight: 0, marginTop: 0 }}>זהו שדה חובה.</FormHelperText>
+                                                        <FormHelperText hidden={!errorJobRegion} security="invalid" style={{ color: '#ef5350', marginRight: '2px', marginTop: 0 }}>זהו שדה חובה.</FormHelperText>
                                                     </Box>
                                                 </Stack>
 
@@ -423,49 +479,66 @@ const NewJobPage = () => {
 
 
                                                     <Box sx={{ width: '100%' }}>
-                                                        <label>
-                                                            <Typography sx={{ fontWeight: 600, fontSize: 13 }}>תפקיד:<text style={{ color: '#e91e63', fontWeight: 600 }}>*</text></Typography>
-                                                        </label>
+                                                        <FormLabel sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'start' }}>
+                                                            <Typography sx={MyLabelSx}>תפקיד:</Typography>
+                                                            <Typography sx={{ fontSize: 14, color: '#e91e63' }}>*</Typography>
+                                                        </FormLabel>
+
                                                         <RoleSingleSelection jobRole={jobRole} setJobRole={setJobRole} error={errorJobRole} setError={setErrorJobRole} />
                                                         <FormHelperText hidden={!errorJobRole} security="invalid" style={{ color: '#ef5350', marginRight: 0, marginTop: 0 }}>זהו שדה חובה.</FormHelperText>
                                                     </Box>
 
 
                                                     <Box sx={{ width: '100%' }}>
-                                                        <label>
-                                                            <Typography sx={{ fontWeight: 600, fontSize: 13 }}>אשכול:<text style={{ color: '#e91e63', fontWeight: 600 }}>*</text></Typography>
-                                                        </label>
+                                                    <FormLabel sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'start' }}>
+                                                            <Typography sx={MyLabelSx}>אשכול:</Typography>
+                                                            <Typography sx={{ fontSize: 14, color: '#e91e63' }}>*</Typography>
+                                                        </FormLabel>
+
                                                         <SectorSingleSelection jobSector={jobSector} setJobSector={setJobSector} error={errorJobSector} setError={setErrorJobSector} />
 
                                                         <FormHelperText hidden={!errorJobSector} security="invalid" style={{ color: '#ef5350', marginRight: 0, marginTop: 0 }}>זהו שדה חובה.</FormHelperText>
 
                                                     </Box>
 
-
-                                                    {/* <Box sx={{width: 'calc(99% / 2)'}}>
-                                                        <label>
-                                                            <Typography sx={{ fontWeight: 600, fontSize: 13 }}>אשכול/ות:<text style={{color: '#e91e63',fontWeight: 600}}>*</text></Typography>
-                                                        </label>
-                                                        <MultipleSectorSelect setJobSector={setJobSector} errorJobState={errorJobState} setErrorJobState={setErrorJobState} />
-
-                                                        <FormHelperText hidden={!errorJobState} security="invalid" style={{ color: '#ef5350', marginRight: 0 }}>זהו שדה חובה.</FormHelperText>
-
-
-                                                        <FormHelperText hidden={errorJobState} security="invalid" style={{ marginRight: 0 }}>
-                                                          0 אשכולות נבחרו.
-                                                        </FormHelperText>
-                                                    </Box>
-                                              */}
-
                                                 </Stack>
 
 
                                                 <Box sx={{ width: '100%', mt: 1 }}>
-                                                    <label>
-                                                        <Typography sx={{ fontWeight: 600, fontSize: 13 }}>דרישות:<text style={{ color: '#e91e63', fontWeight: 600 }}>*</text></Typography>
-                                                    </label>
-                                                    <TextField style={{ width: '100%' }} size='small' id="_requirements" type="text"
-                                                        className="form-control" required
+                                                <FormLabel sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'start' }}>
+                                                            <Typography sx={MyLabelSx}>דרישות:</Typography>
+                                                            <Typography sx={{ fontSize: 14, color: '#e91e63' }}>*</Typography>
+                                                        </FormLabel>
+
+                                                    <TextField
+                                                        sx={{
+                                                            '& .muirtl-9ddj71-MuiInputBase-root-MuiOutlinedInput-root': {
+                                                                borderRadius: '0.375rem',
+                                                                font: 'small-caption',
+                                                            },
+                                                            '& .muirtl-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input': {
+                                                                ':focus': {
+                                                                    boxShadow: '0 0 0 0.2rem #c0cefc',
+                                                                    backgroundColor: '#fff',
+                                                                    border: '1px solid #7795f8',
+                                                                    borderRadius: '0.375rem',
+                                                                    outline: 0,
+                                                                },
+                                                            },
+                                                            '& .muirtl-9ddj71-MuiInputBase-root-MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+                                                                border: '1px solid #7795f8'
+                                                            },
+
+                                                            '& .muirtl-9ddj71-MuiInputBase-root-MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline': {
+                                                                borderColor: 'rgba(220,53,69)'
+
+                                                            },
+                                                            '& .muirtl-9ddj71-MuiInputBase-root-MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                                                border: '1px',
+                                                            },
+                                                        }}
+                                                        style={{ width: '100%' }} size='small' id="_requirements" type="text"
+                                                        required
                                                         error={errorJobRequirements}
                                                         value={jobRequirements}
                                                         onChange={(e) => {
@@ -473,8 +546,8 @@ const NewJobPage = () => {
                                                             if (jobRequirements.length > 0 && errorJobRequirements) { setErrorJobRequirements(false); }
                                                         }}
                                                     />
-                                                    <FormHelperText hidden={!errorJobRequirements} security="invalid" style={{ color: '#ef5350', marginRight: 0, marginTop: 0 }}>זהו שדה חובה.</FormHelperText>
-                                                    <FormHelperText hidden={errorJobRequirements} security="invalid" style={{ marginRight: 0, marginTop: 0, fontSize: 10 }}>הסבר כללי על הדרישות, יופיע בתור תת הכותרת של הכרטיסייה.</FormHelperText>
+                                                    <FormHelperText hidden={!errorJobRequirements} security="invalid" style={{ color: '#ef5350', marginRight: '2px', marginTop: 0 }}>זהו שדה חובה.</FormHelperText>
+                                                    <FormHelperText hidden={errorJobRequirements} security="invalid" style={{ marginRight: '2px', marginTop: 0, fontSize: 10 }}>הסבר כללי על הדרישות, יופיע בתור תת הכותרת של הכרטיסייה.</FormHelperText>
 
                                                 </Box>
 
@@ -484,9 +557,10 @@ const NewJobPage = () => {
                                                     spacing={{ xs: 0, sm: 0, md: 0, lg: 2, xl: 2 }}>
 
                                                     <Stack sx={{ width: '100%' }} direction='column' spacing={0}>
-                                                        <label>
-                                                            <Typography sx={{ fontWeight: 600, fontSize: 13 }}>תיאור המשרה:</Typography>
-                                                        </label>
+                                                    <FormLabel sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'start' }}>
+                                                            <Typography sx={MyLabelSx}>תיאור המשרה:</Typography>
+                                                        </FormLabel>
+
                                                         <TextareaAutosize id="_description"
                                                             className="MyTextField" minRows={2} required
                                                             value={jobDescription}
@@ -497,23 +571,25 @@ const NewJobPage = () => {
                                                     </Stack>
 
                                                     <Stack sx={{ width: '100%' }} direction='column' spacing={0}>
-                                                        <label>
-                                                            <Typography sx={{ fontWeight: 600, fontSize: 13 }}>דרישות המשרה:</Typography>
-                                                        </label>
+                                                    <FormLabel sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'start' }}>
+                                                            <Typography sx={MyLabelSx}>דרישות המשרה:</Typography>
+                                                        </FormLabel>
+
                                                         <TextareaAutosize id="_description_skills"
                                                             className="MyTextField" minRows={2} required
                                                             value={jobDescriptionSkills}
                                                             onChange={(e) => { setJobDescriptionSkills(e.target.value) }}
                                                         />
-                                                        <FormHelperText security="invalid" style={{ marginRight: 0, marginTop: 0, fontSize: 10 }}>
+                                                        <FormHelperText security="invalid" style={{ marginRight: '2px', marginTop: 0, fontSize: 10 }}>
                                                             תיאור מפורט יותר לגבי הדרישות, יופיע בתור "מה אנחנו מחפשים" בדף המשרה.</FormHelperText>
                                                     </Stack>
 
                                                 </Stack>
                                                 <Box sx={{ mt: 1 }}>
-                                                    <label>
-                                                        <Typography sx={{ fontWeight: 600, fontSize: 13 }}>מידע נוסף:</Typography>
-                                                    </label>
+                                                <FormLabel sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'start' }}>
+                                                            <Typography sx={MyLabelSx}>מידע נוסף:</Typography>
+                                                        </FormLabel>
+
                                                     <TextareaAutosize id="_additional_info"
                                                         className="MyTextField" minRows={2} required
                                                         value={jobAdditionalInfo}
@@ -522,9 +598,10 @@ const NewJobPage = () => {
                                                 </Box>
 
                                                 <Box sx={{ mt: 1 }}>
-                                                    <label>
-                                                        <Typography sx={{ fontWeight: 600, fontSize: 13 }}>היקף המשרה:</Typography>
-                                                    </label>
+                                                <FormLabel sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'start' }}>
+                                                            <Typography sx={MyLabelSx}>היקף המשרה:</Typography>
+                                                        </FormLabel>
+
                                                     <Box>
                                                         <JobScopeSlider setJobScope={setJobScope} jobScope={jobScope} />
                                                     </Box>
@@ -538,24 +615,24 @@ const NewJobPage = () => {
                                                 <Stack direction='row' spacing={2} sx={{ mt: 3, mb: 3 }}>
 
 
-                                                
 
-                                                        <Button type="submit" variant='contained'
-                                                            sx={{
-                                                                mt: 1,
-                                                                mb: 1,
-                                                                backgroundColor: '#555abf',
-                                                                ":hover": {
-                                                                    bgcolor: "#555abf",
-                                                                }
-                                                            }} fullWidth>{state === null ? 'פרסם' : 'עדכן'}</Button>
 
-                                                        {state === null ? (
-                                                            <></>
-                                                        ) : (
-                                                            <MyJobRemoveDialog handleDelete={handleDelete} />
-                                                        )}
-                                              
+                                                    <Button type="submit" variant='contained'
+                                                        sx={{
+                                                            mt: 1,
+                                                            mb: 1,
+                                                            backgroundColor: '#555abf',
+                                                            ":hover": {
+                                                                bgcolor: "#555abf",
+                                                            }
+                                                        }} fullWidth>{state === null ? 'פרסם' : 'עדכן'}</Button>
+
+                                                    {state === null ? (
+                                                        <></>
+                                                    ) : (
+                                                        <MyJobRemoveDialog handleDelete={handleDelete} />
+                                                    )}
+
 
                                                 </Stack>
                                             </Form>

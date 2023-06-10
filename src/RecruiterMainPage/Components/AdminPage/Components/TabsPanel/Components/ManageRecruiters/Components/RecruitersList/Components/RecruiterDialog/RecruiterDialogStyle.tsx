@@ -9,7 +9,7 @@ export const ListItemTypographySx: SxProps = {
 export const MyFieldsSx: SxProps = {
     width: '100%',
     height: 'fit-content',
-    border: '1px solid rgba(0, 0, 0, 0.125)',
+    // border: '1px solid rgba(0, 0, 0, 0.125)',
     borderRadius: '1rem',
     paddingRight: 5,
     paddingLeft: 5,

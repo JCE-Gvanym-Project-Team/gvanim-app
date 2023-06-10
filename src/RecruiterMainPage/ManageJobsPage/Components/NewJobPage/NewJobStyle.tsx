@@ -1,11 +1,35 @@
 import { SxProps } from "@mui/material";
 import { ManageCandidatesPageGlobalStyle } from "../../../PageStyles";
 
+
+
+export const MyLabelSx: SxProps ={
+     fontWeight: 600, fontSize: 12, paddingLeft: '2px', color: 'black', display: 'flex', flexDirection: 'column-reverse' 
+}
 export const MyTextFieldSx = {
-    boxShadow: '0px 2px 24px #DAECFF',
-    
-    "& .MuiInputBase-input": {
-        fontSize: '0.875rem',
+    '& .muirtl-9ddj71-MuiInputBase-root-MuiOutlinedInput-root': {
+        borderRadius: '0.375rem',
+        font: 'small-caption',
+    },
+    '& .muirtl-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input': {
+        ':focus': {
+            boxShadow: '0 0 0 0.2rem #c0cefc',
+            backgroundColor: '#fff',
+            border: '1px solid #7795f8',
+            borderRadius: '0.375rem',
+            outline: 0,
+        },
+    },
+    '& .muirtl-9ddj71-MuiInputBase-root-MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+        border: '1px solid #7795f8'
+    },
+
+    '& .muirtl-9ddj71-MuiInputBase-root-MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline': {
+        borderColor: 'rgba(220,53,69)'
+
+    },
+    '& .muirtl-9ddj71-MuiInputBase-root-MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+        border: '1px',
     },
 }
 

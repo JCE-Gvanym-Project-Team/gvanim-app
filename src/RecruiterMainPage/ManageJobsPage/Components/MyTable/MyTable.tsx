@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box, Button, Chip, LinearProgress, Snackbar, Stack, SxProps, Theme, Typography, alpha, styled, useTheme } from '@mui/material';
+import { Box, Button, Chip, LinearProgress, Stack, SxProps, Theme, Tooltip, Typography, alpha, styled, useTheme } from '@mui/material';
 import MyDropMenu from '../MyDropMenu/MyDropMenu';
 import {
 	DataGrid,
@@ -9,8 +9,6 @@ import {
 	GridToolbarColumnsButton,
 	GridToolbarContainer,
 	GridToolbarQuickFilter,
-	GridToolbarExportContainer,
-	GridPrintExportMenuItem,
 	gridPageCountSelector,
 	gridPageSelector,
 	useGridApiContext,
@@ -71,9 +69,12 @@ const MemoizedColumnHeaders = React.memo(ColumnHeadersWithTracer);
 // ---------------------------------------------------------------------------------------------------------
 const ODD_OPACITY = 0.2;
 const MyDataGrid = (theme: Theme): SxProps => ({
-	padding: 0.5,
+	paddingTop: 1,
 	height: '618px',
-	border: '1px solid rgba(0, 0, 0, 0.125)',
+	borderTop: '1px solid rgba(0, 0, 0, 0.125)',
+	borderBottom: '1px solid rgba(0, 0, 0, 0.125)',
+	borderRight: 'unset',
+	borderLeft: 'unset',
 	borderTopRightRadius: 0,
 	borderTopLeftRadius: 0,
 	overflow: 'hidden',
@@ -130,7 +131,7 @@ const MyDataGrid = (theme: Theme): SxProps => ({
 		borderRadius: '35%',
 	},
 	[`& .${gridClasses.row}.even`]: {
-		backgroundColor: theme.palette.grey[100],
+		backgroundColor: theme.palette.grey[50],
 		'&:hover, &.Mui-hovered': {
 			backgroundColor: alpha(theme.palette.primary.main, ODD_OPACITY),
 			'@media (hover: none)': {
@@ -159,6 +160,7 @@ const MyDataGrid = (theme: Theme): SxProps => ({
 			},
 		},
 	},
+
 });
 
 const StyledGridOverlay = styled('div')(({ theme }) => ({
@@ -235,7 +237,7 @@ function CustomNoRowsOverlay() {
 const columns: GridColDef[] = [
 
 	{
-		field: 'תפריט',
+		field: 'options',
 		headerName: '',
 		width: 50,
 		hideSortIcons: true,
@@ -244,6 +246,7 @@ const columns: GridColDef[] = [
 		disableColumnMenu: true,
 		disableExport: true,
 		editable: false,
+		align: 'center',
 
 		renderCell: (job) => {
 			return <MyDropMenu job={job?.row} />;
@@ -262,7 +265,7 @@ const columns: GridColDef[] = [
 		field: '_status',
 		headerName: 'סטטוס',
 		description: 'סטטוס המשרה',
-		sortable: true,
+		sortable: false,
 		editable: false,
 		headerAlign: 'center',
 		align: 'center',
@@ -326,8 +329,8 @@ const columns: GridColDef[] = [
 		align: 'center',
 		width: 200,
 		renderCell: (job) => {
-			const { id } = job.row;
-			return <CandidatesListFullScreenDialog JobId={id} />;
+			const { _jobNumber } = job.row;
+			return <CandidatesListFullScreenDialog JobId={_jobNumber} />;
 		},
 	},
 ];
@@ -343,7 +346,17 @@ const GridCustomToolbar = () => {
 		<GridToolbarContainer>
 			<Stack direction='row' sx={{ width: '100%' }}>
 				<Box sx={{ width: '100%' }}>
-					<GridToolbarQuickFilter variant='outlined' size='small' sx={{ width: '100%' }} />
+					<GridToolbarQuickFilter variant='outlined' size='small' sx={{
+						width: '100%',
+						'& .muirtl-2ehmn7-MuiInputBase-root-MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {
+							borderRadius: '0.75rem',
+							border: '1px solid rgba(0, 0, 0, 0.23)',
+						},
+						'& .muirtl-ptiqhd-MuiSvgIcon-root': {
+							color: 'rgba(0, 0, 0, 0.23)'
+						},
+					}} 
+					/>
 				</Box>
 				<Box sx={{ display: 'flex', flexDirection: 'row-reverse', width: '100%' }}>
 					<Box>
@@ -362,11 +375,6 @@ const GridCustomToolbar = () => {
 					<GridToolbarFilterButton />
 					<GridToolbarColumnsButton />
 					<GridToolbarDensitySelector />
-
-					<GridToolbarExportContainer >
-						<GridPrintExportMenuItem options={{ hideFooter: true, hideToolbar: true }} />
-					</GridToolbarExportContainer>
-
 				</Box>
 
 			</Box>
@@ -388,11 +396,11 @@ const CustomPaginationAndFooter = () => {
 
 
 	return (
-		<Stack direction={{xs: 'column', sm: 'column',md: 'column',lg: 'row-reverse', xl: 'row-reverse' }} 
-		justifyContent='space-between' 
-		alignItems='center' 
-		spacing={2}
-		padding={1} >
+		<Stack direction={{ xs: 'column', sm: 'column', md: 'column', lg: 'row-reverse', xl: 'row-reverse' }}
+			justifyContent='space-between'
+			alignItems='center'
+			spacing={2}
+			padding={1} >
 
 			<Box >
 				<Pagination
@@ -410,12 +418,12 @@ const CustomPaginationAndFooter = () => {
 			</Box>
 
 			<Box>
-					<Chip
-						label={rowsCount + ' משרות'}
-						sx={{ fontWeight: 'bold', borderRadius: '0.5rem', color: 'black' }}
-						variant="outlined"
-					/>
-				</Box>
+				<Chip
+					label={rowsCount + ' משרות'}
+					sx={{ fontWeight: 'bold', borderRadius: '0.5rem', color: 'black' }}
+					variant="outlined"
+				/>
+			</Box>
 		</Stack>
 
 	);
@@ -473,7 +481,6 @@ export default function MyTable() {
 							row: MemoizedRow,
 							columnHeaders: MemoizedColumnHeaders,
 						}}
-
 					/>
 
 
