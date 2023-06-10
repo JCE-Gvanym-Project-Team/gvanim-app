@@ -31,15 +31,14 @@ export default async function JobsByFilters(role: string, scope: number, sector:
     }
 
     const jobs = await getFilteredJobs();
-    // console.log(jobs)
 
-    // Create an array to store candidates with the specified rejection cause
     const promises: Promise<any>[] = [];
 
+    
     for (let i = 0; i < jobs.length; i++) {
         let job = jobs[i];
         // if (dayjs(job._creationDate).isBetween(dayjs(startDate), dayjs(endDate), null, '[]')) {
-        if(job._scope[1] <= scope && job._scope[0] >= scope - 24) {  
+        if((job._scope[1] <= scope && job._scope[0] >= scope - 24) || scope == 1) {  
             let promise = helperJobFilter(job, role, job._scope, sector, openJobs, highPriority, viewsAndApplyPerPlatform);
             promises.push(promise);
         }
@@ -47,7 +46,6 @@ export default async function JobsByFilters(role: string, scope: number, sector:
     }
 
     const resultJobs = await Promise.all(promises);
-    console.log(resultJobs);
     return resultJobs;
 }
 
@@ -59,7 +57,7 @@ export async function helperJobFilter(job: Job, role: string, scope: number[], s
         "תפקיד": job._role,
         "אשכול": job._sector,
         "אזור": job._region,
-        "אחוז משרה": job._scope,
+        "אחוז משרה": job._scope.toString(),
     };
 
     if (highPriority === false) {

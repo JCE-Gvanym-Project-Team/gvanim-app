@@ -18,23 +18,23 @@ import dayjs from 'dayjs';
 
 
 export default function JobsFiltersForm() {
-    //main();
 
     const createReport = (role_ind, scope_ind, sector_ind, openJobs_ind, highPriority_ind, viewsAndApplyPerPlatform_ind, startDate, endDate) => {
         // checking if the user select all the buttons
         const isDateSelected = startDate && endDate;
-        // 
-        // if (!role_ind || !scope_ind || !sector_ind || !role_ind || !viewsAndApplyPerPlatform_ind || !isDateSelected) {
-        //  displaying an error message or indicating to the user that the parameters are mandatory
-        // alert('יש למלא את כל השדות');
-        //  return;
-        // }
 
-        const roleArr = ["מנהל", "עובד סוציאלי", "מתנדב", "כל התפקידים"];
+
+        if (!role_ind || !scope_ind || !sector_ind || !role_ind || !viewsAndApplyPerPlatform_ind || !isDateSelected) {
+            // displaying an error message or indicating to the user that the parameters are mandatory
+            alert('יש למלא את כל השדות');
+            return;
+        }
+
         const scopeArr = [25, 50, 75, 100, 1]; // [1] mean evry scope of jobs
-        const sectorArr = ["מרכז", "צפון", "דרום", "כל הארץ"];
-        const viewsAndApplyPerPlatformArr = ["אל תכלול", "פייסבוק", "יד 2", "מאסטר גוב", "גוגל", "כל הפלטפורמות"];
         const choice = ["true", "false"];
+        const viewsAndApplyPerPlatformArr: string[] = ["אל תכלול", "פייסבוק", "יד 2", "מאסטר גוב", "גוגל", "כל הפלטפורמות"];
+        const roleArr = ["מנהל", "עובד סוציאלי", "מתנדב", "כל התפקידים"];
+        const sectorArr = ["מרכז", "צפון", "דרום", "כל הארץ"];
 
         const role = roleArr[Math.floor(role_ind / 10) - 1];
         const scope = scopeArr[Math.floor(scope_ind / 10) - 1];
@@ -53,14 +53,15 @@ export default function JobsFiltersForm() {
             highPriority = false;
 
         const viewsAndApplyPerPlatform = viewsAndApplyPerPlatformArr[Math.floor(viewsAndApplyPerPlatform_ind / 10) - 1];
-        // const applyPerPlatform = applyPerPlatformArr[Math.floor(applyPerPlatform_ind / 10) - 1];
         const formattedStartDate = startDate.toDate();
         const formattedEndDate = endDate.toDate();
 
         const result = JobsByFilters(role, scope, sector, openJobs, highPriority, viewsAndApplyPerPlatform, formattedStartDate, formattedEndDate)
             .then((result) => {
-                // console.log(result);
-                // exportToExcel(result, "Candidate");
+                if (result.length === 0)
+                    alert('אין נתונים להצגה');
+                else
+                    exportToExcel(result, "משרות");
             })
             .catch((error) => {
                 // handle the error
@@ -105,16 +106,7 @@ export default function JobsFiltersForm() {
 
     const handleViewsAndApplyPerPlatform = (event) => {
         setViewsAndApplyPerPlatform(event.target.value);
-    };
-
-    // const handleChangeViewsPerPlatform = (event) => {
-    // setViewsPerPlatform(event.target.value);
-    // };
-    // 
-    // const handleChangeApplyPerPlatform = (date) => {
-    // setApplyPerPlatform(date);
-    // };
-    // 
+    }
     const handleChangeStartDate = (date) => {
         setStartDate(date);
     };
@@ -340,12 +332,12 @@ export default function JobsFiltersForm() {
                                             </Select>
                                         </FormControl>
 
-                                
+
                                         <br />
                                         {/* select time */}
                                         <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                            <DemoContainer 
-                                               components={['DatePicker', 'DatePicker','DesktopDatePicker', 'MobileDatePicker']}>
+                                            <DemoContainer
+                                                components={['DatePicker', 'DatePicker', 'DesktopDatePicker', 'MobileDatePicker']}>
                                                 <DatePicker
                                                     label="מתאריך"
                                                     value={startDate}
@@ -379,54 +371,4 @@ export default function JobsFiltersForm() {
 }
 
 
-
-export async function main() {
-    loginAdmin().then(async () => {
-        // 
-        // let jobstatus1 = new CandidateJobStatus(109, "28", "נדחה",  "לא מתאים לגוונים בגלל..", 1,  new Date(2023, 4, 1),new Date(2023, 5, 1), new Date(0, 0, 0), ["ded", "ded"], [], "פערים על היקף משרה"  );
-        // let jobstatus2 = new CandidateJobStatus(102, "28", "עבר ראיון ראשון",  "בחור מצוין", 4,  new Date(2023, 4, 1), new Date(2023, 4, 5), new Date(2023, 6, 25), ["ed", "ed"], [], "" );
-        // let jobstatus3 = new CandidateJobStatus(94, "53", "התקבל",  "בחור מצוין", 5,  new Date(2023, 4, 1), new Date(2023, 8, 1), new Date(2023, 6, 25), ["ed", "ed"], [], "" );
-        // let jobstatus4 = new CandidateJobStatus(91, "66", "הודשה מועמדות",  "בחור מצוין", 4,  new Date(2023, 4, 1), new Date(2023, 4, 17), new Date(2023, 6, 25), ["ed", "ed"], [], "" );
-        // let jobstatus5 = new CandidateJobStatus(76, "28", "זומן לראיון ראשון", "", 0, new Date(), new Date(2023, 5, 1), new Date(0, 0, 0), ["ed", "ed"], [], "");
-        //await jobstatus5.add();
-        // await jobstatus5.remove();
-        // jobstatus1.add();
-        // jobstatus2.add();
-        // jobstatus3.add();
-        // jobstatus4.add();
-        // jobstatus5.add();
-
-        // const viewsPerPlatform = new Map<string, number>();
-        // viewsPerPlatform.set("פייסבוק", 23);
-        // viewsPerPlatform.set("ווצאפ", 12);
-        // viewsPerPlatform.set("דרושים", 90);
-        // const applyPerPlatform = new Map<string, number>();
-        // applyPerPlatform.set("פייסבוק", 12);
-        // applyPerPlatform.set("ווצאפ", 12);
-        // applyPerPlatform.set("דרושים", 12);
-        //  const job = new Job(1000,"","",[0,0],"","",[""],"",true,false,new Map<string, number>(),new Map<string, number>(),new Date(2022,1,1));
-        //         job.remove();
-
-        //   let job1 = new Job(11111, "דרוש מנהל", "מנהל", [0,100], "שדרות", "דרום", [""], "", true, false,new Map<string, number>(),new Map<string, number>());
-        //   console.log(job1._creationDate);
-        //  job1._creationDate = new Date(2000, 12, 1);
-        //  let job2 = new Job(await generateJobNumber(), "דרוש עובד סוצאלי", "עובד סוציאלי", [0,30], "קריות", "צפון",  [""], "", false, true,new Map<string, number>(),new Map<string, number>());
-        //  let job3 = new Job(await generateJobNumber(), "דרושה מנהלת ", "מנהלת", [0,30], "ירושלים", "מרכז",  [""], "", true, true, new Map<string, number>(), new Map<string, number>());
-        //  let job4 = new Job(await generateJobNumber(), "דרוש עובד סוצאלי ", "עובד סוציאלי", [0,70], "רמת גן", "מרכז", [""], "", true, false  ,new Map<string, number>() , new Map<string, number>());
-        //  let job5 = new Job(await generateJobNumber(), "דרוש מתנדב ", "מתנדב", [0,20], "מודיעין", "מרכז" , [""], "", true, true, new Map<string, number>() , new Map<string, number>());
-        //  job1.remove();
-        //  job2.remove();
-        //  job3.remove();
-        //  job4.remove();
-        //job5.remove();
-        // await job1.add();
-        //  await job2.add();
-        //  await job3.add();
-        //  await job4.add();
-        //  await job5.add();
-        // await console.log((await getFilteredJobs()));
-    });
-
-
-}
 

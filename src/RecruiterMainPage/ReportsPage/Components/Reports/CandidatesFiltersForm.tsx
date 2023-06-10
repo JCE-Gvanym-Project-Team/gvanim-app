@@ -39,12 +39,13 @@ export default function CandidateFiltersForm() {
         const role = roleArr[Math.floor(role_ind / 10) - 1];
         const formattedStartDate = startDate.toDate();
         const formattedEndDate = endDate.toDate();
-        console.log(status);
 
         const result = CandidatesByFilters(status, timeOnStatus, sector, role, selectGarde, selectInterviewDate, formattedStartDate, formattedEndDate)
             .then((result) => {
-                // console.log(result);
-                exportToExcel(result, "Candidate");
+                if (result.length === 0)
+                    alert('אין נתונים להצגה');
+                else
+                    exportToExcel(result, "מועמדים");
             })
             .catch((error) => {
                 // handle the error
@@ -236,7 +237,7 @@ export default function CandidateFiltersForm() {
                                     <br />
                                     {/* זמן שהוא על הסטטוס הנוכחי*/}
                                     <FormControl fullWidth>
-                                        <InputLabel id="demo-simple-select-label">בחירת הזמן שהוא על הטטוס הנוכחי</InputLabel>
+                                        <InputLabel id="demo-simple-select-label">בחירת הזמן שהוא על הסטטוס הנוכחי</InputLabel>
                                         <Select
                                             labelId="demo-simple-select-label"
                                             id="demo-simple-select"
@@ -244,8 +245,8 @@ export default function CandidateFiltersForm() {
                                             label="timeOnStatus"
                                             onChange={handleChangeTimeInStatus}
                                         >
-                                            <MenuItem value={10}>שבוע</MenuItem>
-                                            <MenuItem value={20}>חודש</MenuItem>
+                                            <MenuItem value={10}>עד שבוע</MenuItem>
+                                            <MenuItem value={20}>עד חודש</MenuItem>
                                             <MenuItem value={30}>כל זמן</MenuItem>
                                         </Select>
                                     </FormControl>

@@ -59,10 +59,10 @@ export default async function CandidatesByFilters(status: string, timeOnStatus: 
 
 
 export async function helperFilteredCandidate(candidate_job_status: CandidateJobStatus, job: Job, role: string, sector: string, status: string,
-  timeOnStatus:number, selectGarde: string, selectInterviewDate: string) {
-  
+  timeOnStatus: number, selectGarde: string, selectInterviewDate: string) {
+
   let candidate = (
-      await getFilteredCandidates(['id'], [candidate_job_status._candidateId.toString()])
+    await getFilteredCandidates(['id'], [candidate_job_status._candidateId.toString()])
   ).at(0);
 
   let filteredCandidate: any = {
@@ -85,17 +85,21 @@ export async function helperFilteredCandidate(candidate_job_status: CandidateJob
     filteredCandidate["סטטוס"] = candidate_job_status._status;
 
   if (status != "נדחה" && status != 'התקבל')
-    filteredCandidate["זמן שעבר משינוי הסטטוס"] = timeOnStatus/(24 * 60 * 60 * 1000); // Convert milliseconds to days
+    filteredCandidate["זמן שעבר משינוי הסטטוס"] = Math.floor(timeOnStatus / (24 * 60 * 60 * 1000)); // Convert milliseconds to days
 
-  if (selectGarde === "yes")
-    filteredCandidate["ציון המועמד"] = candidate_job_status._matchingRate;
+  if (selectGarde === "yes") {
+    if (candidate_job_status._matchingRate === -1)
+      filteredCandidate["ציון המועמד"] = "עדיין לא נקבע ציון";
+    else
+      filteredCandidate["ציון המועמד"] = candidate_job_status._matchingRate;
+  }
 
-  if (selectInterviewDate === "yes" ){
+  if (selectInterviewDate === "yes") {
     const interviewDate = new Date(candidate_job_status._interviewDate);
-    if (interviewDate instanceof Date && !isNaN(interviewDate.getTime()) && interviewDate.getTime() !== new Date().getTime()) 
+    if (interviewDate instanceof Date && !isNaN(interviewDate.getTime()) && interviewDate.getTime() !== new Date().getTime())
       filteredCandidate["תאריך הראיון"] = interviewDate;
-    else 
-        filteredCandidate["תאריך הראיון"] = "לא נקבע";
+    else
+      filteredCandidate["תאריך הראיון"] = "לא נקבע";
   }
 
   return filteredCandidate;
