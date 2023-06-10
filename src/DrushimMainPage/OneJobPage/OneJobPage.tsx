@@ -5,8 +5,9 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import MyLoading from '../../Components/MyLoading/MyLoading';
 import { Job, getFilteredJobs } from '../../Firebase/FirebaseFunctions/Job';
 import { Recomendation } from '../../Firebase/FirebaseFunctions/Recomendation';
-import { Candidate, generateCandidateId, getFilteredCandidateJobStatuses } from '../../Firebase/FirebaseFunctions/functionIndex';
+import { Candidate, generateCandidateId, getFilteredCandidateJobStatuses, getFilteredCandidates } from '../../Firebase/FirebaseFunctions/functionIndex';
 import { ColorModeContext, colorTokens } from '../theme';
+
 
 
 const ABOUT_MAX_LENGTH = 1000;
@@ -91,6 +92,8 @@ export default function OneJobPage()
             temp.push([null, null])
         }
         setRecommendersList(temp);
+
+        setDefaults();
     }, [state])
 
     // submit
@@ -123,7 +126,6 @@ export default function OneJobPage()
 
         if (candidateEmail === "" || !isEmailValid(candidateEmail))
         {
-            console.log("here");
             setCandidateEmailError(true);
         } else
         {
@@ -145,13 +147,15 @@ export default function OneJobPage()
 
         if (!checkRecommenders())
         {
+            console.log("here");
             console.log(recommendersErrors);
             return;
         }
 
+        // insert candidate into database
         setLoading(true);
-        const newCandidateId = await generateCandidateId();
-        const newCandidate = new Candidate(
+        let newCandidateId = await generateCandidateId();
+        let newCandidate = new Candidate(
             newCandidateId,
             candidateName,
             candidateSurname,
@@ -160,11 +164,22 @@ export default function OneJobPage()
             -1,
             aboutText
         );
-        // add candidate
-        await newCandidate.add();
+        // add candidate, or get existing candidate
+        if (!await newCandidate.add()){
+            newCandidate = (await getFilteredCandidates(["eMail", "phone"], [candidateEmail, candidatePhone]))[0];
+            newCandidateId = newCandidate._id;
+        }
 
+        // apply 
+        if (!await newCandidate.apply(job?._jobNumber!, aboutText)){
+            // TODO: error message to the user here
+
+            return;
+        }
+        
         // add recommenders and CV
-        const candidateJobStatus = (await getFilteredCandidateJobStatuses(["jobNumber", "candidateId"], [job?._jobNumber.toString()!, newCandidateId]))[0];
+        let candidateJobStatus = (await getFilteredCandidateJobStatuses(["jobNumber", "candidateId"], [job?._jobNumber.toString()!, newCandidateId]))[0];
+
         recommendersList?.forEach(async (recommender) =>
         {
             const recommenderInfo = recommender[0];
@@ -182,12 +197,12 @@ export default function OneJobPage()
         })
 
         newCandidate.uploadCv(cvFile);
-
-        await newCandidate.apply(job?._jobNumber!, aboutText);
-
         setLoading(false);
-
+        
         // TODO: add success message here
+
+        // set defaults values
+        setDefaults();
     }
 
     const isPhoneValid = (phone: string) =>
@@ -200,6 +215,40 @@ export default function OneJobPage()
         return /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email);
     }
 
+    const setDefaults = () =>
+    {
+        // reset candidate details
+        setCandidateName("");
+        setCandidateNameError(false);
+        setCandidateSurname("");
+        setCandidateSurnameError(false);
+        setCandidatePhone("");
+        setCandidatePhoneError(false);
+        setCandidateEmail("");
+        setCandidateEmailError(false);
+
+        // reset about text
+        setAboutNumChars(0);
+        setAboutText("");
+
+        // reset cv file
+        setCvFileError(false);
+        setCvFile(null);
+
+        // reset recommenders
+        for (let index = 0; index < numRecommenders; index++)
+        {
+            updateRecommendersListAtIndex(null, null, index);
+
+        }
+        setNumRecommenders(0);
+        setRecommendersErrors(
+            recommendersErrors.map(() => {
+                return [false, false]
+            })
+        );
+    }
+
     /**
      * checks whether the phone and email provided 
      * by the user for each recommender is valid. 
@@ -209,7 +258,7 @@ export default function OneJobPage()
     {
         let result = true;
         let recommendersErrorsResult = recommendersErrors;
-        recommendersList?.map((recommender, index) =>
+        recommendersList?.forEach((recommender, index) =>
         {
             const recommenderInfo = recommender[0];
             const file = recommender[1];
@@ -233,11 +282,11 @@ export default function OneJobPage()
                             return [recommenderError[0], recommenderError[1]];
                         }
                     });
-                    return result && false;
+                    result = result && false;
                 }
-                return result && true
+                result = result && true;
             }
-        }, result)
+        })
         setRecommendersErrors(recommendersErrorsResult);
         return result;
     }
@@ -1102,6 +1151,7 @@ export default function OneJobPage()
                                 {
                                     const files = event.target.files!;
                                     setCvFile(files[0]);
+                                    setCvFileError(false);
                                 }}
                             />
                             <Button
