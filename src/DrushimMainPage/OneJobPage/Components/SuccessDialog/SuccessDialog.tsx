@@ -44,6 +44,7 @@ export default function SuccessDialog(props: { open, onClose })
                     }}
                     variant='h4'
                     >
+                        שדגשדגשדג
                 </Typography>
             </DialogContent>
         </Dialog>

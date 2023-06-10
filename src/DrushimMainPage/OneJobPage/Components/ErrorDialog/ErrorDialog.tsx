@@ -12,10 +12,18 @@ export default function ErrorDialog(props: { open, onClose })
         <Dialog open={open} onClose={onClose} sx={dialogSx} >
             <Box sx={dialogTopAreaSx}>
                 {/* Title */}
-                <DialogTitle>
-                    <Typography>
-
-                        ספר עליך
+                <DialogTitle sx={{
+                    textAlign: "center",
+                    flex: 10
+                }}>
+                    <Typography 
+                    variant='h2'
+                    sx={{
+                        alignSelf: "center",
+                        justifySelf: "center"
+                    }}
+                    >
+                        שגיאה
                     </Typography>
                 </DialogTitle>
 
@@ -42,8 +50,9 @@ export default function ErrorDialog(props: { open, onClose })
                         maxWidth: "100%",
                         overflowWrap: "break-word"
                     }}
-                    variant='h4'
+                    variant='h3'
                     >
+                        מועמדותך כבר נקלטה עבור משרה זו
                 </Typography>
             </DialogContent>
         </Dialog>

@@ -155,7 +155,7 @@ export const themeSettings = (mode) =>
                     boxInner: colors.grey[700]
                 },
                 error: {
-                    main: colors.reds[100]
+                    main: colors.reds[500]
                 }
             },
             typography: {
@@ -209,6 +209,9 @@ export const themeSettings = (mode) =>
                     main: colors.grey[1000],
                     box: colors.grey[800],
                     boxInner: colors.grey[700],
+                },
+                error: {
+                    main: colors.reds[500]
                 }
             },
             typography: {

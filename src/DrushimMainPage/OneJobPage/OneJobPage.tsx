@@ -7,6 +7,9 @@ import { Job, getFilteredJobs } from '../../Firebase/FirebaseFunctions/Job';
 import { Recomendation } from '../../Firebase/FirebaseFunctions/Recomendation';
 import { Candidate, generateCandidateId, getFilteredCandidateJobStatuses, getFilteredCandidates } from '../../Firebase/FirebaseFunctions/functionIndex';
 import { ColorModeContext, colorTokens } from '../theme';
+import AreYouSureDialog from './Components/AreYouSureDialog/AreYouSureDialog';
+import SuccessDialog from './Components/SuccessDialog/SuccessDialog';
+import ErrorDialog from './Components/ErrorDialog/ErrorDialog';
 
 
 
@@ -24,6 +27,35 @@ export default function OneJobPage()
     const theme = useTheme();
     const colors = colorTokens(theme.palette.mode);
     const colorMode = useContext(ColorModeContext);
+
+    // dialogs
+    const [successDialogOpen, setSuccessDialogOpen] = useState(false);
+    const [errorDialogOpen, setErrorDialogOpen] = useState(false);
+    const [areYouSureDialogOpen, setAreYouSureDialogOpen] = useState(false);
+
+    const successDialogOnClose = (event, reason) =>
+    {
+        if ((reason && reason !== "backdropClick") || reason === undefined)
+        {
+            setSuccessDialogOpen(false);
+        }
+    }
+
+    const errorDialogOnClose = (event, reason) =>
+    {
+        if ((reason && reason !== "backdropClick") || reason === undefined)
+        {
+            setErrorDialogOpen(false);
+        }
+    }
+
+    const areYouSureDialogOnClose = (event, reason) =>
+    {
+        if ((reason && reason !== "backdropClick") || reason === undefined)
+        {
+            setAreYouSureDialogOpen(false);
+        }
+    }
 
     // get current job from URL
     const fetchJob = async () =>
@@ -165,15 +197,17 @@ export default function OneJobPage()
             aboutText
         );
         // add candidate, or get existing candidate
-        if (!await newCandidate.add()){
+        if (!await newCandidate.add())
+        {
             newCandidate = (await getFilteredCandidates(["eMail", "phone"], [candidateEmail, candidatePhone]))[0];
             newCandidateId = newCandidate._id;
         }
 
         // apply 
-        if (!await newCandidate.apply(job?._jobNumber!, aboutText)){
-            // TODO: error message to the user here
-
+        if (!await newCandidate.apply(job?._jobNumber!, aboutText))
+        {
+            setLoading(false);
+            setErrorDialogOpen(true);
             return;
         }
         // TODO: it only adds one recommender, and the file is incorrect
@@ -198,7 +232,7 @@ export default function OneJobPage()
 
         newCandidate.uploadCv(cvFile);
         setLoading(false);
-        
+
         // TODO: add success message here
 
         // set defaults values
@@ -243,7 +277,8 @@ export default function OneJobPage()
         }
         setNumRecommenders(0);
         setRecommendersErrors(
-            recommendersErrors.map(() => {
+            recommendersErrors.map(() =>
+            {
                 return [false, false]
             })
         );
@@ -368,60 +403,95 @@ export default function OneJobPage()
                     }}
                 >
 
-                    {/* description and requirements */}
+                    {/* Description, requirements, stats and additional info */}
                     <Box
                         sx={{
                             display: "flex",
-                            flexDirection: { xs: "column", md: "row" },
+                            flexDirection: "column",
                             backgroundColor: "background.box",
                             flex: 8,
                             marginRight: { xs: "0", md: "1rem" },
                             marginBottom: { xs: "1rem", md: "0" }
                         }}
                     >
-                        {/* description */}
+                        {/* description and requirements */}
                         <Box
                             sx={{
-                                padding: "1rem",
-                                flex: 7
+                                display: "flex",
+                                flexDirection: { xs: "column", md: "row" }
                             }}
                         >
-                            <Typography variant="h1">
-                                תיאור המשרה
-                            </Typography>
 
-                            <Divider sx={{
-                                marginRight: "3rem",
-                                backgroundColor: "primary.faded"
-                            }} />
-
-                            <Typography
-                                variant='h3'
-                                marginTop={"0.5rem"}
+                            {/* description */}
+                            <Box
                                 sx={{
-                                    backgroundColor: "background.boxInner"
+                                    padding: "1rem",
+                                    flex: 7
                                 }}
                             >
-                                {job?._description}
-                            </Typography>
+                                <Typography variant="h1">
+                                    תיאור המשרה
+                                </Typography>
+
+                                <Divider sx={{
+                                    marginRight: "3rem",
+                                    backgroundColor: "primary.faded"
+                                }} />
+
+                                <Typography
+                                    variant='h3'
+                                    marginTop={"0.5rem"}
+                                    sx={{
+                                        backgroundColor: "background.boxInner"
+                                    }}
+                                >
+                                    {job?._description?.length! >= 1 ? job?._description[0] : ""}
+                                </Typography>
+                            </Box>
+
+                            {/* requirements */}
+                            <Box
+                                sx={{
+                                    backgroundColor: "background.box",
+                                    padding: "1rem",
+                                    flex: 5
+                                }}
+                            >
+                                <Typography variant="h1">
+                                    דרישות המשרה
+                                </Typography>
+                                <Divider sx={{
+                                    marginRight: "3rem",
+                                    backgroundColor: "primary.faded"
+
+                                }} />
+                                <Typography
+                                    variant='h3'
+                                    marginTop={"0.5rem"}
+                                    sx={{
+                                        backgroundColor: "background.boxInner"
+                                    }}
+                                >
+                                    {job?._requirements}
+                                </Typography>
+                            </Box>
                         </Box>
 
-                        {/* requirements */}
+                        {/* Additional Info */}
                         <Box
                             sx={{
-                                backgroundColor: "background.box",
-                                padding: "1rem",
-                                flex: 5
+                                display: job?._description?.length! >= 2 ? "none" : "block"
                             }}
                         >
                             <Typography variant="h1">
-                                דרישות המשרה
+                                מידע נוסף
                             </Typography>
+
                             <Divider sx={{
                                 marginRight: "3rem",
                                 backgroundColor: "primary.faded"
-
                             }} />
+
                             <Typography
                                 variant='h3'
                                 marginTop={"0.5rem"}
@@ -429,7 +499,7 @@ export default function OneJobPage()
                                     backgroundColor: "background.boxInner"
                                 }}
                             >
-                                {job?._requirements}
+                                {job?._description?.length! >= 2 ? job?._description[1] : ""}
                             </Typography>
                         </Box>
 
@@ -601,7 +671,7 @@ export default function OneJobPage()
                                     <ErrorOutlineRounded sx={{ fontSize: "24px", color: "error.main" }} />
 
                                     <Typography variant='h4' color={"error.main"}>
-                                        שדה זה הוא חובה
+                                        שדה זה שגוי
                                     </Typography>
                                 </Box>
                             </Box>
@@ -639,7 +709,7 @@ export default function OneJobPage()
                                     <ErrorOutlineRounded sx={{ fontSize: "24px", color: "error.main" }} />
 
                                     <Typography variant='h4' color={"error.main"}>
-                                        שדה זה הוא חובה
+                                        שדה זה שגוי
                                     </Typography>
                                 </Box>
 
@@ -682,7 +752,7 @@ export default function OneJobPage()
                                     <ErrorOutlineRounded sx={{ fontSize: "24px", color: "error.main" }} />
 
                                     <Typography variant='h4' color={"error.main"}>
-                                        שדה זה הוא חובה
+                                        שדה זה שגוי
                                     </Typography>
                                 </Box>
                             </Box>
@@ -721,7 +791,7 @@ export default function OneJobPage()
                                     <ErrorOutlineRounded sx={{ fontSize: "24px", color: "error.main" }} />
 
                                     <Typography variant='h4' color={"error.main"}>
-                                        שדה זה הוא חובה
+                                        שדה זה שגוי
                                     </Typography>
                                 </Box>
                             </Box>
@@ -960,7 +1030,7 @@ export default function OneJobPage()
                                                             <ErrorOutlineRounded sx={{ fontSize: "24px", color: "error.main" }} />
 
                                                             <Typography variant='h4' color={"error.main"}>
-                                                                שדה זה הוא חובה
+                                                                שדה זה שגוי
                                                             </Typography>
                                                         </Box>
                                                     </Box>
@@ -1014,7 +1084,7 @@ export default function OneJobPage()
                                                             <ErrorOutlineRounded sx={{ fontSize: "24px", color: "error.main" }} />
 
                                                             <Typography variant='h4' color={"error.main"}>
-                                                                שדה זה הוא חובה
+                                                                שדה זה שגוי
                                                             </Typography>
                                                         </Box>
                                                     </Box>
@@ -1233,6 +1303,11 @@ export default function OneJobPage()
                 >
                     Toggle Theme
                 </Button>
+
+                {/* Dialogs */}
+                <ErrorDialog open={errorDialogOpen} onClose={errorDialogOnClose} />
+                <AreYouSureDialog open={areYouSureDialogOpen} onClose={areYouSureDialogOnClose} />
+                <SuccessDialog open={successDialogOpen} onClose={successDialogOnClose} />
             </Box>
     );
 }
