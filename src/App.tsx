@@ -72,8 +72,4 @@ function App()
 
 
 export default App;
-function createCache(arg0: { key: string; stylisPlugins: any[]; })
-{
-	throw new Error('Function not implemented.');
-}
 
