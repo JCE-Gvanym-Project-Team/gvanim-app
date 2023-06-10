@@ -32,6 +32,8 @@ export default function OneJobPage()
     const [successDialogOpen, setSuccessDialogOpen] = useState(false);
     const [errorDialogOpen, setErrorDialogOpen] = useState(false);
     const [areYouSureDialogOpen, setAreYouSureDialogOpen] = useState(false);
+    const [areYouSureDialogIndex, setAreYouSureDialogIndex] = useState(0);
+    const [areYouSureDialogRecommenderName, setAreYouSureDialogRecommenderName] = useState("");
 
     const successDialogOnClose = (event, reason) =>
     {
@@ -49,11 +51,16 @@ export default function OneJobPage()
         }
     }
 
-    const areYouSureDialogOnClose = (event, reason) =>
+    const areYouSureDialogOnClose = (event, reason, index, areYouSureValue) =>
     {
         if ((reason && reason !== "backdropClick") || reason === undefined)
         {
             setAreYouSureDialogOpen(false);
+        }
+        if (areYouSureValue)
+        {
+            updateRecommendersListAtIndex(null, null, index);
+            setNumRecommenders(numRecommenders - 1);
         }
     }
 
@@ -877,7 +884,7 @@ export default function OneJobPage()
                                                 width: "100%",
                                                 marginBottom: index >= MAX_RECOMMENDERS - 1 ? "0" : "1rem"
                                             }}
-                                            key={index + "box"}
+                                            key={index + "recommendersBox"}
                                         >
 
                                             {/* delete recommender button */}
@@ -887,12 +894,20 @@ export default function OneJobPage()
                                                 }}
                                                 onClick={() =>
                                                 {
-                                                    updateRecommendersListAtIndex(null, null, index);
-                                                    setNumRecommenders(numRecommenders - 1);
+                                                    setAreYouSureDialogIndex(index);
+                                                    setAreYouSureDialogOpen(true);
+                                                    setAreYouSureDialogRecommenderName(recommender[0]?._fullName!);
                                                 }}
                                             >
                                                 <DeleteForeverOutlined />
                                             </Button>
+                                            {/* are you sure you want to delete recommender dialog */}
+                                            <AreYouSureDialog
+                                                open={areYouSureDialogOpen}
+                                                onClose={areYouSureDialogOnClose}
+                                                recommenderName={areYouSureDialogRecommenderName}
+                                                index={areYouSureDialogIndex}
+                                            />
                                             {/* Recommender */}
                                             <Box
                                                 sx={{
@@ -1306,7 +1321,6 @@ export default function OneJobPage()
 
                 {/* Dialogs */}
                 <ErrorDialog open={errorDialogOpen} onClose={errorDialogOnClose} />
-                <AreYouSureDialog open={areYouSureDialogOpen} onClose={areYouSureDialogOnClose} />
                 <SuccessDialog open={successDialogOpen} onClose={successDialogOnClose} />
             </Box>
     );

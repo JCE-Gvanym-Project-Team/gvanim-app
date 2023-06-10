@@ -20,16 +20,17 @@ export const colorTokens = (mode) =>
                 1000: "#fcfcfc"
             },
             primary: {
-                100: "#d0d1d5",
-                200: "#a1a4ab",
-                300: "#727681",
-                400: "#434957",
-                500: "#141b2d",
-                600: "#101624",
-                700: "#0c101b",
-                800: "#080b12",
-                900: "#040509",
-                1000: "#000000"
+                100: "#ffffff",
+                200: "#d0d1d5",
+                300: "#a1a4ab",
+                400: "#727681",
+                500: "#434957",
+                600: "#141b2d",
+                700: "#101624",
+                800: "#0c101b",
+                900: "#080b12",
+                1000: "#040509",
+                1100: "#000000"
             },
             greens: {
                 100: "#dbf5ee",
@@ -81,15 +82,17 @@ export const colorTokens = (mode) =>
                 1000: "#fcfcfc"
             },
             primary: {
-                100: "#040509",
-                200: "#080b12",
-                300: "#0c101b",
-                400: "#101624",
-                500: "#141b2d",
-                600: "#434957",
-                700: "#727681",
-                800: "#a1a4ab",
-                900: "#d0d1d5",
+                100: "#000000",
+                200: "#040509",
+                300: "#080b12",
+                400: "#0c101b",
+                500: "#101624",
+                600: "#141b2d",
+                700: "#434957",
+                800: "#727681",
+                900: "#a1a4ab",
+                1000: "#d0d1d5",
+                1100: "#ffffff"
             },
             greens: {
                 100: "#0f2922",
@@ -138,7 +141,8 @@ export const themeSettings = (mode) =>
             palette: {
                 mode: mode,
                 primary: {
-                    main: colors.primary[100],
+                    main: colors.primary[200],
+                    textBright: colors.primary[1100],
                     faded: colors.primary[900]
                 },
                 secondary: {
@@ -195,10 +199,12 @@ export const themeSettings = (mode) =>
                 mode: mode,
                 primary: {
                     main: colors.primary[100],
+                    textBright: colors.primary[1100],
                     faded: colors.primary[900]
                 },
                 secondary: {
-                    main: colors.blues[500]
+                    main: colors.blues[500],
+                    half: colors.blues[700]
                 },
                 neutral: {
                     main: colors.grey[500],
