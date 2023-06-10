@@ -48,7 +48,7 @@ export default function OneJobPage()
                     candidatePhone: candidatePhone,
                     candidateAboutText: aboutText
                 }
-                navigate("/career/jobs", {state})
+                navigate("/career/jobs", { state })
             }
             setSuccessDialogOpen(false);
         }
@@ -260,9 +260,9 @@ export default function OneJobPage()
 
         newCandidate.uploadCv(cvFile);
         setLoading(false);
-        
+
         setSuccessDialogOpen(true);
-        
+
         // set defaults values
         setDefaults();
     }
@@ -961,27 +961,61 @@ export default function OneJobPage()
                                                         }}
                                                     >
                                                         {/* mobile attach file button */}
-                                                        <Button
-                                                            variant='outlined'
+                                                        <Box
                                                             sx={{
-                                                                display: { xs: "block", md: "none" }
-                                                            }}
-                                                            onClick={() =>
-                                                            {
-
+                                                                display: "flex",
+                                                                flexDirection: "row",
+                                                                alignSelf: "end",
                                                             }}
                                                         >
-                                                            <AttachFile
-                                                                sx={{ fontSize: "24px" }}
+                                                            {/* add recommender file button */}
+                                                            <Input
+                                                                type="file"
+                                                                inputRef={(input) => (recommenderFileInputRefs.current[index] = input)}
+                                                                style={{ display: 'none' }}
+                                                                onChange={(event) =>
+                                                                {
+                                                                    const inputElement = event.target as HTMLInputElement;
+                                                                    const files = inputElement.files;
+                                                                    if (files && files.length > 0)
+                                                                    {
+                                                                        updateRecommendersListAtIndex(recommendersList[index][0], files[0], index);
+                                                                    }
+                                                                }}
                                                             />
-                                                        </Button>
+                                                            <Button
+                                                                sx={{
+                                                                    display: { xs: "flex", md: "none" }
+                                                                }}
+                                                                onClick={() =>
+                                                                {
+                                                                    // trigger input onChange
+                                                                    if (recommenderFileInputRefs.current[index])
+                                                                    {
+                                                                        recommenderFileInputRefs.current[index]?.click()
+                                                                    }
+                                                                }}
+
+                                                            >
+                                                                <AttachFile
+                                                                    sx={{ fontSize: "24px" }}
+                                                                />
+                                                                {/* display filename to the user */}
+                                                                <Typography variant='h6'>
+                                                                    {recommendersList[index][1]?.name.length! > 20 ? '...' : ''}
+                                                                    {recommendersList[index][1] ? recommendersList[index][1]?.name.slice(0, 20) : ""}
+                                                                </Typography>
+                                                            </Button>
+
+                                                        </Box>
 
                                                         {/* Remove recommender button */}
                                                         <Button
                                                             onClick={() =>
                                                             {
-                                                                updateRecommendersListAtIndex(null, null, index);
-                                                                setNumRecommenders(numRecommenders - 1);
+                                                                setAreYouSureDialogIndex(index);
+                                                                setAreYouSureDialogOpen(true);
+                                                                setAreYouSureDialogRecommenderName(recommender[0]?._fullName!);
                                                             }}
                                                         >
                                                             <DeleteForeverOutlined />
