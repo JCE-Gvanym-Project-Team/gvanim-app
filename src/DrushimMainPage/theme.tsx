@@ -28,7 +28,8 @@ export const colorTokens = (mode) =>
                 600: "#101624",
                 700: "#0c101b",
                 800: "#080b12",
-                900: "#040509"
+                900: "#040509",
+                1000: "#000000"
             },
             greens: {
                 100: "#dbf5ee",
@@ -130,13 +131,15 @@ export const colorTokens = (mode) =>
 export const themeSettings = (mode) =>
 {
     const colors = colorTokens(mode);
+
     if (mode === "dark")
     {
         return {
             palette: {
                 mode: mode,
                 primary: {
-                    main: colors.primary[500]
+                    main: colors.primary[100],
+                    faded: colors.primary[900]
                 },
                 secondary: {
                     main: colors.blues[500]
@@ -147,12 +150,17 @@ export const themeSettings = (mode) =>
                     light: colors.grey[100]
                 },
                 background: {
-                    default: colors.primary[500]
+                    default: colors.primary[500],
+                    box: colors.grey[800],
+                    boxInner: colors.grey[700]
+                },
+                error: {
+                    main: colors.reds[100]
                 }
             },
             typography: {
                 fontFamily: ["'Noto Sans Hebrew'", "sans-serif"].join(","),
-                fontSize: 12,
+                fontSize: 20,
                 h1: {
                     fontFamily: ["'Noto Sans Hebrew'", "sans-serif"].join(","),
                     fontSize: 40
@@ -186,7 +194,8 @@ export const themeSettings = (mode) =>
             palette: {
                 mode: mode,
                 primary: {
-                    main: colors.primary[100]
+                    main: colors.primary[100],
+                    faded: colors.primary[900]
                 },
                 secondary: {
                     main: colors.blues[500]
@@ -197,12 +206,14 @@ export const themeSettings = (mode) =>
                     light: colors.grey[100]
                 },
                 background: {
-                    default: colors.grey[1000]
+                    main: colors.grey[1000],
+                    box: colors.grey[800],
+                    boxInner: colors.grey[700],
                 }
             },
             typography: {
                 fontFamily: ["'Noto Sans Hebrew'", "sans-serif"].join(","),
-                fontSize: 12,
+                fontSize: 20,
                 h1: {
                     fontFamily: ["'Noto Sans Hebrew'", "sans-serif"].join(","),
                     fontSize: 40

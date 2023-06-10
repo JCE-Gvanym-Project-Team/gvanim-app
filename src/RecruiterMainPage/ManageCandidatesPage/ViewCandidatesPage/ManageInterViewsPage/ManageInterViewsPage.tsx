@@ -8,7 +8,7 @@ import { CandidateJobStatus, allStatus, getFilteredCandidateJobStatuses } from '
 import { Job, getFilteredJobs } from '../../../../Firebase/FirebaseFunctions/Job';
 import { AccountCircle, CalendarMonth, ErrorOutline, QuestionAnswer } from '@mui/icons-material';
 import ScheduleInterviewDialog from './Components/ScheduleInterviewDialog/ScheduleInterviewDialog';
-import MyLoading2ndVersion from '../../../../Components/MyLoading2ndVersion/MyLoading2ndVersion';
+import MyLoading from '../../../../Components/MyLoading/MyLoading';
 export default function ManageInterviewsPage(props: { candidateId: string })
 {
 
@@ -106,22 +106,23 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 
 	const handleinterviewSummaryChange = async (event) =>
 	{
+
 		setInterviewSummary(event.target.value);
 		// save every 15 characters
 		if (interviewSummary?.length && interviewSummary?.length % 15 === 0)
 		{
-			// TODO: add database update here
 			await candidateJobStatus?.editInterviewSummery(interviewSummary, interviewIndex);
 		}
+
 	}
 
 	const handleSaveButtonClick = async () =>
 	{
-		// TODO: add database update here
 		setLoading(true);
 		await candidateJobStatus?.editInterviewSummery(interviewSummary ? interviewSummary : "", interviewIndex);
 		await candidateJobStatus?.updateMatchingRate(matchingRate);
 		setLoading(false);
+		setRerenderKey(rerenderKey === "1" ? "0" : "1");
 	}
 
 	const handleMatchingRateRadioButtons = async (event) =>
@@ -130,7 +131,7 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 	}
 
 	return (
-		loading ? <MyLoading2ndVersion /> :
+		loading ? <MyLoading loading={loading} setLoading={setLoading}/> :
 			<React.Fragment key={rerenderKey}>
 				{/* background div */}
 				<Box sx={BoxGradientSx}>
@@ -220,7 +221,7 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 						position: 'absolute',
 					}} />
 
-					<Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', top:"165px", position:"absolute" }}>
+					<Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', top: "165px", position: "absolute" }}>
 						<Stack direction='row' spacing={1}>
 							<Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
 								<QuestionAnswer sx={{ color: '#fff' }} />
@@ -229,23 +230,22 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 								ראיונות
 							</Typography>
 						</Stack>
+						<Divider />
+						{/* Candidate Name */}
+						<Box sx={{ display: 'flex', alignSelf: "center" }}>
+							<Typography sx={candidateNameSx} variant='h3' >
+								{candidateInfo?._firstName + " " + candidateInfo?._lastName}
+							</Typography>
+
+						</Box>
 					</Box>
 				</Box>
 
 				{/* glass container */}
 				<Box>
-					<Box sx={{marginLeft: "3rem", marginRight: "3rem"}}>
+					<Box sx={{ marginLeft: { xs: "0", md: "3rem" }, marginRight: { xs: "0", md: "3rem" } }} >
 						<Stack direction={'column'} sx={mainStackSx} spacing={6}>
 
-							{/* Candidate Name */}
-							<Box sx={{ display: 'flex', alignSelf: "center", alignItems: "center" }}>
-								<Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignSelf: "center" }}>
-									<AccountCircle sx={{ fontSize: '3rem' }} />
-								</Box>
-								<Typography sx={candidateNameSx} variant='h2' >
-									{candidateInfo?._firstName + " " + candidateInfo?._lastName}
-								</Typography>
-							</Box>
 							<Box sx={candidateNameAndButtonSx}>
 
 								{/* Schedule Interview Button*/}
@@ -265,6 +265,7 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 								</Box>
 							</Box>
 
+							{/* status and change status */}
 							<Box sx={{ display: 'flex', flexDirection: "row", justifyContent: "space-between" }}>
 
 
@@ -288,17 +289,17 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 									</Typography>
 								</Box>
 							</Box>
-
 							<Box sx={{ display: candidateJobStatus?._status === allStatus[8] && jobValue ? 'flex' : "none" }}>
 								<Typography sx={textSx} variant='h4'>
 									סיבת דחייה:
 								</Typography>
 
-								<Typography sx={candidateNameSx} variant='h4' >
+								<Typography variant='h4' sx={textSx} style={{ marginRight: "1rem" }}>
 									{candidateJobStatus?._rejectCause}
 								</Typography>
 							</Box>
 
+							<Divider />
 							{/* Choose Job and interview*/}
 							<Box sx={chooseJobAndInterviewContainerSx}>
 								{/* Choose Job */}
@@ -426,7 +427,7 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 						</Stack>
 					</Box>
 				</Box>
-			</React.Fragment>
+			</React.Fragment >
 	)
 }
 

@@ -18,7 +18,7 @@ import {
 	GridRow,
 	heIL,
 
-} from '@mui/x-data-grid';
+	} from '@mui/x-data-grid';
 
 import Pagination from '@mui/material/Pagination';
 import PaginationItem from '@mui/material/PaginationItem';
@@ -33,21 +33,25 @@ import { MyButtonSx } from './MyTableStyle';
 
 
 // -------------------Use Memorie for better performance----------------------------------------------------
-const TraceUpdates = React.forwardRef<any, any>((props, ref) => {
+const TraceUpdates = React.forwardRef<any, any>((props, ref) =>
+{
 	const { Component, ...other } = props;
 	const rootRef = React.useRef<HTMLElement>();
 	const handleRef = useForkRef(rootRef, ref);
 
-	React.useEffect(() => {
+	React.useEffect(() =>
+	{
 		const root = rootRef.current;
 		root!.classList.add('updating');
 		root!.classList.add('updated');
 
-		const timer = setTimeout(() => {
+		const timer = setTimeout(() =>
+		{
 			root!.classList.remove('updating');
 		}, 360);
 
-		return () => {
+		return () =>
+		{
 			clearTimeout(timer);
 		};
 	});
@@ -55,11 +59,13 @@ const TraceUpdates = React.forwardRef<any, any>((props, ref) => {
 	return <Component ref={handleRef} {...other} />;
 });
 
-const RowWithTracer = React.forwardRef((props, ref) => {
+const RowWithTracer = React.forwardRef((props, ref) =>
+{
 	return <TraceUpdates ref={ref} Component={GridRow} {...props} />;
 });
 
-const ColumnHeadersWithTracer = React.forwardRef((props, ref) => {
+const ColumnHeadersWithTracer = React.forwardRef((props, ref) =>
+{
 	return <TraceUpdates ref={ref} Component={GridColumnHeaders} {...props} />;
 });
 
@@ -187,7 +193,8 @@ const StyledGridOverlay = styled('div')(({ theme }) => ({
 	},
 }));
 
-function CustomNoRowsOverlay() {
+function CustomNoRowsOverlay()
+{
 	return (
 		<StyledGridOverlay>
 			<svg
@@ -335,10 +342,12 @@ const columns: GridColDef[] = [
 	},
 ];
 
-const GridCustomToolbar = () => {
+const GridCustomToolbar = () =>
+{
 	const navigate = useNavigate();
 
-	const handleCreatejob = () => {
+	const handleCreatejob = () =>
+	{
 		navigate("/management/createJob", { state: null });
 	}
 
@@ -382,13 +391,15 @@ const GridCustomToolbar = () => {
 	);
 };
 
-function getScopeFormated(scope: number[] | null) {
+function getScopeFormated(scope: number[] | null)
+{
 
 	return scope === null ? '0-100' : scope[0].toString() === scope[1].toString() ? scope[0].toString() + '%' : scope[1].toString() + '% - ' + scope[0].toString() + '%';
 
 }
 
-const CustomPaginationAndFooter = () => {
+const CustomPaginationAndFooter = () =>
+{
 	const apiRef = useGridApiContext();
 	const page = useGridSelector(apiRef, gridPageSelector);
 	const pageCount = useGridSelector(apiRef, gridPageCountSelector);
@@ -437,7 +448,8 @@ export default function MyTable() {
 
 	const navigate = useNavigate();
 
-	const fetchAllJobs = async () => {
+	const fetchAllJobs = async () =>
+	{
 		setDataLoading(true);
 
 		setRows(await getFilteredJobs());
@@ -445,7 +457,8 @@ export default function MyTable() {
 		setDataLoading(false);
 	};
 
-	React.useEffect(() => {
+	React.useEffect(() =>
+	{
 		setPageLoading(false);
 		fetchAllJobs();
 	}, []);

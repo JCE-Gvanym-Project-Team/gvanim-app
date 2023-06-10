@@ -15,7 +15,4 @@ export const MyPaperSx: SxProps = {
     borderTopRightRadius: '0.75rem',
     borderTopLeftRadius: '0.75rem',
     overflow: 'auto',
-
-
-
 }

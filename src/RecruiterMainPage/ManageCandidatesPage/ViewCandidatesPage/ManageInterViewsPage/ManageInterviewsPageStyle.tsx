@@ -24,7 +24,7 @@ export const interviewSummaryTextSx: SxProps = {
 }
 
 export const interviewSummaryContentSx: SxProps = {
-    width: { sx: "100%", md: "90%" },
+    width: { sx: "100%", md: "100%" },
     marginBottom: "1rem"
 }
 
@@ -91,10 +91,11 @@ export const jobTextSx: SxProps = {
 }
 
 export const candidateNameSx: SxProps = {
-    color: 'black',
     fontFamily: ManageCandidatesPageGlobalStyle.textFontFamily,
     textDecoration: "bold",
     marginLeft: '1rem',
+    fontWeight: "bold",
+    color: "#fff"
 
 }
 
