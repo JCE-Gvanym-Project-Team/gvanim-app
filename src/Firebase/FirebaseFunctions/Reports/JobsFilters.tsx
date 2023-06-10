@@ -1,9 +1,12 @@
-
-
+import { useEffect } from "react";
 import { CandidateJobStatus } from "../CandidateJobStatus";
-import { Job, getFilteredCandidateJobStatuses, getFilteredJobs } from "../functionIndex";
-import dayjs from 'dayjs';
-import isBetween from 'dayjs/plugin/isBetween';
+import { Job, getFilteredJobs } from "../functionIndex";
+import Highcharts from 'highcharts';
+import HighchartsExporting from 'highcharts/modules/exporting';
+import HighchartsExportData from 'highcharts/modules/export-data';
+
+
+
 
 
 export default async function JobsByFilters(role: string, scope: number, sector: string, openJobs: boolean, highPriority: boolean, viewsAndApplyPerPlatform: string, startDate: Date, endDate: Date): Promise<CandidateJobStatus[]> {
@@ -34,11 +37,23 @@ export default async function JobsByFilters(role: string, scope: number, sector:
 
     const promises: Promise<any>[] = [];
 
-    
+    const jobsByRegion: { [region: string]: number } = {};
+
+
+
     for (let i = 0; i < jobs.length; i++) {
         let job = jobs[i];
+
         // if (dayjs(job._creationDate).isBetween(dayjs(startDate), dayjs(endDate), null, '[]')) {
-        if((job._scope[1] <= scope && job._scope[0] >= scope - 24) || scope == 1) {  
+        if ((job._scope[1] <= scope && job._scope[0] >= scope - 24) || scope == 1) {
+            const region = job._region;
+
+            if (jobsByRegion[region]) {
+                jobsByRegion[region]++;
+            } else {
+                jobsByRegion[region] = 1;
+            }
+
             let promise = helperJobFilter(job, role, job._scope, sector, openJobs, highPriority, viewsAndApplyPerPlatform);
             promises.push(promise);
         }
@@ -46,12 +61,19 @@ export default async function JobsByFilters(role: string, scope: number, sector:
     }
 
     const resultJobs = await Promise.all(promises);
+
+    const regions = Object.keys(jobsByRegion);
+    const quantities = Object.values(jobsByRegion);
+  
+    // ChartComponent({ regions, quantities });
+
     return resultJobs;
+
 }
 
 
 
-export async function helperJobFilter(job: Job, role: string, scope: number[], sector: string, openJobs: boolean, highPriority: boolean, viewsAndApplyPerPlatform: string) {
+async function helperJobFilter(job: Job, role: string, scope: number[], sector: string, openJobs: boolean, highPriority: boolean, viewsAndApplyPerPlatform: string) {
     let filteredJob: any = {
         "מספר משרה": job._jobNumber,
         "תפקיד": job._role,
@@ -73,3 +95,36 @@ export async function helperJobFilter(job: Job, role: string, scope: number[], s
 
     return filteredJob;
 }
+
+// 
+// 
+// async function acceptDataAndCreateChart(regions: string[], quantities: number[]) {
+    // Highcharts.chart('chart-container', {
+    //   chart: {
+        // type: 'column',
+        // renderTo: 'chart-container'
+    //   },
+    //   title: {
+        // text: 'מספר משרות לפי ערים'
+    //   },
+    //   xAxis: {
+        // categories: regions,
+        // title: {
+        //   text: 'ערים'
+        // }
+    //   },
+    //   yAxis: {
+        // title: {
+        //   text: 'מספר משרות'
+        // }
+    //   },
+    //   series: [
+        // {
+        //   type: 'column',
+        //   name: 'מספר משרות',
+        //   data: quantities
+        // }
+    //   ]
+    // });
+//   }
+// 

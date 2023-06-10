@@ -96,7 +96,8 @@ export default function MyTable() {
                     hideFooterSelectedRowCount
                     hideFooterPagination
                     localeText={heIL.components.MuiDataGrid.defaultProps.localeText}
-                />
+                    autoHeight 
+               />
             </Box>
         </>
     );
