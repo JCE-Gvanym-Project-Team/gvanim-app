@@ -20,7 +20,6 @@ export default function OneJobPage()
 {
     const [job, setJob] = useState<Job | null>(null);
 
-    const state = useLocation();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
 
@@ -29,16 +28,27 @@ export default function OneJobPage()
     const colorMode = useContext(ColorModeContext);
 
     // dialogs
-    const [successDialogOpen, setSuccessDialogOpen] = useState(false);
+    const [successDialogOpen, setSuccessDialogOpen] = useState(true);
     const [errorDialogOpen, setErrorDialogOpen] = useState(false);
     const [areYouSureDialogOpen, setAreYouSureDialogOpen] = useState(false);
     const [areYouSureDialogIndex, setAreYouSureDialogIndex] = useState(0);
     const [areYouSureDialogRecommenderName, setAreYouSureDialogRecommenderName] = useState("");
 
-    const successDialogOnClose = (event, reason) =>
+    const successDialogOnClose = (event, reason, sendDataToAllJobsPage) =>
     {
         if ((reason && reason !== "backdropClick") || reason === undefined)
         {
+            if (sendDataToAllJobsPage)
+            {
+                const state = {
+                    candidateName: candidateName,
+                    candidateSurname: candidateSurname,
+                    candidateEmail: candidateEmail,
+                    candidatePhone: candidatePhone,
+                    candidateAboutText: aboutText
+                }
+                navigate("/career/jobs", {state})
+            }
             setSuccessDialogOpen(false);
         }
     }
@@ -62,12 +72,6 @@ export default function OneJobPage()
             updateRecommendersListAtIndex(null, null, index);
             setNumRecommenders(numRecommenders - 1);
         }
-    }
-
-    // get current job from URL
-    const fetchJob = async () =>
-    {
-        setJob((await getFilteredJobs(["jobNumber"], [getJobIdFromUrl(state.pathname)]))[0]);
     }
 
     // about text field
@@ -121,6 +125,13 @@ export default function OneJobPage()
     const [cvFile, setCvFile] = useState<File | null>(null);
     const [cvFileError, setCvFileError] = useState(false);
 
+    // get current job from URL
+    const location = useLocation();
+    const fetchJob = async () =>
+    {
+        setJob((await getFilteredJobs(["jobNumber"], [getJobIdFromUrl(location.pathname)]))[0]);
+    }
+
     useEffect(() =>
     {
         fetchJob();
@@ -134,8 +145,16 @@ export default function OneJobPage()
 
         setDefaults();
 
+        // get info from state
+        setCandidateName(location.state?.candidateName);
+        setCandidateSurname(location.state?.candidateSurname);
+        setCandidatePhone(location.state?.candidatePhone);
+        setCandidateEmail(location.state?.candidateEmail);
+        setAboutText(location.state?.candidateAboutText);
+        setAboutNumChars(location.state?.candidateAboutText.length)
+
         setLoading(false);
-    }, [state])
+    }, [location.state])
 
     // submit
     const handleSubmit = async () =>
@@ -291,6 +310,10 @@ export default function OneJobPage()
                 return [false, false]
             })
         );
+
+        // reset dialogs
+        setErrorDialogOpen(false);
+        setAreYouSureDialogOpen(false);
     }
 
     /**

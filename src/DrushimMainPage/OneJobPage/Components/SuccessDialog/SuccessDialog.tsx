@@ -1,45 +1,75 @@
-import * as React from 'react';
-
-
-
-
-import Check from '@mui/icons-material/Check';
 import Close from '@mui/icons-material/Close';
-import Warning from '@mui/icons-material/Warning';
-import { Alert, Box, Button, CircularProgress, IconButton, LinearProgress, Stack, Typography } from '@mui/material';
-import { AspectRatio } from '@mui/icons-material';
+import { Alert, Box, Button, IconButton, Snackbar, Typography } from '@mui/material';
+import * as React from 'react';
 
 export default function SuccessDialog(props: { open, onClose })
 {
     const { open, onClose } = props;
     return (
-        <Box
-        sx={{
-            width: "500px"
-        }}
+        <Snackbar
+            open={open}
+            onClose={onClose}
+            action={
+                <React.Fragment>
+                    <Button color="secondary" size="small" onClick={onClose}>
+                        UNDO
+                    </Button>
+                    <IconButton
+                        aria-label="close"
+                        color="inherit"
+                        sx={{ p: 0.5 }}
+                        onClick={onClose}
+                    >
+                        <Close />
+                    </IconButton>
+                </React.Fragment>
+            }
         >
             <Alert
                 variant="filled"
                 sx={{ alignItems: 'flex-start', '--Alert-gap': '1rem' }}
+                action={
+                    <React.Fragment>
+                        <IconButton
+                            aria-label="close"
+                            color="inherit"
+                            sx={{ p: 0.5 }}
+                            onClick={onClose}
+                        >
+                            <Close />
+                        </IconButton>
+                    </React.Fragment>
+                }
             >
                 <Box sx={{ flex: 1 }}>
                     <Typography sx={{ mt: 1 }}>
                         מועמדותך נקלטה בהצלחה
                     </Typography>
                     <Typography sx={{ mt: 1 }}>
-                        האם תרצה\י להגיש למשרות נוספות?
+                        האם תרצה\י להגיש מועמדות למשרות נוספות?
                     </Typography>
                     <Box sx={{ mt: 2, display: 'flex', justifyContent: 'space-between', gap: 1 }}>
-                        <Button variant="outlined">
-                            לא
-                        </Button>
-                        <Button variant="contained" >
+                        <Button
+                            variant="contained"
+                            sx={{
+                                backgroundColor: "secondary.main",
+                                "&:hover": {
+                                    backgroundColor: "secondary.dark",
+                                    color: "primary.textBright"
+                                }
+                            }}
+                            onClick={onClose}>
                             כן
+                        </Button>
+                        <Button 
+                        variant="outlined" 
+
+                        onClick={onClose}>
+                            לא
                         </Button>
                     </Box>
                 </Box>
             </Alert>
-        </Box>
-
+        </Snackbar>
     );
 }
