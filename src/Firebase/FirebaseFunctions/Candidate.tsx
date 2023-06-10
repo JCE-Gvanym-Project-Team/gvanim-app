@@ -5,7 +5,8 @@ import { removeObjectAtPath, getFirebaseIdsAtPath, replaceData, appendToDatabase
 import { getFilteredJobs, Job } from "./Job";
 import { uploadFileToFirestore, getDownloadUrlFromFirestorePath, getFileExtensionsInFolder, deleteFile, fileExists, renameFirestorePath } from "./firestoreFunc";
 const database = realtimeDB;
-export class Candidate {
+export class Candidate
+{
     public _id: string;
     public _firstName: string;
     public _lastName: string;
@@ -14,7 +15,8 @@ export class Candidate {
     public _generalRating: number;
     public _note: string;
 
-    constructor(id: string, firstName: string = "", lastName: string = "", phone: string = "", eMail: string = "", generalRating: number = -1, note: string = "") {
+    constructor(id: string, firstName: string = "", lastName: string = "", phone: string = "", eMail: string = "", generalRating: number = -1, note: string = "")
+    {
         this._id = id;
         this._firstName = firstName;
         this._lastName = lastName;
@@ -23,43 +25,55 @@ export class Candidate {
         this._generalRating = generalRating;
         this._note = note;
     }
-    public async updateFirstName(firstName: string) {
-        if (await this.exists()) {
+    public async updateFirstName(firstName: string)
+    {
+        if (await this.exists())
+        {
             this._firstName = firstName;
             replaceData((await this.getPath()), this);
         }
     }
 
-    public async updateLastName(lastName: string) {
-        if (await this.exists()) {
+    public async updateLastName(lastName: string)
+    {
+        if (await this.exists())
+        {
             this._lastName = lastName;
             replaceData((await this.getPath()), this);
         }
     }
 
-    public async updatePhone(phone: string) {
-        if (await this.exists() && (await getFilteredCandidates(["phone","eMail"],[phone, this._eMail])).length===0) {
+    public async updatePhone(phone: string)
+    {
+        if (await this.exists() && (await getFilteredCandidates(["phone", "eMail"], [phone, this._eMail])).length === 0)
+        {
             this._phone = phone;
             replaceData((await this.getPath()), this);
         }
     }
 
-    public async updateEmail(email: string) {
-        if (await this.exists() &&  (await getFilteredCandidates(["phone","eMail"],[this._phone, email])).length===0) {
+    public async updateEmail(email: string)
+    {
+        if (await this.exists() && (await getFilteredCandidates(["phone", "eMail"], [this._phone, email])).length === 0)
+        {
             this._eMail = email;
             replaceData((await this.getPath()), this);
         }
     }
 
-    public async updateGeneralRating(generalRating: number) {
-        if (await this.exists()) {
+    public async updateGeneralRating(generalRating: number)
+    {
+        if (await this.exists())
+        {
             this._generalRating = generalRating;
             replaceData((await this.getPath()), this);
         }
     }
 
-    public async updateNote(note: string) {
-        if (await this.exists()) {
+    public async updateNote(note: string)
+    {
+        if (await this.exists())
+        {
             this._note = note;
             replaceData((await this.getPath()), this);
         }
@@ -70,7 +84,8 @@ export class Candidate {
      * @async
      * @returns {Promise<Job[]>} - A promise that resolves to an array of Job objects.
      */
-    public async getAppliedJobs(): Promise<Job[]> {
+    public async getAppliedJobs(): Promise<Job[]>
+    {
         let jobs;
         let statArr = await this.getCandidatures();
         let jobIds = statArr.map((stat) => stat._jobNumber);
@@ -81,7 +96,8 @@ export class Candidate {
      * Retrieves the candidate job statuses for the current candidate.
      * @returns {Promise<CandidateJobStatus[]>} - A promise that resolves to an array of CandidateJobStatus objects.
      */
-    public async getCandidatures(): Promise<CandidateJobStatus[]> {
+    public async getCandidatures(): Promise<CandidateJobStatus[]>
+    {
         let candidatures;
         candidatures = await getFilteredCandidateJobStatuses(["candidateID"], [this._id]);
         return candidatures;
@@ -90,7 +106,8 @@ export class Candidate {
      * Gets the path of the current job in the realtime DB.
      * @returns {Promise<string>} - The path of the current job.
      */
-    public async getPath() {
+    public async getPath()
+    {
         if ((await getFirebaseIdsAtPath('/Candidates')).includes(this._id.toString()))
             return "/Candidates/" + this._id;
         return "";
@@ -99,7 +116,8 @@ export class Candidate {
      * Checks if the current Candidate exists in the realtime DB.
      * @returns {Promise<boolean>} - A promise that resolves to true if the path exists, false otherwise.
      */
-    public async exists() {
+    public async exists()
+    {
         if ((await this.getPath()).length > 0)
             return true;
         return false;
@@ -109,7 +127,8 @@ export class Candidate {
      * Also removes any candidatures associated with the candidate from the realtime DB.
      * @returns None
      */
-    public async remove() {
+    public async remove()
+    {
         if (!(await this.exists()))
             return;
         const candidatures = await getFilteredCandidateJobStatuses(["candidateId"], [this._id]);
@@ -126,8 +145,10 @@ export class Candidate {
      * @param {number} [generalRating=this._generalRating] - The candidate's general rating.
      * @returns None
      */
-    public async edit(firstName: string = this._firstName, lastName: string = this._lastName, phone: string = this._phone, eMail: string = this._eMail, generalRating: number = this._generalRating, note: string = this._note) {
-        if (!(await this.exists())) {
+    public async edit(firstName: string = this._firstName, lastName: string = this._lastName, phone: string = this._phone, eMail: string = this._eMail, generalRating: number = this._generalRating, note: string = this._note)
+    {
+        if (!(await this.exists()))
+        {
             console.log(`you must add() candidate before call edit()`);
             return;
         }
@@ -135,12 +156,15 @@ export class Candidate {
         this._lastName = lastName;
         this._generalRating = generalRating;
         this._note = note;
-        if (this._phone !== phone || this._eMail !== eMail) {
-            if ((await getFilteredCandidates(["eMail", "phone"], [eMail, phone])).length === 0) {
+        if (this._phone !== phone || this._eMail !== eMail)
+        {
+            if ((await getFilteredCandidates(["eMail", "phone"], [eMail, phone])).length === 0)
+            {
                 this._eMail = eMail;
                 this._phone = phone;
             }
-            else {
+            else
+            {
                 console.log(`a candidate alredy exist with the same mail and phone, othe field was chenged`);
             }
         }
@@ -150,12 +174,19 @@ export class Candidate {
      * Adds the current candidate to the realtime DB if they do not already exist.
      * @returns None
      */
-    public async add() {
+    public async add()
+    {
         if (!(await this.exists())
             && (await getFilteredCandidates(["eMail", "phone"], [this._eMail, this._phone])).length === 0)
-            appendToDatabase(this, "/Candidates", this._id);
+        {
+            await appendToDatabase(this, "/Candidates", this._id);
+            return true;
+        }
         else
+        {
             console.log("the candidate already exists");
+            return false;
+        }
     }
     /**
      * link betwwen Candidate and Job.
@@ -164,20 +195,23 @@ export class Candidate {
      * @param {string} about - the free text the candidate write when apply
      * @returns None
      */
-    public async apply(jobNumber: number, about: string) {
-        if (!(await this.exists())) {
+    public async apply(jobNumber: number, about: string)
+    {
+        if (!(await this.exists()))
+        {
             console.log(`you need to add() candidate before call apply()`);
-            return;
+            return false;
         }
         let candidatuers = new CandidateJobStatus(jobNumber, this._id, "הוגשה מועמדות", about, -1, new Date(), new Date());
-        await candidatuers.add();
+        return await candidatuers.add();
     }
     /**
      * Uploads a candidate's CV file to Firestore.
      * @param {File} cv - The candidate's CV file.
      * @returns None
      */
-    public async uploadCv(cv: File) {
+    public async uploadCv(cv: File)
+    {
         const extension = cv.name.split('.')[cv.name.split('.').length - 1];
         await uploadFileToFirestore(cv, `CandidatesFiles/${this._id}/cv`, `CV.${extension}`);
     }
@@ -185,10 +219,12 @@ export class Candidate {
      * Deletes the CV file of the candidate from the firestore.
      * @returns None
      */
-    public async deleteCv() {
+    public async deleteCv()
+    {
         const extensions = await getFileExtensionsInFolder(`CandidatesFiles/${this._id}/cv`);
         for (let i = 0; i < extensions.length; i++)
-            if ((await fileExists(`CandidatesFiles/${this._id}/cv/CV.${extensions.at(i)}`))) {
+            if ((await fileExists(`CandidatesFiles/${this._id}/cv/CV.${extensions.at(i)}`)))
+            {
                 await deleteFile(`CandidatesFiles/${this._id}/cv/CV.${extensions.at(i)}`);
                 return;
             }
@@ -198,10 +234,13 @@ export class Candidate {
      * Retrieves the URL of the candidate's CV file from the Firebase storage.
      * @returns {Promise<string>} - A promise that resolves with the URL of the CV file.
      */
-    public async getCvUrl(): Promise<string> {
+    public async getCvUrl(): Promise<string>
+    {
         const extensions = await getFileExtensionsInFolder(`CandidatesFiles/${this._id}/cv`);
-        for (let i = 0; i < extensions.length; i++) {
-            if ((await fileExists(`CandidatesFiles/${this._id}/cv/CV.${extensions.at(i)}`))) {
+        for (let i = 0; i < extensions.length; i++)
+        {
+            if ((await fileExists(`CandidatesFiles/${this._id}/cv/CV.${extensions.at(i)}`)))
+            {
                 const url = await getDownloadUrlFromFirestorePath(`CandidatesFiles/${this._id}/cv/CV.${extensions.at(i)}`);
                 return url;
             }
@@ -215,29 +254,35 @@ export class Candidate {
  * @returns {Promise<Candidate[]>} A promise that resolves to an array of Candidate objects.
  * @throws {Error} If there is an error fetching the candidates from the database.
  */
-async function getCandidatesFromDatabase(): Promise<Candidate[]> {
-    try {
+async function getCandidatesFromDatabase(): Promise<Candidate[]>
+{
+    try
+    {
         const snapshot = await database.ref("/Candidates").once("value");
         const candidatesData = snapshot.val();
         const candidates: Candidate[] = [];
-        for (const candidateId in candidatesData) {
+        for (const candidateId in candidatesData)
+        {
             const candidate = candidatesData[candidateId];
             candidates.push(candidate);
         }
         return candidates;
-    } catch (error) {
+    } catch (error)
+    {
         console.error(error);
         throw new Error("Failed to fetch candidates from database.");
     }
 }
-export async function generateCandidateId(): Promise<string> {
+export async function generateCandidateId(): Promise<string>
+{
     const candidates = await getFilteredCandidates();
     const len = candidates.length;
     const candIds: string[] = candidates.map((cand) => cand._id);
     const min = 10; // minimum number in range
     const max = len + 100; // maximum number in range
     let num = Math.floor(Math.random() * (max - min + 1)) + min; // generates a random number between 1 and 10
-    while (candIds.some((id) => id === num.toString())) {
+    while (candIds.some((id) => id === num.toString()))
+    {
         num = Math.floor(Math.random() * (max - min + 1)) + min;
     }
     return num.toString();
@@ -250,35 +295,43 @@ export async function generateCandidateId(): Promise<string> {
  * @returns {Promise<Candidate[]>} - A promise that resolves to an array of Candidate objects.
  * @throws None
  */
-export async function getFilteredCandidates(attributes: string[] = [], values: string[] = [], sortBy: string = ""): Promise<Candidate[]> {
-    if (attributes.length !== values.length) {
+export async function getFilteredCandidates(attributes: string[] = [], values: string[] = [], sortBy: string = ""): Promise<Candidate[]>
+{
+    if (attributes.length !== values.length)
+    {
         console.log("the attributes length not match to values length")
         return [];
     }
     let candidates = await getCandidatesFromDatabase();
     //filtering
     let i = attributes.indexOf("id");
-    if (i >= 0) {
+    if (i >= 0)
+    {
         candidates = candidates.filter(candidate => candidate._id === values.at(i))
     }
     i = attributes.indexOf("firstName");
-    if (i >= 0) {
+    if (i >= 0)
+    {
         candidates = candidates.filter(candidate => candidate._firstName === values.at(i))
     }
     i = attributes.indexOf("lastName");
-    if (i >= 0) {
+    if (i >= 0)
+    {
         candidates = candidates.filter(candidate => candidate._lastName === values.at(i))
     }
     i = attributes.indexOf("phone");
-    if (i >= 0) {
+    if (i >= 0)
+    {
         candidates = candidates.filter(candidate => candidate._phone === values.at(i))
     }
     i = attributes.indexOf("eMail");
-    if (i >= 0) {
+    if (i >= 0)
+    {
         candidates = candidates.filter(candidate => candidate._eMail === values.at(i))
     }
     i = attributes.indexOf("generalRating");
-    if (i >= 0) {
+    if (i >= 0)
+    {
         candidates = candidates.filter(candidate => candidate._generalRating.toString() === values.at(i))
     }
     if (sortBy === 'firstName')
@@ -295,46 +348,59 @@ export async function getFilteredCandidates(attributes: string[] = [], values: s
         cand._eMail, cand._generalRating, cand._note));
 }
 /* compare function for sort */
-function sortByFirstName(a: Candidate, b: Candidate): number {
-    if (a._firstName.toLowerCase() < b._firstName.toLowerCase()) {
+function sortByFirstName(a: Candidate, b: Candidate): number
+{
+    if (a._firstName.toLowerCase() < b._firstName.toLowerCase())
+    {
         return -1;
     }
-    if (a._firstName.toLowerCase() > b._firstName.toLowerCase()) {
+    if (a._firstName.toLowerCase() > b._firstName.toLowerCase())
+    {
         return 1;
     }
     return 0;
 }
 
-function sortByLastName(a: Candidate, b: Candidate): number {
-    if (a._lastName.toLowerCase() < b._lastName.toLowerCase()) {
+function sortByLastName(a: Candidate, b: Candidate): number
+{
+    if (a._lastName.toLowerCase() < b._lastName.toLowerCase())
+    {
         return -1;
     }
-    if (a._lastName.toLowerCase() > b._lastName.toLowerCase()) {
+    if (a._lastName.toLowerCase() > b._lastName.toLowerCase())
+    {
         return 1;
     }
     return 0;
 }
 
-function sortByPhone(a: Candidate, b: Candidate): number {
-    if (a._phone < b._phone) {
+function sortByPhone(a: Candidate, b: Candidate): number
+{
+    if (a._phone < b._phone)
+    {
         return -1;
     }
-    if (a._phone > b._phone) {
+    if (a._phone > b._phone)
+    {
         return 1;
     }
     return 0;
 }
 
-function sortByEmail(a: Candidate, b: Candidate): number {
-    if (a._eMail.toLowerCase() < b._eMail.toLowerCase()) {
+function sortByEmail(a: Candidate, b: Candidate): number
+{
+    if (a._eMail.toLowerCase() < b._eMail.toLowerCase())
+    {
         return -1;
     }
-    if (a._eMail.toLowerCase() > b._eMail.toLowerCase()) {
+    if (a._eMail.toLowerCase() > b._eMail.toLowerCase())
+    {
         return 1;
     }
     return 0;
 }
 
-function sortByGeneralRating(a: Candidate, b: Candidate): number {
+function sortByGeneralRating(a: Candidate, b: Candidate): number
+{
     return b._generalRating - a._generalRating;
 }
