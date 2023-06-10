@@ -11,7 +11,7 @@ import { EditNote, GroupAdd } from '@mui/icons-material';
 import { MyFieldsSx } from './RecruiterDialogStyle';
 import Tooltip from '@mui/material/Tooltip';
 import RemoveConfirmPopup from './Components/RemoveConfirmPopup/RemoveConfirmPopup';
-import { Recruiter } from '../../../../../../../../../../../Firebase/FirebaseFunctions/Recruiter';
+import { Recruiter, getRecruitersFromDatabase } from '../../../../../../../../../../../Firebase/FirebaseFunctions/Recruiter';
 import SectorsChip from './Components/SectorsChip/SectorsChip/SectorsChip';
 
 
@@ -67,8 +67,15 @@ export default function RecruiterDialog(props: { recruiterRow: any, recruiters: 
 
 
 	}
-	const handleSubmit = () => {
-		// recruiter.edit(email, firstName, lastName);  // one more argument is needed (Sectors)
+	const handleSubmit = async () => {
+		let DBrecruiters = await getRecruitersFromDatabase();
+	
+		let DBrecruiter: Recruiter = (DBrecruiters.filter((rec) => rec._email === recruiterRow?._email))[0];
+		console.log(DBrecruiter);
+		if(typeof email === 'string' && typeof firstName === 'string' && typeof lastName === 'string' && recruiterSectors !== null){
+			DBrecruiter?.edit()
+		//  recruiterRow?.edit(email, firstName, lastName, recruiterSectors);  // one more argument is needed (Sectors)
+		}
 		// setOpen(false);
 		alert("need to implement");
 	};
@@ -80,6 +87,7 @@ export default function RecruiterDialog(props: { recruiterRow: any, recruiters: 
 	const handleClose = () => {
 		setOpen(false);
 	};
+
 
 	return (
 		<Box>
@@ -185,19 +193,6 @@ export default function RecruiterDialog(props: { recruiterRow: any, recruiters: 
 										</Box>
 									</Stack>
 								</Box>
-								<Divider sx={{ mt: 3 }} />
-								{/* <Box sx={{
-									mt: 1,
-									flexWrap: 'wrap',
-									gap: 1,
-									padding: 2,
-									height: 'fit-content',
-									display: 'flex',
-								}}>
-									{recruiterSectors.map((value) => (
-										<Chip color='primary' onDelete={() => { setRecruiterSectors(recruiterSectors.filter((sector) => sector !== value)) }} key={value} label={value} />
-									))}
-								</Box> */}
 
 							</Stack>
 
