@@ -4,27 +4,19 @@ import MenuItem, { menuItemClasses } from '@mui/base/MenuItem';
 import Popper from '@mui/base/Popper';
 import { styled } from '@mui/system';
 import { ListActionTypes } from '@mui/base/useList';
-import { Box, IconButton, ListItemIcon, Typography } from '@mui/material';
-import { Assignment, Edit, Label, MoreVert, Print } from '@mui/icons-material';
-import { MenuItemIconSx, MenuItemTypographySx, MoreVertSx, blue, grey } from './MyDropManuStyle';
+import { Box, IconButton, ListItemIcon, Tooltip, Typography } from '@mui/material';
+import { Assignment, Edit, MoreVert } from '@mui/icons-material';
+import { MenuItemIconSx, MenuItemTypographySx, blue, grey } from './MyDropManuStyle';
 import { useNavigate } from 'react-router-dom';
 import { Link } from "react-router-dom";
+import { Job } from '../../../../Firebase/FirebaseFunctions/Job';
 
-function MenuSection({ children, label }: MenuSectionProps)
-{
-    return (
-        <MenuSectionRoot>
-            <MenuSectionLabel>{label}</MenuSectionLabel>
-            {children}
-        </MenuSectionRoot>
-    );
-}
 
-export default function MyDropMenu(props: { JobId: any })
-{
+export default function MyDropMenu(props: { job: Job }) {
+    const { job } = props;
     const navigate = useNavigate();
 
-    const { JobId } = props;
+
     const [buttonElement, setButtonElement] = React.useState<HTMLButtonElement | null>(
         null,
     );
@@ -32,23 +24,19 @@ export default function MyDropMenu(props: { JobId: any })
     const menuActions = React.useRef<MenuActions>(null);
     const preventReopen = React.useRef(false);
 
-    const updateAnchor = React.useCallback((node: HTMLButtonElement | null) =>
-    {
+    const updateAnchor = React.useCallback((node: HTMLButtonElement | null) => {
         setButtonElement(node);
     }, []);
 
 
-    const handleEditClick = () =>
-    {
+    const handleEditClick = () => {
         setOpen(false);
         buttonElement?.focus();
-        navigate("/management/createJob", { state: JobId });
+        navigate("/management/createJob", { state: { job: job } });
     }
 
-    const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>) =>
-    {
-        if (preventReopen.current)
-        {
+    const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        if (preventReopen.current) {
             event.preventDefault();
             preventReopen.current = false;
             return;
@@ -57,24 +45,19 @@ export default function MyDropMenu(props: { JobId: any })
         setOpen((open) => !open);
     };
 
-    const handleButtonMouseDown = () =>
-    {
-        if (isOpen)
-        {
+    const handleButtonMouseDown = () => {
+        if (isOpen) {
             // Prevents the menu from reopening right after closing
             // when clicking the button.
             preventReopen.current = true;
         }
     };
 
-    const handleButtonKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) =>
-    {
-        if (event.key === 'ArrowDown' || event.key === 'ArrowUp')
-        {
+    const handleButtonKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+        if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
             event.preventDefault();
             setOpen(true);
-            if (event.key === 'ArrowUp')
-            {
+            if (event.key === 'ArrowUp') {
                 // Focus the last item when pressing ArrowUp.
                 menuActions.current?.dispatch({
                     type: ListActionTypes.keyDown,
@@ -85,55 +68,47 @@ export default function MyDropMenu(props: { JobId: any })
         }
     };
 
-    const createHandleMenuClick = (menuItem: string) =>
-    {
-
-        return () =>
-        {
-            console.log(`Clicked on ${menuItem}`);
-            setOpen(false);
-            buttonElement?.focus();
-        };
-    };
 
     return (
+
         <Box>
-            <IconButton
-                type="button"
-                onClick={handleButtonClick}
-                onKeyDown={handleButtonKeyDown}
-                onMouseDown={handleButtonMouseDown}
-                ref={updateAnchor}
-                aria-controls={isOpen ? 'wrapped-menu' : undefined}
-                aria-expanded={isOpen || undefined}
-                aria-haspopup="menu"
-            >
-                <MoreVert sx={MoreVertSx} />
-            </IconButton>
+            <Tooltip title="אפשרויות">
+                <IconButton
+                    type="button"
+                    onClick={handleButtonClick}
+                    onKeyDown={handleButtonKeyDown}
+                    onMouseDown={handleButtonMouseDown}
+                    ref={updateAnchor}
+                    aria-controls={isOpen ? 'wrapped-menu' : undefined}
+                    aria-expanded={isOpen || undefined}
+                    aria-haspopup="menu"
+                >
+                    <MoreVert />
+                </IconButton>
+            </Tooltip>
 
             <Menu
                 actions={menuActions}
                 open={isOpen}
-                onOpenChange={(open) =>
-                {
+                onOpenChange={(open) => {
                     setOpen(open);
                 }}
                 anchorEl={buttonElement}
                 slots={{ root: StyledPopper, listbox: StyledListbox }}
                 slotProps={{ listbox: { id: 'simple-menu' } }}
             >
-                <Typography variant='caption' sx={{fontSize: 10,fontWeight: 600, padding: 1}}>אפשרויות</Typography>
-                <StyledMenuItem onClick={() => navigate(`/career/jobs/${JobId}`)}>
-                
+                <Typography variant='caption' sx={{ fontSize: 10, fontWeight: 600, padding: 1 }}>אפשרויות</Typography>
+                <StyledMenuItem onClick={() => navigate(`/career/jobs/${job?._jobNumber}`)}>
+
                     <ListItemIcon>
                         <Assignment sx={MenuItemIconSx} />
-   
-                   <Typography sx={MenuItemTypographySx} >
+
+                        <Typography sx={MenuItemTypographySx} >
                             לדף המשרה
                         </Typography>
-                  
-                   </ListItemIcon>
-                
+
+                    </ListItemIcon>
+
                 </StyledMenuItem>
 
                 <StyledMenuItem onClick={handleEditClick}>
@@ -147,7 +122,7 @@ export default function MyDropMenu(props: { JobId: any })
 
                 {/* </MenuSection> */}
             </Menu>
-        </Box>
+        </Box >
     );
 }
 
@@ -205,8 +180,7 @@ const StyledPopper = styled(Popper)`
   z-index: 1;
 `;
 
-interface MenuSectionProps
-{
+interface MenuSectionProps {
     children: React.ReactNode;
     label: string;
 }

@@ -199,7 +199,7 @@ const MyDataGrid = (theme: Theme): SxProps => ({
         borderRadius: '35%',
     },
     [`& .${gridClasses.row}.even`]: {
-        backgroundColor: theme.palette.grey[100],
+        backgroundColor: theme.palette.grey[50],
         '&:hover, &.Mui-hovered': {
             backgroundColor: alpha(theme.palette.primary.main, ODD_OPACITY),
             '@media (hover: none)': {
@@ -238,34 +238,36 @@ const CustomPaginationAndFooter = () => {
 
 
     return (
-        <Stack direction='row' justifyContent='space-between' alignItems='center' padding={1}>
-            <Box >
-                <Box display='flex' flexDirection='row'>
-                    <Chip
-                        label={rowsCount + ' תפקידים'}
-                        sx={{ fontWeight: 'bold' }}
-                        size='small'
-                        variant="outlined"
-                    />
-                </Box>
+        <Stack direction={{xs: 'column', sm: 'column',md: 'row-reverse',lg: 'row-reverse', xl: 'row-reverse' }} 
+		justifyContent='space-between' 
+		alignItems='center' 
+		spacing={2}
+		padding={1} >
 
-            </Box>
+			<Box >
+				<Pagination
+					color="primary"
+					variant="outlined"
+					shape="rounded"
+					page={page + 1}
+					count={pageCount}
+					// @ts-expect-error
+					renderItem={(props2) => <PaginationItem {...props2} disableRipple />}
+					onChange={(event: React.ChangeEvent<unknown>, value: number) =>
+						apiRef.current.setPage(value - 1)
+					}
+				/>
+			</Box>
 
-            <Box >
-                <Pagination
-                    color="primary"
-                    variant="outlined"
-                    shape="rounded"
-                    page={page + 1}
-                    count={pageCount}
-                    // @ts-expect-error
-                    renderItem={(props2) => <PaginationItem {...props2} disableRipple />}
-                    onChange={(event: React.ChangeEvent<unknown>, value: number) =>
-                        apiRef.current.setPage(value - 1)
-                    }
-                />
-            </Box>
-        </Stack>
+			<Box>
+					<Chip
+						label={rowsCount + ' תפקידים'}
+						sx={{ fontWeight: 'bold', borderRadius: '0.5rem', color: 'black' }}
+						variant="outlined"
+					/>
+				</Box>
+		</Stack>
+
 
     );
 };
@@ -299,7 +301,7 @@ export default function RolesTable() {
         // add role
         const handleAdd = () => {
             if (rows.filter((row: any) => row.role_name === roleName).length !== 0) {
-                setSnackbar({ children: `כבר 'קיים תפקיד בשם '${roleName}'.`, severity: 'error' });
+                setSnackbar({ children: `כבר קיים תפקיד בשם '${roleName}'.`, severity: 'error' });
             }
             else {
                 let role: Role = new Role(roleName, roleStatus === 1 ? true : false);

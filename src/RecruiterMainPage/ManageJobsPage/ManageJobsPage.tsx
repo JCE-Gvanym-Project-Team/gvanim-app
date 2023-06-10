@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 import MyTable from "./Components/MyTable/MyTable";
-import { Box, Stack, Typography } from "@mui/material";
+import { Alert, AlertProps, Box, Snackbar, Stack, Typography } from "@mui/material";
 import MyLoading from "../../Components/MyLoading/MyLoading";
 import { ManageJobPageBoxSx } from "./ManageJobsPageStyle";
 import TransitionComponentSnackbar from "./Components/NewJobPage/Components/SuccessSnackBar/SuccessSnackBar";
@@ -12,21 +12,22 @@ import { ArticleOutlined } from "@mui/icons-material";
 
 const ManageJobsPage = () => {
     const [loading, setLoading] = useState(true);
-    const [open, setOpen] = useState(false);
+    const [snackbar, setSnackbar] = useState<Pick<AlertProps, 'children' | 'severity'> | null>(null);
 
     const { state } = useLocation();
-
-    // for the snackbar
-    if (state !== null) {
-        setOpen(true);
-    }
 
 
     useEffect(() => {
         setLoading(false);
+
+        if (state !== null) {
+            setSnackbar({ children: state?.msg , severity: 'success' });
+            window.history.replaceState({}, document.title); // clean state
+        }
     }, []);
 
 
+    const handleCloseSnackbar = () => setSnackbar(null);
 
     return (
         <>
@@ -142,7 +143,17 @@ const ManageJobsPage = () => {
 
                             <MyTable />
 
-                            <TransitionComponentSnackbar open={open} setOpen={setOpen} message={state} />
+                            {/* <TransitionComponentSnackbar open={open} setOpen={setOpen} message={state} /> */}
+                            {!!snackbar && (
+                                <Snackbar
+                                    open
+                                    anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                                    onClose={handleCloseSnackbar}
+                                    autoHideDuration={6000}
+                                >
+                                    <Alert {...snackbar} onClose={handleCloseSnackbar} />
+                                </Snackbar>
+                            )}
                         </Box>
 
                     </>

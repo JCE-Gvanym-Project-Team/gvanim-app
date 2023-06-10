@@ -63,6 +63,8 @@ export default function MyJobRemoveDialog(props: { handleDelete: any }) {
     return (
         <>
             <Button type="button" className='mt-3 mb-3' variant='contained' color='error' onClick={handleClickOpen} sx={{
+                height: 'fit-content',
+                alignSelf: 'center',
                 width: '10%',
                 backgroundColor: '#c82333',
                 borderColor: '#bd2130'

@@ -12,12 +12,13 @@ import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
 import { TransitionProps } from '@mui/material/transitions';
-import { Avatar, Box,ListItemAvatar, ListItemButton, ListItemIcon, Rating } from '@mui/material';
+import { Avatar, Box, Link, ListItemAvatar, ListItemButton, ListItemIcon, Rating } from '@mui/material';
 import { ListItemTypographySx } from './CandidatesListDialogStyle';
-import { ChevronLeft } from '@mui/icons-material';
+import { ArrowBack, ChevronLeft } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { Candidate, getFilteredCandidates } from '../../../../Firebase/FirebaseFunctions/Candidate';
 import { getFilteredCandidateJobStatuses } from '../../../../Firebase/FirebaseFunctions/CandidateJobStatus';
+import { MyTypographyInfoSx } from '../../../WelcomePage/WelcomePageStyle';
 
 const Transition = React.forwardRef(function Transition(
 	props: TransitionProps & {
@@ -60,8 +61,8 @@ export default function CandidatesListFullScreenDialog({ JobId }) {
 
 	return (
 		<Box>
-
-			<Button variant='text' endIcon={<ChevronLeft />} onClick={handleClickOpen} >לרשימת המועמדים</Button>
+			
+			<Button variant='text' disableRipple style={{backgroundColor: 'transparent'}} endIcon={<ChevronLeft />} onClick={handleClickOpen} >לרשימת המועמדים</Button>
 
 
 			<Dialog
@@ -118,43 +119,43 @@ export default function CandidatesListFullScreenDialog({ JobId }) {
 
 					{CMR.map(((cmr) => (
 						<React.Fragment key={cmr[0]?._id}>
-						<ListItemButton onClick={() => {
-							navigate("/management/manageCandidates/" + cmr[0]?._id, { state: cmr[0]?._id })
-						}}>
+							<ListItemButton onClick={() => {
+								navigate("/management/manageCandidates/" + cmr[0]?._id, { state: cmr[0]?._id })
+							}}>
 
-							<ListItemAvatar>
-								<Avatar />
-							</ListItemAvatar>
+								<ListItemAvatar>
+									<Avatar />
+								</ListItemAvatar>
 
-							<ListItemText primary={cmr[0]?._firstName +  ' ' + cmr[0]?._lastName} secondary={cmr[0]?._eMail} />
+								<ListItemText primary={cmr[0]?._firstName + ' ' + cmr[0]?._lastName} secondary={cmr[0]?._eMail} />
 
-						{cmr[1] < 0 ? (
-						<>
-							<ListItemIcon sx={{ paddingRight: '16px', paddingLeft: '16px' }} >
-								<Typography >לא צויין</Typography>
-							</ListItemIcon>
-						</>) : 
-						(
-						<>
-							<ListItemIcon>
-								<Rating defaultValue={cmr[1]} size="medium" readOnly />
-							</ListItemIcon>
-						</>)}
-						
+								{cmr[1] < 0 ? (
+									<>
+										<ListItemIcon sx={{ paddingRight: '16px', paddingLeft: '16px' }} >
+											<Typography >לא צויין</Typography>
+										</ListItemIcon>
+									</>) :
+									(
+										<>
+											<ListItemIcon>
+												<Rating defaultValue={cmr[1]} size="medium" readOnly />
+											</ListItemIcon>
+										</>)}
 
-						</ListItemButton>
 
-						<Divider />
+							</ListItemButton>
+
+							<Divider />
 						</React.Fragment>
-						
+
 					)))}
 
 				</List>
-				
+
 				{CMR.length < 1 ? (
-				<Box sx={{display: 'flex', justifyContent: 'center'}}>
-					<Typography sx={{ fontFamily: "'Noto Sans Hebrew', sans-serif", color: 'rgb(52, 71, 103)'}} variant='h6'>לא נמצאו מועמדים למשרה זו.</Typography>
-				</Box>
+					<Box sx={{ display: 'flex', justifyContent: 'center' }}>
+						<Typography sx={{ fontFamily: "'Noto Sans Hebrew', sans-serif", color: 'rgb(52, 71, 103)' }} variant='h6'>לא נמצאו מועמדים למשרה זו.</Typography>
+					</Box>
 				) : (<></>)}
 
 			</Dialog>

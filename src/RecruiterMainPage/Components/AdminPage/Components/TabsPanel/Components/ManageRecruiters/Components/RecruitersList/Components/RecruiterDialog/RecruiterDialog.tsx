@@ -6,10 +6,10 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
 import { TransitionProps } from '@mui/material/transitions';
-import { Box, Button, Chip, Divider, ListItemIcon, Stack, TextField, Typography } from '@mui/material';
-import { EditNote } from '@mui/icons-material';
+import { Box, Button, Chip, Divider, Stack, TextField, Typography } from '@mui/material';
+import { EditNote, GroupAdd } from '@mui/icons-material';
 import { MyFieldsSx } from './RecruiterDialogStyle';
-
+import Tooltip from '@mui/material/Tooltip';
 import RemoveConfirmPopup from './Components/RemoveConfirmPopup/RemoveConfirmPopup';
 import { Recruiter } from '../../../../../../../../../../../Firebase/FirebaseFunctions/Recruiter';
 import SectorsChip from './Components/SectorsChip/SectorsChip/SectorsChip';
@@ -32,34 +32,42 @@ const Transition = React.forwardRef(function Transition(
 	return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function RecruiterDialog(props: { recruitersList: Recruiter[], setRecruitersList: any, recruiter: Recruiter, setOpenSnackBar: any, setMessage: any }) {
-	const { recruitersList, setRecruitersList, recruiter, setOpenSnackBar, setMessage } = props;
+export default function RecruiterDialog(props: { recruiterRow: any, recruiters: any, setRecruiters:any, setSnackbar: any, isEdit: boolean }) {
+	const { recruiterRow, recruiters, setRecruiters, setSnackbar, isEdit } = props;
 
-	const [recruiterSectors, setRecruiterSectors] = React.useState<string[]>(recruiter._sectors);
+	const [recruiterSectors, setRecruiterSectors] = React.useState<string[]>([]);
 
-	const [firstName, setFirstName] = React.useState(recruiter._firstName);
-	const [lastName, setLastName] = React.useState(recruiter._lastName);
-	const [email, setEmail] = React.useState(recruiter._email);
+	const [firstName, setFirstName] = React.useState('');
+	const [lastName, setLastName] = React.useState('');
+	const [email, setEmail] = React.useState('');
 
 
 	const [saveButton, setSaveButton] = React.useState(false);
 
 	const [open, setOpen] = React.useState(false);
 
+	React.useEffect(() => {
+		if (isEdit) {
+			typeof recruiterRow?._firstName === 'string' && setFirstName(recruiterRow?._firstName);
+			typeof recruiterRow?._lastName === 'string' && setLastName(recruiterRow?._lastName);
+			typeof recruiterRow?._email === 'string' && setEmail(recruiterRow?._email);
+			recruiterRow?._sectors !== null && setRecruiterSectors(recruiterRow?._sectors);
+		}
+	}, []);
 
 
 	const handleRemoveRecruiter = () => {
-		recruiter.remove();
-		const updateData = recruitersList.filter(rec => rec._id !== recruiter._id);
-		setRecruitersList(updateData);
-		setOpen(false);
+		// recruiterRow?.remove();
+		// const updateData = recruitersList.filter(rec => rec._id !== recruiter._id);
+		// setRecruitersList(updateData);
+		// setOpen(false);
 
-		setMessage(`המגייס/ת ${recruiter._firstName} ${recruiter._lastName} נמחק/ה בהצלחה מהמערכת.`);
-		setOpenSnackBar(true);
+		// setMessage(`המגייס/ת ${recruiter._firstName} ${recruiter._lastName} נמחק/ה בהצלחה מהמערכת.`);
+		// setOpenSnackBar(true);
 
 
 	}
-	const handleSave = () => {
+	const handleSubmit = () => {
 		// recruiter.edit(email, firstName, lastName);  // one more argument is needed (Sectors)
 		// setOpen(false);
 		alert("need to implement");
@@ -76,12 +84,17 @@ export default function RecruiterDialog(props: { recruitersList: Recruiter[], se
 	return (
 		<Box>
 
-			<ListItemIcon>
+			{/* <ListItemIcon>
 				<IconButton onClick={handleClickOpen}>
 					<EditNote sx={{ color: 'rgb(52, 71, 103)' }} />
 				</IconButton>
 
-			</ListItemIcon>
+			</ListItemIcon> */}
+			<Tooltip title={isEdit ? 'ערוך מגייס' : 'מגייס חדש'}>
+				<IconButton onClick={handleClickOpen}>
+					{isEdit ? <EditNote /> : <GroupAdd />}
+				</IconButton>
+			</Tooltip>
 
 			<Dialog
 				PaperProps={{
@@ -100,7 +113,7 @@ export default function RecruiterDialog(props: { recruitersList: Recruiter[], se
 					<Toolbar>
 
 						<Typography sx={{ ml: 2, flex: 1, textAlign: 'center' }} variant="h6" component="div">
-							{recruiter._firstName + ' ' + recruiter._lastName}
+							{isEdit ? recruiterRow?._firstName + ' ' + recruiterRow?._lastName : 'מגייס חדש'}
 						</Typography>
 
 						<Box>
@@ -122,72 +135,72 @@ export default function RecruiterDialog(props: { recruitersList: Recruiter[], se
 					<Stack spacing={2}>
 
 						<Stack direction="row" display="flex" justifyContent="center">
-							
-								<Stack direction='column' sx={MyFieldsSx}>
-									<Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-										<Stack spacing={2.5} sx={{ width: '100%' }}>
-											<Box sx={{ display: 'flex', justifyContent: 'center' }}>
-												<TextField
-													sx={{ width: '100%' }}
-													type='text'
-													variant='outlined'
-													size='small'
-													required
-													label="שם פרטי"
-													value={firstName}
-													onChange={(e) => {setFirstName(e.target.value); setSaveButton(true);}}
-												/>
-											</Box>
 
-											<Box  sx={{ display: 'flex', justifyContent: 'center' }}>
-												<TextField
-													sx={{ width: '100%' }}
-													type='text'
-													variant='outlined'
-													size='small'
-													required
-													label="שם משפחה"
-													value={lastName}
-													onChange={(e) =>{ setLastName(e.target.value); setSaveButton(true);}}
-												/>
-											</Box>
+							<Stack direction='column' sx={MyFieldsSx}>
+								<Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+									<Stack spacing={2.5} sx={{ width: '100%' }}>
+										<Box sx={{ display: 'flex', justifyContent: 'center' }}>
+											<TextField
+												sx={{ width: '100%' }}
+												type='text'
+												variant='outlined'
+												size='small'
+												required
+												label="שם פרטי"
+												value={firstName}
+												onChange={(e) => { setFirstName(e.target.value); setSaveButton(true); }}
+											/>
+										</Box>
 
-											<Box sx={{ display: 'flex', justifyContent: 'center' }}>
-				
-												<TextField
-														sx={{ width: '100%' }}
-							
-													type='email'
-													variant='outlined'
-													size='small'
-													required
-													label="אימייל"
-													value={email}
-													onChange={(e) => {setEmail(e.target.value); setSaveButton(true);}}
-												/>
-											</Box>
+										<Box sx={{ display: 'flex', justifyContent: 'center' }}>
+											<TextField
+												sx={{ width: '100%' }}
+												type='text'
+												variant='outlined'
+												size='small'
+												required
+												label="שם משפחה"
+												value={lastName}
+												onChange={(e) => { setLastName(e.target.value); setSaveButton(true); }}
+											/>
+										</Box>
 
-											<Box sx={{ display: 'flex', justifyContent: 'center' }}>
-												<SectorsChip recruiterSectors={recruiterSectors} setRecruiterSectors={setRecruiterSectors} setSaveButton={setSaveButton} />
-											</Box>
-										</Stack>
-									</Box>
-								<Divider sx={{mt: 3}} />
-									<Box sx={{
-										mt: 1,
-										flexWrap: 'wrap',
-										gap: 1,
-										padding: 2,
-										height: 'fit-content',
-										display: 'flex',
-									}}>
-										{recruiterSectors.map((value) => (
-											<Chip color='primary' onDelete={() => { setRecruiterSectors(recruiterSectors.filter((sector) => sector !== value)) }} key={value} label={value} />
-										))}
-									</Box>
+										<Box sx={{ display: 'flex', justifyContent: 'center' }}>
 
-								</Stack>
-							
+											<TextField
+												sx={{ width: '100%' }}
+
+												type='email'
+												variant='outlined'
+												size='small'
+												required
+												label="אימייל"
+												value={email}
+												onChange={(e) => { setEmail(e.target.value); setSaveButton(true); }}
+											/>
+										</Box>
+
+										<Box sx={{ display: 'flex', justifyContent: 'center' }}>
+											<SectorsChip recruiterSectors={recruiterSectors} setRecruiterSectors={setRecruiterSectors} setSaveButton={setSaveButton} />
+										</Box>
+									</Stack>
+								</Box>
+								<Divider sx={{ mt: 3 }} />
+								{/* <Box sx={{
+									mt: 1,
+									flexWrap: 'wrap',
+									gap: 1,
+									padding: 2,
+									height: 'fit-content',
+									display: 'flex',
+								}}>
+									{recruiterSectors.map((value) => (
+										<Chip color='primary' onDelete={() => { setRecruiterSectors(recruiterSectors.filter((sector) => sector !== value)) }} key={value} label={value} />
+									))}
+								</Box> */}
+
+							</Stack>
+
 
 						</Stack>
 
@@ -199,12 +212,12 @@ export default function RecruiterDialog(props: { recruitersList: Recruiter[], se
 				</Stack>
 				<Divider />
 				<Stack spacing={1} direction='row' sx={{ padding: 2, display: 'flex', justifyContent: 'space-between' }}>
-					<Box>
+					{isEdit && (<Box>
 						<RemoveConfirmPopup handleRemoveRecruiter={handleRemoveRecruiter} />
-					</Box>
+					</Box>)}
 
-					<Button disabled={!saveButton} onClick={handleSave} variant='contained' color='primary'>
-						שמור שינויים
+					<Button disabled={!saveButton} onClick={handleSubmit} variant='contained' color='primary'>
+						{isEdit ? 'שמור שינויים' : 'הוסף מגייס'}
 					</Button>
 
 

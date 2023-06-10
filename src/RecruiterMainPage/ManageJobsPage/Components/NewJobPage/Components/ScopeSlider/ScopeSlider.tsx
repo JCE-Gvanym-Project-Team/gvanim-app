@@ -6,7 +6,7 @@ import { MyPaperSx } from './ScopeSliderStyle';
 
 
 const AirbnbSlider = styled(Slider)(({ theme }) => ({
-    color: 'rgb(52, 71, 103)',
+    color: '#555abf',
     height: 3,
     padding: '13px 0',
     '& .MuiSlider-thumb': {

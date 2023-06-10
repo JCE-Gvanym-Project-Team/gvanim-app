@@ -8,6 +8,7 @@ import ManageFields from './Components/ManageFields/ManageFields';
 import ManageAccount from './Components/ManageAccount/ManageAccount';
 import ManageRecruiters from './Components/ManageRecruiters/ManageRecruiters';
 import MyLoading from '../../../../../Components/MyLoading/MyLoading';
+import Temp from './Components/ManageRecruiters/Components/RecruitersList/Temp';
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -87,6 +88,7 @@ export default function TabsPane() {
             <TabPanel value={value} index={1}>
 
                 {/* <ManageRecruiters /> */}
+                <Temp />
 
             </TabPanel>
 
