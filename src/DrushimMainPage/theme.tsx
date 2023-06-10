@@ -261,7 +261,55 @@ export const themeSettings = (mode) =>
         // TODO: fill this with colors after website is built
         // according to what colors look good
         return {
-            palette: mode,
+            palette: {
+                mode: mode,
+                primary: {
+                    main: colors.primary[100],
+                    faded: colors.primary[900]
+                },
+                secondary: {
+                    main: colors.blues[500]
+                },
+                neutral: {
+                    main: colors.grey[500],
+                    dark: colors.grey[700],
+                    light: colors.grey[100]
+                },
+                background: {
+                    main: colors.grey[1000],
+                    box: colors.grey[800],
+                    boxInner: colors.grey[700],
+                }
+            },
+            typography: {
+                fontFamily: ["'Noto Sans Hebrew'", "sans-serif"].join(","),
+                fontSize: 20,
+                h1: {
+                    fontFamily: ["'Noto Sans Hebrew'", "sans-serif"].join(","),
+                    fontSize: 40
+                },
+                h2: {
+                    fontFamily: ["'Noto Sans Hebrew'", "sans-serif"].join(","),
+                    fontSize: 32
+                },
+                h3: {
+                    fontFamily: ["'Noto Sans Hebrew'", "sans-serif"].join(","),
+                    fontSize: 24
+                },
+                h4: {
+                    fontFamily: ["'Noto Sans Hebrew'", "sans-serif"].join(","),
+                    fontSize: 20
+                },
+                h5: {
+                    fontFamily: ["'Noto Sans Hebrew'", "sans-serif"].join(","),
+                    fontSize: 16
+                },
+                h6: {
+                    fontFamily: ["'Noto Sans Hebrew'", "sans-serif"].join(","),
+                    fontSize: 14
+                },
+
+            }
         }
     }
 }

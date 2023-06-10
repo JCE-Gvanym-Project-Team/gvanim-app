@@ -176,7 +176,7 @@ export default function OneJobPage()
 
             return;
         }
-        
+        // TODO: it only adds one recommender, and the file is incorrect
         // add recommenders and CV
         let candidateJobStatus = (await getFilteredCandidateJobStatuses(["jobNumber", "candidateId"], [job?._jobNumber.toString()!, newCandidateId]))[0];
 
