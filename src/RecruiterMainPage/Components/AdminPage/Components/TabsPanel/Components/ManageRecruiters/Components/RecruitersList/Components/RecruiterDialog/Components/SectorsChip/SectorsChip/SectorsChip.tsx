@@ -5,7 +5,9 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { Input, Stack } from '@mui/material';
+import { Checkbox, Chip, FormLabel, Input, ListItemText, OutlinedInput, Stack, TextField } from '@mui/material';
+import { MyPaperSx } from './SectorsChipStyle';
+import SelectInput from '@mui/material/Select/SelectInput';
 
 
 const ITEM_HEIGHT = 48;
@@ -42,11 +44,11 @@ function getStyles(name: string, personName: readonly string[], theme: Theme) {
   };
 }
 
-export default function SectorChips(props: { recruiterSectors: string[], setRecruiterSectors: any, setSaveButton: any}) {
+export default function SectorChips(props: { recruiterSectors: string[], setRecruiterSectors: any, setSaveButton: any }) {
   const { recruiterSectors, setRecruiterSectors, setSaveButton } = props;
   const theme = useTheme();
 
-
+  const [sectorsSelection, setSectorsSelection] = React.useState<string[]>([]);
 
 
   const handleChange = (event: SelectChangeEvent<typeof recruiterSectors>) => {
@@ -54,46 +56,55 @@ export default function SectorChips(props: { recruiterSectors: string[], setRecr
     const {
       target: { value },
     } = event;
-    setRecruiterSectors(
+    setSectorsSelection(
       // On autofill we get a stringified value.
       typeof value === 'string' ? value.split(',') : value,
     );
   };
 
+    const fetchSectors = () => {
+     recruiterSectors !== null && setSectorsSelection(recruiterSectors)
+  };
+
+  React.useEffect(() => {
+    fetchSectors();
+  }, []);
+
+
   return (
     <Box sx={{ width: '100%' }}>
-      <Stack spacing={1} direction="row">
 
-        <FormControl 		sx={{ width: '100%'}}>
-        <InputLabel  variant='standard'>אשכולות</InputLabel>
-          <Select
-            multiple
-            value={recruiterSectors}
-            onChange={handleChange}
-            input={<Input size='small' />}
-            MenuProps={MenuProps}
-          >
-            {names.map((name) => (
-              <MenuItem
-                key={name}
-                value={name}
-                style={getStyles(name, recruiterSectors, theme)}
+      <FormControl sx={{ width: '100%', maxWidth: '100%' }}>
+        <label>אשכולות:</label>
+        <Select
+          multiple
+          size='small'
+          label="אשכולות"
+          value={sectorsSelection}
+          multiline
+          onChange={handleChange}
+          input={<OutlinedInput />}
+          renderValue={(selected) => selected.join(', ')}
+          MenuProps={MenuProps}
+          required
+        >
+          {recruiterSectors.map((sector) => (
+            <MenuItem key={sector} value={sector}>
+              <Checkbox checked={sectorsSelection.indexOf(sector) > -1} />
+              <ListItemText primary={sector} />
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
 
-              >
-                {name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Stack>
 
 
-      {/* <Box sx={MyPaperSx}>
-        {recruiterSectors.map((value) => (
-          <Chip disabled={!edit} color='primary' onDelete={() => { setRecruiterSectors(recruiterSectors.filter((sector) => sector !== value)) }} key={value} label={value} />
+      <Box sx={MyPaperSx}>
+        {sectorsSelection?.map((value) => (
+          <Chip color='primary' key={value} label={value} />
         ))}
-      </Box> */}
-
     </Box>
+
+    </Box >
   );
 }

@@ -2,7 +2,7 @@ import { Avatar, Box, Button, Divider, IconButton, InputBase, List, ListItem, Li
 import React from 'react'
 import { Search } from '@mui/icons-material';
 import { Recruiter, getRecruitersFromDatabase } from '../../../../../../../../../Firebase/FirebaseFunctions/Recruiter';
-import { ListItemTypographySx, MyPaperSx } from './RecruitersListStyle';
+import { ListItemTypographySx, MyPaperSx } from './RecruitersTableStyle';
 import RecruiterDialog from './Components/RecruiterDialog/RecruiterDialog';
 import SuccessSnackBar from '../SuccessSnackBar/SuccessSnackBar';
 
@@ -48,10 +48,7 @@ export default function RecruitersList() {
         return bool;
     }
 
-    // recruiters.forEach(rec => {
-    //     const first_recruiter = new Recruiter(rec.email, rec.firstname, rec.lastname,rec.sectors);
-    //     first_recruiter.add();
-    // });
+
     const fetchRecruitersList = async () => {
         const recruiters_ = await getRecruitersFromDatabase();
         setRecruitersList(recruiters_);
@@ -59,8 +56,6 @@ export default function RecruitersList() {
 
     React.useEffect(() => {
         fetchRecruitersList();
-
-        // console.log(recruitersList);
 
     }, []);
 
@@ -142,7 +137,7 @@ export default function RecruitersList() {
                                 <ListItemText primary={filtered_recruiter._firstName + ' ' + filtered_recruiter._lastName} secondary={filtered_recruiter._email} />
                             <Box sx={{paddingRight: '16px', paddingLeft: '16px'}}>
                                 <Box sx={{ width: '80px',display: 'flex',justifyContent: 'center'}}>
-                                <RecruiterDialog recruiter={filtered_recruiter} recruitersList={recruitersList} setRecruitersList={setRecruitersList} setOpenSnackBar={setOpenSnackBar} setMessage={setMessage} />
+                                {/* <RecruiterDialog recruiter={filtered_recruiter} recruitersList={recruitersList} setRecruitersList={setRecruitersList} setOpenSnackBar={setOpenSnackBar} setMessage={setMessage} /> */}
                                 </Box>
                               
                             </Box>

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Alert, AlertProps, Box, Button, Chip, LinearProgress, Snackbar, Stack, SxProps, Theme, alpha, styled, useTheme } from '@mui/material';
+import { Box, Button, Chip, LinearProgress, Stack, SxProps, Theme, Tooltip, Typography, alpha, styled, useTheme } from '@mui/material';
 import MyDropMenu from '../MyDropMenu/MyDropMenu';
 import {
 	DataGrid,
@@ -9,8 +9,6 @@ import {
 	GridToolbarColumnsButton,
 	GridToolbarContainer,
 	GridToolbarQuickFilter,
-	GridToolbarExportContainer,
-	GridPrintExportMenuItem,
 	gridPageCountSelector,
 	gridPageSelector,
 	useGridApiContext,
@@ -20,35 +18,40 @@ import {
 	GridRow,
 	heIL,
 
-} from '@mui/x-data-grid';
+	} from '@mui/x-data-grid';
 
 import Pagination from '@mui/material/Pagination';
 import PaginationItem from '@mui/material/PaginationItem';
 import CandidatesListFullScreenDialog from '../CandidatesListDialog/CandidatesListDialog';
-import { getFilteredJobs } from '../../../../Firebase/FirebaseFunctions/Job';
+import { Job, getFilteredJobs } from '../../../../Firebase/FirebaseFunctions/Job';
 import { useNavigate } from "react-router-dom";
-import { ArticleOutlined } from '@mui/icons-material';
+import { ArticleOutlined, LockOpen, Lock } from '@mui/icons-material';
 import MyLoading from '../../../../Components/MyLoading/MyLoading';
 import { unstable_useForkRef as useForkRef } from '@mui/utils';
+import { MyButtonSx } from './MyTableStyle';
 
 
 
 // -------------------Use Memorie for better performance----------------------------------------------------
-const TraceUpdates = React.forwardRef<any, any>((props, ref) => {
+const TraceUpdates = React.forwardRef<any, any>((props, ref) =>
+{
 	const { Component, ...other } = props;
 	const rootRef = React.useRef<HTMLElement>();
 	const handleRef = useForkRef(rootRef, ref);
 
-	React.useEffect(() => {
+	React.useEffect(() =>
+	{
 		const root = rootRef.current;
 		root!.classList.add('updating');
 		root!.classList.add('updated');
 
-		const timer = setTimeout(() => {
+		const timer = setTimeout(() =>
+		{
 			root!.classList.remove('updating');
 		}, 360);
 
-		return () => {
+		return () =>
+		{
 			clearTimeout(timer);
 		};
 	});
@@ -56,11 +59,13 @@ const TraceUpdates = React.forwardRef<any, any>((props, ref) => {
 	return <Component ref={handleRef} {...other} />;
 });
 
-const RowWithTracer = React.forwardRef((props, ref) => {
+const RowWithTracer = React.forwardRef((props, ref) =>
+{
 	return <TraceUpdates ref={ref} Component={GridRow} {...props} />;
 });
 
-const ColumnHeadersWithTracer = React.forwardRef((props, ref) => {
+const ColumnHeadersWithTracer = React.forwardRef((props, ref) =>
+{
 	return <TraceUpdates ref={ref} Component={GridColumnHeaders} {...props} />;
 });
 
@@ -70,9 +75,12 @@ const MemoizedColumnHeaders = React.memo(ColumnHeadersWithTracer);
 // ---------------------------------------------------------------------------------------------------------
 const ODD_OPACITY = 0.2;
 const MyDataGrid = (theme: Theme): SxProps => ({
-	padding: 0.5,
+	paddingTop: 1,
 	height: '618px',
-	border: '1px solid rgba(0, 0, 0, 0.125)',
+	borderTop: '1px solid rgba(0, 0, 0, 0.125)',
+	borderBottom: '1px solid rgba(0, 0, 0, 0.125)',
+	borderRight: 'unset',
+	borderLeft: 'unset',
 	borderTopRightRadius: 0,
 	borderTopLeftRadius: 0,
 	overflow: 'hidden',
@@ -129,7 +137,7 @@ const MyDataGrid = (theme: Theme): SxProps => ({
 		borderRadius: '35%',
 	},
 	[`& .${gridClasses.row}.even`]: {
-		backgroundColor: theme.palette.grey[100],
+		backgroundColor: theme.palette.grey[50],
 		'&:hover, &.Mui-hovered': {
 			backgroundColor: alpha(theme.palette.primary.main, ODD_OPACITY),
 			'@media (hover: none)': {
@@ -158,6 +166,7 @@ const MyDataGrid = (theme: Theme): SxProps => ({
 			},
 		},
 	},
+
 });
 
 const StyledGridOverlay = styled('div')(({ theme }) => ({
@@ -184,7 +193,8 @@ const StyledGridOverlay = styled('div')(({ theme }) => ({
 	},
 }));
 
-function CustomNoRowsOverlay() {
+function CustomNoRowsOverlay()
+{
 	return (
 		<StyledGridOverlay>
 			<svg
@@ -231,11 +241,10 @@ function CustomNoRowsOverlay() {
 	);
 }
 
-
 const columns: GridColDef[] = [
 
 	{
-		field: 'תפריט',
+		field: 'options',
 		headerName: '',
 		width: 50,
 		hideSortIcons: true,
@@ -244,44 +253,79 @@ const columns: GridColDef[] = [
 		disableColumnMenu: true,
 		disableExport: true,
 		editable: false,
+		align: 'center',
 
 		renderCell: (job) => {
-			return <MyDropMenu JobId={job.id} />;
+			return <MyDropMenu job={job?.row} />;
 		},
 	},
 
 	{
 		field: '_jobNumber',
 		headerName: "מס' משרה",
-		width: 150,
-		headerAlign: 'left',
-		align: 'left'
+		width: 110,
+		headerAlign: 'center',
+		align: 'center',
+		// renderCell: (job) => { return <strong>{job?.row?._jobNumber}</strong> }
 	},
+	{
+		field: '_status',
+		headerName: 'סטטוס',
+		description: 'סטטוס המשרה',
+		sortable: false,
+		editable: false,
+		headerAlign: 'center',
+		align: 'center',
+		width: 120,
+		renderCell: (job) => {
+			const { _open } = job.row;
+			return (
+				<>
+					{_open ?
+						<Chip variant='outlined' sx={{ padding: 0.5 }} label={'פתוח'} color="success" icon={<LockOpen sx={{ fontSize: 'medium' }} />} />
+						:
+						<Chip variant='outlined' sx={{ padding: 0.8 }} label={'סגור'} color="error" icon={<Lock sx={{ fontSize: 'medium' }} />} />
+					}
+				</>);
+		},
+	},
+
 
 	{
 		field: '_region',
 		headerName: 'איזור',
 		width: 200,
 		editable: false,
-		headerAlign: 'left',
-		align: 'left'
+		headerAlign: 'center',
+		align: 'center',
 
 
 	},
 	{
 		field: '_role',
 		headerName: 'תפקיד',
-		width: 300,
-		headerAlign: 'left',
-		align: 'left'
+		width: 350,
+		headerAlign: 'center',
+		align: 'center',
+	},
+	{
+		field: '_sector',
+		headerName: 'אשכול',
+		width: 250,
+		headerAlign: 'center',
+		align: 'center',
+		renderCell: (job) => { return <>{job?.row?._sector}</> }
 	},
 	{
 		field: '_scope',
 		headerName: 'אחוז משרה',
 		width: 150,
 		headerAlign: 'center',
-		align: 'center'
+		align: 'center',
+		renderCell: (job) => { return getScopeFormated(job?.row._scope); }
+
 	},
+
 	{
 		field: 'candidates',
 		headerName: 'מועמדים שניגשו',
@@ -290,18 +334,20 @@ const columns: GridColDef[] = [
 		editable: false,
 		headerAlign: 'center',
 		align: 'center',
-		width: 300,
+		width: 200,
 		renderCell: (job) => {
-			const { id } = job.row;
-			return <CandidatesListFullScreenDialog JobId={id} />;
+			const { _jobNumber } = job.row;
+			return <CandidatesListFullScreenDialog JobId={_jobNumber} />;
 		},
 	},
 ];
 
-const GridCustomToolbar = () => {
+const GridCustomToolbar = () =>
+{
 	const navigate = useNavigate();
 
-	const handleCreatejob = () => {
+	const handleCreatejob = () =>
+	{
 		navigate("/management/createJob", { state: null });
 	}
 
@@ -309,12 +355,24 @@ const GridCustomToolbar = () => {
 		<GridToolbarContainer>
 			<Stack direction='row' sx={{ width: '100%' }}>
 				<Box sx={{ width: '100%' }}>
-					<GridToolbarQuickFilter variant='outlined' size='small' sx={{ width: '100%' }} />
+					<GridToolbarQuickFilter variant='outlined' size='small' sx={{
+						width: '100%',
+						'& .muirtl-2ehmn7-MuiInputBase-root-MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {
+							borderRadius: '0.75rem',
+							border: '1px solid rgba(0, 0, 0, 0.23)',
+						},
+						'& .muirtl-ptiqhd-MuiSvgIcon-root': {
+							color: 'rgba(0, 0, 0, 0.23)'
+						},
+					}} 
+					/>
 				</Box>
 				<Box sx={{ display: 'flex', flexDirection: 'row-reverse', width: '100%' }}>
 					<Box>
+						<Button onClick={handleCreatejob} disableRipple sx={MyButtonSx}>
 
-						<Button type="button" endIcon={<ArticleOutlined />} onClick={handleCreatejob} variant='contained' fullWidth>משרה חדשה</Button>
+							<Typography sx={{ font: '12px Roboto, Helvetica,Arial, sans-serif', margin: '0px 0px 2px 0px', fontWeight: 600 }}>משרה חדשה</Typography>
+						</Button>
 
 					</Box>
 				</Box>
@@ -326,11 +384,6 @@ const GridCustomToolbar = () => {
 					<GridToolbarFilterButton />
 					<GridToolbarColumnsButton />
 					<GridToolbarDensitySelector />
-
-					<GridToolbarExportContainer >
-						<GridPrintExportMenuItem options={{ hideFooter: true, hideToolbar: true }} />
-					</GridToolbarExportContainer>
-
 				</Box>
 
 			</Box>
@@ -338,13 +391,15 @@ const GridCustomToolbar = () => {
 	);
 };
 
-function getScopeFormated(scope: number[] | null) {
+function getScopeFormated(scope: number[] | null)
+{
 
 	return scope === null ? '0-100' : scope[0].toString() === scope[1].toString() ? scope[0].toString() + '%' : scope[1].toString() + '% - ' + scope[0].toString() + '%';
 
 }
 
-const CustomPaginationAndFooter = () => {
+const CustomPaginationAndFooter = () =>
+{
 	const apiRef = useGridApiContext();
 	const page = useGridSelector(apiRef, gridPageSelector);
 	const pageCount = useGridSelector(apiRef, gridPageCountSelector);
@@ -352,22 +407,11 @@ const CustomPaginationAndFooter = () => {
 
 
 	return (
-		<Stack direction='row' justifyContent='space-between' alignItems='center' padding={1}>
-			<Box >
-				<Box display='flex' flexDirection='row'>
-					<Chip
-				
-						label={rowsCount + ' משרות'}
-						
-					
-					sx={{fontWeight: 'bold'}}
-						color= 'primary'
-						size='small'
-						variant="outlined"
-					/>
-				</Box>
-
-			</Box>
+		<Stack direction={{ xs: 'column', sm: 'column', md: 'column', lg: 'row-reverse', xl: 'row-reverse' }}
+			justifyContent='space-between'
+			alignItems='center'
+			spacing={2}
+			padding={1} >
 
 			<Box >
 				<Pagination
@@ -383,6 +427,14 @@ const CustomPaginationAndFooter = () => {
 					}
 				/>
 			</Box>
+
+			<Box>
+				<Chip
+					label={rowsCount + ' משרות'}
+					sx={{ fontWeight: 'bold', borderRadius: '0.5rem', color: 'black' }}
+					variant="outlined"
+				/>
+			</Box>
 		</Stack>
 
 	);
@@ -390,32 +442,27 @@ const CustomPaginationAndFooter = () => {
 
 
 export default function MyTable() {
-
-	const [snackbar, setSnackbar] = React.useState<Pick<AlertProps, 'children' | 'severity'> | null>(null);
 	const [pageloading, setPageLoading] = React.useState(true);
 	const [dataloading, setDataLoading] = React.useState(true);
-	const [rows, setRows] = React.useState<any>([]);
+	const [rows, setRows] = React.useState<Job[]>([]);
 
 	const navigate = useNavigate();
 
-	const fetchAllJobs = async () => {
+	const fetchAllJobs = async () =>
+	{
 		setDataLoading(true);
 
-		const jobs = await getFilteredJobs();
-		const jobsWithId = jobs.map((job) => ({ ...job, id: job._jobNumber, _scope: getScopeFormated(job._scope) }));
-
-		setRows(jobsWithId);
+		setRows(await getFilteredJobs());
 
 		setDataLoading(false);
-
 	};
 
-	React.useEffect(() => {
+	React.useEffect(() =>
+	{
 		setPageLoading(false);
 		fetchAllJobs();
 	}, []);
 
-	const handleCloseSnackbar = () => setSnackbar(null);
 
 	const theme = useTheme();
 
@@ -425,17 +472,17 @@ export default function MyTable() {
 				<>
 
 					<DataGrid
-						getRowClassName={(params) =>params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'}
+						getRowClassName={(params) => params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'}
 						autoPageSize
 
 						sx={MyDataGrid(theme)}
 						rows={rows}
 						columns={columns}
-						onRowDoubleClick={(job) => navigate(`../jobs/${job.id}`)}
+						onRowDoubleClick={(job) => navigate(`/career/jobs/${job.id}`)}
 						hideFooterSelectedRowCount
 						rowCount={rows.length}
 
-						getRowId={(row) => row.id}
+						getRowId={(row) => row._jobNumber}
 						localeText={heIL.components.MuiDataGrid.defaultProps.localeText}
 
 						loading={dataloading}
@@ -447,18 +494,8 @@ export default function MyTable() {
 							row: MemoizedRow,
 							columnHeaders: MemoizedColumnHeaders,
 						}}
-
 					/>
-					{!!snackbar && (
-						<Snackbar
-							open
-							anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-							onClose={handleCloseSnackbar}
-							autoHideDuration={6000}
-						>
-							<Alert {...snackbar} onClose={handleCloseSnackbar} />
-						</Snackbar>
-					)}
+
 
 				</>
 			)}
