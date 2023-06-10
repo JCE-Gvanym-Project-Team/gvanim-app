@@ -6,7 +6,7 @@ import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
 
 
-export default async function JobsByFilters(role: string, scope: string, sector: string, openJobs: boolean, highPriority: boolean, viewsAndApplyPerPlatform: string, startDate: Date, endDate: Date): Promise<CandidateJobStatus[]> {
+export default async function JobsByFilters(role: string, scope: number, sector: string, openJobs: boolean, highPriority: boolean, viewsAndApplyPerPlatform: string, startDate: Date, endDate: Date): Promise<CandidateJobStatus[]> {
     let attributes: string[] = [];
     let values: string[] = [];
 
@@ -30,21 +30,20 @@ export default async function JobsByFilters(role: string, scope: string, sector:
         values.push(sector);
     }
 
-    const jobs = await getFilteredJobs(attributes,values);
-    console.log(jobs)
+    const jobs = await getFilteredJobs();
+    // console.log(jobs)
 
     // Create an array to store candidates with the specified rejection cause
     const promises: Promise<any>[] = [];
 
     for (let i = 0; i < jobs.length; i++) {
         let job = jobs[i];
-        console.log(job._creationDate);
-        if (dayjs(job._creationDate).isBetween(dayjs(startDate), dayjs(endDate), null, '[]')) {
-            console.log("hi");
-            let promise = helperJobFilter(job, role, scope, sector, openJobs, highPriority, viewsAndApplyPerPlatform);
-            console.log(promise);
+        // if (dayjs(job._creationDate).isBetween(dayjs(startDate), dayjs(endDate), null, '[]')) {
+        if(job._scope[1] <= scope && job._scope[0] >= scope - 24) {  
+            let promise = helperJobFilter(job, role, job._scope, sector, openJobs, highPriority, viewsAndApplyPerPlatform);
             promises.push(promise);
         }
+        // }
     }
 
     const resultJobs = await Promise.all(promises);
@@ -54,16 +53,22 @@ export default async function JobsByFilters(role: string, scope: string, sector:
 
 
 
-export async function helperJobFilter(job: Job, role: string, scope: string, sector: string, openJobs: boolean, highPriority: boolean, viewsAndApplyPerPlatform: string) {
+export async function helperJobFilter(job: Job, role: string, scope: number[], sector: string, openJobs: boolean, highPriority: boolean, viewsAndApplyPerPlatform: string) {
     let filteredJob: any = {
         "מספר משרה": job._jobNumber,
         "תפקיד": job._role,
-        // "אחוז משרה": job._scope,
         "אשכול": job._sector,
         "אזור": job._region,
-        // "משרה פתוחה" :job._open,
-        "משרה בעדיפות גבוהה": job._highPriority
+        "אחוז משרה": job._scope,
     };
+
+    if (highPriority === false) {
+        filteredJob["משרה בעדיפות רגילה/גבוהה"] = job._highPriority === true ? "כן" : "לא";
+    }
+
+    if (openJobs === false) {
+        filteredJob["משרה פתוחה/סגורה"] = job._open === true ? "פתוחה" : "סגורה";
+    }
 
     //if(viewsAndApplyPerPlatform != "אל תכלול")
     //

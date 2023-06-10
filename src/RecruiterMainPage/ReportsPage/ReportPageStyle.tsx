@@ -57,3 +57,8 @@ export const BootstrapInput = styled(InputBase)(({ theme }) => ({
     display: 'flex',
     gap: '16px' 
   }
+
+
+  export const MyReportStyle = {
+    marginLeft: { xs: '0rem', md: '3rem', lg: '25vw' },  
+  }

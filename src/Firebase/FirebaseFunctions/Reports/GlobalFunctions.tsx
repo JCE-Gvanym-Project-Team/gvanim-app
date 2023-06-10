@@ -4,20 +4,6 @@ import { Job, loginAdmin, getFilteredCandidateJobStatuses, generateJobNumber, ge
 import * as XLSX from 'xlsx';
 
 
-
-export async function filterByDates(listCandidates: CandidateJobStatus[], dates: Date[]): Promise<CandidateJobStatus[]> {
-    let candidatesWithCasueReject: Array<CandidateJobStatus> = [];
-
-    for (let i = 0; i < listCandidates.length; i++) {
-        let candidate = listCandidates[i];
-        if (candidate._applyDate >= dates[0] && candidate._lastUpdate <= dates[1])
-            candidatesWithCasueReject.push(candidate);
-    }
-
-    return candidatesWithCasueReject;
-}
-
-
 export async function exportToExcel(tableResule: any[], reportName: string) {
     // Convert the result data to the Excel format
     const worksheet = XLSX.utils.json_to_sheet(tableResule);
