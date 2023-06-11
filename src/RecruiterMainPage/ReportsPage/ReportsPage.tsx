@@ -117,7 +117,7 @@ function ReportsPage() {
 
 			<Box> 
 				 <MyTable></MyTable> 
-				<CandidatesByRoles></CandidatesByRoles>
+				{/* <CandidatesByRoles></CandidatesByRoles> */}
 				<JobsByRegions></JobsByRegions>
 			</Box>
 		</>
