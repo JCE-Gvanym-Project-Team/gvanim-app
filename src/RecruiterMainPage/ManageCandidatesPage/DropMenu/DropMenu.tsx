@@ -25,7 +25,7 @@ function MenuSection({ children, label }: MenuSectionProps) {
   );
 }
 
-export default function MyDropMenu(props: { CandidateId: any }) {
+export default function DropMenu(props: { CandidateId: any }) {
   const navigate = useNavigate();
   const { CandidateId } = props;
   const [buttonElement, setButtonElement] =

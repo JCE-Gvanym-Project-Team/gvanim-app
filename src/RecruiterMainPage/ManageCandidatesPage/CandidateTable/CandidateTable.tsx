@@ -1,7 +1,7 @@
 import * as React from "react";
 import Typography from "@mui/material/Typography";
 import { Box, Button, Container, Stack, styled, useTheme } from "@mui/material";
-import MyDropMenu from "../DropMenu/DropMenu";
+import DropMenu from "../DropMenu/DropMenu";
 import {
   DataGrid,
   GridToolbarFilterButton,
@@ -19,16 +19,185 @@ import {
   GridPrintExportMenuItem,
 } from "@mui/x-data-grid";
 import {
-  GridFooterContainerSx,
+  Candidate,
+  getFilteredCandidates,
+} from "../../../Firebase/FirebaseFunctions/Candidate";
+import { useNavigate } from "react-router-dom";
+import {
   TypographyFooterSx,
   dataGridContainerStyle,
   dataGridContainerSx,
   dataGridSx,
 } from "./CandidateTableStyle";
-import { getFilteredCandidates } from "../../../Firebase/FirebaseFunctions/Candidate";
-import { getFilteredJobs } from "../../../Firebase/FirebaseFunctions/Job";
-import { useNavigate } from "react-router-dom";
-import { ArticleOutlined } from "@mui/icons-material";
+import { unstable_useForkRef as useForkRef } from "@mui/utils";
+import { MyButtonSx } from "./CandidateTableStyle";
+import { ArticleOutlined, LockOpen, Lock } from "@mui/icons-material";
+import { Job, getFilteredJobs } from "../../../Firebase/FirebaseFunctions/Job";
+import Pagination from "@mui/material/Pagination";
+import PaginationItem from "@mui/material/PaginationItem";
+import {
+  gridPageCountSelector,
+  gridPageSelector,
+  useGridSelector,
+  GridColumnHeaders,
+  gridClasses,
+  GridRow,
+} from "@mui/x-data-grid";
+import {
+  Chip,
+  LinearProgress,
+  SxProps,
+  Theme,
+  Tooltip,
+  alpha,
+} from "@mui/material";
+import MyLoading from "../../../Components/MyLoading/MyLoading";
+import MyDropMenu from "../../ManageJobsPage/Components/MyDropMenu/MyDropMenu";
+import CandidatesListFullScreenDialog from "../../ManageJobsPage/Components/CandidatesListDialog/CandidatesListDialog";
+import { useState, useEffect } from "react";
+import ViewCandidatesPage from "../ViewCandidatesPage/ViewCandidatesPage";
+
+// -------------------Use Memorie for better performance----------------------------------------------------
+const TraceUpdates = React.forwardRef<any, any>((props, ref) => {
+  const { Component, ...other } = props;
+  const rootRef = React.useRef<HTMLElement>();
+  const handleRef = useForkRef(rootRef, ref);
+
+  React.useEffect(() => {
+    const root = rootRef.current;
+    root!.classList.add("updating");
+    root!.classList.add("updated");
+
+    const timer = setTimeout(() => {
+      root!.classList.remove("updating");
+    }, 360);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  });
+
+  return <Component ref={handleRef} {...other} />;
+});
+
+const RowWithTracer = React.forwardRef((props, ref) => {
+  return <TraceUpdates ref={ref} Component={GridRow} {...props} />;
+});
+
+const ColumnHeadersWithTracer = React.forwardRef((props, ref) => {
+  return <TraceUpdates ref={ref} Component={GridColumnHeaders} {...props} />;
+});
+
+const MemoizedRow = React.memo(RowWithTracer);
+const MemoizedColumnHeaders = React.memo(ColumnHeadersWithTracer);
+// ---------------------------------------------------------------------------------------------------------
+
+const ODD_OPACITY = 0.2;
+const MyDataGrid = (theme: Theme): SxProps => ({
+  paddingTop: 1,
+  height: "618px",
+  borderTop: "1px solid rgba(0, 0, 0, 0.125)",
+  borderBottom: "1px solid rgba(0, 0, 0, 0.125)",
+  borderRight: "unset",
+  borderLeft: "unset",
+  borderTopRightRadius: 0,
+  borderTopLeftRadius: 0,
+  overflow: "hidden",
+  "&.MuiDataGrid-root .MuiDataGrid-cell:focus-within": {
+    outline: "none !important",
+  },
+  "&.MuiDataGrid-root .MuiDataGrid-row:focus-within": {
+    background: alpha(
+      theme.palette.primary.main,
+      ODD_OPACITY + theme.palette.action.selectedOpacity
+    ),
+  },
+
+  color:
+    theme.palette.mode === "light"
+      ? "rgba(0,0,0,.85)"
+      : "rgba(255,255,255,0.85)",
+  fontFamily: [
+    "-apple-system",
+    "BlinkMacSystemFont",
+    '"Segoe UI"',
+    "Roboto",
+    '"Helvetica Neue"',
+    "Arial",
+    "sans-serif",
+    '"Apple Color Emoji"',
+    '"Segoe UI Emoji"',
+    '"Segoe UI Symbol"',
+  ].join(","),
+  WebkitFontSmoothing: "auto",
+  letterSpacing: "normal",
+  "& .MuiDataGrid-columnsContainer": {
+    backgroundColor: theme.palette.mode === "light" ? "#fafafa" : "#1d1d1d",
+    borderBottom: `1px solid ${
+      theme.palette.mode === "light" ? "#f0f0f0" : "#303030"
+    }`,
+  },
+  "& .MuiDataGrid-iconSeparator": {
+    display: "none",
+  },
+  "& .MuiDataGrid-columnHeader": {
+    borderBottom: `1px solid ${
+      theme.palette.mode === "light" ? "#f0f0f0" : "#303030"
+    }`,
+  },
+  "& .MuiDataGrid-columnHeader, .MuiDataGrid-cell": {
+    borderRight: `1px solid ${
+      theme.palette.mode === "light" ? "#f0f0f0" : "#303030"
+    }`,
+    borderBottom: `1px solid ${
+      theme.palette.mode === "light" ? "#f0f0f0" : "#303030"
+    }`,
+  },
+  "& .MuiDataGrid-columnsContainer, .MuiDataGrid-cell": {
+    borderBottom: `1px solid ${
+      theme.palette.mode === "light" ? "#f0f0f0" : "#303030"
+    }`,
+  },
+  "& .MuiDataGrid-cell": {
+    color:
+      theme.palette.mode === "light"
+        ? "rgba(0,0,0,.85)"
+        : "rgba(255,255,255,0.65)",
+  },
+  "& .MuiPaginationItem-root": {
+    borderRadius: "35%",
+  },
+  [`& .${gridClasses.row}.even`]: {
+    backgroundColor: theme.palette.grey[50],
+    "&:hover, &.Mui-hovered": {
+      backgroundColor: alpha(theme.palette.primary.main, ODD_OPACITY),
+      "@media (hover: none)": {
+        backgroundColor: "transparent",
+      },
+    },
+    "&.Mui-selected": {
+      backgroundColor: alpha(
+        theme.palette.primary.main,
+        ODD_OPACITY + theme.palette.action.selectedOpacity
+      ),
+      "&:hover, &.Mui-hovered": {
+        backgroundColor: alpha(
+          theme.palette.primary.main,
+          ODD_OPACITY +
+            theme.palette.action.selectedOpacity +
+            theme.palette.action.hoverOpacity
+        ),
+        // Reset on touch devices, it doesn't add specificity
+        "@media (hover: none)": {
+          backgroundColor: alpha(
+            theme.palette.primary.main,
+            ODD_OPACITY + theme.palette.action.selectedOpacity
+          ),
+        },
+      },
+    },
+  },
+});
 
 const StyledGridOverlay = styled("div")(({ theme }) => ({
   display: "flex",
@@ -96,14 +265,15 @@ function CustomNoRowsOverlay() {
           </g>
         </g>
       </svg>
-      <Box sx={{ mt: 1 }}>אין משרות</Box>
+      <Box sx={{ mt: 1 }}>אין מועמדים!</Box>
     </StyledGridOverlay>
   );
 }
+//================================================
 
 const columns: GridColDef[] = [
   {
-    field: "תפריט",
+    field: "options",
     headerName: "",
     width: 50,
     hideSortIcons: true,
@@ -112,63 +282,114 @@ const columns: GridColDef[] = [
     disableColumnMenu: true,
     disableExport: true,
     editable: false,
+    align: "center",
 
     renderCell: (candidate) => {
-      return <MyDropMenu CandidateId={candidate.id} />;
+      return <DropMenu CandidateId={candidate?.row} />;
     },
   },
-
   {
-    field: "_candidateName",
-    headerName: "שם מועמד",
+    field: "firstName",
+    headerName: "שם פרטי",
     width: 150,
     headerAlign: "center",
     align: "center",
-    renderCell: (params) => {
-      const navigate = useNavigate();
+    sortable: true,
+    renderCell: (candidate) => {
+      const handleFirstNameClick = () => {
+        // Redirect to the candidate details page
+        "management/candidate/" + candidate.row._id;
+      };
+
       return (
-        <Button
-          onClick={() => navigate(`/candidate/${params.row._candidateName}`)}
-        >
-          {params.row._candidateName}
-        </Button>
+        <span className="clickable" onClick={handleFirstNameClick}>
+          {candidate.row._firstName}
+        </span>
       );
+    },
+  },
+  {
+    field: "_lastName",
+    headerName: "שם משפחה",
+    width: 150,
+    headerAlign: "center",
+    align: "center",
+    sortable: true,
+    renderCell: (candidate) => {
+      return <>{candidate?.row?._lastName}</>;
     },
   },
   {
     field: "_jobNumber",
-    headerName: "מס' משרה",
+    headerName: "מספר המשרה",
     width: 150,
     headerAlign: "center",
     align: "center",
-    valueGetter: (params) => getAppliedJobs(params.row.id),
+    sortable: true,
+    renderCell: (candidate) => {
+      const handleJobNumberClick = () => {
+        // Redirect to the job details page
+        "career/job/" + candidate.row._jobNumber;
+      };
+
+      return (
+        <span className="clickable" onClick={handleJobNumberClick}>
+          {candidate.row._jobNumber}
+        </span>
+      );
+    },
   },
   {
-    field: "_region",
-    headerName: "איזור",
-    width: 200,
-    editable: false,
+    field: "_jobArea",
+    headerName: "אזור",
+    width: 150,
     headerAlign: "center",
     align: "center",
-    valueGetter: async (params) => {
-      const appliedJobs = await getAppliedJobs(params.row.id);
-      const regions = await Promise.all(
-        appliedJobs.map((job) =>
-          getFilteredJobs(["jobNumber"], [job], "region")
-        )
+    sortable: true,
+  },
+  {
+    field: "submissionDate",
+    headerName: "תאריך הגשת מועמדות",
+    width: 200,
+    headerAlign: "center",
+    align: "center",
+    sortable: true,
+    renderCell: (candidate) => {
+      return <>{candidate?.row?.submissionDate}</>;
+    },
+  },
+  {
+    field: "status",
+    headerName: "סטטוס המועמד",
+    width: 150,
+    headerAlign: "center",
+    align: "center",
+    sortable: true,
+    renderCell: (candidate) => candidate?.row?.status,
+  },
+  {
+    field: "cvFile",
+    headerName: "קורות חיים",
+    width: 150,
+    headerAlign: "center",
+    align: "center",
+    sortable: false,
+    renderCell: (params) => {
+      const handleCvFileClick = () => {
+        // Open the candidate's CV file
+        window.open(params.row.cvFile, "_blank");
+      };
+
+      return (
+        <span className="clickable" onClick={handleCvFileClick}>
+          קובץ
+        </span>
       );
-      return regions.join(", ");
     },
   },
 ];
 
-const GridCustomToolbar = ({
-  syncState,
-}: {
-  syncState: (stateToSave: GridInitialState) => void;
-}) => {
-  const rootProps = useGridRootProps();
-  const apiRef = useGridApiContext();
+const GridCustomToolbar = () => {
   const navigate = useNavigate();
 
   const handleCreateCandidate = () => {
@@ -182,7 +403,17 @@ const GridCustomToolbar = ({
           <GridToolbarQuickFilter
             variant="outlined"
             size="small"
-            sx={{ width: "100%" }}
+            sx={{
+              width: "100%",
+              "& .muirtl-2ehmn7-MuiInputBase-root-MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
+                {
+                  borderRadius: "0.75rem",
+                  border: "1px solid rgba(0, 0, 0, 0.23)",
+                },
+              "& .muirtl-ptiqhd-MuiSvgIcon-root": {
+                color: "rgba(0, 0, 0, 0.23)",
+              },
+            }}
           />
         </Box>
         <Box
@@ -190,18 +421,23 @@ const GridCustomToolbar = ({
         >
           <Box>
             <Button
-              type="button"
-              endIcon={<ArticleOutlined />}
               onClick={handleCreateCandidate}
-              variant="contained"
-              fullWidth
+              disableRipple
+              sx={MyButtonSx}
             >
-              מועמד חדש
+              <Typography
+                sx={{
+                  font: "12px Roboto, Helvetica,Arial, sans-serif",
+                  margin: "0px 0px 2px 0px",
+                  fontWeight: 600,
+                }}
+              >
+                מועמד/ת חדש/ה
+              </Typography>
             </Button>
           </Box>
         </Box>
       </Stack>
-
       <Box
         sx={{
           width: "100%",
@@ -214,53 +450,75 @@ const GridCustomToolbar = ({
           <GridToolbarFilterButton />
           <GridToolbarColumnsButton />
           <GridToolbarDensitySelector />
-
-          <GridToolbarExportContainer>
-            <GridPrintExportMenuItem
-              options={{ hideFooter: true, hideToolbar: true }}
-            />
-          </GridToolbarExportContainer>
         </Box>
       </Box>
     </GridToolbarContainer>
   );
 };
 
-export default function CandidateTable(props: { setDataSize: any }) {
-  const { setDataSize } = props;
-  const [allCandidates, setAllCandidates] = React.useState<any[]>([]);
+const CustomPaginationAndFooter = () => {
+  const apiRef = useGridApiContext();
+  const page = useGridSelector(apiRef, gridPageSelector);
+  const pageCount = useGridSelector(apiRef, gridPageCountSelector);
+  const rowsCount = apiRef.current.getRowsCount();
+
+  return (
+    <Stack
+      direction={{
+        xs: "column",
+        sm: "column",
+        md: "column",
+        lg: "row-reverse",
+        xl: "row-reverse",
+      }}
+      justifyContent="space-between"
+      alignItems="center"
+      spacing={2}
+      padding={1}
+    >
+      <Box>
+        <Pagination
+          color="primary"
+          variant="outlined"
+          shape="rounded"
+          page={page + 1}
+          count={pageCount}
+          // @ts-expect-error
+          renderItem={(props2) => <PaginationItem {...props2} disableRipple />}
+          onChange={(event: React.ChangeEvent<unknown>, value: number) =>
+            apiRef.current.setPage(value - 1)
+          }
+        />
+      </Box>
+
+      <Box>
+        <Chip
+          label={rowsCount + " מועמדים"}
+          sx={{ fontWeight: "bold", borderRadius: "0.5rem", color: "black" }}
+          variant="outlined"
+        />
+      </Box>
+    </Stack>
+  );
+};
+
+export default function CandidateTable() {
+  const [pageloading, setPageLoading] = React.useState(true);
+  const [dataloading, setDataLoading] = React.useState(true);
+  const [rows, setRows] = React.useState<Candidate[]>([]);
+
   const navigate = useNavigate();
 
   const fetchAllCandidates = async () => {
-    const candidates = await getFilteredCandidates();
-    const candidatesWithId = candidates.map((candidate) => ({
-      ...candidate,
-      id: candidate._id,
-      firstName: candidate._firstName,
-      lastName: candidate._lastName,
-    }));
-    setAllCandidates(candidatesWithId);
-  };
+    setDataLoading(true);
 
-  const CustomFooter = () => {
-    React.useEffect(() => {
-      setDataSize(allCandidates.length);
-    }, []);
+    setRows(await getFilteredCandidates());
 
-    return (
-      <GridFooterContainer sx={GridFooterContainerSx}>
-        <Typography variant="subtitle2" sx={TypographyFooterSx}>
-          מס' מועמדים:
-        </Typography>
-
-        <Typography variant="subtitle2" sx={TypographyFooterSx}>
-          {allCandidates.length}
-        </Typography>
-      </GridFooterContainer>
-    );
+    setDataLoading(false);
   };
 
   React.useEffect(() => {
+    setPageLoading(false);
     fetchAllCandidates();
   }, []);
 
@@ -268,42 +526,37 @@ export default function CandidateTable(props: { setDataSize: any }) {
 
   return (
     <>
-      <Container
-        className="shadow-lg border rounded"
-        sx={dataGridContainerSx}
-        style={dataGridContainerStyle}
-        maxWidth="xl"
-      >
-        <DataGrid
-          sx={dataGridSx(theme)}
-          rows={allCandidates}
-          columns={columns}
-          onRowDoubleClick={(candidate) =>
-            navigate(`/career/candidates/${candidate.id}`)
-          }
-          // checkboxSelection
-          // disableRowSelectionOnClick
-          // disableColumnMenu
-          hideFooterSelectedRowCount
-          hideFooterPagination
-          // hideFooter
-          localeText={heIL.components.MuiDataGrid.defaultProps.localeText}
-          slots={{
-            noRowsOverlay: CustomNoRowsOverlay,
-            toolbar: GridCustomToolbar,
-            footer: CustomFooter,
-          }}
-        />
-      </Container>
+      {pageloading ? (
+        <MyLoading loading={pageloading} setLoading={setPageLoading} />
+      ) : (
+        <>
+          <DataGrid
+            getRowClassName={(params) =>
+              params.indexRelativeToCurrentPage % 2 === 0 ? "even" : "odd"
+            }
+            autoPageSize
+            sx={MyDataGrid(theme)}
+            rows={rows}
+            columns={columns}
+            onRowDoubleClick={(candidate) =>
+              navigate(`/management/manageCandidates/${candidate.id}`)
+            }
+            hideFooterSelectedRowCount
+            rowCount={rows.length}
+            getRowId={(row) => row._id}
+            localeText={heIL.components.MuiDataGrid.defaultProps.localeText}
+            loading={dataloading}
+            slots={{
+              noRowsOverlay: CustomNoRowsOverlay,
+              toolbar: GridCustomToolbar,
+              footer: CustomPaginationAndFooter,
+              loadingOverlay: LinearProgress,
+              row: MemoizedRow,
+              columnHeaders: MemoizedColumnHeaders,
+            }}
+          />
+        </>
+      )}
     </>
   );
-}
-async function getAppliedJobs(this: any, id: any) {
-  let jobs;
-  let statArr = await this.getCandidatures();
-  let jobIds = statArr.map((stat) => stat._jobNumber);
-  jobIds.forEach((id) =>
-    jobs.push(getFilteredJobs(["jobNumber"], [id.toString()]))
-  );
-  return jobs;
 }
