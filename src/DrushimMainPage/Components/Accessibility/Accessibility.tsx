@@ -40,12 +40,6 @@ export default function Accessibility()
 
     return (
         <React.Fragment>
-            <Button
-                color='secondary'
-                onClick={() => theme.palette.mode === "light" ? colorMode.toggleColorMode("dark") : colorMode.toggleColorMode("light")}
-            >
-                Toggle Theme
-            </Button>
             <Box
                 sx={{
                     display: "flex",
@@ -132,7 +126,7 @@ export default function Accessibility()
                             <ListItemButton
                                 onClick={() =>
                                 {
-                                    colorMode.toggleColorMode("aaa");
+                                    colorMode.toggleColorMode("dark-contrast");
                                 }}>
                                 <ListItemIcon>
                                     <Nightlight />
