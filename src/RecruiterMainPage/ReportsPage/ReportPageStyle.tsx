@@ -40,3 +40,25 @@ export const BootstrapInput = styled(InputBase)(({ theme }) => ({
       },
     },
   }));
+
+
+  export const formContainerStyles = {
+    width: '600px',
+    height: '400px',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    minHeight: '100vh',
+    marginRight: '30%'
+  };
+
+
+  export const radioStyle = {
+    display: 'flex',
+    gap: '16px' 
+  }
+
+
+  export const MyReportStyle = {
+    marginLeft: { xs: '0rem', md: '3rem', lg: '25vw' },  
+  }

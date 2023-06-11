@@ -37,7 +37,7 @@ export class CandidateJobStatus {
         about: string = "",
         matchingRate: number = -1,
         applyDate: Date = new Date(),
-        lastUpdate: Date = new Date(),
+        lastUpdate: Date = new Date(0, 0, 0),
         interviewDate: Date = new Date(0, 0, 0),
         interviewsSummery: Array<string> = ["", ""],
         recomendations: Array<Recomendation> = new Array<Recomendation>(),
@@ -117,7 +117,8 @@ export class CandidateJobStatus {
             for (let j = 0; j < extentions.length; j++)
                 if ((await fileExists(`CandidatesFiles/${this._candidateId}/rec/${phones[i]}_${this._jobNumber}_REC.${extentions[j]}`))) {
                     let url = await getDownloadUrlFromFirestorePath(`CandidatesFiles/${this._candidateId}/rec/${phones[i]}_${this._jobNumber}_REC.${extentions[j]}`);
-                    urls.push(url);
+                    if(!urls.includes(url))
+                        urls.push(url);
                 }
         return urls;
     }
@@ -219,10 +220,15 @@ export class CandidateJobStatus {
      * @returns None
      */
     public async add() {
-        if (!(await this.exists()))
-            appendToDatabase(this, "/CandidatesJobStatus");
-        else
+        if (!(await this.exists())){
+            await appendToDatabase(this, "/CandidatesJobStatus");
+            return true;
+        }
+        else{
             console.log("the CandidatesJobStatus already exists");
+            return false;
+
+        }
     }
     /**
      * Updates the status of the candidate job application and replaces the data in the realtime DB.

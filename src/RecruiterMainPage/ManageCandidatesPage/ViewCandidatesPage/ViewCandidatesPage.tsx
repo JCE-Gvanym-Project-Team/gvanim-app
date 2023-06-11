@@ -220,7 +220,7 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 								position: 'absolute',
 							}} />
 
-							<Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', top: "165px", position: "absolute" }}>
+							<Box sx={{ display: 'flex', flexDirection: 'column', alignItems: "center", justifyContent: "end", height: "190px"}}>
 								<Stack direction='row' spacing={1}>
 									<Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
 										<AccountCircle sx={{ color: '#fff' }} />

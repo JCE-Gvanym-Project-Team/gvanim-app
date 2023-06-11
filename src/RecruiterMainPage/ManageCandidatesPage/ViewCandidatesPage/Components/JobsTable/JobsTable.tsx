@@ -80,7 +80,7 @@ export default function JobsTable2(props: {
 
             renderCell: (job) =>
             {
-                return <MyDropMenu JobId={job.id} />;
+                return <MyDropMenu job={job.row} />;
             },
         },
 

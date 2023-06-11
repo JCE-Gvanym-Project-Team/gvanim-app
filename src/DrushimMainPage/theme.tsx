@@ -2,10 +2,8 @@ import { createContext, useState, useMemo } from "react"
 import { createTheme } from "@mui/material/styles"
 
 // colors based on mode
-export const colorTokens = (mode) =>
-{
-    if (mode === "dark")
-    {
+export const colorTokens = (mode) => {
+    if (mode === "dark") {
         return {
             grey: {
                 100: "#e0e0e0",
@@ -20,16 +18,17 @@ export const colorTokens = (mode) =>
                 1000: "#fcfcfc"
             },
             primary: {
-                100: "#d0d1d5",
-                200: "#a1a4ab",
-                300: "#727681",
-                400: "#434957",
-                500: "#141b2d",
-                600: "#101624",
-                700: "#0c101b",
-                800: "#080b12",
-                900: "#040509",
-                1000: "#000000"
+                100: "#ffffff",
+                200: "#d0d1d5",
+                300: "#a1a4ab",
+                400: "#727681",
+                500: "#434957",
+                600: "#141b2d",
+                700: "#101624",
+                800: "#0c101b",
+                900: "#080b12",
+                1000: "#040509",
+                1100: "#000000"
             },
             greens: {
                 100: "#dbf5ee",
@@ -65,8 +64,7 @@ export const colorTokens = (mode) =>
                 900: "#151632"
             }
         }
-    } else
-    {
+    } else {
         return {
             grey: {
                 100: "#141414",
@@ -81,15 +79,17 @@ export const colorTokens = (mode) =>
                 1000: "#fcfcfc"
             },
             primary: {
-                100: "#040509",
-                200: "#080b12",
-                300: "#0c101b",
-                400: "#101624",
-                500: "#141b2d",
-                600: "#434957",
-                700: "#727681",
-                800: "#a1a4ab",
-                900: "#d0d1d5",
+                100: "#000000",
+                200: "#040509",
+                300: "#080b12",
+                400: "#0c101b",
+                500: "#101624",
+                600: "#141b2d",
+                700: "#434957",
+                800: "#727681",
+                900: "#a1a4ab",
+                1000: "#d0d1d5",
+                1100: "#ffffff"
             },
             greens: {
                 100: "#0f2922",
@@ -128,17 +128,16 @@ export const colorTokens = (mode) =>
     }
 }
 
-export const themeSettings = (mode) =>
-{
+export const themeSettings = (mode) => {
     const colors = colorTokens(mode);
 
-    if (mode === "dark")
-    {
+    if (mode === "dark") {
         return {
             palette: {
                 mode: mode,
                 primary: {
-                    main: colors.primary[100],
+                    main: colors.primary[200],
+                    textBright: colors.primary[1100],
                     faded: colors.primary[900]
                 },
                 secondary: {
@@ -153,6 +152,12 @@ export const themeSettings = (mode) =>
                     default: colors.primary[500],
                     box: colors.grey[800],
                     boxInner: colors.grey[700]
+                },
+                error: {
+                    main: colors.reds[500]
+                },
+                success: {
+                    main: colors.greens[600]
                 }
             },
             typography: {
@@ -182,11 +187,96 @@ export const themeSettings = (mode) =>
                     fontFamily: ["'Noto Sans Hebrew'", "sans-serif"].join(","),
                     fontSize: 14
                 },
+                icons: {
+                    fontSizeBIG: 24,
+                    fontSizeMEDIUM: 20,
+                    fontSIzeSMALL: 16
+                }
 
             }
         }
-    } else if (mode === "light")
-    {
+    } else if (mode === "light") {
+        return {
+            palette: {
+                mode: mode,
+                primary: {
+                    main: colors.primary[100],
+                    textBright: colors.primary[1100],
+                    faded: colors.primary[900]
+                },
+                secondary: {
+                    dark: colors.blues[200],
+                    main: colors.blues[500],
+                    half: colors.blues[700]
+                },
+                neutral: {
+                    main: colors.grey[500],
+                    dark: colors.grey[700],
+                    light: colors.grey[100]
+                },
+                background: {
+                    main: colors.grey[1000],
+                    box: colors.grey[800],
+                    boxInner: colors.grey[700],
+                },
+                error: {
+                    main: colors.reds[500]
+                },
+                success: {
+                    main: colors.greens[600],
+                    secondary: colors.greens[300]
+                }
+            },
+            typography: {
+                fontFamily: ["'Noto Sans Hebrew'", "sans-serif"].join(","),
+                fontSize: 20,
+                h1: {
+                    fontFamily: ["'Noto Sans Hebrew'", "sans-serif"].join(","),
+                    fontSize: 40
+                },
+                h2: {
+                    fontFamily: ["'Noto Sans Hebrew'", "sans-serif"].join(","),
+                    fontSize: 32
+                },
+                h3: {
+                    fontFamily: ["'Noto Sans Hebrew'", "sans-serif"].join(","),
+                    fontSize: 24
+                },
+                h4: {
+                    fontFamily: ["'Noto Sans Hebrew'", "sans-serif"].join(","),
+                    fontSize: 20
+                },
+                h5: {
+                    fontFamily: ["'Noto Sans Hebrew'", "sans-serif"].join(","),
+                    fontSize: 16
+                },
+                h6: {
+                    fontFamily: ["'Noto Sans Hebrew'", "sans-serif"].join(","),
+                    fontSize: 14
+                },
+            },
+            icons: {
+                fontSizeBIG: 24,
+                fontSizeMEDIUM: 20,
+                fontSIzeSMALL: 16
+            }
+        }
+
+    } else if (mode === "bright contrast") {
+        // TODO: fill this with colors after website is built
+        // according to what colors look good
+        return {
+            palette: mode,
+        }
+    } else if (mode === "dark contrast") {
+        // TODO: fill this with colors after website is built
+        // according to what colors look good
+        return {
+            palette: mode,
+        }
+    } else if (mode === "white and dark") {
+        // TODO: fill this with colors after website is built
+        // according to what colors look good
         return {
             palette: {
                 mode: mode,
@@ -238,28 +328,6 @@ export const themeSettings = (mode) =>
 
             }
         }
-
-    } else if (mode === "bright contrast")
-    {
-        // TODO: fill this with colors after website is built
-        // according to what colors look good
-        return {
-            palette: mode,
-        }
-    } else if (mode === "dark contrast")
-    {
-        // TODO: fill this with colors after website is built
-        // according to what colors look good
-        return {
-            palette: mode,
-        }
-    } else if (mode === "white and dark")
-    {
-        // TODO: fill this with colors after website is built
-        // according to what colors look good
-        return {
-            palette: mode,
-        }
     }
 }
 
@@ -269,15 +337,13 @@ export const ColorModeContext = createContext({
     toggleColorMode: (mode) => { }
 });
 
-export const useMode = () =>
-{
+export const useMode = () => {
     // default is light
     const [mode, setMode] = useState("light");
 
     const colorMode = useMemo(() =>
     ({
-        toggleColorMode: (mode) =>
-        {
+        toggleColorMode: (mode) => {
             setMode(mode)
         }
     }), []);
