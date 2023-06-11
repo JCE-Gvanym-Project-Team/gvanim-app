@@ -1,8 +1,9 @@
+import { Box } from '@mui/material'
 import React from 'react'
 
 export default function Accessibility()
 {
     return (
-        <div>Accessibility</div>
+        <Box sx={{position: 'absolute'}}>Accessibility</Box>
     )
 }
