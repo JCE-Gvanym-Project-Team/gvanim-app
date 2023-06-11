@@ -1,5 +1,5 @@
 
-import { AddRounded, Inbox, Mail, ZoomInRounded, ZoomOutRounded } from '@mui/icons-material';
+import { Accessible, AddRounded, Contrast, FormatUnderlined, Inbox, LightMode, Mail, Nightlight, ZoomInRounded, ZoomOutRounded } from '@mui/icons-material';
 import { Box, Button, Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, SwipeableDrawer, ThemeProvider, Typography, createTheme, makeStyles, styled, useTheme } from '@mui/material'
 import React, { useContext, useState } from 'react'
 import { ColorModeContext, colorTokens } from '../../theme';
@@ -9,7 +9,8 @@ const CustomDrawer = styled(Drawer)(({ theme }) => ({
     '& .MuiDrawer-paperAnchorLeft': {
         transform: 'translateX(100%)',
         transition: 'transform 0.3s !important',
-        left: "calc(100% - 250px)"
+        left: "calc(100% - 250px)",
+        zIndex: "12000"
     }
 }));
 
@@ -40,7 +41,7 @@ export default function Accessibility() {
                     position: "fixed",
                     top: "70%",
                     right: "0",
-                    zIndex: "120000" // on top of everything
+                    zIndex: "10" // on top of everything but the drawer
                 }}
             >
                 <Button
@@ -50,7 +51,10 @@ export default function Accessibility() {
                     }}
                     onClick={() => toggleDrawer(true)}
                 >
-                    נגישות
+                    <Typography variant='h4' sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+                        <Accessible sx={{ fontSize: "24px" }} />
+                        נגישות
+                    </Typography>
                 </Button>
             </Box>
 
@@ -66,32 +70,102 @@ export default function Accessibility() {
                     onClick={() => toggleDrawer(false)}
                     onKeyDown={() => toggleDrawer(false)}
                 >
+                    {/* increase or decrease font size */}
                     <List>
-                        {/* increase or decrease font size */}
+                        {/* Increase font size */}
                         <ListItem disablePadding>
                             <ListItemButton>
                                 <ListItemIcon>
-                                    <ZoomOutRounded sx={{
-                                        
-                                    }} />
+                                    <Typography
+                                        sx={{
+                                            display: "flex",
+                                            flexDirection: "row",
+                                            alignItems: "center"
+                                        }}
+                                    >
+                                        <ZoomOutRounded />
+                                    </Typography>
                                 </ListItemIcon>
-                                {/* <ListItemText primary="הקנת גודל הגופן" /> */}
-                                <Typography variant='h4'>הגדלת גודל גןפן</Typography>
+                                <Typography variant='h4'>
+                                    הקטנת גודל גופן
+                                </Typography>
                             </ListItemButton>
                         </ListItem>
-                    </List>
-                    <Divider />
-                    <List>
+                        {/* Decrease font size */}
                         <ListItem disablePadding>
                             <ListItemButton>
                                 <ListItemIcon>
                                     <ZoomInRounded />
                                 </ListItemIcon>
-                                <Typography variant='h4'>הגדלת גודל גןפן</Typography>
-                                {/* <ListItemText primary={"הגדלת גודל הגופן"} /> */}
+                                <Typography variant='h4'>
+                                    הגדלת גודל גופן
+                                </Typography>
                             </ListItemButton>
                         </ListItem>
                     </List>
+                    <Divider />
+                    <List >
+                        {/* dark contrast */}
+                        <ListItem disablePadding>
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <Nightlight />
+                                </ListItemIcon>
+                                <Typography variant='h4'>
+                                    ניגודיות כהה
+                                </Typography>
+                            </ListItemButton>
+                        </ListItem>
+
+                        {/* bright contrast */}
+                        <ListItem disablePadding>
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <LightMode />
+                                </ListItemIcon>
+                                <Typography variant='h4'>
+                                    ניגודיות בהירה
+                                </Typography>
+                            </ListItemButton>
+                        </ListItem>
+
+                        {/* Black and white */}
+                        <ListItem disablePadding>
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <Contrast />
+                                </ListItemIcon>
+                                <Typography variant='h4'>
+                                    שחור-לבן
+                                </Typography>
+                            </ListItemButton>
+                        </ListItem>
+                    </List>
+                    <Divider />
+                    <List>
+                        {/* Change font */}
+                        <ListItem disablePadding>
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <ZoomInRounded />
+                                </ListItemIcon>
+                                <Typography variant='h4'>
+                                    פונט קריא
+                                </Typography>
+                            </ListItemButton>
+                        </ListItem>
+                        <ListItem disablePadding>
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <FormatUnderlined />
+                                </ListItemIcon>
+                                <Typography variant='h4'>
+                                    קו תחתון לקישורים
+                                </Typography>
+                            </ListItemButton>
+                        </ListItem>
+                    </List>
+
                 </Box>
             </CustomDrawer>
 
