@@ -41,7 +41,7 @@ const JobsComponent: React.FC = () => {
       const regions = Object.keys(jobsByRegion);
       const quantities = Object.values(jobsByRegion);
 
-      Highcharts.chart("chart-container", {
+      Highcharts.chart("chart-container2", {
         chart: {
           type: "column",
           renderTo: "chart-container",
@@ -73,7 +73,7 @@ const JobsComponent: React.FC = () => {
     fetchDataAndCreateChart();
   }, []);
 
-  return <div id="chart-container"></div>;
+  return <div id="chart-container2"></div>;
 };
 
 export default JobsComponent;

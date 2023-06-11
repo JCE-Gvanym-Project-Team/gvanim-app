@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Typography from '@mui/material/Typography';
-import { Box, Container, Stack, useTheme } from '@mui/material';
+import { Box, Button, Container, Stack, useTheme } from '@mui/material';
 import MyTable from '../ReportsPage/Components/MyTable/MyTable';
 import { BoxGradientSx } from '../PageStyles';
 import { ManageJobPageBoxSx } from '../ManageJobsPage/ManageJobsPageStyle';
@@ -115,12 +115,10 @@ function ReportsPage() {
 				</Box>
 			</Box>
 
-
-			<Box > {/* גובה מינימלי של הדף בגובה של החלון הצפוי */}
-				<MyTable></MyTable>
-				<JobsByRegions></JobsByRegions>
+			<Box> 
+				 <MyTable></MyTable> 
 				{/* <CandidatesByRoles></CandidatesByRoles> */}
-				
+				<JobsByRegions></JobsByRegions>
 			</Box>
 		</>
 	)

@@ -42,10 +42,13 @@ export default function CandidateFiltersForm() {
 
         const result = CandidatesByFilters(status, timeOnStatus, sector, role, selectGarde, selectInterviewDate, formattedStartDate, formattedEndDate)
             .then((result) => {
-                if (result.length === 0)
+                if (result.length === 0){
                     alert('אין נתונים להצגה');
-                else
+                    return;
+                }
+                else{
                     exportToExcel(result, "מועמדים");
+                }
             })
             .catch((error) => {
                 // handle the error
