@@ -1,7 +1,8 @@
 
-import { Inbox, Mail } from '@mui/icons-material';
-import { Box, Button, Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, SwipeableDrawer, ThemeProvider, createTheme, makeStyles, styled } from '@mui/material'
-import React, { useState } from 'react'
+import { AddRounded, Inbox, Mail, ZoomInRounded, ZoomOutRounded } from '@mui/icons-material';
+import { Box, Button, Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, SwipeableDrawer, ThemeProvider, Typography, createTheme, makeStyles, styled, useTheme } from '@mui/material'
+import React, { useContext, useState } from 'react'
+import { ColorModeContext, colorTokens } from '../../theme';
 
 
 const CustomDrawer = styled(Drawer)(({ theme }) => ({
@@ -13,26 +14,33 @@ const CustomDrawer = styled(Drawer)(({ theme }) => ({
 }));
 
 
-export default function Accessibility()
-{
+export default function Accessibility() {
     const [open, setOpen] = useState(false);
 
+    const theme = useTheme();
+    const colors = colorTokens(theme.palette.mode);
+    const colorMode = useContext(ColorModeContext);
 
-    function toggleDrawer(open: boolean)
-    {
+    function toggleDrawer(open: boolean) {
         setOpen(open);
     }
 
     return (
         <React.Fragment>
-
+            <Button
+                color='secondary'
+                onClick={() => theme.palette.mode === "light" ? colorMode.toggleColorMode("dark") : colorMode.toggleColorMode("light")}
+            >
+                Toggle Theme
+            </Button>
             <Box
                 sx={{
                     display: "flex",
                     justifyContent: "end",
                     position: "fixed",
                     top: "70%",
-                    width: "100%"
+                    right: "0",
+                    zIndex: "120000" // on top of everything
                 }}
             >
                 <Button
@@ -59,29 +67,30 @@ export default function Accessibility()
                     onKeyDown={() => toggleDrawer(false)}
                 >
                     <List>
-                        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                            <ListItem key={text} disablePadding>
-                                <ListItemButton>
-                                    <ListItemIcon>
-                                        {index % 2 === 0 ? <Inbox /> : <Mail />}
-                                    </ListItemIcon>
-                                    <ListItemText primary={text} />
-                                </ListItemButton>
-                            </ListItem>
-                        ))}
+                        {/* increase or decrease font size */}
+                        <ListItem disablePadding>
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <ZoomOutRounded sx={{
+                                        
+                                    }} />
+                                </ListItemIcon>
+                                {/* <ListItemText primary="הקנת גודל הגופן" /> */}
+                                <Typography variant='h4'>הגדלת גודל גןפן</Typography>
+                            </ListItemButton>
+                        </ListItem>
                     </List>
                     <Divider />
                     <List>
-                        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                            <ListItem key={text} disablePadding>
-                                <ListItemButton>
-                                    <ListItemIcon>
-                                        {index % 2 === 0 ? <Inbox /> : <Mail />}
-                                    </ListItemIcon>
-                                    <ListItemText primary={text} />
-                                </ListItemButton>
-                            </ListItem>
-                        ))}
+                        <ListItem disablePadding>
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <ZoomInRounded />
+                                </ListItemIcon>
+                                <Typography variant='h4'>הגדלת גודל גןפן</Typography>
+                                {/* <ListItemText primary={"הגדלת גודל הגופן"} /> */}
+                            </ListItemButton>
+                        </ListItem>
                     </List>
                 </Box>
             </CustomDrawer>
@@ -91,7 +100,6 @@ export default function Accessibility()
     )
 }
 
-function createCache(arg0: { key: string; stylisPlugins: any[]; })
-{
+function createCache(arg0: { key: string; stylisPlugins: any[]; }) {
     throw new Error('Function not implemented.');
 }

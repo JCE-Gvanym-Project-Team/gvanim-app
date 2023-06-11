@@ -1357,13 +1357,6 @@ export default function OneJobPage()
 
                 </Box>
 
-                <Button
-                    color='secondary'
-                    onClick={() => theme.palette.mode === "light" ? colorMode.toggleColorMode("dark") : colorMode.toggleColorMode("light")}
-                >
-                    Toggle Theme
-                </Button>
-
                 {/* Dialogs */}
                 <ErrorDialog open={errorDialogOpen} onClose={errorDialogOnClose} />
                 <SuccessDialog open={successDialogOpen} onClose={successDialogOnClose} />
