@@ -103,7 +103,7 @@ function ReportsPage() {
 				}} />
 
 
-				<Box sx={{ display: 'flex', flexDirection: 'column', top: "165px", position: "absolute" }}>
+				<Box sx={{ display: 'flex', flexDirection: 'column', top: "120px", position: "absolute" }}>
 					<Stack direction='row' spacing={1}>
 						<Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
 						</Box>
@@ -116,9 +116,9 @@ function ReportsPage() {
 			</Box>
 
 			<Box> 
+				<JobsByRegions></JobsByRegions>
 				 <MyTable></MyTable> 
 				{/* <CandidatesByRoles></CandidatesByRoles> */}
-				<JobsByRegions></JobsByRegions>
 			</Box>
 		</>
 	)
