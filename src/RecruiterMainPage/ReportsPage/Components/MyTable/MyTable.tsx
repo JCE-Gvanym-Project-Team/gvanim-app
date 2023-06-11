@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Typography from '@mui/material/Typography';
-import { Container, Fab, useTheme } from '@mui/material';
+import { Box, Container, Stack, useTheme } from '@mui/material';
 import {
     DataGrid, GridToolbarFilterButton,
     GridColDef, GridToolbarDensitySelector,
@@ -8,13 +8,14 @@ import {
     GridInitialState, GridToolbarExport,
     useGridRootProps, GridApi,
     useGridApiContext, GridKeyValue, GridValueGetterParams,
-    GridToolbarContainer, heIL, GridFooterContainer
+    GridToolbarContainer, heIL, GridFooterContainer, GridRowParams
 } from '@mui/x-data-grid';
 import { GridFooterContainerSx, TypographyFooterSx, dataGridContainerStyle, dataGridSx } from './MyTableStyle';
 import { useNavigate } from 'react-router-dom';
-// import { getFilteredJobs } from '../../../../Firebase/FirebaseFunctions/Job';
-
-
+import { ArticleOutlined } from '@mui/icons-material';
+import MyLoading from '../../../../Components/MyLoading/MyLoading';
+import { BoxGradientSx } from '../../../PageStyles';
+import { useState } from 'react';
 
 function GridCustomToolbar({
     syncState,
@@ -25,7 +26,6 @@ function GridCustomToolbar({
     const apiRef = useGridApiContext();
 
     return (
-
         <GridToolbarContainer>
             <GridToolbarFilterButton />
             <GridToolbarColumnsButton />
@@ -36,7 +36,7 @@ function GridCustomToolbar({
 }
 
 const columns: GridColDef[] = [
-    { field: 'id', headerName: 'id', width: 90 },
+    { field: 'id', headerName: 'id', width: 90},
     {
         field: 'שם דו"ח',
         headerName: 'שם דו"ח',
@@ -48,68 +48,57 @@ const columns: GridColDef[] = [
         disableExport: true,
         editable: false,
         valueGetter: (params: GridValueGetterParams) =>
-        `${params.row.name || ''}`,
-        },
+            `${params.row.name || ''}`,
+    },
 ];
 
 const rows = [
-    { id: 1, name: "מועדמים שנדחו"},
-    { id: 2, name: "משרות לפי תאריכים"}
+    { id: 1, name: "מועמדים על פי פילטרים" },
+    { id: 2, name: "משרות על פי פילטרים" },
 ];
 
 
-
-
-function CustomFooter() {
-
-    const [dataSize, setDataSize] = React.useState(3);
-
-    return (
-        <GridFooterContainer sx={GridFooterContainerSx}>
-
-            <Typography variant='subtitle2' sx={TypographyFooterSx}>
-                מס' משרות:
-            </Typography>
-
-            <Typography variant='subtitle2' sx={TypographyFooterSx}>
-                {dataSize}
-            </Typography>
-
-        </GridFooterContainer>
-    );
-};
-
-
-function getScopeFormated(scope: number[] | null) {
-
-    return scope === null ? '0-100' : scope[0].toString() + '-' + scope[1].toString();
-
-}
-
 export default function MyTable() {
     const navigate = useNavigate();
-    const onRowClick = (event, row) => {
-        // if(row.id === 1)
-          navigate(`rejection`);
-             
-      };  
+    const [loading, setLoading] = useState(true);
+    const [open, setOpen] = useState(false);
+
+    const onRowClick = (params, event) => {
+        const actions = {
+            1: () => navigate('CandidateByFilters'),
+            2: () => navigate('JobsByFilters')
+            // הוסיפו פעולות נוספות כרצונכם לפי הערכים הנדרשים
+        };
+
+        const id = params.row.id;
+        console.log(id);
+        const action = actions[id];
+
+        if (action) {
+            action();
+        }
+    };
+
     const theme = useTheme();
 
     return (
         <>
-            <Container className="shadow-lg border rounded"
+            <Box className="shadow-lg border rounded"
                 sx={dataGridContainerStyle}
                 style={dataGridContainerStyle}
                 maxWidth='xl'>
                 <DataGrid
+                
                     sx={dataGridSx(theme)}
                     rows={rows}
                     columns={columns}
-                    onRowClick={onRowClick}                    
+                    onRowClick={onRowClick}
                     hideFooterSelectedRowCount
                     hideFooterPagination
                     localeText={heIL.components.MuiDataGrid.defaultProps.localeText}
-                    slots={{ toolbar: GridCustomToolbar, footer: CustomFooter }} />
-            </Container></>
+                    autoHeight 
+               />
+            </Box>
+        </>
     );
 }
