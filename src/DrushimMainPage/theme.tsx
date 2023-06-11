@@ -1,9 +1,14 @@
 import { createContext, useState, useMemo } from "react"
 import { createTheme } from "@mui/material/styles"
 
+const MAX_FONT_SIZE = 40;
+const MIN_FONT_SIZE = 12;
+
 // colors based on mode
-export const colorTokens = (mode) => {
-    if (mode === "dark") {
+export const colorTokens = (mode) =>
+{
+    if (mode === "dark")
+    {
         return {
             grey: {
                 100: "#e0e0e0",
@@ -64,7 +69,8 @@ export const colorTokens = (mode) => {
                 900: "#151632"
             }
         }
-    } else {
+    } else
+    {
         return {
             grey: {
                 100: "#141414",
@@ -128,10 +134,12 @@ export const colorTokens = (mode) => {
     }
 }
 
-export const themeSettings = (mode) => {
+export const themeSettings = (mode, fontSize, fontFamily, textUnderline) =>
+{
     const colors = colorTokens(mode);
 
-    if (mode === "dark") {
+    if (mode === "dark")
+    {
         return {
             palette: {
                 mode: mode,
@@ -161,41 +169,40 @@ export const themeSettings = (mode) => {
                 }
             },
             typography: {
-                fontFamily: ["'Noto Sans Hebrew'", "sans-serif"].join(","),
-                fontSize: 20,
+                fontFamily: fontFamily,
+                fontSize: fontSize,
+                a:{
+                    textDecoration: textUnderline ? "underline" : "none"
+                },
                 h1: {
-                    fontFamily: ["'Noto Sans Hebrew'", "sans-serif"].join(","),
-                    fontSize: 40
+                    fontFamily: fontFamily,
+                    fontSize: fontSize + 20
                 },
                 h2: {
-                    fontFamily: ["'Noto Sans Hebrew'", "sans-serif"].join(","),
-                    fontSize: 32
+                    fontFamily: fontFamily,
+                    fontSize: fontSize + 12
                 },
                 h3: {
-                    fontFamily: ["'Noto Sans Hebrew'", "sans-serif"].join(","),
-                    fontSize: 24
+                    fontFamily: fontFamily,
+                    fontSize: fontSize + 4
                 },
                 h4: {
-                    fontFamily: ["'Noto Sans Hebrew'", "sans-serif"].join(","),
-                    fontSize: 20
+                    fontFamily: fontFamily,
+                    fontSize: fontSize
                 },
                 h5: {
-                    fontFamily: ["'Noto Sans Hebrew'", "sans-serif"].join(","),
-                    fontSize: 16
+                    fontFamily: fontFamily,
+                    fontSize: fontSize - 4
                 },
                 h6: {
-                    fontFamily: ["'Noto Sans Hebrew'", "sans-serif"].join(","),
-                    fontSize: 14
+                    fontFamily: fontFamily,
+                    fontSize: fontSize - 6
                 },
-                icons: {
-                    fontSizeBIG: 24,
-                    fontSizeMEDIUM: 20,
-                    fontSIzeSMALL: 16
-                }
 
             }
         }
-    } else if (mode === "light") {
+    } else if (mode === "light")
+    {
         return {
             palette: {
                 mode: mode,
@@ -228,53 +235,170 @@ export const themeSettings = (mode) => {
                 }
             },
             typography: {
-                fontFamily: ["'Noto Sans Hebrew'", "sans-serif"].join(","),
-                fontSize: 20,
+                fontFamily: fontFamily,
+                fontSize: fontSize,
+                a:{
+                    textDecoration: textUnderline ? "underline" : "none"
+                },
                 h1: {
-                    fontFamily: ["'Noto Sans Hebrew'", "sans-serif"].join(","),
-                    fontSize: 40
+                    fontFamily: fontFamily,
+                    fontSize: fontSize + 20,
                 },
                 h2: {
-                    fontFamily: ["'Noto Sans Hebrew'", "sans-serif"].join(","),
-                    fontSize: 32
+                    fontFamily: fontFamily,
+                    fontSize: fontSize + 12
                 },
                 h3: {
-                    fontFamily: ["'Noto Sans Hebrew'", "sans-serif"].join(","),
-                    fontSize: 24
+                    fontFamily: fontFamily,
+                    fontSize: fontSize + 4
                 },
                 h4: {
-                    fontFamily: ["'Noto Sans Hebrew'", "sans-serif"].join(","),
-                    fontSize: 20
+                    fontFamily: fontFamily,
+                    fontSize: fontSize
                 },
                 h5: {
-                    fontFamily: ["'Noto Sans Hebrew'", "sans-serif"].join(","),
-                    fontSize: 16
+                    fontFamily: fontFamily,
+                    fontSize: fontSize - 4
                 },
                 h6: {
-                    fontFamily: ["'Noto Sans Hebrew'", "sans-serif"].join(","),
-                    fontSize: 14
+                    fontFamily: fontFamily,
+                    fontSize: fontSize - 6
                 },
-            },
-            icons: {
-                fontSizeBIG: 24,
-                fontSizeMEDIUM: 20,
-                fontSIzeSMALL: 16
             }
         }
 
-    } else if (mode === "bright contrast") {
+    } else if (mode === "bright contrast")
+    {
         // TODO: fill this with colors after website is built
         // according to what colors look good
         return {
-            palette: mode,
+            palette: {
+                mode: mode,
+                primary: {
+                    main: colors.primary[200],
+                    textBright: colors.primary[1100],
+                    faded: colors.primary[900]
+                },
+                secondary: {
+                    main: colors.blues[500]
+                },
+                neutral: {
+                    main: colors.grey[500],
+                    dark: colors.grey[700],
+                    light: colors.grey[100]
+                },
+                background: {
+                    default: colors.primary[500],
+                    box: colors.grey[800],
+                    boxInner: colors.grey[700]
+                },
+                error: {
+                    main: colors.reds[500]
+                },
+                success: {
+                    main: colors.greens[600]
+                }
+            },
+            typography: {
+                fontFamily: fontFamily,
+                fontSize: fontSize,
+                a:{
+                    textDecoration: textUnderline ? "underline" : "none"
+                },
+                h1: {
+                    fontFamily: fontFamily,
+                    fontSize: fontSize + 20
+                },
+                h2: {
+                    fontFamily: fontFamily,
+                    fontSize: fontSize + 12
+                },
+                h3: {
+                    fontFamily: fontFamily,
+                    fontSize: fontSize + 4
+                },
+                h4: {
+                    fontFamily: fontFamily,
+                    fontSize: fontSize
+                },
+                h5: {
+                    fontFamily: fontFamily,
+                    fontSize: fontSize - 4
+                },
+                h6: {
+                    fontFamily: fontFamily,
+                    fontSize: fontSize - 6
+                },
+
+            }
         }
-    } else if (mode === "dark contrast") {
+    } else if (mode === "dark contrast")
+    {
         // TODO: fill this with colors after website is built
         // according to what colors look good
         return {
-            palette: mode,
+            palette: {
+                mode: mode,
+                primary: {
+                    main: colors.primary[200],
+                    textBright: colors.primary[1100],
+                    faded: colors.primary[900]
+                },
+                secondary: {
+                    main: colors.blues[500]
+                },
+                neutral: {
+                    main: colors.grey[500],
+                    dark: colors.grey[700],
+                    light: colors.grey[100]
+                },
+                background: {
+                    default: colors.primary[500],
+                    box: colors.grey[800],
+                    boxInner: colors.grey[700]
+                },
+                error: {
+                    main: colors.reds[500]
+                },
+                success: {
+                    main: colors.greens[600]
+                }
+            },
+            typography: {
+                fontFamily: fontFamily,
+                fontSize: fontSize,
+                a:{
+                    textDecoration: textUnderline ? "underline" : "none"
+                },
+                h1: {
+                    fontFamily: fontFamily,
+                    fontSize: fontSize + 20
+                },
+                h2: {
+                    fontFamily: fontFamily,
+                    fontSize: fontSize + 12
+                },
+                h3: {
+                    fontFamily: fontFamily,
+                    fontSize: fontSize + 4
+                },
+                h4: {
+                    fontFamily: fontFamily,
+                    fontSize: fontSize
+                },
+                h5: {
+                    fontFamily: fontFamily,
+                    fontSize: fontSize - 4
+                },
+                h6: {
+                    fontFamily: fontFamily,
+                    fontSize: fontSize - 6
+                },
+
+            }
         }
-    } else if (mode === "white and dark") {
+    } else if (mode === "white and dark")
+    {
         // TODO: fill this with colors after website is built
         // according to what colors look good
         return {
@@ -299,33 +423,35 @@ export const themeSettings = (mode) => {
                 }
             },
             typography: {
-                fontFamily: ["'Noto Sans Hebrew'", "sans-serif"].join(","),
-                fontSize: 20,
+                fontFamily: fontFamily,
+                fontSize: fontSize,
+                a:{
+                    textDecoration: textUnderline ? "underline" : "none"
+                },
                 h1: {
-                    fontFamily: ["'Noto Sans Hebrew'", "sans-serif"].join(","),
-                    fontSize: 40
+                    fontFamily: fontFamily,
+                    fontSize: fontSize + 20
                 },
                 h2: {
-                    fontFamily: ["'Noto Sans Hebrew'", "sans-serif"].join(","),
-                    fontSize: 32
+                    fontFamily: fontFamily,
+                    fontSize: fontSize + 12
                 },
                 h3: {
-                    fontFamily: ["'Noto Sans Hebrew'", "sans-serif"].join(","),
-                    fontSize: 24
+                    fontFamily: fontFamily,
+                    fontSize: fontSize + 4
                 },
                 h4: {
-                    fontFamily: ["'Noto Sans Hebrew'", "sans-serif"].join(","),
-                    fontSize: 20
+                    fontFamily: fontFamily,
+                    fontSize: fontSize
                 },
                 h5: {
-                    fontFamily: ["'Noto Sans Hebrew'", "sans-serif"].join(","),
-                    fontSize: 16
+                    fontFamily: fontFamily,
+                    fontSize: fontSize - 4
                 },
                 h6: {
-                    fontFamily: ["'Noto Sans Hebrew'", "sans-serif"].join(","),
-                    fontSize: 14
+                    fontFamily: fontFamily,
+                    fontSize: fontSize - 6
                 },
-
             }
         }
     }
@@ -334,25 +460,62 @@ export const themeSettings = (mode) => {
 // context for color mode
 
 export const ColorModeContext = createContext({
-    toggleColorMode: (mode) => { }
+    toggleColorMode: (mode) => { },
 });
 
-export const useMode = () => {
+export const FontContext = createContext({
+    increaseFontSize: (increaseBy) => { },
+    decreaseFontSize: (decreaseBy) => { },
+    changeFontFamily: (fontFamily) => { }
+});
+
+export const useMode = () =>
+{
     // default is light
     const [mode, setMode] = useState("light");
+    const [fontSize, setFontSize] = useState(20);
+    const [fontFamily, setFontFamily] = useState("'Noto Sans Hebrew', sans-serif");
+    const [textUnderline, setTextUnderline] = useState(false);
+
+
+    // ["'Noto Sans Hebrew'", "sans-serif"].join(",")
 
     const colorMode = useMemo(() =>
     ({
-        toggleColorMode: (mode) => {
+        toggleColorMode: (mode) =>
+        {
             setMode(mode)
         }
     }), []);
 
-    const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
+
+    const fontMode = useMemo(() =>
+    ({
+        increaseFontSize: (increaseBy) =>
+        {
+            console.log(fontSize);
+            setFontSize(fontSize + increaseBy > MAX_FONT_SIZE ? fontSize : fontSize + increaseBy);
+        },
+
+        decreaseFontSize: (decreaseBy) =>
+        {
+            setFontSize(fontSize - decreaseBy < MIN_FONT_SIZE ? fontSize : fontSize - decreaseBy);
+        },
+
+        changeFontFamily: (fontFamily) =>
+        {
+            setFontFamily(fontFamily);
+        }
+
+
+    }), [fontSize, fontFamily]);
+
+    const theme = useMemo(() => createTheme(themeSettings(mode, fontSize, fontFamily, textUnderline)), [mode, fontSize, fontFamily]);
 
     const result: any[] = []
     result.push(theme);
     result.push(colorMode);
+    result.push(fontMode)
 
     return result;
 }
