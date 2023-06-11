@@ -2,10 +2,8 @@ import { createContext, useState, useMemo } from "react"
 import { createTheme } from "@mui/material/styles"
 
 // colors based on mode
-export const colorTokens = (mode) =>
-{
-    if (mode === "dark")
-    {
+export const colorTokens = (mode) => {
+    if (mode === "dark") {
         return {
             grey: {
                 100: "#e0e0e0",
@@ -66,8 +64,7 @@ export const colorTokens = (mode) =>
                 900: "#151632"
             }
         }
-    } else
-    {
+    } else {
         return {
             grey: {
                 100: "#141414",
@@ -131,12 +128,10 @@ export const colorTokens = (mode) =>
     }
 }
 
-export const themeSettings = (mode) =>
-{
+export const themeSettings = (mode) => {
     const colors = colorTokens(mode);
 
-    if (mode === "dark")
-    {
+    if (mode === "dark") {
         return {
             palette: {
                 mode: mode,
@@ -160,6 +155,9 @@ export const themeSettings = (mode) =>
                 },
                 error: {
                     main: colors.reds[500]
+                },
+                success: {
+                    main: colors.greens[600]
                 }
             },
             typography: {
@@ -189,11 +187,15 @@ export const themeSettings = (mode) =>
                     fontFamily: ["'Noto Sans Hebrew'", "sans-serif"].join(","),
                     fontSize: 14
                 },
+                icons: {
+                    fontSizeBIG: 24,
+                    fontSizeMEDIUM: 20,
+                    fontSIzeSMALL: 16
+                }
 
             }
         }
-    } else if (mode === "light")
-    {
+    } else if (mode === "light") {
         return {
             palette: {
                 mode: mode,
@@ -203,6 +205,7 @@ export const themeSettings = (mode) =>
                     faded: colors.primary[900]
                 },
                 secondary: {
+                    dark: colors.blues[200],
                     main: colors.blues[500],
                     half: colors.blues[700]
                 },
@@ -220,7 +223,8 @@ export const themeSettings = (mode) =>
                     main: colors.reds[500]
                 },
                 success: {
-                    main: colors.greens[500]
+                    main: colors.greens[600],
+                    secondary: colors.greens[300]
                 }
             },
             typography: {
@@ -250,26 +254,27 @@ export const themeSettings = (mode) =>
                     fontFamily: ["'Noto Sans Hebrew'", "sans-serif"].join(","),
                     fontSize: 14
                 },
-
+            },
+            icons: {
+                fontSizeBIG: 24,
+                fontSizeMEDIUM: 20,
+                fontSIzeSMALL: 16
             }
         }
 
-    } else if (mode === "bright contrast")
-    {
+    } else if (mode === "bright contrast") {
         // TODO: fill this with colors after website is built
         // according to what colors look good
         return {
             palette: mode,
         }
-    } else if (mode === "dark contrast")
-    {
+    } else if (mode === "dark contrast") {
         // TODO: fill this with colors after website is built
         // according to what colors look good
         return {
             palette: mode,
         }
-    } else if (mode === "white and dark")
-    {
+    } else if (mode === "white and dark") {
         // TODO: fill this with colors after website is built
         // according to what colors look good
         return {
@@ -332,15 +337,13 @@ export const ColorModeContext = createContext({
     toggleColorMode: (mode) => { }
 });
 
-export const useMode = () =>
-{
+export const useMode = () => {
     // default is light
     const [mode, setMode] = useState("light");
 
     const colorMode = useMemo(() =>
     ({
-        toggleColorMode: (mode) =>
-        {
+        toggleColorMode: (mode) => {
             setMode(mode)
         }
     }), []);
