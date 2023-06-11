@@ -11,16 +11,16 @@ export const colorTokens = (mode) =>
     {
         return {
             grey: {
-                100: "#e0e0e0",
-                200: "#c2c2c2",
-                300: "#a3a3a3",
-                400: "#858585",
-                500: "#666666",
-                600: "#525252",
-                700: "#3d3d3d",
-                800: "#292929",
-                900: "#141414",
-                1000: "#fcfcfc"
+                100: "#fcfcfc",
+                200: "#e0e0e0",
+                300: "#c2c2c2",
+                400: "#a3a3a3",
+                500: "#858585",
+                600: "#666666",
+                700: "#525252",
+                800: "#3d3d3d",
+                900: "#292929",
+                1000: "#141414"
             },
             primary: {
                 100: "#ffffff",
@@ -69,7 +69,7 @@ export const colorTokens = (mode) =>
                 900: "#151632"
             }
         }
-    } else
+    } else if (mode === "light")    
     {
         return {
             grey: {
@@ -131,328 +131,262 @@ export const colorTokens = (mode) =>
                 900: "#e1e2fe",
             }
         }
+
+    } else if (mode === "bright-contrast")
+    {
+        return {
+            grey: {
+                100: "#fcfcfc",
+                200: "#e0e0e0",
+                300: "#c2c2c2",
+                400: "#a3a3a3",
+                500: "#858585",
+                600: "#666666",
+                700: "#525252",
+                800: "#3d3d3d",
+                900: "#292929",
+                1000: "#141414"
+            },
+            primary: {
+                100: "#ffffff",
+                200: "#d0d1d5",
+                300: "#a1a4ab",
+                400: "#727681",
+                500: "#434957",
+                600: "#141b2d",
+                700: "#101624",
+                800: "#0c101b",
+                900: "#080b12",
+                1000: "#040509",
+                1100: "#000000"
+            },
+            greens: {
+                100: "#dbf5ee",
+                200: "#b7ebde",
+                300: "#94e2cd",
+                400: "#70d8bd",
+                500: "#4cceac",
+                600: "#3da58a",
+                700: "#2e7c67",
+                800: "#1e5245",
+                900: "#0f2922"
+            },
+            reds: {
+                100: "#f8dcdb",
+                200: "#f1b9b7",
+                300: "#e99592",
+                400: "#e2726e",
+                500: "#db4f4a",
+                600: "#af3f3b",
+                700: "#832f2c",
+                800: "#58201e",
+                900: "#2c100f"
+            },
+            blues: {
+                100: "#e1e2fe",
+                200: "#c3c6fd",
+                300: "#a4a9fc",
+                400: "#868dfb",
+                500: "#6870fa",
+                600: "#535ac8",
+                700: "#3e4396",
+                800: "#2a2d64",
+                900: "#151632"
+            }
+        }
+    } else if (mode === "dark-contrast")
+    {
+        return {
+            grey: {
+                100: "#fcfcfc",
+                200: "#e0e0e0",
+                300: "#c2c2c2",
+                400: "#a3a3a3",
+                500: "#858585",
+                600: "#666666",
+                700: "#525252",
+                800: "#3d3d3d",
+                900: "#292929",
+                1000: "#141414"
+            },
+            primary: {
+                100: "#ffffff",
+                200: "#d0d1d5",
+                300: "#a1a4ab",
+                400: "#727681",
+                500: "#434957",
+                600: "#141b2d",
+                700: "#101624",
+                800: "#0c101b",
+                900: "#080b12",
+                1000: "#040509",
+                1100: "#000000"
+            },
+            greens: {
+                100: "#dbf5ee",
+                200: "#b7ebde",
+                300: "#94e2cd",
+                400: "#70d8bd",
+                500: "#4cceac",
+                600: "#3da58a",
+                700: "#2e7c67",
+                800: "#1e5245",
+                900: "#0f2922"
+            },
+            reds: {
+                100: "#f8dcdb",
+                200: "#f1b9b7",
+                300: "#e99592",
+                400: "#e2726e",
+                500: "#db4f4a",
+                600: "#af3f3b",
+                700: "#832f2c",
+                800: "#58201e",
+                900: "#2c100f"
+            },
+            blues: {
+                100: "#e1e2fe",
+                200: "#c3c6fd",
+                300: "#a4a9fc",
+                400: "#868dfb",
+                500: "#6870fa",
+                600: "#535ac8",
+                700: "#3e4396",
+                800: "#2a2d64",
+                900: "#151632"
+            }
+        }
+    } else 
+    {
+        return {
+            grey: {
+                100: "#fcfcfc",
+                200: "#e0e0e0",
+                300: "#c2c2c2",
+                400: "#a3a3a3",
+                500: "#858585",
+                600: "#666666",
+                700: "#525252",
+                800: "#3d3d3d",
+                900: "#292929",
+                1000: "#141414"
+            },
+            primary: {
+                100: "#ffffff",
+                200: "#d0d1d5",
+                300: "#a1a4ab",
+                400: "#727681",
+                500: "#434957",
+                600: "#141b2d",
+                700: "#101624",
+                800: "#0c101b",
+                900: "#080b12",
+                1000: "#040509",
+                1100: "#000000"
+            },
+            greens: {
+                100: "#dbf5ee",
+                200: "#b7ebde",
+                300: "#94e2cd",
+                400: "#70d8bd",
+                500: "#4cceac",
+                600: "#3da58a",
+                700: "#2e7c67",
+                800: "#1e5245",
+                900: "#0f2922"
+            },
+            reds: {
+                100: "#f8dcdb",
+                200: "#f1b9b7",
+                300: "#e99592",
+                400: "#e2726e",
+                500: "#db4f4a",
+                600: "#af3f3b",
+                700: "#832f2c",
+                800: "#58201e",
+                900: "#2c100f"
+            },
+            blues: {
+                100: "#e1e2fe",
+                200: "#c3c6fd",
+                300: "#a4a9fc",
+                400: "#868dfb",
+                500: "#6870fa",
+                600: "#535ac8",
+                700: "#3e4396",
+                800: "#2a2d64",
+                900: "#151632"
+            }
+        }
     }
 }
 
-export const themeSettings = (mode, fontSize, fontFamily, textUnderline) =>
+export const themeSettings = (mode, actualMode, fontSize, fontFamily) =>
 {
-    const colors = colorTokens(mode);
+    const colors = colorTokens(actualMode);
 
-    if (mode === "dark")
-    {
-        return {
-            palette: {
-                mode: mode,
-                primary: {
-                    main: colors.primary[200],
-                    textBright: colors.primary[1100],
-                    faded: colors.primary[900]
-                },
-                secondary: {
-                    main: colors.blues[500]
-                },
-                neutral: {
-                    main: colors.grey[500],
-                    dark: colors.grey[700],
-                    light: colors.grey[100]
-                },
-                background: {
-                    default: colors.primary[500],
-                    box: colors.grey[800],
-                    boxInner: colors.grey[700]
-                },
-                error: {
-                    main: colors.reds[500]
-                },
-                success: {
-                    main: colors.greens[600]
-                }
+    return {
+        palette: {
+            mode: mode,
+            primary: {
+                main: colors.primary[200],
+                textBright: colors.primary[1100],
+                faded: colors.primary[900]
             },
-            typography: {
+            secondary: {
+                main: colors.blues[500]
+            },
+            neutral: {
+                main: colors.grey[500],
+                dark: colors.grey[700],
+                light: colors.grey[100]
+            },
+            background: {
+                default: actualMode === "light" ?
+                    colors.primary[1100]
+                    : actualMode === "bright-contrast" ?
+                        colors.primary[300]
+                        : actualMode === "dark-contrast" ? colors.primary[100] :
+                            colors.primary[100]
+                ,
+                box: colors.grey[800],
+                boxInner: colors.grey[700]
+            },
+            error: {
+                main: colors.reds[500]
+            },
+            success: {
+                main: colors.greens[600]
+            }
+        },
+        typography: {
+            fontFamily: fontFamily,
+            fontSize: fontSize,
+            h1: {
                 fontFamily: fontFamily,
-                fontSize: fontSize,
-                a:{
-                    textDecoration: textUnderline ? "underline" : "none"
-                },
-                h1: {
-                    fontFamily: fontFamily,
-                    fontSize: fontSize + 20
-                },
-                h2: {
-                    fontFamily: fontFamily,
-                    fontSize: fontSize + 12
-                },
-                h3: {
-                    fontFamily: fontFamily,
-                    fontSize: fontSize + 4
-                },
-                h4: {
-                    fontFamily: fontFamily,
-                    fontSize: fontSize
-                },
-                h5: {
-                    fontFamily: fontFamily,
-                    fontSize: fontSize - 4
-                },
-                h6: {
-                    fontFamily: fontFamily,
-                    fontSize: fontSize - 6
-                },
+                fontSize: fontSize + 20
+            },
+            h2: {
+                fontFamily: fontFamily,
+                fontSize: fontSize + 12
+            },
+            h3: {
+                fontFamily: fontFamily,
+                fontSize: fontSize + 4
+            },
+            h4: {
+                fontFamily: fontFamily,
+                fontSize: fontSize
+            },
+            h5: {
+                fontFamily: fontFamily,
+                fontSize: fontSize - 4
+            },
+            h6: {
+                fontFamily: fontFamily,
+                fontSize: fontSize - 6
+            },
 
-            }
-        }
-    } else if (mode === "light")
-    {
-        return {
-            palette: {
-                mode: mode,
-                primary: {
-                    main: colors.primary[100],
-                    textBright: colors.primary[1100],
-                    faded: colors.primary[900]
-                },
-                secondary: {
-                    dark: colors.blues[200],
-                    main: colors.blues[500],
-                    half: colors.blues[700]
-                },
-                neutral: {
-                    main: colors.grey[500],
-                    dark: colors.grey[700],
-                    light: colors.grey[100]
-                },
-                background: {
-                    main: colors.grey[1000],
-                    box: colors.grey[800],
-                    boxInner: colors.grey[700],
-                },
-                error: {
-                    main: colors.reds[500]
-                },
-                success: {
-                    main: colors.greens[600],
-                    secondary: colors.greens[300]
-                }
-            },
-            typography: {
-                fontFamily: fontFamily,
-                fontSize: fontSize,
-                a:{
-                    textDecoration: textUnderline ? "underline" : "none"
-                },
-                h1: {
-                    fontFamily: fontFamily,
-                    fontSize: fontSize + 20,
-                },
-                h2: {
-                    fontFamily: fontFamily,
-                    fontSize: fontSize + 12
-                },
-                h3: {
-                    fontFamily: fontFamily,
-                    fontSize: fontSize + 4
-                },
-                h4: {
-                    fontFamily: fontFamily,
-                    fontSize: fontSize
-                },
-                h5: {
-                    fontFamily: fontFamily,
-                    fontSize: fontSize - 4
-                },
-                h6: {
-                    fontFamily: fontFamily,
-                    fontSize: fontSize - 6
-                },
-            }
-        }
-
-    } else if (mode === "bright contrast")
-    {
-        // TODO: fill this with colors after website is built
-        // according to what colors look good
-        return {
-            palette: {
-                mode: mode,
-                primary: {
-                    main: colors.primary[200],
-                    textBright: colors.primary[1100],
-                    faded: colors.primary[900]
-                },
-                secondary: {
-                    main: colors.blues[500]
-                },
-                neutral: {
-                    main: colors.grey[500],
-                    dark: colors.grey[700],
-                    light: colors.grey[100]
-                },
-                background: {
-                    default: colors.primary[500],
-                    box: colors.grey[800],
-                    boxInner: colors.grey[700]
-                },
-                error: {
-                    main: colors.reds[500]
-                },
-                success: {
-                    main: colors.greens[600]
-                }
-            },
-            typography: {
-                fontFamily: fontFamily,
-                fontSize: fontSize,
-                a:{
-                    textDecoration: textUnderline ? "underline" : "none"
-                },
-                h1: {
-                    fontFamily: fontFamily,
-                    fontSize: fontSize + 20
-                },
-                h2: {
-                    fontFamily: fontFamily,
-                    fontSize: fontSize + 12
-                },
-                h3: {
-                    fontFamily: fontFamily,
-                    fontSize: fontSize + 4
-                },
-                h4: {
-                    fontFamily: fontFamily,
-                    fontSize: fontSize
-                },
-                h5: {
-                    fontFamily: fontFamily,
-                    fontSize: fontSize - 4
-                },
-                h6: {
-                    fontFamily: fontFamily,
-                    fontSize: fontSize - 6
-                },
-
-            }
-        }
-    } else if (mode === "dark contrast")
-    {
-        // TODO: fill this with colors after website is built
-        // according to what colors look good
-        return {
-            palette: {
-                mode: mode,
-                primary: {
-                    main: colors.primary[200],
-                    textBright: colors.primary[1100],
-                    faded: colors.primary[900]
-                },
-                secondary: {
-                    main: colors.blues[500]
-                },
-                neutral: {
-                    main: colors.grey[500],
-                    dark: colors.grey[700],
-                    light: colors.grey[100]
-                },
-                background: {
-                    default: colors.primary[500],
-                    box: colors.grey[800],
-                    boxInner: colors.grey[700]
-                },
-                error: {
-                    main: colors.reds[500]
-                },
-                success: {
-                    main: colors.greens[600]
-                }
-            },
-            typography: {
-                fontFamily: fontFamily,
-                fontSize: fontSize,
-                a:{
-                    textDecoration: textUnderline ? "underline" : "none"
-                },
-                h1: {
-                    fontFamily: fontFamily,
-                    fontSize: fontSize + 20
-                },
-                h2: {
-                    fontFamily: fontFamily,
-                    fontSize: fontSize + 12
-                },
-                h3: {
-                    fontFamily: fontFamily,
-                    fontSize: fontSize + 4
-                },
-                h4: {
-                    fontFamily: fontFamily,
-                    fontSize: fontSize
-                },
-                h5: {
-                    fontFamily: fontFamily,
-                    fontSize: fontSize - 4
-                },
-                h6: {
-                    fontFamily: fontFamily,
-                    fontSize: fontSize - 6
-                },
-
-            }
-        }
-    } else if (mode === "white and dark")
-    {
-        // TODO: fill this with colors after website is built
-        // according to what colors look good
-        return {
-            palette: {
-                mode: mode,
-                primary: {
-                    main: colors.primary[100],
-                    faded: colors.primary[900]
-                },
-                secondary: {
-                    main: colors.blues[500]
-                },
-                neutral: {
-                    main: colors.grey[500],
-                    dark: colors.grey[700],
-                    light: colors.grey[100]
-                },
-                background: {
-                    main: colors.grey[1000],
-                    box: colors.grey[800],
-                    boxInner: colors.grey[700],
-                }
-            },
-            typography: {
-                fontFamily: fontFamily,
-                fontSize: fontSize,
-                a:{
-                    textDecoration: textUnderline ? "underline" : "none"
-                },
-                h1: {
-                    fontFamily: fontFamily,
-                    fontSize: fontSize + 20
-                },
-                h2: {
-                    fontFamily: fontFamily,
-                    fontSize: fontSize + 12
-                },
-                h3: {
-                    fontFamily: fontFamily,
-                    fontSize: fontSize + 4
-                },
-                h4: {
-                    fontFamily: fontFamily,
-                    fontSize: fontSize
-                },
-                h5: {
-                    fontFamily: fontFamily,
-                    fontSize: fontSize - 4
-                },
-                h6: {
-                    fontFamily: fontFamily,
-                    fontSize: fontSize - 6
-                },
-            }
         }
     }
 }
@@ -466,7 +400,8 @@ export const ColorModeContext = createContext({
 export const FontContext = createContext({
     increaseFontSize: (increaseBy) => { },
     decreaseFontSize: (decreaseBy) => { },
-    changeFontFamily: (fontFamily) => { }
+    changeFontSize: (fontSize) => { },
+    changeFontFamily: (fontFamily) => { },
 });
 
 export const useMode = () =>
@@ -475,25 +410,22 @@ export const useMode = () =>
     const [mode, setMode] = useState("light");
     const [fontSize, setFontSize] = useState(20);
     const [fontFamily, setFontFamily] = useState("'Noto Sans Hebrew', sans-serif");
-    const [textUnderline, setTextUnderline] = useState(false);
 
-
-    // ["'Noto Sans Hebrew'", "sans-serif"].join(",")
+    const [actualMode, setActualMode] = useState("light");
 
     const colorMode = useMemo(() =>
     ({
         toggleColorMode: (mode) =>
         {
-            setMode(mode)
+            setActualMode(mode)
         }
-    }), []);
+    }), [actualMode]);
 
 
     const fontMode = useMemo(() =>
     ({
         increaseFontSize: (increaseBy) =>
         {
-            console.log(fontSize);
             setFontSize(fontSize + increaseBy > MAX_FONT_SIZE ? fontSize : fontSize + increaseBy);
         },
 
@@ -505,12 +437,15 @@ export const useMode = () =>
         changeFontFamily: (fontFamily) =>
         {
             setFontFamily(fontFamily);
+        },
+
+        changeFontSize: (fontSize) =>
+        {
+            setFontSize(fontSize);
         }
-
-
     }), [fontSize, fontFamily]);
 
-    const theme = useMemo(() => createTheme(themeSettings(mode, fontSize, fontFamily, textUnderline)), [mode, fontSize, fontFamily]);
+    const theme = useMemo(() => createTheme(themeSettings(mode, actualMode, fontSize, fontFamily)), [mode, actualMode, fontSize, fontFamily]);
 
     const result: any[] = []
     result.push(theme);

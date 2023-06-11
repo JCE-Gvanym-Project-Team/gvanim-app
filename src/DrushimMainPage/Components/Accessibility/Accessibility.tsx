@@ -1,8 +1,9 @@
 
-import { Accessible, Contrast, FontDownload, FormatUnderlined, LightMode, Nightlight, Replay, ZoomInRounded, ZoomOutRounded } from '@mui/icons-material';
-import { Box, Button, Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, Typography, styled, useTheme } from '@mui/material';
+import { Accessible, Contrast, FontDownload, LightMode, Nightlight, Replay, ZoomInRounded, ZoomOutRounded } from '@mui/icons-material';
+import { Box, Button, Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, Typography, styled } from '@mui/material';
+import {useTheme} from '@mui/material/styles'
 import React, { useContext, useState } from 'react';
-import { ColorModeContext, FontContext, colorTokens, useMode } from '../../theme';
+import { ColorModeContext, FontContext, colorTokens } from '../../theme';
 
 
 const CustomDrawer = styled(Drawer)(({ theme }) => ({
@@ -14,6 +15,9 @@ const CustomDrawer = styled(Drawer)(({ theme }) => ({
     }
 }));
 
+const DEFAULT_FONT_FAMILY = "'Noto Sans Hebrew', sans-serif";
+const READABLE_FONT_FAMILY = "Arial";
+const DEFAULT_FONT_SIZE = 20
 
 export default function Accessibility()
 {
@@ -24,7 +28,7 @@ export default function Accessibility()
     const colorMode = useContext(ColorModeContext);
     const fontMode = useContext(FontContext);
 
-    const [fontFamily, setfontFamily] = useState()
+    const [fontFamily, setfontFamily] = useState("'Noto Sans Hebrew', sans-serif");
 
     function toggleDrawer(open: boolean)
     {
@@ -128,7 +132,7 @@ export default function Accessibility()
                             <ListItemButton
                                 onClick={() =>
                                 {
-
+                                    colorMode.toggleColorMode("aaa");
                                 }}>
                                 <ListItemIcon>
                                     <Nightlight />
@@ -144,7 +148,7 @@ export default function Accessibility()
                             <ListItemButton
                                 onClick={() =>
                                 {
-                                    // TODO: this
+                                    colorMode.toggleColorMode("bright-contrast");
                                 }}
                             >
                                 <ListItemIcon >
@@ -161,7 +165,7 @@ export default function Accessibility()
                             <ListItemButton
                                 onClick={() =>
                                 {
-                                    // TODO: this
+                                    colorMode.toggleColorMode("white-and-dark")
                                 }}
                             >
                                 <ListItemIcon>
@@ -179,7 +183,9 @@ export default function Accessibility()
                         <ListItem disablePadding>
                             <ListItemButton onClick={() =>
                             {
-                                // TODO: this
+                                const nextFontFamily = fontFamily === DEFAULT_FONT_FAMILY ? READABLE_FONT_FAMILY : DEFAULT_FONT_FAMILY;
+                                fontMode.changeFontFamily(nextFontFamily);
+                                setfontFamily(nextFontFamily);
                             }}
                             >
                                 <ListItemIcon>
@@ -187,20 +193,6 @@ export default function Accessibility()
                                 </ListItemIcon>
                                 <Typography variant='h4'>
                                     פונט קריא
-                                </Typography>
-                            </ListItemButton>
-                        </ListItem>
-                        <ListItem disablePadding>
-                            <ListItemButton onClick={() =>
-                            {
-                                // TODO: this
-                            }}
-                            >
-                                <ListItemIcon>
-                                    <FormatUnderlined />
-                                </ListItemIcon>
-                                <Typography variant='h4'>
-                                    קו תחתון לקישורים
                                 </Typography>
                             </ListItemButton>
                         </ListItem>
@@ -212,7 +204,9 @@ export default function Accessibility()
                             <ListItemButton
                                 onClick={() =>
                                 {
-
+                                    fontMode.changeFontFamily(DEFAULT_FONT_FAMILY);
+                                    fontMode.changeFontSize(DEFAULT_FONT_SIZE);
+                                    colorMode.toggleColorMode("light");
                                 }}
                             >
                                 <ListItemIcon>
