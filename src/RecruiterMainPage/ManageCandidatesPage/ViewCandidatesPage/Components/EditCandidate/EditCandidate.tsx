@@ -1,11 +1,12 @@
-import { Box, Button, Container, Divider, FormHelperText, Stack, TextField, Typography, styled } from '@mui/material'
-import React, { useEffect, useState } from 'react'
-import { BoxGradientSx, MyPaperSx, MyTextFieldStyle } from './EditCandidateStyle'
+import { Box, Button, Container, Divider, FormHelperText, Stack, TextField, Typography, styled } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import RemoveCandidateDialog from './../RemoveCandidateDialog/RemoveCandidateDialog';
 import { Candidate, getFilteredCandidates } from '../../../../../Firebase/FirebaseFunctions/Candidate';
-import { loginAdmin } from '../../../../../Firebase/FirebaseFunctions/Authentication';
-import { Edit } from '@mui/icons-material';
+import RemoveCandidateDialog from './../RemoveCandidateDialog/RemoveCandidateDialog';
+import { MyPaperSx } from './EditCandidateStyle';
+import { BoxGradientSx } from './EditCandidateStyle';
+import { AccountCircle, Edit } from '@mui/icons-material';
+import { candidateNameSx } from '../../ViewCandidatesPageStyle';
 
 const Form = styled('form')(({ theme }) => ({
     width: '100%',
@@ -179,6 +180,25 @@ const EditCandidate = () =>
                     borderRadius: '50%',
                     position: 'absolute',
                 }} />
+
+                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: "center", justifyContent: "end", height: { xs: "280px", md: "220px" }, marginBottom: { xs: "1rem", md: "0" } }}>
+                    <Stack direction='row' spacing={1} sx={{ justifyContent: "center", alignItems: "center" }}>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                            <Edit sx={{ color: '#fff', fontSize: "28px" }} />
+                        </Box>
+                        <Typography variant="h4" sx={{ color: '#fff', fontFamily: "'Noto Sans Hebrew', sans-serif", fontWeight: 500 }}>
+                            עריכת מועמד
+                        </Typography>
+                    </Stack>
+                    <Box sx={{ background: 'linear-gradient(90deg,hsla(0,0%,100%,0),#fff,hsla(0,0%,100%,0))', padding: 0.05, width: '100%', mt: 2 }} />
+                    {/* Candidate Name */}
+                    <Box sx={{ display: 'flex', alignSelf: "center" }}>
+                        <Typography sx={candidateNameSx} variant='h3' >
+                            {candidateFirstname + " " + candidateLastname}
+                        </Typography>
+
+                    </Box>
+                </Box>
             </Box>
 
             <Box sx={MyPaperSx}>
@@ -189,10 +209,6 @@ const EditCandidate = () =>
 
                             <Box className="col-md-12">
                                 <Box className="section-title">
-
-                                    <Typography sx={{ fontFamily: "'Noto Sans Hebrew', sans-serif", color: 'rgb(52, 71, 103)', textAlign: 'center' }} variant='h3'>
-                                        {`עריכת מועמד`}
-                                    </Typography>
 
                                     <Typography className='mt-1' sx={{ fontFamily: "'Noto Sans Hebrew', sans-serif", color: 'rgb(123, 128, 154)', textAlign: 'center' }} variant='subtitle1'>
                                         {'לתשומת ליבך: עדכון השינויים יגרום לאובדן הנתונים הקודמים לצמיתות.'}

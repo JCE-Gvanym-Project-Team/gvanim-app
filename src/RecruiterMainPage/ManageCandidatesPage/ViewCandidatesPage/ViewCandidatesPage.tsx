@@ -220,16 +220,16 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 								position: 'absolute',
 							}} />
 
-							<Box sx={{ display: 'flex', flexDirection: 'column', alignItems: "center", justifyContent: "end", height: "190px"}}>
-								<Stack direction='row' spacing={1}>
+							<Box sx={{ display: 'flex', flexDirection: 'column', alignItems: "center", justifyContent: "end", height: {xs: "280px" ,md: "220px"}, marginBottom: {xs: "1rem", md: "0"}}}>
+								<Stack direction='row' spacing={1} sx={{justifyContent: "center", alignItems: "center"}}>
 									<Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-										<AccountCircle sx={{ color: '#fff' }} />
+										<AccountCircle sx={{ color: '#fff', fontSize: "28px" }} />
 									</Box>
 									<Typography variant="h4" sx={{ color: '#fff', fontFamily: "'Noto Sans Hebrew', sans-serif", fontWeight: 500 }}>
 										צפייה במועמד
 									</Typography>
 								</Stack>
-								<Divider />
+								<Box sx={{ background: 'linear-gradient(90deg,hsla(0,0%,100%,0),#fff,hsla(0,0%,100%,0))', padding: 0.05, width: '100%', mt: 2 }} />
 								{/* Candidate Name */}
 								<Box sx={{ display: 'flex', alignSelf: "center" }}>
 									<Typography sx={candidateNameSx} variant='h3' >

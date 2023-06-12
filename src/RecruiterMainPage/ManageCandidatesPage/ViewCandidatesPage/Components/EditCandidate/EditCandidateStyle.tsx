@@ -10,16 +10,6 @@ export const MyTextFieldSx = {
     },
 }
 
-export const BoxGradientSx: SxProps = {
-    height: '400px',
-    width: "100%",
-    top: 0,
-    position: "absolute",
-    display: 'flex',
-    justifyContent: 'center',
-    background: 'linear-gradient(to left, #7795f8, #7795f8,#555abf)',
-}
-
 export const MyTitleBoxSx: SxProps = {
     height: 'fit-content',
     color: 'rgba(0, 0, 0, 0.87)',
@@ -43,8 +33,17 @@ export const MyTitleBoxSx: SxProps = {
     boxShadow: 'rgba(0, 0, 0, 0.05) 0rem 1.25rem 1.6875rem 0rem',
 }
 
+export const BoxGradientSx: SxProps = {
+    minHeight: '400px',
+    width: "100%",
+    top: 0,
+    display: 'flex',
+    justifyContent: 'center',
+    background: 'linear-gradient(to left, #7795f8, #7795f8,#555abf)',
+}
+
 export const MyPaperSx: SxProps = {
-    width: { sm: "100%", md: "60%", lg: "60%", xl: "40%" },
+    width: { sm: "100%", md: "90%" },
     height: 'fit-content',
     color: 'rgba(0, 0, 0, 0.87)',
     transition: 'box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
@@ -60,7 +59,7 @@ export const MyPaperSx: SxProps = {
     borderRadius: '0.75rem',
     overflow: 'visible',
     padding: '16px',
-    marginTop: ManageCandidatesPageGlobalStyle.marginFromNavbar,
+    marginTop: "-10rem",
     marginBottom: '32px',
     backgroundColor: 'rgba(255, 255, 255, 0.8)',
     backdropFilter: 'saturate(200%) blur(30px)',
