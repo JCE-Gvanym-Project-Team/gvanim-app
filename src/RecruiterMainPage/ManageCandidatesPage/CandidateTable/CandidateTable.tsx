@@ -31,7 +31,12 @@ import {
 } from "./CandidateTableStyle";
 import { unstable_useForkRef as useForkRef } from "@mui/utils";
 import { MyButtonSx } from "./CandidateTableStyle";
-import { ArticleOutlined, LockOpen, Lock } from "@mui/icons-material";
+import {
+  ArticleOutlined,
+  LockOpen,
+  Lock,
+  PictureAsPdfSharp,
+} from "@mui/icons-material";
 import { Job, getFilteredJobs } from "../../../Firebase/FirebaseFunctions/Job";
 import Pagination from "@mui/material/Pagination";
 import PaginationItem from "@mui/material/PaginationItem";
@@ -56,7 +61,10 @@ import MyDropMenu from "../../ManageJobsPage/Components/MyDropMenu/MyDropMenu";
 import CandidatesListFullScreenDialog from "../../ManageJobsPage/Components/CandidatesListDialog/CandidatesListDialog";
 import { useState, useEffect } from "react";
 import ViewCandidatesPage from "../ViewCandidatesPage/ViewCandidatesPage";
-
+import {
+  CandidateJobStatus,
+  getFilteredCandidateJobStatuses,
+} from "../../../Firebase/FirebaseFunctions/CandidateJobStatus";
 // -------------------Use Memorie for better performance----------------------------------------------------
 const TraceUpdates = React.forwardRef<any, any>((props, ref) => {
   const { Component, ...other } = props;
@@ -295,18 +303,7 @@ const columns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     sortable: true,
-    renderCell: (candidate) => {
-      const handleFirstNameClick = () => {
-        // Redirect to the candidate details page
-        "management/candidate/" + candidate.row._id;
-      };
-
-      return (
-        <span className="clickable" onClick={handleFirstNameClick}>
-          {candidate.row._firstName}
-        </span>
-      );
-    },
+    valueGetter: (params) => params.row._firstName,
   },
   {
     field: "_lastName",
@@ -315,9 +312,7 @@ const columns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     sortable: true,
-    renderCell: (candidate) => {
-      return <>{candidate?.row?._lastName}</>;
-    },
+    valueGetter: (params) => params.row._lastName,
   },
   {
     field: "_jobNumber",
@@ -326,18 +321,7 @@ const columns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     sortable: true,
-    renderCell: (candidate) => {
-      const handleJobNumberClick = () => {
-        // Redirect to the job details page
-        "career/job/" + candidate.row._jobNumber;
-      };
-
-      return (
-        <span className="clickable" onClick={handleJobNumberClick}>
-          {candidate.row._jobNumber}
-        </span>
-      );
-    },
+    valueGetter: (params) => params.row._jobNumber,
   },
   {
     field: "_jobArea",
@@ -346,6 +330,7 @@ const columns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     sortable: true,
+    valueGetter: (params) => params.row._region,
   },
   {
     field: "submissionDate",
@@ -355,7 +340,14 @@ const columns: GridColDef[] = [
     align: "center",
     sortable: true,
     renderCell: (candidate) => {
-      return <>{candidate?.row?.submissionDate}</>;
+      const submissionDate = new Date(candidate?.row?._applyDate);
+      const formattedDate = submissionDate.toLocaleDateString("he-IL", {
+        day: "numeric",
+        month: "numeric",
+        year: "numeric",
+      });
+
+      return <>{formattedDate}</>;
     },
   },
   {
@@ -365,7 +357,7 @@ const columns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     sortable: true,
-    renderCell: (candidate) => candidate?.row?.status,
+    renderCell: (candidate) => candidate?.row?._status,
   },
   {
     field: "cvFile",
@@ -375,19 +367,35 @@ const columns: GridColDef[] = [
     align: "center",
     sortable: false,
     renderCell: (params) => {
-      const handleCvFileClick = () => {
-        // Open the candidate's CV file
-        window.open(params.row.cvFile, "_blank");
-      };
-
-      return (
-        <span className="clickable" onClick={handleCvFileClick}>
-          קובץ
-        </span>
-      );
+      return <CvButton candidate={params.row} />;
     },
   },
 ];
+
+const CvButton = ({ candidate }) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleCvClick = async () => {
+    setLoading(true);
+    const cvLink = await candidate.getCvUrl();
+    setLoading(false);
+    window.open(cvLink);
+  };
+
+  return (
+    <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+      <Button
+        sx={{ color: "white", backgroundColor: "#3333ff" }}
+        variant="contained"
+        startIcon={<PictureAsPdfSharp />}
+        onClick={handleCvClick}
+        disabled={loading}
+      >
+        קו"ח
+      </Button>
+    </Box>
+  );
+};
 
 const GridCustomToolbar = () => {
   const navigate = useNavigate();
@@ -505,21 +513,60 @@ const CustomPaginationAndFooter = () => {
 export default function CandidateTable() {
   const [pageloading, setPageLoading] = React.useState(true);
   const [dataloading, setDataLoading] = React.useState(true);
-  const [rows, setRows] = React.useState<Candidate[]>([]);
+  type CombinedCandidate = {
+    _id: string;
+    _firstName: string;
+    _lastName: string;
+    _phone: string;
+    _eMail: string;
+    _generalRating: number;
+    _jobNumber: number;
+    _status: string;
+    _applyDate: Date;
+    _region: string;
+  };
 
+  const [rows, setRows] = React.useState<CombinedCandidate[]>([]);
   const navigate = useNavigate();
 
-  const fetchAllCandidates = async () => {
+  const fetchAllData = async () => {
     setDataLoading(true);
 
-    setRows(await getFilteredCandidates());
+    // Fetch all necessary data.
+    const candidates = await getFilteredCandidates();
+    const candidateJobStatuses = await getFilteredCandidateJobStatuses();
+    const jobs = await getFilteredJobs();
+
+    // Combine data into a new array for the rows.
+    const combinedRows = candidates.map((candidate) => {
+      // Find the job status and job for the current candidate.
+      const jobStatus = candidateJobStatuses.find(
+        (status) => status._candidateId === candidate._id
+      );
+      const job =
+        jobStatus &&
+        jobs.find((job) => job._jobNumber === jobStatus._jobNumber);
+
+      // Return a new object that combines the necessary data from all three sources.
+      // If jobStatus or job is undefined, provide default values for the missing data.
+      return {
+        ...candidate,
+        _jobNumber: jobStatus ? jobStatus._jobNumber : -1,
+        _status: jobStatus ? jobStatus._status : "N/A",
+        _applyDate: jobStatus ? jobStatus._applyDate : new Date(0, 0, 0),
+        _region: job ? job._region : "N/A",
+        getCvUrl: candidate.getCvUrl,
+      };
+    });
+
+    setRows(combinedRows);
 
     setDataLoading(false);
   };
 
   React.useEffect(() => {
     setPageLoading(false);
-    fetchAllCandidates();
+    fetchAllData();
   }, []);
 
   const theme = useTheme();
