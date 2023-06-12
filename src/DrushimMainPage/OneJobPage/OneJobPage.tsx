@@ -481,10 +481,10 @@ export default function OneJobPage()
                                     }}
                                 >
                                     {job?._description?.length! >= 1 ?
-                                        job?._description[0].split('\n').map((line) =>
+                                        job?._description[0].split('\n').map((line, index) =>
                                         {
                                             return (
-                                                <React.Fragment>
+                                                <React.Fragment key={"jobDescriptionLine" + index}>
                                                     {line}
                                                     <br />
                                                 </React.Fragment>
@@ -515,10 +515,10 @@ export default function OneJobPage()
                                     width: "28vw"
                                 }}
                             >
-                                {job?._requirements.split('\n').map((line) =>
+                                {job?._requirements.split('\n').map((line, index) =>
                                 {
                                     return (
-                                        <React.Fragment>
+                                        <React.Fragment key={"jobRequirementsLine" + index}>
                                             {line}
                                             <br />
                                         </React.Fragment>
