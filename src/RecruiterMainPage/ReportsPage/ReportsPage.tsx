@@ -114,18 +114,13 @@ function ReportsPage() {
 					</Stack>
 				</Box>
 			</Box>
-
-			<Box> 
+			<Box>
+				<h2 style={{ textAlign: "center" }}>דוחות לאקסל</h2>
+				<MyTable></MyTable>
+				<h2 style={{ textAlign: "center" }}>מספר משרות לפי ערים</h2>
 				<JobsByRegions></JobsByRegions>
-				 <MyTable></MyTable> 
-<<<<<<< HEAD
-				<JobsByRegions></JobsByRegions>
-				 <h2>כמות מועמדים למשרות השונות</h2>
-				<CandidatesByRoles></CandidatesByRoles> 
-				 
-=======
-				{/* <CandidatesByRoles></CandidatesByRoles> */}
->>>>>>> 9a9c86ed07127f0197f37b760284d0bbf7d5eacc
+				<h2 style={{ textAlign: "center" }}>כמות מועמדים למשרות השונות</h2>
+				<CandidatesByRoles></CandidatesByRoles>
 			</Box>
 		</>
 	)

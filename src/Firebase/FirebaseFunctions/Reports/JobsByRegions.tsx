@@ -4,34 +4,37 @@ import HighchartsExporting from "highcharts/modules/exporting";
 import HighchartsExportData from "highcharts/modules/export-data";
 import { Job, getFilteredJobs } from "../Job";
 
-
 const JobsComponent: React.FC = () => {
-    const [jobs, setJobs] = useState<Job[]>([]);
+  const [jobs, setJobs] = useState<Job[]>([]);
 
   useEffect(() => {
     // Load Highcharts libraries
     HighchartsExporting(Highcharts);
     HighchartsExportData(Highcharts);
-  }, []);
 
-  useEffect(() => {
     const fetchDataAndCreateChart = async () => {
       const filteredJobs = await getFilteredJobs();
       setJobs(filteredJobs); // Update the jobs state with filtered jobs
+    };
 
+    fetchDataAndCreateChart();
+  }, []);
+
+  useEffect(() => {
+    const createChart = () => {
       const jobsByRegion: { [region: string]: number } = {};
 
-      for (let i = 0; i < filteredJobs.length; i++) {
-        const job = filteredJobs[i];
+      for (let i = 0; i < jobs.length; i++) {
+        const job = jobs[i];
         const region = job._region;
 
-        if(job._open === true){
-        if (jobsByRegion[region]) {
-          jobsByRegion[region]++;
-        } else {
-          jobsByRegion[region] = 1;
+        if (job._open === true) {
+          if (jobsByRegion[region]) {
+            jobsByRegion[region]++;
+          } else {
+            jobsByRegion[region] = 1;
+          }
         }
-    }
       }
 
       const regions = Object.keys(jobsByRegion);
@@ -43,7 +46,7 @@ const JobsComponent: React.FC = () => {
           renderTo: "chart-container",
         },
         title: {
-          text: "מספר משרות לפי ערים",
+          text: "",
         },
         xAxis: {
           categories: regions,
@@ -66,8 +69,8 @@ const JobsComponent: React.FC = () => {
       });
     };
 
-    fetchDataAndCreateChart();
-  }, []);
+    createChart();
+  }, [jobs]);
 
   return <div id="chart-container2"></div>;
 };
