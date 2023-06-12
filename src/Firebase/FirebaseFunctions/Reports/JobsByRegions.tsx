@@ -4,10 +4,6 @@ import HighchartsExporting from "highcharts/modules/exporting";
 import HighchartsExportData from "highcharts/modules/export-data";
 import { Job, getFilteredJobs } from "../Job";
 
-interface ChartComponentProps {
-  regions: string[];
-  quantities: number[];
-}
 
 const JobsComponent: React.FC = () => {
     const [jobs, setJobs] = useState<Job[]>([]);
