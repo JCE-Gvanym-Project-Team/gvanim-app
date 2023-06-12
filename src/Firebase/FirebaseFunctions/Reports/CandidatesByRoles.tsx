@@ -243,9 +243,8 @@ const A = () => {
 
         if (job != undefined && role != undefined) {
           if (candidatesByRole[role]) {
-            // if (await job.getCandidates() != undefined)
-            //   candidatesByRole[role] += (await job.getCandidates()).length;
-            candidatesByRole[role] += 5;
+            const cands =  (await job.getCandidatures()).length;
+            candidatesByRole[role] += cands;
           } else {
             candidatesByRole[role] = 1;
             const newColor = randomColor();
@@ -278,11 +277,22 @@ const A = () => {
   };
 
   return (
-    <PieChart width={1700} height={700}>
-      <Pie dataKey="value" isAnimationActive={true} data={data} outerRadius={300} fill="fill" label />
-      <Tooltip />
-    </PieChart>
+    <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+      <PieChart width={600} height={600}>
+        <Pie
+          dataKey="value"
+          isAnimationActive={true}
+          data={data}
+          outerRadius={250}
+          fill="fill"
+          label
+        />
+        <Tooltip />
+      </PieChart>
+    </div>
   );
+  
+  
 };
 
 export default A;
