@@ -14,6 +14,8 @@ import AboutDialog from './Components/AboutDialog/AboutDialog';
 import MyLoading from '../../../Components/MyLoading/MyLoading';
 import RecommendersDialog from './Components/RecommendersDialog/RecommendersDialog';
 import JobsTable2 from './Components/JobsTable/JobsTable';
+import AreYouSureDialog from './Components/AreYouSureDialog/AreYouSureDialog';
+import SuccessMessageSnackbar from './Components/SuccessMessageSnackbar/SuccessMessageSnackbar';
 
 export default function ViewCandidatesPage(props: { candidateId: string })
 {
@@ -71,6 +73,7 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 		if ((reason && reason !== "backdropClick") || reason === undefined)
 		{
 			setPopupOpen(false);
+			setLoading(false);
 		}
 	};
 
@@ -111,6 +114,26 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 		{
 			setRecommendersDialogOpen(false);
 		}
+	}
+
+	// are you sure dialog
+	const [areYouSureDialogOpen, setAreYouSureDialogOpen] = useState(false);
+	const [areYouSureCallback, setAreYouSureCallback] = useState<(() => {})>();
+	const [areYouSureDialogMessage, setAreYouSureDialogMessage] = useState("");
+
+	const closeAreYouSureDialog = (event, reason) =>
+	{
+		if ((reason && reason !== "backdropClick") || reason === undefined)
+		{
+			setAreYouSureDialogOpen(false);
+		}
+	}
+
+	// success message
+	const [snackBarOpen, setSnackBarOpen] = useState(false);
+	const snackBarOnClose = () =>
+	{
+		setSnackBarOpen(false);
 	}
 
 	return (
@@ -220,16 +243,16 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 								position: 'absolute',
 							}} />
 
-							<Box sx={{ display: 'flex', flexDirection: 'column', alignItems: "center", justifyContent: "end", height: "190px"}}>
-								<Stack direction='row' spacing={1}>
+							<Box sx={{ display: 'flex', flexDirection: 'column', alignItems: "center", justifyContent: "end", height: { xs: "280px", md: "220px" }, marginBottom: { xs: "1rem", md: "0" } }}>
+								<Stack direction='row' spacing={1} sx={{ justifyContent: "center", alignItems: "center" }}>
 									<Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-										<AccountCircle sx={{ color: '#fff' }} />
+										<AccountCircle sx={{ color: '#fff', fontSize: "28px" }} />
 									</Box>
 									<Typography variant="h4" sx={{ color: '#fff', fontFamily: "'Noto Sans Hebrew', sans-serif", fontWeight: 500 }}>
 										צפייה במועמד
 									</Typography>
 								</Stack>
-								<Divider />
+								<Box sx={{ background: 'linear-gradient(90deg,hsla(0,0%,100%,0),#fff,hsla(0,0%,100%,0))', padding: 0.05, width: '100%', mt: 2 }} />
 								{/* Candidate Name */}
 								<Box sx={{ display: 'flex', alignSelf: "center" }}>
 									<Typography sx={candidateNameSx} variant='h3' >
@@ -242,7 +265,7 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 
 						{/* glass container */}
 						<Box >
-							<Box sx={{ marginRight: {xs: "0", md:"3rem"}, marginLeft: {xs: "0", md:"3rem"} }}>
+							<Box sx={{ marginRight: { xs: "0", md: "3rem" }, marginLeft: { xs: "0", md: "3rem" } }}>
 								<Stack direction={'column'} sx={mainStackSx} spacing={6}>
 
 
@@ -262,8 +285,16 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 												value={generalRating}
 												onChange={(event, newValue) =>
 												{
-													candidateInfo?.updateGeneralRating(newValue ? newValue : -1);
-													setGeneralRating(newValue ? newValue : -1);
+													setAreYouSureDialogOpen(true);
+													setAreYouSureDialogMessage("פעולה זו תשנה את דרגת ההתאמה הכללית של המועמד");
+													setAreYouSureCallback((() =>
+													{
+														return () =>
+														{
+															candidateInfo?.updateGeneralRating(newValue ? newValue : -1);
+															setGeneralRating(newValue ? newValue : -1);
+														}
+													}))
 												}}
 												size='large'
 											/>
@@ -281,15 +312,23 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 										onClose={closeRecommendersDialog}
 										jobId={recommendersDialogJobId}
 										candidateId={candidateInfo?._id!}
+										setLoading={setLoading}
 									/>
 
-
+									<AreYouSureDialog
+										open={areYouSureDialogOpen}
+										onClose={closeAreYouSureDialog}
+										message={areYouSureDialogMessage}
+										callback={areYouSureCallback}
+										setSnackBarOpen={setSnackBarOpen}
+									/>
+									<SuccessMessageSnackbar open={snackBarOpen} onClose={snackBarOnClose} />
 									<Box sx={{ display: "flex", justifyContent: "space-between" }}>
 										<Button sx={{
 											color: "white",
 											backgroundColor: "#3333ff"
 										}}
-										
+
 											variant="contained"
 											startIcon={<PictureAsPdfSharp />}
 											onClick={async () =>
@@ -298,7 +337,7 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 												const cvLink = (await candidateInfo?.getCvUrl()!);
 												setLoading(false);
 												window.open(cvLink);
-												
+
 											}}
 										>
 											קו"ח
@@ -338,7 +377,14 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 										<Button sx={notesButtonSx} variant="contained" onClick={commentsPopupOpenHandler} startIcon={<SpeakerNotes />}>
 											הערות
 										</Button>
-										<NotesPopup open={popupOpen} onClose={commentsPopupCloseHandler} candidate={candidateInfo} initialData={initialData} />
+										<NotesPopup
+											open={popupOpen}
+											onClose={commentsPopupCloseHandler}
+											candidate={candidateInfo}
+											initialData={initialData}
+											setLoading={setLoading}
+											loading={loading}
+										/>
 									</Box>
 
 								</Stack>

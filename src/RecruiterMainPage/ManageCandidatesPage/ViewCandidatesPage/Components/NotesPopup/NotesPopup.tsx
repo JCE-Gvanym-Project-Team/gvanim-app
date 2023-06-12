@@ -1,27 +1,34 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Typography, Box, IconButton } from '@mui/material';
-import { dialogActionsSx, dialogContentSx, dialogSx, dialogTitleSx, dialogTopAreaSx } from './NotesPopupStyles';
 import CloseIcon from '@mui/icons-material/Close';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, TextField } from '@mui/material';
+import { useEffect, useState } from 'react';
+import MyLoading from '../../../../../Components/MyLoading/MyLoading';
 import { Candidate } from '../../../../../Firebase/FirebaseFunctions/Candidate';
+import { dialogActionsSx, dialogContentSx, dialogSx, dialogTitleSx, dialogTopAreaSx } from './NotesPopupStyles';
 
-export default function NotesPopup(props: { open, onClose, candidate: Candidate | null, initialData: string | undefined }) {
-    const { open, onClose, candidate, initialData } = props;
+export default function NotesPopup(props: { open, onClose, candidate: Candidate | null, initialData: string | undefined, setLoading, loading})
+{
+    const { open, onClose, candidate, initialData,setLoading, loading } = props;
     const [formData, setFormData] = useState('');
-    const handleChange = (event) => {
+    const handleChange = (event) =>
+    {
         setFormData(event.target.value);
     };
 
-    useEffect(() => {
+    useEffect(() =>
+    {
         setFormData(initialData ? initialData : "");
-    },[initialData]);
+    }, [initialData]);
 
-    const handleSave = () => {
-        candidate?.edit(candidate._firstName, candidate._lastName, candidate._phone,candidate._eMail,candidate._generalRating, formData);
+    const handleSave = () =>
+    {
+        setLoading(true);
+        candidate?.edit(candidate._firstName, candidate._lastName, candidate._phone, candidate._eMail, candidate._generalRating, formData);
         onClose();
     };
 
 
     return (
+        loading ? <MyLoading loading={loading} setLoading={setLoading}/> :
         // popup dialog
         <Dialog open={open} onClose={onClose} sx={dialogSx}>
             <Box sx={dialogTopAreaSx}>
@@ -60,7 +67,10 @@ export default function NotesPopup(props: { open, onClose, candidate: Candidate 
 
             {/* Action Button */}
             <DialogActions sx={dialogActionsSx}>
-                <Button onClick={handleSave}>שמירה</Button>
+                <Button
+                    variant='contained'
+                    onClick={handleSave}
+                >שמירה</Button>
             </DialogActions>
         </Dialog>
     );

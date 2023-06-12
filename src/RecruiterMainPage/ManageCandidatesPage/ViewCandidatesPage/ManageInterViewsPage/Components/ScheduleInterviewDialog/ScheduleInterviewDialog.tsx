@@ -1,7 +1,7 @@
 import { Autocomplete, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, MenuItem, TextField, Typography, createFilterOptions } from "@mui/material";
 import { useEffect, useState } from "react";
 import { changeJobContainerStyle, changeJobContainerSx, currentStatusTextSx, dialogActionsSx, dialogContentSx, dialogSx, dialogTitleSx, dialogTopAreaSx, locationTextFieldSx, locationTitleSx, submitButtonSx } from "./ScheduleInterviewDialogStyle";
-import { ArrowBack, ArrowDownward, Autorenew, Check, Close, DoneAll, ElevatorSharp, MoodBad, ThumbDown, ThumbUp, WhatsApp } from "@mui/icons-material";
+import { ArrowBack, ArrowDownward, Autorenew, Check, Close, DoneAll, ElevatorSharp, MoodBad, NestCamWiredStandOutlined, ThumbDown, ThumbUp, WhatsApp } from "@mui/icons-material";
 import { DatePicker, LocalizationProvider, MobileTimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import 'dayjs/locale/he'
@@ -10,6 +10,8 @@ import { CandidateJobStatus, allStatus, getAllRejectCause, getFilteredCandidateJ
 import { Recruiter } from "../../../../../../Firebase/FirebaseFunctions/Recruiter";
 import { Job, getFilteredJobs } from "../../../../../../Firebase/FirebaseFunctions/Job";
 import { useNavigate } from "react-router-dom";
+import AreYouSureDialog from "../../../Components/AreYouSureDialog/AreYouSureDialog";
+import SuccessMessageSnackbar from "../../../Components/SuccessMessageSnackbar/SuccessMessageSnackbar";
 
 const filter = createFilterOptions<string>();
 
@@ -248,6 +250,26 @@ export default function ScheduleInterviewDialog(props: {
     const [fromJobError, setFromJobError] = useState(false);
     const [toJobError, setToJobError] = useState(false);
 
+    // are you sure dialog
+    const [areYouSureDialogOpen, setAreYouSureDialogOpen] = useState(false);
+    const [areYouSureCallback, setAreYouSureCallback] = useState<(() => {})>();
+    const [areYouSureDialogMessage, setAreYouSureDialogMessage] = useState("");
+
+    const closeAreYouSureDialog = (event, reason) =>
+    {
+        if ((reason && reason !== "backdropClick") || reason === undefined)
+        {
+            setAreYouSureDialogOpen(false);
+        }
+    }
+
+    // success message
+    const [snackBarOpen, setSnackBarOpen] = useState(false);
+    const snackBarOnClose = () =>
+    {
+        setSnackBarOpen(false);
+    }
+
     return (
         // popup dialog
         <Dialog open={open} onClose={(event, reason) =>
@@ -451,6 +473,14 @@ export default function ScheduleInterviewDialog(props: {
                         />
                     </Box>
                 </Box>
+                <AreYouSureDialog
+                    open={areYouSureDialogOpen}
+                    onClose={closeAreYouSureDialog}
+                    message={areYouSureDialogMessage}
+                    callback={areYouSureCallback}
+                    setSnackBarOpen={setSnackBarOpen}
+                />
+                <SuccessMessageSnackbar open={snackBarOpen} onClose={snackBarOnClose}/>
             </DialogContent>
 
 
@@ -461,7 +491,14 @@ export default function ScheduleInterviewDialog(props: {
                     if (changeJobDialogOpen)
                     {
                         return (
-                            <Button onClick={handleSubmitChangeJob} variant="contained" sx={submitButtonSx}>
+                            <Button onClick={(event) =>
+                            {
+                                setAreYouSureDialogOpen(true);
+                                setAreYouSureDialogMessage("פעולה זו תשנה את המשרה של המועמד: " +
+                                    candidate?._firstName + " " + candidate?._lastName +
+                                    "\nמ: " + fromJobValue + " ל: " + toJobValue);
+                                setAreYouSureCallback(() => () => { handleSubmitChangeJob(event); });
+                            }} variant="contained" sx={submitButtonSx}>
                                 העברת משרה
                             </Button>
                         );
@@ -469,7 +506,12 @@ export default function ScheduleInterviewDialog(props: {
                     if (!disableRejectionReason)
                     {
                         return (
-                            <Button onClick={handleSubmitSaveRejectionReason} variant="contained" sx={submitButtonSx}>
+                            <Button onClick={(event) =>
+                            {
+                                setAreYouSureDialogOpen(true);
+                                setAreYouSureDialogMessage("פעולה זו תשנה את המשרה של המועמד: " + candidate?._firstName + " " + candidate?._lastName);
+                                setAreYouSureCallback(() => () => { handleSubmitSaveRejectionReason(event); });
+                            }} variant="contained" sx={submitButtonSx}>
                                 שמירה
                             </Button>
                         );
@@ -477,14 +519,24 @@ export default function ScheduleInterviewDialog(props: {
                     if (!disableWhatsappMessage)
                     {
                         return (
-                            <Button onClick={handleSubmitSendWhatsappMessage} variant="contained" sx={submitButtonSx}>
+                            <Button onClick={(event) =>
+                            {
+                                setAreYouSureDialogOpen(true);
+                                setAreYouSureDialogMessage('פעולה זו תשנה את הסטטוס של המועמד ל: ' + newStatus + '\nותנתב אותך לאתר של וואצאפ על מנת לשלוח למועמד הודעה');
+                                setAreYouSureCallback(() => () => { handleSubmitSendWhatsappMessage(event); });
+                            }} variant="contained" sx={submitButtonSx}>
                                 <WhatsApp sx={{ marginRight: "0.5rem" }} />
                                 שליחת הודעה למועמד
                             </Button>
                         );
                     }
                     return (
-                        <Button onClick={handleSubmitSaveStatus} variant="contained" sx={{ backgroundColor: "blueviolet" }}>
+                        <Button onClick={(event) =>
+                        {
+                            setAreYouSureDialogOpen(true);
+                            setAreYouSureDialogMessage(" פעולה זו תשנה את סטטוס המועמד ל: " + newStatus);
+                            setAreYouSureCallback(() => () => { handleSubmitSaveStatus(event); });
+                        }} variant="contained" sx={{ backgroundColor: "blueviolet" }}>
                             שמירת סטטוס
                         </Button>
                     );
