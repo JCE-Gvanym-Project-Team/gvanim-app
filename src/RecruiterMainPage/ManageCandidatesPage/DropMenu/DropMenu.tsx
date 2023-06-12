@@ -118,10 +118,11 @@ export default function DropMenu(props: { CandidateId: any }) {
         >
           אפשרויות
         </Typography>
-        <StyledMenuItem onClick={() => navigate(`/career/jobs/${CandidateId}`)}>
+        <StyledMenuItem
+          onClick={() => navigate(`/career/jobs/${CandidateId._jobNumber}`)}
+        >
           <ListItemIcon>
             <Assignment sx={MenuItemIconSx} />
-
             <Typography sx={MenuItemTypographySx}>לדף המשרה</Typography>
           </ListItemIcon>
         </StyledMenuItem>
