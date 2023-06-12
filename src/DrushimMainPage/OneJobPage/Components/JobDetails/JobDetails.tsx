@@ -33,7 +33,7 @@ export default function FloatingBox(props: { job })
 
     return (
 
-        < Box
+        <Box
             sx={{
                 position: "sticky",
                 top: floatingTop,
@@ -44,6 +44,7 @@ export default function FloatingBox(props: { job })
             }
             }
         >
+            <Typography variant='h1' sx={{marginBottom: "42px"}}>פרטי משרה</Typography>
             {/* job location */}
             < Box
                 sx={{
@@ -52,7 +53,7 @@ export default function FloatingBox(props: { job })
                     flexDirection: "row"
                 }}
             >
-                <Typography variant='h3'>
+                <Typography variant='h4'>
                     מיקום:
                 </Typography>
                 <Typography
@@ -60,7 +61,7 @@ export default function FloatingBox(props: { job })
                         marginLeft: "1rem",
                         backgroundColor: "background.boxInner"
                     }}
-                    variant='h3'
+                    variant='h4'
                 >
                     {job?._region}
                 </Typography>
@@ -74,7 +75,7 @@ export default function FloatingBox(props: { job })
                     flexDirection: "row"
                 }}
             >
-                <Typography variant='h3'>
+                <Typography variant='h4'>
                     תפקיד:
                 </Typography>
                 <Typography
@@ -82,7 +83,7 @@ export default function FloatingBox(props: { job })
                         marginLeft: "1rem",
                         backgroundColor: "background.boxInner"
                     }}
-                    variant='h3'
+                    variant='h4'
                 >
                     {job?._role}
                 </Typography>
@@ -96,7 +97,7 @@ export default function FloatingBox(props: { job })
                     flexDirection: "row"
                 }}
             >
-                <Typography variant='h3'>
+                <Typography variant='h4'>
                     היקף משרה:
                 </Typography>
                 <Typography
@@ -104,7 +105,7 @@ export default function FloatingBox(props: { job })
                         marginLeft: "1rem",
                         backgroundColor: "background.boxInner"
                     }}
-                    variant='h3'
+                    variant='h4'
                 >
                     {job?._scope.slice(0).reverse().map((num, index) => index !== job._scope.length - 1 ? num + "% - " : num + "%")}
                 </Typography>
@@ -118,7 +119,7 @@ export default function FloatingBox(props: { job })
                     flexDirection: "row"
                 }}
             >
-                <Typography variant='h3'>
+                <Typography variant='h4'>
                     מס' משרה:
                 </Typography>
                 <Typography
@@ -126,7 +127,7 @@ export default function FloatingBox(props: { job })
                         marginLeft: "1rem",
                         backgroundColor: "background.boxInner"
                     }}
-                    variant='h3'
+                    variant='h4'
                 >
                     {job?._jobNumber}
                 </Typography>

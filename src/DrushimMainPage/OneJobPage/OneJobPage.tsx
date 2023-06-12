@@ -500,7 +500,7 @@ export default function OneJobPage()
                         <Box
                             sx={{
                                 backgroundColor: "background.box",
-                                flex: 5
+                                flex: 4
                             }}
                         >
                             <Typography variant="h2" marginTop={"73px"}>
@@ -554,9 +554,9 @@ export default function OneJobPage()
                         </Box>
 
                     </Box>
+
                     {/* Job Details */}
                     <JobsDetails job={job} />
-
 
                 </Box>
 
@@ -565,7 +565,8 @@ export default function OneJobPage()
                     variant='h2'
                     sx={{
                         alignSelf: "center",
-                        marginTop: "313px"
+                        marginTop: "313px",
+                        marginBottom: "76px"
                     }}
                 >
                     השאירו פרטים כאן:
