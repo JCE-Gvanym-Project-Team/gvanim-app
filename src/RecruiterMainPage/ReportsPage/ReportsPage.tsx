@@ -103,7 +103,7 @@ function ReportsPage() {
 				}} />
 
 
-				<Box sx={{ display: 'flex', flexDirection: 'column', top: "165px", position: "absolute" }}>
+				<Box sx={{ display: 'flex', flexDirection: 'column', top: "120px", position: "absolute" }}>
 					<Stack direction='row' spacing={1}>
 						<Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
 						</Box>
@@ -116,11 +116,16 @@ function ReportsPage() {
 			</Box>
 
 			<Box> 
+				<JobsByRegions></JobsByRegions>
 				 <MyTable></MyTable> 
+<<<<<<< HEAD
 				<JobsByRegions></JobsByRegions>
 				 <h2>כמות מועמדים למשרות השונות</h2>
 				<CandidatesByRoles></CandidatesByRoles> 
 				 
+=======
+				{/* <CandidatesByRoles></CandidatesByRoles> */}
+>>>>>>> 9a9c86ed07127f0197f37b760284d0bbf7d5eacc
 			</Box>
 		</>
 	)

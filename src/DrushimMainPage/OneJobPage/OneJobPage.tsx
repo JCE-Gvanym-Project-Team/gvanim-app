@@ -20,7 +20,6 @@ export default function OneJobPage()
 {
     const [job, setJob] = useState<Job | null>(null);
 
-    const state = useLocation();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
 
@@ -35,10 +34,22 @@ export default function OneJobPage()
     const [areYouSureDialogIndex, setAreYouSureDialogIndex] = useState(0);
     const [areYouSureDialogRecommenderName, setAreYouSureDialogRecommenderName] = useState("");
 
-    const successDialogOnClose = (event, reason) =>
+    const successDialogOnClose = (event, reason, sendDataToAllJobsPage) =>
     {
-        if ((reason && reason !== "backdropClick") || reason === undefined)
+        if ((reason && reason !== "backdropClick" && reason !== "clickaway") || reason === undefined)
         {
+            console.log(sendDataToAllJobsPage);
+            if (sendDataToAllJobsPage)
+            {
+                const state = {
+                    candidateName: candidateName,
+                    candidateSurname: candidateSurname,
+                    candidateEmail: candidateEmail,
+                    candidatePhone: candidatePhone,
+                    candidateAboutText: aboutText
+                }
+                navigate("/career/jobs", { state })
+            }
             setSuccessDialogOpen(false);
         }
     }
@@ -62,12 +73,6 @@ export default function OneJobPage()
             updateRecommendersListAtIndex(null, null, index);
             setNumRecommenders(numRecommenders - 1);
         }
-    }
-
-    // get current job from URL
-    const fetchJob = async () =>
-    {
-        setJob((await getFilteredJobs(["jobNumber"], [getJobIdFromUrl(state.pathname)]))[0]);
     }
 
     // about text field
@@ -121,6 +126,13 @@ export default function OneJobPage()
     const [cvFile, setCvFile] = useState<File | null>(null);
     const [cvFileError, setCvFileError] = useState(false);
 
+    // get current job from URL
+    const location = useLocation();
+    const fetchJob = async () =>
+    {
+        setJob((await getFilteredJobs(["jobNumber"], [getJobIdFromUrl(location.pathname)]))[0]);
+    }
+
     useEffect(() =>
     {
         fetchJob();
@@ -134,8 +146,16 @@ export default function OneJobPage()
 
         setDefaults();
 
+        // get info from state
+        setCandidateName(location.state?.candidateName);
+        setCandidateSurname(location.state?.candidateSurname);
+        setCandidatePhone(location.state?.candidatePhone);
+        setCandidateEmail(location.state?.candidateEmail);
+        setAboutText(location.state?.candidateAboutText);
+        setAboutNumChars(location.state?.candidateAboutText.length)
+
         setLoading(false);
-    }, [state])
+    }, [location.state])
 
     // submit
     const handleSubmit = async () =>
@@ -219,7 +239,6 @@ export default function OneJobPage()
             setErrorDialogOpen(true);
             return;
         }
-        // TODO: it only adds one recommender, and the file is incorrect
         // add recommenders and CV
         let candidateJobStatus = (await getFilteredCandidateJobStatuses(["jobNumber", "candidateId"], [job?._jobNumber.toString()!, newCandidateId]))[0];
 
@@ -242,7 +261,7 @@ export default function OneJobPage()
         newCandidate.uploadCv(cvFile);
         setLoading(false);
 
-        // TODO: add success message here
+        setSuccessDialogOpen(true);
 
         // set defaults values
         setDefaults();
@@ -250,7 +269,7 @@ export default function OneJobPage()
 
     const isPhoneValid = (phone: string) =>
     {
-        return /^(?:(?:(\+?972|\(\+?972\)|\+?\(972\))(?:\s|\.|-)?([1-9]\d?))|(0[23489]{1})|(0[57]{1}[0-9]))(?:\s|\.|-)?([^0\D]{1}\d{2}(?:\s|\.|-)?\d{4})$/gm.test(phone);
+        return /^05[0-57-8][0-9]{7}$/gm.test(phone);
     }
 
     const isEmailValid = (email: string) =>
@@ -260,20 +279,6 @@ export default function OneJobPage()
 
     const setDefaults = () =>
     {
-        // reset candidate details
-        setCandidateName("");
-        setCandidateNameError(false);
-        setCandidateSurname("");
-        setCandidateSurnameError(false);
-        setCandidatePhone("");
-        setCandidatePhoneError(false);
-        setCandidateEmail("");
-        setCandidateEmailError(false);
-
-        // reset about text
-        setAboutNumChars(0);
-        setAboutText("");
-
         // reset cv file
         setCvFileError(false);
         setCvFile(null);
@@ -291,6 +296,10 @@ export default function OneJobPage()
                 return [false, false]
             })
         );
+
+        // reset dialogs
+        setErrorDialogOpen(false);
+        setAreYouSureDialogOpen(false);
     }
 
     /**
@@ -938,27 +947,61 @@ export default function OneJobPage()
                                                         }}
                                                     >
                                                         {/* mobile attach file button */}
-                                                        <Button
-                                                            variant='outlined'
+                                                        <Box
                                                             sx={{
-                                                                display: { xs: "block", md: "none" }
-                                                            }}
-                                                            onClick={() =>
-                                                            {
-
+                                                                display: "flex",
+                                                                flexDirection: "row",
+                                                                alignSelf: "end",
                                                             }}
                                                         >
-                                                            <AttachFile
-                                                                sx={{ fontSize: "24px" }}
+                                                            {/* add recommender file button */}
+                                                            <Input
+                                                                type="file"
+                                                                inputRef={(input) => (recommenderFileInputRefs.current[index] = input)}
+                                                                style={{ display: 'none' }}
+                                                                onChange={(event) =>
+                                                                {
+                                                                    const inputElement = event.target as HTMLInputElement;
+                                                                    const files = inputElement.files;
+                                                                    if (files && files.length > 0)
+                                                                    {
+                                                                        updateRecommendersListAtIndex(recommendersList[index][0], files[0], index);
+                                                                    }
+                                                                }}
                                                             />
-                                                        </Button>
+                                                            <Button
+                                                                sx={{
+                                                                    display: { xs: "flex", md: "none" }
+                                                                }}
+                                                                onClick={() =>
+                                                                {
+                                                                    // trigger input onChange
+                                                                    if (recommenderFileInputRefs.current[index])
+                                                                    {
+                                                                        recommenderFileInputRefs.current[index]?.click()
+                                                                    }
+                                                                }}
+
+                                                            >
+                                                                <AttachFile
+                                                                    sx={{ fontSize: "24px" }}
+                                                                />
+                                                                {/* display filename to the user */}
+                                                                <Typography variant='h6'>
+                                                                    {recommendersList[index][1]?.name.length! > 20 ? '...' : ''}
+                                                                    {recommendersList[index][1] ? recommendersList[index][1]?.name.slice(0, 20) : ""}
+                                                                </Typography>
+                                                            </Button>
+
+                                                        </Box>
 
                                                         {/* Remove recommender button */}
                                                         <Button
                                                             onClick={() =>
                                                             {
-                                                                updateRecommendersListAtIndex(null, null, index);
-                                                                setNumRecommenders(numRecommenders - 1);
+                                                                setAreYouSureDialogIndex(index);
+                                                                setAreYouSureDialogOpen(true);
+                                                                setAreYouSureDialogRecommenderName(recommender[0]?._fullName!);
                                                             }}
                                                         >
                                                             <DeleteForeverOutlined />
@@ -1313,13 +1356,6 @@ export default function OneJobPage()
                     </Box>
 
                 </Box>
-
-                <Button
-                    color='secondary'
-                    onClick={() => theme.palette.mode === "light" ? colorMode.toggleColorMode("dark") : colorMode.toggleColorMode("light")}
-                >
-                    Toggle Theme
-                </Button>
 
                 {/* Dialogs */}
                 <ErrorDialog open={errorDialogOpen} onClose={errorDialogOnClose} />
