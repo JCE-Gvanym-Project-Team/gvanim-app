@@ -14,6 +14,7 @@ import AboutDialog from './Components/AboutDialog/AboutDialog';
 import MyLoading from '../../../Components/MyLoading/MyLoading';
 import RecommendersDialog from './Components/RecommendersDialog/RecommendersDialog';
 import JobsTable2 from './Components/JobsTable/JobsTable';
+import AreYouSureDialog from './Components/AreYouSureDialog/AreYouSureDialog';
 
 export default function ViewCandidatesPage(props: { candidateId: string })
 {
@@ -110,6 +111,17 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 		if ((reason && reason !== "backdropClick") || reason === undefined)
 		{
 			setRecommendersDialogOpen(false);
+		}
+	}
+
+	// are you sure dialog
+	const [areYouSureDialogOpen, setAreYouSureDialogOpen] = useState(false);
+
+	const closeAreYouSureDialog = (event, reason) =>
+	{
+		if ((reason && reason !== "backdropClick") || reason === undefined)
+		{
+			setAreYouSureDialogOpen(false);
 		}
 	}
 
@@ -220,8 +232,8 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 								position: 'absolute',
 							}} />
 
-							<Box sx={{ display: 'flex', flexDirection: 'column', alignItems: "center", justifyContent: "end", height: {xs: "280px" ,md: "220px"}, marginBottom: {xs: "1rem", md: "0"}}}>
-								<Stack direction='row' spacing={1} sx={{justifyContent: "center", alignItems: "center"}}>
+							<Box sx={{ display: 'flex', flexDirection: 'column', alignItems: "center", justifyContent: "end", height: { xs: "280px", md: "220px" }, marginBottom: { xs: "1rem", md: "0" } }}>
+								<Stack direction='row' spacing={1} sx={{ justifyContent: "center", alignItems: "center" }}>
 									<Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
 										<AccountCircle sx={{ color: '#fff', fontSize: "28px" }} />
 									</Box>
@@ -242,7 +254,7 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 
 						{/* glass container */}
 						<Box >
-							<Box sx={{ marginRight: {xs: "0", md:"3rem"}, marginLeft: {xs: "0", md:"3rem"} }}>
+							<Box sx={{ marginRight: { xs: "0", md: "3rem" }, marginLeft: { xs: "0", md: "3rem" } }}>
 								<Stack direction={'column'} sx={mainStackSx} spacing={6}>
 
 
@@ -262,8 +274,9 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 												value={generalRating}
 												onChange={(event, newValue) =>
 												{
-													candidateInfo?.updateGeneralRating(newValue ? newValue : -1);
-													setGeneralRating(newValue ? newValue : -1);
+													setAreYouSureDialogOpen(true);
+													// candidateInfo?.updateGeneralRating(newValue ? newValue : -1);
+													// setGeneralRating(newValue ? newValue : -1);
 												}}
 												size='large'
 											/>
@@ -283,13 +296,14 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 										candidateId={candidateInfo?._id!}
 									/>
 
+									<AreYouSureDialog open={areYouSureDialogOpen} onClose={closeAreYouSureDialog} />
 
 									<Box sx={{ display: "flex", justifyContent: "space-between" }}>
 										<Button sx={{
 											color: "white",
 											backgroundColor: "#3333ff"
 										}}
-										
+
 											variant="contained"
 											startIcon={<PictureAsPdfSharp />}
 											onClick={async () =>
@@ -298,7 +312,7 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 												const cvLink = (await candidateInfo?.getCvUrl()!);
 												setLoading(false);
 												window.open(cvLink);
-												
+
 											}}
 										>
 											קו"ח
