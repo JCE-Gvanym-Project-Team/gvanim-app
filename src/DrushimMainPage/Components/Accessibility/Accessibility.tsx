@@ -45,7 +45,7 @@ export default function Accessibility()
                     display: "flex",
                     justifyContent: "end",
                     position: "fixed",
-                    top: "80%",
+                    top: "35%",
                     right: "0",
                     zIndex: "10" // on top of everything but the drawer
                 }}

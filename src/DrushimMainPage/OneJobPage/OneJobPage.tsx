@@ -1,4 +1,4 @@
-import { AddBoxSharp, AttachFile, DeleteForeverOutlined, ErrorOutlineRounded, Redo, Send } from '@mui/icons-material';
+import { AddBoxSharp, ArrowDownward, ArrowUpward, AttachFile, DeleteForeverOutlined, ErrorOutlineRounded, Redo, Send } from '@mui/icons-material';
 import { Box, Button, Divider, Input, TextField, Typography, useTheme } from '@mui/material';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -10,11 +10,14 @@ import { ColorModeContext, colorTokens } from '../theme';
 import AreYouSureDialog from './Components/AreYouSureDialog/AreYouSureDialog';
 import SuccessDialog from './Components/SuccessDialog/SuccessDialog';
 import ErrorDialog from './Components/ErrorDialog/ErrorDialog';
+import JobsDetails from './Components/JobDetails/JobDetails';
 
 
 
 const ABOUT_MAX_LENGTH = 1000;
 const MAX_RECOMMENDERS = 3;
+
+const marginLeftAndRight = "18.75vw"
 
 export default function OneJobPage()
 {
@@ -81,6 +84,7 @@ export default function OneJobPage()
     // recommenders
     const [numRecommenders, setNumRecommenders] = useState(0);
     const [recommendersList, setRecommendersList] = useState<Array<[Recomendation | null, File | null]>>();
+    const [recommendersListOpen, setRecommendersListOpen] = useState(false);
     const [recommendersErrors, setRecommendersErrors] = useState<boolean[][]>
         ([
             // index 0 = phone error. index 1 = email error
@@ -152,7 +156,10 @@ export default function OneJobPage()
         setCandidatePhone(location.state?.candidatePhone);
         setCandidateEmail(location.state?.candidateEmail);
         setAboutText(location.state?.candidateAboutText);
-        setAboutNumChars(location.state?.candidateAboutText.length)
+        setAboutNumChars(location.state?.candidateAboutText.length);
+
+        updateRecommendersListAtIndex(new Recomendation("", "", ""), null, 0);
+        setNumRecommenders(1);
 
         setLoading(false);
     }, [location.state])
@@ -160,8 +167,9 @@ export default function OneJobPage()
     // submit
     const handleSubmit = async () =>
     {
+        console.log(candidateName);
         // handle errors
-        if (candidateName === "")
+        if (!candidateName || candidateName === "")
         {
             setCandidateNameError(true);
         } else
@@ -169,7 +177,7 @@ export default function OneJobPage()
             setCandidateNameError(false);
         }
 
-        if (candidateSurname === "")
+        if (!candidateSurname || candidateSurname === "")
         {
             setCandidateSurnameError(true);
         } else
@@ -206,9 +214,8 @@ export default function OneJobPage()
         }
         setCvFileError(false);
 
-        if (!checkRecommenders())
+        if (recommendersListOpen && !checkRecommenders())
         {
-            console.log("here");
             console.log(recommendersErrors);
             return;
         }
@@ -223,7 +230,7 @@ export default function OneJobPage()
             candidatePhone,
             candidateEmail,
             -1,
-            aboutText
+            ""
         );
         // add candidate, or get existing candidate
         if (!await newCandidate.add())
@@ -239,24 +246,28 @@ export default function OneJobPage()
             setErrorDialogOpen(true);
             return;
         }
-        // add recommenders and CV
-        let candidateJobStatus = (await getFilteredCandidateJobStatuses(["jobNumber", "candidateId"], [job?._jobNumber.toString()!, newCandidateId]))[0];
 
-        recommendersList?.forEach(async (recommender) =>
+        if (recommendersListOpen)
         {
-            const recommenderInfo = recommender[0];
-            const file = recommender[1];
-            if (recommenderInfo)
+            // add recommenders and CV
+            let candidateJobStatus = (await getFilteredCandidateJobStatuses(["jobNumber", "candidateId"], [job?._jobNumber.toString()!, newCandidateId]))[0];
+            await candidateJobStatus.updateAbout(aboutText);
+            recommendersList?.forEach(async (recommender) =>
             {
-                if (!file)
+                const recommenderInfo = recommender[0];
+                const file = recommender[1];
+                if (recommenderInfo)
                 {
-                    await candidateJobStatus.addRecomendation(recommenderInfo._fullName, recommenderInfo._phone, recommenderInfo._eMail, new File([''], ''));
-                } else
-                {
-                    await candidateJobStatus.addRecomendation(recommenderInfo._fullName, recommenderInfo._phone, recommenderInfo._eMail, file);
+                    if (!file)
+                    {
+                        await candidateJobStatus.addRecomendation(recommenderInfo._fullName, recommenderInfo._phone, recommenderInfo._eMail, new File([''], ''));
+                    } else
+                    {
+                        await candidateJobStatus.addRecomendation(recommenderInfo._fullName, recommenderInfo._phone, recommenderInfo._eMail, file);
+                    }
                 }
-            }
-        })
+            })
+        }
 
         newCandidate.uploadCv(cvFile);
         setLoading(false);
@@ -352,9 +363,10 @@ export default function OneJobPage()
                     flexDirection: "column",
                     alignItems: "stretch",
                     justifyContent: "stretch",
-                    marginLeft: { xs: "0", md: "0.2rem" },
-                    marginRight: { xs: "0", md: "0.2rem" },
-                    backgroundColor: "background.main"
+                    marginLeft: { xs: "0", md: marginLeftAndRight },
+                    marginRight: { xs: "0", md: marginLeftAndRight },
+                    backgroundColor: "background.main",
+                    marginTop: "256px"
                 }}
             >
 
@@ -378,7 +390,7 @@ export default function OneJobPage()
                             display: "flex",
                             alignItems: "center",
                             fontWeight: "bold",
-                            color: "primary?.title"
+                            color: "primary.title"
                         }}
                     >
 
@@ -387,16 +399,26 @@ export default function OneJobPage()
                     </Typography>
                 </Button>
 
+                {/* Job Number */}
+                <Box sx={{ display: "flex", flexDirection: "row", width: "41.71875vw" }}>
+
+                    <Typography variant='h5' sx={{ letterSpacing: 0 }}>
+                        משרה מספר:
+                    </Typography>
+                    <Typography variant='h5' sx={{ marginLeft: "11px" }}>
+                        {job?._jobNumber}
+                    </Typography>
+                </Box>
+
                 {/* Job Title */}
                 <Box
                     sx={{
-                        marginTop: "1rem",
                         backgroundColor: "background.box",
                         display: "flex",
-                        justifyContent: "center",
+                        justifyContent: "start",
                         alignItems: "center",
-                        textAlign: "center",
-                        padding: "1rem"
+                        textAlign: "left",
+                        width: "41.71875vw"
                     }}
                 >
 
@@ -404,7 +426,7 @@ export default function OneJobPage()
                         sx={{
                             color: "primary.main"
                         }}
-                        variant='h3'
+                        variant='h1'
                     >
                         {job?._title}
                     </Typography>
@@ -436,63 +458,73 @@ export default function OneJobPage()
                         <Box
                             sx={{
                                 display: "flex",
-                                flexDirection: { xs: "column", md: "row" }
+                                flexDirection: "column"
                             }}
                         >
 
                             {/* description */}
                             <Box
                                 sx={{
-                                    padding: "1rem",
                                     flex: 7
                                 }}
                             >
-                                <Typography variant="h1">
-                                    תיאור המשרה
+                                <Typography variant="h2">
+                                    תיאור המשרה:
                                 </Typography>
-
-                                <Divider sx={{
-                                    marginRight: "3rem",
-                                    backgroundColor: "primary.faded"
-                                }} />
 
                                 <Typography
                                     variant='h3'
-                                    marginTop={"0.5rem"}
+                                    marginTop={"15px"}
                                     sx={{
-                                        backgroundColor: "background.boxInner"
+                                        backgroundColor: "background.boxInner",
+                                        width: "30vw"
                                     }}
                                 >
-                                    {job?._description?.length! >= 1 ? job?._description[0] : ""}
+                                    {job?._description?.length! >= 1 ?
+                                        job?._description[0].split('\n').map((line) =>
+                                        {
+                                            return (
+                                                <React.Fragment>
+                                                    {line}
+                                                    <br />
+                                                </React.Fragment>
+                                            )
+                                        })
+                                        : ""
+                                    }
                                 </Typography>
                             </Box>
 
-                            {/* requirements */}
-                            <Box
+                        </Box>
+                        {/* requirements */}
+                        <Box
+                            sx={{
+                                backgroundColor: "background.box",
+                                flex: 5
+                            }}
+                        >
+                            <Typography variant="h2" marginTop={"73px"}>
+                                דרישות התפקיד:
+                            </Typography>
+
+                            <Typography
+                                variant='h3'
+                                marginTop={"15px"}
                                 sx={{
-                                    backgroundColor: "background.box",
-                                    padding: "1rem",
-                                    flex: 5
+                                    backgroundColor: "background.boxInner",
+                                    width: "28vw"
                                 }}
                             >
-                                <Typography variant="h1">
-                                    דרישות המשרה
-                                </Typography>
-                                <Divider sx={{
-                                    marginRight: "3rem",
-                                    backgroundColor: "primary.faded"
-
-                                }} />
-                                <Typography
-                                    variant='h3'
-                                    marginTop={"0.5rem"}
-                                    sx={{
-                                        backgroundColor: "background.boxInner"
-                                    }}
-                                >
-                                    {job?._requirements}
-                                </Typography>
-                            </Box>
+                                {job?._requirements.split('\n').map((line) =>
+                                {
+                                    return (
+                                        <React.Fragment>
+                                            {line}
+                                            <br />
+                                        </React.Fragment>
+                                    )
+                                })}
+                            </Typography>
                         </Box>
 
                         {/* Additional Info */}
@@ -522,102 +554,9 @@ export default function OneJobPage()
                         </Box>
 
                     </Box>
+                    {/* Job Details */}
+                    <JobsDetails job={job} />
 
-                    {/* job stats */}
-                    <Box
-                        sx={{
-                            backgroundColor: "background.box",
-                            flex: 4
-                        }}
-                    >
-                        {/* job location */}
-                        <Box
-                            sx={{
-                                padding: "1rem",
-                                display: "flex",
-                                flexDirection: "row"
-                            }}
-                        >
-                            <Typography variant='h2'>
-                                מיקום:
-                            </Typography>
-                            <Typography
-                                sx={{
-                                    marginLeft: "1rem",
-                                    backgroundColor: "background.boxInner"
-                                }}
-                                variant='h2'
-                            >
-                                {job?._region}
-                            </Typography>
-                        </Box>
-
-                        {/* job role */}
-                        <Box
-                            sx={{
-                                padding: "1rem",
-                                display: "flex",
-                                flexDirection: "row"
-                            }}
-                        >
-                            <Typography variant='h2'>
-                                תפקיד:
-                            </Typography>
-                            <Typography
-                                sx={{
-                                    marginLeft: "1rem",
-                                    backgroundColor: "background.boxInner"
-                                }}
-                                variant='h2'
-                            >
-                                {job?._role}
-                            </Typography>
-                        </Box>
-
-                        {/* job scope */}
-                        <Box
-                            sx={{
-                                padding: "1rem",
-                                display: "flex",
-                                flexDirection: "row"
-                            }}
-                        >
-                            <Typography variant='h2'>
-                                היקף משרה:
-                            </Typography>
-                            <Typography
-                                sx={{
-                                    marginLeft: "1rem",
-                                    backgroundColor: "background.boxInner"
-                                }}
-                                variant='h2'
-                            >
-                                {job?._scope.slice(0).reverse().map((num, index) => index !== job._scope.length - 1 ? num + "% - " : num + "%")}
-                            </Typography>
-                        </Box>
-
-                        {/* job ID */}
-                        <Box
-                            sx={{
-                                padding: "1rem",
-                                display: "flex",
-                                flexDirection: "row"
-                            }}
-                        >
-                            <Typography variant='h2'>
-                                מס' משרה:
-                            </Typography>
-                            <Typography
-                                sx={{
-                                    marginLeft: "1rem",
-                                    backgroundColor: "background.boxInner"
-                                }}
-                                variant='h2'
-                            >
-                                {job?._jobNumber}
-                            </Typography>
-                        </Box>
-                    </Box>
 
                 </Box>
 
@@ -626,10 +565,10 @@ export default function OneJobPage()
                     variant='h2'
                     sx={{
                         alignSelf: "center",
-                        marginTop: "5rem"
+                        marginTop: "313px"
                     }}
                 >
-                    להגשת מועמדות
+                    השאירו פרטים כאן:
                 </Typography>
 
                 {/* Candidate Details */}
@@ -648,9 +587,6 @@ export default function OneJobPage()
                             display: "flex",
                             flexDirection: "row",
                             justifyContent: "center",
-                            padding: "1rem",
-                            paddingLeft: { xs: "0", md: "1rem" },
-                            paddingRight: { xs: "0", md: "1rem" }
                         }}
                     >
                         {/* Firstname and Lastname */}
@@ -822,17 +758,22 @@ export default function OneJobPage()
                         sx={{
                             display: "flex",
                             flexDirection: "column",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            marginTop: "1rem"
+                            alignItems: "start",
+                            marginTop: "54px"
                         }}
                     >
+                        <Typography variant='h4'>
+                            ספרו לנו קצת עליכם:
+                        </Typography>
                         <TextField
-                            label="ספר/י לנו עליך"
+                            label="כתבו כאן..."
                             multiline
+                            variant='outlined'
                             rows={10}
                             sx={{
-                                width: { xs: "100%", md: "90%" }
+                                width: { xs: "100%", md: "100%" },
+                                backgroundColor: "background.boxInner",
+                                marginTop: "15px"
                             }}
                             inputProps={{
                                 maxLength: ABOUT_MAX_LENGTH
@@ -848,12 +789,77 @@ export default function OneJobPage()
                                 display: "flex",
                                 flexDirection: "row",
                                 justifyContent: "end",
-                                width: { xs: "100%", md: "90%" },
+                                width: "100%",
                                 marginBottom: "1rem"
                             }}
                         >
                             <Typography variant='h4'>
                                 {aboutNumChars} / {ABOUT_MAX_LENGTH}
+                            </Typography>
+                        </Box>
+                    </Box>
+                    {/* attach CV file button */}
+                    <Box>
+                        <Input
+                            type="file"
+                            inputRef={cvFileInputRef}
+                            style={{ display: 'none' }}
+                            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                            {
+                                const files = event.target.files!;
+                                setCvFile(files[0]);
+                                setCvFileError(false);
+                            }}
+                        />
+                        <Button
+                            variant='contained'
+                            sx={{
+                                backgroundColor: "background.boxInner",
+                                color: "primary.main",
+                                "&:hover": {
+                                    backgroundColor: "background.main"
+                                }
+                            }}
+                            onClick={() =>
+                            {
+                                // trigger input onChange
+                                if (cvFileInputRef.current)
+                                {
+                                    cvFileInputRef.current.click();
+                                }
+                            }}
+
+                        >
+                            <AttachFile
+                                sx={{ fontSize: "24px" }}
+                            />
+                            <Box
+                                sx={{
+                                    flexDirection: "column"
+                                }}
+                            >
+                                <Typography variant='h4'>
+                                    צירוף קורות חיים
+                                </Typography>
+
+                                {/* display filename to the user */}
+                                <Typography variant='h6'>
+                                    {cvFile?.name.slice(0, 10)}
+                                    {cvFile?.name.length! > 10 ? '...' : ''}
+                                </Typography>
+
+
+                            </Box>
+                        </Button>
+                        <Box sx={{
+                            display: cvFileError ? "flex" : "none",
+                            flexDirection: "row",
+                            alignItems: "center"
+                        }}>
+                            <ErrorOutlineRounded sx={{ fontSize: "24px", color: "error.main" }} />
+
+                            <Typography variant='h4' color={"error.main"}>
+                                שדה זה הוא חובה
                             </Typography>
                         </Box>
                     </Box>
@@ -864,23 +870,38 @@ export default function OneJobPage()
                             display: "flex",
                             alignSelf: "center",
                             flexDirection: "column",
-                            alignItems: "center",
-                            width: "90%"
+                            alignItems: "start",
+                            width: "100%",
+                            marginTop: "134px",
                         }}
                     >
 
-                        <Typography variant='h2' justifySelf={"center"}>
-                            ממליצים
-                        </Typography>
+                        <Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
+                            <Button onClick={() => { setRecommendersListOpen(!recommendersListOpen) }}>
+                                <Typography variant='h2'>
+                                    הוספת ממליצים
+                                </Typography>
+                                <Typography variant='h2' marginLeft={"12px"}>
+                                    (אופציונאלי)
+                                </Typography>
+                                <Typography variant='h2' marginLeft={"22px"}>
+                                    {recommendersListOpen ? <ArrowDownward /> : <ArrowUpward />}
+                                </Typography>
+                            </Button>
+                        </Box>
 
                         {/* List of recommenders */}
                         <Box sx={{
                             backgroundColor: "background.boxInner",
-                            display: "flex",
                             flexDirection: "column",
-                            padding: "1rem",
+                            paddingTop: "36px",
+                            paddingBottom: "36px",
+                            paddingRight: "23px",
+                            paddingLeft: "23px",
                             alignItems: "center",
-                            marginTop: "1rem"
+                            marginTop: "30px",
+
+                            display: recommendersListOpen ? "flex" : "none"
                         }}
                         >
                             {recommendersList?.map((recommender, index) =>
@@ -893,7 +914,7 @@ export default function OneJobPage()
                                                 display: "flex",
                                                 flexDirection: "row",
                                                 width: "100%",
-                                                marginBottom: index >= MAX_RECOMMENDERS - 1 ? "0" : "1rem"
+                                                marginBottom: index >= MAX_RECOMMENDERS - 1 ? "0" : "43px"
                                             }}
                                             key={index + "recommendersBox"}
                                         >
@@ -1141,7 +1162,7 @@ export default function OneJobPage()
                                                             flexDirection: "row",
                                                             alignItems: "center"
                                                         }}>
-                                                            <ErrorOutlineRounded sx={{ fontSize: "24px", color: "error.main" }} />
+                                                            <ErrorOutlineRounded sx={{ color: "error.main" }} />
 
                                                             <Typography variant='h4' color={"error.main"}>
                                                                 שדה זה שגוי
@@ -1159,7 +1180,7 @@ export default function OneJobPage()
                                                         alignSelf: "end",
                                                     }}
                                                 >
-                                                    {/* PC add recommender file button */}
+                                                    {/* PC add recommender file input */}
                                                     <Input
                                                         type="file"
                                                         inputRef={(input) => (recommenderFileInputRefs.current[index] = input)}
@@ -1258,7 +1279,7 @@ export default function OneJobPage()
 
                     </Box>
 
-                    {/* Submit buttons */}
+                    {/* Submit Button */}
                     <Box
                         sx={{
                             width: "90%",
@@ -1270,72 +1291,6 @@ export default function OneJobPage()
                             marginTop: "5rem"
                         }}
                     >
-
-                        {/* attach CV file button */}
-                        <Box>
-                            <Input
-                                type="file"
-                                inputRef={cvFileInputRef}
-                                style={{ display: 'none' }}
-                                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                                {
-                                    const files = event.target.files!;
-                                    setCvFile(files[0]);
-                                    setCvFileError(false);
-                                }}
-                            />
-                            <Button
-                                variant='contained'
-                                sx={{
-                                    backgroundColor: "background.boxInner",
-                                    color: "primary.main",
-                                    "&:hover": {
-                                        backgroundColor: "background.main"
-                                    }
-                                }}
-                                onClick={() =>
-                                {
-                                    // trigger input onChange
-                                    if (cvFileInputRef.current)
-                                    {
-                                        cvFileInputRef.current.click();
-                                    }
-                                }}
-
-                            >
-                                <AttachFile
-                                    sx={{ fontSize: "24px" }}
-                                />
-                                <Box
-                                    sx={{
-                                        flexDirection: "column"
-                                    }}
-                                >
-                                    <Typography variant='h4'>
-                                        העלאת קו"ח
-                                    </Typography>
-
-                                    {/* display filename to the user */}
-                                    <Typography variant='h6'>
-                                        {cvFile?.name.slice(0, 10)}
-                                        {cvFile?.name.length! > 10 ? '...' : ''}
-                                    </Typography>
-
-
-                                </Box>
-                            </Button>
-                            <Box sx={{
-                                display: cvFileError ? "flex" : "none",
-                                flexDirection: "row",
-                                alignItems: "center"
-                            }}>
-                                <ErrorOutlineRounded sx={{ fontSize: "24px", color: "error.main" }} />
-
-                                <Typography variant='h4' color={"error.main"}>
-                                    שדה זה הוא חובה
-                                </Typography>
-                            </Box>
-                        </Box>
 
                         <Button
                             variant='contained'
