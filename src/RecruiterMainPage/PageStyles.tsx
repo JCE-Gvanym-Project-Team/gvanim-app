@@ -1,7 +1,7 @@
 import { SxProps } from "@mui/material"
 
 export const BoxGradientSx: SxProps = {
-    height: '200px',
+    minHeight: '250px',
     width: "100%",
     top: 0,
     display: 'flex',

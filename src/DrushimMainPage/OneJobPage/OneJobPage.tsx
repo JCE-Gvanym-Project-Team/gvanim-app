@@ -378,7 +378,7 @@ export default function OneJobPage()
                             display: "flex",
                             alignItems: "center",
                             fontWeight: "bold",
-                            color: "primary.title"
+                            color: "primary?.title"
                         }}
                     >
 

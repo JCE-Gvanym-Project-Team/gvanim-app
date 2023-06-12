@@ -9,6 +9,8 @@ import { Job, getFilteredJobs } from '../../../../Firebase/FirebaseFunctions/Job
 import { AccountCircle, CalendarMonth, ErrorOutline, QuestionAnswer } from '@mui/icons-material';
 import ScheduleInterviewDialog from './Components/ScheduleInterviewDialog/ScheduleInterviewDialog';
 import MyLoading from '../../../../Components/MyLoading/MyLoading';
+import AreYouSureDialog from '../Components/AreYouSureDialog/AreYouSureDialog';
+import SuccessMessageSnackbar from '../Components/SuccessMessageSnackbar/SuccessMessageSnackbar';
 export default function ManageInterviewsPage(props: { candidateId: string })
 {
 
@@ -118,11 +120,36 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 
 	const handleSaveButtonClick = async () =>
 	{
-		setLoading(true);
-		await candidateJobStatus?.editInterviewSummery(interviewSummary ? interviewSummary : "", interviewIndex);
-		await candidateJobStatus?.updateMatchingRate(matchingRate);
-		setLoading(false);
-		setRerenderKey(rerenderKey === "1" ? "0" : "1");
+		setAreYouSureDialogOpen(true);
+		setAreYouSureDialogMessage("פעולה זו תשמור את סיכום הראיון ואת דרגת ההתאמה למשרה של: " + candidateInfo?._firstName + " " + candidateInfo?._lastName)
+		setAreYouSureCallback(() => async () =>
+		{
+			setLoading(true);
+			await candidateJobStatus?.editInterviewSummery(interviewSummary ? interviewSummary : "", interviewIndex);
+			await candidateJobStatus?.updateMatchingRate(matchingRate);
+			setLoading(false);
+			setRerenderKey(rerenderKey === "1" ? "0" : "1");
+		});
+	}
+
+	// are you sure dialog
+	const [areYouSureDialogOpen, setAreYouSureDialogOpen] = useState(false);
+	const [areYouSureCallback, setAreYouSureCallback] = useState<(() => {})>();
+	const [areYouSureDialogMessage, setAreYouSureDialogMessage] = useState("");
+
+	const closeAreYouSureDialog = (event, reason) =>
+	{
+		if ((reason && reason !== "backdropClick") || reason === undefined)
+		{
+			setAreYouSureDialogOpen(false);
+		}
+	}
+
+	// success message
+	const [snackBarOpen, setSnackBarOpen] = useState(false);
+	const snackBarOnClose = () =>
+	{
+		setSnackBarOpen(false);
 	}
 
 	const handleMatchingRateRadioButtons = async (event) =>
@@ -131,7 +158,7 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 	}
 
 	return (
-		loading ? <MyLoading loading={loading} setLoading={setLoading}/> :
+		loading ? <MyLoading loading={loading} setLoading={setLoading} /> :
 			<React.Fragment key={rerenderKey}>
 				{/* background div */}
 				<Box sx={BoxGradientSx}>
@@ -221,7 +248,7 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 						position: 'absolute',
 					}} />
 
-					<Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', top: "165px", position: "absolute" }}>
+					<Box sx={{ display: 'flex', flexDirection: 'column', alignItems: "center", justifyContent: "end", height: { xs: "280px", md: "220px" }, marginBottom: { xs: "1rem", md: "0" } }}>
 						<Stack direction='row' spacing={1}>
 							<Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
 								<QuestionAnswer sx={{ color: '#fff' }} />
@@ -230,7 +257,7 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 								ראיונות
 							</Typography>
 						</Stack>
-						<Divider />
+						<Box sx={{ background: 'linear-gradient(90deg,hsla(0,0%,100%,0),#fff,hsla(0,0%,100%,0))', padding: 0.05, width: '100%', mt: 2 }} />
 						{/* Candidate Name */}
 						<Box sx={{ display: 'flex', alignSelf: "center" }}>
 							<Typography sx={candidateNameSx} variant='h3' >
@@ -266,27 +293,34 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 							</Box>
 
 							{/* status and change status */}
-							<Box sx={{ display: 'flex', flexDirection: "row", justifyContent: "space-between" }}>
+							<Box sx={{ display: 'flex', flexDirection: { xs: "column-reverse", md: "row" }, marginBottom: { xs: "3rem", md: "0" }, justifyContent: "space-between" }}>
 
 
-								<Box>
+								<Box sx={{
+									marginBottom: "1rem"
+								}}>
 									<Typography sx={textSx} variant='h4'>
 										סטטוס: {candidateJobStatus?._status}
 									</Typography>
 								</Box>
 
 
-								<Box>
+								<Box sx={{ display: "flex", flexDirection: "column", width: { xs: "50vw", md: "290px" }, alignSelf: { xs: "center", md: "center" } }}>
 									<Button sx={scheduleInterviewButton} variant="contained" startIcon={<CalendarMonth />} onClick={scheduleInterviewOpenHandler}>
 										קביעת ראיון ושינוי סטטוס
 									</Button>
 									<Divider />
-									<Typography sx={scheduleInterviewText}>
-										סטטוס השתנה ב:
-									</Typography>
-									<Typography sx={scheduleInterviewText}>
-										{candidateJobStatus?._lastUpdate.toLocaleString()}
-									</Typography>
+									<Box sx={{
+										display: "flex",
+										flexDirection: { xs: "column", md: "row" }
+									}}>
+										<Typography sx={scheduleInterviewText}>
+											סטטוס השתנה ב:
+										</Typography>
+										<Typography sx={scheduleInterviewText}>
+											{candidateJobStatus?._lastUpdate.toLocaleString()}
+										</Typography>
+									</Box>
 								</Box>
 							</Box>
 							<Box sx={{ display: candidateJobStatus?._status === allStatus[8] && jobValue ? 'flex' : "none" }}>
@@ -383,6 +417,15 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 									/>
 								</Box>
 							</Box>
+
+							<AreYouSureDialog
+								open={areYouSureDialogOpen}
+								onClose={closeAreYouSureDialog}
+								message={areYouSureDialogMessage}
+								callback={areYouSureCallback}
+								setSnackBarOpen={setSnackBarOpen}
+							/>
+							<SuccessMessageSnackbar open={snackBarOpen} onClose={snackBarOnClose}/>
 
 							{/* Summary of interview */}
 							{interviewIndex !== -1 && jobValue !== "" ?

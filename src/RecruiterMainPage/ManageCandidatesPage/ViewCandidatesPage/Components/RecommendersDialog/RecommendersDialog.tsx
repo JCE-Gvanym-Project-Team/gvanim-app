@@ -1,17 +1,17 @@
-import { Close, FileCopy, Key } from '@mui/icons-material';
-import { Box, Button, Dialog, DialogContent, DialogTitle, Divider, IconButton, Typography } from '@mui/material';
-import { useEffect, useState } from 'react'
-import { dialogContentStyle, dialogContentSx, dialogSx, dialogTitleSx, dialogTopAreaSx } from './RecommendersDialogStyle';
+import { Close, FileCopy } from '@mui/icons-material';
+import { Box, Button, Dialog, DialogContent, DialogTitle, IconButton, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import { CandidateJobStatus, getFilteredCandidateJobStatuses } from '../../../../../Firebase/FirebaseFunctions/CandidateJobStatus';
-import React from 'react';
 import { ManageCandidatesPageGlobalStyle } from '../../../../PageStyles';
+import { dialogContentStyle, dialogContentSx, dialogSx, dialogTitleSx, dialogTopAreaSx } from './RecommendersDialogStyle';
 
-export default function RecommendersDialog(props: { open, onClose, jobId: string, candidateId: string })
+export default function RecommendersDialog(props: { open, onClose, jobId: string, candidateId: string, setLoading})
 {
-    const { open, onClose, jobId, candidateId } = props;
+    const { open, onClose, jobId, candidateId,setLoading } = props;
 
     const [recommendersLinks, setRecommendersLinks] = useState<string[] | undefined>();
     const [candidateJobStatus, setCandidateJobStatus] = useState<CandidateJobStatus | null>(null);
+    
 
     const getRecommendationsURLs = async function ()
     {
@@ -19,7 +19,7 @@ export default function RecommendersDialog(props: { open, onClose, jobId: string
         setCandidateJobStatus(candJobStatus);
         setRecommendersLinks(await candJobStatus?.getRecomendationsUrl());
     }
-
+    
     useEffect(() =>
     {
         getRecommendationsURLs();
