@@ -7,6 +7,7 @@ import { MyPaperSx } from './EditCandidateStyle';
 import { BoxGradientSx } from './EditCandidateStyle';
 import { AccountCircle, Edit } from '@mui/icons-material';
 import { candidateNameSx } from '../../ViewCandidatesPageStyle';
+import AreYouSureDialog from '../AreYouSureDialog/AreYouSureDialog';
 
 const Form = styled('form')(({ theme }) => ({
     width: '100%',
@@ -70,16 +71,21 @@ const EditCandidate = () =>
     {
 
         event.preventDefault();
-
-        if (state !== null)
+        setAreYouSureDialogOpen(true);
+        setAreYouSureDialogMessage("פעולה זו תשנה את פרטי המועמד. הפרטים הקודמים ימחקו לצמיתות")
+        setAreYouSureCallback(() => async () =>
         {
-            if (candidateToEdit)
+            if (state !== null)
             {
-                await candidateToEdit.edit(candidateFirstname, candidateLastname, candidatePhone, candidateMail, candidateGeneralRating);
-                //TODO: tell Gavriel to integrate this
-                navigate("/management/manageCandidates/" + candidateToEdit?._id, { state: `השינויים עבור המועמד' ${candidateToEdit._firstName + " " + candidateToEdit._lastName} נשמרו בהצלחה.` });
+                if (candidateToEdit)
+                {
+                    await candidateToEdit.edit(candidateFirstname, candidateLastname, candidatePhone, candidateMail, candidateGeneralRating);
+                    //TODO: tell Gavriel to integrate this
+                    navigate("/management/manageCandidates/" + candidateToEdit?._id, { state: `השינויים עבור המועמד' ${candidateToEdit._firstName + " " + candidateToEdit._lastName} נשמרו בהצלחה.` });
+                }
             }
-        }
+        })
+
     }
 
     const handleDelete = () =>
@@ -89,6 +95,18 @@ const EditCandidate = () =>
             candidateToEdit.remove();
             console.log(`candidate (id: ${candidateToEdit._id}) deleted successfully`);
             navigate("/management/manageCandidates", { state: `המועמד' ${candidateToEdit._firstName + " " + candidateToEdit._lastName} הוסרה בהצלחה.` });
+        }
+    }
+
+    // are you sure for update button
+    const [areYouSureDialogOpen, setAreYouSureDialogOpen] = useState(false);
+    const [areYouSureCallback, setAreYouSureCallback] = useState<(() => {})>();
+    const [areYouSureDialogMessage, setAreYouSureDialogMessage] = useState("");
+    const closeAreYouSureDialog = (event, reason) =>
+    {
+        if ((reason && reason !== "backdropClick") || reason === undefined)
+        {
+            setAreYouSureDialogOpen(false);
         }
     }
 
@@ -313,7 +331,6 @@ const EditCandidate = () =>
                                                 onChange={(e) =>
                                                 {
                                                     setCandidateGeneralRating(+e.target.value);
-                                                    // if (candidateGeneralRating.length > 0 && errorJobRequirements) { setErrorJobRequirements(false); }
                                                 }}
                                             />
                                             <FormHelperText hidden={!errorJobRequirements} security="invalid" style={{ color: '#ef5350', marginRight: 0 }}>זהו שדה חובה.</FormHelperText>
@@ -327,11 +344,18 @@ const EditCandidate = () =>
                                                 ":hover": {
                                                     bgcolor: "rgb(52, 71, 103)",
                                                 }
-                                            }} fullWidth>{'עדכן'}</Button>
+                                            }} fullWidth>{'עדכן'}
+                                            </Button>
 
                                             <RemoveCandidateDialog handleDelete={handleDelete} />
 
                                         </Stack>
+                                        <AreYouSureDialog
+                                            open={areYouSureDialogOpen}
+                                            onClose={closeAreYouSureDialog}
+                                            message={areYouSureDialogMessage}
+                                            callback={areYouSureCallback}
+                                        />
                                     </Form>
                                 </Box>
                             </Box>

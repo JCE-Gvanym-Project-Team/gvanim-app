@@ -12,6 +12,7 @@ export const dialogContentSx: SxProps = {
     display: "flex",
     flexDirection: { xs: "column", md: "row" },
     alignItems: "center",
+    justifyContent: "center",
     minHeight: "100%"
 }
 
@@ -37,6 +38,6 @@ export const dialogTopAreaSx: SxProps = {
 }
 
 export const dialogActionsSx: SxProps = {
-    justifyContent: "start",
-    marginLeft: "3rem"
+    justifyContent: "space-between",
+    
 }

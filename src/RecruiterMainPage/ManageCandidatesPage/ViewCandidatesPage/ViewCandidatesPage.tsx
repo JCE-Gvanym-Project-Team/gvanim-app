@@ -72,6 +72,7 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 		if ((reason && reason !== "backdropClick") || reason === undefined)
 		{
 			setPopupOpen(false);
+			setLoading(false);
 		}
 	};
 
@@ -116,6 +117,8 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 
 	// are you sure dialog
 	const [areYouSureDialogOpen, setAreYouSureDialogOpen] = useState(false);
+	const [areYouSureCallback, setAreYouSureCallback] = useState<(() => {})>();
+	const [areYouSureDialogMessage, setAreYouSureDialogMessage] = useState("");
 
 	const closeAreYouSureDialog = (event, reason) =>
 	{
@@ -275,8 +278,15 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 												onChange={(event, newValue) =>
 												{
 													setAreYouSureDialogOpen(true);
-													// candidateInfo?.updateGeneralRating(newValue ? newValue : -1);
-													// setGeneralRating(newValue ? newValue : -1);
+													setAreYouSureDialogMessage("פעולה זו תשנה את דרגת ההתאמה הכללית של המועמד");
+													setAreYouSureCallback((() =>
+													{
+														return () =>
+														{
+															candidateInfo?.updateGeneralRating(newValue ? newValue : -1);
+															setGeneralRating(newValue ? newValue : -1);
+														}
+													}))
 												}}
 												size='large'
 											/>
@@ -294,9 +304,15 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 										onClose={closeRecommendersDialog}
 										jobId={recommendersDialogJobId}
 										candidateId={candidateInfo?._id!}
+										setLoading={setLoading}
 									/>
 
-									<AreYouSureDialog open={areYouSureDialogOpen} onClose={closeAreYouSureDialog} />
+									<AreYouSureDialog
+										open={areYouSureDialogOpen}
+										onClose={closeAreYouSureDialog}
+										message={areYouSureDialogMessage}
+										callback={areYouSureCallback}
+									/>
 
 									<Box sx={{ display: "flex", justifyContent: "space-between" }}>
 										<Button sx={{
@@ -352,7 +368,14 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 										<Button sx={notesButtonSx} variant="contained" onClick={commentsPopupOpenHandler} startIcon={<SpeakerNotes />}>
 											הערות
 										</Button>
-										<NotesPopup open={popupOpen} onClose={commentsPopupCloseHandler} candidate={candidateInfo} initialData={initialData} />
+										<NotesPopup
+											open={popupOpen}
+											onClose={commentsPopupCloseHandler}
+											candidate={candidateInfo}
+											initialData={initialData}
+											setLoading={setLoading}
+											loading={loading}
+										/>
 									</Box>
 
 								</Stack>

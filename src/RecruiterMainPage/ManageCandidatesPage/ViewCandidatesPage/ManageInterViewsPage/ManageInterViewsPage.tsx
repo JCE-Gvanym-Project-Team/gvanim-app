@@ -9,6 +9,7 @@ import { Job, getFilteredJobs } from '../../../../Firebase/FirebaseFunctions/Job
 import { AccountCircle, CalendarMonth, ErrorOutline, QuestionAnswer } from '@mui/icons-material';
 import ScheduleInterviewDialog from './Components/ScheduleInterviewDialog/ScheduleInterviewDialog';
 import MyLoading from '../../../../Components/MyLoading/MyLoading';
+import AreYouSureDialog from '../Components/AreYouSureDialog/AreYouSureDialog';
 export default function ManageInterviewsPage(props: { candidateId: string })
 {
 
@@ -118,11 +119,29 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 
 	const handleSaveButtonClick = async () =>
 	{
-		setLoading(true);
-		await candidateJobStatus?.editInterviewSummery(interviewSummary ? interviewSummary : "", interviewIndex);
-		await candidateJobStatus?.updateMatchingRate(matchingRate);
-		setLoading(false);
-		setRerenderKey(rerenderKey === "1" ? "0" : "1");
+		setAreYouSureDialogOpen(true);
+		setAreYouSureDialogMessage("פעולה זו תשמור את סיכום הראיון ואת דרגת ההתאמה למשרה של: " + candidateInfo?._firstName + " " + candidateInfo?._lastName)
+		setAreYouSureCallback(() => async () =>
+		{
+			setLoading(true);
+			await candidateJobStatus?.editInterviewSummery(interviewSummary ? interviewSummary : "", interviewIndex);
+			await candidateJobStatus?.updateMatchingRate(matchingRate);
+			setLoading(false);
+			setRerenderKey(rerenderKey === "1" ? "0" : "1");
+		});
+	}
+
+	// are you sure dialog
+	const [areYouSureDialogOpen, setAreYouSureDialogOpen] = useState(false);
+	const [areYouSureCallback, setAreYouSureCallback] = useState<(() => {})>();
+	const [areYouSureDialogMessage, setAreYouSureDialogMessage] = useState("");
+
+	const closeAreYouSureDialog = (event, reason) =>
+	{
+		if ((reason && reason !== "backdropClick") || reason === undefined)
+		{
+			setAreYouSureDialogOpen(false);
+		}
 	}
 
 	const handleMatchingRateRadioButtons = async (event) =>
@@ -278,14 +297,14 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 								</Box>
 
 
-								<Box sx={{display: "flex", flexDirection:"column", width: {xs: "50vw", md: "290px"}, alignSelf: {xs: "center", md: "center"}}}>
+								<Box sx={{ display: "flex", flexDirection: "column", width: { xs: "50vw", md: "290px" }, alignSelf: { xs: "center", md: "center" } }}>
 									<Button sx={scheduleInterviewButton} variant="contained" startIcon={<CalendarMonth />} onClick={scheduleInterviewOpenHandler}>
 										קביעת ראיון ושינוי סטטוס
 									</Button>
 									<Divider />
 									<Box sx={{
 										display: "flex",
-										flexDirection: {xs: "column", md: "row"}
+										flexDirection: { xs: "column", md: "row" }
 									}}>
 										<Typography sx={scheduleInterviewText}>
 											סטטוס השתנה ב:
@@ -390,6 +409,13 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 									/>
 								</Box>
 							</Box>
+
+							<AreYouSureDialog
+								open={areYouSureDialogOpen}
+								onClose={closeAreYouSureDialog}
+								message={areYouSureDialogMessage}
+								callback={areYouSureCallback}
+							/>
 
 							{/* Summary of interview */}
 							{interviewIndex !== -1 && jobValue !== "" ?
