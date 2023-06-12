@@ -3,7 +3,7 @@ import DrushimMainPage from './DrushimMainPage/DrushimMainPage';
 import { main } from './Firebase/FirebaseFunctions/test';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { BrowserRouter, Link, Navigate, Route, Routes } from 'react-router-dom';
-import { ColorModeContext, useMode } from './DrushimMainPage/theme';
+import { ColorModeContext, FontContext, useMode } from './DrushimMainPage/theme';
 import { CssBaseline, Switch } from '@mui/material';
 import WelcomePage from './RecruiterMainPage/WelcomePage/WelcomePage';
 import SingleJob from './DrushimMainPage/Components/Job';
@@ -32,9 +32,7 @@ function App()
 {
 
 	// for drushim page
-	const temp = useMode();
-	const drushimPageTheme = temp[0];
-	const colorMode = temp[1];
+	const [drushimPageTheme, colorMode, fontMode] = useMode();
 
 	return (
 		<>
@@ -49,11 +47,13 @@ function App()
 
 				{/* Drushim Page */}
 				<Route path='/career/*' element={
-					<ColorModeContext.Provider value={colorMode} >
-						<ThemeProvider theme={drushimPageTheme}>
-							<DrushimMainPage />
-						</ThemeProvider>
-					</ColorModeContext.Provider >
+					<FontContext.Provider value={fontMode} >
+						<ColorModeContext.Provider value={colorMode} >
+							<ThemeProvider theme={drushimPageTheme}>
+								<DrushimMainPage />
+							</ThemeProvider>
+						</ColorModeContext.Provider >
+					</FontContext.Provider>
 				}
 				/>
 
@@ -72,8 +72,4 @@ function App()
 
 
 export default App;
-function createCache(arg0: { key: string; stylisPlugins: any[]; })
-{
-	throw new Error('Function not implemented.');
-}
 

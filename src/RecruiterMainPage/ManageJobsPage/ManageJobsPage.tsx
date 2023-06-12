@@ -126,7 +126,7 @@ const ManageJobsPage = () => {
                             }} />
 
 
-                            <Box sx={{ display: 'flex', flexDirection: 'column', top: "165px", position: "absolute" }}>
+                            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: "center", justifyContent: "end", height: "190px"}}>
                                 <Stack direction='row' spacing={1}>
                                     <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                                         <ArticleOutlined sx={{ color: '#fff' }} />
