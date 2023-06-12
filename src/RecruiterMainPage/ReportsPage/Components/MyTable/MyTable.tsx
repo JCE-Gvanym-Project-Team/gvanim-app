@@ -1,15 +1,16 @@
 import * as React from 'react';
 import Typography from '@mui/material/Typography';
 import { Box, Container, Stack, useTheme } from '@mui/material';
-import {
-    DataGrid, GridToolbarFilterButton,
-    GridColDef, GridToolbarDensitySelector,
-    GridToolbarColumnsButton,
-    GridInitialState, GridToolbarExport,
-    useGridRootProps, GridApi,
-    useGridApiContext, GridKeyValue, GridValueGetterParams,
-    GridToolbarContainer, heIL, GridFooterContainer, GridRowParams
-} from '@mui/x-data-grid';
+import
+    {
+        DataGrid, GridToolbarFilterButton,
+        GridColDef, GridToolbarDensitySelector,
+        GridToolbarColumnsButton,
+        GridInitialState, GridToolbarExport,
+        useGridRootProps, GridApi,
+        useGridApiContext, GridKeyValue, GridValueGetterParams,
+        GridToolbarContainer, heIL, GridFooterContainer, GridRowParams
+    } from '@mui/x-data-grid';
 import { GridFooterContainerSx, TypographyFooterSx, dataGridContainerStyle, dataGridSx } from './MyTableStyle';
 import { useNavigate } from 'react-router-dom';
 import { ArticleOutlined } from '@mui/icons-material';
@@ -21,7 +22,8 @@ function GridCustomToolbar({
     syncState,
 }: {
     syncState: (stateToSave: GridInitialState) => void;
-}) {
+})
+{
     const rootProps = useGridRootProps();
     const apiRef = useGridApiContext();
 
@@ -36,7 +38,7 @@ function GridCustomToolbar({
 }
 
 const columns: GridColDef[] = [
-    { field: 'id', headerName: 'id', width: 90},
+    { field: 'id', headerName: 'id', width: 90 },
     {
         field: 'שם דו"ח',
         headerName: 'שם דו"ח',
@@ -58,23 +60,25 @@ const rows = [
 ];
 
 
-export default function MyTable() {
+export default function MyTable()
+{
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const [open, setOpen] = useState(false);
 
-    const onRowClick = (params, event) => {
+    const onRowClick = (params, event) =>
+    {
         const actions = {
             1: () => navigate('CandidateByFilters'),
             2: () => navigate('JobsByFilters')
-            // הוסיפו פעולות נוספות כרצונכם לפי הערכים הנדרשים
         };
 
         const id = params.row.id;
         console.log(id);
         const action = actions[id];
 
-        if (action) {
+        if (action)
+        {
             action();
         }
     };
@@ -83,12 +87,14 @@ export default function MyTable() {
 
     return (
         <>
-            <Box className="shadow-lg border rounded"
-                sx={dataGridContainerStyle}
-                style={dataGridContainerStyle}
-                maxWidth='xl'>
+        <Box sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            width: "100%"
+        }}>
+            <Box sx={dataGridContainerStyle}>
                 <DataGrid
-                
                     sx={dataGridSx(theme)}
                     rows={rows}
                     columns={columns}
@@ -96,9 +102,10 @@ export default function MyTable() {
                     hideFooterSelectedRowCount
                     hideFooterPagination
                     localeText={heIL.components.MuiDataGrid.defaultProps.localeText}
-                    autoHeight 
-               />
+                    autoHeight
+                />
             </Box>
+        </Box>
         </>
     );
 }
