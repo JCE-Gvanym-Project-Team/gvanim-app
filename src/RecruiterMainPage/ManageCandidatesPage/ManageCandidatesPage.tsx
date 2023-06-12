@@ -1,71 +1,250 @@
-import { Box, Button } from "@mui/material";
+import { useState, useEffect } from "react";
+
+import {
+  Alert,
+  AlertProps,
+  Box,
+  Snackbar,
+  Stack,
+  Typography,
+} from "@mui/material";
+import MyLoading from "../../Components/MyLoading/MyLoading";
+import TransitionComponentSnackbar from "../ManageJobsPage/Components/NewJobPage/Components/SuccessSnackBar/SuccessSnackBar";
+import { useLocation } from "react-router-dom";
 import { BoxGradientSx } from "../PageStyles";
-import { Candidate, generateCandidateId, getFilteredCandidates } from "../../Firebase/FirebaseFunctions/Candidate";
-import { loginAdmin } from "../../Firebase/FirebaseFunctions/Authentication";
-import { getFilteredCandidateJobStatuses } from "../../Firebase/FirebaseFunctions/CandidateJobStatus";
-import { useState } from "react";
+import { ArticleOutlined } from "@mui/icons-material";
+import CandidateTable from "./CandidateTable/CandidateTable";
+import { Candidate } from "./../../Firebase/FirebaseFunctions/Candidate";
+import { ManageCandidatesPageBoxSx } from "./ManageCandidatesPageStyle";
 
-export default function ManageCandidatesPage()
-{
-    const handleFileUpload = async (event) =>
-    {
-        const file = event.target.files[0];
-        let johanson = (await getFilteredCandidateJobStatuses(["jobNumber", "candidateId"], ["32", "53"]))[0];
-        await johanson.addRecomendation("Pog", "0444444", "mail@gail.com", file);
-    };
+const ManageCandidatesPage = () => {
+  const [loading, setLoading] = useState(true);
+  const [snackbar, setSnackbar] = useState<Pick<
+    AlertProps,
+    "children" | "severity"
+  > | null>(null);
 
-    const handleCVUpload = async (event) => {
-        const file = event.target.files[0];
-        let johanson = (await getFilteredCandidates(["id"], ["53"]))[0];
-        johanson.uploadCv(file);
+  const { state } = useLocation();
+
+  useEffect(() => {
+    setLoading(false);
+
+    if (state !== null) {
+      setSnackbar({ children: state?.msg, severity: "success" });
+      window.history.replaceState({}, document.title); // clean state
     }
+  }, []);
 
-    const addCandidate = async () =>
-    {
-        await loginAdmin();
-        let id = await generateCandidateId()
-        let newCandidate: Candidate = new Candidate(id, "דוג", "מה", "05123456", "dogma@gmail.com", 1, "notes");
-        let dogma = (await getFilteredCandidates(["id"], ["53"]))[0];
-        dogma.apply(32,"abu");
-        // await newCandidate.add();
-        // newCandidate.apply(49, "ABOUT");
-        // let newCandidate2 = await getFilteredCandidates(["id"],["53"]);
-        // // await newCandidate2[0].add();
-        // await newCandidate2[0].apply(49, "abouttt");
+  const handleCloseSnackbar = () => setSnackbar(null);
 
-    }
-
-    
-
-    return (
+  return (
+    <>
+      {loading ? (
+        <MyLoading loading={loading} setLoading={setLoading} />
+      ) : (
         <>
-            <Box sx={BoxGradientSx} />
-            <div>hi</div>
-            <Button onClick={addCandidate}>asdasdasdsa</Button>
-            <Button
-                variant="contained"
-                component="label"
-            >
-                הוסף ממליץ
-                <input
-                    type="file"
-                    hidden
-                    onChange={handleFileUpload}
-                />
-            </Button>
+          <Box sx={BoxGradientSx}>
+            <Box
+              display={{
+                xs: "none",
+                sm: "none",
+                md: "flex",
+                lg: "flex",
+                xl: "flex",
+              }}
+              sx={{
+                right: "2%",
+                left: "auto",
+                top: "15%",
+                bottom: "auto",
+                backgroundColor: "hsla(0,0%,100%,.1)",
+                background: "hsla(0,0%,100%,.1)",
+                width: "100px",
+                height: "100px",
+                borderRadius: "50%",
+                position: "absolute",
+              }}
+            />
 
-            <Button
-                variant="contained"
-                component="label"
+            <Box
+              display={{
+                xs: "none",
+                sm: "none",
+                md: "flex",
+                lg: "flex",
+                xl: "flex",
+              }}
+              sx={{
+                right: "10%",
+                left: "auto",
+                top: "0%",
+                backgroundColor: "hsla(0,0%,100%,.1)",
+                background: "hsla(0,0%,100%,.1)",
+                width: "170px",
+                height: "170px",
+                borderRadius: "50%",
+                position: "absolute",
+              }}
+            />
+
+            <Box
+              display={{
+                xs: "none",
+                sm: "none",
+                md: "flex",
+                lg: "flex",
+                xl: "flex",
+              }}
+              sx={{
+                left: "40%",
+                top: "-1%",
+                right: "auto",
+                bottom: "auto",
+                backgroundColor: "hsla(0,0%,100%,.1)",
+                background: "hsla(0,0%,100%,.1)",
+                width: "60px",
+                height: "60px",
+                borderRadius: "50%",
+                position: "absolute",
+              }}
+            />
+
+            <Box
+              display={{
+                xs: "none",
+                sm: "none",
+                md: "flex",
+                lg: "flex",
+                xl: "flex",
+              }}
+              sx={{
+                left: "auto",
+                top: "16%",
+                bottom: "auto",
+                backgroundColor: "hsla(0,0%,100%,.1)",
+                background: "hsla(0,0%,100%,.1)",
+                width: "30px",
+                height: "30px",
+                borderRadius: "50%",
+                position: "absolute",
+              }}
+            />
+
+            <Box
+              display={{
+                xs: "none",
+                sm: "none",
+                md: "flex",
+                lg: "flex",
+                xl: "flex",
+              }}
+              sx={{
+                left: "-2%",
+                top: "12%",
+                bottom: "auto",
+                backgroundColor: "hsla(0,0%,100%,.1)",
+                background: "hsla(0,0%,100%,.1)",
+                width: "120px",
+                height: "120px",
+                borderRadius: "50%",
+                position: "absolute",
+              }}
+            />
+
+            <Box
+              display={{
+                xs: "none",
+                sm: "none",
+                md: "flex",
+                lg: "flex",
+                xl: "flex",
+              }}
+              sx={{
+                left: "4%",
+                top: "8%",
+                bottom: "auto",
+                backgroundColor: "hsla(0,0%,100%,.1)",
+                background: "hsla(0,0%,100%,.1)",
+                width: "80px",
+                height: "80px",
+                borderRadius: "50%",
+                position: "absolute",
+              }}
+            />
+
+            <Box
+              display={{
+                xs: "none",
+                sm: "none",
+                md: "flex",
+                lg: "flex",
+                xl: "flex",
+              }}
+              sx={{
+                left: "25%",
+                top: "12%",
+                bottom: "auto",
+                backgroundColor: "hsla(0,0%,100%,.1)",
+                background: "hsla(0,0%,100%,.1)",
+                width: "60px",
+                height: "60px",
+                borderRadius: "50%",
+                position: "absolute",
+              }}
+            />
+
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "end",
+                height: "190px",
+              }}
             >
-                הוסף קו"ח
-                <input
-                    type="file"
-                    hidden
-                    onChange={handleCVUpload}
-                />
-            </Button>
+              <Stack direction="row" spacing={1}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                  }}
+                >
+                  <ArticleOutlined sx={{ color: "#fff" }} />
+                </Box>
+                <Typography
+                  variant="h4"
+                  sx={{
+                    color: "#fff",
+                    fontFamily: "'Noto Sans Hebrew', sans-serif",
+                    fontWeight: 500,
+                  }}
+                >
+                  ניהול מועמדים
+                </Typography>
+              </Stack>
+            </Box>
+          </Box>
+
+          <Box className="ManageJobPage-Body" sx={ManageCandidatesPageBoxSx}>
+            <CandidateTable />
+
+            {/* <TransitionComponentSnackbar open={open} setOpen={setOpen} message={state} /> */}
+            {!!snackbar && (
+              <Snackbar
+                open
+                anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                onClose={handleCloseSnackbar}
+                autoHideDuration={6000}
+              >
+                <Alert {...snackbar} onClose={handleCloseSnackbar} />
+              </Snackbar>
+            )}
+          </Box>
         </>
-    )
-}
+      )}
+    </>
+  );
+};
 
+export default ManageCandidatesPage;
