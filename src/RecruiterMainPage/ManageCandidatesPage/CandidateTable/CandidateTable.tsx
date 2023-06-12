@@ -17,7 +17,7 @@ import { getFilteredCandidates } from "../../../Firebase/FirebaseFunctions/Candi
 import { useNavigate } from "react-router-dom";
 import { unstable_useForkRef as useForkRef } from "@mui/utils";
 import { MyButtonSx } from "./CandidateTableStyle";
-import { PictureAsPdfSharp } from "@mui/icons-material";
+import { PictureAsPdfSharp, SortByAlpha } from "@mui/icons-material";
 import { getFilteredJobs } from "../../../Firebase/FirebaseFunctions/Job";
 import Pagination from "@mui/material/Pagination";
 import PaginationItem from "@mui/material/PaginationItem";
