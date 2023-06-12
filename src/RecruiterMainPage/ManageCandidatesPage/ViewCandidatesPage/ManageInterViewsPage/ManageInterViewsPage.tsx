@@ -10,6 +10,7 @@ import { AccountCircle, CalendarMonth, ErrorOutline, QuestionAnswer } from '@mui
 import ScheduleInterviewDialog from './Components/ScheduleInterviewDialog/ScheduleInterviewDialog';
 import MyLoading from '../../../../Components/MyLoading/MyLoading';
 import AreYouSureDialog from '../Components/AreYouSureDialog/AreYouSureDialog';
+import SuccessMessageSnackbar from '../Components/SuccessMessageSnackbar/SuccessMessageSnackbar';
 export default function ManageInterviewsPage(props: { candidateId: string })
 {
 
@@ -142,6 +143,13 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 		{
 			setAreYouSureDialogOpen(false);
 		}
+	}
+
+	// success message
+	const [snackBarOpen, setSnackBarOpen] = useState(false);
+	const snackBarOnClose = () =>
+	{
+		setSnackBarOpen(false);
 	}
 
 	const handleMatchingRateRadioButtons = async (event) =>
@@ -415,7 +423,9 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 								onClose={closeAreYouSureDialog}
 								message={areYouSureDialogMessage}
 								callback={areYouSureCallback}
+								setSnackBarOpen={setSnackBarOpen}
 							/>
+							<SuccessMessageSnackbar open={snackBarOpen} onClose={snackBarOnClose}/>
 
 							{/* Summary of interview */}
 							{interviewIndex !== -1 && jobValue !== "" ?

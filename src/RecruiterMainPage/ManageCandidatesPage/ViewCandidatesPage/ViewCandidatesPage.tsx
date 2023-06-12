@@ -15,6 +15,7 @@ import MyLoading from '../../../Components/MyLoading/MyLoading';
 import RecommendersDialog from './Components/RecommendersDialog/RecommendersDialog';
 import JobsTable2 from './Components/JobsTable/JobsTable';
 import AreYouSureDialog from './Components/AreYouSureDialog/AreYouSureDialog';
+import SuccessMessageSnackbar from './Components/SuccessMessageSnackbar/SuccessMessageSnackbar';
 
 export default function ViewCandidatesPage(props: { candidateId: string })
 {
@@ -126,6 +127,13 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 		{
 			setAreYouSureDialogOpen(false);
 		}
+	}
+
+	// success message
+	const [snackBarOpen, setSnackBarOpen] = useState(false);
+	const snackBarOnClose = () =>
+	{
+		setSnackBarOpen(false);
 	}
 
 	return (
@@ -312,8 +320,9 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 										onClose={closeAreYouSureDialog}
 										message={areYouSureDialogMessage}
 										callback={areYouSureCallback}
+										setSnackBarOpen={setSnackBarOpen}
 									/>
-
+									<SuccessMessageSnackbar open={snackBarOpen} onClose={snackBarOnClose} />
 									<Box sx={{ display: "flex", justifyContent: "space-between" }}>
 										<Button sx={{
 											color: "white",

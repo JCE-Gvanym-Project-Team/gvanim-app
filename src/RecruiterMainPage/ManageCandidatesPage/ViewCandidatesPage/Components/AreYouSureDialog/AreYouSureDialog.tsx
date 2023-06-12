@@ -1,11 +1,14 @@
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton } from '@mui/material'
-import React from 'react'
+import React, { useState } from 'react'
 import { dialogActionsSx, dialogContentStyle, dialogContentSx, dialogSx, dialogTitleSx, dialogTopAreaSx } from './AreYouSureDialogStyle';
 import { Close } from '@mui/icons-material';
+import SuccessMessageSnackbar from '../SuccessMessageSnackbar/SuccessMessageSnackbar';
 
-export default function AreYouSureDialog(props: { open, onClose, message, callback })
+export default function AreYouSureDialog(props: { open, onClose, message, callback, setSnackBarOpen })
 {
-	const { open, onClose, message, callback } = props;
+	const { open, onClose, message, callback, setSnackBarOpen } = props;
+
+	
 	return (
 		// popup dialog
 		<Dialog open={open} onClose={onClose} sx={dialogSx} >
@@ -52,7 +55,12 @@ export default function AreYouSureDialog(props: { open, onClose, message, callba
 				</Button>
 				<Button
 					variant='outlined'
-					onClick={(event) => { callback(); onClose(event, undefined) }}
+					onClick={(event) =>
+					{
+						callback();
+						onClose(event, undefined);
+						setSnackBarOpen(true);
+					}}
 					sx={{
 
 					}}

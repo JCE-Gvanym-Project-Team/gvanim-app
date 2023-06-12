@@ -1,13 +1,13 @@
+import { Edit } from '@mui/icons-material';
 import { Box, Button, Container, Divider, FormHelperText, Stack, TextField, Typography, styled } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Candidate, getFilteredCandidates } from '../../../../../Firebase/FirebaseFunctions/Candidate';
-import RemoveCandidateDialog from './../RemoveCandidateDialog/RemoveCandidateDialog';
-import { MyPaperSx } from './EditCandidateStyle';
-import { BoxGradientSx } from './EditCandidateStyle';
-import { AccountCircle, Edit } from '@mui/icons-material';
 import { candidateNameSx } from '../../ViewCandidatesPageStyle';
 import AreYouSureDialog from '../AreYouSureDialog/AreYouSureDialog';
+import SuccessMessageSnackbar from '../SuccessMessageSnackbar/SuccessMessageSnackbar';
+import RemoveCandidateDialog from './../RemoveCandidateDialog/RemoveCandidateDialog';
+import { BoxGradientSx, MyPaperSx } from './EditCandidateStyle';
 
 const Form = styled('form')(({ theme }) => ({
     width: '100%',
@@ -108,6 +108,12 @@ const EditCandidate = () =>
         {
             setAreYouSureDialogOpen(false);
         }
+    }
+
+    // success message
+    const [snackBarOpen, setSnackBarOpen] = useState(false);
+    const snackBarOnClose = () => {
+        setSnackBarOpen(false);
     }
 
     return (
@@ -355,7 +361,9 @@ const EditCandidate = () =>
                                             onClose={closeAreYouSureDialog}
                                             message={areYouSureDialogMessage}
                                             callback={areYouSureCallback}
+                                            setSnackBarOpen={setSnackBarOpen}
                                         />
+                                        <SuccessMessageSnackbar open={snackBarOpen} onClose={snackBarOnClose}/>
                                     </Form>
                                 </Box>
                             </Box>

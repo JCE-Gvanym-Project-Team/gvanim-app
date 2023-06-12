@@ -11,6 +11,7 @@ import { Recruiter } from "../../../../../../Firebase/FirebaseFunctions/Recruite
 import { Job, getFilteredJobs } from "../../../../../../Firebase/FirebaseFunctions/Job";
 import { useNavigate } from "react-router-dom";
 import AreYouSureDialog from "../../../Components/AreYouSureDialog/AreYouSureDialog";
+import SuccessMessageSnackbar from "../../../Components/SuccessMessageSnackbar/SuccessMessageSnackbar";
 
 const filter = createFilterOptions<string>();
 
@@ -250,7 +251,6 @@ export default function ScheduleInterviewDialog(props: {
     const [toJobError, setToJobError] = useState(false);
 
     // are you sure dialog
-    // are you sure dialog
     const [areYouSureDialogOpen, setAreYouSureDialogOpen] = useState(false);
     const [areYouSureCallback, setAreYouSureCallback] = useState<(() => {})>();
     const [areYouSureDialogMessage, setAreYouSureDialogMessage] = useState("");
@@ -261,6 +261,13 @@ export default function ScheduleInterviewDialog(props: {
         {
             setAreYouSureDialogOpen(false);
         }
+    }
+
+    // success message
+    const [snackBarOpen, setSnackBarOpen] = useState(false);
+    const snackBarOnClose = () =>
+    {
+        setSnackBarOpen(false);
     }
 
     return (
@@ -471,7 +478,9 @@ export default function ScheduleInterviewDialog(props: {
                     onClose={closeAreYouSureDialog}
                     message={areYouSureDialogMessage}
                     callback={areYouSureCallback}
+                    setSnackBarOpen={setSnackBarOpen}
                 />
+                <SuccessMessageSnackbar open={snackBarOpen} onClose={snackBarOnClose}/>
             </DialogContent>
 
 
