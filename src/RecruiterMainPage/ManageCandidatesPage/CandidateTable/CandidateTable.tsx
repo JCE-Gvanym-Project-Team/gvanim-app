@@ -1,6 +1,6 @@
 import * as React from "react";
 import Typography from "@mui/material/Typography";
-import { Box, Button, Container, Stack, styled, useTheme } from "@mui/material";
+import { Box, Button, Stack, styled, useTheme } from "@mui/material";
 import DropMenu from "../DropMenu/DropMenu";
 import {
   DataGrid,
@@ -8,36 +8,17 @@ import {
   GridColDef,
   GridToolbarDensitySelector,
   GridToolbarColumnsButton,
-  GridInitialState,
-  useGridRootProps,
   useGridApiContext,
   GridToolbarContainer,
   heIL,
-  GridFooterContainer,
   GridToolbarQuickFilter,
-  GridToolbarExportContainer,
-  GridPrintExportMenuItem,
 } from "@mui/x-data-grid";
-import {
-  Candidate,
-  getFilteredCandidates,
-} from "../../../Firebase/FirebaseFunctions/Candidate";
+import { getFilteredCandidates } from "../../../Firebase/FirebaseFunctions/Candidate";
 import { useNavigate } from "react-router-dom";
-import {
-  TypographyFooterSx,
-  dataGridContainerStyle,
-  dataGridContainerSx,
-  dataGridSx,
-} from "./CandidateTableStyle";
 import { unstable_useForkRef as useForkRef } from "@mui/utils";
 import { MyButtonSx } from "./CandidateTableStyle";
-import {
-  ArticleOutlined,
-  LockOpen,
-  Lock,
-  PictureAsPdfSharp,
-} from "@mui/icons-material";
-import { Job, getFilteredJobs } from "../../../Firebase/FirebaseFunctions/Job";
+import { PictureAsPdfSharp } from "@mui/icons-material";
+import { getFilteredJobs } from "../../../Firebase/FirebaseFunctions/Job";
 import Pagination from "@mui/material/Pagination";
 import PaginationItem from "@mui/material/PaginationItem";
 import {
@@ -48,23 +29,11 @@ import {
   gridClasses,
   GridRow,
 } from "@mui/x-data-grid";
-import {
-  Chip,
-  LinearProgress,
-  SxProps,
-  Theme,
-  Tooltip,
-  alpha,
-} from "@mui/material";
+import { Chip, LinearProgress, SxProps, Theme, alpha } from "@mui/material";
 import MyLoading from "../../../Components/MyLoading/MyLoading";
-import MyDropMenu from "../../ManageJobsPage/Components/MyDropMenu/MyDropMenu";
-import CandidatesListFullScreenDialog from "../../ManageJobsPage/Components/CandidatesListDialog/CandidatesListDialog";
-import { useState, useEffect } from "react";
-import ViewCandidatesPage from "../ViewCandidatesPage/ViewCandidatesPage";
-import {
-  CandidateJobStatus,
-  getFilteredCandidateJobStatuses,
-} from "../../../Firebase/FirebaseFunctions/CandidateJobStatus";
+import { useState } from "react";
+import { getFilteredCandidateJobStatuses } from "../../../Firebase/FirebaseFunctions/CandidateJobStatus";
+
 // -------------------Use Memorie for better performance----------------------------------------------------
 const TraceUpdates = React.forwardRef<any, any>((props, ref) => {
   const { Component, ...other } = props;
