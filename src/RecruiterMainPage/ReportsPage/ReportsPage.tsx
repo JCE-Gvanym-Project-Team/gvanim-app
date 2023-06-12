@@ -115,12 +115,12 @@ function ReportsPage() {
 				</Box>
 			</Box>
 			<Box>
-				<h2 style={{ textAlign: "center" }}>דוחות לאקסל</h2>
-				<MyTable></MyTable>
 				<h2 style={{ textAlign: "center" }}>מספר משרות לפי ערים</h2>
 				<JobsByRegions></JobsByRegions>
 				<h2 style={{ textAlign: "center" }}>כמות מועמדים למשרות השונות</h2>
 				<CandidatesByRoles></CandidatesByRoles>
+				<h2 style={{ textAlign: "center" }}>דוחות נוספים</h2>
+				<MyTable></MyTable>
 			</Box>
 		</>
 	)
