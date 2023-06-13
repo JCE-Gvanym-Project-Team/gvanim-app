@@ -65,6 +65,7 @@ export default function FloatingBox(props: { job }) {
                     justifySelf: "center",
                     paddingBottom: "10px",
                     paddingTop: "9px",
+                    font: "normal normal medium 30px/35px Rubik"
 
                 }}
                 >

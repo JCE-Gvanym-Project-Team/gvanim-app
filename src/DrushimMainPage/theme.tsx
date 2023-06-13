@@ -243,30 +243,30 @@ export const themeSettings = (mode, actualMode, fontSize, fontFamily) =>
             }
         },
         typography: {
-            fontFamily: fontFamily,
+            font: fontFamily,
             fontSize: fontSize,
             h1: {
-                fontFamily: fontFamily,
+                font: fontFamily,
                 fontSize: fontSize + 30
             },
             h2: {
-                fontFamily: fontFamily,
+                font: "normal normal medium 30px/35px Rubik",
                 fontSize: fontSize + 10
             },
             h3: {
-                fontFamily: fontFamily,
+                font: fontFamily,
                 fontSize: fontSize + 5
             },
             h4: {
-                fontFamily: fontFamily,
+                font: "normal normal normal 22px/35px Rubik",
                 fontSize: fontSize + 2
             },
             h5: {
-                fontFamily: fontFamily,
+                font: fontFamily,
                 fontSize: fontSize - 4
             },
             h6: {
-                fontFamily: fontFamily,
+                font: fontFamily,
                 fontSize: fontSize - 6
             },
 
@@ -293,7 +293,7 @@ export const useMode = () =>
     const [mode, setMode] = useState("light");
     const [fontSize, setFontSize] = useState(20);
     // const [fontFamily, setFontFamily] = useState("'Noto Sans Hebrew', sans-serif");
-    const [fontFamily, setFontFamily] = useState("'Noto Sans Hebrew', sans-serif");
+    const [fontFamily, setFontFamily] = useState("normal normal medium 30px/35px Rubik");
 
     const [actualMode, setActualMode] = useState("light");
 
