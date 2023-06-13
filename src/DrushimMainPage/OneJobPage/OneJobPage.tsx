@@ -655,7 +655,7 @@ export default function OneJobPage()
                                 sx={{
                                     display: "flex",
                                     flexDirection: { xs: "column", md: "row" },
-                                    marginRight: { xs: "1rem", md: "5rem" }
+                                    marginRight: "7px"
                                 }}
                             >
                                 {/* Firstname */}
@@ -717,7 +717,7 @@ export default function OneJobPage()
                                 {/* Lastname */}
                                 <Box
                                     sx={{
-                                        marginLeft: { xs: "0", md: "5rem" }
+                                        marginLeft: { xs: "0", md: "7px" }
                                     }}
                                 >
                                     <Typography variant='h4' color={"primary.jobTitle"} sx={{ marginBottom: "15px" }}>
@@ -843,7 +843,7 @@ export default function OneJobPage()
                                 {/* Email */}
                                 <Box
                                     sx={{
-                                        marginLeft: { xs: "0", md: "5rem" }
+                                        marginLeft: { xs: "0", md: "7px" }
                                     }}
                                 >
                                     <Typography variant='h4' color={"primary.jobTitle"} sx={{ marginBottom: "15px" }}>
