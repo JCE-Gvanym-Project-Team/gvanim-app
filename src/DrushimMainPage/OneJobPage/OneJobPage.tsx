@@ -368,9 +368,6 @@ export default function OneJobPage()
         return result;
     }
 
-    // is mobile view
-    const isMobileView = useMediaQuery(theme.breakpoints.down('sm'));
-    
     return (
         loading ? <MyLoading loading={loading} setLoading={setLoading} /> :
             <React.Fragment>
@@ -414,7 +411,6 @@ export default function OneJobPage()
                         height: '133px',
                         zIndex: "4"
                     }} component={PinkEllipseSVG} />
-
                 </Box>
                 {/* Entire Page */}
                 <Box
@@ -445,7 +441,7 @@ export default function OneJobPage()
 
                     >
                         <Typography
-                            variant='h6'
+                            variant='h5'
                             sx={{
                                 display: "flex",
                                 alignItems: "center",
@@ -959,7 +955,7 @@ export default function OneJobPage()
                                 </Box>
                             </Button>
                             {/* display filename to the user */}
-                            <Typography variant='h6'>
+                            <Typography variant='h5'>
                                 {cvFile ? "קובץ שצורף: " : ""}
                                 {cvFile?.name.slice(0, 20)}
                                 {cvFile?.name.length! > 20 ? '...' : ''}
@@ -1080,7 +1076,7 @@ export default function OneJobPage()
                                                         setAreYouSureDialogRecommenderName(recommender[0]?._fullName!);
                                                     }}
                                                 >
-                                                    <DeleteOutlined sx={{ }} />
+                                                    <DeleteOutlined sx={{}} />
                                                 </Button>
                                                 {/* are you sure you want to delete recommender dialog */}
                                                 <AreYouSureDialog
@@ -1156,7 +1152,7 @@ export default function OneJobPage()
                                                                         sx={{ fontSize: "24px" }}
                                                                     />
                                                                     {/* display filename to the user */}
-                                                                    <Typography variant='h6'>
+                                                                    <Typography variant='h5'>
                                                                         {recommendersList[index][1]?.name.length! > 20 ? '...' : ''}
                                                                         {recommendersList[index][1] ? recommendersList[index][1]?.name.slice(0, 20) : ""}
                                                                     </Typography>
@@ -1360,87 +1356,89 @@ export default function OneJobPage()
                                                     </Box>
 
                                                     {/* Attach recommender file button */}
-                                                    <Box
-                                                        sx={{
-                                                            display: "flex",
-                                                            flexDirection: "row",
-                                                            alignSelf: "end",
-                                                        }}
-                                                    >
-                                                        {/* PC add recommender file input */}
-                                                        <Input
-                                                            type="file"
-                                                            inputRef={(input) => (recommenderFileInputRefs.current[index] = input)}
-                                                            style={{ display: 'none' }}
-                                                            onChange={(event) =>
-                                                            {
-                                                                const inputElement = event.target as HTMLInputElement;
-                                                                const files = inputElement.files;
-                                                                if (files && files.length > 0)
-                                                                {
-                                                                    updateRecommendersListAtIndex(recommendersList[index][0], files[0], index);
-                                                                }
-                                                            }}
-                                                        />
-                                                        <Button
-                                                            disableRipple
+                                                    <Box sx={{ display: "flex", flexDirection: "column", alignSelf: "end" }}>
+                                                        {/* display filename to the user */}
+                                                        <Typography variant='h5' sx={{ alignSelf: "center" }}>
+                                                            {recommendersList[index][1] ? "קובץ שצורף: " : ""}
+                                                            {recommendersList[index][1]?.name.length! > 12 ? '...' : ''}
+                                                            {recommendersList[index][1] ? recommendersList[index][1]?.name.slice(0, 12) : ""}
+                                                        </Typography>
+                                                        <Box
                                                             sx={{
-                                                                borderRadius: "36px",
-                                                                paddingTop: "21px",
-                                                                paddingBottom: "21px",
-                                                                display: { xs: "none", md: "flex" },
-                                                                backgroundColor: "background.cvButton",
-                                                                "&:hover": {
-                                                                    backgroundColor: "background.cvButtonHover"
-                                                                }
+                                                                display: "flex",
+                                                                flexDirection: "row",
+                                                                alignSelf: "end",
                                                             }}
-                                                            onClick={() =>
-                                                            {
-                                                                // trigger input onChange
-                                                                if (recommenderFileInputRefs.current[index])
-                                                                {
-                                                                    recommenderFileInputRefs.current[index]?.click()
-                                                                }
-                                                            }}
-
                                                         >
-                                                            <Icon
-                                                                sx={{
-                                                                    height: "21px",
-                                                                    width: "19px",
-                                                                    color: "primary.textBright",
-                                                                    marginRight: "9px",
-                                                                    marginLeft: "30px"
+                                                            {/* PC add recommender file input */}
+                                                            <Input
+                                                                type="file"
+                                                                inputRef={(input) => (recommenderFileInputRefs.current[index] = input)}
+                                                                style={{ display: 'none' }}
+                                                                onChange={(event) =>
+                                                                {
+                                                                    const inputElement = event.target as HTMLInputElement;
+                                                                    const files = inputElement.files;
+                                                                    if (files && files.length > 0)
+                                                                    {
+                                                                        updateRecommendersListAtIndex(recommendersList[index][0], files[0], index);
+                                                                    }
                                                                 }}
-                                                                component={AttachFileSVG}
                                                             />
-                                                            <Box
+                                                            <Button
+                                                                disableRipple
                                                                 sx={{
-                                                                    flexDirection: "column", paddingRight: "30px"
+                                                                    borderRadius: "36px",
+                                                                    paddingTop: "21px",
+                                                                    paddingBottom: "21px",
+                                                                    display: { xs: "none", md: "flex" },
+                                                                    backgroundColor: "background.cvButton",
+                                                                    "&:hover": {
+                                                                        backgroundColor: "background.cvButtonHover"
+                                                                    }
                                                                 }}
+                                                                onClick={() =>
+                                                                {
+                                                                    // trigger input onChange
+                                                                    if (recommenderFileInputRefs.current[index])
+                                                                    {
+                                                                        recommenderFileInputRefs.current[index]?.click()
+                                                                    }
+                                                                }}
+
                                                             >
-                                                                <Typography
-                                                                    variant='h3'
+                                                                <Icon
                                                                     sx={{
-                                                                        display: { xs: "none", md: "block" },
-                                                                        whiteSpace: 'nowrap',
-                                                                        overflow: 'hidden',
-                                                                        textOverflow: 'ellipsis',
-                                                                        color: "primary.textBright"
-                                                                    }}>
-                                                                    צירוף קובץ
-                                                                </Typography>
+                                                                        height: "21px",
+                                                                        width: "19px",
+                                                                        color: "primary.textBright",
+                                                                        marginRight: "9px",
+                                                                        marginLeft: "30px"
+                                                                    }}
+                                                                    component={AttachFileSVG}
+                                                                />
+                                                                <Box
+                                                                    sx={{
+                                                                        flexDirection: "column", paddingRight: "30px"
+                                                                    }}
+                                                                >
+                                                                    <Typography
+                                                                        variant='h3'
+                                                                        sx={{
+                                                                            display: { xs: "none", md: "block" },
+                                                                            whiteSpace: 'nowrap',
+                                                                            overflow: 'hidden',
+                                                                            textOverflow: 'ellipsis',
+                                                                            color: "primary.textBright"
+                                                                        }}>
+                                                                        צירוף קובץ
+                                                                    </Typography>
 
-                                                                {/* display filename to the user */}
-                                                                <Typography variant='h6'>
-                                                                    {recommendersList[index][1]?.name.length! > 20 ? '...' : ''}
-                                                                    {recommendersList[index][1] ? recommendersList[index][1]?.name.slice(0, 20) : ""}
-                                                                </Typography>
-                                                            </Box>
-                                                        </Button>
+                                                                </Box>
+                                                            </Button>
 
+                                                        </Box>
                                                     </Box>
-
                                                 </Box>
                                             </Box>
                                         );

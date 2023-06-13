@@ -286,7 +286,14 @@ export const themeSettings = (mode, actualMode, fontSize, fontFamily) =>
                 fontFamily: fontFamily,
                 fontSize: fontSize - 6
             },
-
+            subtitle1: {
+                fontFamily: fontFamily,
+                fontSize: fontSize
+            },
+            subtitle2: {
+                fontFamily: fontFamily,
+                fontSize: fontSize
+            }
         }
     }
 }
