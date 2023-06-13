@@ -1,4 +1,4 @@
-import { AddBoxSharp, ArrowDownward, ArrowUpward, AttachFile, DeleteForeverOutlined, ErrorOutlineRounded, Redo, Send } from '@mui/icons-material';
+import { AddBoxSharp, ArrowDownward, ArrowUpward, AttachFile, DeleteForeverOutlined, ErrorOutlineRounded, FileUpload, FileUploadOutlined, Redo, Send } from '@mui/icons-material';
 import { Box, Button, Divider, Icon, Input, TextField, Typography, useTheme } from '@mui/material';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -11,10 +11,12 @@ import AreYouSureDialog from './Components/AreYouSureDialog/AreYouSureDialog';
 import SuccessDialog from './Components/SuccessDialog/SuccessDialog';
 import ErrorDialog from './Components/ErrorDialog/ErrorDialog';
 import JobsDetails from './Components/JobDetails/JobDetails';
+// icons
 import { ReactComponent as CloudSVG } from './Resources/Cloud.svg';
 import { ReactComponent as BackgroundSVG } from './Resources/Background.svg'
 import { ReactComponent as YellowEllipseSVG } from './Resources/YellowEllipse.svg'
 import { ReactComponent as PinkEllipseSVG } from './Resources/PinkEllipse.svg'
+import {ReactComponent as UploadIconSVG } from './Resources/UploadIcon.svg'
 
 
 const ABOUT_MAX_LENGTH = 1000;
@@ -947,16 +949,16 @@ export default function OneJobPage()
                                     flexDirection: "row",
                                     justifyContent: "end",
                                     width: "100%",
-                                    marginBottom: "1rem"
                                 }}
                             >
                                 <Typography variant='h4'>
-                                    {aboutNumChars} / {ABOUT_MAX_LENGTH}
+                                    {aboutNumChars ? aboutNumChars : 0} / {ABOUT_MAX_LENGTH}
                                 </Typography>
                             </Box>
                         </Box>
+
                         {/* attach CV file button */}
-                        <Box>
+                        <Box sx={{marginTop: "50px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", width: "fit-content"}}>
                             <Input
                                 type="file"
                                 inputRef={cvFileInputRef}
@@ -971,11 +973,17 @@ export default function OneJobPage()
                             <Button
                                 variant='contained'
                                 sx={{
-                                    backgroundColor: "background.boxInner",
-                                    color: "primary.main",
+                                    backgroundColor: "background.cvButton",
+                                    borderRadius: "36px",
+                                    color: "primary.textBright",
                                     "&:hover": {
-                                        backgroundColor: "background.main"
-                                    }
+                                        backgroundColor: "background.cvButtonHover"
+                                    },
+                                    paddingTop: "21px", 
+                                    paddingBottom: "21px",
+                                    paddingLeft: "65px",
+                                    paddingRight: "58px"
+
                                 }}
                                 onClick={() =>
                                 {
@@ -987,27 +995,29 @@ export default function OneJobPage()
                                 }}
 
                             >
-                                <AttachFile
-                                    sx={{ fontSize: "24px" }}
+                                <Icon
+                                    sx={{ height: "27px", width: "27px", marginRight: "16px", fontFamily: "serif" }}
+                                    component={UploadIconSVG}
                                 />
                                 <Box
                                     sx={{
                                         flexDirection: "column"
                                     }}
                                 >
-                                    <Typography variant='h4'>
+                                    <Typography variant='h3' >
                                         צירוף קורות חיים
                                     </Typography>
 
-                                    {/* display filename to the user */}
-                                    <Typography variant='h6'>
-                                        {cvFile?.name.slice(0, 10)}
-                                        {cvFile?.name.length! > 10 ? '...' : ''}
-                                    </Typography>
 
 
                                 </Box>
                             </Button>
+                            {/* display filename to the user */}
+                            <Typography variant='h6'>
+                                {cvFile ? "קובץ שצורף: " : ""}
+                                {cvFile?.name.slice(0, 20)}
+                                {cvFile?.name.length! > 20 ? '...' : ''}
+                            </Typography>
                             <Box sx={{
                                 display: cvFileError ? "flex" : "none",
                                 flexDirection: "row",

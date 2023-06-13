@@ -41,7 +41,7 @@ export default function FloatingBox(props: { job })
             sx={{
                 position: "sticky",
                 top: floatingTop,
-                maxHeight: "416px",
+                maxHeight: "fit-content",
                 backgroundColor: "background.jobDetails",
                 boxShadow: "0px 3px 10px #00000029",
                 borderRadius: "10px",

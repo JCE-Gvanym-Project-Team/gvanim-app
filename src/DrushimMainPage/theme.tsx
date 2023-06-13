@@ -240,7 +240,9 @@ export const themeSettings = (mode, actualMode, fontSize, fontFamily) =>
                 jobDetails: "#FFFFFF",
                 JobDetailsText: "#053B7A",
                 jobTitleSeparator: "#2E3552",
-                candidateDetailsTextField: "#F0F0F0"
+                candidateDetailsTextField: "#F0F0F0",
+                cvButton: "#41C2F0",
+                cvButtonHover: "#77CFEF"
             },
             error: {
                 main: "#FF0000"
