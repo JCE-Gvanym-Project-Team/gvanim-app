@@ -214,12 +214,15 @@ export const themeSettings = (mode, actualMode, fontSize, fontFamily) =>
             primary: {
                 main: "#000000",
                 textBright: "#FFFFFF",
-                faded: "#FEFEFE"
+                faded: "#FEFEFE",
+                jobTitle: "#053B7A",
+                descAndReqTitle: "#5BA1AA",
             },
             secondary: {
                 main: "#03368a",
                 half: "#184fa8",
                 dark: "#041a3d",
+                descAndReqText: "#767676"
 
             },
             neutral: {
@@ -245,15 +248,13 @@ export const themeSettings = (mode, actualMode, fontSize, fontFamily) =>
         typography: {
             fontFamily: fontFamily,
             fontWeight: "Regular",
-            lineSpacing: "72",
-
             fontSize: fontSize,
             h1: {
-                fontFamily: fontFamily,
+                fontWeight: "medium",
                 fontSize: fontSize + 30
             },
             h2: {
-                fontFamily: fontFamily,
+                fontWeight: "medium",
                 fontSize: fontSize + 10
             },
             h3: {

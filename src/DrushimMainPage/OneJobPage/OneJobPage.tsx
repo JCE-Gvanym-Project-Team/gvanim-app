@@ -422,7 +422,7 @@ export default function OneJobPage() {
 
                         <Typography
                             sx={{
-                                color: "primary.main"
+                                color: "primary.jobTitle"
                             }}
                             variant='h1'
                         >
@@ -466,7 +466,7 @@ export default function OneJobPage() {
                                         flex: 7
                                     }}
                                 >
-                                    <Typography variant="h2">
+                                    <Typography variant="h2" color={"primary.descAndReqTitle"}>
                                         תיאור המשרה:
                                     </Typography>
 
@@ -475,6 +475,7 @@ export default function OneJobPage() {
                                         marginTop={"15px"}
                                         sx={{
                                             backgroundColor: "background.boxInner",
+                                            color: "secondary.descAndReqText",
                                             width: "30vw"
                                         }}
                                     >
@@ -500,7 +501,7 @@ export default function OneJobPage() {
                                     flex: 4
                                 }}
                             >
-                                <Typography variant="h2" marginTop={"73px"}>
+                                <Typography variant="h2" marginTop={"73px"} sx={{color: "primary.descAndReqTitle"}}>
                                     דרישות התפקיד:
                                 </Typography>
 
@@ -509,6 +510,7 @@ export default function OneJobPage() {
                                     marginTop={"15px"}
                                     sx={{
                                         backgroundColor: "background.boxInner",
+                                        color: "secondary.descAndReqText",
                                         width: "28vw"
                                     }}
                                 >
