@@ -1497,8 +1497,8 @@ export default function OneJobPage()
                                     borderRadius: "36px",
                                     paddingTop: "21px",
                                     paddingBottom: "21px",
-                                    paddingRight: "8vw",
-                                    paddingLeft: "8vw",
+                                    paddingRight: {xs: "84px", md: "8vw" },
+                                    paddingLeft: {xs: "84px", md: "8vw" },
                                     color: "primary.main",
                                     "&:hover": {
                                         backgroundColor: "background.submitButtonHover"
