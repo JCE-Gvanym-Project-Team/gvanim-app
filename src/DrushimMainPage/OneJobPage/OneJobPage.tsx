@@ -16,7 +16,9 @@ import { ReactComponent as CloudSVG } from './Resources/Cloud.svg';
 import { ReactComponent as BackgroundSVG } from './Resources/Background.svg'
 import { ReactComponent as YellowEllipseSVG } from './Resources/YellowEllipse.svg'
 import { ReactComponent as PinkEllipseSVG } from './Resources/PinkEllipse.svg'
-import {ReactComponent as UploadIconSVG } from './Resources/UploadIcon.svg'
+import { ReactComponent as UploadIconSVG } from './Resources/UploadIcon.svg'
+import { ReactComponent as DownArrowSVG } from './Resources/DownArrow.svg'
+import { ReactComponent as UpArrowSVG } from './Resources/UpArrow.svg'
 
 
 const ABOUT_MAX_LENGTH = 1000;
@@ -583,6 +585,7 @@ export default function OneJobPage()
                                         )
                                     })}
                                 </Typography>
+                                
                             </Box>
 
                             {/* not sure about additional info */}
@@ -958,7 +961,7 @@ export default function OneJobPage()
                         </Box>
 
                         {/* attach CV file button */}
-                        <Box sx={{marginTop: "50px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", width: "fit-content"}}>
+                        <Box sx={{ marginTop: "50px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", width: "fit-content" }}>
                             <Input
                                 type="file"
                                 inputRef={cvFileInputRef}
@@ -979,7 +982,7 @@ export default function OneJobPage()
                                     "&:hover": {
                                         backgroundColor: "background.cvButtonHover"
                                     },
-                                    paddingTop: "21px", 
+                                    paddingTop: "21px",
                                     paddingBottom: "21px",
                                     paddingLeft: "65px",
                                     paddingRight: "58px"
@@ -1045,15 +1048,16 @@ export default function OneJobPage()
 
                             <Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
                                 <Button onClick={() => { setRecommendersListOpen(!recommendersListOpen) }}>
-                                    <Typography variant='h2'>
+                                    <Typography variant='h2' color={"primary.descAndReqTitle"}>
                                         הוספת ממליצים
                                     </Typography>
-                                    <Typography variant='h2' marginLeft={"12px"}>
+                                    <Typography variant='h2' marginLeft={"12px"} color={"primary.descAndReqTitle"} sx={{ opacity: 0.68 }}>
                                         (אופציונאלי)
                                     </Typography>
-                                    <Typography variant='h2' marginLeft={"22px"}>
-                                        {recommendersListOpen ? <ArrowDownward /> : <ArrowUpward />}
-                                    </Typography>
+                                    {recommendersListOpen ?
+                                        <Icon sx={{ height: "12px", width: "22px", color: "primary.descAndReqTitle" }} component={DownArrowSVG} /> :
+                                        <Icon sx={{ height: "12px", width: "22px", color: "primary.descAndReqTitle" }} component={UpArrowSVG} />}
+
                                 </Button>
                             </Box>
 
