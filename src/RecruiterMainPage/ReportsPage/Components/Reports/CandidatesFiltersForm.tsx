@@ -5,7 +5,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { Box, Typography, FormControlLabel, MenuItem, Radio, RadioGroup, Select, SelectChangeEvent, Stack, Container } from '@mui/material';
+import { Box, Typography, FormControlLabel, MenuItem, Radio, RadioGroup, Select, SelectChangeEvent, Stack, Container, Button } from '@mui/material';
 import { CandidateJobStatus, Job, generateJobNumber, getFilteredCandidateJobStatuses, getFilteredCandidates, getFilteredJobs, loginAdmin } from '../../../../Firebase/FirebaseFunctions/functionIndex';
 import { exportToExcel } from '../../../../Firebase/FirebaseFunctions/Reports/GlobalFunctions'
 import CandidatesByFilters from '../../../../Firebase/FirebaseFunctions/Reports/CandidatesFilters';
@@ -13,6 +13,8 @@ import { MyReportStyle, formContainerStyles, radioStyle } from '../../ReportPage
 import { useNavigate } from 'react-router-dom';
 import { MyPaperSx, BoxGradientSx } from '../../../ManageJobsPage/Components/NewJobPage/NewJobStyle';
 import { ArticleOutlined, Margin } from "@mui/icons-material";
+import { designReturnButton } from '../../../ManageJobsPage/ManageJobsPageStyle';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 
 
@@ -42,11 +44,11 @@ export default function CandidateFiltersForm() {
 
         const result = CandidatesByFilters(status, timeOnStatus, sector, role, selectGarde, selectInterviewDate, formattedStartDate, formattedEndDate)
             .then((result) => {
-                if (result.length === 0){
+                if (result.length === 0) {
                     alert('אין נתונים להצגה');
                     return;
                 }
-                else{
+                else {
                     exportToExcel(result, "מועמדים");
                 }
             })
@@ -99,6 +101,12 @@ export default function CandidateFiltersForm() {
 
     const handleChangeEndDate = (date) => {
         setEndDate(date);
+    };
+
+    const navigate = useNavigate();
+
+    const handleClick = () => {
+        navigate("/management/reports");
     };
 
 
@@ -350,6 +358,19 @@ export default function CandidateFiltersForm() {
                     </Container>
                 </Box >
             </Box>
+
+       
+            <Box style={{ position: 'absolute', top: '100px', right: '50px' }}>
+                <Button
+                    onClick={handleClick}
+                    sx={designReturnButton}
+                >
+                    <ArrowForwardIosIcon></ArrowForwardIosIcon>
+                    חזור
+                </Button>
+            </Box>
+
+
         </>
 
     );

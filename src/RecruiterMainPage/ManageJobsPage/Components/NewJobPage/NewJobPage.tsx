@@ -10,6 +10,8 @@ import { ArticleOutlined } from '@mui/icons-material';
 import MyLoading from '../../../../Components/MyLoading/MyLoading';
 import RoleSingleSelection from './Components/RoleSingleSelection/RoleSingleSelection';
 import SectorSingleSelection from './Components/SectorSingleSelection/SectorSingleSelection';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { designReturnButton } from '../../ManageJobsPageStyle';
 
 const Form = styled('form')(({ theme }) => ({
     width: '100%',
@@ -161,6 +163,10 @@ const NewJobPage = () => {
         navigate("/management/manageJobs", { state: { msg: `משרה מס' ${myJob?._jobNumber} הוסרה בהצלחה.` } });
     }
 
+    const handleClick = () => {
+        navigate("/management/manageJobs");
+    };
+
     return (
         <>
             {loading ? (<MyLoading loading={loading} setLoading={setLoading} />) : (
@@ -180,6 +186,7 @@ const NewJobPage = () => {
                             borderRadius: '50%',
                             position: 'absolute',
                         }} />
+
 
                         <Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
                             right: '6%',
@@ -490,7 +497,7 @@ const NewJobPage = () => {
 
 
                                                     <Box sx={{ width: '100%' }}>
-                                                    <FormLabel sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'start' }}>
+                                                        <FormLabel sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'start' }}>
                                                             <Typography sx={MyLabelSx}>אשכול:</Typography>
                                                             <Typography sx={{ fontSize: 14, color: '#e91e63' }}>*</Typography>
                                                         </FormLabel>
@@ -505,10 +512,10 @@ const NewJobPage = () => {
 
 
                                                 <Box sx={{ width: '100%', mt: 1 }}>
-                                                <FormLabel sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'start' }}>
-                                                            <Typography sx={MyLabelSx}>דרישות:</Typography>
-                                                            <Typography sx={{ fontSize: 14, color: '#e91e63' }}>*</Typography>
-                                                        </FormLabel>
+                                                    <FormLabel sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'start' }}>
+                                                        <Typography sx={MyLabelSx}>דרישות:</Typography>
+                                                        <Typography sx={{ fontSize: 14, color: '#e91e63' }}>*</Typography>
+                                                    </FormLabel>
 
                                                     <TextField
                                                         sx={{
@@ -557,7 +564,7 @@ const NewJobPage = () => {
                                                     spacing={{ xs: 0, sm: 0, md: 0, lg: 2, xl: 2 }}>
 
                                                     <Stack sx={{ width: '100%' }} direction='column' spacing={0}>
-                                                    <FormLabel sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'start' }}>
+                                                        <FormLabel sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'start' }}>
                                                             <Typography sx={MyLabelSx}>תיאור המשרה:</Typography>
                                                         </FormLabel>
 
@@ -571,7 +578,7 @@ const NewJobPage = () => {
                                                     </Stack>
 
                                                     <Stack sx={{ width: '100%' }} direction='column' spacing={0}>
-                                                    <FormLabel sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'start' }}>
+                                                        <FormLabel sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'start' }}>
                                                             <Typography sx={MyLabelSx}>דרישות המשרה:</Typography>
                                                         </FormLabel>
 
@@ -586,9 +593,9 @@ const NewJobPage = () => {
 
                                                 </Stack>
                                                 <Box sx={{ mt: 1 }}>
-                                                <FormLabel sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'start' }}>
-                                                            <Typography sx={MyLabelSx}>מידע נוסף:</Typography>
-                                                        </FormLabel>
+                                                    <FormLabel sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'start' }}>
+                                                        <Typography sx={MyLabelSx}>מידע נוסף:</Typography>
+                                                    </FormLabel>
 
                                                     <TextareaAutosize id="_additional_info"
                                                         className="MyTextField" minRows={2} required
@@ -598,9 +605,9 @@ const NewJobPage = () => {
                                                 </Box>
 
                                                 <Box sx={{ mt: 1 }}>
-                                                <FormLabel sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'start' }}>
-                                                            <Typography sx={MyLabelSx}>היקף המשרה:</Typography>
-                                                        </FormLabel>
+                                                    <FormLabel sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'start' }}>
+                                                        <Typography sx={MyLabelSx}>היקף המשרה:</Typography>
+                                                    </FormLabel>
 
                                                     <Box>
                                                         <JobScopeSlider setJobScope={setJobScope} jobScope={jobScope} />
@@ -613,7 +620,6 @@ const NewJobPage = () => {
 
 
                                                 <Stack direction='row' spacing={2} sx={{ mt: 3, mb: 3 }}>
-
 
 
 
@@ -644,11 +650,25 @@ const NewJobPage = () => {
                             </Container>
                         </Box>
 
+
+
                     </Box>
+                        <Box style={{ position: 'absolute', top: '100px', right: '50px' }}>
+                            <Button
+                                onClick={handleClick}
+                                sx={designReturnButton}
+                            >
+                                <ArrowForwardIosIcon></ArrowForwardIosIcon>
+                                חזור
+                            </Button>
+                        </Box>
+
+
+
                 </>
             )}
-        </>
 
+        </>
 
     )
 }
