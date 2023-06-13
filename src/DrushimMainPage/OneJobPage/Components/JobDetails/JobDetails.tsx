@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
-import { Typography } from '@mui/material';
+import { Icon, Typography } from '@mui/material';
+import { ReactComponent as JobRoleSVG } from '../../Resources/JobRole.svg';
+import { ReactComponent as JobLocationSVG } from '../../Resources/JobLocation.svg';
+import { ReactComponent as JobScopeSVG } from '../../Resources/JobScope.svg';
+import { ReactComponent as JobStartSVG } from '../../Resources/JobStart.svg';
 
 export default function FloatingBox(props: { job })
 {
@@ -82,7 +86,19 @@ export default function FloatingBox(props: { job })
                     paddingLeft: "55px"
                 }}
             >
-                <Typography variant='h4' sx={{ color: "secondary.jobDetails"}}>
+                {/* Icon */}
+                <Box sx={{
+                    overflow: 'hidden',
+                    zIndex: "-1"
+                }}>
+                    <Icon sx={{
+                        height: 19,
+                        width: 17,
+                        zIndex: "-1",
+                        marginRight: "25px",
+                    }} component={JobRoleSVG} />
+                </Box>
+                <Typography variant='h4' sx={{ color: "secondary.jobDetails" }}>
                     תפקיד:
                 </Typography>
                 <Typography
@@ -105,6 +121,18 @@ export default function FloatingBox(props: { job })
                     paddingLeft: "55px"
                 }}
             >
+                {/* Icon */}
+                <Box sx={{
+                    overflow: 'hidden',
+                    zIndex: "-1"
+                }}>
+                    <Icon sx={{
+                        height: 19,
+                        width: 17,
+                        zIndex: "-1",
+                        marginRight: "25px",
+                    }} component={JobScopeSVG} />
+                </Box>
                 <Typography variant='h4' color="secondary.jobDetails">
                     היקף משרה:
                 </Typography>
@@ -128,6 +156,19 @@ export default function FloatingBox(props: { job })
                     paddingLeft: "55px"
                 }}
             >
+                {/* Icon */}
+                <Box sx={{
+                    overflow: 'hidden',
+                    zIndex: "-1"
+                }}>
+                    <Icon sx={{
+                        height: 19,
+                        width: 17,
+                        zIndex: "-1",
+                        marginRight: "25px",
+                    }} component={JobLocationSVG} />
+                </Box>
+
                 <Typography variant='h4' sx={{ color: "secondary.jobDetails" }}>
                     מיקום:
                 </Typography>
@@ -151,7 +192,20 @@ export default function FloatingBox(props: { job })
                     paddingLeft: "55px"
                 }}
             >
-                <Typography variant='h4' sx={{color: "secondary.jobDetails"}}>
+                {/* Icon */}
+                <Box sx={{
+                    overflow: 'hidden',
+                    zIndex: "-1"
+                }}>
+                    <Icon sx={{
+                        height: 19,
+                        width: 17,
+                        zIndex: "-1",
+                        marginRight: "25px",
+                    }} component={JobStartSVG} />
+                </Box>
+
+                <Typography variant='h4' sx={{ color: "secondary.jobDetails" }}>
                     תחילת עבודה:
                 </Typography>
                 <Typography

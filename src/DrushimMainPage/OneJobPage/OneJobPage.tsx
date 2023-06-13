@@ -12,7 +12,7 @@ import SuccessDialog from './Components/SuccessDialog/SuccessDialog';
 import ErrorDialog from './Components/ErrorDialog/ErrorDialog';
 import JobsDetails from './Components/JobDetails/JobDetails';
 import { ReactComponent as CloudSVG } from './Resources/Cloud.svg';
-import { ReactComponent as BackgroudSVG } from './Resources/Background.svg'
+import { ReactComponent as BackgroundSVG } from './Resources/Background.svg'
 import { ReactComponent as YellowEllipseSVG } from './Resources/YellowEllipse.svg'
 import { ReactComponent as PinkEllipseSVG } from './Resources/PinkEllipse.svg'
 
@@ -361,7 +361,7 @@ export default function OneJobPage()
     return (
         loading ? <MyLoading loading={loading} setLoading={setLoading} /> :
             <React.Fragment>
-                {/* Background and Ellipses */}
+                {/* Background */}
                 <Box sx={{
                     width: '100%',
                     height: "676px",
@@ -376,8 +376,9 @@ export default function OneJobPage()
                         width: '100%',
                         height: 'auto',
                         zIndex: "-1"
-                    }} component={BackgroudSVG} />
+                    }} component={BackgroundSVG} />
                 </Box>
+                {/* Ellipses */}
                 <Box sx={{
                     width: '100%',
                     position: 'absolute',
@@ -402,6 +403,7 @@ export default function OneJobPage()
                     }} component={PinkEllipseSVG} />
 
                 </Box>
+                {/* Entire Page */}
                 <Box
                     sx={{
                         display: "flex",
