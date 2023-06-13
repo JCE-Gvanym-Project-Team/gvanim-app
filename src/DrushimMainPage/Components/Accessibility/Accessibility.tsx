@@ -15,7 +15,7 @@ const CustomDrawer = styled(Drawer)(({ theme }) => ({
     }
 }));
 
-const DEFAULT_FONT_FAMILY = "'Noto Sans Hebrew', sans-serif";
+const DEFAULT_FONT_FAMILY = "Rubik";
 const READABLE_FONT_FAMILY = "Arial";
 const DEFAULT_FONT_SIZE = 20
 
@@ -45,7 +45,7 @@ export default function Accessibility()
                     display: "flex",
                     justifyContent: "end",
                     position: "fixed",
-                    top: "80%",
+                    top: "35%",
                     right: "0",
                     zIndex: "10" // on top of everything but the drawer
                 }}

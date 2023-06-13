@@ -11,64 +11,8 @@ export const colorTokens = (mode) =>
     if (mode === "light")    
     {
         return {
-            grey: {
-                100: "#141414",
-                200: "#292929",
-                300: "#3d3d3d",
-                400: "#525252",
-                500: "#666666",
-                600: "#858585",
-                700: "#a3a3a3",
-                800: "#c2c2c2",
-                900: "#e0e0e0",
-                1000: "#fcfcfc"
-            },
-            primary: {
-                100: "#000000",
-                200: "#040509",
-                300: "#080b12",
-                400: "#0c101b",
-                500: "#101624",
-                600: "#141b2d",
-                700: "#434957",
-                800: "#727681",
-                900: "#a1a4ab",
-                1000: "#d0d1d5",
-                1100: "#ffffff"
-            },
-            greens: {
-                100: "#0f2922",
-                200: "#1e5245",
-                300: "#2e7c67",
-                400: "#3da58a",
-                500: "#4cceac",
-                600: "#70d8bd",
-                700: "#94e2cd",
-                800: "#b7ebde",
-                900: "#dbf5ee",
-            },
-            reds: {
-                100: "#2c100f",
-                200: "#58201e",
-                300: "#832f2c",
-                400: "#af3f3b",
-                500: "#db4f4a",
-                600: "#e2726e",
-                700: "#e99592",
-                800: "#f1b9b7",
-                900: "#f8dcdb",
-            },
-            blues: {
-                100: "#151632",
-                200: "#2a2d64",
-                300: "#3e4396",
-                400: "#535ac8",
-                500: "#6870fa",
-                600: "#868dfb",
-                700: "#a4a9fc",
-                800: "#c3c6fd",
-                900: "#e1e2fe",
-            }
+            globalBackground: "#FFFFFF",
+            jobDetailsBackground: "#FFFFFF",
         }
 
     } else if (mode === "bright-contrast")
@@ -268,52 +212,71 @@ export const themeSettings = (mode, actualMode, fontSize, fontFamily) =>
         palette: {
             mode: mode,
             primary: {
-                main: colors.primary[200],
-                textBright: colors.primary[1000],
-                faded: colors.primary[900]
+                main: "#000000",
+                textBright: "#FFFFFF",
+                faded: "#FEFEFE",
+                jobTitle: "#053B7A",
+                descAndReqTitle: "#5BA1AA",
+                addRecommenderButton: "#91A749"
             },
             secondary: {
-                main: colors.blues[500],
-                half: colors.blues[700],
-                dark: colors.blues[300],
+                main: "#03368a",
+                half: "#184fa8",
+                dark: "#041a3d",
+                descAndReqText: "#767676",
+                jobDetails: "#AC2F69",
+                labelText: "#053B7A",
+                addRecommendersTextHover: "#7BC3CC",
+                addRecommenderButtonHover: "#BFD37E"
 
             },
             neutral: {
-                main: colors.grey[500],
-                dark: colors.grey[700],
-                light: colors.grey[100]
+                main: "#000000",
+                dark: "#000000",
+                light: "#000000"
             },
             background: {
-                main: colors.primary[1100],
-                default: colors.primary[1100],
-                box: colors.grey[800],
-                boxInner: colors.grey[700]
+                main: colors.globalBackground,
+                default: colors.globalBackground,
+                box: colors.globalBackground,
+                boxInner: colors.globalBackground,
+                jobDetails: "#FFFFFF",
+                JobDetailsText: "#053B7A",
+                jobTitleSeparator: "#2E3552",
+                candidateDetailsTextField: "#F0F0F0",
+                cvButton: "#41C2F0",
+                cvButtonHover: "#77CFEF",
+                submitButtonHover: "#2768B4",
+                recommendersBox: "rgba(91, 161, 170, 0.14)"
             },
             error: {
-                main: colors.reds[500]
+                main: "#FF0000"
             },
             success: {
-                main: colors.greens[600]
+                main: "#00FF00"
             }
         },
         typography: {
             fontFamily: fontFamily,
+            fontWeight: "Regular",
             fontSize: fontSize,
             h1: {
+                fontWeight: "Medium",
                 fontFamily: fontFamily,
-                fontSize: fontSize + 20
+                fontSize: fontSize + 30
             },
             h2: {
+                fontWeight: "Medium",
                 fontFamily: fontFamily,
-                fontSize: fontSize + 12
+                fontSize: fontSize + 10
             },
             h3: {
                 fontFamily: fontFamily,
-                fontSize: fontSize + 4
+                fontSize: fontSize + 5
             },
             h4: {
                 fontFamily: fontFamily,
-                fontSize: fontSize
+                fontSize: fontSize + 2
             },
             h5: {
                 fontFamily: fontFamily,
@@ -321,9 +284,18 @@ export const themeSettings = (mode, actualMode, fontSize, fontFamily) =>
             },
             h6: {
                 fontFamily: fontFamily,
-                fontSize: fontSize - 6
+                fontWeight: "Medium",
+                fontSize: fontSize + 6
             },
-
+            subtitle1: {
+                fontWeight: "Medium",
+                fontFamily: fontFamily,
+                fontSize: fontSize
+            },
+            subtitle2: {
+                fontFamily: fontFamily,
+                fontSize: fontSize - 2
+            }
         }
     }
 }
@@ -346,7 +318,7 @@ export const useMode = () =>
     // default is light
     const [mode, setMode] = useState("light");
     const [fontSize, setFontSize] = useState(20);
-    const [fontFamily, setFontFamily] = useState("'Noto Sans Hebrew', sans-serif");
+    const [fontFamily, setFontFamily] = useState("Rubik");
 
     const [actualMode, setActualMode] = useState("light");
 
@@ -431,19 +403,20 @@ function getContrastingColor(hexColor)
     return contrastingColor;
 }
 
-function getDarkContrastingColor(hexColor) {
+function getDarkContrastingColor(hexColor)
+{
     // Convert hexadecimal color to RGB
     const hex = hexColor.replace("#", "");
     const r = parseInt(hex.substring(0, 2), 16);
     const g = parseInt(hex.substring(2, 4), 16);
     const b = parseInt(hex.substring(4, 6), 16);
-  
+
     // Calculate brightness
     const brightness = (r * 299 + g * 587 + b * 114) / 1000;
-  
+
     // Determine contrasting color
     const darkContrast = brightness >= 128 ? brightness - 100 : brightness + 100;
     const contrastingColor = `#${Math.round(darkContrast).toString(16).padStart(2, "0").repeat(3)}`;
-  
+
     return contrastingColor;
-  }
+}
