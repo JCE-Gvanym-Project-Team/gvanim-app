@@ -15,7 +15,7 @@ const CustomDrawer = styled(Drawer)(({ theme }) => ({
     }
 }));
 
-const DEFAULT_FONT_FAMILY = "'Noto Sans Hebrew', sans-serif";
+const DEFAULT_FONT_FAMILY = "Rubik";
 const READABLE_FONT_FAMILY = "Arial";
 const DEFAULT_FONT_SIZE = 20
 

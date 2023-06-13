@@ -1,5 +1,5 @@
 import { AddBoxSharp, ArrowDownward, ArrowUpward, AttachFile, DeleteForeverOutlined, DeleteOutlined, ErrorOutlineRounded, FileUpload, FileUploadOutlined, Redo, Send } from '@mui/icons-material';
-import { Box, Button, Divider, Icon, Input, TextField, Typography, useTheme } from '@mui/material';
+import { Box, Button, Divider, Icon, Input, TextField, Typography, useMediaQuery, useTheme } from '@mui/material';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import MyLoading from '../../Components/MyLoading/MyLoading';
@@ -368,6 +368,9 @@ export default function OneJobPage()
         return result;
     }
 
+    // is mobile view
+    const isMobileView = useMediaQuery(theme.breakpoints.down('sm'));
+    
     return (
         loading ? <MyLoading loading={loading} setLoading={setLoading} /> :
             <React.Fragment>
