@@ -5,10 +5,12 @@ import { ReactComponent as JobRoleSVG } from '../../Resources/JobRole.svg';
 import { ReactComponent as JobLocationSVG } from '../../Resources/JobLocation.svg';
 import { ReactComponent as JobScopeSVG } from '../../Resources/JobScope.svg';
 import { ReactComponent as JobStartSVG } from '../../Resources/JobStart.svg';
+import { ReactComponent as YellowEllipseSVG } from '../../Resources/YellowEllipse.svg'
+import { ReactComponent as PinkEllipseSVG } from '../../Resources/PinkEllipse.svg'
 
-export default function FloatingBox(props: { job })
+export default function FloatingBox(props: { job, screenSize })
 {
-    const { job } = props;
+    const { job, screenSize } = props;
     const [floatingTop, setFloatingTop] = useState<number>(0);
     const [containerHeight, setContainerHeight] = useState<number>(10);
 
@@ -36,7 +38,31 @@ export default function FloatingBox(props: { job })
     }, [floatingTop, containerHeight]);
 
     return (
-        <Box sx={{flex: 45}}>
+        <Box sx={{ flex: { xs: 0, md: 45 }, marginTop: { xs: "102px", md: "0" },alignSelf: "center" }}>
+            {/* Ellipses */}
+            <Box sx={{
+                width: '100%',
+                zIndex: "4"
+            }}
+            >
+                <Icon sx={{
+                    position: "absolute",
+                    // top: "543px",
+                    marginLeft: { xs: "-50px", md: "250px" },
+                    marginTop: { xs: "300px", md: "-70px" },
+                    width: { xs: "171px", md: '133px' },
+                    height: { xs: "171px", md: '133px' },
+                    zIndex: "4"
+                }} component={YellowEllipseSVG} />
+                <Icon sx={{
+                    position: "absolute",
+                    marginTop: { xs: "-70px", md: "200px" },
+                    marginLeft: { xs: "200px", md: "-70px" },
+                    width: '133px',
+                    height: '133px',
+                    zIndex: "4"
+                }} component={PinkEllipseSVG} />
+            </Box>
             <Box
                 sx={{
                     position: "sticky",
@@ -62,12 +88,12 @@ export default function FloatingBox(props: { job })
                     flexDirection: "row",
                     alignItems: "start",
                     justifyContent: "start",
-                    marginLeft: "-47px",
-                    paddingLeft: "47px",
+                    marginLeft: { xs: "-26px", md: "-47px" },
+                    paddingLeft: { xs: "26px", md: "47px" },
                     width: "fit-content"
 
                 }}>
-                    <Typography variant='h2' sx={{
+                    <Typography variant={screenSize === "xs" ? "subtitle1" : 'h2'} sx={{
                         textAlign: "left",
                         paddingBottom: "10px",
                         paddingTop: "9px",
@@ -83,7 +109,7 @@ export default function FloatingBox(props: { job })
                     sx={{
                         display: "flex",
                         flexDirection: "row",
-                        marginBottom: "43px",
+                        marginBottom: { xs: "28px", md: "43px" },
                         paddingLeft: "55px"
                     }}
                 >
@@ -99,15 +125,15 @@ export default function FloatingBox(props: { job })
                             marginRight: "25px",
                         }} component={JobRoleSVG} />
                     </Box>
-                    <Typography variant='h4' sx={{ color: "secondary.jobDetails" }}>
+                    <Typography variant={screenSize === "xs" ? "subtitle2" : 'h4'} sx={{ color: "secondary.jobDetails" }}>
                         תפקיד:
                     </Typography>
                     <Typography
                         sx={{
-                            marginLeft: "1rem",
-                            backgroundColor: "background.boxInner"
+                            marginLeft: "10px",
+                            color: "secondary.descAndReqText"
                         }}
-                        variant='h4'
+                        variant={screenSize === "xs" ? "subtitle2" : 'h4'}
                     >
                         {job?._role}
                     </Typography>
@@ -118,7 +144,7 @@ export default function FloatingBox(props: { job })
                     sx={{
                         display: "flex",
                         flexDirection: "row",
-                        marginBottom: "43px",
+                        marginBottom: { xs: "28px", md: "43px" },
                         paddingLeft: "55px"
                     }}
                 >
@@ -134,15 +160,15 @@ export default function FloatingBox(props: { job })
                             marginRight: "25px",
                         }} component={JobScopeSVG} />
                     </Box>
-                    <Typography variant='h4' color="secondary.jobDetails">
+                    <Typography variant={screenSize === "xs" ? "subtitle2" : 'h4'} color="secondary.jobDetails" sx={{ minWidth: "50px" }}>
                         היקף משרה:
                     </Typography>
                     <Typography
                         sx={{
-                            marginLeft: "1rem",
-                            backgroundColor: "background.boxInner"
+                            marginLeft: "10px",
+                            color: "secondary.descAndReqText"
                         }}
-                        variant='h4'
+                        variant={screenSize === "xs" ? "subtitle2" : 'h4'}
                     >
                         {job?._scope[0] !== job?._scope[1] ? job?._scope.slice(0).reverse().map((num, index) => (index !== job._scope.length - 1) ? num + "%-" : num + "%") : job?._scope[0] + "%"}
                     </Typography>
@@ -153,7 +179,7 @@ export default function FloatingBox(props: { job })
                     sx={{
                         display: "flex",
                         flexDirection: "row",
-                        marginBottom: "43px",
+                        marginBottom: { xs: "28px", md: "43px" },
                         paddingLeft: "55px"
                     }}
                 >
@@ -170,15 +196,15 @@ export default function FloatingBox(props: { job })
                         }} component={JobLocationSVG} />
                     </Box>
 
-                    <Typography variant='h4' sx={{ color: "secondary.jobDetails" }}>
+                    <Typography variant={screenSize === "xs" ? "subtitle2" : 'h4'} sx={{ color: "secondary.jobDetails" }}>
                         מיקום:
                     </Typography>
                     <Typography
                         sx={{
-                            marginLeft: "1rem",
-                            backgroundColor: "background.boxInner",
+                            marginLeft: "10px",
+                            color: "secondary.descAndReqText"
                         }}
-                        variant='h4'
+                        variant={screenSize === "xs" ? "subtitle2" : 'h4'}
                     >
                         {job?._region}
                     </Typography>
@@ -205,15 +231,15 @@ export default function FloatingBox(props: { job })
                         }} component={JobStartSVG} />
                     </Box>
 
-                    <Typography variant='h4' sx={{ color: "secondary.jobDetails" }}>
+                    <Typography variant={screenSize === "xs" ? "subtitle2" : 'h4'} sx={{ color: "secondary.jobDetails", minWidth: { xs: "100px", md: "126px" } }}>
                         תחילת עבודה:
                     </Typography>
                     <Typography
                         sx={{
-                            marginLeft: "1rem",
-                            backgroundColor: "background.boxInner"
+                            marginLeft: "10px",
+                            color: "secondary.descAndReqText"
                         }}
-                        variant='h4'
+                        variant={screenSize === "xs" ? "subtitle2" : 'h4'}
                     >
                         {/* TODO: add job start */}
                         {job?._jobNumber}

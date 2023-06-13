@@ -284,15 +284,17 @@ export const themeSettings = (mode, actualMode, fontSize, fontFamily) =>
             },
             h6: {
                 fontFamily: fontFamily,
-                fontSize: fontSize - 6
+                fontWeight: "Medium",
+                fontSize: fontSize + 6
             },
             subtitle1: {
+                fontWeight: "Medium",
                 fontFamily: fontFamily,
                 fontSize: fontSize
             },
             subtitle2: {
                 fontFamily: fontFamily,
-                fontSize: fontSize
+                fontSize: fontSize - 2
             }
         }
     }
@@ -316,7 +318,6 @@ export const useMode = () =>
     // default is light
     const [mode, setMode] = useState("light");
     const [fontSize, setFontSize] = useState(20);
-    // const [fontFamily, setFontFamily] = useState("'Noto Sans Hebrew', sans-serif");
     const [fontFamily, setFontFamily] = useState("Rubik");
 
     const [actualMode, setActualMode] = useState("light");

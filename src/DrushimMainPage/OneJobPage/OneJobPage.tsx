@@ -1,5 +1,5 @@
 import { AddBoxSharp, ArrowDownward, ArrowUpward, AttachFile, DeleteForeverOutlined, DeleteOutlined, ErrorOutlineRounded, FileUpload, FileUploadOutlined, Redo, Send } from '@mui/icons-material';
-import { Box, Button, Divider, Icon, Input, TextField, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Box, Breakpoint, Button, Divider, Icon, Input, TextField, Theme, Typography, useMediaQuery, useTheme } from '@mui/material';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import MyLoading from '../../Components/MyLoading/MyLoading';
@@ -14,8 +14,6 @@ import JobsDetails from './Components/JobDetails/JobDetails';
 // icons
 import { ReactComponent as CloudSVG } from './Resources/Cloud.svg';
 import { ReactComponent as BackgroundSVG } from './Resources/Background.svg'
-import { ReactComponent as YellowEllipseSVG } from './Resources/YellowEllipse.svg'
-import { ReactComponent as PinkEllipseSVG } from './Resources/PinkEllipse.svg'
 import { ReactComponent as UploadIconSVG } from './Resources/UploadIcon.svg'
 import { ReactComponent as DownArrowSVG } from './Resources/DownArrow.svg'
 import { ReactComponent as UpArrowSVG } from './Resources/UpArrow.svg'
@@ -26,7 +24,7 @@ import { ReactComponent as AttachFileSVG } from './Resources/AttachFile.svg'
 const ABOUT_MAX_LENGTH = 1000;
 const MAX_RECOMMENDERS = 3;
 
-const marginLeftAndRight = { xs: "0", xl: "18.75vw", lg: "12vw" }
+const marginLeftAndRight = { xs: "25px", xl: "18.75vw", lg: "12vw" }
 
 export default function OneJobPage()
 {
@@ -368,6 +366,24 @@ export default function OneJobPage()
         return result;
     }
 
+    type BreakpointOrNull = Breakpoint | null;
+
+    function useWidth()
+    {
+        const theme: Theme = useTheme();
+        const keys: readonly Breakpoint[] = [...theme.breakpoints.keys].reverse();
+        return (
+            keys.reduce((output: BreakpointOrNull, key: Breakpoint) =>
+            {
+                // eslint-disable-next-line react-hooks/rules-of-hooks
+                const matches = useMediaQuery(theme.breakpoints.up(key));
+                return !output && matches ? key : output;
+            }, null) || 'xs'
+        );
+    }
+
+    const screenSize = useWidth();
+
     return (
         loading ? <MyLoading loading={loading} setLoading={setLoading} /> :
             <React.Fragment>
@@ -387,30 +403,6 @@ export default function OneJobPage()
                         height: 'auto',
                         zIndex: "-1"
                     }} component={BackgroundSVG} />
-                </Box>
-                {/* Ellipses */}
-                <Box sx={{
-                    width: '100%',
-                    position: 'absolute',
-                    zIndex: "4"
-                }}
-                >
-                    <Icon sx={{
-                        position: 'absolute',
-                        top: "543px",
-                        right: "15.3%",
-                        width: '133px',
-                        height: '133px',
-                        zIndex: "4"
-                    }} component={YellowEllipseSVG} />
-                    <Icon sx={{
-                        position: 'absolute',
-                        top: "770px",
-                        right: "32.6%",
-                        width: '133px',
-                        height: '133px',
-                        zIndex: "4"
-                    }} component={PinkEllipseSVG} />
                 </Box>
                 {/* Entire Page */}
                 <Box
@@ -456,12 +448,12 @@ export default function OneJobPage()
                     </Button> */}
 
                     {/* Job Number */}
-                    <Box sx={{ display: "flex", flexDirection: "row", width: "41.71875vw" }}>
+                    <Box sx={{ display: "flex", flexDirection: "row", width: { xs: "100%", md: "41.71875vw" } }}>
 
-                        <Typography variant='h4' sx={{ letterSpacing: 0, color: "secondary.jobDetails" }}>
+                        <Typography variant={screenSize === "xs" ? "subtitle2" : 'h4'} sx={{ letterSpacing: 0, color: "secondary.jobDetails" }}>
                             משרה מספר:
                         </Typography>
-                        <Typography variant='h4' sx={{ marginLeft: "11px", color: "secondary.descAndReqText" }}>
+                        <Typography variant={screenSize === "xs" ? "subtitle2" : 'h4'} sx={{ marginLeft: "11px", color: "secondary.descAndReqText" }}>
                             {job?._jobNumber}
                         </Typography>
                     </Box>
@@ -474,22 +466,22 @@ export default function OneJobPage()
                             justifyContent: "start",
                             alignItems: "center",
                             textAlign: "left",
-                            width: "41.71875vw"
+                            width: { xs: "100%", md: "41.71875vw" }
                         }}
                     >
 
                         <Typography
                             sx={{
-                                color: "primary.jobTitle"
+                                color: "primary.jobTitle",
                             }}
-                            variant='h1'
+                            variant={screenSize === 'xs' ? "h6" : "h1"}
                         >
                             {job?._title}
                         </Typography>
                     </Box>
 
                     {/* Separator */}
-                    <Box sx={{ width: "36.6vw", backgroundColor: "background.jobTitleSeparator", height: 2, opacity: 0.2, marginTop: "27px" }} />
+                    <Box sx={{ width: { xs: "100%", md: "36.6vw" }, backgroundColor: "background.jobTitleSeparator", height: 2, opacity: 0.2, marginTop: "27px" }} />
 
                     {/* Job description, stats and requirements */}
                     <Box
@@ -498,7 +490,7 @@ export default function OneJobPage()
                             flexDirection: { xs: "column", md: "row" },
                             justifyContent: "stretch",
                             backgroundColor: "background.main",
-                            marginTop: "128px"
+                            marginTop: { xs: "44px", md: "128px" }
                         }}
                     >
 
@@ -510,7 +502,6 @@ export default function OneJobPage()
                                 backgroundColor: "background.box",
                                 flex: 100,
                                 marginRight: { xs: "0", md: "1rem" },
-                                marginBottom: { xs: "1rem", md: "0" },
                             }}
                         >
                             {/* description and requirements */}
@@ -527,17 +518,17 @@ export default function OneJobPage()
                                         flex: 7
                                     }}
                                 >
-                                    <Typography variant="h2" color={"primary.descAndReqTitle"}>
+                                    <Typography variant={screenSize === "xs" ? "subtitle1" : 'h2'} color={"primary.descAndReqTitle"}>
                                         תיאור המשרה:
                                     </Typography>
 
                                     <Typography
-                                        variant='h4'
+                                        variant={screenSize === "xs" ? "subtitle2" : 'h4'}
                                         marginTop={"15px"}
                                         sx={{
                                             backgroundColor: "background.boxInner",
                                             color: "secondary.descAndReqText",
-                                            width: "30vw"
+                                            width: { xs: "100%", md: "30vw" }
                                         }}
                                     >
                                         {job?._description?.length! >= 1 ?
@@ -563,17 +554,17 @@ export default function OneJobPage()
                                     flex: 4
                                 }}
                             >
-                                <Typography variant="h2" marginTop={"73px"} sx={{ color: "primary.descAndReqTitle" }}>
+                                <Typography variant={screenSize === "xs" ? "subtitle1" : 'h2'} sx={{ color: "primary.descAndReqTitle", marginTop: { xs: "44px", md: "73px" } }}>
                                     דרישות התפקיד:
                                 </Typography>
 
                                 <Typography
-                                    variant='h4'
+                                    variant={screenSize === "xs" ? "subtitle2" : 'h4'}
                                     marginTop={"15px"}
                                     sx={{
                                         backgroundColor: "background.boxInner",
                                         color: "secondary.descAndReqText",
-                                        width: "28vw"
+                                        width: { xs: "100%", md: "28vw" }
                                     }}
                                 >
                                     {job?._requirements.split('\n').map((line, index) =>
@@ -619,18 +610,21 @@ export default function OneJobPage()
                         </Box>
 
                         {/* Job Details */}
-                        <JobsDetails job={job} />
+                        <JobsDetails job={job} screenSize={screenSize} />
 
                     </Box>
 
                     {/* Apply Icon + Apply Text*/}
                     <Box sx={{ marginTop: "179px", alignSelf: "center", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-                        <CloudSVG />
+                        <Icon
+                            sx={{ width: { xs: "118px", md: "208px" }, height: { xs: "65px", md: "115px" } }}
+                            component={CloudSVG}
+                        ></Icon>
                         <Typography
-                            variant='h1'
+                            variant={screenSize === "xs" ? "h6" : 'h1'}
                             sx={{
                                 marginTop: "19px",
-                                marginBottom: "76px",
+                                marginBottom: { xs: "38px", md: "76px" },
                                 color: "primary.jobTitle",
                             }}
                         >
@@ -644,7 +638,7 @@ export default function OneJobPage()
                             display: "flex",
                             flexDirection: "column",
                             backgroundColor: "background.box",
-                            marginTop: "0.5rem",
+                            justifyContent: "center",
                         }}
                     >
 
@@ -652,8 +646,9 @@ export default function OneJobPage()
                         <Box
                             sx={{
                                 display: "flex",
-                                flexDirection: "row",
+                                flexDirection: { xs: "column", md: "row" },
                                 justifyContent: "center",
+                                alignItems: "center"
                             }}
                         >
                             {/* Firstname and Lastname */}
@@ -661,12 +656,12 @@ export default function OneJobPage()
                                 sx={{
                                     display: "flex",
                                     flexDirection: { xs: "column", md: "row" },
-                                    marginRight: "7px"
+                                    marginRight:  { xs: "0", md: "7px" }
                                 }}
                             >
                                 {/* Firstname */}
                                 <Box>
-                                    <Typography variant='h4' color={"primary.jobTitle"} sx={{ marginBottom: "15px" }}>
+                                    <Typography variant={screenSize === "xs" ? "subtitle1" : 'h4'} color={"primary.jobTitle"} sx={{ marginBottom: "15px" }}>
                                         שם פרטי:
                                     </Typography>
                                     <TextField
@@ -682,10 +677,6 @@ export default function OneJobPage()
                                                     borderRadius: "4px"
                                                 },
                                             },
-                                            // "& .Mui-focused": {
-                                            //     borderColor: "red",
-                                            //     border: "1px solid red",
-                                            // }
                                         }}
                                         color={candidateNameError ? 'error' : "primary"}
                                         onChange={(event) =>
@@ -713,7 +704,7 @@ export default function OneJobPage()
                                         marginLeft: { xs: "0", md: "7px" }
                                     }}
                                 >
-                                    <Typography variant='h4' color={"primary.jobTitle"} sx={{ marginBottom: "15px" }}>
+                                    <Typography variant={screenSize === "xs" ? "subtitle1" : 'h4'} color={"primary.jobTitle"} sx={{ marginBottom: "15px" }}>
                                         שם משפחה:
                                     </Typography>
                                     <TextField
@@ -762,7 +753,7 @@ export default function OneJobPage()
                             >
                                 {/* Phone */}
                                 <Box>
-                                    <Typography variant='h4' color={"primary.jobTitle"} sx={{ marginBottom: "15px" }}>
+                                    <Typography variant={screenSize === "xs" ? "subtitle1" : 'h4'} color={"primary.jobTitle"} sx={{ marginBottom: "15px" }}>
                                         טלפון:
                                     </Typography>
                                     <TextField
@@ -805,7 +796,7 @@ export default function OneJobPage()
                                         marginLeft: { xs: "0", md: "7px" }
                                     }}
                                 >
-                                    <Typography variant='h4' color={"primary.jobTitle"} sx={{ marginBottom: "15px" }}>
+                                    <Typography variant={screenSize === "xs" ? "subtitle1" : 'h4'} color={"primary.jobTitle"} sx={{ marginBottom: "15px" }}>
                                         אימייל:
                                     </Typography>
                                     <TextField
@@ -855,7 +846,7 @@ export default function OneJobPage()
                                 marginTop: "54px"
                             }}
                         >
-                            <Typography variant='h4' color={"primary.jobTitle"}>
+                            <Typography variant={screenSize === "xs" ? "subtitle1" : 'h4'} color={"primary.jobTitle"}>
                                 ספרו לנו קצת עליכם:
                             </Typography>
                             <TextField
@@ -946,7 +937,7 @@ export default function OneJobPage()
                                         flexDirection: "column"
                                     }}
                                 >
-                                    <Typography variant='h3' >
+                                    <Typography variant={screenSize === "xs" ? "subtitle1" : 'h3'} >
                                         צירוף קורות חיים
                                     </Typography>
 
