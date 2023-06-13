@@ -1,5 +1,5 @@
 import { AddBoxSharp, ArrowDownward, ArrowUpward, AttachFile, DeleteForeverOutlined, ErrorOutlineRounded, Redo, Send } from '@mui/icons-material';
-import { Box, Button, Divider, Input, TextField, Typography, useTheme } from '@mui/material';
+import { Box, Button, Divider, Icon, Input, TextField, Typography, useTheme } from '@mui/material';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import MyLoading from '../../Components/MyLoading/MyLoading';
@@ -11,7 +11,10 @@ import AreYouSureDialog from './Components/AreYouSureDialog/AreYouSureDialog';
 import SuccessDialog from './Components/SuccessDialog/SuccessDialog';
 import ErrorDialog from './Components/ErrorDialog/ErrorDialog';
 import JobsDetails from './Components/JobDetails/JobDetails';
-
+import { ReactComponent as CloudSVG } from './Resources/Cloud.svg';
+import { ReactComponent as BackgroudSVG } from './Resources/Background.svg'
+import { ReactComponent as YellowEllipseSVG } from './Resources/YellowEllipse.svg'
+import { ReactComponent as PinkEllipseSVG } from './Resources/PinkEllipse.svg'
 
 
 const ABOUT_MAX_LENGTH = 1000;
@@ -19,8 +22,7 @@ const MAX_RECOMMENDERS = 3;
 
 const marginLeftAndRight = "18.75vw"
 
-export default function OneJobPage()
-{
+export default function OneJobPage() {
     const [job, setJob] = useState<Job | null>(null);
 
     const navigate = useNavigate();
@@ -37,13 +39,10 @@ export default function OneJobPage()
     const [areYouSureDialogIndex, setAreYouSureDialogIndex] = useState(0);
     const [areYouSureDialogRecommenderName, setAreYouSureDialogRecommenderName] = useState("");
 
-    const successDialogOnClose = (event, reason, sendDataToAllJobsPage) =>
-    {
-        if ((reason && reason !== "backdropClick" && reason !== "clickaway") || reason === undefined)
-        {
+    const successDialogOnClose = (event, reason, sendDataToAllJobsPage) => {
+        if ((reason && reason !== "backdropClick" && reason !== "clickaway") || reason === undefined) {
             console.log(sendDataToAllJobsPage);
-            if (sendDataToAllJobsPage)
-            {
+            if (sendDataToAllJobsPage) {
                 const state = {
                     candidateName: candidateName,
                     candidateSurname: candidateSurname,
@@ -57,22 +56,17 @@ export default function OneJobPage()
         }
     }
 
-    const errorDialogOnClose = (event, reason) =>
-    {
-        if ((reason && reason !== "backdropClick") || reason === undefined)
-        {
+    const errorDialogOnClose = (event, reason) => {
+        if ((reason && reason !== "backdropClick") || reason === undefined) {
             setErrorDialogOpen(false);
         }
     }
 
-    const areYouSureDialogOnClose = (event, reason, index, areYouSureValue) =>
-    {
-        if ((reason && reason !== "backdropClick") || reason === undefined)
-        {
+    const areYouSureDialogOnClose = (event, reason, index, areYouSureValue) => {
+        if ((reason && reason !== "backdropClick") || reason === undefined) {
             setAreYouSureDialogOpen(false);
         }
-        if (areYouSureValue)
-        {
+        if (areYouSureValue) {
             updateRecommendersListAtIndex(null, null, index);
             setNumRecommenders(numRecommenders - 1);
         }
@@ -94,13 +88,10 @@ export default function OneJobPage()
         ]);
 
     // changes recommendersList at the given index
-    const updateRecommendersListAtIndex = function (newRecommendation: Recomendation | null, newFile: File | null, index: number)
-    {
-        setRecommendersList(prevList =>
-        {
+    const updateRecommendersListAtIndex = function (newRecommendation: Recomendation | null, newFile: File | null, index: number) {
+        setRecommendersList(prevList => {
             const newList = [...prevList!]; // Create a copy of the array
-            if (newList.length > 0)
-            {
+            if (newList.length > 0) {
                 newList[index] = [newRecommendation, newFile]; // Set the new value at index 0
             }
             return newList;
@@ -132,18 +123,15 @@ export default function OneJobPage()
 
     // get current job from URL
     const location = useLocation();
-    const fetchJob = async () =>
-    {
+    const fetchJob = async () => {
         setJob((await getFilteredJobs(["jobNumber"], [getJobIdFromUrl(location.pathname)]))[0]);
     }
 
-    useEffect(() =>
-    {
+    useEffect(() => {
         fetchJob();
         // init recommendersList
         let temp = Array<[Recomendation | null, File | null]>();
-        for (let index = 0; index < MAX_RECOMMENDERS; index++)
-        {
+        for (let index = 0; index < MAX_RECOMMENDERS; index++) {
             temp.push([null, null])
         }
         setRecommendersList(temp);
@@ -165,57 +153,45 @@ export default function OneJobPage()
     }, [location.state])
 
     // submit
-    const handleSubmit = async () =>
-    {
+    const handleSubmit = async () => {
         console.log(candidateName);
         // handle errors
-        if (!candidateName || candidateName === "")
-        {
+        if (!candidateName || candidateName === "") {
             setCandidateNameError(true);
-        } else
-        {
+        } else {
             setCandidateNameError(false);
         }
 
-        if (!candidateSurname || candidateSurname === "")
-        {
+        if (!candidateSurname || candidateSurname === "") {
             setCandidateSurnameError(true);
-        } else
-        {
+        } else {
             setCandidateSurnameError(false);
         }
 
-        if (candidatePhone === "" || !isPhoneValid(candidatePhone))
-        {
+        if (candidatePhone === "" || !isPhoneValid(candidatePhone)) {
             setCandidatePhoneError(true);
-        } else
-        {
+        } else {
             setCandidatePhoneError(false);
         }
 
-        if (candidateEmail === "" || !isEmailValid(candidateEmail))
-        {
+        if (candidateEmail === "" || !isEmailValid(candidateEmail)) {
             setCandidateEmailError(true);
-        } else
-        {
+        } else {
             setCandidateEmailError(false);
         }
 
-        if (candidateName === "" || candidateSurname === "" || candidatePhone === "" || candidateEmail === "")
-        {
+        if (candidateName === "" || candidateSurname === "" || candidatePhone === "" || candidateEmail === "") {
             console.log(candidateNameError);
             return;
         }
 
-        if (!cvFile)
-        {
+        if (!cvFile) {
             setCvFileError(true);
             return;
         }
         setCvFileError(false);
 
-        if (recommendersListOpen && !checkRecommenders())
-        {
+        if (recommendersListOpen && !checkRecommenders()) {
             console.log(recommendersErrors);
             return;
         }
@@ -233,36 +209,29 @@ export default function OneJobPage()
             ""
         );
         // add candidate, or get existing candidate
-        if (!await newCandidate.add())
-        {
+        if (!await newCandidate.add()) {
             newCandidate = (await getFilteredCandidates(["eMail", "phone"], [candidateEmail, candidatePhone]))[0];
             newCandidateId = newCandidate._id;
         }
 
         // apply 
-        if (!await newCandidate.apply(job?._jobNumber!, aboutText))
-        {
+        if (!await newCandidate.apply(job?._jobNumber!, aboutText)) {
             setLoading(false);
             setErrorDialogOpen(true);
             return;
         }
 
-        if (recommendersListOpen)
-        {
+        if (recommendersListOpen) {
             // add recommenders and CV
             let candidateJobStatus = (await getFilteredCandidateJobStatuses(["jobNumber", "candidateId"], [job?._jobNumber.toString()!, newCandidateId]))[0];
             await candidateJobStatus.updateAbout(aboutText);
-            recommendersList?.forEach(async (recommender) =>
-            {
+            recommendersList?.forEach(async (recommender) => {
                 const recommenderInfo = recommender[0];
                 const file = recommender[1];
-                if (recommenderInfo)
-                {
-                    if (!file)
-                    {
+                if (recommenderInfo) {
+                    if (!file) {
                         await candidateJobStatus.addRecomendation(recommenderInfo._fullName, recommenderInfo._phone, recommenderInfo._eMail, new File([''], ''));
-                    } else
-                    {
+                    } else {
                         await candidateJobStatus.addRecomendation(recommenderInfo._fullName, recommenderInfo._phone, recommenderInfo._eMail, file);
                     }
                 }
@@ -278,32 +247,27 @@ export default function OneJobPage()
         setDefaults();
     }
 
-    const isPhoneValid = (phone: string) =>
-    {
+    const isPhoneValid = (phone: string) => {
         return /^05[0-57-8][0-9]{7}$/gm.test(phone);
     }
 
-    const isEmailValid = (email: string) =>
-    {
+    const isEmailValid = (email: string) => {
         return /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email);
     }
 
-    const setDefaults = () =>
-    {
+    const setDefaults = () => {
         // reset cv file
         setCvFileError(false);
         setCvFile(null);
 
         // reset recommenders
-        for (let index = 0; index < numRecommenders; index++)
-        {
+        for (let index = 0; index < numRecommenders; index++) {
             updateRecommendersListAtIndex(null, null, index);
 
         }
         setNumRecommenders(0);
         setRecommendersErrors(
-            recommendersErrors.map(() =>
-            {
+            recommendersErrors.map(() => {
                 return [false, false]
             })
         );
@@ -318,31 +282,23 @@ export default function OneJobPage()
      * by the user for each recommender is valid. 
      * @returns false if any of them are invalid (and updates recommendersErrors). true otherwise.
      */
-    const checkRecommenders = () =>
-    {
+    const checkRecommenders = () => {
         let result = true;
         let recommendersErrorsResult = recommendersErrors;
-        recommendersList?.forEach((recommender, index) =>
-        {
+        recommendersList?.forEach((recommender, index) => {
             const recommenderInfo = recommender[0];
             const file = recommender[1];
-            if (!recommenderInfo && !file)
-            {
+            if (!recommenderInfo && !file) {
                 return result && true;
-            } else
-            {
+            } else {
                 let emailValid = isEmailValid(recommenderInfo?._eMail!);
                 let phoneValid = isPhoneValid(recommenderInfo?._phone!);
-                if (!emailValid || !phoneValid)
-                {
+                if (!emailValid || !phoneValid) {
                     // set errors for appropriate index
-                    recommendersErrorsResult = recommendersErrorsResult.map((recommenderError, errorIndex) =>
-                    {
-                        if (errorIndex === index)
-                        {
+                    recommendersErrorsResult = recommendersErrorsResult.map((recommenderError, errorIndex) => {
+                        if (errorIndex === index) {
                             return [!phoneValid, !emailValid];
-                        } else
-                        {
+                        } else {
                             return [recommenderError[0], recommenderError[1]];
                         }
                     });
@@ -357,119 +313,195 @@ export default function OneJobPage()
 
     return (
         loading ? <MyLoading loading={loading} setLoading={setLoading} /> :
-            <Box
-                sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "stretch",
-                    justifyContent: "stretch",
-                    marginLeft: { xs: "0", md: marginLeftAndRight },
-                    marginRight: { xs: "0", md: marginLeftAndRight },
-                    backgroundColor: "background.main",
-                    marginTop: "256px"
+            <React.Fragment>
+                {/* Background and Ellipses */}
+                <Box sx={{
+                    width: '100%',
+                    height: "676px",
+                    position: 'absolute',
+                    overflow: 'hidden',
+                    zIndex: "-1"
+                }}>
+                    <Icon sx={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: 'auto',
+                        zIndex: "-1"
+                    }} component={BackgroudSVG} />
+                </Box>
+                <Box sx={{
+                    width: '100%',
+                    position: 'absolute',
+                    zIndex: "4"
                 }}
-            >
-
-                {/* Go back to all jobs button */}
-                <Button
-                    variant='outlined'
-                    sx={{
-                        alignSelf: "start",
-                        backgroundColor: "background.boxInner",
-                        "&:hover": {
-                            backgroundColor: "background.main"
-                        },
-                        marginTop: "1rem"
-                    }}
-                    onClick={() => navigate("/career/jobs")}
-
                 >
-                    <Typography
-                        variant='h6'
-                        sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            fontWeight: "bold",
-                            color: "primary.title"
-                        }}
-                    >
+                    <Icon sx={{
+                        position: 'absolute',
+                        top: "543px",
+                        right: "15.3%",
+                        width: '133px',
+                        height: '133px',
+                        zIndex: "4"
+                    }} component={YellowEllipseSVG} />
+                    <Icon sx={{
+                        position: 'absolute',
+                        top: "770px",
+                        right: "32.6%",
+                        width: '133px',
+                        height: '133px',
+                        zIndex: "4"
+                    }} component={PinkEllipseSVG} />
 
-                        <Redo sx={{ marginRight: "0.3rem" }} />
-                        לכל המשרות
-                    </Typography>
-                </Button>
-
-                {/* Job Number */}
-                <Box sx={{ display: "flex", flexDirection: "row", width: "41.71875vw" }}>
-
-                    <Typography variant='h5' sx={{ letterSpacing: 0 }}>
-                        משרה מספר:
-                    </Typography>
-                    <Typography variant='h5' sx={{ marginLeft: "11px" }}>
-                        {job?._jobNumber}
-                    </Typography>
                 </Box>
-
-                {/* Job Title */}
-                <Box
-                    sx={{
-                        backgroundColor: "background.box",
-                        display: "flex",
-                        justifyContent: "start",
-                        alignItems: "center",
-                        textAlign: "left",
-                        width: "41.71875vw"
-                    }}
-                >
-
-                    <Typography
-                        sx={{
-                            color: "primary.main"
-                        }}
-                        variant='h1'
-                    >
-                        {job?._title}
-                    </Typography>
-                </Box>
-
-                {/* Job description, stats and requirements */}
                 <Box
                     sx={{
                         display: "flex",
-                        flexDirection: { xs: "column", md: "row" },
+                        flexDirection: "column",
+                        alignItems: "stretch",
                         justifyContent: "stretch",
+                        marginLeft: { xs: "0", md: marginLeftAndRight },
+                        marginRight: { xs: "0", md: marginLeftAndRight },
                         backgroundColor: "background.main",
-                        marginTop: "1rem",
+                        marginTop: "256px",
                     }}
                 >
 
-                    {/* Description, requirements, stats and additional info */}
-                    <Box
+                    {/* Go back to all jobs button */}
+                    <Button
+                        variant='outlined'
                         sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                            backgroundColor: "background.box",
-                            flex: 8,
-                            marginRight: { xs: "0", md: "1rem" },
-                            marginBottom: { xs: "1rem", md: "0" }
+                            alignSelf: "start",
+                            backgroundColor: "background.boxInner",
+                            "&:hover": {
+                                backgroundColor: "background.main"
+                            },
+                            marginTop: "1rem"
                         }}
+                        onClick={() => navigate("/career/jobs")}
+
                     >
-                        {/* description and requirements */}
-                        <Box
+                        <Typography
+                            variant='h6'
                             sx={{
                                 display: "flex",
-                                flexDirection: "column"
+                                alignItems: "center",
+                                fontWeight: "bold",
+                                color: "primary.title"
                             }}
                         >
 
-                            {/* description */}
+                            <Redo sx={{ marginRight: "0.3rem" }} />
+                            לכל המשרות
+                        </Typography>
+                    </Button>
+
+                    {/* Job Number */}
+                    <Box sx={{ display: "flex", flexDirection: "row", width: "41.71875vw" }}>
+
+                        <Typography variant='h5' sx={{ letterSpacing: 0 }}>
+                            משרה מספר:
+                        </Typography>
+                        <Typography variant='h5' sx={{ marginLeft: "11px" }}>
+                            {job?._jobNumber}
+                        </Typography>
+                    </Box>
+
+                    {/* Job Title */}
+                    <Box
+                        sx={{
+                            backgroundColor: "background.box",
+                            display: "flex",
+                            justifyContent: "start",
+                            alignItems: "center",
+                            textAlign: "left",
+                            width: "41.71875vw"
+                        }}
+                    >
+
+                        <Typography
+                            sx={{
+                                color: "primary.main"
+                            }}
+                            variant='h1'
+                        >
+                            {job?._title}
+                        </Typography>
+                    </Box>
+
+                    {/* Job description, stats and requirements */}
+                    <Box
+                        sx={{
+                            display: "flex",
+                            flexDirection: { xs: "column", md: "row" },
+                            justifyContent: "stretch",
+                            backgroundColor: "background.main",
+                            marginTop: "1rem",
+                        }}
+                    >
+
+                        {/* Description, requirements, stats and additional info */}
+                        <Box
+                            sx={{
+                                display: "flex",
+                                flexDirection: "column",
+                                backgroundColor: "background.box",
+                                flex: 8,
+                                marginRight: { xs: "0", md: "1rem" },
+                                marginBottom: { xs: "1rem", md: "0" }
+                            }}
+                        >
+                            {/* description and requirements */}
                             <Box
                                 sx={{
-                                    flex: 7
+                                    display: "flex",
+                                    flexDirection: "column"
                                 }}
                             >
-                                <Typography variant="h2">
-                                    תיאור המשרה:
+
+                                {/* description */}
+                                <Box
+                                    sx={{
+                                        flex: 7
+                                    }}
+                                >
+                                    <Typography variant="h2">
+                                        תיאור המשרה:
+                                    </Typography>
+
+                                    <Typography
+                                        variant='h3'
+                                        marginTop={"15px"}
+                                        sx={{
+                                            backgroundColor: "background.boxInner",
+                                            width: "30vw"
+                                        }}
+                                    >
+                                        {job?._description?.length! >= 1 ?
+                                            job?._description[0].split('\n').map((line, index) => {
+                                                return (
+                                                    <React.Fragment key={"jobDescriptionLine" + index}>
+                                                        {line}
+                                                        <br />
+                                                    </React.Fragment>
+                                                )
+                                            })
+                                            : ""
+                                        }
+                                    </Typography>
+                                </Box>
+
+                            </Box>
+                            {/* requirements */}
+                            <Box
+                                sx={{
+                                    backgroundColor: "transparent",
+                                    flex: 4
+                                }}
+                            >
+                                <Typography variant="h2" marginTop={"73px"}>
+                                    דרישות התפקיד:
                                 </Typography>
 
                                 <Typography
@@ -477,850 +509,783 @@ export default function OneJobPage()
                                     marginTop={"15px"}
                                     sx={{
                                         backgroundColor: "background.boxInner",
-                                        width: "30vw"
+                                        width: "28vw"
                                     }}
                                 >
-                                    {job?._description?.length! >= 1 ?
-                                        job?._description[0].split('\n').map((line, index) =>
-                                        {
-                                            return (
-                                                <React.Fragment key={"jobDescriptionLine" + index}>
-                                                    {line}
-                                                    <br />
-                                                </React.Fragment>
-                                            )
-                                        })
-                                        : ""
-                                    }
+                                    {job?._requirements.split('\n').map((line, index) => {
+                                        return (
+                                            <React.Fragment key={"jobRequirementsLine" + index}>
+                                                {line}
+                                                <br />
+                                            </React.Fragment>
+                                        )
+                                    })}
+                                </Typography>
+                            </Box>
+
+                            {/* Additional Info */}
+                            <Box
+                                sx={{
+                                    display: job?._description?.length! >= 2 ? "none" : "block"
+                                }}
+                            >
+                                <Typography variant="h1">
+                                    מידע נוסף
+                                </Typography>
+
+                                <Divider sx={{
+                                    marginRight: "3rem",
+                                    backgroundColor: "primary.faded"
+                                }} />
+
+                                <Typography
+                                    variant='h3'
+                                    marginTop={"0.5rem"}
+                                    sx={{
+                                        backgroundColor: "background.boxInner"
+                                    }}
+                                >
+                                    {job?._description?.length! >= 2 ? job?._description[1] : ""}
                                 </Typography>
                             </Box>
 
                         </Box>
-                        {/* requirements */}
-                        <Box
-                            sx={{
-                                backgroundColor: "background.box",
-                                flex: 4
-                            }}
-                        >
-                            <Typography variant="h2" marginTop={"73px"}>
-                                דרישות התפקיד:
-                            </Typography>
 
-                            <Typography
-                                variant='h3'
-                                marginTop={"15px"}
-                                sx={{
-                                    backgroundColor: "background.boxInner",
-                                    width: "28vw"
-                                }}
-                            >
-                                {job?._requirements.split('\n').map((line, index) =>
-                                {
-                                    return (
-                                        <React.Fragment key={"jobRequirementsLine" + index}>
-                                            {line}
-                                            <br />
-                                        </React.Fragment>
-                                    )
-                                })}
-                            </Typography>
-                        </Box>
-
-                        {/* Additional Info */}
-                        <Box
-                            sx={{
-                                display: job?._description?.length! >= 2 ? "none" : "block"
-                            }}
-                        >
-                            <Typography variant="h1">
-                                מידע נוסף
-                            </Typography>
-
-                            <Divider sx={{
-                                marginRight: "3rem",
-                                backgroundColor: "primary.faded"
-                            }} />
-
-                            <Typography
-                                variant='h3'
-                                marginTop={"0.5rem"}
-                                sx={{
-                                    backgroundColor: "background.boxInner"
-                                }}
-                            >
-                                {job?._description?.length! >= 2 ? job?._description[1] : ""}
-                            </Typography>
-                        </Box>
+                        {/* Job Details */}
+                        <JobsDetails job={job} />
 
                     </Box>
 
-                    {/* Job Details */}
-                    <JobsDetails job={job} />
-
-                </Box>
-
-                {/* Apply Text */}
-                <Typography
-                    variant='h2'
-                    sx={{
-                        alignSelf: "center",
-                        marginTop: "313px",
-                        marginBottom: "76px"
-                    }}
-                >
-                    השאירו פרטים כאן:
-                </Typography>
-
-                {/* Candidate Details */}
-                <Box
-                    sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        backgroundColor: "background.box",
-                        marginTop: "0.5rem",
-                    }}
-                >
-
-                    {/* Details */}
-                    <Box
-                        sx={{
-                            display: "flex",
-                            flexDirection: "row",
-                            justifyContent: "center",
-                        }}
-                    >
-                        {/* Firstname and Lastname */}
-                        <Box
+                    {/* Apply Icon + Apply Text*/}
+                    <Box sx={{ marginTop: "313px", alignSelf: "center", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+                        <CloudSVG />
+                        <Typography
+                            variant='h2'
                             sx={{
-                                display: "flex",
-                                flexDirection: { xs: "column", md: "row" },
-                                marginRight: { xs: "1rem", md: "5rem" }
+                                marginTop: "19px",
+                                marginBottom: "76px"
                             }}
                         >
-                            {/* Firstname */}
-                            <Box>
-                                <Typography variant='h4'>
-                                    שם פרטי:
-                                </Typography>
-                                <TextField
-                                    sx={{
-                                        '& .MuiOutlinedInput-root': {
-                                            '& fieldset': {
-                                                borderColor: candidateNameError ? 'error.main' : "primary.main",
-                                            }
-                                        },
-                                    }}
-                                    color={candidateNameError ? 'error' : "primary"}
-                                    onChange={(event) =>
-                                    {
-                                        setCandidateNameError(false);
-                                        setCandidateName(event.target.value);
-                                    }}
-                                />
-                                <Box sx={{
-                                    display: candidateNameError ? "flex" : "none",
-                                    flexDirection: "row",
-                                    alignItems: "center"
-                                }}>
-                                    <ErrorOutlineRounded sx={{ fontSize: "24px", color: "error.main" }} />
-
-                                    <Typography variant='h4' color={"error.main"}>
-                                        שדה זה שגוי
-                                    </Typography>
-                                </Box>
-                            </Box>
-
-                            {/* Lastname */}
-                            <Box
-                                sx={{
-                                    marginLeft: { xs: "0", md: "5rem" }
-                                }}
-                            >
-                                <Typography variant='h4'>
-                                    שם משפחה:
-                                </Typography>
-                                <TextField
-                                    variant='outlined'
-                                    sx={{
-                                        '& .MuiOutlinedInput-root': {
-                                            '& fieldset': {
-                                                borderColor: candidateSurnameError ? 'error.main' : "primary.main",
-                                            }
-                                        },
-                                    }}
-                                    color={candidateSurnameError ? 'error' : "primary"}
-                                    onChange={(event) =>
-                                    {
-                                        setCandidateSurnameError(false);
-                                        setCandidateSurname(event.target.value);
-                                    }}
-                                />
-                                <Box sx={{
-                                    display: candidateSurnameError ? "flex" : "none",
-                                    flexDirection: "row",
-                                    alignItems: "center"
-                                }}>
-                                    <ErrorOutlineRounded sx={{ fontSize: "24px", color: "error.main" }} />
-
-                                    <Typography variant='h4' color={"error.main"}>
-                                        שדה זה שגוי
-                                    </Typography>
-                                </Box>
-
-                            </Box>
-
-                        </Box>
-
-                        {/* Phone and Email */}
-                        <Box
-                            sx={{
-                                display: "flex",
-                                flexDirection: { xs: "column", md: "row" }
-                            }}
-                        >
-                            {/* Phone */}
-                            <Box>
-                                <Typography variant='h4'>
-                                    טלפון:
-                                </Typography>
-                                <TextField
-                                    sx={{
-                                        '& .MuiOutlinedInput-root': {
-                                            '& fieldset': {
-                                                borderColor: candidatePhoneError ? 'error.main' : "primary.main",
-                                            }
-                                        },
-                                    }}
-                                    color={candidatePhoneError ? 'error' : "primary"}
-                                    onChange={(event) =>
-                                    {
-                                        setCandidatePhoneError(false);
-                                        setCandidatePhone(event.target.value);
-                                    }}
-                                />
-                                <Box sx={{
-                                    display: candidatePhoneError ? "flex" : "none",
-                                    flexDirection: "row",
-                                    alignItems: "center"
-                                }}>
-                                    <ErrorOutlineRounded sx={{ fontSize: "24px", color: "error.main" }} />
-
-                                    <Typography variant='h4' color={"error.main"}>
-                                        שדה זה שגוי
-                                    </Typography>
-                                </Box>
-                            </Box>
-
-                            {/* Email */}
-                            <Box
-                                sx={{
-                                    marginLeft: { xs: "0", md: "5rem" }
-                                }}
-                            >
-                                <Typography variant='h4'>
-                                    אימייל:
-                                </Typography>
-                                <TextField
-                                    variant='outlined'
-                                    type='email'
-                                    sx={{
-                                        '& .MuiOutlinedInput-root': {
-                                            '& fieldset': {
-                                                borderColor: candidateEmailError ? 'error.main' : "primary.main",
-                                            }
-                                        },
-                                    }}
-                                    color={candidateEmailError ? 'error' : "primary"}
-                                    onChange={(event) =>
-                                    {
-                                        setCandidateEmailError(false);
-                                        setCandidateEmail(event.target.value);
-                                    }}
-                                />
-                                <Box sx={{
-                                    display: candidateEmailError ? "flex" : "none",
-                                    flexDirection: "row",
-                                    alignItems: "center"
-                                }}>
-                                    <ErrorOutlineRounded sx={{ fontSize: "24px", color: "error.main" }} />
-
-                                    <Typography variant='h4' color={"error.main"}>
-                                        שדה זה שגוי
-                                    </Typography>
-                                </Box>
-                            </Box>
-
-                        </Box>
+                            השאירו פרטים כאן:
+                        </Typography>
                     </Box>
 
-                    {/* About */}
+                    {/* Candidate Details */}
                     <Box
                         sx={{
                             display: "flex",
                             flexDirection: "column",
-                            alignItems: "start",
-                            marginTop: "54px"
+                            backgroundColor: "background.box",
+                            marginTop: "0.5rem",
                         }}
                     >
-                        <Typography variant='h4'>
-                            ספרו לנו קצת עליכם:
-                        </Typography>
-                        <TextField
-                            label="כתבו כאן..."
-                            multiline
-                            variant='outlined'
-                            rows={10}
-                            sx={{
-                                width: { xs: "100%", md: "100%" },
-                                backgroundColor: "background.boxInner",
-                                marginTop: "15px"
-                            }}
-                            inputProps={{
-                                maxLength: ABOUT_MAX_LENGTH
-                            }}
-                            onChange={(event) =>
-                            {
-                                setAboutNumChars(event?.target.value.length);
-                                setAboutText(event.target.value);
-                            }}
-                        />
+
+                        {/* Details */}
                         <Box
                             sx={{
                                 display: "flex",
                                 flexDirection: "row",
-                                justifyContent: "end",
-                                width: "100%",
-                                marginBottom: "1rem"
+                                justifyContent: "center",
+                            }}
+                        >
+                            {/* Firstname and Lastname */}
+                            <Box
+                                sx={{
+                                    display: "flex",
+                                    flexDirection: { xs: "column", md: "row" },
+                                    marginRight: { xs: "1rem", md: "5rem" }
+                                }}
+                            >
+                                {/* Firstname */}
+                                <Box>
+                                    <Typography variant='h4'>
+                                        שם פרטי:
+                                    </Typography>
+                                    <TextField
+                                        sx={{
+                                            '& .MuiOutlinedInput-root': {
+                                                '& fieldset': {
+                                                    borderColor: candidateNameError ? 'error.main' : "primary.main",
+                                                }
+                                            },
+                                        }}
+                                        color={candidateNameError ? 'error' : "primary"}
+                                        onChange={(event) => {
+                                            setCandidateNameError(false);
+                                            setCandidateName(event.target.value);
+                                        }}
+                                    />
+                                    <Box sx={{
+                                        display: candidateNameError ? "flex" : "none",
+                                        flexDirection: "row",
+                                        alignItems: "center"
+                                    }}>
+                                        <ErrorOutlineRounded sx={{ fontSize: "24px", color: "error.main" }} />
+
+                                        <Typography variant='h4' color={"error.main"}>
+                                            שדה זה שגוי
+                                        </Typography>
+                                    </Box>
+                                </Box>
+
+                                {/* Lastname */}
+                                <Box
+                                    sx={{
+                                        marginLeft: { xs: "0", md: "5rem" }
+                                    }}
+                                >
+                                    <Typography variant='h4'>
+                                        שם משפחה:
+                                    </Typography>
+                                    <TextField
+                                        variant='outlined'
+                                        sx={{
+                                            '& .MuiOutlinedInput-root': {
+                                                '& fieldset': {
+                                                    borderColor: candidateSurnameError ? 'error.main' : "primary.main",
+                                                }
+                                            },
+                                        }}
+                                        color={candidateSurnameError ? 'error' : "primary"}
+                                        onChange={(event) => {
+                                            setCandidateSurnameError(false);
+                                            setCandidateSurname(event.target.value);
+                                        }}
+                                    />
+                                    <Box sx={{
+                                        display: candidateSurnameError ? "flex" : "none",
+                                        flexDirection: "row",
+                                        alignItems: "center"
+                                    }}>
+                                        <ErrorOutlineRounded sx={{ fontSize: "24px", color: "error.main" }} />
+
+                                        <Typography variant='h4' color={"error.main"}>
+                                            שדה זה שגוי
+                                        </Typography>
+                                    </Box>
+
+                                </Box>
+
+                            </Box>
+
+                            {/* Phone and Email */}
+                            <Box
+                                sx={{
+                                    display: "flex",
+                                    flexDirection: { xs: "column", md: "row" }
+                                }}
+                            >
+                                {/* Phone */}
+                                <Box>
+                                    <Typography variant='h4'>
+                                        טלפון:
+                                    </Typography>
+                                    <TextField
+                                        sx={{
+                                            '& .MuiOutlinedInput-root': {
+                                                '& fieldset': {
+                                                    borderColor: candidatePhoneError ? 'error.main' : "primary.main",
+                                                }
+                                            },
+                                        }}
+                                        color={candidatePhoneError ? 'error' : "primary"}
+                                        onChange={(event) => {
+                                            setCandidatePhoneError(false);
+                                            setCandidatePhone(event.target.value);
+                                        }}
+                                    />
+                                    <Box sx={{
+                                        display: candidatePhoneError ? "flex" : "none",
+                                        flexDirection: "row",
+                                        alignItems: "center"
+                                    }}>
+                                        <ErrorOutlineRounded sx={{ fontSize: "24px", color: "error.main" }} />
+
+                                        <Typography variant='h4' color={"error.main"}>
+                                            שדה זה שגוי
+                                        </Typography>
+                                    </Box>
+                                </Box>
+
+                                {/* Email */}
+                                <Box
+                                    sx={{
+                                        marginLeft: { xs: "0", md: "5rem" }
+                                    }}
+                                >
+                                    <Typography variant='h4'>
+                                        אימייל:
+                                    </Typography>
+                                    <TextField
+                                        variant='outlined'
+                                        type='email'
+                                        sx={{
+                                            '& .MuiOutlinedInput-root': {
+                                                '& fieldset': {
+                                                    borderColor: candidateEmailError ? 'error.main' : "primary.main",
+                                                }
+                                            },
+                                        }}
+                                        color={candidateEmailError ? 'error' : "primary"}
+                                        onChange={(event) => {
+                                            setCandidateEmailError(false);
+                                            setCandidateEmail(event.target.value);
+                                        }}
+                                    />
+                                    <Box sx={{
+                                        display: candidateEmailError ? "flex" : "none",
+                                        flexDirection: "row",
+                                        alignItems: "center"
+                                    }}>
+                                        <ErrorOutlineRounded sx={{ fontSize: "24px", color: "error.main" }} />
+
+                                        <Typography variant='h4' color={"error.main"}>
+                                            שדה זה שגוי
+                                        </Typography>
+                                    </Box>
+                                </Box>
+
+                            </Box>
+                        </Box>
+
+                        {/* About */}
+                        <Box
+                            sx={{
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: "start",
+                                marginTop: "54px"
                             }}
                         >
                             <Typography variant='h4'>
-                                {aboutNumChars} / {ABOUT_MAX_LENGTH}
+                                ספרו לנו קצת עליכם:
                             </Typography>
-                        </Box>
-                    </Box>
-                    {/* attach CV file button */}
-                    <Box>
-                        <Input
-                            type="file"
-                            inputRef={cvFileInputRef}
-                            style={{ display: 'none' }}
-                            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                            {
-                                const files = event.target.files!;
-                                setCvFile(files[0]);
-                                setCvFileError(false);
-                            }}
-                        />
-                        <Button
-                            variant='contained'
-                            sx={{
-                                backgroundColor: "background.boxInner",
-                                color: "primary.main",
-                                "&:hover": {
-                                    backgroundColor: "background.main"
-                                }
-                            }}
-                            onClick={() =>
-                            {
-                                // trigger input onChange
-                                if (cvFileInputRef.current)
-                                {
-                                    cvFileInputRef.current.click();
-                                }
-                            }}
-
-                        >
-                            <AttachFile
-                                sx={{ fontSize: "24px" }}
+                            <TextField
+                                label="כתבו כאן..."
+                                multiline
+                                variant='outlined'
+                                rows={10}
+                                sx={{
+                                    width: { xs: "100%", md: "100%" },
+                                    backgroundColor: "background.boxInner",
+                                    marginTop: "15px"
+                                }}
+                                inputProps={{
+                                    maxLength: ABOUT_MAX_LENGTH
+                                }}
+                                onChange={(event) => {
+                                    setAboutNumChars(event?.target.value.length);
+                                    setAboutText(event.target.value);
+                                }}
                             />
                             <Box
                                 sx={{
-                                    flexDirection: "column"
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    justifyContent: "end",
+                                    width: "100%",
+                                    marginBottom: "1rem"
                                 }}
                             >
                                 <Typography variant='h4'>
-                                    צירוף קורות חיים
+                                    {aboutNumChars} / {ABOUT_MAX_LENGTH}
                                 </Typography>
-
-                                {/* display filename to the user */}
-                                <Typography variant='h6'>
-                                    {cvFile?.name.slice(0, 10)}
-                                    {cvFile?.name.length! > 10 ? '...' : ''}
-                                </Typography>
-
-
                             </Box>
-                        </Button>
-                        <Box sx={{
-                            display: cvFileError ? "flex" : "none",
-                            flexDirection: "row",
-                            alignItems: "center"
-                        }}>
-                            <ErrorOutlineRounded sx={{ fontSize: "24px", color: "error.main" }} />
-
-                            <Typography variant='h4' color={"error.main"}>
-                                שדה זה הוא חובה
-                            </Typography>
                         </Box>
-                    </Box>
+                        {/* attach CV file button */}
+                        <Box>
+                            <Input
+                                type="file"
+                                inputRef={cvFileInputRef}
+                                style={{ display: 'none' }}
+                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                                    const files = event.target.files!;
+                                    setCvFile(files[0]);
+                                    setCvFileError(false);
+                                }}
+                            />
+                            <Button
+                                variant='contained'
+                                sx={{
+                                    backgroundColor: "background.boxInner",
+                                    color: "primary.main",
+                                    "&:hover": {
+                                        backgroundColor: "background.main"
+                                    }
+                                }}
+                                onClick={() => {
+                                    // trigger input onChange
+                                    if (cvFileInputRef.current) {
+                                        cvFileInputRef.current.click();
+                                    }
+                                }}
 
-                    {/* Recommenders */}
-                    <Box
-                        sx={{
-                            display: "flex",
-                            alignSelf: "center",
-                            flexDirection: "column",
-                            alignItems: "start",
-                            width: "100%",
-                            marginTop: "134px",
-                        }}
-                    >
+                            >
+                                <AttachFile
+                                    sx={{ fontSize: "24px" }}
+                                />
+                                <Box
+                                    sx={{
+                                        flexDirection: "column"
+                                    }}
+                                >
+                                    <Typography variant='h4'>
+                                        צירוף קורות חיים
+                                    </Typography>
 
-                        <Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
-                            <Button onClick={() => { setRecommendersListOpen(!recommendersListOpen) }}>
-                                <Typography variant='h2'>
-                                    הוספת ממליצים
-                                </Typography>
-                                <Typography variant='h2' marginLeft={"12px"}>
-                                    (אופציונאלי)
-                                </Typography>
-                                <Typography variant='h2' marginLeft={"22px"}>
-                                    {recommendersListOpen ? <ArrowDownward /> : <ArrowUpward />}
-                                </Typography>
+                                    {/* display filename to the user */}
+                                    <Typography variant='h6'>
+                                        {cvFile?.name.slice(0, 10)}
+                                        {cvFile?.name.length! > 10 ? '...' : ''}
+                                    </Typography>
+
+
+                                </Box>
                             </Button>
+                            <Box sx={{
+                                display: cvFileError ? "flex" : "none",
+                                flexDirection: "row",
+                                alignItems: "center"
+                            }}>
+                                <ErrorOutlineRounded sx={{ fontSize: "24px", color: "error.main" }} />
+
+                                <Typography variant='h4' color={"error.main"}>
+                                    שדה זה הוא חובה
+                                </Typography>
+                            </Box>
                         </Box>
 
-                        {/* List of recommenders */}
-                        <Box sx={{
-                            backgroundColor: "background.boxInner",
-                            flexDirection: "column",
-                            paddingTop: "36px",
-                            paddingBottom: "36px",
-                            paddingRight: "23px",
-                            paddingLeft: "23px",
-                            alignItems: "center",
-                            marginTop: "30px",
-
-                            display: recommendersListOpen ? "flex" : "none"
-                        }}
+                        {/* Recommenders */}
+                        <Box
+                            sx={{
+                                display: "flex",
+                                alignSelf: "center",
+                                flexDirection: "column",
+                                alignItems: "start",
+                                width: "100%",
+                                marginTop: "134px",
+                            }}
                         >
-                            {recommendersList?.map((recommender, index) =>
-                            {
-                                if (recommender[0] !== null)
-                                {
-                                    return (
-                                        <Box
-                                            sx={{
-                                                display: "flex",
-                                                flexDirection: "row",
-                                                width: "100%",
-                                                marginBottom: index >= MAX_RECOMMENDERS - 1 ? "0" : "43px"
-                                            }}
-                                            key={index + "recommendersBox"}
-                                        >
 
-                                            {/* delete recommender button */}
-                                            <Button
-                                                sx={{
-                                                    display: { xs: "none", md: "flex" }
-                                                }}
-                                                onClick={() =>
-                                                {
-                                                    setAreYouSureDialogIndex(index);
-                                                    setAreYouSureDialogOpen(true);
-                                                    setAreYouSureDialogRecommenderName(recommender[0]?._fullName!);
-                                                }}
-                                            >
-                                                <DeleteForeverOutlined />
-                                            </Button>
-                                            {/* are you sure you want to delete recommender dialog */}
-                                            <AreYouSureDialog
-                                                open={areYouSureDialogOpen}
-                                                onClose={areYouSureDialogOnClose}
-                                                recommenderName={areYouSureDialogRecommenderName}
-                                                index={areYouSureDialogIndex}
-                                            />
-                                            {/* Recommender */}
+                            <Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
+                                <Button onClick={() => { setRecommendersListOpen(!recommendersListOpen) }}>
+                                    <Typography variant='h2'>
+                                        הוספת ממליצים
+                                    </Typography>
+                                    <Typography variant='h2' marginLeft={"12px"}>
+                                        (אופציונאלי)
+                                    </Typography>
+                                    <Typography variant='h2' marginLeft={"22px"}>
+                                        {recommendersListOpen ? <ArrowDownward /> : <ArrowUpward />}
+                                    </Typography>
+                                </Button>
+                            </Box>
+
+                            {/* List of recommenders */}
+                            <Box sx={{
+                                backgroundColor: "background.boxInner",
+                                flexDirection: "column",
+                                paddingTop: "36px",
+                                paddingBottom: "36px",
+                                paddingRight: "23px",
+                                paddingLeft: "23px",
+                                alignItems: "center",
+                                marginTop: "30px",
+
+                                display: recommendersListOpen ? "flex" : "none"
+                            }}
+                            >
+                                {recommendersList?.map((recommender, index) => {
+                                    if (recommender[0] !== null) {
+                                        return (
                                             <Box
                                                 sx={{
-                                                    backgroundColor: "background.box",
                                                     display: "flex",
                                                     flexDirection: "row",
-                                                    justifyContent: "space-between",
-                                                    padding: "1rem",
-                                                    paddingTop: "0",
-                                                    paddingBottom: "1rem",
-                                                }}>
+                                                    width: "100%",
+                                                    marginBottom: index >= MAX_RECOMMENDERS - 1 ? "0" : "43px"
+                                                }}
+                                                key={index + "recommendersBox"}
+                                            >
 
-                                                {/* name + phone + email + buttons*/}
-                                                <Box
+                                                {/* delete recommender button */}
+                                                <Button
                                                     sx={{
-                                                        display: "flex",
-                                                        flexDirection: { xs: "column", md: "row" }
+                                                        display: { xs: "none", md: "flex" }
+                                                    }}
+                                                    onClick={() => {
+                                                        setAreYouSureDialogIndex(index);
+                                                        setAreYouSureDialogOpen(true);
+                                                        setAreYouSureDialogRecommenderName(recommender[0]?._fullName!);
                                                     }}
                                                 >
-                                                    {/* mobile delete + attach file buttons */}
+                                                    <DeleteForeverOutlined />
+                                                </Button>
+                                                {/* are you sure you want to delete recommender dialog */}
+                                                <AreYouSureDialog
+                                                    open={areYouSureDialogOpen}
+                                                    onClose={areYouSureDialogOnClose}
+                                                    recommenderName={areYouSureDialogRecommenderName}
+                                                    index={areYouSureDialogIndex}
+                                                />
+                                                {/* Recommender */}
+                                                <Box
+                                                    sx={{
+                                                        backgroundColor: "background.box",
+                                                        display: "flex",
+                                                        flexDirection: "row",
+                                                        justifyContent: "space-between",
+                                                        padding: "1rem",
+                                                        paddingTop: "0",
+                                                        paddingBottom: "1rem",
+                                                    }}>
+
+                                                    {/* name + phone + email + buttons*/}
                                                     <Box
                                                         sx={{
-                                                            display: { xs: "flex", md: "none" },
-                                                            flexDirection: "row",
-                                                            justifyContent: "space-between"
+                                                            display: "flex",
+                                                            flexDirection: { xs: "column", md: "row" }
                                                         }}
                                                     >
-                                                        {/* mobile attach file button */}
+                                                        {/* mobile delete + attach file buttons */}
+                                                        <Box
+                                                            sx={{
+                                                                display: { xs: "flex", md: "none" },
+                                                                flexDirection: "row",
+                                                                justifyContent: "space-between"
+                                                            }}
+                                                        >
+                                                            {/* mobile attach file button */}
+                                                            <Box
+                                                                sx={{
+                                                                    display: "flex",
+                                                                    flexDirection: "row",
+                                                                    alignSelf: "end",
+                                                                }}
+                                                            >
+                                                                {/* add recommender file button */}
+                                                                <Input
+                                                                    type="file"
+                                                                    inputRef={(input) => (recommenderFileInputRefs.current[index] = input)}
+                                                                    style={{ display: 'none' }}
+                                                                    onChange={(event) => {
+                                                                        const inputElement = event.target as HTMLInputElement;
+                                                                        const files = inputElement.files;
+                                                                        if (files && files.length > 0) {
+                                                                            updateRecommendersListAtIndex(recommendersList[index][0], files[0], index);
+                                                                        }
+                                                                    }}
+                                                                />
+                                                                <Button
+                                                                    sx={{
+                                                                        display: { xs: "flex", md: "none" }
+                                                                    }}
+                                                                    onClick={() => {
+                                                                        // trigger input onChange
+                                                                        if (recommenderFileInputRefs.current[index]) {
+                                                                            recommenderFileInputRefs.current[index]?.click()
+                                                                        }
+                                                                    }}
+
+                                                                >
+                                                                    <AttachFile
+                                                                        sx={{ fontSize: "24px" }}
+                                                                    />
+                                                                    {/* display filename to the user */}
+                                                                    <Typography variant='h6'>
+                                                                        {recommendersList[index][1]?.name.length! > 20 ? '...' : ''}
+                                                                        {recommendersList[index][1] ? recommendersList[index][1]?.name.slice(0, 20) : ""}
+                                                                    </Typography>
+                                                                </Button>
+
+                                                            </Box>
+
+                                                            {/* Remove recommender button */}
+                                                            <Button
+                                                                onClick={() => {
+                                                                    setAreYouSureDialogIndex(index);
+                                                                    setAreYouSureDialogOpen(true);
+                                                                    setAreYouSureDialogRecommenderName(recommender[0]?._fullName!);
+                                                                }}
+                                                            >
+                                                                <DeleteForeverOutlined />
+                                                            </Button>
+                                                        </Box>
+
+                                                        {/* Recommender name */}
                                                         <Box
                                                             sx={{
                                                                 display: "flex",
-                                                                flexDirection: "row",
-                                                                alignSelf: "end",
+                                                                flexDirection: "column",
+                                                                marginRight: "1rem"
                                                             }}
                                                         >
-                                                            {/* add recommender file button */}
-                                                            <Input
-                                                                type="file"
-                                                                inputRef={(input) => (recommenderFileInputRefs.current[index] = input)}
-                                                                style={{ display: 'none' }}
-                                                                onChange={(event) =>
-                                                                {
-                                                                    const inputElement = event.target as HTMLInputElement;
-                                                                    const files = inputElement.files;
-                                                                    if (files && files.length > 0)
-                                                                    {
-                                                                        updateRecommendersListAtIndex(recommendersList[index][0], files[0], index);
-                                                                    }
+                                                            <Typography
+                                                                variant='h4'
+                                                            >
+                                                                שם:
+                                                            </Typography>
+                                                            <TextField
+                                                                onChange={(event) => {
+                                                                    const currentRecommender = recommendersList[index][0];
+                                                                    updateRecommendersListAtIndex(
+                                                                        new Recomendation(event.target.value,
+                                                                            currentRecommender?._phone!,
+                                                                            currentRecommender?._eMail!
+                                                                        ),
+                                                                        null,
+                                                                        index
+                                                                    );
                                                                 }}
                                                             />
-                                                            <Button
-                                                                sx={{
-                                                                    display: { xs: "flex", md: "none" }
-                                                                }}
-                                                                onClick={() =>
-                                                                {
-                                                                    // trigger input onChange
-                                                                    if (recommenderFileInputRefs.current[index])
-                                                                    {
-                                                                        recommenderFileInputRefs.current[index]?.click()
-                                                                    }
-                                                                }}
+                                                        </Box>
 
+                                                        {/* Recommender phone */}
+                                                        <Box
+                                                            sx={{
+                                                                marginRight: "1rem"
+                                                            }}>
+                                                            <Typography
+                                                                variant='h4'
                                                             >
-                                                                <AttachFile
-                                                                    sx={{ fontSize: "24px" }}
-                                                                />
+                                                                טלפון:
+                                                            </Typography>
+                                                            <TextField
+                                                                sx={{
+                                                                    '& .MuiOutlinedInput-root': {
+                                                                        '& fieldset': {
+                                                                            borderColor: recommendersErrors[index][0] ? 'error.main' : "primary.main",
+                                                                        }
+                                                                    },
+                                                                }}
+                                                                onChange={(event) => {
+                                                                    const currentRecommender = recommendersList[index][0];
+                                                                    updateRecommendersListAtIndex(
+                                                                        new Recomendation(currentRecommender?._fullName!,
+                                                                            event.target.value,
+                                                                            currentRecommender?._eMail!
+                                                                        ),
+                                                                        null,
+                                                                        index
+                                                                    );
+
+                                                                    // remove error message
+                                                                    setRecommendersErrors(
+                                                                        recommendersErrors.map((recommenderError, ind) => {
+                                                                            if (index === ind) {
+                                                                                return [false, recommenderError[1]];
+                                                                            } else {
+                                                                                return [recommenderError[0], recommenderError[1]];
+                                                                            }
+                                                                        })
+                                                                    );
+                                                                }}
+                                                            />
+                                                            <Box sx={{
+                                                                display: recommendersErrors[index][0] ? "flex" : "none",
+                                                                flexDirection: "row",
+                                                                alignItems: "center"
+                                                            }}>
+                                                                <ErrorOutlineRounded sx={{ fontSize: "24px", color: "error.main" }} />
+
+                                                                <Typography variant='h4' color={"error.main"}>
+                                                                    שדה זה שגוי
+                                                                </Typography>
+                                                            </Box>
+                                                        </Box>
+                                                        {/* Recommender email */}
+                                                        <Box sx={{ marginRight: "1rem" }}>
+                                                            <Typography
+                                                                variant='h4'
+                                                            >
+                                                                אימייל:
+                                                            </Typography>
+                                                            <TextField
+                                                                sx={{
+                                                                    '& .MuiOutlinedInput-root': {
+                                                                        '& fieldset': {
+                                                                            borderColor: recommendersErrors[index][1] ? 'error.main' : "primary.main",
+                                                                        }
+                                                                    },
+                                                                }}
+                                                                onChange={(event) => {
+                                                                    const currentRecommender = recommendersList[index][0];
+                                                                    updateRecommendersListAtIndex(
+                                                                        new Recomendation(currentRecommender?._fullName!,
+                                                                            currentRecommender?._phone!,
+                                                                            event.target.value
+                                                                        ),
+                                                                        null,
+                                                                        index
+                                                                    );
+
+                                                                    // remove error message
+                                                                    setRecommendersErrors(
+                                                                        recommendersErrors.map((recommenderError, ind) => {
+                                                                            if (index === ind) {
+                                                                                return [recommenderError[0], false];
+                                                                            } else {
+                                                                                return [recommenderError[0], recommenderError[1]];
+                                                                            }
+                                                                        })
+                                                                    );
+                                                                }}
+                                                            />
+                                                            <Box sx={{
+                                                                display: recommendersErrors[index][1] ? "flex" : "none",
+                                                                flexDirection: "row",
+                                                                alignItems: "center"
+                                                            }}>
+                                                                <ErrorOutlineRounded sx={{ color: "error.main" }} />
+
+                                                                <Typography variant='h4' color={"error.main"}>
+                                                                    שדה זה שגוי
+                                                                </Typography>
+                                                            </Box>
+                                                        </Box>
+                                                    </Box>
+
+                                                    {/* Attach recommender file button */}
+                                                    <Box
+                                                        sx={{
+                                                            display: "flex",
+                                                            flexDirection: "row",
+                                                            height: "72%",
+                                                            alignSelf: "end",
+                                                        }}
+                                                    >
+                                                        {/* PC add recommender file input */}
+                                                        <Input
+                                                            type="file"
+                                                            inputRef={(input) => (recommenderFileInputRefs.current[index] = input)}
+                                                            style={{ display: 'none' }}
+                                                            onChange={(event) => {
+                                                                const inputElement = event.target as HTMLInputElement;
+                                                                const files = inputElement.files;
+                                                                if (files && files.length > 0) {
+                                                                    updateRecommendersListAtIndex(recommendersList[index][0], files[0], index);
+                                                                }
+                                                            }}
+                                                        />
+                                                        <Button
+                                                            sx={{
+                                                                display: { xs: "none", md: "flex" }
+                                                            }}
+                                                            onClick={() => {
+                                                                // trigger input onChange
+                                                                if (recommenderFileInputRefs.current[index]) {
+                                                                    recommenderFileInputRefs.current[index]?.click()
+                                                                }
+                                                            }}
+
+                                                        >
+                                                            <AttachFile
+                                                                sx={{ fontSize: "24px" }}
+                                                            />
+                                                            <Box
+                                                                sx={{
+                                                                    flexDirection: "column"
+                                                                }}
+                                                            >
+                                                                <Typography
+                                                                    variant='h4'
+                                                                    sx={{
+                                                                        display: { xs: "none", md: "block" }
+                                                                    }}>
+                                                                    צירוף קובץ
+                                                                </Typography>
+
                                                                 {/* display filename to the user */}
                                                                 <Typography variant='h6'>
                                                                     {recommendersList[index][1]?.name.length! > 20 ? '...' : ''}
                                                                     {recommendersList[index][1] ? recommendersList[index][1]?.name.slice(0, 20) : ""}
                                                                 </Typography>
-                                                            </Button>
-
-                                                        </Box>
-
-                                                        {/* Remove recommender button */}
-                                                        <Button
-                                                            onClick={() =>
-                                                            {
-                                                                setAreYouSureDialogIndex(index);
-                                                                setAreYouSureDialogOpen(true);
-                                                                setAreYouSureDialogRecommenderName(recommender[0]?._fullName!);
-                                                            }}
-                                                        >
-                                                            <DeleteForeverOutlined />
+                                                            </Box>
                                                         </Button>
+
                                                     </Box>
-
-                                                    {/* Recommender name */}
-                                                    <Box
-                                                        sx={{
-                                                            display: "flex",
-                                                            flexDirection: "column",
-                                                            marginRight: "1rem"
-                                                        }}
-                                                    >
-                                                        <Typography
-                                                            variant='h4'
-                                                        >
-                                                            שם:
-                                                        </Typography>
-                                                        <TextField
-                                                            onChange={(event) =>
-                                                            {
-                                                                const currentRecommender = recommendersList[index][0];
-                                                                updateRecommendersListAtIndex(
-                                                                    new Recomendation(event.target.value,
-                                                                        currentRecommender?._phone!,
-                                                                        currentRecommender?._eMail!
-                                                                    ),
-                                                                    null,
-                                                                    index
-                                                                );
-                                                            }}
-                                                        />
-                                                    </Box>
-
-                                                    {/* Recommender phone */}
-                                                    <Box
-                                                        sx={{
-                                                            marginRight: "1rem"
-                                                        }}>
-                                                        <Typography
-                                                            variant='h4'
-                                                        >
-                                                            טלפון:
-                                                        </Typography>
-                                                        <TextField
-                                                            sx={{
-                                                                '& .MuiOutlinedInput-root': {
-                                                                    '& fieldset': {
-                                                                        borderColor: recommendersErrors[index][0] ? 'error.main' : "primary.main",
-                                                                    }
-                                                                },
-                                                            }}
-                                                            onChange={(event) =>
-                                                            {
-                                                                const currentRecommender = recommendersList[index][0];
-                                                                updateRecommendersListAtIndex(
-                                                                    new Recomendation(currentRecommender?._fullName!,
-                                                                        event.target.value,
-                                                                        currentRecommender?._eMail!
-                                                                    ),
-                                                                    null,
-                                                                    index
-                                                                );
-
-                                                                // remove error message
-                                                                setRecommendersErrors(
-                                                                    recommendersErrors.map((recommenderError, ind) =>
-                                                                    {
-                                                                        if (index === ind)
-                                                                        {
-                                                                            return [false, recommenderError[1]];
-                                                                        } else
-                                                                        {
-                                                                            return [recommenderError[0], recommenderError[1]];
-                                                                        }
-                                                                    })
-                                                                );
-                                                            }}
-                                                        />
-                                                        <Box sx={{
-                                                            display: recommendersErrors[index][0] ? "flex" : "none",
-                                                            flexDirection: "row",
-                                                            alignItems: "center"
-                                                        }}>
-                                                            <ErrorOutlineRounded sx={{ fontSize: "24px", color: "error.main" }} />
-
-                                                            <Typography variant='h4' color={"error.main"}>
-                                                                שדה זה שגוי
-                                                            </Typography>
-                                                        </Box>
-                                                    </Box>
-                                                    {/* Recommender email */}
-                                                    <Box sx={{ marginRight: "1rem" }}>
-                                                        <Typography
-                                                            variant='h4'
-                                                        >
-                                                            אימייל:
-                                                        </Typography>
-                                                        <TextField
-                                                            sx={{
-                                                                '& .MuiOutlinedInput-root': {
-                                                                    '& fieldset': {
-                                                                        borderColor: recommendersErrors[index][1] ? 'error.main' : "primary.main",
-                                                                    }
-                                                                },
-                                                            }}
-                                                            onChange={(event) =>
-                                                            {
-                                                                const currentRecommender = recommendersList[index][0];
-                                                                updateRecommendersListAtIndex(
-                                                                    new Recomendation(currentRecommender?._fullName!,
-                                                                        currentRecommender?._phone!,
-                                                                        event.target.value
-                                                                    ),
-                                                                    null,
-                                                                    index
-                                                                );
-
-                                                                // remove error message
-                                                                setRecommendersErrors(
-                                                                    recommendersErrors.map((recommenderError, ind) =>
-                                                                    {
-                                                                        if (index === ind)
-                                                                        {
-                                                                            return [recommenderError[0], false];
-                                                                        } else
-                                                                        {
-                                                                            return [recommenderError[0], recommenderError[1]];
-                                                                        }
-                                                                    })
-                                                                );
-                                                            }}
-                                                        />
-                                                        <Box sx={{
-                                                            display: recommendersErrors[index][1] ? "flex" : "none",
-                                                            flexDirection: "row",
-                                                            alignItems: "center"
-                                                        }}>
-                                                            <ErrorOutlineRounded sx={{ color: "error.main" }} />
-
-                                                            <Typography variant='h4' color={"error.main"}>
-                                                                שדה זה שגוי
-                                                            </Typography>
-                                                        </Box>
-                                                    </Box>
-                                                </Box>
-
-                                                {/* Attach recommender file button */}
-                                                <Box
-                                                    sx={{
-                                                        display: "flex",
-                                                        flexDirection: "row",
-                                                        height: "72%",
-                                                        alignSelf: "end",
-                                                    }}
-                                                >
-                                                    {/* PC add recommender file input */}
-                                                    <Input
-                                                        type="file"
-                                                        inputRef={(input) => (recommenderFileInputRefs.current[index] = input)}
-                                                        style={{ display: 'none' }}
-                                                        onChange={(event) =>
-                                                        {
-                                                            const inputElement = event.target as HTMLInputElement;
-                                                            const files = inputElement.files;
-                                                            if (files && files.length > 0)
-                                                            {
-                                                                updateRecommendersListAtIndex(recommendersList[index][0], files[0], index);
-                                                            }
-                                                        }}
-                                                    />
-                                                    <Button
-                                                        sx={{
-                                                            display: { xs: "none", md: "flex" }
-                                                        }}
-                                                        onClick={() =>
-                                                        {
-                                                            // trigger input onChange
-                                                            if (recommenderFileInputRefs.current[index])
-                                                            {
-                                                                recommenderFileInputRefs.current[index]?.click()
-                                                            }
-                                                        }}
-
-                                                    >
-                                                        <AttachFile
-                                                            sx={{ fontSize: "24px" }}
-                                                        />
-                                                        <Box
-                                                            sx={{
-                                                                flexDirection: "column"
-                                                            }}
-                                                        >
-                                                            <Typography
-                                                                variant='h4'
-                                                                sx={{
-                                                                    display: { xs: "none", md: "block" }
-                                                                }}>
-                                                                צירוף קובץ
-                                                            </Typography>
-
-                                                            {/* display filename to the user */}
-                                                            <Typography variant='h6'>
-                                                                {recommendersList[index][1]?.name.length! > 20 ? '...' : ''}
-                                                                {recommendersList[index][1] ? recommendersList[index][1]?.name.slice(0, 20) : ""}
-                                                            </Typography>
-                                                        </Box>
-                                                    </Button>
 
                                                 </Box>
-
                                             </Box>
-                                        </Box>
-                                    );
-                                }
-                            })}
+                                        );
+                                    }
+                                })}
 
-                            {/* Add recommender button */}
-                            <Box
-                                sx={{
-                                    width: "95%",
-                                    display: numRecommenders >= MAX_RECOMMENDERS ? "none" : "block"
-                                }}>
-
-                                <Button
+                                {/* Add recommender button */}
+                                <Box
                                     sx={{
-                                        alignSelf: "start"
-                                    }}
-                                    onClick={() =>
-                                    {
-                                        for (let index = 0; index < recommendersList?.length!; index++)
-                                        {
-                                            const recommender = recommendersList?.at(index);
-                                            if (recommender?.at(0) === null)
-                                            {
-                                                updateRecommendersListAtIndex(new Recomendation("", "", ""), null, index);
-                                                setNumRecommenders(numRecommenders + 1);
-                                                if (numRecommenders > MAX_RECOMMENDERS)
-                                                {
-                                                    setNumRecommenders(MAX_RECOMMENDERS);
+                                        width: "95%",
+                                        display: numRecommenders >= MAX_RECOMMENDERS ? "none" : "block"
+                                    }}>
+
+                                    <Button
+                                        sx={{
+                                            alignSelf: "start"
+                                        }}
+                                        onClick={() => {
+                                            for (let index = 0; index < recommendersList?.length!; index++) {
+                                                const recommender = recommendersList?.at(index);
+                                                if (recommender?.at(0) === null) {
+                                                    updateRecommendersListAtIndex(new Recomendation("", "", ""), null, index);
+                                                    setNumRecommenders(numRecommenders + 1);
+                                                    if (numRecommenders > MAX_RECOMMENDERS) {
+                                                        setNumRecommenders(MAX_RECOMMENDERS);
+                                                    }
+                                                    return;
                                                 }
-                                                return;
                                             }
-                                        }
-                                    }}
-                                >
-                                    <AddBoxSharp />
-                                    הוספת ממליץ
-                                </Button>
+                                        }}
+                                    >
+                                        <AddBoxSharp />
+                                        הוספת ממליץ
+                                    </Button>
+                                </Box>
+
                             </Box>
 
                         </Box>
 
-                    </Box>
-
-                    {/* Submit Button */}
-                    <Box
-                        sx={{
-                            width: "90%",
-                            alignSelf: "center",
-                            display: "flex",
-                            flexDirection: "row",
-                            justifyContent: "space-between",
-                            marginBottom: "1rem",
-                            marginTop: "5rem"
-                        }}
-                    >
-
-                        <Button
-                            variant='contained'
+                        {/* Submit Button */}
+                        <Box
                             sx={{
-                                backgroundColor: "background.boxInner",
-                                color: "primary.main",
-                                "&:hover": {
-                                    backgroundColor: "background.main"
-                                }
+                                width: "90%",
+                                alignSelf: "center",
+                                display: "flex",
+                                flexDirection: "row",
+                                justifyContent: "space-between",
+                                marginBottom: "1rem",
+                                marginTop: "5rem"
                             }}
-                            onClick={handleSubmit}
                         >
-                            <Typography variant='h4'>
-                                שליחה
-                            </Typography>
-                            <Send sx={{ fontSize: "24px", transform: "scaleX(-1)", marginLeft: "0.5rem" }} />
-                        </Button>
+
+                            <Button
+                                variant='contained'
+                                sx={{
+                                    backgroundColor: "background.boxInner",
+                                    color: "primary.main",
+                                    "&:hover": {
+                                        backgroundColor: "background.main"
+                                    }
+                                }}
+                                onClick={handleSubmit}
+                            >
+                                <Typography variant='h4'>
+                                    שליחה
+                                </Typography>
+                                <Send sx={{ fontSize: "24px", transform: "scaleX(-1)", marginLeft: "0.5rem" }} />
+                            </Button>
+                        </Box>
+
                     </Box>
 
+                    {/* Dialogs */}
+                    <ErrorDialog open={errorDialogOpen} onClose={errorDialogOnClose} />
+                    <SuccessDialog open={successDialogOpen} onClose={successDialogOnClose} />
                 </Box>
-
-                {/* Dialogs */}
-                <ErrorDialog open={errorDialogOpen} onClose={errorDialogOnClose} />
-                <SuccessDialog open={successDialogOpen} onClose={successDialogOnClose} />
-            </Box>
+            </React.Fragment>
     );
 }
 
-const getJobIdFromUrl = (pathname: string) =>
-{
+const getJobIdFromUrl = (pathname: string) => {
     return pathname.split("/").slice(-1)[0];
 }

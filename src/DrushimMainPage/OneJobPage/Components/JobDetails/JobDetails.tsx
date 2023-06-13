@@ -2,32 +2,27 @@ import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import { Typography } from '@mui/material';
 
-export default function FloatingBox(props: { job })
-{
+export default function FloatingBox(props: { job }) {
     const { job } = props;
     const [floatingTop, setFloatingTop] = useState<number>(0);
-    const [containerHeight, setContainerHeight] = useState<number>(220);
+    const [containerHeight, setContainerHeight] = useState<number>(10);
 
-    useEffect(() =>
-    {
-        const handleScroll = () =>
-        {
+    useEffect(() => {
+        const handleScroll = () => {
             const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
 
-            if (scrollTop >= floatingTop && scrollTop <= containerHeight)
-            {
+            if (scrollTop >= floatingTop && scrollTop <= containerHeight) {
                 setFloatingTop(scrollTop);
             }
         };
 
-        
+
 
         window.addEventListener('scroll', handleScroll);
 
-        return () =>
-        {
+        return () => {
             window.removeEventListener('scroll', handleScroll);
-            
+
         };
     }, [floatingTop, containerHeight]);
 
@@ -39,18 +34,30 @@ export default function FloatingBox(props: { job })
                 top: floatingTop,
                 maxHeight: "416px",
                 maxWidth: "16.97916vw",
-                backgroundColor: "background.box",
-                flex: 4
+                backgroundColor: "background.jobDetails",
+                boxShadow: "0px 3px 10px #00000029",
+                borderRadius: "10px",
+                flex: 4,
+                zIndex: 5
             }
             }
         >
-            <Typography variant='h1' sx={{marginBottom: "42px"}}>פרטי משרה</Typography>
+            <Typography variant='h1' sx={{
+                marginBottom: "42px",
+                backgroundColor: "background.JobDetailsText",
+                color: "primary.textBright",
+                width: "12vw",
+                marginTop: "35px"
+            }}
+            >
+                פרטי משרה
+            </Typography>
             {/* job location */}
             < Box
                 sx={{
                     padding: "1rem",
                     display: "flex",
-                    flexDirection: "row"
+                    flexDirection: "row",
                 }}
             >
                 <Typography variant='h4'>
