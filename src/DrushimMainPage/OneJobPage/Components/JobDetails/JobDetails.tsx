@@ -33,7 +33,8 @@ export default function FloatingBox(props: { job }) {
                 position: "sticky",
                 top: floatingTop,
                 maxHeight: "416px",
-                maxWidth: "16.97916vw",
+                paddingLeft: "55px",
+                paddingRight: "30px",
                 backgroundColor: "background.jobDetails",
                 boxShadow: "0px 3px 10px #00000029",
                 borderRadius: "10px",
@@ -42,22 +43,40 @@ export default function FloatingBox(props: { job }) {
             }
             }
         >
-            <Typography variant='h1' sx={{
-                marginBottom: "42px",
+            <Box sx={{
                 backgroundColor: "background.JobDetailsText",
                 color: "primary.textBright",
-                width: "12vw",
-                marginTop: "35px"
-            }}
-            >
-                פרטי משרה
-            </Typography>
+                borderRadius: "0px 31px 31px 0px",
+                marginBottom: "42px",
+                marginTop: "35px",
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+                marginLeft: "-110px",
+                marginRight: "100px",
+                paddingLeft: "55px"
+                
+            }}>
+                <Typography variant='h2' sx={{  
+                    paddingRight: "33px",
+                    textAlign: "left",
+                    alignSelf: "center",
+                    justifySelf: "center",
+                    paddingBottom: "10px",
+                    paddingTop: "9px",
+
+                }}
+                >
+                    פרטי משרה:
+                </Typography>
+            </Box>
             {/* job location */}
             < Box
                 sx={{
-                    padding: "1rem",
                     display: "flex",
                     flexDirection: "row",
+                    marginBottom: "43px"
                 }}
             >
                 <Typography variant='h4'>
@@ -77,9 +96,9 @@ export default function FloatingBox(props: { job }) {
             {/* job role */}
             < Box
                 sx={{
-                    padding: "1rem",
                     display: "flex",
-                    flexDirection: "row"
+                    flexDirection: "row",
+                    marginBottom: "43px"
                 }}
             >
                 <Typography variant='h4'>
@@ -99,9 +118,9 @@ export default function FloatingBox(props: { job }) {
             {/* job scope */}
             < Box
                 sx={{
-                    padding: "1rem",
                     display: "flex",
-                    flexDirection: "row"
+                    flexDirection: "row",
+                    marginBottom: "43px",
                 }}
             >
                 <Typography variant='h4'>
@@ -114,16 +133,16 @@ export default function FloatingBox(props: { job }) {
                     }}
                     variant='h4'
                 >
-                    {job?._scope.slice(0).reverse().map((num, index) => index !== job._scope.length - 1 ? num + "% - " : num + "%")}
+                    {job?._scope.slice(0).reverse().map((num, index) => index !== job._scope.length - 1 ? num + "%-" : num + "%")}
                 </Typography>
             </Box >
 
             {/* job ID */}
             < Box
                 sx={{
-                    padding: "1rem",
                     display: "flex",
-                    flexDirection: "row"
+                    flexDirection: "row",
+                    marginBottom: "43px"
                 }}
             >
                 <Typography variant='h4'>

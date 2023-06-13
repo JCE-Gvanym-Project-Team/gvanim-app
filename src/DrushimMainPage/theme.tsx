@@ -247,19 +247,19 @@ export const themeSettings = (mode, actualMode, fontSize, fontFamily) =>
             fontSize: fontSize,
             h1: {
                 fontFamily: fontFamily,
-                fontSize: fontSize + 20
+                fontSize: fontSize + 30
             },
             h2: {
                 fontFamily: fontFamily,
-                fontSize: fontSize + 12
+                fontSize: fontSize + 10
             },
             h3: {
                 fontFamily: fontFamily,
-                fontSize: fontSize + 4
+                fontSize: fontSize + 5
             },
             h4: {
                 fontFamily: fontFamily,
-                fontSize: fontSize
+                fontSize: fontSize + 2
             },
             h5: {
                 fontFamily: fontFamily,
@@ -292,6 +292,7 @@ export const useMode = () =>
     // default is light
     const [mode, setMode] = useState("light");
     const [fontSize, setFontSize] = useState(20);
+    // const [fontFamily, setFontFamily] = useState("'Noto Sans Hebrew', sans-serif");
     const [fontFamily, setFontFamily] = useState("'Noto Sans Hebrew', sans-serif");
 
     const [actualMode, setActualMode] = useState("light");

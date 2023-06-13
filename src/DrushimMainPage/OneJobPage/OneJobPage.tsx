@@ -523,7 +523,8 @@ export default function OneJobPage() {
                                 </Typography>
                             </Box>
 
-                            {/* Additional Info */}
+                            {/* not sure about additional info */}
+                            {/* Additional Info
                             <Box
                                 sx={{
                                     display: job?._description?.length! >= 2 ? "none" : "block"
@@ -547,7 +548,7 @@ export default function OneJobPage() {
                                 >
                                     {job?._description?.length! >= 2 ? job?._description[1] : ""}
                                 </Typography>
-                            </Box>
+                            </Box> */}
 
                         </Box>
 
