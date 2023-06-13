@@ -585,7 +585,7 @@ export default function OneJobPage()
                                         )
                                     })}
                                 </Typography>
-                                
+
                             </Box>
 
                             {/* not sure about additional info */}
@@ -623,7 +623,7 @@ export default function OneJobPage()
                     </Box>
 
                     {/* Apply Icon + Apply Text*/}
-                    <Box sx={{ marginTop: "313px", alignSelf: "center", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+                    <Box sx={{ marginTop: "179px", alignSelf: "center", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
                         <CloudSVG />
                         <Typography
                             variant='h1'
@@ -1046,17 +1046,44 @@ export default function OneJobPage()
                             }}
                         >
 
+                            {/* show or hide recommenders button */}
                             <Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
-                                <Button onClick={() => { setRecommendersListOpen(!recommendersListOpen) }}>
-                                    <Typography variant='h2' color={"primary.descAndReqTitle"}>
+                                <Button onClick={() => { setRecommendersListOpen(!recommendersListOpen) }} sx={{
+                                    "&:hover": {
+                                        backgroundColor: "background.main",
+                                        '& .addRecommendersText': {
+                                            color: 'secondary.addRecommendersTextHover', // Change the color to your desired hover color
+                                        },
+                                        '& .addRecommendersText2': {
+                                            color: 'secondary.addRecommendersTextHover', // Change the color to your desired hover color
+                                            opacity: "0.68"
+                                        },
+                                        '& .addRecommendersIcon1': {
+                                            color: 'secondary.addRecommendersTextHover', // Change the color to your desired hover color
+                                        },
+                                        '& .addRecommendersIcon2': {
+                                            color: 'secondary.addRecommendersTextHover', // Change the color to your desired hover color
+                                        },
+
+                                    }
+                                }}>
+                                    <Typography variant='h2' color={"primary.descAndReqTitle"} className='addRecommendersText'>
                                         הוספת ממליצים
                                     </Typography>
-                                    <Typography variant='h2' marginLeft={"12px"} color={"primary.descAndReqTitle"} sx={{ opacity: 0.68 }}>
+                                    <Typography variant='h2' marginLeft={"12px"} color={"primary.descAndReqTitle"} sx={{ opacity: 0.68 }} className='addRecommendersText2'>
                                         (אופציונאלי)
                                     </Typography>
                                     {recommendersListOpen ?
-                                        <Icon sx={{ height: "12px", width: "22px", color: "primary.descAndReqTitle" }} component={DownArrowSVG} /> :
-                                        <Icon sx={{ height: "12px", width: "22px", color: "primary.descAndReqTitle" }} component={UpArrowSVG} />}
+                                        <Icon sx={{ height: "30px", width: "40px", color: "primary.descAndReqTitle", marginLeft: "12px" }}
+                                            className='addRecommendersIcon1'
+                                            component={DownArrowSVG}
+                                        /> :
+
+                                        <Icon sx={{ height: "30px", width: "40px", color: "primary.descAndReqTitle", marginLeft: "12px" }}
+                                            className='addRecommendersIcon1'
+                                            component={UpArrowSVG}
+                                        />
+                                    }
 
                                 </Button>
                             </Box>
@@ -1450,34 +1477,41 @@ export default function OneJobPage()
 
                         </Box>
 
+                        {/* Separator for the submit button */}
+                        <Box sx={{ height: "1px", width: "100%", borderRadius: "1px", backgroundColor: "background.JobDetailsText", marginTop: "39px" }} />
+
                         {/* Submit Button */}
                         <Box
                             sx={{
-                                width: "90%",
+                                width: "100%",
                                 alignSelf: "center",
                                 display: "flex",
                                 flexDirection: "row",
-                                justifyContent: "space-between",
-                                marginBottom: "1rem",
-                                marginTop: "5rem"
+                                justifyContent: "center",
+                                marginBottom: "537px",
+                                marginTop: "76px",
                             }}
                         >
 
                             <Button
                                 variant='contained'
                                 sx={{
-                                    backgroundColor: "background.boxInner",
+                                    backgroundColor: "background.JobDetailsText",
+                                    borderRadius: "36px",
+                                    paddingTop: "21px",
+                                    paddingBottom: "21px",
+                                    paddingRight: "8vw",
+                                    paddingLeft: "8vw",
                                     color: "primary.main",
                                     "&:hover": {
-                                        backgroundColor: "background.main"
+                                        backgroundColor: "background.submitButtonHover"
                                     }
                                 }}
                                 onClick={handleSubmit}
                             >
-                                <Typography variant='h4'>
-                                    שליחה
+                                <Typography variant='h4' color={"primary.textBright"}>
+                                    שלח/י טופס
                                 </Typography>
-                                <Send sx={{ fontSize: "24px", transform: "scaleX(-1)", marginLeft: "0.5rem" }} />
                             </Button>
                         </Box>
 

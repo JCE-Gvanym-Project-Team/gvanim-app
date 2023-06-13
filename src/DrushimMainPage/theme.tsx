@@ -224,7 +224,8 @@ export const themeSettings = (mode, actualMode, fontSize, fontFamily) =>
                 dark: "#041a3d",
                 descAndReqText: "#767676",
                 jobDetails: "#AC2F69",
-                labelText: "#053B7A"
+                labelText: "#053B7A",
+                addRecommendersTextHover: "#7BC3CC",
 
             },
             neutral: {
@@ -242,7 +243,8 @@ export const themeSettings = (mode, actualMode, fontSize, fontFamily) =>
                 jobTitleSeparator: "#2E3552",
                 candidateDetailsTextField: "#F0F0F0",
                 cvButton: "#41C2F0",
-                cvButtonHover: "#77CFEF"
+                cvButtonHover: "#77CFEF",
+                submitButtonHover: "#2768B4"
             },
             error: {
                 main: "#FF0000"
