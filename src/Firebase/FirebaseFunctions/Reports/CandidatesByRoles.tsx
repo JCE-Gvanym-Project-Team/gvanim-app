@@ -1,6 +1,98 @@
 import React, { useState, useEffect } from "react";
-import { PieChart, Pie, Tooltip } from "recharts";
 import { getFilteredJobs } from "../Job";
+import Highcharts from "highcharts";
+import HighchartsReact from "highcharts-react-official";
+
+interface ChartData {
+  name: string;
+  y: number;
+  color: string;
+}
+
+const A = () => {
+  const [data, setData] = useState<ChartData[]>([]);
+  const [newJobsCount, setNewJobsCount] = useState(0);
+  const candidatesByRole: { [role: string]: number } = {};
+  const colors = ["orangered", "skyblue", "limegreen", "purple", "yellow", "teal"];
+
+  useEffect(() => {
+    async function fetchData() {
+      const filteredJobs = await getFilteredJobs();
+      console.log(filteredJobs.length);
+      console.log(newJobsCount);
+      if (filteredJobs.length !== newJobsCount) {
+        for (let i = 0; i < filteredJobs.length; i++) {
+          const job = filteredJobs[i];
+          const role = job._role;
+
+          if (job !== undefined && role !== undefined) {
+            if (candidatesByRole[role]) {
+              const cands = (await job.getCandidatures()).length;
+              candidatesByRole[role] += cands;
+            } else {
+              candidatesByRole[role] = 1;
+            }
+            setNewJobsCount((prevCount) => prevCount + 1); // Update the count of new jobs
+          }
+        }
+
+        const newData: ChartData[] = Object.entries(candidatesByRole).map(([role, quantity], index) => ({
+          name: role,
+          y: quantity,
+          color: colors[index % colors.length],
+        }));
+
+        if (newData !== undefined) {
+          setData(newData);
+        }
+      }
+    }
+
+    fetchData();
+  }, []);
+
+  const options = {
+    chart: {
+      type: "pie",
+    },
+    title: {
+      text: "Job Candidates by Role",
+    },
+    series: [
+      {
+        name: "Roles",
+        data: data,
+        showInLegend: true,
+        dataLabels: {
+          enabled: true,
+        },
+      },
+    ],
+  };
+
+  const handleDataChange = (updatedData: ChartData[]) => {
+    setData(updatedData);
+    setNewJobsCount((prevCount) => prevCount + 1); // Update the count of new jobs
+  };
+
+  // Function to generate a random color
+  const randomColor = () => {
+    const letters = "0123456789ABCDEF";
+    let color = "#";
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  };
+
+  return (
+    <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+      <HighchartsReact highcharts={Highcharts} options={options} />
+    </div>
+  );
+};
+
+export default A;
 
 // import React, { useEffect, useState } from "react";
 // import { Job, getFilteredJobs } from "../Job";
@@ -227,72 +319,3 @@ import { getFilteredJobs } from "../Job";
 // export default App;
 
 
-const A = () => {
-  const [data, setData] = useState<{ name: string; value: number; }[]>([]);
-  const colors = ["orangered", "skyblue", "limegreen", "purple", "yellow", "teal"];
-  ;
-
-  useEffect(() => {
-    async function fetchData() {
-      const filteredJobs = await getFilteredJobs();
-      const candidatesByRole: { [role: string]: number } = {};
-
-      for (let i = 0; i < filteredJobs.length; i++) {
-        const job = filteredJobs[i];
-        const role = job._role;
-
-        if (job != undefined && role != undefined) {
-          if (candidatesByRole[role]) {
-            const cands =  (await job.getCandidatures()).length;
-            candidatesByRole[role] += cands;
-          } else {
-            candidatesByRole[role] = 1;
-            const newColor = randomColor();
-            colors.push(newColor);
-          }
-        }
-      }
-
-      const newData: { name: string; value: number; fill: string; }[] = Object.entries(candidatesByRole).map(([role, quantity], index) => ({
-        name: role,
-        value: quantity,
-        fill: colors[index % colors.length],
-      }));
-
-      if (newData != undefined)
-        setData(newData);
-    }
-
-    fetchData();
-  }, []);
-
-  // פונקציה שמגרילה צבע רנדומלי
-  const randomColor = () => {
-    const letters = "0123456789ABCDEF";
-    let color = "#";
-    for (let i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-  };
-
-  return (
-    <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-      <PieChart width={600} height={600}>
-        <Pie
-          dataKey="value"
-          isAnimationActive={true}
-          data={data}
-          outerRadius={250}
-          fill="fill"
-          label
-        />
-        <Tooltip />
-      </PieChart>
-    </div>
-  );
-  
-  
-};
-
-export default A;
