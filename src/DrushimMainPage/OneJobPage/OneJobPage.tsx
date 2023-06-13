@@ -1,4 +1,4 @@
-import { AddBoxSharp, ArrowDownward, ArrowUpward, AttachFile, DeleteForeverOutlined, ErrorOutlineRounded, FileUpload, FileUploadOutlined, Redo, Send } from '@mui/icons-material';
+import { AddBoxSharp, ArrowDownward, ArrowUpward, AttachFile, DeleteForeverOutlined, DeleteOutlined, ErrorOutlineRounded, FileUpload, FileUploadOutlined, Redo, Send } from '@mui/icons-material';
 import { Box, Button, Divider, Icon, Input, TextField, Typography, useTheme } from '@mui/material';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -19,6 +19,8 @@ import { ReactComponent as PinkEllipseSVG } from './Resources/PinkEllipse.svg'
 import { ReactComponent as UploadIconSVG } from './Resources/UploadIcon.svg'
 import { ReactComponent as DownArrowSVG } from './Resources/DownArrow.svg'
 import { ReactComponent as UpArrowSVG } from './Resources/UpArrow.svg'
+import { ReactComponent as PlusIconSVG } from './Resources/Plus.svg'
+import { ReactComponent as AttachFileSVG } from './Resources/AttachFile.svg'
 
 
 const ABOUT_MAX_LENGTH = 1000;
@@ -425,7 +427,7 @@ export default function OneJobPage()
                     }}
                 >
 
-                    {/* Go back to all jobs button */}
+                    {/* Go back to all jobs button
                     <Button
                         variant='outlined'
                         sx={{
@@ -452,7 +454,7 @@ export default function OneJobPage()
                             <Redo sx={{ marginRight: "0.3rem" }} />
                             לכל המשרות
                         </Typography>
-                    </Button>
+                    </Button> */}
 
                     {/* Job Number */}
                     <Box sx={{ display: "flex", flexDirection: "row", width: "41.71875vw" }}>
@@ -670,40 +672,27 @@ export default function OneJobPage()
                                     </Typography>
                                     <TextField
                                         variant='outlined'
-                                        label="שם פרטי"
-                                        InputLabelProps={{
-                                            shrink: false,
-                                            style: { display: (!candidateName || candidateName === "") && !candidateNameTextFieldFocused ? "block" : "none" }
-
-                                        }}
+                                        placeholder='שם פרטי'
                                         sx={{
                                             backgroundColor: "background.candidateDetailsTextField",
-                                            border: "0px solid red",
                                             '& .MuiOutlinedInput-root': {
+                                                borderColor: "red",
                                                 '& fieldset': {
-                                                    borderColor: candidateNameError ? 'error.main' : "primary.main",
+                                                    borderColor: candidateNameError ? 'error.main' : "secondary.labelText",
                                                     border: "0px solid red",
                                                     borderRadius: "4px"
-                                                }
+                                                },
                                             },
+                                            // "& .Mui-focused": {
+                                            //     borderColor: "red",
+                                            //     border: "1px solid red",
+                                            // }
                                         }}
                                         color={candidateNameError ? 'error' : "primary"}
                                         onChange={(event) =>
                                         {
-                                            setCandidateNameTextFieldFocused(false);
                                             setCandidateNameError(false);
                                             setCandidateName(event.target.value);
-                                        }}
-                                        onFocus={(event) =>
-                                        {
-                                            setCandidateNameTextFieldFocused(true);
-                                        }}
-                                        onBlur={() =>
-                                        {
-                                            if (!candidateName || candidateName === "")
-                                            {
-                                                setCandidateNameTextFieldFocused(false);
-                                            }
                                         }}
                                     />
                                     <Box sx={{
@@ -730,18 +719,13 @@ export default function OneJobPage()
                                     </Typography>
                                     <TextField
                                         variant='outlined'
-                                        label="שם משפחה"
-                                        InputLabelProps={{
-                                            shrink: false,
-                                            style: { display: (!candidateSurname || candidateSurname === "") && !candidateSurnameTextFieldFocuesd ? "block" : "none" }
-
-                                        }}
+                                        placeholder='שם משפחה'
                                         sx={{
                                             backgroundColor: "background.candidateDetailsTextField",
                                             border: "0px solid red",
                                             '& .MuiOutlinedInput-root': {
                                                 '& fieldset': {
-                                                    borderColor: candidateSurnameError ? 'error.main' : "primary.main",
+                                                    borderColor: candidateSurnameError ? 'error.main' : "secondary.labelText",
                                                     border: "0px solid red",
                                                     borderRadius: "4px"
                                                 }
@@ -750,20 +734,8 @@ export default function OneJobPage()
                                         color={candidateSurnameError ? 'error' : "primary"}
                                         onChange={(event) =>
                                         {
-                                            setCandidateSurnameTextFieldFocuesd(false);
                                             setCandidateSurnameError(false);
                                             setCandidateSurname(event.target.value);
-                                        }}
-                                        onFocus={(event) =>
-                                        {
-                                            setCandidateSurnameTextFieldFocuesd(true);
-                                        }}
-                                        onBlur={() =>
-                                        {
-                                            if (!candidateSurname || candidateSurname === "")
-                                            {
-                                                setCandidateSurnameTextFieldFocuesd(false);
-                                            }
                                         }}
                                     />
                                     <Box sx={{
@@ -796,18 +768,13 @@ export default function OneJobPage()
                                     </Typography>
                                     <TextField
                                         variant='outlined'
-                                        label="טלפון"
-                                        InputLabelProps={{
-                                            shrink: false,
-                                            style: { display: (!candidatePhone || candidatePhone === "") && !candidatePhoneTextFieldFocused ? "block" : "none" }
-
-                                        }}
+                                        placeholder='טלפון'
                                         sx={{
                                             backgroundColor: "background.candidateDetailsTextField",
                                             border: "0px solid red",
                                             '& .MuiOutlinedInput-root': {
                                                 '& fieldset': {
-                                                    borderColor: candidatePhoneError ? 'error.main' : "primary.main",
+                                                    borderColor: candidatePhoneError ? 'error.main' : "secondary.labelText",
                                                     border: "0px solid red",
                                                     borderRadius: "4px"
                                                 }
@@ -816,20 +783,8 @@ export default function OneJobPage()
                                         color={candidatePhoneError ? 'error' : "primary"}
                                         onChange={(event) =>
                                         {
-                                            setCandidatePhoneTextFieldFocused(false);
                                             setCandidatePhoneError(false);
                                             setCandidatePhone(event.target.value);
-                                        }}
-                                        onFocus={(event) =>
-                                        {
-                                            setCandidatePhoneTextFieldFocused(true);
-                                        }}
-                                        onBlur={() =>
-                                        {
-                                            if (!candidatePhone || candidatePhone === "")
-                                            {
-                                                setCandidatePhoneTextFieldFocused(false);
-                                            }
                                         }}
                                     />
                                     <Box sx={{
@@ -857,17 +812,12 @@ export default function OneJobPage()
                                     <TextField
                                         variant='outlined'
                                         type='email'
-                                        label="אימייל"
-                                        InputLabelProps={{
-                                            shrink: false,
-                                            style: { display: (!candidateEmail || candidateEmail === "") && !candidateEmailTextFieldFocused ? "block" : "none" }
-
-                                        }}
+                                        placeholder='אימייל'
                                         sx={{
                                             backgroundColor: "background.candidateDetailsTextField",
                                             '& .MuiOutlinedInput-root': {
                                                 '& fieldset': {
-                                                    borderColor: candidateEmailError ? 'error.main' : "primary.main",
+                                                    borderColor: candidateEmailError ? 'error.main' : "secondary.labelText",
                                                     border: "0px solid red",
                                                     borderRadius: "4px"
                                                 }
@@ -876,20 +826,8 @@ export default function OneJobPage()
                                         color={candidateEmailError ? 'error' : "primary"}
                                         onChange={(event) =>
                                         {
-                                            setCandidateEmailTextFieldFocused(false);
                                             setCandidateEmailError(false);
                                             setCandidateEmail(event.target.value);
-                                        }}
-                                        onFocus={() =>
-                                        {
-                                            setCandidateEmailTextFieldFocused(true);
-                                        }}
-                                        onBlur={() =>
-                                        {
-                                            if (!candidateEmail || candidateEmail === "")
-                                            {
-                                                setCandidateEmailTextFieldFocused(false);
-                                            }
                                         }}
 
                                     />
@@ -974,6 +912,7 @@ export default function OneJobPage()
                                 }}
                             />
                             <Button
+                                disableRipple
                                 variant='contained'
                                 sx={{
                                     backgroundColor: "background.cvButton",
@@ -1003,6 +942,7 @@ export default function OneJobPage()
                                     component={UploadIconSVG}
                                 />
                                 <Box
+
                                     sx={{
                                         flexDirection: "column"
                                     }}
@@ -1048,7 +988,7 @@ export default function OneJobPage()
 
                             {/* show or hide recommenders button */}
                             <Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
-                                <Button onClick={() => { setRecommendersListOpen(!recommendersListOpen) }} sx={{
+                                <Button disableRipple onClick={() => { setRecommendersListOpen(!recommendersListOpen) }} sx={{
                                     "&:hover": {
                                         backgroundColor: "background.main",
                                         '& .addRecommendersText': {
@@ -1090,12 +1030,12 @@ export default function OneJobPage()
 
                             {/* List of recommenders */}
                             <Box sx={{
-                                backgroundColor: "background.boxInner",
+                                backgroundColor: "background.recommendersBox",
+                                borderRadius: "4px",
                                 flexDirection: "column",
                                 paddingTop: "36px",
                                 paddingBottom: "36px",
                                 paddingRight: "23px",
-                                paddingLeft: "23px",
                                 alignItems: "center",
                                 marginTop: "30px",
 
@@ -1119,8 +1059,16 @@ export default function OneJobPage()
 
                                                 {/* delete recommender button */}
                                                 <Button
+                                                    disableRipple
                                                     sx={{
-                                                        display: { xs: "none", md: "flex" }
+                                                        alignSelf: "end",
+                                                        marginBottom: "27px",
+                                                        height: "fit-content",
+                                                        display: { xs: "none", md: "flex" },
+                                                        "&:hover": {
+                                                            backgroundColor: "transparent",
+                                                            color: "error.main"
+                                                        }
                                                     }}
                                                     onClick={() =>
                                                     {
@@ -1129,7 +1077,7 @@ export default function OneJobPage()
                                                         setAreYouSureDialogRecommenderName(recommender[0]?._fullName!);
                                                     }}
                                                 >
-                                                    <DeleteForeverOutlined />
+                                                    <DeleteOutlined sx={{ }} />
                                                 </Button>
                                                 {/* are you sure you want to delete recommender dialog */}
                                                 <AreYouSureDialog
@@ -1141,11 +1089,10 @@ export default function OneJobPage()
                                                 {/* Recommender */}
                                                 <Box
                                                     sx={{
-                                                        backgroundColor: "background.box",
                                                         display: "flex",
                                                         flexDirection: "row",
                                                         justifyContent: "space-between",
-                                                        padding: "1rem",
+
                                                         paddingTop: "0",
                                                         paddingBottom: "1rem",
                                                     }}>
@@ -1232,15 +1179,33 @@ export default function OneJobPage()
                                                             sx={{
                                                                 display: "flex",
                                                                 flexDirection: "column",
-                                                                marginRight: "1rem"
+                                                                marginRight: "20px"
                                                             }}
                                                         >
                                                             <Typography
-                                                                variant='h4'
+                                                                variant='h3'
+                                                                sx={{ marginBottom: "15px" }}
+                                                                color={"primary.jobTitle"}
                                                             >
-                                                                שם:
+                                                                שם מלא:
                                                             </Typography>
                                                             <TextField
+                                                                placeholder='שם מלא'
+                                                                variant='outlined'
+                                                                sx={{
+                                                                    backgroundColor: "background.main",
+                                                                    '& .MuiOutlinedInput-root': {
+                                                                        '& fieldset': {
+                                                                            borderColor: recommendersErrors[index][0] ? 'error.main' : "secondary.labelText",
+                                                                            border: "0px solid black"
+                                                                        }
+                                                                    },
+                                                                    '& .MuiInputBase-input': {
+                                                                        height: '71px', // Adjust the height value as needed
+                                                                        paddingTop: "0",
+                                                                        paddingBottom: "0"
+                                                                    },
+                                                                }}
                                                                 onChange={(event) =>
                                                                 {
                                                                     const currentRecommender = recommendersList[index][0];
@@ -1259,19 +1224,30 @@ export default function OneJobPage()
                                                         {/* Recommender phone */}
                                                         <Box
                                                             sx={{
-                                                                marginRight: "1rem"
+                                                                marginRight: "20px"
                                                             }}>
                                                             <Typography
-                                                                variant='h4'
+                                                                variant='h3'
+                                                                color={"secondary.labelText"}
+                                                                sx={{ marginBottom: "15px" }}
                                                             >
                                                                 טלפון:
                                                             </Typography>
                                                             <TextField
+                                                                placeholder='טלפון'
+                                                                variant='outlined'
                                                                 sx={{
+                                                                    backgroundColor: "background.main",
                                                                     '& .MuiOutlinedInput-root': {
                                                                         '& fieldset': {
-                                                                            borderColor: recommendersErrors[index][0] ? 'error.main' : "primary.main",
+                                                                            borderColor: recommendersErrors[index][0] ? 'error.main' : "secondary.labelText",
+                                                                            border: "0px solid black"
                                                                         }
+                                                                    },
+                                                                    '& .MuiInputBase-input': {
+                                                                        height: '71px', // Adjust the height value as needed
+                                                                        paddingTop: "0",
+                                                                        paddingBottom: "0"
                                                                     },
                                                                 }}
                                                                 onChange={(event) =>
@@ -1314,18 +1290,29 @@ export default function OneJobPage()
                                                             </Box>
                                                         </Box>
                                                         {/* Recommender email */}
-                                                        <Box sx={{ marginRight: "1rem" }}>
+                                                        <Box sx={{ marginRight: "20px" }}>
                                                             <Typography
-                                                                variant='h4'
+                                                                variant='h3'
+                                                                color={"secondary.labelText"}
+                                                                sx={{ marginBottom: "15px" }}
                                                             >
                                                                 אימייל:
                                                             </Typography>
                                                             <TextField
+                                                                placeholder='אימייל'
+                                                                variant='outlined'
                                                                 sx={{
+                                                                    backgroundColor: "background.main",
                                                                     '& .MuiOutlinedInput-root': {
                                                                         '& fieldset': {
-                                                                            borderColor: recommendersErrors[index][1] ? 'error.main' : "primary.main",
+                                                                            borderColor: recommendersErrors[index][1] ? 'error.main' : "secondary.labelText",
+                                                                            border: "0px solid black"
                                                                         }
+                                                                    },
+                                                                    '& .MuiInputBase-input': {
+                                                                        height: '71px', // Adjust the height value as needed
+                                                                        paddingTop: "0",
+                                                                        paddingBottom: "0"
                                                                     },
                                                                 }}
                                                                 onChange={(event) =>
@@ -1374,7 +1361,6 @@ export default function OneJobPage()
                                                         sx={{
                                                             display: "flex",
                                                             flexDirection: "row",
-                                                            height: "72%",
                                                             alignSelf: "end",
                                                         }}
                                                     >
@@ -1394,8 +1380,16 @@ export default function OneJobPage()
                                                             }}
                                                         />
                                                         <Button
+                                                            disableRipple
                                                             sx={{
-                                                                display: { xs: "none", md: "flex" }
+                                                                borderRadius: "36px",
+                                                                paddingTop: "21px",
+                                                                paddingBottom: "21px",
+                                                                display: { xs: "none", md: "flex" },
+                                                                backgroundColor: "background.cvButton",
+                                                                "&:hover": {
+                                                                    backgroundColor: "background.cvButtonHover"
+                                                                }
                                                             }}
                                                             onClick={() =>
                                                             {
@@ -1407,18 +1401,29 @@ export default function OneJobPage()
                                                             }}
 
                                                         >
-                                                            <AttachFile
-                                                                sx={{ fontSize: "24px" }}
+                                                            <Icon
+                                                                sx={{
+                                                                    height: "21px",
+                                                                    width: "19px",
+                                                                    color: "primary.textBright",
+                                                                    marginRight: "9px",
+                                                                    marginLeft: "30px"
+                                                                }}
+                                                                component={AttachFileSVG}
                                                             />
                                                             <Box
                                                                 sx={{
-                                                                    flexDirection: "column"
+                                                                    flexDirection: "column", paddingRight: "30px"
                                                                 }}
                                                             >
                                                                 <Typography
-                                                                    variant='h4'
+                                                                    variant='h3'
                                                                     sx={{
-                                                                        display: { xs: "none", md: "block" }
+                                                                        display: { xs: "none", md: "block" },
+                                                                        whiteSpace: 'nowrap',
+                                                                        overflow: 'hidden',
+                                                                        textOverflow: 'ellipsis',
+                                                                        color: "primary.textBright"
                                                                     }}>
                                                                     צירוף קובץ
                                                                 </Typography>
@@ -1442,13 +1447,34 @@ export default function OneJobPage()
                                 {/* Add recommender button */}
                                 <Box
                                     sx={{
-                                        width: "95%",
+                                        width: "100%",
                                         display: numRecommenders >= MAX_RECOMMENDERS ? "none" : "block"
                                     }}>
 
                                     <Button
+                                        disableRipple
                                         sx={{
-                                            alignSelf: "start"
+                                            minWidth: "200px",
+                                            backgroundColor: "transparent",
+                                            alignSelf: "start",
+                                            display: "flex",
+                                            flexDirection: "column",
+                                            justifyContent: "center",
+                                            alignItems: "center",
+                                            marginLeft: "60px",
+                                            "&:hover": {
+                                                backgroundColor: "transparent",
+                                                "& .addRecommenderIcon": {
+                                                    color: "secondary.addRecommenderButtonHover"
+                                                },
+                                                "& .addRecommenderText": {
+                                                    color: "secondary.addRecommenderButtonHover"
+                                                },
+                                                "& .addRecommenderLine": {
+                                                    backgroundColor: "secondary.addRecommenderButtonHover"
+                                                }
+                                            }
+
                                         }}
                                         onClick={() =>
                                         {
@@ -1468,8 +1494,27 @@ export default function OneJobPage()
                                             }
                                         }}
                                     >
-                                        <AddBoxSharp />
-                                        הוספת ממליץ
+                                        {/* Icon and text */}
+                                        <Box sx={{
+                                            display: "flex",
+                                            flexDirection: "row",
+                                            alignItems: "center"
+                                        }}>
+
+                                            <Icon
+                                                sx={{ width: "30px", height: "30px", marginRight: "10px", color: "primary.addRecommenderButton" }}
+                                                component={PlusIconSVG}
+                                                className='addRecommenderIcon'
+                                            />
+                                            <Typography variant='h3' color={"primary.addRecommenderButton"} className='addRecommenderText'>
+                                                הוספת ממליץ
+                                            </Typography>
+                                        </Box>
+                                        {/* Line underneath */}
+                                        <Box
+                                            className="addRecommenderLine"
+                                            sx={{ backgroundColor: "primary.addRecommenderButton", height: "3px", borderRadius: "36px", marginTop: "9px", width: "100%" }}
+                                        />
                                     </Button>
                                 </Box>
 

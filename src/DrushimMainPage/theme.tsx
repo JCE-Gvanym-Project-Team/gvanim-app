@@ -217,6 +217,7 @@ export const themeSettings = (mode, actualMode, fontSize, fontFamily) =>
                 faded: "#FEFEFE",
                 jobTitle: "#053B7A",
                 descAndReqTitle: "#5BA1AA",
+                addRecommenderButton: "#91A749"
             },
             secondary: {
                 main: "#03368a",
@@ -226,6 +227,7 @@ export const themeSettings = (mode, actualMode, fontSize, fontFamily) =>
                 jobDetails: "#AC2F69",
                 labelText: "#053B7A",
                 addRecommendersTextHover: "#7BC3CC",
+                addRecommenderButtonHover: "#BFD37E"
 
             },
             neutral: {
@@ -244,7 +246,8 @@ export const themeSettings = (mode, actualMode, fontSize, fontFamily) =>
                 candidateDetailsTextField: "#F0F0F0",
                 cvButton: "#41C2F0",
                 cvButtonHover: "#77CFEF",
-                submitButtonHover: "#2768B4"
+                submitButtonHover: "#2768B4",
+                recommendersBox: "rgba(91, 161, 170, 0.14)"
             },
             error: {
                 main: "#FF0000"
@@ -392,19 +395,20 @@ function getContrastingColor(hexColor)
     return contrastingColor;
 }
 
-function getDarkContrastingColor(hexColor) {
+function getDarkContrastingColor(hexColor)
+{
     // Convert hexadecimal color to RGB
     const hex = hexColor.replace("#", "");
     const r = parseInt(hex.substring(0, 2), 16);
     const g = parseInt(hex.substring(2, 4), 16);
     const b = parseInt(hex.substring(4, 6), 16);
-  
+
     // Calculate brightness
     const brightness = (r * 299 + g * 587 + b * 114) / 1000;
-  
+
     // Determine contrasting color
     const darkContrast = brightness >= 128 ? brightness - 100 : brightness + 100;
     const contrastingColor = `#${Math.round(darkContrast).toString(16).padStart(2, "0").repeat(3)}`;
-  
+
     return contrastingColor;
-  }
+}
