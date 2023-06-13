@@ -656,7 +656,7 @@ export default function OneJobPage()
                                 sx={{
                                     display: "flex",
                                     flexDirection: { xs: "column", md: "row" },
-                                    marginRight:  { xs: "0", md: "7px" }
+                                    marginRight: { xs: "0", md: "7px" }
                                 }}
                             >
                                 {/* Firstname */}
@@ -889,7 +889,7 @@ export default function OneJobPage()
                         </Box>
 
                         {/* attach CV file button */}
-                        <Box sx={{ marginTop: "50px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", width: "fit-content" }}>
+                        <Box sx={{ marginTop: "50px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", alignSelf: { xs: "center", md: "start" }, width: "fit-content" }}>
                             <Input
                                 type="file"
                                 inputRef={cvFileInputRef}
@@ -935,6 +935,7 @@ export default function OneJobPage()
 
                                     sx={{
                                         flexDirection: "column"
+
                                     }}
                                 >
                                     <Typography variant={screenSize === "xs" ? "subtitle1" : 'h3'} >
@@ -973,6 +974,7 @@ export default function OneJobPage()
                                 alignItems: "start",
                                 width: "100%",
                                 marginTop: "134px",
+
                             }}
                         >
 
@@ -997,19 +999,19 @@ export default function OneJobPage()
 
                                     }
                                 }}>
-                                    <Typography variant='h2' color={"primary.descAndReqTitle"} className='addRecommendersText'>
-                                        הוספת ממליצים
+                                    <Typography variant={screenSize === "xs" ? "subtitle2" : 'h2'} color={"primary.descAndReqTitle"} className='addRecommendersText'>
+                                        הוספת ממליצים:
                                     </Typography>
-                                    <Typography variant='h2' marginLeft={"12px"} color={"primary.descAndReqTitle"} sx={{ opacity: 0.68 }} className='addRecommendersText2'>
+                                    <Typography variant={screenSize === "xs" ? "subtitle2" : 'h2'} color={"primary.descAndReqTitle"} sx={{ marginLeft: { xs: "4px", md: "12px" }, opacity: 0.68 }} className='addRecommendersText2'>
                                         (אופציונאלי)
                                     </Typography>
                                     {recommendersListOpen ?
-                                        <Icon sx={{ height: "30px", width: "40px", color: "primary.descAndReqTitle", marginLeft: "12px" }}
+                                        <Icon sx={{ height: "30px", width: "40px", color: "primary.descAndReqTitle", marginLeft: { xs: "2px", md: "12px" } }}
                                             className='addRecommendersIcon1'
                                             component={DownArrowSVG}
                                         /> :
 
-                                        <Icon sx={{ height: "30px", width: "40px", color: "primary.descAndReqTitle", marginLeft: "12px" }}
+                                        <Icon sx={{ height: "30px", width: "40px", color: "primary.descAndReqTitle", marginLeft: { xs: "2px", md: "12px" } }}
                                             className='addRecommendersIcon1'
                                             component={UpArrowSVG}
                                         />
@@ -1025,7 +1027,7 @@ export default function OneJobPage()
                                 flexDirection: "column",
                                 paddingTop: "36px",
                                 paddingBottom: "36px",
-                                paddingRight: "23px",
+                                paddingRight: { xs: "0px", md: "23px" },
                                 alignItems: "center",
                                 marginTop: "30px",
 
@@ -1042,7 +1044,9 @@ export default function OneJobPage()
                                                     display: "flex",
                                                     flexDirection: "row",
                                                     width: "100%",
-                                                    marginBottom: index >= MAX_RECOMMENDERS - 1 ? "0" : "43px"
+                                                    marginBottom: index >= MAX_RECOMMENDERS - 1 ? "0" : "43px",
+                                                    justifyContent: "center",
+                                                    alignItems: "center"
                                                 }}
                                                 key={index + "recommendersBox"}
                                             >
@@ -1091,65 +1095,18 @@ export default function OneJobPage()
                                                     <Box
                                                         sx={{
                                                             display: "flex",
-                                                            flexDirection: { xs: "column", md: "row" }
+                                                            flexDirection: { xs: "column", md: "row" },
                                                         }}
                                                     >
                                                         {/* mobile delete + attach file buttons */}
                                                         <Box
                                                             sx={{
+                                                                alignSelf: "end",
                                                                 display: { xs: "flex", md: "none" },
                                                                 flexDirection: "row",
                                                                 justifyContent: "space-between"
                                                             }}
                                                         >
-                                                            {/* mobile attach file button */}
-                                                            <Box
-                                                                sx={{
-                                                                    display: "flex",
-                                                                    flexDirection: "row",
-                                                                    alignSelf: "end",
-                                                                }}
-                                                            >
-                                                                {/* add recommender file button */}
-                                                                <Input
-                                                                    type="file"
-                                                                    inputRef={(input) => (recommenderFileInputRefs.current[index] = input)}
-                                                                    style={{ display: 'none' }}
-                                                                    onChange={(event) =>
-                                                                    {
-                                                                        const inputElement = event.target as HTMLInputElement;
-                                                                        const files = inputElement.files;
-                                                                        if (files && files.length > 0)
-                                                                        {
-                                                                            updateRecommendersListAtIndex(recommendersList[index][0], files[0], index);
-                                                                        }
-                                                                    }}
-                                                                />
-                                                                <Button
-                                                                    sx={{
-                                                                        display: { xs: "flex", md: "none" }
-                                                                    }}
-                                                                    onClick={() =>
-                                                                    {
-                                                                        // trigger input onChange
-                                                                        if (recommenderFileInputRefs.current[index])
-                                                                        {
-                                                                            recommenderFileInputRefs.current[index]?.click()
-                                                                        }
-                                                                    }}
-
-                                                                >
-                                                                    <AttachFile
-                                                                        sx={{ fontSize: "24px" }}
-                                                                    />
-                                                                    {/* display filename to the user */}
-                                                                    <Typography variant='h5'>
-                                                                        {recommendersList[index][1]?.name.length! > 20 ? '...' : ''}
-                                                                        {recommendersList[index][1] ? recommendersList[index][1]?.name.slice(0, 20) : ""}
-                                                                    </Typography>
-                                                                </Button>
-
-                                                            </Box>
 
                                                             {/* Remove recommender button */}
                                                             <Button
@@ -1169,11 +1126,13 @@ export default function OneJobPage()
                                                             sx={{
                                                                 display: "flex",
                                                                 flexDirection: "column",
-                                                                marginRight: "20px"
+                                                                marginRight: "20px",
+                                                                marginLeft: { xs: "20px", md: 0 },
+                                                                marginTop: { xs: "20px", md: "0" }
                                                             }}
                                                         >
                                                             <Typography
-                                                                variant='h3'
+                                                                variant={screenSize === "xs" ? "subtitle1" : 'h3'}
                                                                 sx={{ marginBottom: "15px" }}
                                                                 color={"primary.jobTitle"}
                                                             >
@@ -1214,7 +1173,9 @@ export default function OneJobPage()
                                                         {/* Recommender phone */}
                                                         <Box
                                                             sx={{
-                                                                marginRight: "20px"
+                                                                marginRight: "20px",
+                                                                marginLeft: { xs: "20px", md: 0 },
+                                                                marginTop: { xs: "20px", md: "0" }
                                                             }}>
                                                             <Typography
                                                                 variant='h3'
@@ -1280,7 +1241,7 @@ export default function OneJobPage()
                                                             </Box>
                                                         </Box>
                                                         {/* Recommender email */}
-                                                        <Box sx={{ marginRight: "20px" }}>
+                                                        <Box sx={{ marginRight: "20px", marginLeft: { xs: "20px", md: 0 }, marginTop: { xs: "20px", md: "0" } }}>
                                                             <Typography
                                                                 variant='h3'
                                                                 color={"secondary.labelText"}
@@ -1344,92 +1305,91 @@ export default function OneJobPage()
                                                                 </Typography>
                                                             </Box>
                                                         </Box>
-                                                    </Box>
-
-                                                    {/* Attach recommender file button */}
-                                                    <Box sx={{ display: "flex", flexDirection: "column", alignSelf: "end" }}>
-                                                        {/* display filename to the user */}
-                                                        <Typography variant='h5' sx={{ alignSelf: "center" }}>
-                                                            {recommendersList[index][1] ? "קובץ שצורף: " : ""}
-                                                            {recommendersList[index][1]?.name.length! > 12 ? '...' : ''}
-                                                            {recommendersList[index][1] ? recommendersList[index][1]?.name.slice(0, 12) : ""}
-                                                        </Typography>
-                                                        <Box
-                                                            sx={{
-                                                                display: "flex",
-                                                                flexDirection: "row",
-                                                                alignSelf: "end",
-                                                            }}
-                                                        >
-                                                            {/* PC add recommender file input */}
-                                                            <Input
-                                                                type="file"
-                                                                inputRef={(input) => (recommenderFileInputRefs.current[index] = input)}
-                                                                style={{ display: 'none' }}
-                                                                onChange={(event) =>
-                                                                {
-                                                                    const inputElement = event.target as HTMLInputElement;
-                                                                    const files = inputElement.files;
-                                                                    if (files && files.length > 0)
-                                                                    {
-                                                                        updateRecommendersListAtIndex(recommendersList[index][0], files[0], index);
-                                                                    }
-                                                                }}
-                                                            />
-                                                            <Button
-                                                                disableRipple
+                                                        {/* Attach recommender file button */}
+                                                        <Box sx={{ display: "flex", flexDirection: "column", alignSelf: { xs: "center", md: "end" }, marginTop: "49px" }}>
+                                                            {/* display filename to the user */}
+                                                            <Typography variant='h5' sx={{ alignSelf: "center" }}>
+                                                                {recommendersList[index][1] ? "קובץ שצורף: " : ""}
+                                                                {recommendersList[index][1]?.name.length! > 12 ? '...' : ''}
+                                                                {recommendersList[index][1] ? recommendersList[index][1]?.name.slice(0, 12) : ""}
+                                                            </Typography>
+                                                            <Box
                                                                 sx={{
-                                                                    borderRadius: "36px",
-                                                                    paddingTop: "21px",
-                                                                    paddingBottom: "21px",
-                                                                    display: { xs: "none", md: "flex" },
-                                                                    backgroundColor: "background.cvButton",
-                                                                    "&:hover": {
-                                                                        backgroundColor: "background.cvButtonHover"
-                                                                    }
+                                                                    display: "flex",
+                                                                    flexDirection: "row",
+                                                                    alignSelf: "end",
                                                                 }}
-                                                                onClick={() =>
-                                                                {
-                                                                    // trigger input onChange
-                                                                    if (recommenderFileInputRefs.current[index])
-                                                                    {
-                                                                        recommenderFileInputRefs.current[index]?.click()
-                                                                    }
-                                                                }}
-
                                                             >
-                                                                <Icon
-                                                                    sx={{
-                                                                        height: "21px",
-                                                                        width: "19px",
-                                                                        color: "primary.textBright",
-                                                                        marginRight: "9px",
-                                                                        marginLeft: "30px"
+                                                                {/* TODO: pdf files only  */}
+                                                                {/* PC add recommender file input */}
+                                                                <Input
+                                                                    type="file"
+                                                                    inputRef={(input) => (recommenderFileInputRefs.current[index] = input)}
+                                                                    style={{ display: 'none' }}
+                                                                    onChange={(event) =>
+                                                                    {
+                                                                        const inputElement = event.target as HTMLInputElement;
+                                                                        const files = inputElement.files;
+                                                                        if (files && files.length > 0)
+                                                                        {
+                                                                            updateRecommendersListAtIndex(recommendersList[index][0], files[0], index);
+                                                                        }
                                                                     }}
-                                                                    component={AttachFileSVG}
                                                                 />
-                                                                <Box
+                                                                <Button
+                                                                    disableRipple
                                                                     sx={{
-                                                                        flexDirection: "column", paddingRight: "30px"
+                                                                        borderRadius: "36px",
+                                                                        paddingTop: "21px",
+                                                                        paddingBottom: "21px",
+                                                                        backgroundColor: "background.cvButton",
+                                                                        "&:hover": {
+                                                                            backgroundColor: "background.cvButtonHover"
+                                                                        }
                                                                     }}
+                                                                    onClick={() =>
+                                                                    {
+                                                                        // trigger input onChange
+                                                                        if (recommenderFileInputRefs.current[index])
+                                                                        {
+                                                                            recommenderFileInputRefs.current[index]?.click()
+                                                                        }
+                                                                    }}
+
                                                                 >
-                                                                    <Typography
-                                                                        variant='h3'
+                                                                    <Icon
                                                                         sx={{
-                                                                            display: { xs: "none", md: "block" },
-                                                                            whiteSpace: 'nowrap',
-                                                                            overflow: 'hidden',
-                                                                            textOverflow: 'ellipsis',
-                                                                            color: "primary.textBright"
-                                                                        }}>
-                                                                        צירוף קובץ
-                                                                    </Typography>
+                                                                            height: "21px",
+                                                                            width: "19px",
+                                                                            color: "primary.textBright",
+                                                                            marginRight: "9px",
+                                                                            marginLeft: "30px"
+                                                                        }}
+                                                                        component={AttachFileSVG}
+                                                                    />
+                                                                    <Box
+                                                                        sx={{
+                                                                            flexDirection: "column", paddingRight: "30px"
+                                                                        }}
+                                                                    >
+                                                                        <Typography
+                                                                            variant='h3'
+                                                                            sx={{
+                                                                                whiteSpace: 'nowrap',
+                                                                                overflow: 'hidden',
+                                                                                textOverflow: 'ellipsis',
+                                                                                color: "primary.textBright"
+                                                                            }}>
+                                                                            צירוף קובץ
+                                                                        </Typography>
 
-                                                                </Box>
-                                                            </Button>
+                                                                    </Box>
+                                                                </Button>
 
+                                                            </Box>
                                                         </Box>
                                                     </Box>
+
                                                 </Box>
                                             </Box>
                                         );
