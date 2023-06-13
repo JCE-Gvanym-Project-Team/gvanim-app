@@ -15,6 +15,7 @@ import { MyPaperSx, BoxGradientSx } from '../../../ManageJobsPage/Components/New
 import { useNavigate } from 'react-router-dom';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { designReturnButton } from '../../../ManageJobsPage/ManageJobsPageStyle';
+import { ArticleOutlined } from '@mui/icons-material';
 
 
 
