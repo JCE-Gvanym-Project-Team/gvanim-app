@@ -223,7 +223,8 @@ export const themeSettings = (mode, actualMode, fontSize, fontFamily) =>
                 half: "#184fa8",
                 dark: "#041a3d",
                 descAndReqText: "#767676",
-                jobDetails: "#AC2F69"
+                jobDetails: "#AC2F69",
+                labelText: "#053B7A"
 
             },
             neutral: {
@@ -238,7 +239,8 @@ export const themeSettings = (mode, actualMode, fontSize, fontFamily) =>
                 boxInner: colors.globalBackground,
                 jobDetails: "#FFFFFF",
                 JobDetailsText: "#053B7A",
-                jobTitleSeparator: "#2E3552"
+                jobTitleSeparator: "#2E3552",
+                candidateDetailsTextField: "#F0F0F0"
             },
             error: {
                 main: "#FF0000"
@@ -252,11 +254,13 @@ export const themeSettings = (mode, actualMode, fontSize, fontFamily) =>
             fontWeight: "Regular",
             fontSize: fontSize,
             h1: {
-                fontWeight: "medium",
+                fontWeight: "Medium",
+                fontFamily: fontFamily,
                 fontSize: fontSize + 30
             },
             h2: {
-                fontWeight: "medium",
+                fontWeight: "Medium",
+                fontFamily: fontFamily,
                 fontSize: fontSize + 10
             },
             h3: {

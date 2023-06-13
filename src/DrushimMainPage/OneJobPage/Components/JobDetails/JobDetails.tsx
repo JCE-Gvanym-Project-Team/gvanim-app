@@ -45,7 +45,7 @@ export default function FloatingBox(props: { job })
                 backgroundColor: "background.jobDetails",
                 boxShadow: "0px 3px 10px #00000029",
                 borderRadius: "10px",
-                flex: 35,
+                flex: 40,
                 zIndex: 5,
                 width: "fit-content"
             }

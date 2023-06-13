@@ -113,15 +113,19 @@ export default function OneJobPage()
     // candidate details
     const [candidateName, setCandidateName] = useState("");
     const [candidateNameError, setCandidateNameError] = useState(false);
+    const [candidateNameTextFieldFocused, setCandidateNameTextFieldFocused] = useState(false);
 
     const [candidateSurname, setCandidateSurname] = useState("");
     const [candidateSurnameError, setCandidateSurnameError] = useState(false);
+    const [candidateSurnameTextFieldFocuesd, setCandidateSurnameTextFieldFocuesd] = useState(false);
 
     const [candidatePhone, setCandidatePhone] = useState("");
     const [candidatePhoneError, setCandidatePhoneError] = useState(false);
+    const [candidatePhoneTextFieldFocused, setCandidatePhoneTextFieldFocused] = useState(false);
 
     const [candidateEmail, setCandidateEmail] = useState("");
     const [candidateEmailError, setCandidateEmailError] = useState(false);
+    const [candidateEmailTextFieldFocused, setCandidateEmailTextFieldFocused] = useState(false);
 
     const [aboutText, setAboutText] = useState("");
 
@@ -449,10 +453,10 @@ export default function OneJobPage()
                     {/* Job Number */}
                     <Box sx={{ display: "flex", flexDirection: "row", width: "41.71875vw" }}>
 
-                        <Typography variant='h5' sx={{ letterSpacing: 0, color: "secondary.jobDetails" }}>
+                        <Typography variant='h4' sx={{ letterSpacing: 0, color: "secondary.jobDetails" }}>
                             משרה מספר:
                         </Typography>
-                        <Typography variant='h5' sx={{ marginLeft: "11px", color: "secondary.descAndReqText" }}>
+                        <Typography variant='h4' sx={{ marginLeft: "11px", color: "secondary.descAndReqText" }}>
                             {job?._jobNumber}
                         </Typography>
                     </Box>
@@ -617,10 +621,11 @@ export default function OneJobPage()
                     <Box sx={{ marginTop: "313px", alignSelf: "center", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
                         <CloudSVG />
                         <Typography
-                            variant='h2'
+                            variant='h1'
                             sx={{
                                 marginTop: "19px",
-                                marginBottom: "76px"
+                                marginBottom: "76px",
+                                color: "primary.jobTitle",
                             }}
                         >
                             השאירו פרטים כאן:
@@ -655,22 +660,45 @@ export default function OneJobPage()
                             >
                                 {/* Firstname */}
                                 <Box>
-                                    <Typography variant='h4'>
+                                    <Typography variant='h4' color={"primary.jobTitle"} sx={{ marginBottom: "15px" }}>
                                         שם פרטי:
                                     </Typography>
                                     <TextField
+                                        variant='outlined'
+                                        label="שם פרטי"
+                                        InputLabelProps={{
+                                            shrink: false,
+                                            style: { display: (!candidateName || candidateName === "") && !candidateNameTextFieldFocused ? "block" : "none" }
+
+                                        }}
                                         sx={{
+                                            backgroundColor: "background.candidateDetailsTextField",
+                                            border: "0px solid red",
                                             '& .MuiOutlinedInput-root': {
                                                 '& fieldset': {
                                                     borderColor: candidateNameError ? 'error.main' : "primary.main",
+                                                    border: "0px solid red",
+                                                    borderRadius: "4px"
                                                 }
                                             },
                                         }}
                                         color={candidateNameError ? 'error' : "primary"}
                                         onChange={(event) =>
                                         {
+                                            setCandidateNameTextFieldFocused(false);
                                             setCandidateNameError(false);
                                             setCandidateName(event.target.value);
+                                        }}
+                                        onFocus={(event) =>
+                                        {
+                                            setCandidateNameTextFieldFocused(true);
+                                        }}
+                                        onBlur={() =>
+                                        {
+                                            if (!candidateName || candidateName === "")
+                                            {
+                                                setCandidateNameTextFieldFocused(false);
+                                            }
                                         }}
                                     />
                                     <Box sx={{
@@ -692,23 +720,45 @@ export default function OneJobPage()
                                         marginLeft: { xs: "0", md: "5rem" }
                                     }}
                                 >
-                                    <Typography variant='h4'>
+                                    <Typography variant='h4' color={"primary.jobTitle"} sx={{ marginBottom: "15px" }}>
                                         שם משפחה:
                                     </Typography>
                                     <TextField
                                         variant='outlined'
+                                        label="שם משפחה"
+                                        InputLabelProps={{
+                                            shrink: false,
+                                            style: { display: (!candidateSurname || candidateSurname === "") && !candidateSurnameTextFieldFocuesd ? "block" : "none" }
+
+                                        }}
                                         sx={{
+                                            backgroundColor: "background.candidateDetailsTextField",
+                                            border: "0px solid red",
                                             '& .MuiOutlinedInput-root': {
                                                 '& fieldset': {
                                                     borderColor: candidateSurnameError ? 'error.main' : "primary.main",
+                                                    border: "0px solid red",
+                                                    borderRadius: "4px"
                                                 }
                                             },
                                         }}
                                         color={candidateSurnameError ? 'error' : "primary"}
                                         onChange={(event) =>
                                         {
+                                            setCandidateSurnameTextFieldFocuesd(false);
                                             setCandidateSurnameError(false);
                                             setCandidateSurname(event.target.value);
+                                        }}
+                                        onFocus={(event) =>
+                                        {
+                                            setCandidateSurnameTextFieldFocuesd(true);
+                                        }}
+                                        onBlur={() =>
+                                        {
+                                            if (!candidateSurname || candidateSurname === "")
+                                            {
+                                                setCandidateSurnameTextFieldFocuesd(false);
+                                            }
                                         }}
                                     />
                                     <Box sx={{
@@ -736,22 +786,45 @@ export default function OneJobPage()
                             >
                                 {/* Phone */}
                                 <Box>
-                                    <Typography variant='h4'>
+                                    <Typography variant='h4' color={"primary.jobTitle"} sx={{ marginBottom: "15px" }}>
                                         טלפון:
                                     </Typography>
                                     <TextField
+                                        variant='outlined'
+                                        label="טלפון"
+                                        InputLabelProps={{
+                                            shrink: false,
+                                            style: { display: (!candidatePhone || candidatePhone === "") && !candidatePhoneTextFieldFocused ? "block" : "none" }
+
+                                        }}
                                         sx={{
+                                            backgroundColor: "background.candidateDetailsTextField",
+                                            border: "0px solid red",
                                             '& .MuiOutlinedInput-root': {
                                                 '& fieldset': {
                                                     borderColor: candidatePhoneError ? 'error.main' : "primary.main",
+                                                    border: "0px solid red",
+                                                    borderRadius: "4px"
                                                 }
                                             },
                                         }}
                                         color={candidatePhoneError ? 'error' : "primary"}
                                         onChange={(event) =>
                                         {
+                                            setCandidatePhoneTextFieldFocused(false);
                                             setCandidatePhoneError(false);
                                             setCandidatePhone(event.target.value);
+                                        }}
+                                        onFocus={(event) =>
+                                        {
+                                            setCandidatePhoneTextFieldFocused(true);
+                                        }}
+                                        onBlur={() =>
+                                        {
+                                            if (!candidatePhone || candidatePhone === "")
+                                            {
+                                                setCandidatePhoneTextFieldFocused(false);
+                                            }
                                         }}
                                     />
                                     <Box sx={{
@@ -773,25 +846,47 @@ export default function OneJobPage()
                                         marginLeft: { xs: "0", md: "5rem" }
                                     }}
                                 >
-                                    <Typography variant='h4'>
+                                    <Typography variant='h4' color={"primary.jobTitle"} sx={{ marginBottom: "15px" }}>
                                         אימייל:
                                     </Typography>
                                     <TextField
                                         variant='outlined'
                                         type='email'
+                                        label="אימייל"
+                                        InputLabelProps={{
+                                            shrink: false,
+                                            style: { display: (!candidateEmail || candidateEmail === "") && !candidateEmailTextFieldFocused ? "block" : "none" }
+
+                                        }}
                                         sx={{
+                                            backgroundColor: "background.candidateDetailsTextField",
                                             '& .MuiOutlinedInput-root': {
                                                 '& fieldset': {
                                                     borderColor: candidateEmailError ? 'error.main' : "primary.main",
+                                                    border: "0px solid red",
+                                                    borderRadius: "4px"
                                                 }
                                             },
                                         }}
                                         color={candidateEmailError ? 'error' : "primary"}
                                         onChange={(event) =>
                                         {
+                                            setCandidateEmailTextFieldFocused(false);
                                             setCandidateEmailError(false);
                                             setCandidateEmail(event.target.value);
                                         }}
+                                        onFocus={() =>
+                                        {
+                                            setCandidateEmailTextFieldFocused(true);
+                                        }}
+                                        onBlur={() =>
+                                        {
+                                            if (!candidateEmail || candidateEmail === "")
+                                            {
+                                                setCandidateEmailTextFieldFocused(false);
+                                            }
+                                        }}
+
                                     />
                                     <Box sx={{
                                         display: candidateEmailError ? "flex" : "none",
@@ -818,7 +913,7 @@ export default function OneJobPage()
                                 marginTop: "54px"
                             }}
                         >
-                            <Typography variant='h4'>
+                            <Typography variant='h4' color={"primary.jobTitle"}>
                                 ספרו לנו קצת עליכם:
                             </Typography>
                             <TextField
@@ -828,8 +923,14 @@ export default function OneJobPage()
                                 rows={10}
                                 sx={{
                                     width: { xs: "100%", md: "100%" },
-                                    backgroundColor: "background.boxInner",
-                                    marginTop: "15px"
+                                    marginTop: "15px",
+                                    backgroundColor: "background.candidateDetailsTextField",
+                                    '& .MuiOutlinedInput-root': {
+                                        '& fieldset': {
+                                            border: "0px solid red",
+                                            borderRadius: "4px",
+                                        }
+                                    },
                                 }}
                                 inputProps={{
                                     maxLength: ABOUT_MAX_LENGTH
