@@ -2,16 +2,20 @@ import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import { Typography } from '@mui/material';
 
-export default function FloatingBox(props: { job }) {
+export default function FloatingBox(props: { job })
+{
     const { job } = props;
     const [floatingTop, setFloatingTop] = useState<number>(0);
     const [containerHeight, setContainerHeight] = useState<number>(10);
 
-    useEffect(() => {
-        const handleScroll = () => {
+    useEffect(() =>
+    {
+        const handleScroll = () =>
+        {
             const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
 
-            if (scrollTop >= floatingTop && scrollTop <= containerHeight) {
+            if (scrollTop >= floatingTop && scrollTop <= containerHeight)
+            {
                 setFloatingTop(scrollTop);
             }
         };
@@ -20,7 +24,8 @@ export default function FloatingBox(props: { job }) {
 
         window.addEventListener('scroll', handleScroll);
 
-        return () => {
+        return () =>
+        {
             window.removeEventListener('scroll', handleScroll);
 
         };
@@ -33,13 +38,12 @@ export default function FloatingBox(props: { job }) {
                 position: "sticky",
                 top: floatingTop,
                 maxHeight: "416px",
-                paddingLeft: "55px",
-                paddingRight: "30px",
                 backgroundColor: "background.jobDetails",
                 boxShadow: "0px 3px 10px #00000029",
                 borderRadius: "10px",
-                flex: 4,
-                zIndex: 5
+                flex: 35,
+                zIndex: 5,
+                width: "fit-content"
             }
             }
         >
@@ -51,58 +55,34 @@ export default function FloatingBox(props: { job }) {
                 marginTop: "35px",
                 display: "flex",
                 flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
-                marginLeft: "-110px",
-                marginRight: "100px",
-                paddingLeft: "55px"
-                
+                alignItems: "start",
+                justifyContent: "start",
+                marginLeft: "-47px",
+                paddingLeft: "47px",
+                width: "fit-content"
+
             }}>
-                <Typography variant='h2' sx={{  
-                    paddingRight: "33px",
+                <Typography variant='h2' sx={{
                     textAlign: "left",
-                    alignSelf: "center",
-                    justifySelf: "center",
                     paddingBottom: "10px",
                     paddingTop: "9px",
-                    font: "normal normal medium 30px/35px Rubik"
-
+                    paddingRight: "33px",
                 }}
                 >
                     פרטי משרה:
                 </Typography>
             </Box>
-            {/* job location */}
-            < Box
-                sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    marginBottom: "43px"
-                }}
-            >
-                <Typography variant='h4'>
-                    מיקום:
-                </Typography>
-                <Typography
-                    sx={{
-                        marginLeft: "1rem",
-                        backgroundColor: "background.boxInner"
-                    }}
-                    variant='h4'
-                >
-                    {job?._region}
-                </Typography>
-            </Box >
 
             {/* job role */}
             < Box
                 sx={{
                     display: "flex",
                     flexDirection: "row",
-                    marginBottom: "43px"
+                    marginBottom: "43px",
+                    paddingLeft: "55px"
                 }}
             >
-                <Typography variant='h4'>
+                <Typography variant='h4' sx={{ color: "secondary.jobDetails"}}>
                     תפקיד:
                 </Typography>
                 <Typography
@@ -122,9 +102,10 @@ export default function FloatingBox(props: { job }) {
                     display: "flex",
                     flexDirection: "row",
                     marginBottom: "43px",
+                    paddingLeft: "55px"
                 }}
             >
-                <Typography variant='h4'>
+                <Typography variant='h4' color="secondary.jobDetails">
                     היקף משרה:
                 </Typography>
                 <Typography
@@ -134,7 +115,30 @@ export default function FloatingBox(props: { job }) {
                     }}
                     variant='h4'
                 >
-                    {job?._scope.slice(0).reverse().map((num, index) => index !== job._scope.length - 1 ? num + "%-" : num + "%")}
+                    {job?._scope[0] !== job?._scope[1] ? job?._scope.slice(0).reverse().map((num, index) => (index !== job._scope.length - 1) ? num + "%-" : num + "%") : job?._scope[0] + "%"}
+                </Typography>
+            </Box >
+
+            {/* job location */}
+            < Box
+                sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    marginBottom: "43px",
+                    paddingLeft: "55px"
+                }}
+            >
+                <Typography variant='h4' sx={{ color: "secondary.jobDetails" }}>
+                    מיקום:
+                </Typography>
+                <Typography
+                    sx={{
+                        marginLeft: "1rem",
+                        backgroundColor: "background.boxInner",
+                    }}
+                    variant='h4'
+                >
+                    {job?._region}
                 </Typography>
             </Box >
 
@@ -143,11 +147,12 @@ export default function FloatingBox(props: { job }) {
                 sx={{
                     display: "flex",
                     flexDirection: "row",
-                    marginBottom: "43px"
+                    marginBottom: "43px",
+                    paddingLeft: "55px"
                 }}
             >
-                <Typography variant='h4'>
-                    מס' משרה:
+                <Typography variant='h4' sx={{color: "secondary.jobDetails"}}>
+                    תחילת עבודה:
                 </Typography>
                 <Typography
                     sx={{
@@ -156,6 +161,7 @@ export default function FloatingBox(props: { job }) {
                     }}
                     variant='h4'
                 >
+                    {/* TODO: add job start */}
                     {job?._jobNumber}
                 </Typography>
             </Box >

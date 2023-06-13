@@ -222,7 +222,8 @@ export const themeSettings = (mode, actualMode, fontSize, fontFamily) =>
                 main: "#03368a",
                 half: "#184fa8",
                 dark: "#041a3d",
-                descAndReqText: "#767676"
+                descAndReqText: "#767676",
+                jobDetails: "#AC2F69"
 
             },
             neutral: {
@@ -236,7 +237,8 @@ export const themeSettings = (mode, actualMode, fontSize, fontFamily) =>
                 box: colors.globalBackground,
                 boxInner: colors.globalBackground,
                 jobDetails: "#FFFFFF",
-                JobDetailsText: "#053B7A"
+                JobDetailsText: "#053B7A",
+                jobTitleSeparator: "#2E3552"
             },
             error: {
                 main: "#FF0000"

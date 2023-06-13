@@ -20,9 +20,10 @@ import { ReactComponent as PinkEllipseSVG } from './Resources/PinkEllipse.svg'
 const ABOUT_MAX_LENGTH = 1000;
 const MAX_RECOMMENDERS = 3;
 
-const marginLeftAndRight = "18.75vw"
+const marginLeftAndRight = { xs: "0", xl: "18.75vw", lg: "12vw" }
 
-export default function OneJobPage() {
+export default function OneJobPage()
+{
     const [job, setJob] = useState<Job | null>(null);
 
     const navigate = useNavigate();
@@ -39,10 +40,13 @@ export default function OneJobPage() {
     const [areYouSureDialogIndex, setAreYouSureDialogIndex] = useState(0);
     const [areYouSureDialogRecommenderName, setAreYouSureDialogRecommenderName] = useState("");
 
-    const successDialogOnClose = (event, reason, sendDataToAllJobsPage) => {
-        if ((reason && reason !== "backdropClick" && reason !== "clickaway") || reason === undefined) {
+    const successDialogOnClose = (event, reason, sendDataToAllJobsPage) =>
+    {
+        if ((reason && reason !== "backdropClick" && reason !== "clickaway") || reason === undefined)
+        {
             console.log(sendDataToAllJobsPage);
-            if (sendDataToAllJobsPage) {
+            if (sendDataToAllJobsPage)
+            {
                 const state = {
                     candidateName: candidateName,
                     candidateSurname: candidateSurname,
@@ -56,17 +60,22 @@ export default function OneJobPage() {
         }
     }
 
-    const errorDialogOnClose = (event, reason) => {
-        if ((reason && reason !== "backdropClick") || reason === undefined) {
+    const errorDialogOnClose = (event, reason) =>
+    {
+        if ((reason && reason !== "backdropClick") || reason === undefined)
+        {
             setErrorDialogOpen(false);
         }
     }
 
-    const areYouSureDialogOnClose = (event, reason, index, areYouSureValue) => {
-        if ((reason && reason !== "backdropClick") || reason === undefined) {
+    const areYouSureDialogOnClose = (event, reason, index, areYouSureValue) =>
+    {
+        if ((reason && reason !== "backdropClick") || reason === undefined)
+        {
             setAreYouSureDialogOpen(false);
         }
-        if (areYouSureValue) {
+        if (areYouSureValue)
+        {
             updateRecommendersListAtIndex(null, null, index);
             setNumRecommenders(numRecommenders - 1);
         }
@@ -88,10 +97,13 @@ export default function OneJobPage() {
         ]);
 
     // changes recommendersList at the given index
-    const updateRecommendersListAtIndex = function (newRecommendation: Recomendation | null, newFile: File | null, index: number) {
-        setRecommendersList(prevList => {
+    const updateRecommendersListAtIndex = function (newRecommendation: Recomendation | null, newFile: File | null, index: number)
+    {
+        setRecommendersList(prevList =>
+        {
             const newList = [...prevList!]; // Create a copy of the array
-            if (newList.length > 0) {
+            if (newList.length > 0)
+            {
                 newList[index] = [newRecommendation, newFile]; // Set the new value at index 0
             }
             return newList;
@@ -123,15 +135,18 @@ export default function OneJobPage() {
 
     // get current job from URL
     const location = useLocation();
-    const fetchJob = async () => {
+    const fetchJob = async () =>
+    {
         setJob((await getFilteredJobs(["jobNumber"], [getJobIdFromUrl(location.pathname)]))[0]);
     }
 
-    useEffect(() => {
+    useEffect(() =>
+    {
         fetchJob();
         // init recommendersList
         let temp = Array<[Recomendation | null, File | null]>();
-        for (let index = 0; index < MAX_RECOMMENDERS; index++) {
+        for (let index = 0; index < MAX_RECOMMENDERS; index++)
+        {
             temp.push([null, null])
         }
         setRecommendersList(temp);
@@ -153,45 +168,57 @@ export default function OneJobPage() {
     }, [location.state])
 
     // submit
-    const handleSubmit = async () => {
+    const handleSubmit = async () =>
+    {
         console.log(candidateName);
         // handle errors
-        if (!candidateName || candidateName === "") {
+        if (!candidateName || candidateName === "")
+        {
             setCandidateNameError(true);
-        } else {
+        } else
+        {
             setCandidateNameError(false);
         }
 
-        if (!candidateSurname || candidateSurname === "") {
+        if (!candidateSurname || candidateSurname === "")
+        {
             setCandidateSurnameError(true);
-        } else {
+        } else
+        {
             setCandidateSurnameError(false);
         }
 
-        if (candidatePhone === "" || !isPhoneValid(candidatePhone)) {
+        if (candidatePhone === "" || !isPhoneValid(candidatePhone))
+        {
             setCandidatePhoneError(true);
-        } else {
+        } else
+        {
             setCandidatePhoneError(false);
         }
 
-        if (candidateEmail === "" || !isEmailValid(candidateEmail)) {
+        if (candidateEmail === "" || !isEmailValid(candidateEmail))
+        {
             setCandidateEmailError(true);
-        } else {
+        } else
+        {
             setCandidateEmailError(false);
         }
 
-        if (candidateName === "" || candidateSurname === "" || candidatePhone === "" || candidateEmail === "") {
+        if (candidateName === "" || candidateSurname === "" || candidatePhone === "" || candidateEmail === "")
+        {
             console.log(candidateNameError);
             return;
         }
 
-        if (!cvFile) {
+        if (!cvFile)
+        {
             setCvFileError(true);
             return;
         }
         setCvFileError(false);
 
-        if (recommendersListOpen && !checkRecommenders()) {
+        if (recommendersListOpen && !checkRecommenders())
+        {
             console.log(recommendersErrors);
             return;
         }
@@ -209,29 +236,36 @@ export default function OneJobPage() {
             ""
         );
         // add candidate, or get existing candidate
-        if (!await newCandidate.add()) {
+        if (!await newCandidate.add())
+        {
             newCandidate = (await getFilteredCandidates(["eMail", "phone"], [candidateEmail, candidatePhone]))[0];
             newCandidateId = newCandidate._id;
         }
 
         // apply 
-        if (!await newCandidate.apply(job?._jobNumber!, aboutText)) {
+        if (!await newCandidate.apply(job?._jobNumber!, aboutText))
+        {
             setLoading(false);
             setErrorDialogOpen(true);
             return;
         }
 
-        if (recommendersListOpen) {
+        if (recommendersListOpen)
+        {
             // add recommenders and CV
             let candidateJobStatus = (await getFilteredCandidateJobStatuses(["jobNumber", "candidateId"], [job?._jobNumber.toString()!, newCandidateId]))[0];
             await candidateJobStatus.updateAbout(aboutText);
-            recommendersList?.forEach(async (recommender) => {
+            recommendersList?.forEach(async (recommender) =>
+            {
                 const recommenderInfo = recommender[0];
                 const file = recommender[1];
-                if (recommenderInfo) {
-                    if (!file) {
+                if (recommenderInfo)
+                {
+                    if (!file)
+                    {
                         await candidateJobStatus.addRecomendation(recommenderInfo._fullName, recommenderInfo._phone, recommenderInfo._eMail, new File([''], ''));
-                    } else {
+                    } else
+                    {
                         await candidateJobStatus.addRecomendation(recommenderInfo._fullName, recommenderInfo._phone, recommenderInfo._eMail, file);
                     }
                 }
@@ -247,27 +281,32 @@ export default function OneJobPage() {
         setDefaults();
     }
 
-    const isPhoneValid = (phone: string) => {
+    const isPhoneValid = (phone: string) =>
+    {
         return /^05[0-57-8][0-9]{7}$/gm.test(phone);
     }
 
-    const isEmailValid = (email: string) => {
+    const isEmailValid = (email: string) =>
+    {
         return /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email);
     }
 
-    const setDefaults = () => {
+    const setDefaults = () =>
+    {
         // reset cv file
         setCvFileError(false);
         setCvFile(null);
 
         // reset recommenders
-        for (let index = 0; index < numRecommenders; index++) {
+        for (let index = 0; index < numRecommenders; index++)
+        {
             updateRecommendersListAtIndex(null, null, index);
 
         }
         setNumRecommenders(0);
         setRecommendersErrors(
-            recommendersErrors.map(() => {
+            recommendersErrors.map(() =>
+            {
                 return [false, false]
             })
         );
@@ -282,23 +321,31 @@ export default function OneJobPage() {
      * by the user for each recommender is valid. 
      * @returns false if any of them are invalid (and updates recommendersErrors). true otherwise.
      */
-    const checkRecommenders = () => {
+    const checkRecommenders = () =>
+    {
         let result = true;
         let recommendersErrorsResult = recommendersErrors;
-        recommendersList?.forEach((recommender, index) => {
+        recommendersList?.forEach((recommender, index) =>
+        {
             const recommenderInfo = recommender[0];
             const file = recommender[1];
-            if (!recommenderInfo && !file) {
+            if (!recommenderInfo && !file)
+            {
                 return result && true;
-            } else {
+            } else
+            {
                 let emailValid = isEmailValid(recommenderInfo?._eMail!);
                 let phoneValid = isPhoneValid(recommenderInfo?._phone!);
-                if (!emailValid || !phoneValid) {
+                if (!emailValid || !phoneValid)
+                {
                     // set errors for appropriate index
-                    recommendersErrorsResult = recommendersErrorsResult.map((recommenderError, errorIndex) => {
-                        if (errorIndex === index) {
+                    recommendersErrorsResult = recommendersErrorsResult.map((recommenderError, errorIndex) =>
+                    {
+                        if (errorIndex === index)
+                        {
                             return [!phoneValid, !emailValid];
-                        } else {
+                        } else
+                        {
                             return [recommenderError[0], recommenderError[1]];
                         }
                     });
@@ -361,10 +408,10 @@ export default function OneJobPage() {
                         flexDirection: "column",
                         alignItems: "stretch",
                         justifyContent: "stretch",
-                        marginLeft: { xs: "0", md: marginLeftAndRight },
-                        marginRight: { xs: "0", md: marginLeftAndRight },
+                        marginLeft: marginLeftAndRight,
+                        marginRight: marginLeftAndRight,
                         backgroundColor: "background.main",
-                        marginTop: "256px",
+                        marginTop: "179px",
                     }}
                 >
 
@@ -400,10 +447,10 @@ export default function OneJobPage() {
                     {/* Job Number */}
                     <Box sx={{ display: "flex", flexDirection: "row", width: "41.71875vw" }}>
 
-                        <Typography variant='h5' sx={{ letterSpacing: 0 }}>
+                        <Typography variant='h5' sx={{ letterSpacing: 0, color: "secondary.jobDetails" }}>
                             משרה מספר:
                         </Typography>
-                        <Typography variant='h5' sx={{ marginLeft: "11px" }}>
+                        <Typography variant='h5' sx={{ marginLeft: "11px", color: "secondary.descAndReqText" }}>
                             {job?._jobNumber}
                         </Typography>
                     </Box>
@@ -430,6 +477,9 @@ export default function OneJobPage() {
                         </Typography>
                     </Box>
 
+                    {/* Separator */}
+                    <Box sx={{ width: "36.6vw", backgroundColor: "background.jobTitleSeparator", height: 2, opacity: 0.2, marginTop: "27px" }} />
+
                     {/* Job description, stats and requirements */}
                     <Box
                         sx={{
@@ -437,7 +487,7 @@ export default function OneJobPage() {
                             flexDirection: { xs: "column", md: "row" },
                             justifyContent: "stretch",
                             backgroundColor: "background.main",
-                            marginTop: "1rem",
+                            marginTop: "128px"
                         }}
                     >
 
@@ -447,9 +497,9 @@ export default function OneJobPage() {
                                 display: "flex",
                                 flexDirection: "column",
                                 backgroundColor: "background.box",
-                                flex: 8,
+                                flex: 100,
                                 marginRight: { xs: "0", md: "1rem" },
-                                marginBottom: { xs: "1rem", md: "0" }
+                                marginBottom: { xs: "1rem", md: "0" },
                             }}
                         >
                             {/* description and requirements */}
@@ -471,7 +521,7 @@ export default function OneJobPage() {
                                     </Typography>
 
                                     <Typography
-                                        variant='h3'
+                                        variant='h4'
                                         marginTop={"15px"}
                                         sx={{
                                             backgroundColor: "background.boxInner",
@@ -480,7 +530,8 @@ export default function OneJobPage() {
                                         }}
                                     >
                                         {job?._description?.length! >= 1 ?
-                                            job?._description[0].split('\n').map((line, index) => {
+                                            job?._description[0].split('\n').map((line, index) =>
+                                            {
                                                 return (
                                                     <React.Fragment key={"jobDescriptionLine" + index}>
                                                         {line}
@@ -501,12 +552,12 @@ export default function OneJobPage() {
                                     flex: 4
                                 }}
                             >
-                                <Typography variant="h2" marginTop={"73px"} sx={{color: "primary.descAndReqTitle"}}>
+                                <Typography variant="h2" marginTop={"73px"} sx={{ color: "primary.descAndReqTitle" }}>
                                     דרישות התפקיד:
                                 </Typography>
 
                                 <Typography
-                                    variant='h3'
+                                    variant='h4'
                                     marginTop={"15px"}
                                     sx={{
                                         backgroundColor: "background.boxInner",
@@ -514,7 +565,8 @@ export default function OneJobPage() {
                                         width: "28vw"
                                     }}
                                 >
-                                    {job?._requirements.split('\n').map((line, index) => {
+                                    {job?._requirements.split('\n').map((line, index) =>
+                                    {
                                         return (
                                             <React.Fragment key={"jobRequirementsLine" + index}>
                                                 {line}
@@ -613,7 +665,8 @@ export default function OneJobPage() {
                                             },
                                         }}
                                         color={candidateNameError ? 'error' : "primary"}
-                                        onChange={(event) => {
+                                        onChange={(event) =>
+                                        {
                                             setCandidateNameError(false);
                                             setCandidateName(event.target.value);
                                         }}
@@ -650,7 +703,8 @@ export default function OneJobPage() {
                                             },
                                         }}
                                         color={candidateSurnameError ? 'error' : "primary"}
-                                        onChange={(event) => {
+                                        onChange={(event) =>
+                                        {
                                             setCandidateSurnameError(false);
                                             setCandidateSurname(event.target.value);
                                         }}
@@ -692,7 +746,8 @@ export default function OneJobPage() {
                                             },
                                         }}
                                         color={candidatePhoneError ? 'error' : "primary"}
-                                        onChange={(event) => {
+                                        onChange={(event) =>
+                                        {
                                             setCandidatePhoneError(false);
                                             setCandidatePhone(event.target.value);
                                         }}
@@ -730,7 +785,8 @@ export default function OneJobPage() {
                                             },
                                         }}
                                         color={candidateEmailError ? 'error' : "primary"}
-                                        onChange={(event) => {
+                                        onChange={(event) =>
+                                        {
                                             setCandidateEmailError(false);
                                             setCandidateEmail(event.target.value);
                                         }}
@@ -776,7 +832,8 @@ export default function OneJobPage() {
                                 inputProps={{
                                     maxLength: ABOUT_MAX_LENGTH
                                 }}
-                                onChange={(event) => {
+                                onChange={(event) =>
+                                {
                                     setAboutNumChars(event?.target.value.length);
                                     setAboutText(event.target.value);
                                 }}
@@ -801,7 +858,8 @@ export default function OneJobPage() {
                                 type="file"
                                 inputRef={cvFileInputRef}
                                 style={{ display: 'none' }}
-                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                                {
                                     const files = event.target.files!;
                                     setCvFile(files[0]);
                                     setCvFileError(false);
@@ -816,9 +874,11 @@ export default function OneJobPage() {
                                         backgroundColor: "background.main"
                                     }
                                 }}
-                                onClick={() => {
+                                onClick={() =>
+                                {
                                     // trigger input onChange
-                                    if (cvFileInputRef.current) {
+                                    if (cvFileInputRef.current)
+                                    {
                                         cvFileInputRef.current.click();
                                     }
                                 }}
@@ -898,8 +958,10 @@ export default function OneJobPage() {
                                 display: recommendersListOpen ? "flex" : "none"
                             }}
                             >
-                                {recommendersList?.map((recommender, index) => {
-                                    if (recommender[0] !== null) {
+                                {recommendersList?.map((recommender, index) =>
+                                {
+                                    if (recommender[0] !== null)
+                                    {
                                         return (
                                             <Box
                                                 sx={{
@@ -916,7 +978,8 @@ export default function OneJobPage() {
                                                     sx={{
                                                         display: { xs: "none", md: "flex" }
                                                     }}
-                                                    onClick={() => {
+                                                    onClick={() =>
+                                                    {
                                                         setAreYouSureDialogIndex(index);
                                                         setAreYouSureDialogOpen(true);
                                                         setAreYouSureDialogRecommenderName(recommender[0]?._fullName!);
@@ -971,10 +1034,12 @@ export default function OneJobPage() {
                                                                     type="file"
                                                                     inputRef={(input) => (recommenderFileInputRefs.current[index] = input)}
                                                                     style={{ display: 'none' }}
-                                                                    onChange={(event) => {
+                                                                    onChange={(event) =>
+                                                                    {
                                                                         const inputElement = event.target as HTMLInputElement;
                                                                         const files = inputElement.files;
-                                                                        if (files && files.length > 0) {
+                                                                        if (files && files.length > 0)
+                                                                        {
                                                                             updateRecommendersListAtIndex(recommendersList[index][0], files[0], index);
                                                                         }
                                                                     }}
@@ -983,9 +1048,11 @@ export default function OneJobPage() {
                                                                     sx={{
                                                                         display: { xs: "flex", md: "none" }
                                                                     }}
-                                                                    onClick={() => {
+                                                                    onClick={() =>
+                                                                    {
                                                                         // trigger input onChange
-                                                                        if (recommenderFileInputRefs.current[index]) {
+                                                                        if (recommenderFileInputRefs.current[index])
+                                                                        {
                                                                             recommenderFileInputRefs.current[index]?.click()
                                                                         }
                                                                     }}
@@ -1005,7 +1072,8 @@ export default function OneJobPage() {
 
                                                             {/* Remove recommender button */}
                                                             <Button
-                                                                onClick={() => {
+                                                                onClick={() =>
+                                                                {
                                                                     setAreYouSureDialogIndex(index);
                                                                     setAreYouSureDialogOpen(true);
                                                                     setAreYouSureDialogRecommenderName(recommender[0]?._fullName!);
@@ -1029,7 +1097,8 @@ export default function OneJobPage() {
                                                                 שם:
                                                             </Typography>
                                                             <TextField
-                                                                onChange={(event) => {
+                                                                onChange={(event) =>
+                                                                {
                                                                     const currentRecommender = recommendersList[index][0];
                                                                     updateRecommendersListAtIndex(
                                                                         new Recomendation(event.target.value,
@@ -1061,7 +1130,8 @@ export default function OneJobPage() {
                                                                         }
                                                                     },
                                                                 }}
-                                                                onChange={(event) => {
+                                                                onChange={(event) =>
+                                                                {
                                                                     const currentRecommender = recommendersList[index][0];
                                                                     updateRecommendersListAtIndex(
                                                                         new Recomendation(currentRecommender?._fullName!,
@@ -1074,10 +1144,13 @@ export default function OneJobPage() {
 
                                                                     // remove error message
                                                                     setRecommendersErrors(
-                                                                        recommendersErrors.map((recommenderError, ind) => {
-                                                                            if (index === ind) {
+                                                                        recommendersErrors.map((recommenderError, ind) =>
+                                                                        {
+                                                                            if (index === ind)
+                                                                            {
                                                                                 return [false, recommenderError[1]];
-                                                                            } else {
+                                                                            } else
+                                                                            {
                                                                                 return [recommenderError[0], recommenderError[1]];
                                                                             }
                                                                         })
@@ -1111,7 +1184,8 @@ export default function OneJobPage() {
                                                                         }
                                                                     },
                                                                 }}
-                                                                onChange={(event) => {
+                                                                onChange={(event) =>
+                                                                {
                                                                     const currentRecommender = recommendersList[index][0];
                                                                     updateRecommendersListAtIndex(
                                                                         new Recomendation(currentRecommender?._fullName!,
@@ -1124,10 +1198,13 @@ export default function OneJobPage() {
 
                                                                     // remove error message
                                                                     setRecommendersErrors(
-                                                                        recommendersErrors.map((recommenderError, ind) => {
-                                                                            if (index === ind) {
+                                                                        recommendersErrors.map((recommenderError, ind) =>
+                                                                        {
+                                                                            if (index === ind)
+                                                                            {
                                                                                 return [recommenderError[0], false];
-                                                                            } else {
+                                                                            } else
+                                                                            {
                                                                                 return [recommenderError[0], recommenderError[1]];
                                                                             }
                                                                         })
@@ -1162,10 +1239,12 @@ export default function OneJobPage() {
                                                             type="file"
                                                             inputRef={(input) => (recommenderFileInputRefs.current[index] = input)}
                                                             style={{ display: 'none' }}
-                                                            onChange={(event) => {
+                                                            onChange={(event) =>
+                                                            {
                                                                 const inputElement = event.target as HTMLInputElement;
                                                                 const files = inputElement.files;
-                                                                if (files && files.length > 0) {
+                                                                if (files && files.length > 0)
+                                                                {
                                                                     updateRecommendersListAtIndex(recommendersList[index][0], files[0], index);
                                                                 }
                                                             }}
@@ -1174,9 +1253,11 @@ export default function OneJobPage() {
                                                             sx={{
                                                                 display: { xs: "none", md: "flex" }
                                                             }}
-                                                            onClick={() => {
+                                                            onClick={() =>
+                                                            {
                                                                 // trigger input onChange
-                                                                if (recommenderFileInputRefs.current[index]) {
+                                                                if (recommenderFileInputRefs.current[index])
+                                                                {
                                                                     recommenderFileInputRefs.current[index]?.click()
                                                                 }
                                                             }}
@@ -1225,13 +1306,17 @@ export default function OneJobPage() {
                                         sx={{
                                             alignSelf: "start"
                                         }}
-                                        onClick={() => {
-                                            for (let index = 0; index < recommendersList?.length!; index++) {
+                                        onClick={() =>
+                                        {
+                                            for (let index = 0; index < recommendersList?.length!; index++)
+                                            {
                                                 const recommender = recommendersList?.at(index);
-                                                if (recommender?.at(0) === null) {
+                                                if (recommender?.at(0) === null)
+                                                {
                                                     updateRecommendersListAtIndex(new Recomendation("", "", ""), null, index);
                                                     setNumRecommenders(numRecommenders + 1);
-                                                    if (numRecommenders > MAX_RECOMMENDERS) {
+                                                    if (numRecommenders > MAX_RECOMMENDERS)
+                                                    {
                                                         setNumRecommenders(MAX_RECOMMENDERS);
                                                     }
                                                     return;
@@ -1289,6 +1374,7 @@ export default function OneJobPage() {
     );
 }
 
-const getJobIdFromUrl = (pathname: string) => {
+const getJobIdFromUrl = (pathname: string) =>
+{
     return pathname.split("/").slice(-1)[0];
 }
