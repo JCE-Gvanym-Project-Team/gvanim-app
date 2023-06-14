@@ -72,30 +72,30 @@ export default function Footer()
 
                 {/* mailbox */}
                 <Box sx={{ display: "flex", flexDirection: "row", marginLeft: { xs: "0", md: "57px" }, marginTop: { xs: "22px", md: "0px" } }}>
-                    <Typography variant={screenSize === "xs" ? "subtitle2" : 'h3'} color={"background.main"}>
+                    <Typography variant={screenSize === "xs" ? "subtitle2" : 'h3'} color={"primary.textBright"}>
                         ת.ד
                     </Typography>
-                    <Typography variant={screenSize === "xs" ? "subtitle2" : 'h3'} color={"background.main"} sx={{ marginLeft: "10px" }}>
+                    <Typography variant={screenSize === "xs" ? "subtitle2" : 'h3'} color={"primary.textBright"} sx={{ marginLeft: "10px" }}>
                         346
                     </Typography>
                 </Box>
 
                 {/* address */}
                 <Box sx={{ display: "flex", flexDirection: "row", marginLeft: { xs: "0", md: "57px" }, marginTop: { xs: "22px", md: "0px" } }}>
-                    <Typography variant={screenSize === "xs" ? "subtitle2" : 'h3'} color={"background.main"}>
+                    <Typography variant={screenSize === "xs" ? "subtitle2" : 'h3'} color={"primary.textBright"}>
                         כתובת:
                     </Typography>
-                    <Typography variant={screenSize === "xs" ? "subtitle2" : 'h3'} color={"background.main"} sx={{ marginLeft: "10px" }}>
+                    <Typography variant={screenSize === "xs" ? "subtitle2" : 'h3'} color={"primary.textBright"} sx={{ marginLeft: "10px" }}>
                         רח' הרקפת 6, שדרות
                     </Typography>
                 </Box>
 
                 {/* postal code */}
                 <Box sx={{ display: "flex", flexDirection: "row", marginLeft: { xs: "0", md: "57px" }, marginTop: { xs: "22px", md: "0px" } }}>
-                    <Typography variant={screenSize === "xs" ? "subtitle2" : 'h3'} color={"background.main"}>
+                    <Typography variant={screenSize === "xs" ? "subtitle2" : 'h3'} color={"primary.textBright"}>
                         מיקוד:
                     </Typography>
-                    <Typography variant={screenSize === "xs" ? "subtitle2" : 'h3'} color={"background.main"} sx={{ marginLeft: "10px" }}>
+                    <Typography variant={screenSize === "xs" ? "subtitle2" : 'h3'} color={"primary.textBright"} sx={{ marginLeft: "10px" }}>
                         8701301
                     </Typography>
 

@@ -1,6 +1,7 @@
 import { createContext, useState, useMemo } from "react"
 import { createTheme } from "@mui/material/styles"
 import { color } from "highcharts";
+import { main } from "../Firebase/FirebaseFunctions/test";
 
 const MAX_FONT_SIZE = 40;
 const MIN_FONT_SIZE = 12;
@@ -11,206 +12,6 @@ export const colorTokens = (mode) =>
     if (mode === "light")    
     {
         return {
-            globalBackground: "#FFFFFF",
-            jobDetailsBackground: "#FFFFFF",
-        }
-
-    } else if (mode === "bright-contrast")
-    {
-        return {
-            grey: {
-                100: getContrastingColor("#fcfcfc"),
-                200: getContrastingColor("#e0e0e0"),
-                300: getContrastingColor("#c2c2c2"),
-                400: getContrastingColor("#a3a3a3"),
-                500: getContrastingColor("#858585"),
-                600: getContrastingColor("#666666"),
-                700: getContrastingColor("#525252"),
-                800: getContrastingColor("#3d3d3d"),
-                900: getContrastingColor("#292929"),
-                1000: getContrastingColor("#141414")
-            },
-            primary: {
-                100: getContrastingColor("#ffffff"),
-                200: getContrastingColor("#d0d1d5"),
-                300: getContrastingColor("#a1a4ab"),
-                400: getContrastingColor("#727681"),
-                500: getContrastingColor("#434957"),
-                600: getContrastingColor("#141b2d"),
-                700: getContrastingColor("#101624"),
-                800: getContrastingColor("#0c101b"),
-                900: getContrastingColor("#080b12"),
-                1000: "#040509",
-                1100: getContrastingColor("#000000")
-            },
-            greens: {
-                100: getContrastingColor("#dbf5ee"),
-                200: getContrastingColor("#b7ebde"),
-                300: getContrastingColor("#94e2cd"),
-                400: getContrastingColor("#70d8bd"),
-                500: getContrastingColor("#4cceac"),
-                600: getContrastingColor("#3da58a"),
-                700: getContrastingColor("#2e7c67"),
-                800: getContrastingColor("#1e5245"),
-                900: getContrastingColor("#0f2922")
-            },
-            reds: {
-                100: getContrastingColor("#f8dcdb"),
-                200: getContrastingColor("#f1b9b7"),
-                300: getContrastingColor("#e99592"),
-                400: getContrastingColor("#e2726e"),
-                500: getContrastingColor("#db4f4a"),
-                600: getContrastingColor("#af3f3b"),
-                700: getContrastingColor("#832f2c"),
-                800: getContrastingColor("#58201e"),
-                900: getContrastingColor("#2c100f")
-            },
-            blues: {
-                100: getContrastingColor("#e1e2fe"),
-                200: getContrastingColor("#c3c6fd"),
-                300: getContrastingColor("#a4a9fc"),
-                400: getContrastingColor("#868dfb"),
-                500: getContrastingColor("#6870fa"),
-                600: getContrastingColor("#535ac8"),
-                700: getContrastingColor("#3e4396"),
-                800: getContrastingColor("#2a2d64"),
-                900: getContrastingColor("#151632")
-            }
-        }
-    } else if (mode === "dark-contrast")
-    {
-        return {
-            grey: {
-                100: getDarkContrastingColor("#fcfcfc"),
-                200: getDarkContrastingColor("#e0e0e0"),
-                300: getDarkContrastingColor("#c2c2c2"),
-                400: getDarkContrastingColor("#a3a3a3"),
-                500: getDarkContrastingColor("#858585"),
-                600: getDarkContrastingColor("#666666"),
-                700: getDarkContrastingColor("#525252"),
-                800: getDarkContrastingColor("#3d3d3d"),
-                900: getDarkContrastingColor("#292929"),
-                1000: getDarkContrastingColor("#141414")
-            },
-            primary: {
-                100: getDarkContrastingColor("#ffffff"),
-                200: getDarkContrastingColor("#d0d1d5"),
-                300: getDarkContrastingColor("#a1a4ab"),
-                400: getDarkContrastingColor("#727681"),
-                500: getDarkContrastingColor("#434957"),
-                600: getDarkContrastingColor("#141b2d"),
-                700: getDarkContrastingColor("#101624"),
-                800: getDarkContrastingColor("#0c101b"),
-                900: getDarkContrastingColor("#080b12"),
-                1000: getDarkContrastingColor("#040509"),
-                1100: "#000000"
-            },
-            greens: {
-                100: getDarkContrastingColor("#dbf5ee"),
-                200: getDarkContrastingColor("#b7ebde"),
-                300: getDarkContrastingColor("#94e2cd"),
-                400: getDarkContrastingColor("#70d8bd"),
-                500: getDarkContrastingColor("#4cceac"),
-                600: getDarkContrastingColor("#3da58a"),
-                700: getDarkContrastingColor("#2e7c67"),
-                800: getDarkContrastingColor("#1e5245"),
-                900: getDarkContrastingColor("#0f2922")
-            },
-            reds: {
-                100: getDarkContrastingColor("#f8dcdb"),
-                200: getDarkContrastingColor("#f1b9b7"),
-                300: getDarkContrastingColor("#e99592"),
-                400: getDarkContrastingColor("#e2726e"),
-                500: getDarkContrastingColor("#db4f4a"),
-                600: getDarkContrastingColor("#af3f3b"),
-                700: getDarkContrastingColor("#832f2c"),
-                800: getDarkContrastingColor("#58201e"),
-                900: getDarkContrastingColor("#2c100f")
-            },
-            blues: {
-                100: getDarkContrastingColor("#e1e2fe"),
-                200: getDarkContrastingColor("#c3c6fd"),
-                300: getDarkContrastingColor("#a4a9fc"),
-                400: getDarkContrastingColor("#868dfb"),
-                500: getDarkContrastingColor("#6870fa"),
-                600: getDarkContrastingColor("#535ac8"),
-                700: getDarkContrastingColor("#3e4396"),
-                800: getDarkContrastingColor("#2a2d64"),
-                900: getDarkContrastingColor("#151632")
-            }
-        }
-    } else 
-    {
-        return {
-            grey: {
-                100: colorToGrayscale("#141414"),
-                200: colorToGrayscale("#292929"),
-                300: colorToGrayscale("#3d3d3d"),
-                400: colorToGrayscale("#525252"),
-                500: colorToGrayscale("#666666"),
-                600: colorToGrayscale("#858585"),
-                700: colorToGrayscale("#a3a3a3"),
-                800: colorToGrayscale("#c2c2c2"),
-                900: colorToGrayscale("#e0e0e0"),
-                1000: colorToGrayscale("#fcfcfc")
-            },
-            primary: {
-                100: colorToGrayscale("#000000"),
-                200: colorToGrayscale("#040509"),
-                300: colorToGrayscale("#080b12"),
-                400: colorToGrayscale("#0c101b"),
-                500: colorToGrayscale("#101624"),
-                600: colorToGrayscale("#141b2d"),
-                700: colorToGrayscale("#434957"),
-                800: colorToGrayscale("#727681"),
-                900: colorToGrayscale("#a1a4ab"),
-                1000: colorToGrayscale("#d0d1d5"),
-                1100: colorToGrayscale("#ffffff")
-            },
-            greens: {
-                100: colorToGrayscale("#0f2922"),
-                200: colorToGrayscale("#1e5245"),
-                300: colorToGrayscale("#2e7c67"),
-                400: colorToGrayscale("#3da58a"),
-                500: colorToGrayscale("#4cceac"),
-                600: colorToGrayscale("#70d8bd"),
-                700: colorToGrayscale("#94e2cd"),
-                800: colorToGrayscale("#b7ebde"),
-                900: colorToGrayscale("#dbf5ee"),
-            },
-            reds: {
-                100: colorToGrayscale("#2c100f"),
-                200: colorToGrayscale("#58201e"),
-                300: colorToGrayscale("#832f2c"),
-                400: colorToGrayscale("#af3f3b"),
-                500: colorToGrayscale("#db4f4a"),
-                600: colorToGrayscale("#e2726e"),
-                700: colorToGrayscale("#e99592"),
-                800: colorToGrayscale("#f1b9b7"),
-                900: colorToGrayscale("#f8dcdb"),
-            },
-            blues: {
-                100: colorToGrayscale("#151632"),
-                200: colorToGrayscale("#2a2d64"),
-                300: colorToGrayscale("#3e4396"),
-                400: colorToGrayscale("#535ac8"),
-                500: colorToGrayscale("#6870fa"),
-                600: colorToGrayscale("#868dfb"),
-                700: colorToGrayscale("#a4a9fc"),
-                800: colorToGrayscale("#c3c6fd"),
-                900: colorToGrayscale("#e1e2fe"),
-            }
-        }
-    }
-}
-
-export const themeSettings = (mode, actualMode, fontSize, fontFamily) =>
-{
-    const colors = colorTokens(actualMode);
-
-    return {
-        palette: {
-            mode: mode,
             primary: {
                 main: "#000000",
                 textBright: "#FFFFFF",
@@ -219,6 +20,7 @@ export const themeSettings = (mode, actualMode, fontSize, fontFamily) =>
                 descAndReqTitle: "#5BA1AA",
                 addRecommenderButton: "#91A749"
             },
+
             secondary: {
                 main: "#03368a",
                 half: "#184fa8",
@@ -230,16 +32,13 @@ export const themeSettings = (mode, actualMode, fontSize, fontFamily) =>
                 addRecommenderButtonHover: "#BFD37E"
 
             },
-            neutral: {
-                main: "#000000",
-                dark: "#000000",
-                light: "#000000"
-            },
             background: {
-                main: colors.globalBackground,
-                default: colors.globalBackground,
-                box: colors.globalBackground,
-                boxInner: colors.globalBackground,
+                globalBackground: "#FFFFFF",
+                jobDetailsBackground: "#FFFFFF",
+                main: "#ffffff",
+                default: "#ffffff",
+                box: "#ffffff",
+                boxInner: "#ffffff",
                 jobDetails: "#FFFFFF",
                 JobDetailsText: "#053B7A",
                 jobTitleSeparator: "#2E3552",
@@ -255,6 +54,200 @@ export const themeSettings = (mode, actualMode, fontSize, fontFamily) =>
             },
             success: {
                 main: "#00FF00"
+            }
+        }
+
+    } else if (mode === "bright-contrast")
+    {
+        return {
+            primary: {
+                main: "#000000",
+                textBright: "#000000",
+                faded: "#333333",
+                jobTitle: "#010c18",
+                descAndReqTitle: "#122022",
+                addRecommenderButton: "#1d210f"
+            },
+
+            secondary: {
+                main: "#010b1c",
+                half: "#051022",
+                dark: "#01050c",
+                descAndReqText: "#181818",
+                jobDetails: "#220915",
+                labelText: "#010c18",
+                addRecommendersTextHover: "#122c2f",
+                addRecommenderButtonHover: "#2a3211"
+
+            },
+            background: {
+                globalBackground: "#FFFFFF",
+                jobDetailsBackground: "#FFFFFF",
+                main: "#ffffff",
+                default: "#ffffff",
+                box: "#ffffff",
+                boxInner: "#ffffff",
+                jobDetails: "#FFFFFF",
+                JobDetailsText: "#b5d6fc",
+                jobTitleSeparator: "#ced2e4",
+                candidateDetailsTextField: "#fcfcfc",
+                cvButton: "#d9f3fc",
+                cvButtonHover: "#e4f5fc",
+                submitButtonHover: "#cfe0f5",
+                recommendersBox: "rgba(91, 161, 170, 0.14)",
+                footer: "#a9d1ff"
+            },
+            error: {
+                main: "#FF0000"
+            },
+            success: {
+                main: "#00FF00"
+            }
+        }
+    } else if (mode === "dark-contrast")
+    {
+        return {
+            primary: {
+                main: "#000000",
+                textBright: "#FFFFFF",
+                faded: "#ffffff",
+                jobTitle: "#6cadf9",
+                descAndReqTitle: "#bdd9dd",
+                addRecommenderButton: "#d4deb4"
+            },
+
+            secondary: {
+                main: "#6ea4fc",
+                half: "#90b4ef",
+                dark: "#5894f4",
+                descAndReqText: "#c8c8c8",
+                jobDetails: "#e6a4c2",
+                labelText: "#6cadf9",
+                addRecommendersTextHover: "#cae7eb",
+                addRecommenderButtonHover: "#e5edcb"
+
+            },
+            background: {
+                globalBackground: "#000000",
+                jobDetailsBackground: "#000000",
+                main: "#000000",
+                default: "#000000",
+                box: "#000000",
+                boxInner: "#000000",
+                jobDetails: "#000000",
+                JobDetailsText: "#010c18",
+                jobTitleSeparator: "#090b10",
+                candidateDetailsTextField: "#303030",
+                cvButton: "#042b39",
+                cvButtonHover: "#083140",
+                submitButtonHover: "#081524",
+                recommendersBox: "rgba(91, 161, 170, 0.14)",
+                footer: "#000810"
+            },
+            error: {
+                main: "#FF0000"
+            },
+            success: {
+                main: "#00FF00"
+            }
+        }
+    } else 
+    {
+        // black and white
+        return {
+            primary: {
+                main: colorToGrayscale("#000000"),
+                textBright: colorToGrayscale("#FFFFFF"),
+                faded: colorToGrayscale("#FEFEFE"),
+                jobTitle: colorToGrayscale("#053B7A"),
+                descAndReqTitle: colorToGrayscale("#5BA1AA"),
+                addRecommenderButton: colorToGrayscale("#91A749")
+            },
+
+            secondary: {
+                main: colorToGrayscale("#03368a"),
+                half: colorToGrayscale("#184fa8"),
+                dark: colorToGrayscale("#041a3d"),
+                descAndReqText: colorToGrayscale("#767676"),
+                jobDetails: colorToGrayscale("#AC2F69"),
+                labelText: colorToGrayscale("#053B7A"),
+                addRecommendersTextHover: colorToGrayscale("#7BC3CC"),
+                addRecommenderButtonHover: colorToGrayscale("#BFD37E")
+
+            },
+            background: {
+                globalBackground: colorToGrayscale("#FFFFFF"),
+                jobDetailsBackground: colorToGrayscale("#FFFFFF"),
+                main: colorToGrayscale("#ffffff"),
+                default: colorToGrayscale("#ffffff"),
+                box: colorToGrayscale("#ffffff"),
+                boxInner: colorToGrayscale("#ffffff"),
+                jobDetails: colorToGrayscale("#FFFFFF"),
+                JobDetailsText: colorToGrayscale("#053B7A"),
+                jobTitleSeparator: colorToGrayscale("#2E3552"),
+                candidateDetailsTextField: colorToGrayscale("#F0F0F0"),
+                cvButton: colorToGrayscale("#41C2F0"),
+                cvButtonHover: colorToGrayscale("#77CFEF"),
+                submitButtonHover: colorToGrayscale("#2768B4"),
+                recommendersBox: colorToGrayscale("rgba(91, 161, 170, 0.14)"),
+                footer: colorToGrayscale("#002652")
+            },
+            error: {
+                main: colorToGrayscale("#FF0000")
+            },
+            success: {
+                main: colorToGrayscale("#00FF00")
+            }
+        }
+    }
+}
+
+export const themeSettings = (mode, actualMode, fontSize, fontFamily) =>
+{
+    const colors = colorTokens(actualMode);
+
+    return {
+        palette: {
+            mode: mode,
+            primary: {
+                main: colors.primary.main!,
+                textBright: colors.primary.textBright!,
+                faded: colors.primary.faded!,
+                jobTitle: colors.primary.jobTitle!,
+                descAndReqTitle: colors.primary.descAndReqTitle!,
+                addRecommenderButton: colors.primary.addRecommenderButton!
+            },
+            secondary: {
+                main: colors.secondary?.main!,
+                half: colors.secondary?.half!,
+                dark: colors.secondary?.dark!,
+                descAndReqText: colors.secondary?.descAndReqText!,
+                jobDetails: colors.secondary?.jobDetails!,
+                labelText: colors.secondary?.labelText!,
+                addRecommendersTextHover: colors.secondary?.addRecommendersTextHover!,
+                addRecommenderButtonHover: colors.secondary?.addRecommenderButtonHover
+
+            },
+            background: {
+                main: colors.background?.globalBackground,
+                default: colors.background?.globalBackground,
+                box: colors.background?.globalBackground,
+                boxInner: colors.background?.globalBackground,
+                jobDetails: colors.background?.jobDetails,
+                JobDetailsText: colors.background?.JobDetailsText,
+                jobTitleSeparator: colors.background?.jobTitleSeparator,
+                candidateDetailsTextField: colors.background?.candidateDetailsTextField,
+                cvButton: colors.background?.cvButton,
+                cvButtonHover: colors.background?.cvButtonHover,
+                submitButtonHover: colors.background?.submitButtonHover,
+                recommendersBox: colors.background?.recommendersBox,
+                footer: colors.background?.footer
+            },
+            error: {
+                main: colors.error?.main!
+            },
+            success: {
+                main: colors.success?.main!
             }
         },
         typography: {
