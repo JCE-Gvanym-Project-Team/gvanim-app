@@ -1,9 +1,227 @@
-import { Box } from '@mui/material'
-import React from 'react'
+
+import { Accessible, Contrast, FontDownload, LightMode, Nightlight, Replay, ZoomInRounded, ZoomOutRounded } from '@mui/icons-material';
+import { Box, Button, Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, Typography, styled } from '@mui/material';
+import {useTheme} from '@mui/material/styles'
+import React, { useContext, useState } from 'react';
+import { ColorModeContext, FontContext, colorTokens } from '../../theme';
+
+
+const CustomDrawer = styled(Drawer)(({ theme }) => ({
+    '& .MuiDrawer-paperAnchorLeft': {
+        transform: 'translateX(100%)',
+        transition: 'transform 0.3s !important',
+        left: "calc(100% - 250px)",
+        zIndex: "12000"
+    }
+}));
+
+const DEFAULT_FONT_FAMILY = "'Noto Sans Hebrew', sans-serif";
+const READABLE_FONT_FAMILY = "Arial";
+const DEFAULT_FONT_SIZE = 20
 
 export default function Accessibility()
 {
+    const [open, setOpen] = useState(false);
+
+    const theme = useTheme();
+    const colors = colorTokens(theme.palette.mode);
+    const colorMode = useContext(ColorModeContext);
+    const fontMode = useContext(FontContext);
+
+    const [fontFamily, setfontFamily] = useState("'Noto Sans Hebrew', sans-serif");
+
+    function toggleDrawer(open: boolean)
+    {
+        setOpen(open);
+    }
+
+    // is active for each accessibility option
+    const [isActive, setIsActive] = useState(false);
+
     return (
-        <Box sx={{position: 'absolute'}}>Accessibility</Box>
+        <React.Fragment>
+            <Box
+                sx={{
+                    display: "flex",
+                    justifyContent: "end",
+                    position: "fixed",
+                    top: "80%",
+                    right: "0",
+                    zIndex: "10" // on top of everything but the drawer
+                }}
+            >
+                <Button
+                    variant='contained'
+                    sx={{
+                        left: 0,
+                        backgroundColor: "secondary.main",
+                        "&:hover": {
+                            backgroundColor: "secondary.dark"
+                        }
+                    }}
+                    onClick={() => toggleDrawer(true)}
+                >
+                    <Typography variant='h4' color={"primary.textBright"} sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+                        <Accessible sx={{ fontSize: "24px" }} />
+                        נגישות
+                    </Typography>
+                </Button>
+            </Box>
+
+            <CustomDrawer
+                anchor="left"
+                open={open}
+                onClose={() => toggleDrawer(false)}
+            >
+                <Box
+                    sx={{ width: 250 }}
+                    role="presentation"
+                    onKeyDown={() => toggleDrawer(false)}
+                >
+                    {/* increase or decrease font size */}
+                    <List>
+                        {/* Decrease font size */}
+                        <ListItem disablePadding>
+                            <ListItemButton
+                                onClick={() =>
+                                {
+                                    fontMode.decreaseFontSize(2);
+                                }}>
+                                <ListItemIcon>
+                                    <Typography
+                                        sx={{
+                                            display: "flex",
+                                            flexDirection: "row",
+                                            alignItems: "center"
+                                        }}
+                                    >
+                                        <ZoomOutRounded />
+                                    </Typography>
+                                </ListItemIcon>
+                                <Typography variant='h4'>
+                                    הקטנת גודל גופן
+                                </Typography>
+                            </ListItemButton>
+                        </ListItem>
+                        {/* Increase font size */}
+                        <ListItem disablePadding>
+                            <ListItemButton
+                                onClick={() =>
+                                {
+                                    fontMode.increaseFontSize(2);
+                                }}>
+                                <ListItemIcon>
+                                    <ZoomInRounded />
+                                </ListItemIcon>
+                                <Typography variant='h4'>
+                                    הגדלת גודל גופן
+                                </Typography>
+                            </ListItemButton>
+                        </ListItem>
+                    </List>
+                    <Divider />
+                    <List >
+                        {/* dark contrast */}
+                        <ListItem disablePadding>
+                            <ListItemButton
+                                onClick={() =>
+                                {
+                                    colorMode.toggleColorMode("dark-contrast");
+                                }}>
+                                <ListItemIcon>
+                                    <Nightlight />
+                                </ListItemIcon>
+                                <Typography variant='h4'>
+                                    ניגודיות כהה
+                                </Typography>
+                            </ListItemButton>
+                        </ListItem>
+
+                        {/* bright contrast */}
+                        <ListItem disablePadding>
+                            <ListItemButton
+                                onClick={() =>
+                                {
+                                    colorMode.toggleColorMode("bright-contrast");
+                                }}
+                            >
+                                <ListItemIcon >
+                                    <LightMode />
+                                </ListItemIcon>
+                                <Typography variant='h4'>
+                                    ניגודיות בהירה
+                                </Typography>
+                            </ListItemButton>
+                        </ListItem>
+
+                        {/* Black and white */}
+                        <ListItem disablePadding>
+                            <ListItemButton
+                                onClick={() =>
+                                {
+                                    colorMode.toggleColorMode("white-and-dark")
+                                }}
+                            >
+                                <ListItemIcon>
+                                    <Contrast />
+                                </ListItemIcon>
+                                <Typography variant='h4'>
+                                    שחור-לבן
+                                </Typography>
+                            </ListItemButton>
+                        </ListItem>
+                    </List>
+                    <Divider />
+                    <List>
+                        {/* Change font */}
+                        <ListItem disablePadding>
+                            <ListItemButton onClick={() =>
+                            {
+                                const nextFontFamily = fontFamily === DEFAULT_FONT_FAMILY ? READABLE_FONT_FAMILY : DEFAULT_FONT_FAMILY;
+                                fontMode.changeFontFamily(nextFontFamily);
+                                setfontFamily(nextFontFamily);
+                            }}
+                            >
+                                <ListItemIcon>
+                                    <FontDownload />
+                                </ListItemIcon>
+                                <Typography variant='h4'>
+                                    פונט קריא
+                                </Typography>
+                            </ListItemButton>
+                        </ListItem>
+                    </List>
+                    {/* Reset all accesibility options */}
+                    <Divider />
+                    <List>
+                        <ListItem disablePadding>
+                            <ListItemButton
+                                onClick={() =>
+                                {
+                                    fontMode.changeFontFamily(DEFAULT_FONT_FAMILY);
+                                    fontMode.changeFontSize(DEFAULT_FONT_SIZE);
+                                    colorMode.toggleColorMode("light");
+                                }}
+                            >
+                                <ListItemIcon>
+                                    <Replay />
+                                </ListItemIcon>
+                                <Typography variant='h4'>
+                                    איפוס נגישות
+                                </Typography>
+                            </ListItemButton>
+                        </ListItem>
+                    </List>
+
+                </Box>
+            </CustomDrawer>
+
+        </React.Fragment>
+
     )
+}
+
+function createCache(arg0: { key: string; stylisPlugins: any[]; })
+{
+    throw new Error('Function not implemented.');
 }
