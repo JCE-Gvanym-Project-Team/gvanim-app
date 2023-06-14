@@ -247,7 +247,8 @@ export const themeSettings = (mode, actualMode, fontSize, fontFamily) =>
                 cvButton: "#41C2F0",
                 cvButtonHover: "#77CFEF",
                 submitButtonHover: "#2768B4",
-                recommendersBox: "rgba(91, 161, 170, 0.14)"
+                recommendersBox: "rgba(91, 161, 170, 0.14)",
+                footer: "#002652"
             },
             error: {
                 main: "#FF0000"

@@ -48,7 +48,7 @@ export default function FloatingBox(props: { job, screenSize })
                 <Icon sx={{
                     position: "absolute",
                     // top: "543px",
-                    marginLeft: { xs: "-50px", md: "250px" },
+                    marginLeft: { xs: "-50px", md: "200px", lg: "250px" },
                     marginTop: { xs: "300px", md: "-70px" },
                     width: { xs: "171px", md: '133px' },
                     height: { xs: "171px", md: '133px' },

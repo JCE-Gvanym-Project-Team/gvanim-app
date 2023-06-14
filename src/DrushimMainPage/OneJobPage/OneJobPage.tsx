@@ -19,6 +19,7 @@ import { ReactComponent as DownArrowSVG } from './Resources/DownArrow.svg'
 import { ReactComponent as UpArrowSVG } from './Resources/UpArrow.svg'
 import { ReactComponent as PlusIconSVG } from './Resources/Plus.svg'
 import { ReactComponent as AttachFileSVG } from './Resources/AttachFile.svg'
+import MobileBackground from './Resources/MobileBackground.png'
 
 
 const ABOUT_MAX_LENGTH = 1000;
@@ -366,6 +367,7 @@ export default function OneJobPage()
         return result;
     }
 
+    // screen size
     type BreakpointOrNull = Breakpoint | null;
 
     function useWidth()
@@ -395,14 +397,21 @@ export default function OneJobPage()
                     overflow: 'hidden',
                     zIndex: "-1"
                 }}>
-                    <Icon sx={{
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        width: '100%',
-                        height: 'auto',
-                        zIndex: "-1"
-                    }} component={BackgroundSVG} />
+                    {screenSize === "xs" ? 
+                        <img src={MobileBackground}
+                            height={"408px"}
+                            width={"100%"}
+                        />
+                    :
+                        <Icon sx={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            width: '100%',
+                            height: 'auto',
+                            zIndex: "-1"
+                        }} component={BackgroundSVG} />
+                    }
                 </Box>
                 {/* Entire Page */}
                 <Box
@@ -1497,8 +1506,8 @@ export default function OneJobPage()
                                     borderRadius: "36px",
                                     paddingTop: "21px",
                                     paddingBottom: "21px",
-                                    paddingRight: {xs: "84px", md: "8vw" },
-                                    paddingLeft: {xs: "84px", md: "8vw" },
+                                    paddingRight: { xs: "84px", md: "8vw" },
+                                    paddingLeft: { xs: "84px", md: "8vw" },
                                     color: "primary.main",
                                     "&:hover": {
                                         backgroundColor: "background.submitButtonHover"
