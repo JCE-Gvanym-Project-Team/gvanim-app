@@ -30,7 +30,7 @@ export const colorTokens = (mode) =>
                 800: "#0c101b",
                 900: "#080b12",
                 1000: "#040509",
-                1100: "#000000"
+                1100: "#000000",
             },
             greens: {
                 100: "#dbf5ee",
@@ -92,7 +92,7 @@ export const colorTokens = (mode) =>
                 800: "#727681",
                 900: "#a1a4ab",
                 1000: "#d0d1d5",
-                1100: "#ffffff"
+                1100: "#ffffff",
             },
             greens: {
                 100: "#0f2922",
@@ -143,7 +143,7 @@ export const themeSettings = (mode) =>
                 primary: {
                     main: colors.primary[200],
                     textBright: colors.primary[1100],
-                    faded: colors.primary[900]
+                    faded: colors.primary[900],
                 },
                 secondary: {
                     main: colors.blues[500]
@@ -160,7 +160,7 @@ export const themeSettings = (mode) =>
                 },
                 error: {
                     main: colors.reds[500]
-                }
+                },
             },
             typography: {
                 fontFamily: ["'Noto Sans Hebrew'", "sans-serif"].join(","),
