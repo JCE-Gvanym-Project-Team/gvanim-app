@@ -284,13 +284,25 @@ const columns: GridColDef[] = [
     valueGetter: (params) => params.row._lastName,
   },
   {
-    field: "_jobNumber",
-    headerName: "מספר המשרה",
+    field: "_jobNumbers",
+    headerName: "מספר המשרה ",
     width: 150,
-    headerAlign: "center",
-    align: "center",
-    sortable: true,
-    valueGetter: (params) => params.row._jobNumber,
+    sortable: false,
+    renderCell: (params) => {
+      const jobNumbers = params.value as number[];
+
+      let displayJobNumbers = jobNumbers;
+      if (jobNumbers.length > 2) {
+        displayJobNumbers = jobNumbers.slice(0, 2);
+        displayJobNumbers.push(-1); // Add a placeholder number to indicate ellipsis
+      }
+
+      const formattedJobNumbers = displayJobNumbers
+        .map((jobNumber) => (jobNumber === -1 ? "..." : jobNumber))
+        .join(", ");
+
+      return <span>{formattedJobNumbers}</span>;
+    },
   },
   {
     field: "_jobArea",
@@ -507,26 +519,42 @@ export default function CandidateTable() {
     const jobs = await getFilteredJobs();
 
     // Combine data into a new array for the rows.
-    const combinedRows = candidates.map((candidate) => {
-      // Find the job status and job for the current candidate.
-      const jobStatus = candidateJobStatuses.find(
-        (status) => status._candidateId === candidate._id
-      );
-      const job =
-        jobStatus &&
-        jobs.find((job) => job._jobNumber === jobStatus._jobNumber);
+    const combinedRows = candidates
+      .filter((candidate) => candidate._firstName && candidate._lastName) // Filter candidates with no name
+      .filter((candidate) =>
+        candidateJobStatuses.some(
+          (status) => status._candidateId === candidate._id
+        )
+      ) // Filter candidates who have applied for any position
+      .map((candidate) => {
+        // Find the job statuses for the current candidate.
+        const jobStatuses = candidateJobStatuses.filter(
+          (status) => status._candidateId === candidate._id
+        );
+        const jobNumbers = jobStatuses.map((status) => status._jobNumber);
 
-      // Return a new object that combines the necessary data from all three sources.
-      // If jobStatus or job is undefined, provide default values for the missing data.
-      return {
-        ...candidate,
-        _jobNumber: jobStatus ? jobStatus._jobNumber : -1,
-        _status: jobStatus ? jobStatus._status : "N/A",
-        _applyDate: jobStatus ? jobStatus._applyDate : new Date(0, 0, 0),
-        _region: job ? job._region : "N/A",
-        getCvUrl: candidate.getCvUrl,
-      };
-    });
+        // Find the jobs associated with the job numbers.
+        const associatedJobs = jobs.filter((job) =>
+          jobNumbers.includes(job._jobNumber)
+        );
+
+        // Return a new object that combines the necessary data from all three sources.
+        // If jobStatuses or associatedJobs are empty, provide default values for the missing data.
+        return {
+          ...candidate,
+          _jobNumber: jobStatuses.length > 0 ? jobStatuses[0]._jobNumber : -1,
+          _status: jobStatuses.length > 0 ? jobStatuses[0]._status : "Error",
+          _applyDate:
+            jobStatuses.length > 0
+              ? jobStatuses[0]._applyDate
+              : new Date(0, 0, 0),
+          _region:
+            associatedJobs.length > 0 ? associatedJobs[0]._region : "Error",
+          _jobNumbers: jobNumbers,
+          _regions: associatedJobs.map((job) => job._region),
+          getCvUrl: candidate.getCvUrl,
+        };
+      });
 
     setRows(combinedRows);
 
