@@ -1,5 +1,5 @@
 import { Job, getFilteredJobs, generateJobNumber } from "./Job";
-import { loginAdmin, loginRecruiter } from "./Authentication";
+import { loginAdmin, loginRecruiter, getConnectedUser } from "./Authentication";
 import { Candidate, getFilteredCandidates, generateCandidateId } from "./Candidate";
 import { CandidateJobStatus, getFilteredCandidateJobStatuses, allStatus, getMessage } from "./CandidateJobStatus";
 import { Recomendation } from "./Recomendation";
@@ -7,7 +7,8 @@ import { Role, getAllRoles, getOpenRoles, getClosedRoles } from "./Role";
 import { Stage, getAllStages, getOpenStages, getClosedStages } from "./Stage";
 import { Sector, getAllSectors, getOpenSectors, getClosedSectors } from "./Sector";
 
-export {
+export
+{
     Job,
     getFilteredJobs,
     generateJobNumber,
@@ -32,5 +33,6 @@ export {
     Sector,
     getAllSectors,
     getOpenSectors,
-    getClosedSectors
+    getClosedSectors,
+    getConnectedUser
 }

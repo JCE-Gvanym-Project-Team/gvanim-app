@@ -114,11 +114,13 @@ function ReportsPage() {
 					</Stack>
 				</Box>
 			</Box>
-
-			<Box> 
+			<Box>
+				<h2 style={{ textAlign: "center" }}>מספר משרות לפי ערים</h2>
 				<JobsByRegions></JobsByRegions>
-				 <MyTable></MyTable> 
-				{/* <CandidatesByRoles></CandidatesByRoles> */}
+				<h2 style={{ textAlign: "center" }}>כמות מועמדים למשרות השונות</h2>
+				<CandidatesByRoles></CandidatesByRoles>
+				<h2 style={{ textAlign: "center" }}>דוחות נוספים</h2>
+				<MyTable></MyTable>
 			</Box>
 		</>
 	)

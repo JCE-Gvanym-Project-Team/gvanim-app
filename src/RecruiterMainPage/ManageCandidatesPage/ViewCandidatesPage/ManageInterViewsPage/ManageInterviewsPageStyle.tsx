@@ -31,22 +31,24 @@ export const interviewSummaryContentSx: SxProps = {
 export const scheduleInterviewButton: SxProps = {
     backgroundColor: ManageCandidatesPageGlobalStyle.editDetailsButtonColor,
     alignSelf: 'center',
-    marginBottom: "1rem"
+    marginBottom: "1rem",
+    width: {xs: "50vw", md: "100%"}
 }
 
 export const chooseJobAndInterviewContainerSx: SxProps = {
     display: "flex",
-    flexDirection: "row",
+    flexDirection: {xs: "column", md:"row"},
     justifyContent: "start",
     width: "100%"
 }
 
 export const autoCompleteSx: SxProps = {
-    width: { xs: "40vw", md: "300px" }
+    width: { xs: "100vw", md: "300px" }
 }
 
 export const scheduleInterviewText: SxProps = {
-    color: "grey"
+    color: "grey",
+    marginRight: "0.5rem"
 }
 
 export const chooseJobContainerSx: SxProps = {
@@ -54,7 +56,8 @@ export const chooseJobContainerSx: SxProps = {
     flexDirection: "column",
     alignItems: "center",
     width: "fit-content",
-    marginRight: { sx: "0", md: "3rem" }
+    marginRight: { sx: "0", md: "3rem" },
+    marginBottom: "3rem"
 }
 
 export const appliedDateTextSx: SxProps = {
@@ -105,15 +108,6 @@ export const titleSx: SxProps = {
     fontWeight: 'bold',
     fontFamily: ManageCandidatesPageGlobalStyle.textFontFamily,
 
-}
-
-export const BoxGradientSx: SxProps = {
-    height: '400px',
-    width: "100%",
-    top: 0,
-    display: 'flex',
-    justifyContent: 'center',
-    background: 'linear-gradient(to left, #7795f8, #7795f8,#555abf)',
 }
 
 export const errorTextSx: SxProps = {

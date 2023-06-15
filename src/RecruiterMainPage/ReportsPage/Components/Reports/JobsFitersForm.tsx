@@ -5,26 +5,31 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { Box, Typography, FormControlLabel, MenuItem, Radio, RadioGroup, Select, SelectChangeEvent, Stack, Container } from '@mui/material';
+import { Box, Typography, FormControlLabel, MenuItem, Radio, RadioGroup, Select, SelectChangeEvent, Stack, Container, Button } from '@mui/material';
 import { CandidateJobStatus, Job, generateJobNumber, getFilteredCandidateJobStatuses, getFilteredCandidates, getFilteredJobs, loginAdmin } from '../../../../Firebase/FirebaseFunctions/functionIndex';
 import { exportToExcel } from '../../../../Firebase/FirebaseFunctions/Reports/GlobalFunctions'
 import CandidatesByFilters from '../../../../Firebase/FirebaseFunctions/Reports/CandidatesFilters';
 import { MyReportStyle, formContainerStyles, radioStyle } from '../../ReportPageStyle';
 import JobsByFilters from '../../../../Firebase/FirebaseFunctions/Reports/JobsFilters'
-import { ArticleOutlined } from "@mui/icons-material";
 import { MyPaperSx, BoxGradientSx } from '../../../ManageJobsPage/Components/NewJobPage/NewJobStyle';
 import { useNavigate } from 'react-router-dom';
-import dayjs from 'dayjs';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { designReturnButton } from '../../../ManageJobsPage/ManageJobsPageStyle';
+import { ArticleOutlined } from '@mui/icons-material';
 
 
-export default function JobsFiltersForm() {
 
-    const createReport = (role_ind, scope_ind, sector_ind, openJobs_ind, highPriority_ind, viewsAndApplyPerPlatform_ind, startDate, endDate) => {
+export default function JobsFiltersForm()
+{
+
+    const createReport = (role_ind, scope_ind, sector_ind, openJobs_ind, highPriority_ind, viewsAndApplyPerPlatform_ind, startDate, endDate) =>
+    {
         // checking if the user select all the buttons
         const isDateSelected = startDate && endDate;
 
 
-        if (!role_ind || !scope_ind || !sector_ind || !role_ind || !viewsAndApplyPerPlatform_ind || !isDateSelected) {
+        if (!role_ind || !scope_ind || !sector_ind || !role_ind || !viewsAndApplyPerPlatform_ind || !isDateSelected)
+        {
             // displaying an error message or indicating to the user that the parameters are mandatory
             alert('יש למלא את כל השדות');
             return;
@@ -57,13 +62,15 @@ export default function JobsFiltersForm() {
         const formattedEndDate = endDate.toDate();
 
         const result = JobsByFilters(role, scope, sector, openJobs, highPriority, viewsAndApplyPerPlatform, formattedStartDate, formattedEndDate)
-            .then((result) => {
+            .then((result) =>
+            {
                 if (result.length === 0)
                     alert('אין נתונים להצגה');
                 else
                     exportToExcel(result, "משרות");
             })
-            .catch((error) => {
+            .catch((error) =>
+            {
                 // handle the error
                 console.log(error);
             });
@@ -84,36 +91,48 @@ export default function JobsFiltersForm() {
 
 
     // handls
-    function handleChangeRole(event: SelectChangeEvent<string>, child: React.ReactNode): void {
+    function handleChangeRole(event: SelectChangeEvent<string>, child: React.ReactNode): void
+    {
         setRole(event.target.value);
     }
 
-    function handleChangeScope(event: SelectChangeEvent<string>, child: React.ReactNode): void {
+    function handleChangeScope(event: SelectChangeEvent<string>, child: React.ReactNode): void
+    {
         setScope(event.target.value);
     }
 
-    const handleChangeSector = (event) => {
+    const handleChangeSector = (event) =>
+    {
         setSector(event.target.value);
     };
 
-    const handleChangeOpenJobs = (event) => {
+    const handleChangeOpenJobs = (event) =>
+    {
         setOpenJobs(event.target.value);
     };
 
-    const handleChangeHighPriority = (event) => {
+    const handleChangeHighPriority = (event) =>
+    {
         setHighPriority(event.target.value);
     };
 
-    const handleViewsAndApplyPerPlatform = (event) => {
+    const handleViewsAndApplyPerPlatform = (event) =>
+    {
         setViewsAndApplyPerPlatform(event.target.value);
     }
-    const handleChangeStartDate = (date) => {
+    const handleChangeStartDate = (date) =>
+    {
         setStartDate(date);
     };
 
-    const handleChangeEndDate = (date) => {
+    const handleChangeEndDate = (date) =>
+    {
         setEndDate(date);
     };
+
+    const handleClick = () => {
+        navigate("/management/reports");
+    }; 
 
 
 
@@ -208,7 +227,27 @@ export default function JobsFiltersForm() {
                     borderRadius: '50%',
                     position: 'absolute',
                 }} />
+                <Box sx={{ display: 'flex', flexDirection: 'column', top: "165px", position: "absolute" }}>
+                    <Stack direction='column'>
+                        <Stack direction='row' justifyContent='center' spacing={1}>
 
+                            <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                                <ArticleOutlined sx={{ color: '#fff' }} />
+                            </Box>
+                            <Typography sx={{ fontFamily: "'Noto Sans Hebrew', sans-serif", color: '#fff', textAlign: 'center' }} variant='h4'>
+                                דו"ח משרות
+                            </Typography>
+
+                        </Stack>
+
+
+                        <Typography sx={{ opacity: 0.6, width: '100%', textAlign: 'center', color: '#fff', fontSize: '16px', fontFamily: "'Noto Sans Hebrew', sans-serif", mt: 1 }} variant='subtitle1'>
+                            הפקת דוחות על משרות לפי מס' קטגוריות
+                        </Typography>
+                        <Box sx={{ background: 'linear-gradient(90deg,hsla(0,0%,100%,0),#fff,hsla(0,0%,100%,0))', padding: 0.05, width: '100%', mt: 2 }} />
+                    </Stack>
+
+                </Box>
             </Box>
 
             <Box sx={MyPaperSx}>
@@ -220,12 +259,6 @@ export default function JobsFiltersForm() {
                                 <Box className="section-title">
 
                                     <FormControl  >
-                                        <Typography sx={{ fontFamily: "'Noto Sans Hebrew', sans-serif", color: 'rgb(52, 71, 103)', textAlign: 'center' }} variant='h3'>
-                                            דו"ח משרות
-                                        </Typography>
-                                        <br />
-                                        <br />
-
                                         {/* select role */}
                                         <FormControl fullWidth>
                                             <InputLabel id="demo-simple-select-label">בחר תפקיד</InputLabel>
@@ -363,6 +396,16 @@ export default function JobsFiltersForm() {
 
                     </Container>
                 </Box >
+            </Box>
+
+            <Box style={{ position: 'absolute', top: '100px', right: '50px' }}>
+                <Button
+                    onClick={handleClick}
+                    sx={designReturnButton}
+                >
+                    <ArrowForwardIosIcon></ArrowForwardIosIcon>
+                    חזור
+                </Button>
             </Box>
 
         </>
