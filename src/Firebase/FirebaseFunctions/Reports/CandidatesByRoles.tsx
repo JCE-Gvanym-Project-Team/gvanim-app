@@ -9,12 +9,13 @@ const Chart = () => {
   const [chartWidth, setChartWidth] = useState(window.innerWidth * 0.6);
   const [chartOuterRadius, setChartOuterRadius] = useState(window.innerWidth * 0.2);
 
-
   useEffect(() => {
+
     async function fetchData() {
       const filteredJobs = await getFilteredJobs();
+      console.log(filteredJobs);
       const candidatesByRole: { [role: string]: number } = {};
-
+      
       for (let i = 0; i < filteredJobs.length; i++) {
         const job = filteredJobs[i];
         const role = job._role;
@@ -37,18 +38,13 @@ const Chart = () => {
         value: quantity,
         fill: colors[index % colors.length],
       }));
-
+      
       if (newData != undefined)
-        setData(newData);
+      setData(newData);
     }
-
-    fetchData();
+    
+       fetchData();
   }, []);
-
-  for(let i = 0 ; i < data.length; i ++)
-     if(data[i].value == 0)
-        console.log(data[i].name)
-        
 
   useEffect(() => {
     function handleResize() {
@@ -64,7 +60,6 @@ const Chart = () => {
   }, []);
 
 
-  // פונקציה שמגרילה צבע רנדומלי
   const randomColor = () => {
     const letters = "0123456789ABCDEF";
     let color = "#";
