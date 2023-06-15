@@ -1,5 +1,5 @@
 import 'firebase/auth';
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, User } from "firebase/auth";
 import { sleep } from "./test";
 
 import { Recruiter } from "./Recruiter";
@@ -52,6 +52,11 @@ export async function isConnected(): Promise<boolean> {
 	else
 		return false;
 }
+
+export async function getConnectedUser(): Promise<User | null>{
+	return getAuth().currentUser;
+}
+
 export async function main() {
 	await loginAdmin();
 	let rec = new Recruiter('ex@gmail.com',"el","ta");

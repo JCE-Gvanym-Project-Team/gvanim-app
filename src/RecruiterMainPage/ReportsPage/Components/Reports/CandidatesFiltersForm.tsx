@@ -5,7 +5,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { Box, Typography, FormControlLabel, MenuItem, Radio, RadioGroup, Select, SelectChangeEvent, Stack, Container } from '@mui/material';
+import { Box, Typography, FormControlLabel, MenuItem, Radio, RadioGroup, Select, SelectChangeEvent, Stack, Container, Button } from '@mui/material';
 import { CandidateJobStatus, Job, generateJobNumber, getFilteredCandidateJobStatuses, getFilteredCandidates, getFilteredJobs, loginAdmin } from '../../../../Firebase/FirebaseFunctions/functionIndex';
 import { exportToExcel } from '../../../../Firebase/FirebaseFunctions/Reports/GlobalFunctions'
 import CandidatesByFilters from '../../../../Firebase/FirebaseFunctions/Reports/CandidatesFilters';
@@ -13,15 +13,20 @@ import { MyReportStyle, formContainerStyles, radioStyle } from '../../ReportPage
 import { useNavigate } from 'react-router-dom';
 import { MyPaperSx, BoxGradientSx } from '../../../ManageJobsPage/Components/NewJobPage/NewJobStyle';
 import { ArticleOutlined, Margin } from "@mui/icons-material";
+import { designReturnButton } from '../../../ManageJobsPage/ManageJobsPageStyle';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 
 
-export default function CandidateFiltersForm() {
-    const createReport = (status_ind, timeOnStatus_ind, sector_ind, role_ind, selectGarde, selectInterviewDate, startDate, endDate) => {
+export default function CandidateFiltersForm()
+{
+    const createReport = (status_ind, timeOnStatus_ind, sector_ind, role_ind, selectGarde, selectInterviewDate, startDate, endDate) =>
+    {
         // checking if the user select all the buttons
         const isDateSelected = startDate && endDate;
 
-        if (!status_ind || !timeOnStatus_ind || !sector_ind || !role_ind || !selectGarde || !isDateSelected) {
+        if (!status_ind || !timeOnStatus_ind || !sector_ind || !role_ind || !selectGarde || !isDateSelected)
+        {
             // displaying an error message or indicating to the user that the parameters are mandatory
             alert('יש למלא את כל השדות');
             return;
@@ -50,7 +55,8 @@ export default function CandidateFiltersForm() {
                     exportToExcel(result, "מועמדים");
                 }
             })
-            .catch((error) => {
+            .catch((error) =>
+            {
                 // handle the error
                 console.log(error);
             });
@@ -69,36 +75,50 @@ export default function CandidateFiltersForm() {
 
 
     // handls
-    function handleChangeStatus(event: SelectChangeEvent<string>, child: React.ReactNode): void {
+    function handleChangeStatus(event: SelectChangeEvent<string>, child: React.ReactNode): void
+    {
         setSelectStatus(event.target.value);
     }
 
-    function handleChangeTimeInStatus(event: SelectChangeEvent<string>, child: React.ReactNode): void {
+    function handleChangeTimeInStatus(event: SelectChangeEvent<string>, child: React.ReactNode): void
+    {
         setTimeOnStatus(event.target.value);
     }
 
-    const handleChangeSector = (event) => {
+    const handleChangeSector = (event) =>
+    {
         setRegion(event.target.value);
     };
 
-    const handleChangeRole = (event) => {
+    const handleChangeRole = (event) =>
+    {
         setRole(event.target.value);
     };
 
-    const handleChangeIncludeGrade = (event) => {
+    const handleChangeIncludeGrade = (event) =>
+    {
         setSelectGarde(event.target.value);
     };
 
-    const handleChangeIncludeInterviewDate = (event) => {
+    const handleChangeIncludeInterviewDate = (event) =>
+    {
         setSelectInterviewDate(event.target.value);
     };
 
-    const handleChangeStartDate = (date) => {
+    const handleChangeStartDate = (date) =>
+    {
         setStartDate(date);
     };
 
-    const handleChangeEndDate = (date) => {
+    const handleChangeEndDate = (date) =>
+    {
         setEndDate(date);
+    };
+
+    const navigate = useNavigate();
+
+    const handleClick = () => {
+        navigate("/management/reports");
     };
 
 
@@ -194,7 +214,27 @@ export default function CandidateFiltersForm() {
                     borderRadius: '50%',
                     position: 'absolute',
                 }} />
+                <Box sx={{ display: 'flex', flexDirection: 'column', top: "165px", position: "absolute" }}>
+                    <Stack direction='column'>
+                        <Stack direction='row' justifyContent='center' spacing={1}>
 
+                            <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                                <ArticleOutlined sx={{ color: '#fff' }} />
+                            </Box>
+                            <Typography sx={{ fontFamily: "'Noto Sans Hebrew', sans-serif", color: '#fff', textAlign: 'center' }} variant='h4'>
+                                דו"ח מועמדים
+                            </Typography>
+
+                        </Stack>
+
+
+                        <Typography sx={{ opacity: 0.6, width: '100%', textAlign: 'center', color: '#fff', fontSize: '16px', fontFamily: "'Noto Sans Hebrew', sans-serif", mt: 1 }} variant='subtitle1'>
+                        הפקת דוחות על מועמדים לפי מס' קטגוריות
+                        </Typography>
+                        <Box sx={{ background: 'linear-gradient(90deg,hsla(0,0%,100%,0),#fff,hsla(0,0%,100%,0))', padding: 0.05, width: '100%', mt: 2 }} />
+                    </Stack>
+
+                </Box>
             </Box>
 
 
@@ -208,11 +248,6 @@ export default function CandidateFiltersForm() {
                                 <Box className="section-title"></Box>
 
                                 <FormControl>
-                                    <Typography sx={{ fontFamily: "'Noto Sans Hebrew', sans-serif", color: 'rgb(52, 71, 103)', textAlign: 'center' }} variant='h3'>
-                                        דו"ח מועמדים
-                                    </Typography>
-                                    <br />
-                                    <br />
                                     {/* select the status */}
                                     <FormControl fullWidth>
                                         <InputLabel id="demo-simple-select-label">בחר סטטוס</InputLabel>
@@ -350,6 +385,19 @@ export default function CandidateFiltersForm() {
                     </Container>
                 </Box >
             </Box>
+
+       
+            <Box style={{ position: 'absolute', top: '100px', right: '50px' }}>
+                <Button
+                    onClick={handleClick}
+                    sx={designReturnButton}
+                >
+                    <ArrowForwardIosIcon></ArrowForwardIosIcon>
+                    חזור
+                </Button>
+            </Box>
+
+
         </>
 
     );
@@ -357,8 +405,10 @@ export default function CandidateFiltersForm() {
 
 
 
-export async function main() {
-    loginAdmin().then(async () => {
+export async function main()
+{
+    loginAdmin().then(async () =>
+    {
         // 
         // let jobstatus1 = new CandidateJobStatus(109, "28", "נדחה",  "לא מתאים לגוונים בגלל..", 1,  new Date(2023, 4, 1),new Date(2023, 5, 1), new Date(0, 0, 0), ["ded", "ded"], [], "פערים על היקף משרה"  );
         // let jobstatus2 = new CandidateJobStatus(102, "28", "עבר ראיון ראשון",  "בחור מצוין", 4,  new Date(2023, 4, 1), new Date(2023, 4, 5), new Date(2023, 6, 25), ["ed", "ed"], [], "" );
