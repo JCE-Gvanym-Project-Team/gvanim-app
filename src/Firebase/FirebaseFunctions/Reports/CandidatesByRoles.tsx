@@ -6,8 +6,8 @@ import { getFilteredJobs } from "../Job";
 const Chart = () => {
   const [data, setData] = useState<{ name: string; value: number; }[]>([]);
   const colors = ["orangered", "skyblue", "limegreen", "purple", "yellow", "teal"];
-  const [chartWidth, setChartWidth] = useState(window.innerWidth * 0.8);
-  const [chartOuterRadius, setChartOuterRadius] = useState(window.innerWidth * 0.3);
+  const [chartWidth, setChartWidth] = useState(window.innerWidth * 0.6);
+  const [chartOuterRadius, setChartOuterRadius] = useState(window.innerWidth * 0.2);
 
 
   useEffect(() => {
@@ -52,8 +52,8 @@ const Chart = () => {
 
   useEffect(() => {
     function handleResize() {
-      setChartWidth(window.innerWidth * 0.8);
-      setChartOuterRadius(window.innerWidth * 0.3);
+      setChartWidth(window.innerWidth * 0.6);
+      setChartOuterRadius(window.innerWidth * 0.2);
     }
 
     window.addEventListener("resize", handleResize);

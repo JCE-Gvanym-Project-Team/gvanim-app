@@ -64,6 +64,7 @@ const JobsComponent: React.FC = () => {
             type: "column",
             name: "מספר משרות",
             data: quantities,
+            color: "#0000FF", // כחול כהה
           },
         ],
       });
@@ -74,16 +75,17 @@ const JobsComponent: React.FC = () => {
 
   return (
     <>
-    <style>{`
-      #chart-container2 {
-        width: 100%;
-        height: 400px;
-      }
-    `}</style>
-    <div className="chart-container">
-      <div id="chart-container2"></div>
-    </div>
-  </>
-  );};
+      <style>{`
+        #chart-container2 {
+          width: 100%;
+          height: 400px;
+        }
+      `}</style>
+      <div className="chart-container">
+        <div id="chart-container2"></div>
+      </div>
+    </>
+  );
+};
 
 export default JobsComponent;
