@@ -72,7 +72,18 @@ const JobsComponent: React.FC = () => {
     createChart();
   }, [jobs]);
 
-  return <div id="chart-container2"></div>;
-};
+  return (
+    <>
+    <style>{`
+      #chart-container2 {
+        width: 100%;
+        height: 400px;
+      }
+    `}</style>
+    <div className="chart-container">
+      <div id="chart-container2"></div>
+    </div>
+  </>
+  );};
 
 export default JobsComponent;
