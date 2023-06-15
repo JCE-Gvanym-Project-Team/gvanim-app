@@ -33,6 +33,7 @@ import { Chip, LinearProgress, SxProps, Theme, alpha } from "@mui/material";
 import MyLoading from "../../../Components/MyLoading/MyLoading";
 import { useState } from "react";
 import { getFilteredCandidateJobStatuses } from "../../../Firebase/FirebaseFunctions/CandidateJobStatus";
+import MyChip from "../ViewCandidatesPage/Components/MyChip/MyChip";
 
 // -------------------Use Memorie for better performance----------------------------------------------------
 const TraceUpdates = React.forwardRef<any, any>((props, ref) => {
@@ -353,7 +354,11 @@ const columns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     sortable: true,
-    renderCell: (candidate) => candidate?.row?._status,
+    renderCell: (params) => {
+      const jobId = params.row?._jobNumber.toString();
+      const candidate = params.row;
+      return <MyChip jobId={jobId} candidate={candidate} purpose="status" />;
+    },
   },
   {
     field: "cvFile",
