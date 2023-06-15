@@ -8,6 +8,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { Checkbox, Chip, FormLabel, Input, ListItemText, OutlinedInput, Stack, TextField } from '@mui/material';
 import { MyPaperSx } from './SectorsChipStyle';
 import SelectInput from '@mui/material/Select/SelectInput';
+import { getAllSectors } from '../../../../../../../../../../../../../../Firebase/FirebaseFunctions/Sector';
 
 
 const ITEM_HEIGHT = 48;
@@ -22,18 +23,7 @@ const MenuProps = {
 };
 
 
-const names = [
-  'אשכול 1',
-  'אשכול 2',
-  'אשכול 3',
-  'אשכול 4',
-  'אשכול 5',
-  'אשכול 6',
-  'אשכול 7',
-  'אשכול 8',
-  'אשכול 9',
-  'אשכול 10',
-];
+const names = getAllSectors();
 
 function getStyles(name: string, personName: readonly string[], theme: Theme) {
   return {

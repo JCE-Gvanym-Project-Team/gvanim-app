@@ -202,38 +202,38 @@ const CustomPaginationAndFooter = () => {
     const pageCount = useGridSelector(apiRef, gridPageCountSelector);
     const rowsCount = apiRef.current.getRowsCount();
 
-    
+
 
     return (
-        <Stack direction={{xs: 'column', sm: 'column',md: 'row-reverse',lg: 'row-reverse', xl: 'row-reverse' }} 
-		justifyContent='space-between' 
-		alignItems='center' 
-		spacing={2}
-		padding={1} >
+        <Stack direction={{ xs: 'column', sm: 'column', md: 'row-reverse', lg: 'row-reverse', xl: 'row-reverse' }}
+            justifyContent='space-between'
+            alignItems='center'
+            spacing={2}
+            padding={1} >
 
-			<Box >
-				<Pagination
-					color="primary"
-					variant="outlined"
-					shape="rounded"
-					page={page + 1}
-					count={pageCount}
-					// @ts-expect-error
-					renderItem={(props2) => <PaginationItem {...props2} disableRipple />}
-					onChange={(event: React.ChangeEvent<unknown>, value: number) =>
-						apiRef.current.setPage(value - 1)
-					}
-				/>
-			</Box>
+            <Box >
+                <Pagination
+                    color="primary"
+                    variant="outlined"
+                    shape="rounded"
+                    page={page + 1}
+                    count={pageCount}
+                    // @ts-expect-error
+                    renderItem={(props2) => <PaginationItem {...props2} disableRipple />}
+                    onChange={(event: React.ChangeEvent<unknown>, value: number) =>
+                        apiRef.current.setPage(value - 1)
+                    }
+                />
+            </Box>
 
-			<Box>
-					<Chip
-						label={rowsCount + ' מגייסים'}
-						sx={{ fontWeight: 'bold', borderRadius: '0.5rem', color: 'black' }}
-						variant="outlined"
-					/>
-				</Box>
-		</Stack>
+            <Box>
+                <Chip
+                    label={rowsCount + ' מגייסים'}
+                    sx={{ fontWeight: 'bold', borderRadius: '0.5rem', color: 'black' }}
+                    variant="outlined"
+                />
+            </Box>
+        </Stack>
 
     );
 };
@@ -242,33 +242,33 @@ const CustomPaginationAndFooter = () => {
 
 // -------------------Use Memorie for better performance----------------------------------------------------
 const TraceUpdates = React.forwardRef<any, any>((props, ref) => {
-	const { Component, ...other } = props;
-	const rootRef = React.useRef<HTMLElement>();
-	const handleRef = useForkRef(rootRef, ref);
+    const { Component, ...other } = props;
+    const rootRef = React.useRef<HTMLElement>();
+    const handleRef = useForkRef(rootRef, ref);
 
-	React.useEffect(() => {
-		const root = rootRef.current;
-		root!.classList.add('updating');
-		root!.classList.add('updated');
+    React.useEffect(() => {
+        const root = rootRef.current;
+        root!.classList.add('updating');
+        root!.classList.add('updated');
 
-		const timer = setTimeout(() => {
-			root!.classList.remove('updating');
-		}, 360);
+        const timer = setTimeout(() => {
+            root!.classList.remove('updating');
+        }, 360);
 
-		return () => {
-			clearTimeout(timer);
-		};
-	});
+        return () => {
+            clearTimeout(timer);
+        };
+    });
 
-	return <Component ref={handleRef} {...other} />;
+    return <Component ref={handleRef} {...other} />;
 });
 
 const RowWithTracer = React.forwardRef((props, ref) => {
-	return <TraceUpdates ref={ref} Component={GridRow} {...props} />;
+    return <TraceUpdates ref={ref} Component={GridRow} {...props} />;
 });
 
 const ColumnHeadersWithTracer = React.forwardRef((props, ref) => {
-	return <TraceUpdates ref={ref} Component={GridColumnHeaders} {...props} />;
+    return <TraceUpdates ref={ref} Component={GridColumnHeaders} {...props} />;
 });
 
 const MemoizedRow = React.memo(RowWithTracer);
@@ -346,20 +346,20 @@ export default function Temp() {
 
 
         return (
-            <GridToolbarContainer sx={{mb: 2}}>
+            <GridToolbarContainer sx={{ mb: 2 }}>
                 <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', }}>
 
                     <GridToolbarQuickFilter variant='outlined' size='small' sx={{
-                         
-                         padding: 1 ,
-                         '& .muirtl-2ehmn7-MuiInputBase-root-MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {
-							borderRadius: '0.75rem',
-							border: '1px solid rgba(0, 0, 0, 0.23)',
-						},
-						'& .muirtl-ptiqhd-MuiSvgIcon-root': {
-							color: 'rgba(0, 0, 0, 0.23)'
-						},
-                         }} />
+
+                        padding: 1,
+                        '& .muirtl-2ehmn7-MuiInputBase-root-MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {
+                            borderRadius: '0.75rem',
+                            border: '1px solid rgba(0, 0, 0, 0.23)',
+                        },
+                        '& .muirtl-ptiqhd-MuiSvgIcon-root': {
+                            color: 'rgba(0, 0, 0, 0.23)'
+                        },
+                    }} />
 
                     <Stack direction='row'>
                         <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'start' }}>
@@ -407,10 +407,10 @@ export default function Temp() {
             align: 'center',
             minWidth: 50,
             renderCell: (sector) => {
-                    return <RecruiterDialog recruiters={rows} setRecruiters={setRows} recruiterRow={sector?.row} setSnackbar={setSnackbar} isEdit={true} />;
-                },
-    
-            
+                return <RecruiterDialog recruiters={rows} setRecruiters={setRows} recruiterRow={sector?.row} setSnackbar={setSnackbar} isEdit={true} />;
+            },
+
+
         },
         {
             field: '_firstName',
@@ -450,7 +450,7 @@ export default function Temp() {
 
 
         },
-        
+
         {
             field: '_sectors',
             headerName: "אשכולות",
@@ -470,54 +470,54 @@ export default function Temp() {
             <MyLoading loading={pageloading} setLoading={setPageLoading} />
         ) : (
             <>
-            <DataGrid
-                getRowClassName={(params) =>
-                    params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-                }
-                autoPageSize
-                density='compact'
+                <DataGrid
+                    getRowClassName={(params) =>
+                        params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+                    }
+                    autoPageSize
+                    density='compact'
 
-                sx={MyDataGrid(theme)}
-                rows={rows}
-                columns={columns}
-                getRowId={(row) => row.id}
-                disableColumnMenu
-                loading={dataLoading}
-                hideFooterSelectedRowCount
+                    sx={MyDataGrid(theme)}
+                    rows={rows}
+                    columns={columns}
+                    getRowId={(row) => row.id}
+                    disableColumnMenu
+                    loading={dataLoading}
+                    hideFooterSelectedRowCount
 
-                localeText={heIL.components.MuiDataGrid.defaultProps.localeText}
-                slots={{
-                    noRowsOverlay: CustomNoRowsOverlay,
-                    toolbar: GridCustomToolbar,
-                    footer: CustomPaginationAndFooter,
-                    loadingOverlay: LinearProgress,
-                    row: MemoizedRow,
-                    columnHeaders: MemoizedColumnHeaders,
-                }}
-                onRowClick={handleRowClick}
-                onRowSelectionModelChange={(newRowSelectionModel) => {
-                    setRowSelectionModel(newRowSelectionModel);
-                }}
-                slotProps={{
-                    toolbar: { selectedRowParams, setSelectedRowParams }
-                    ,
-                }}
-                rowSelectionModel={rowSelectionModel}
-            />
-            {!!snackbar && (
-                <Snackbar
-                    open
-                    anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-                    onClose={handleCloseSnackbar}
-                    autoHideDuration={6000}
-                >
-                    <Alert {...snackbar} onClose={handleCloseSnackbar} />
-                </Snackbar>
-            )}
-        </>
+                    localeText={heIL.components.MuiDataGrid.defaultProps.localeText}
+                    slots={{
+                        noRowsOverlay: CustomNoRowsOverlay,
+                        toolbar: GridCustomToolbar,
+                        footer: CustomPaginationAndFooter,
+                        loadingOverlay: LinearProgress,
+                        row: MemoizedRow,
+                        columnHeaders: MemoizedColumnHeaders,
+                    }}
+                    onRowClick={handleRowClick}
+                    onRowSelectionModelChange={(newRowSelectionModel) => {
+                        setRowSelectionModel(newRowSelectionModel);
+                    }}
+                    slotProps={{
+                        toolbar: { selectedRowParams, setSelectedRowParams }
+                        ,
+                    }}
+                    rowSelectionModel={rowSelectionModel}
+                />
+                {!!snackbar && (
+                    <Snackbar
+                        open
+                        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                        onClose={handleCloseSnackbar}
+                        autoHideDuration={6000}
+                    >
+                        <Alert {...snackbar} onClose={handleCloseSnackbar} />
+                    </Snackbar>
+                )}
+            </>
         )}</>
 
-   
+
     );
 }
 

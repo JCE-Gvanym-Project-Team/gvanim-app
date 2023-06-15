@@ -13,7 +13,8 @@ import Tooltip from '@mui/material/Tooltip';
 import RemoveConfirmPopup from './Components/RemoveConfirmPopup/RemoveConfirmPopup';
 import { Recruiter } from '../../../../../../../../../../../Firebase/FirebaseFunctions/Recruiter';
 import SectorsChip from './Components/SectorsChip/SectorsChip/SectorsChip';
-
+import { getAllSectors } from '../../../../../../../../../../../Firebase/FirebaseFunctions/Sector';
+import { Sector } from '../../../../../../../../../../../Firebase/FirebaseFunctions/Sector'
 
 
 const recruiter_sectors = [
@@ -32,28 +33,46 @@ const Transition = React.forwardRef(function Transition(
 	return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function RecruiterDialog(props: { recruiterRow: any, recruiters: any, setRecruiters:any, setSnackbar: any, isEdit: boolean }) {
+export default function RecruiterDialog(props: { recruiterRow: any, recruiters: any, setRecruiters: any, setSnackbar: any, isEdit: boolean }): JSX.Element {
 	const { recruiterRow, recruiters, setRecruiters, setSnackbar, isEdit } = props;
-
 	const [recruiterSectors, setRecruiterSectors] = React.useState<string[]>([]);
-
+	const [loading, setLoading] = React.useState(true);
 	const [firstName, setFirstName] = React.useState('');
 	const [lastName, setLastName] = React.useState('');
 	const [email, setEmail] = React.useState('');
-
-
 	const [saveButton, setSaveButton] = React.useState(false);
-
 	const [open, setOpen] = React.useState(false);
 
 	React.useEffect(() => {
-		if (isEdit) {
-			typeof recruiterRow?._firstName === 'string' && setFirstName(recruiterRow?._firstName);
-			typeof recruiterRow?._lastName === 'string' && setLastName(recruiterRow?._lastName);
-			typeof recruiterRow?._email === 'string' && setEmail(recruiterRow?._email);
-			recruiterRow?._sectors !== null && setRecruiterSectors(recruiterRow?._sectors);
-		}
+		const fetchData = async () => {
+			const sectors = await getAllSectors();
+			console.log(sectors);
+			const sectorStrings = sectors.map((sector: Sector) => sector.toString());
+			setRecruiterSectors(sectorStrings);
+			setLoading(false);
+			if (isEdit) {
+				typeof recruiterRow?._firstName === 'string' && setFirstName(recruiterRow?._firstName);
+				typeof recruiterRow?._lastName === 'string' && setLastName(recruiterRow?._lastName);
+				typeof recruiterRow?._email === 'string' && setEmail(recruiterRow?._email);
+				recruiterRow?._sectors !== null && setRecruiterSectors(recruiterRow?._sectors);
+			}
+		};
+
+		fetchData();
 	}, []);
+
+	if (loading) {
+		return <div>Loading...</div>;
+	}
+
+	// React.useEffect(() => {
+	// 	if (isEdit) {
+	// 		typeof recruiterRow?._firstName === 'string' && setFirstName(recruiterRow?._firstName);
+	// 		typeof recruiterRow?._lastName === 'string' && setLastName(recruiterRow?._lastName);
+	// 		typeof recruiterRow?._email === 'string' && setEmail(recruiterRow?._email);
+	// 		recruiterRow?._sectors !== null && setRecruiterSectors(recruiterRow?._sectors);
+	// 	}
+	// }, []);
 
 
 	const handleRemoveRecruiter = () => {
@@ -81,14 +100,15 @@ export default function RecruiterDialog(props: { recruiterRow: any, recruiters: 
 		setOpen(false);
 	};
 
+
 	return (
 		<Box>
 
 			{/* <ListItemIcon>
 				<IconButton onClick={handleClickOpen}>
-					<EditNote sx={{ color: 'rgb(52, 71, 103)' }} />
+				<EditNote sx={{ color: 'rgb(52, 71, 103)' }} />
 				</IconButton>
-
+				
 			</ListItemIcon> */}
 			<Tooltip title={isEdit ? 'ערוך מגייס' : 'מגייס חדש'}>
 				<IconButton onClick={handleClickOpen}>
@@ -227,4 +247,7 @@ export default function RecruiterDialog(props: { recruiterRow: any, recruiters: 
 
 		</Box>
 	);
+
 }
+
+
