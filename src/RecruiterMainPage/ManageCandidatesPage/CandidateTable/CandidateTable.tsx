@@ -535,45 +535,51 @@ export default function CandidateTable() {
 
     // Fetch all necessary data.
     const candidates = await getFilteredCandidates();
-    const candidateJobStatuses = await getFilteredCandidateJobStatuses();
+    const candidateJobStatuses = await getFilteredCandidateJobStatuses(); // Assuming this function retrieves the candidate's job statuses
     const jobs = await getFilteredJobs();
 
     // Combine data into a new array for the rows.
     const combinedRows = candidates
-      .filter((candidate) => candidate._firstName && candidate._lastName) // Filter candidates with no name
-      .filter((candidate) =>
-        candidateJobStatuses.some(
-          (status) => status._candidateId === candidate._id
-        )
-      ) // Filter candidates who have applied for any position
+      .filter((candidate) => candidate._firstName && candidate._lastName)
       .map((candidate) => {
         // Find the job statuses for the current candidate.
         const jobStatuses = candidateJobStatuses.filter(
           (status) => status._candidateId === candidate._id
         );
-        const jobNumbers = jobStatuses.map((status) => status._jobNumber);
 
-        // Find the jobs associated with the job numbers.
-        const associatedJobs = jobs.filter((job) =>
-          jobNumbers.includes(job._jobNumber)
+        if (jobStatuses.length === 0) {
+          // Candidate has no job statuses
+          return null;
+        }
+
+        // Sort job statuses by apply date in descending order
+        jobStatuses.sort(
+          (a, b) =>
+            new Date(b._applyDate).getTime() - new Date(a._applyDate).getTime()
         );
 
-        // Return a new object that combines the necessary data from all three sources.
-        // If jobStatuses or associatedJobs are empty, provide default values for the missing data.
+        const lastJobStatus = jobStatuses[0];
+        const jobNumber = lastJobStatus._jobNumber;
+
+        // Find the job associated with the last job status.
+        const associatedJob = jobs.find((job) => job._jobNumber === jobNumber);
+
+        if (!associatedJob) {
+          // Last job status does not have a corresponding job
+          return null;
+        }
+
         return {
           ...candidate,
-          _jobNumber: jobStatuses.length > 0 ? jobStatuses[0]._jobNumber : -1,
-          _status: jobStatuses.length > 0 ? jobStatuses[0]._status : "Error",
-          _applyDate:
-            jobStatuses.length > 0
-              ? jobStatuses[0]._applyDate
-              : new Date(0, 0, 0),
-          _region:
-            associatedJobs.length > 0 ? associatedJobs[0]._region : "Error",
-          _jobNumbers: jobNumbers,
+          _jobNumber: jobNumber,
+          _status: lastJobStatus._status,
+          _applyDate: lastJobStatus._applyDate,
+          _region: associatedJob._region,
+          _jobNumbers: jobStatuses.map((status) => status._jobNumber),
           getCvUrl: candidate.getCvUrl,
         };
-      });
+      })
+      .filter((row) => row !== null) as CombinedCandidate[]; // Use type assertion to assign the correct type
 
     setRows(combinedRows);
 
