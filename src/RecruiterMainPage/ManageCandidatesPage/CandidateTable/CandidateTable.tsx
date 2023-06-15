@@ -272,6 +272,10 @@ const columns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     sortable: true,
+    sortComparator: (v1, v2, params1, params2) =>
+      params1.api
+        .getCellValue(params1.id, "firstName")
+        .localeCompare(params2.api.getCellValue(params2.id, "firstName")),
     valueGetter: (params) => params.row._firstName,
   },
   {
@@ -281,6 +285,10 @@ const columns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     sortable: true,
+    sortComparator: (v1, v2, params1, params2) =>
+      params1.api
+        .getCellValue(params1.id, "_lastName")
+        .localeCompare(params2.api.getCellValue(params2.id, "_lastName")),
     valueGetter: (params) => params.row._lastName,
   },
   {
@@ -311,24 +319,31 @@ const columns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     sortable: true,
+    sortComparator: (v1, v2, params1, params2) =>
+      params1.api
+        .getCellValue(params1.id, "_jobArea")
+        .localeCompare(params2.api.getCellValue(params2.id, "_jobArea")),
     valueGetter: (params) => params.row._region,
   },
   {
-    field: "submissionDate",
+    field: "_applyDate",
     headerName: "תאריך הגשת מועמדות",
     width: 200,
     headerAlign: "center",
     align: "center",
     sortable: true,
-    renderCell: (candidate) => {
-      const submissionDate = new Date(candidate?.row?._applyDate);
-      const formattedDate = submissionDate.toLocaleDateString("he-IL", {
+    sortComparator: (v1, v2, cellParams1, cellParams2) => {
+      const date1 = new Date(v1);
+      const date2 = new Date(v2);
+      return date1.getTime() - date2.getTime();
+    },
+    valueGetter: (params) => {
+      const submissionDate = new Date(params.row._applyDate);
+      return submissionDate.toLocaleDateString("he-IL", {
         day: "numeric",
         month: "numeric",
         year: "numeric",
       });
-
-      return <>{formattedDate}</>;
     },
   },
   {
@@ -551,7 +566,6 @@ export default function CandidateTable() {
           _region:
             associatedJobs.length > 0 ? associatedJobs[0]._region : "Error",
           _jobNumbers: jobNumbers,
-          _regions: associatedJobs.map((job) => job._region),
           getCvUrl: candidate.getCvUrl,
         };
       });
