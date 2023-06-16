@@ -17,12 +17,6 @@ import { getAllSectors } from '../../../../../../../../../../../Firebase/Firebas
 import { Sector } from '../../../../../../../../../../../Firebase/FirebaseFunctions/Sector'
 
 
-const recruiter_sectors = [
-	"אשכול 4",
-	"אשכול 3",
-	"אשכול 2",
-	"אשכול 1"
-];
 
 const Transition = React.forwardRef(function Transition(
 	props: TransitionProps & {
@@ -33,15 +27,18 @@ const Transition = React.forwardRef(function Transition(
 	return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function RecruiterDialog(props: { recruiterRow: any, recruiters: any, setRecruiters: any, setSnackbar: any, isEdit: boolean }): JSX.Element {
+export default function RecruiterDialog(props: { recruiterRow: Recruiter, recruiters: any, setRecruiters: any, setSnackbar: any, isEdit: boolean}): JSX.Element {
 	const { recruiterRow, recruiters, setRecruiters, setSnackbar, isEdit } = props;
 	const [recruiterSectors, setRecruiterSectors] = React.useState<string[]>([]);
+	const [sectorsSelection, setSectorsSelection] = React.useState<string[]>([]);
 	const [loading, setLoading] = React.useState(true);
 	const [firstName, setFirstName] = React.useState('');
 	const [lastName, setLastName] = React.useState('');
 	const [email, setEmail] = React.useState('');
 	const [saveButton, setSaveButton] = React.useState(false);
 	const [open, setOpen] = React.useState(false);
+	const rew = new Recruiter();
+	console.log(typeof rew);
 
 	React.useEffect(() => {
 		const fetchData = async () => {
@@ -74,21 +71,31 @@ export default function RecruiterDialog(props: { recruiterRow: any, recruiters: 
 	// }, []);
 
 
-	const handleRemoveRecruiter = () => {
-		// recruiterRow?.remove();
-		// const updateData = recruitersList.filter(rec => rec._id !== recruiter._id);
-		// setRecruitersList(updateData);
+	const handleRemoveRecruiter = async () => {
+        console.log(typeof recruiterRow);
+		//await recruiterRow?.remove();
+		// const updateData = recruiters.filter(rec => rec._id !== recruiterRow._id);
+		// setRecruiters(updateData);
 		// setOpen(false);
 
-		// setMessage(`המגייס/ת ${recruiter._firstName} ${recruiter._lastName} נמחק/ה בהצלחה מהמערכת.`);
-		// setOpenSnackBar(true);
-
+		// postMessage(`המגייס/ת ${recruiterRow._firstName} ${recruiterRow._lastName} נמחק/ה בהצלחה מהמערכת.`);
+		// setSnackbar(true);
 
 	}
-	const handleSubmit = () => {
+	const handleSubmit = async () => {
+		const isValidEmail = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email);
+		if (!isValidEmail) {
+			alert('יש להזין כתובת תקינה');
+			setEmail('');
+			return;
+		}
+
+		const newRecruter = new Recruiter(email, firstName, lastName, sectorsSelection);
+		await newRecruter.add();
+		await console.log(newRecruter);
 		// recruiter.edit(email, firstName, lastName);  // one more argument is needed (Sectors)
 		// setOpen(false);
-		alert("need to implement");
+		//alert("need to implement");
 	};
 
 	const handleClickOpen = () => {
@@ -167,7 +174,16 @@ export default function RecruiterDialog(props: { recruiterRow: any, recruiters: 
 												required
 												label="שם פרטי"
 												value={firstName}
-												onChange={(e) => { setFirstName(e.target.value); setSaveButton(true); }}
+												onChange={
+													(e) => {
+														const isHebrewInput = /^[א-ת\s]+$/u.test(e.target.value);
+														if (!isHebrewInput && e.target.value.length > 0) {
+															setFirstName('');
+															alert('יש להקליד בעברית בלבד');
+														}
+														setFirstName(e.target.value); setSaveButton(true);
+													}
+												}
 											/>
 										</Box>
 
@@ -180,7 +196,16 @@ export default function RecruiterDialog(props: { recruiterRow: any, recruiters: 
 												required
 												label="שם משפחה"
 												value={lastName}
-												onChange={(e) => { setLastName(e.target.value); setSaveButton(true); }}
+												onChange={
+													(e) => {
+														const isHebrewInput = /^[א-ת\s]+$/u.test(e.target.value);
+														if (!isHebrewInput && e.target.value.length > 0) {
+															setLastName('');
+															alert('יש להקליד בעברית בלבד');
+															return;
+														}
+														setLastName(e.target.value); setSaveButton(true);
+													}}
 											/>
 										</Box>
 
@@ -195,12 +220,23 @@ export default function RecruiterDialog(props: { recruiterRow: any, recruiters: 
 												required
 												label="אימייל"
 												value={email}
-												onChange={(e) => { setEmail(e.target.value); setSaveButton(true); }}
+												onChange={
+													(e) => {
+														// const isHebrewInput = /^[א-ת\s]+$/u.test(e.target.value);
+														// if (!isHebrewInput && e.target.value.length > 0) {
+															// setEmail('');
+															// alert('יש להזין כתובת תקינה');
+															// return;
+														// }
+														setEmail(e.target.value);
+														setSaveButton(true);
+													}
+												}
 											/>
 										</Box>
 
 										<Box sx={{ display: 'flex', justifyContent: 'center' }}>
-											<SectorsChip recruiterSectors={recruiterSectors} setRecruiterSectors={setRecruiterSectors} setSaveButton={setSaveButton} />
+											<SectorsChip recruiterSectors={recruiterSectors} setRecruiterSectors={setRecruiterSectors} setSaveButton={setSaveButton} sectorsSelection={sectorsSelection} setSectorsSelection={setSectorsSelection} />
 										</Box>
 									</Stack>
 								</Box>
@@ -231,11 +267,14 @@ export default function RecruiterDialog(props: { recruiterRow: any, recruiters: 
 				</Stack>
 				<Divider />
 				<Stack spacing={1} direction='row' sx={{ padding: 2, display: 'flex', justifyContent: 'space-between' }}>
-					{isEdit && (<Box>
+					{isEdit && (
+					<Box>
 						<RemoveConfirmPopup handleRemoveRecruiter={handleRemoveRecruiter} />
-					</Box>)}
+					</Box>)
+					}
 
 					<Button disabled={!saveButton} onClick={handleSubmit} variant='contained' color='primary'>
+
 						{isEdit ? 'שמור שינויים' : 'הוסף מגייס'}
 					</Button>
 

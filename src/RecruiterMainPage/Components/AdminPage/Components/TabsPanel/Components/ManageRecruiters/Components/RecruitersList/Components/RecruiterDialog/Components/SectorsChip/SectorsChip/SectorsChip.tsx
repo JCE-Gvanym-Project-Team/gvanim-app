@@ -23,7 +23,6 @@ const MenuProps = {
 };
 
 
-const names = getAllSectors();
 
 function getStyles(name: string, personName: readonly string[], theme: Theme) {
   return {
@@ -34,13 +33,9 @@ function getStyles(name: string, personName: readonly string[], theme: Theme) {
   };
 }
 
-export default function SectorChips(props: { recruiterSectors: string[], setRecruiterSectors: any, setSaveButton: any }) {
-  const { recruiterSectors, setRecruiterSectors, setSaveButton } = props;
+export default function SectorChips(props: { recruiterSectors: string[], setRecruiterSectors: any, setSaveButton: any, sectorsSelection:string[], setSectorsSelection:any }) {
+  const { recruiterSectors, setRecruiterSectors, setSaveButton,sectorsSelection, setSectorsSelection} = props;
   const theme = useTheme();
-
-  const [sectorsSelection, setSectorsSelection] = React.useState<string[]>([]);
-  const [sectorsSelectionAfterSelector, setsectorsSelectionAfterSelector] = React.useState<string[]>([]);
-
 
   const handleChange = (event: SelectChangeEvent<typeof recruiterSectors>) => {
     setSaveButton(true);

@@ -8,7 +8,7 @@ export default function PasswordSettings(props: { passwordEdit: any }) {
         <>
             <Stack direction='column' spacing={1} sx={{ width: '100%', mt: 1, padding: 2 }}>
                
-                <Stack direction='row'
+                {/* <Stack direction='row'
                     display={{ xs: 'block', sm: 'block', md: 'block', lg: 'flex', xl: 'flex' }}
                     spacing={{ xs: 0, sm: 0, md: 0, lg: 5, xl: 5 }}>
 
@@ -30,7 +30,7 @@ export default function PasswordSettings(props: { passwordEdit: any }) {
                             <TextField disabled={!passwordEdit} style={{ width: '100%' }} size='small' placeholder="אימות סיסמה נוכחית" type="password"
                             />
                         </Box>
-                </Stack>
+                </Stack> */}
 
                 <Stack direction='row'
                     display={{ xs: 'block', sm: 'block', md: 'block', lg: 'flex', xl: 'flex' }}

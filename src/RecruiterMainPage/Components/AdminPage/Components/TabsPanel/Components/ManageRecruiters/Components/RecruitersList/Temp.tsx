@@ -364,7 +364,7 @@ export default function Temp() {
                     <Stack direction='row'>
                         <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'start' }}>
                             {/* <AddSectorDialog sectorName={sectorName} setSectorName={setSectorName} sectorStatus={sectorStatus} setSectorStatus={setSectorStatus} handleAdd={handleAdd} /> */}
-                            <RecruiterDialog recruiterRow={selectedRowParams?.currentRow} recruiters={rows} setRecruiters={setRows} setSnackbar={setSnackbar} isEdit={false} />
+                            <RecruiterDialog  recruiterRow={selectedRowParams?.currentRow} recruiters={rows} setRecruiters={setRows} setSnackbar={setSnackbar} isEdit={false} />
                         </Box>
 
 
