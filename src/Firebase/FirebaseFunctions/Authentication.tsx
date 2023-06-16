@@ -1,5 +1,5 @@
 import 'firebase/auth';
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, User, sendPasswordResetEmail } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, User, sendPasswordResetEmail, updatePassword } from "firebase/auth";
 import { sleep } from "./test";
 
 import { Recruiter } from "./Recruiter";
@@ -58,6 +58,13 @@ export async function getConnectedUser(): Promise<User | null>{
 }
 export async function sendResetMail(mail: string) {
 	sendPasswordResetEmail(auth, mail);
+}
+export async function updateRecruiterPassword(newPass: string){
+	const user = await getConnectedUser();
+	if(user)
+		updatePassword(user, newPass);
+	else
+		console.log('error while updating password');
 }
 
 export async function main() {
