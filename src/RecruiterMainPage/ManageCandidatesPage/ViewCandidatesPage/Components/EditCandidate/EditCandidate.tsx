@@ -8,6 +8,8 @@ import AreYouSureDialog from '../AreYouSureDialog/AreYouSureDialog';
 import SuccessMessageSnackbar from '../SuccessMessageSnackbar/SuccessMessageSnackbar';
 import RemoveCandidateDialog from './../RemoveCandidateDialog/RemoveCandidateDialog';
 import { BoxGradientSx, MyPaperSx } from './EditCandidateStyle';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { designReturnButton } from '../../../../ManageJobsPage/ManageJobsPageStyle';
 
 const Form = styled('form')(({ theme }) => ({
     width: '100%',
@@ -15,8 +17,7 @@ const Form = styled('form')(({ theme }) => ({
 }));
 
 
-const EditCandidate = () =>
-{
+const EditCandidate = () => {
 
     const { state } = useLocation();
 
@@ -37,10 +38,8 @@ const EditCandidate = () =>
     const [errorJobRequirements, setErrorJobRequirements] = useState(false);
 
 
-    useEffect(() =>
-    {
-        const getCandidateDetails = async () =>
-        {
+    useEffect(() => {
+        const getCandidateDetails = async () => {
             const candidates = await getFilteredCandidates(["id"], [state]);
 
 
@@ -54,8 +53,7 @@ const EditCandidate = () =>
             setCandidateToEdit(candidates[0]);
         }
 
-        if (state !== null)
-        {
+        if (state !== null) {
             getCandidateDetails();
         }
 
@@ -67,18 +65,14 @@ const EditCandidate = () =>
     const navigate = useNavigate();
 
 
-    const handleSubmit = async (event: any) =>
-    {
+    const handleSubmit = async (event: any) => {
 
         event.preventDefault();
         setAreYouSureDialogOpen(true);
         setAreYouSureDialogMessage("פעולה זו תשנה את פרטי המועמד. הפרטים הקודמים ימחקו לצמיתות")
-        setAreYouSureCallback(() => async () =>
-        {
-            if (state !== null)
-            {
-                if (candidateToEdit)
-                {
+        setAreYouSureCallback(() => async () => {
+            if (state !== null) {
+                if (candidateToEdit) {
                     await candidateToEdit.edit(candidateFirstname, candidateLastname, candidatePhone, candidateMail, candidateGeneralRating);
                     //TODO: tell Gavriel to integrate this
                     navigate("/management/manageCandidates/" + candidateToEdit?._id, { state: `השינויים עבור המועמד' ${candidateToEdit._firstName + " " + candidateToEdit._lastName} נשמרו בהצלחה.` });
@@ -88,24 +82,24 @@ const EditCandidate = () =>
 
     }
 
-    const handleDelete = () =>
-    {
-        if (candidateToEdit)
-        {
+    const handleDelete = () => {
+        if (candidateToEdit) {
             candidateToEdit.remove();
             console.log(`candidate (id: ${candidateToEdit._id}) deleted successfully`);
             navigate("/management/manageCandidates", { state: `המועמד' ${candidateToEdit._firstName + " " + candidateToEdit._lastName} הוסרה בהצלחה.` });
         }
     }
 
+    const handleClick = () => {
+        navigate("/management/manageCandidates");
+    }; 
+
     // are you sure for update button
     const [areYouSureDialogOpen, setAreYouSureDialogOpen] = useState(false);
     const [areYouSureCallback, setAreYouSureCallback] = useState<(() => {})>();
     const [areYouSureDialogMessage, setAreYouSureDialogMessage] = useState("");
-    const closeAreYouSureDialog = (event, reason) =>
-    {
-        if ((reason && reason !== "backdropClick") || reason === undefined)
-        {
+    const closeAreYouSureDialog = (event, reason) => {
+        if ((reason && reason !== "backdropClick") || reason === undefined) {
             setAreYouSureDialogOpen(false);
         }
     }
@@ -252,8 +246,7 @@ const EditCandidate = () =>
                                                 className="form-control" required
                                                 value={candidateFirstname}
                                                 error={errorJobName}
-                                                onChange={(e) =>
-                                                {
+                                                onChange={(e) => {
                                                     setCandidateFirstname(e.target.value);
                                                     if (candidateFirstname.length > 0 && errorJobName) { setErrorJobName(false); }
                                                 }}
@@ -268,8 +261,7 @@ const EditCandidate = () =>
                                                 className="form-control" required
                                                 value={candidateLastname}
                                                 error={errorJobRole}
-                                                onChange={(e) =>
-                                                {
+                                                onChange={(e) => {
                                                     setCandidateLastname(e.target.value);
                                                     if (candidateLastname.length > 0 && errorJobRole) { setErrorJobRole(false); }
                                                 }}
@@ -289,8 +281,7 @@ const EditCandidate = () =>
                                                 className="form-control" required
                                                 value={candidatePhone}
                                                 error={errorJobRegion}
-                                                onChange={(e) =>
-                                                {
+                                                onChange={(e) => {
                                                     setCandidatePhone(e.target.value);
                                                     if (candidatePhone.length > 0 && errorJobRegion) { setErrorJobRegion(false); }
                                                 }}
@@ -308,8 +299,7 @@ const EditCandidate = () =>
                                                 required
                                                 error={errorJobState}
                                                 value={candidateMail}
-                                                onChange={(e) =>
-                                                {
+                                                onChange={(e) => {
                                                     setCandidateMail(e.target.value);
                                                     if (candidateMail.length > 0 && errorJobState) { setErrorJobState(false); }
                                                 }}
@@ -334,8 +324,7 @@ const EditCandidate = () =>
                                                         type: "number",
                                                     },
                                                 }}
-                                                onChange={(e) =>
-                                                {
+                                                onChange={(e) => {
                                                     setCandidateGeneralRating(+e.target.value);
                                                 }}
                                             />
@@ -363,7 +352,7 @@ const EditCandidate = () =>
                                             callback={areYouSureCallback}
                                             setSnackBarOpen={setSnackBarOpen}
                                         />
-                                        <SuccessMessageSnackbar open={snackBarOpen} onClose={snackBarOnClose}/>
+                                        <SuccessMessageSnackbar open={snackBarOpen} onClose={snackBarOnClose} />
                                     </Form>
                                 </Box>
                             </Box>
@@ -375,6 +364,15 @@ const EditCandidate = () =>
 
             </Box>
 
+            <Box style={{ position: 'absolute', top: '100px', right: '50px' }}>
+                <Button
+                    onClick={handleClick}
+                    sx={designReturnButton}
+                >
+                    <ArrowForwardIosIcon></ArrowForwardIosIcon>
+                    חזור
+                </Button>
+            </Box>
 
         </>
     )

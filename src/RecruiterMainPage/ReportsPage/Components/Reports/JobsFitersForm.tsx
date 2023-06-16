@@ -5,16 +5,18 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { Box, Typography, FormControlLabel, MenuItem, Radio, RadioGroup, Select, SelectChangeEvent, Stack, Container } from '@mui/material';
+import { Box, Typography, FormControlLabel, MenuItem, Radio, RadioGroup, Select, SelectChangeEvent, Stack, Container, Button } from '@mui/material';
 import { CandidateJobStatus, Job, generateJobNumber, getFilteredCandidateJobStatuses, getFilteredCandidates, getFilteredJobs, loginAdmin } from '../../../../Firebase/FirebaseFunctions/functionIndex';
 import { exportToExcel } from '../../../../Firebase/FirebaseFunctions/Reports/GlobalFunctions'
 import CandidatesByFilters from '../../../../Firebase/FirebaseFunctions/Reports/CandidatesFilters';
 import { MyReportStyle, formContainerStyles, radioStyle } from '../../ReportPageStyle';
 import JobsByFilters from '../../../../Firebase/FirebaseFunctions/Reports/JobsFilters'
-import { ArticleOutlined } from "@mui/icons-material";
 import { MyPaperSx, BoxGradientSx } from '../../../ManageJobsPage/Components/NewJobPage/NewJobStyle';
 import { useNavigate } from 'react-router-dom';
-import dayjs from 'dayjs';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { designReturnButton } from '../../../ManageJobsPage/ManageJobsPageStyle';
+import { ArticleOutlined } from '@mui/icons-material';
+
 
 
 export default function JobsFiltersForm()
@@ -127,6 +129,10 @@ export default function JobsFiltersForm()
     {
         setEndDate(date);
     };
+
+    const handleClick = () => {
+        navigate("/management/reports");
+    }; 
 
 
 
@@ -390,6 +396,16 @@ export default function JobsFiltersForm()
 
                     </Container>
                 </Box >
+            </Box>
+
+            <Box style={{ position: 'absolute', top: '100px', right: '50px' }}>
+                <Button
+                    onClick={handleClick}
+                    sx={designReturnButton}
+                >
+                    <ArrowForwardIosIcon></ArrowForwardIosIcon>
+                    חזור
+                </Button>
             </Box>
 
         </>

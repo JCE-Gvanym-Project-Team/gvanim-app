@@ -21,6 +21,7 @@ export class Job {
     public _viewsPerPlatform: Map<string, number>;
     public _applyPerPlatform: Map<string, number>;
     public _creationDate: Date;
+    public _startOn: string;
 
     constructor(
         jobNumber: number,
@@ -35,7 +36,8 @@ export class Job {
         highPriority: boolean = false,
         viewsPerPlatform: Map<string, number> = new Map<string, number>(),
         applyPerPlatform: Map<string, number> = new Map<string, number>(),
-        creationDate = new Date(0, 0, 0)
+        creationDate = new Date(0, 0, 0),
+        startOn = 'מיידי'
     ) {
         this._title = title;
         this._role = role;
@@ -54,6 +56,7 @@ export class Job {
         else
             this._creationDate = creationDate;
         this._jobNumber = jobNumber;
+        this._startOn = startOn;
     }
     /**
      * Retrieves the candidate job statuses for the current job.
@@ -140,6 +143,12 @@ export class Job {
     public async updateHighPriority(highPriority: boolean) {
         if (await this.exists()) {
             this._highPriority = highPriority;
+            replaceData((await this.getPath()), this);
+        }
+    }
+    public async updateStartOn(startOn: string) {
+        if (await this.exists()) {
+            this._startOn = startOn;
             replaceData((await this.getPath()), this);
         }
     }
@@ -344,7 +353,7 @@ export async function getFilteredJobs(attributes: string[] = [], values: string[
         return jobs.sort(compareByViews);
     return jobs.map((job) => new Job(job._jobNumber, job._title, job._role, job._scope
         , job._region, job._sector, job._description, job._requirements,
-        job._open, job._highPriority, job._viewsPerPlatform, job._applyPerPlatform, job._creationDate));
+        job._open, job._highPriority, job._viewsPerPlatform, job._applyPerPlatform, job._creationDate, job._startOn));
 }
 /* compare function for sort */
 function compareByTitle(a: Job, b: Job): number {
