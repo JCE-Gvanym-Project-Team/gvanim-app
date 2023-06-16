@@ -46,8 +46,7 @@ export default function RecruiterDialog(props: { recruiterRow: any, recruiters: 
 	React.useEffect(() => {
 		const fetchData = async () => {
 			const sectors = await getAllSectors();
-			console.log(sectors);
-			const sectorStrings = sectors.map((sector: Sector) => sector.toString());
+			const sectorStrings = sectors.map((sector: Sector) => sector._name.toString());
 			setRecruiterSectors(sectorStrings);
 			setLoading(false);
 			if (isEdit) {

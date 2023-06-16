@@ -5,7 +5,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { Checkbox, Chip, FormLabel, Input, ListItemText, OutlinedInput, Stack, TextField } from '@mui/material';
+import { Checkbox, FormLabel, Input, ListItemText, OutlinedInput, Stack, TextField } from '@mui/material';
 import { MyPaperSx } from './SectorsChipStyle';
 import SelectInput from '@mui/material/Select/SelectInput';
 import { getAllSectors } from '../../../../../../../../../../../../../../Firebase/FirebaseFunctions/Sector';
@@ -39,6 +39,7 @@ export default function SectorChips(props: { recruiterSectors: string[], setRecr
   const theme = useTheme();
 
   const [sectorsSelection, setSectorsSelection] = React.useState<string[]>([]);
+  const [sectorsSelectionAfterSelector, setsectorsSelectionAfterSelector] = React.useState<string[]>([]);
 
 
   const handleChange = (event: SelectChangeEvent<typeof recruiterSectors>) => {
@@ -52,13 +53,19 @@ export default function SectorChips(props: { recruiterSectors: string[], setRecr
     );
   };
 
-    const fetchSectors = () => {
-     recruiterSectors !== null && setSectorsSelection(recruiterSectors)
-  };
-
   React.useEffect(() => {
-    fetchSectors();
-  }, []);
+    console.log(sectorsSelection);
+  }, [sectorsSelection]);
+  
+
+  // const fetchSectors = () => {
+   // recruiterSectors !== null && setSectorsSelection(recruiterSectors)
+  // };
+
+  // React.useEffect(() => {
+    // fetchSectors();
+  // }, []);
+
 
 
   return (
@@ -80,20 +87,15 @@ export default function SectorChips(props: { recruiterSectors: string[], setRecr
         >
           {recruiterSectors.map((sector) => (
             <MenuItem key={sector} value={sector}>
-              <Checkbox checked={sectorsSelection.indexOf(sector) > -1} />
+              <Checkbox
+                checked={sectorsSelection.indexOf(sector) > -1}
+              />
               <ListItemText primary={sector} />
             </MenuItem>
           ))}
+
         </Select>
       </FormControl>
-
-
-
-      <Box sx={MyPaperSx}>
-        {sectorsSelection?.map((value) => (
-          <Chip color='primary' key={value} label={value} />
-        ))}
-    </Box>
 
     </Box >
   );

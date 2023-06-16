@@ -456,7 +456,7 @@ export default function Temp() {
             headerName: "אשכולות",
             headerAlign: 'center',
 
-            sortable: true,
+            sortable: false,
             editable: false,
             align: 'center',
             minWidth: 300,
