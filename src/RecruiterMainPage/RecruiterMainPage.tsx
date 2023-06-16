@@ -18,6 +18,7 @@ import { CssBaseline } from "@mui/material";
 import CandidateFiltersForm from "./ReportsPage/Components/Reports/CandidatesFiltersForm";
 import JobsFiltersForm  from "./ReportsPage/Components/Reports/JobsFitersForm"
 import ManageInterviewsPage from "./ManageCandidatesPage/ViewCandidatesPage/ManageInterViewsPage/ManageInterViewsPage";
+import UpdateAccount from "./Components/AdminPage/Components/TabsPanel/Components/ManageAccount/Components/AccountSettings/UpdateAccount/UpdateAccount";
 
 
 
@@ -82,6 +83,7 @@ function RecruiterMainPage({ handlelogout })
 
 				{/* Admin Routes */}
 				<Route path="settings" element={<AdminPage />} />
+				<Route path="settings/updateAccount" element={<UpdateAccount />} />
 
 			</Routes>
 			<Footer />
