@@ -1,5 +1,5 @@
 import 'firebase/auth';
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, User } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, User, sendPasswordResetEmail } from "firebase/auth";
 import { sleep } from "./test";
 
 import { Recruiter } from "./Recruiter";
@@ -55,6 +55,9 @@ export async function isConnected(): Promise<boolean> {
 
 export async function getConnectedUser(): Promise<User | null>{
 	return getAuth().currentUser;
+}
+export async function sendResetMail(mail: string) {
+	sendPasswordResetEmail(auth, mail);
 }
 
 export async function main() {
