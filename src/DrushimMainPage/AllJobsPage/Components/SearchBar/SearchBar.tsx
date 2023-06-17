@@ -6,7 +6,8 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import DirectionsIcon from '@mui/icons-material/Directions';
-import { Box, useTheme } from '@mui/material';
+import { Box, Stack, useTheme } from '@mui/material';
+import { ReactComponent as SearchSVG } from './Resources/Icon feather-search.svg';
 import { RestartAlt } from '@mui/icons-material';
 
 export default function SearchBar(props: { text: string, setText: any, search: string, setSearch: any }) {
@@ -28,32 +29,27 @@ export default function SearchBar(props: { text: string, setText: any, search: s
   return (
     <Box
       component="form"
-      sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 400, mr: 'auto', ml: 'auto', borderRadius: '1rem', mb: 1,
-      border: theme.palette.mode === 'dark' ? '1px solid grey' : '1px solid rgba(0, 0, 0, 0.095)'
+      sx={{ display: 'flex',mb: 1,mt: 1,mr: 6, borderBottom: '2px solid #053B7A'
+      // border: theme.palette.mode === 'dark' ? '1px solid grey' : '1px solid rgba(0, 0, 0, 0.095)'
  }}
     >
-             <IconButton sx={{ p: '10px' }} aria-label="directions">
-        <RestartAlt sx={{fontSize: 22}}/>
-      </IconButton>
 
-      <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
- 
-      <IconButton onClick={handleSearch} aria-label="search">
-        <SearchIcon sx={{fontSize: 22}}/>
-      </IconButton>
- 
-      <InputBase
-        sx={{ ml: 1, flex: 1,fontFamily: 'Roboto, Helvetica, Arial, sans-serif',fontSize: 16 }}
-        placeholder="חיפוש..."
-        inputProps={{ 'aria-label': 'search' }}
-        value={text}
-        onChange={handleText}
-      />
- 
+<Stack direction='row'>
+  
+<Box sx={{display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
+<SearchSVG />
+</Box>
 
-      <IconButton sx={{ p: '10px' }} aria-label="menu">
-        <MenuIcon sx={{fontSize: 22}} />
-      </IconButton>
+ 
+<InputBase
+  sx={{flex: 1,ml: 1, fontFamily: 'normal normal normal 18px Rubik',color: '#053B7A',
+  opacity: 1, letterSpacing: '0px', }}
+  inputProps={{ 'aria-label': 'search' }}
+  value={text}
+  onChange={handleText}
+/>
+</Stack>
+ 
     </Box>
   );
 }
