@@ -13,6 +13,7 @@ import MyLoading from '../../../../../Components/MyLoading/MyLoading';
 import Temp from './Components/ManageRecruiters/Components/RecruitersList/Temp';
 import RessetPassword from '../TabsPanel/Components/ResetPassword/ResetPassword';
 import { getConnectedUser } from '../../../../../Firebase/FirebaseFunctions/Authentication';
+import { sleep } from '../../../../../Firebase/FirebaseFunctions/test';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -47,19 +48,39 @@ export default function TabsPane() {
   const [isAdminUser, setIsAdminUser] = React.useState(false);
   const [userEmail, setUserEmail] = React.useState('');
 
+  // React.useEffect(() => {
+  // const currentUser = getConnectedUser()
+  // .then((userCredential) => {
+  // if (userCredential?.email != null)
+  // setUserEmail(userCredential?.email);
+  // console.log(userEmail);
+  // if (process.env.REACT_APP_ADMIN_MAIL === userEmail)
+  // setIsAdminUser(true);
+  // })
+  // .catch((error) => {
+  // console.log(error);
+  // });
+  // }, []);
+
   React.useEffect(() => {
-    const currentUser = getConnectedUser()
-      .then((userCredential) => {
-        if (userCredential?.email != null)
-          setUserEmail(userCredential?.email);
-        console.log(userEmail);
-        if (process.env.REACT_APP_ADMIN_MAIL === userEmail)
-          setIsAdminUser(true);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+    const loadUserasync = async () => {
+      const currentUser = await getConnectedUser()
+        .then(async (userCredential) => {
+          if (userCredential?.email != null)
+            setUserEmail(userCredential?.email);
+          console.log(userEmail);
+
+          console.log(process.env.REACT_APP_ADMIN_MAIL);
+
+          if (process.env.REACT_APP_ADMIN_MAIL === userEmail)
+            setIsAdminUser(true);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+    loadUserasync();
+  }, [userEmail]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -68,6 +89,10 @@ export default function TabsPane() {
   React.useEffect(() => {
     setLoading(false);
   }, []);
+
+
+  // console.log(userEmail);
+  // console.log(isAdminUser);
 
   return (
     <>
@@ -109,15 +134,15 @@ export default function TabsPane() {
             sx={{ display: { xs: 'none', sm: 'flex', md: 'flex', lg: 'flex', xl: 'flex' }, borderBottom: '1px solid rgba(0, 0, 0, 0.1)' }}
           >
             <Tab disableRipple label="איפוס סיסמא" {...a11yProps(0)} />
-
+            
             {isAdminUser && (
-              <>
-                <Tab disableRipple label="ניהול מגייסים" {...a11yProps(1)} />
+              <Tab disableRipple label="ניהול מגייסים" value={1} {...a11yProps(1)} />
 
-                <Tab disableRipple label="אשכולות ותפקידים" {...a11yProps(2)} />
-              </>
             )}
 
+            {isAdminUser && (
+              <Tab disableRipple label="אשכולות ותפקידים" value={2} {...a11yProps(2)} />
+            )}
           </Tabs>
 
           <TabPanel value={value} index={0}>

@@ -41,7 +41,7 @@ export default function UpdateAccount() {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [userEmail]);
 
 
   React.useEffect(() => {

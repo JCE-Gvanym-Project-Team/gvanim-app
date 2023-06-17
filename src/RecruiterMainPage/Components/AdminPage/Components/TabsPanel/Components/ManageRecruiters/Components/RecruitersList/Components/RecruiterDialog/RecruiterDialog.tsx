@@ -114,15 +114,14 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 		if (!isEdit) {
 			const newRecruter = new Recruiter(email, firstName, lastName, sectorsSelection);
 			const firstPassword = generateCodeFromEmail(email);
-			//	await newRecruter.add(firstPassword);
+			await newRecruter.add(firstPassword);
 			setDialogOpen(true);
 			setDialogEmail(email);
 			setDialogPassword(firstPassword);
 		}
 		else {
-			// recruiter.edit(email, firstName, lastName);  // one more argument is needed (Sectors)
+			await recruiterRow.edit(firstName, lastName);  // one more argument is needed (Sectors)
 
-			//alert("need to implement");
 			setOpen(false);
 		}
 	};
