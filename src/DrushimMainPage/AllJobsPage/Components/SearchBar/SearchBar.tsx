@@ -1,27 +1,18 @@
-import * as React from 'react';
-import Paper from '@mui/material/Paper';
 import InputBase from '@mui/material/InputBase';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
-import DirectionsIcon from '@mui/icons-material/Directions';
 import { Box, Stack, useTheme } from '@mui/material';
 import { ReactComponent as SearchSVG } from './Resources/Icon feather-search.svg';
-import { RestartAlt } from '@mui/icons-material';
 
-export default function SearchBar(props: { text: string, setText: any, search: string, setSearch: any }) {
-    const { text, setText, search, setSearch} = props;
-
+export default function SearchBar(props: { text: string, setText: any }) {
+    const { text, setText } = props;
 
 
     const handleText = (event) => {
         setText(event.target.value);
       };
     
-      const handleSearch = () => {
-        setSearch(text);
-      };
+      // const handleSearch = () => {
+      //   setSearch(text);
+      // };
 
 
       const theme = useTheme();
@@ -42,8 +33,9 @@ export default function SearchBar(props: { text: string, setText: any, search: s
 
  
 <InputBase
-  sx={{flex: 1,ml: 1, fontFamily: 'normal normal normal 18px Rubik',color: '#053B7A',
+  sx={{flex: 1,ml: 2, fontFamily: 'normal normal normal 18px Rubik',color: '#053B7A',
   opacity: 1, letterSpacing: '0px', }}
+  placeholder='כתבו כאן...'
   inputProps={{ 'aria-label': 'search' }}
   value={text}
   onChange={handleText}
