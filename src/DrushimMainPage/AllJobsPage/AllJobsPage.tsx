@@ -47,12 +47,11 @@ export default function AllJobsPage(props: { jobs: any }) {
                 console.log("filtering jobs");
                 return (
                     
-                    job?._region.toLowerCase().includes(search.toLowerCase()) || job?._role.toLowerCase().includes(search.toLowerCase())
+                    job?._region.toLowerCase().includes(search) || job?._role.toLowerCase().includes(search.toLowerCase())
                     || job?._requirements.toLowerCase().includes(search.toLowerCase())
            
                     );
             }),[search]
-        // [search || role || location || halfScope || fullScope]
     );
 
     const filteredJobsByRole = useMemo(
@@ -73,9 +72,7 @@ export default function AllJobsPage(props: { jobs: any }) {
         [location]
     );
 
-    useEffect(() => {
-        setSearch("א");
-    })
+
 
     const handleFilter = () => {
 
