@@ -26,7 +26,7 @@ export default function DrushimMainPage()
 		<>
 			{/* All Jobs Page Route*/}
 			<CssBaseline />
-			<Navbar />
+			{/* <Navbar /> */}
 			<Accessibility />
 			<Routes>
 				{/* All Jobs Page Route*/}

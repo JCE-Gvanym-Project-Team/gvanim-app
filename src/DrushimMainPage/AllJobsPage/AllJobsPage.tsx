@@ -1,16 +1,16 @@
 import { Box, Button, Divider, Grid, Stack, Typography, useTheme } from '@mui/material';
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useEffect, useMemo } from 'react'
 import { ColorModeContext, colorTokens } from '../theme';
 import JobItem from './Components/JobItem/JobItem';
 import SearchBar from './Components/SearchBar/SearchBar';
 import { Job } from '../../Firebase/FirebaseFunctions/Job';
-import { ReactComponent as LocationSVG } from '../AllJobsPage/Resources/icon-location2.svg';
 import { ReactComponent as ScopeSVG } from '../AllJobsPage/Resources/Icon awesome-clock.svg';
 import { ReactComponent as RoleSVG } from '../AllJobsPage/Resources/Group 71.svg';
 import { ReactComponent as FilterSVG } from '../AllJobsPage/Resources/Group 1.svg';
 import RoleSingleSelection from './Components/RoleSingleSelection/RoleSingleSelection';
 import LocationSingleSelection from './Components/LocationSingleSelection/LocationSingleSelection';
 import { Place } from '@mui/icons-material';
+import NavbarDrushim from '../Components/Navbar/Navbar';
 
 export default function AllJobsPage(props: { jobs: any }) {
     const { jobs } = props;
@@ -47,12 +47,11 @@ export default function AllJobsPage(props: { jobs: any }) {
                 console.log("filtering jobs");
                 return (
                     
-                    job?._region.toLowerCase().includes(search.toLowerCase()) || job?._role.toLowerCase().includes(search.toLowerCase())
+                    job?._region.toLowerCase().includes(search) || job?._role.toLowerCase().includes(search.toLowerCase())
                     || job?._requirements.toLowerCase().includes(search.toLowerCase())
            
                     );
             }),[search]
-        // [search || role || location || halfScope || fullScope]
     );
 
     const filteredJobsByRole = useMemo(
@@ -72,6 +71,7 @@ export default function AllJobsPage(props: { jobs: any }) {
             }),
         [location]
     );
+
 
 
     const handleFilter = () => {
@@ -97,7 +97,7 @@ export default function AllJobsPage(props: { jobs: any }) {
 
 
 
-
+        <NavbarDrushim />
             <Stack direction='row' sx={{padding: 6, mb: 10}}>
 
                 <Box sx={{ width: '25%', mr: '20px'}}>
