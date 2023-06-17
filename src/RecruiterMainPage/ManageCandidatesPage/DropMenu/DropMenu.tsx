@@ -127,13 +127,6 @@ export default function DropMenu(props: { CandidateId: any }) {
           </ListItemIcon>
         </StyledMenuItem>
 
-        <StyledMenuItem onClick={handleEditClick}>
-          <ListItemIcon>
-            <Edit sx={MenuItemIconSx} />
-            <Typography sx={MenuItemTypographySx}>ערוך מועמד</Typography>
-          </ListItemIcon>
-        </StyledMenuItem>
-
         {/* </MenuSection> */}
       </Menu>
     </Box>
