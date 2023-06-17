@@ -30,7 +30,6 @@ import {
   getFilteredJobs,
 } from "../../../Firebase/FirebaseFunctions/Job";
 import { useLocation, useNavigate } from "react-router-dom";
-import MyJobRemoveDialog from "./Components/RemoveCandidateDialog/RemoveCandidateDialog";
 import "./NewCandidatePage.css";
 import { ArticleOutlined } from "@mui/icons-material";
 import MyLoading from "../../../Components/MyLoading/MyLoading";
@@ -820,10 +819,11 @@ const NewCandidatePage = () => {
 
                           <Rating
                             name="generalRating"
-                            value={generalRating}
                             onChange={(event, newValue) => {
-                              setCandidateGeneralRating(newValue as number);
+                              setGeneralRating(newValue as number);
                             }}
+                            value={generalRating}
+                            size="large"
                           />
 
                           <FormHelperText
