@@ -17,7 +17,7 @@ import { getFilteredCandidates } from "../../../Firebase/FirebaseFunctions/Candi
 import { useNavigate } from "react-router-dom";
 import { unstable_useForkRef as useForkRef } from "@mui/utils";
 import { MyButtonSx } from "./CandidateTableStyle";
-import { PictureAsPdfSharp } from "@mui/icons-material";
+import { PictureAsPdfSharp, SortByAlpha } from "@mui/icons-material";
 import { getFilteredJobs } from "../../../Firebase/FirebaseFunctions/Job";
 import Pagination from "@mui/material/Pagination";
 import PaginationItem from "@mui/material/PaginationItem";
@@ -33,6 +33,7 @@ import { Chip, LinearProgress, SxProps, Theme, alpha } from "@mui/material";
 import MyLoading from "../../../Components/MyLoading/MyLoading";
 import { useState } from "react";
 import { getFilteredCandidateJobStatuses } from "../../../Firebase/FirebaseFunctions/CandidateJobStatus";
+import MyChip from "../ViewCandidatesPage/Components/MyChip/MyChip";
 
 // -------------------Use Memorie for better performance----------------------------------------------------
 const TraceUpdates = React.forwardRef<any, any>((props, ref) => {
@@ -272,6 +273,10 @@ const columns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     sortable: true,
+    sortComparator: (v1, v2, params1, params2) =>
+      params1.api
+        .getCellValue(params1.id, "firstName")
+        .localeCompare(params2.api.getCellValue(params2.id, "firstName")),
     valueGetter: (params) => params.row._firstName,
   },
   {
@@ -281,16 +286,32 @@ const columns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     sortable: true,
+    sortComparator: (v1, v2, params1, params2) =>
+      params1.api
+        .getCellValue(params1.id, "_lastName")
+        .localeCompare(params2.api.getCellValue(params2.id, "_lastName")),
     valueGetter: (params) => params.row._lastName,
   },
   {
-    field: "_jobNumber",
-    headerName: "מספר המשרה",
+    field: "_jobNumbers",
+    headerName: "מספר המשרה ",
     width: 150,
-    headerAlign: "center",
-    align: "center",
-    sortable: true,
-    valueGetter: (params) => params.row._jobNumber,
+    sortable: false,
+    renderCell: (params) => {
+      const jobNumbers = params.value as number[];
+
+      let displayJobNumbers = jobNumbers;
+      if (jobNumbers.length > 2) {
+        displayJobNumbers = jobNumbers.slice(0, 2);
+        displayJobNumbers.push(-1); // Add a placeholder number to indicate ellipsis
+      }
+
+      const formattedJobNumbers = displayJobNumbers
+        .map((jobNumber) => (jobNumber === -1 ? "..." : jobNumber))
+        .join(", ");
+
+      return <span>{formattedJobNumbers}</span>;
+    },
   },
   {
     field: "_jobArea",
@@ -299,24 +320,31 @@ const columns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     sortable: true,
+    sortComparator: (v1, v2, params1, params2) =>
+      params1.api
+        .getCellValue(params1.id, "_jobArea")
+        .localeCompare(params2.api.getCellValue(params2.id, "_jobArea")),
     valueGetter: (params) => params.row._region,
   },
   {
-    field: "submissionDate",
+    field: "_applyDate",
     headerName: "תאריך הגשת מועמדות",
     width: 200,
     headerAlign: "center",
     align: "center",
     sortable: true,
-    renderCell: (candidate) => {
-      const submissionDate = new Date(candidate?.row?._applyDate);
-      const formattedDate = submissionDate.toLocaleDateString("he-IL", {
+    sortComparator: (v1, v2, cellParams1, cellParams2) => {
+      const date1 = new Date(v1);
+      const date2 = new Date(v2);
+      return date1.getTime() - date2.getTime();
+    },
+    valueGetter: (params) => {
+      const submissionDate = new Date(params.row._applyDate);
+      return submissionDate.toLocaleDateString("he-IL", {
         day: "numeric",
         month: "numeric",
         year: "numeric",
       });
-
-      return <>{formattedDate}</>;
     },
   },
   {
@@ -326,7 +354,11 @@ const columns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     sortable: true,
-    renderCell: (candidate) => candidate?.row?._status,
+    renderCell: (params) => {
+      const jobId = params.row?._jobNumber.toString();
+      const candidate = params.row;
+      return <MyChip jobId={jobId} candidate={candidate} purpose="status" />;
+    },
   },
   {
     field: "cvFile",
@@ -503,30 +535,51 @@ export default function CandidateTable() {
 
     // Fetch all necessary data.
     const candidates = await getFilteredCandidates();
-    const candidateJobStatuses = await getFilteredCandidateJobStatuses();
+    const candidateJobStatuses = await getFilteredCandidateJobStatuses(); // Assuming this function retrieves the candidate's job statuses
     const jobs = await getFilteredJobs();
 
     // Combine data into a new array for the rows.
-    const combinedRows = candidates.map((candidate) => {
-      // Find the job status and job for the current candidate.
-      const jobStatus = candidateJobStatuses.find(
-        (status) => status._candidateId === candidate._id
-      );
-      const job =
-        jobStatus &&
-        jobs.find((job) => job._jobNumber === jobStatus._jobNumber);
+    const combinedRows = candidates
+      .filter((candidate) => candidate._firstName && candidate._lastName)
+      .map((candidate) => {
+        // Find the job statuses for the current candidate.
+        const jobStatuses = candidateJobStatuses.filter(
+          (status) => status._candidateId === candidate._id
+        );
 
-      // Return a new object that combines the necessary data from all three sources.
-      // If jobStatus or job is undefined, provide default values for the missing data.
-      return {
-        ...candidate,
-        _jobNumber: jobStatus ? jobStatus._jobNumber : -1,
-        _status: jobStatus ? jobStatus._status : "N/A",
-        _applyDate: jobStatus ? jobStatus._applyDate : new Date(0, 0, 0),
-        _region: job ? job._region : "N/A",
-        getCvUrl: candidate.getCvUrl,
-      };
-    });
+        if (jobStatuses.length === 0) {
+          // Candidate has no job statuses
+          return null;
+        }
+
+        // Sort job statuses by apply date in descending order
+        jobStatuses.sort(
+          (a, b) =>
+            new Date(b._applyDate).getTime() - new Date(a._applyDate).getTime()
+        );
+
+        const lastJobStatus = jobStatuses[0];
+        const jobNumber = lastJobStatus._jobNumber;
+
+        // Find the job associated with the last job status.
+        const associatedJob = jobs.find((job) => job._jobNumber === jobNumber);
+
+        if (!associatedJob) {
+          // Last job status does not have a corresponding job
+          return null;
+        }
+
+        return {
+          ...candidate,
+          _jobNumber: jobNumber,
+          _status: lastJobStatus._status,
+          _applyDate: lastJobStatus._applyDate,
+          _region: associatedJob._region,
+          _jobNumbers: jobStatuses.map((status) => status._jobNumber),
+          getCvUrl: candidate.getCvUrl,
+        };
+      })
+      .filter((row) => row !== null) as CombinedCandidate[]; // Use type assertion to assign the correct type
 
     setRows(combinedRows);
 
