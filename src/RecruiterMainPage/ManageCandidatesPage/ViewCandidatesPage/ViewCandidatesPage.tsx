@@ -3,7 +3,6 @@ import { Button, Typography, Box, Stack, Rating, Divider } from '@mui/material'
 import EditIcon from '@mui/icons-material/Edit';
 import { editButtonSx, textSx, titleSx, mainStackSx, ContainerGradientSx, candidateNameSx, candidateNameAndEditButtonContainerSx, jobTextSx, notesButtonSx, interviewsButtonSx, changeJobButtonSx, recommendationsButtonSx } from './ViewCandidatesPageStyle';
 import { BoxGradientSx } from '../../PageStyles';
-import JobsTable from './Components/JobsTable/JobsTable';
 import { Candidate, getFilteredCandidates } from '../../../Firebase/FirebaseFunctions/Candidate';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Job, getFilteredJobs } from '../../../Firebase/FirebaseFunctions/Job';
@@ -13,7 +12,7 @@ import { AccountCircle, ArticleOutlined, EditNote, PictureAsPdfSharp, QuestionAn
 import AboutDialog from './Components/AboutDialog/AboutDialog';
 import MyLoading from '../../../Components/MyLoading/MyLoading';
 import RecommendersDialog from './Components/RecommendersDialog/RecommendersDialog';
-import JobsTable2 from './Components/JobsTable/JobsTable';
+import JobsTable from './Components/JobsTable/JobsTable';
 import AreYouSureDialog from './Components/AreYouSureDialog/AreYouSureDialog';
 import SuccessMessageSnackbar from './Components/SuccessMessageSnackbar/SuccessMessageSnackbar';
 
@@ -385,7 +384,7 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 									</Box>
 
 									{/* Jobs table */}
-									<JobsTable2
+									<JobsTable
 										setDataSize={setDataSize}
 										candidateJobs={candidateJobs}
 										candidateInfo={candidateInfo}
