@@ -8,7 +8,7 @@ export default function AreYouSureDialog(props: { open, onClose, message, callba
 {
 	const { open, onClose, message, callback, setSnackBarOpen } = props;
 
-	
+
 	return (
 		// popup dialog
 		<Dialog open={open} onClose={onClose} sx={dialogSx} >
@@ -48,21 +48,35 @@ export default function AreYouSureDialog(props: { open, onClose, message, callba
 					variant='contained'
 					onClick={(event) => onClose(event, undefined)}
 					sx={{
+						backgroundColor: "#008000",
 
+						"&:hover": {
+							backgroundColor: "#66b366",
+							color: "black"
+						}
 					}}
 				>
 					לא
 				</Button>
 				<Button
 					variant='outlined'
-					onClick={(event) =>
+					onClick={async (event) =>
 					{
-						callback();
+						if (!(await callback()))
+						{
+							onClose(event, undefined);
+							return;
+						}
 						onClose(event, undefined);
 						setSnackBarOpen(true);
 					}}
 					sx={{
-
+						borderColor: "red",
+						color: "red",
+						"&:hover": {
+							backgroundColor: "#ff6666",
+							color: "white"
+						}
 					}}
 				>
 					כן

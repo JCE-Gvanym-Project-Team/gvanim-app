@@ -5,12 +5,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch Edge",
+            "command": "npm start",
+            "name": "Run npm start",
             "request": "launch",
-            "type": "msedge",
-            "url": "http://localhost:3000",
-            "webRoot": "${workspaceFolder}"
+            "type": "node-terminal"
         }
-
     ]
 }

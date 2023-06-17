@@ -36,6 +36,7 @@ export const textSx: SxProps = {
 
 export const candidateNameAndEditButtonContainerSx: SxProps = {
     display: 'flex',
+    flexDirection: "row",
     justifyContent: 'space-between',
     justifySelf: 'stretch'
 }
