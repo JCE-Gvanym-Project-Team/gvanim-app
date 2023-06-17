@@ -5,6 +5,6 @@ import { AvatarSx } from './GvanimAvatarStyle';
 export default function GvanimAvatar() {
 
     return (
-        <Avatar variant='circular' src={SvgLogo} sx={AvatarSx} />
+        <Avatar src={SvgLogo} sx={AvatarSx} />
     );
 }
