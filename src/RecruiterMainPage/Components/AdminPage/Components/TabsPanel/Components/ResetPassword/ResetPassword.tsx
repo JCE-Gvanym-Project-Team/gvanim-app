@@ -20,11 +20,29 @@ const MenuProps = {
   },
 };
 
+
 export default function UpdateAccount() {
   const [recruitersSelected, setRecruitersSelected] = React.useState<string[]>([]);
   const [recruiters, setRecruiters] = React.useState<Recruiter[]>([]);
   const [openDialog, setOpenDialog] = React.useState(false);
   const [recruiterSelect, setRecruiterSelect] = React.useState(false);
+  const [isAdminUser, setIsAdminUser] = React.useState(false);
+  const [userEmail, setUserEmail] = React.useState('')
+
+  React.useEffect(() => {
+    const currentUser = getConnectedUser()
+      .then((userCredential) => {
+        if (userCredential?.email != null)
+          setUserEmail(userCredential?.email);
+        console.log(userEmail);
+        if (process.env.REACT_APP_ADMIN_MAIL === userEmail)
+          setIsAdminUser(true);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -41,7 +59,7 @@ export default function UpdateAccount() {
   };
 
   const handleResetPassword = () => {
-    // sendResetMail(recruitersSelected[0]);
+    // sendResetMail(recruitersSelected[0]); 
     if (recruiterSelect) setOpenDialog(true);
   };
 
@@ -52,51 +70,50 @@ export default function UpdateAccount() {
   const resetThePasswordOfTheCurrentUser = () => {
     console.log("hi");
     return;
-    const currentUser = getConnectedUser()
-      .then((userCredential) => {
-        const userEmail = userCredential?.email;
-        console.log(userEmail);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
   };
 
-  return (
 
-    <Box sx={{ display: 'fixed', justifyContent: 'center', alignItems: 'center', height: '30vh' }}>
+  return (
+    <Box sx={{ display: 'flex', justifyContent: 'fixed', alignItems: 'center', height: '30vh' }}>
       <Grid container justifyContent="center">
         <Grid item xs={8} sm={6} md={4} lg={3}>
-          <FormControl sx={{ width: '100%', marginBottom: '1rem', marginTop: '3rem' }}>
-            <label>אנא בחר/י מגייס/ת:</label>
-            <Select
-              multiple
-              size="small"
-              label="מגייסים/ות"
-              value={recruitersSelected}
-              onChange={handleChange}
-              input={<OutlinedInput />}
-              MenuProps={MenuProps}
-              required
-              sx={{ height: '10%' }}
-            >
-              {recruiters.map((recruiter) => (
-                <MenuItem key={recruiter._id} value={recruiter._id}>
-                  <div>
-                    <span>{recruiter._lastName} </span>
-                    <span>{recruiter._firstName}</span>
-                    <span style={{ marginLeft: '10px' }}> | </span>
-                    <span>{recruiter._email}</span>
-                  </div>
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-            <Button variant="outlined" onClick={handleResetPassword} sx={{ width: '45%' }}>
-              אפס/י סיסמא
-            </Button>
-          </Box>
+          {isAdminUser && (
+            <>
+              <FormControl sx={{ width: '100%', marginBottom: '1rem', marginTop: '3rem' }}>
+                <label>אנא בחר/י מגייס/ת:</label>
+                <Select
+                  multiple
+                  size="small"
+                  label="מגייסים/ות"
+                  value={recruitersSelected}
+                  onChange={handleChange}
+                  input={<OutlinedInput />}
+                  MenuProps={MenuProps}
+                  required
+                  sx={{ height: '10%' }}
+                >
+                  {recruiters.map((recruiter) => (
+                    <MenuItem key={recruiter._id} value={recruiter._id}>
+                      <div>
+                        <span>{recruiter._lastName} </span>
+                        <span>{recruiter._firstName}</span>
+                        <span style={{ marginLeft: '10px' }}> | </span>
+                        <span>{recruiter._email}</span>
+                      </div>
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+
+              <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                <Button variant="outlined" onClick={handleResetPassword} sx={{ width: '45%' }}>
+                  אפס/י סיסמא
+                </Button>
+              </Box>
+
+            </>
+          )}
+
           <Dialog open={openDialog} onClose={handleCloseDialog}>
             <DialogTitle sx={{ textAlign: 'center', margin: '1rem 0' }}>הסיסמא אופסה בהצלחה!</DialogTitle>
             <DialogContent>
@@ -109,11 +126,13 @@ export default function UpdateAccount() {
               <Button onClick={handleCloseDialog}>סגור</Button>
             </DialogActions>
           </Dialog>
+
           <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '5rem' }}>
             <Button variant="outlined" onClick={resetThePasswordOfTheCurrentUser} sx={{ width: '85%' }}>
               אפס/י את הסיסמא של החשבון הנוכחי
             </Button>
           </Box>
+
         </Grid>
       </Grid>
     </Box>
