@@ -205,7 +205,6 @@ export const colorTokens = (mode) =>
 export const themeSettings = (mode, actualMode, fontSize, fontFamily) =>
 {
     const colors = colorTokens(actualMode);
-
     return {
         palette: {
             mode: mode,
@@ -216,6 +215,7 @@ export const themeSettings = (mode, actualMode, fontSize, fontFamily) =>
                 jobTitle: colors.primary.jobTitle!,
                 descAndReqTitle: colors.primary.descAndReqTitle!,
                 addRecommenderButton: colors.primary.addRecommenderButton!
+
             },
             secondary: {
                 main: colors.secondary?.main!,
