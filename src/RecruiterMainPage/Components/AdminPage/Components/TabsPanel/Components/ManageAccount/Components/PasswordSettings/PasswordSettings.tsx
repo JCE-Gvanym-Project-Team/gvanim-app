@@ -1,5 +1,7 @@
-import { Box, Button, FormGroup, Stack, TextField, Typography } from '@mui/material';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormGroup, Stack, TextField, Typography } from '@mui/material';
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { sleep } from '../../../../../../../../../Firebase/FirebaseFunctions/test';
 
 export default function PasswordSettings(props: { passwordEdit: any }) {
     const { passwordEdit } = props;
@@ -7,30 +9,37 @@ export default function PasswordSettings(props: { passwordEdit: any }) {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [passwordError, setPasswordError] = useState(false);
     const [confirmPasswordError, setConfirmPasswordError] = useState(false);
+    const [isDialogOpen, setDialogOpen] = useState(false);
+
+    const navigate = useNavigate();
 
     const handleNewPasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setPasswordError(false);
         const regex = /^[a-zA-Z0-9@$#]+$/;
         const newPasswordValue = event.target.value;
-      
+
         if (!newPasswordValue.includes(' ') && (!newPasswordValue || regex.test(newPasswordValue))) {
-          setNewPassword(newPasswordValue);
-          setConfirmPasswordError(false);
-          if (!newPasswordValue) {
-            setConfirmPassword('');
-          }
+            setNewPassword(newPasswordValue);
+            setConfirmPasswordError(false);
+            if (!newPasswordValue) {
+                setConfirmPassword('');
+            }
         } else {
-          setConfirmPassword('');
-          setPasswordError(true);
+            setConfirmPassword('');
+            setPasswordError(true);
         }
-      };
-      
+    };
+
 
     const handleConfirmPasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setConfirmPassword(event.target.value);
     };
 
-    const handleUpdatePassword = () => {
+    const handleCloseDialog = () => {
+        setDialogOpen(false);
+      };
+
+    const handleUpdatePassword = async () => {
         if (newPassword.length < 6) {
             setPasswordError(true);
         } else {
@@ -39,7 +48,11 @@ export default function PasswordSettings(props: { passwordEdit: any }) {
                 setConfirmPasswordError(true);
             } else { // if sucsess
                 setConfirmPasswordError(false);
-                // Perform password update logic here
+                setDialogOpen(true);
+                setNewPassword('');
+                setConfirmPassword('');
+                await sleep(2300);
+                navigate('/management');
             }
         }
     };
@@ -65,7 +78,7 @@ export default function PasswordSettings(props: { passwordEdit: any }) {
                             value={newPassword}
                             onChange={handleNewPasswordChange}
                             error={passwordError}
-                            helperText={passwordError ? 'הסיסמא חייבת להיות 6 תווים לפחות, אותיות a-z, A-Z והתווים @,#,$'  : ''}
+                            helperText={passwordError ? 'הסיסמא חייבת להיות 6 תווים לפחות, אותיות a-z, A-Z והתווים @,#,$' : ''}
                         />
 
 
@@ -97,6 +110,16 @@ export default function PasswordSettings(props: { passwordEdit: any }) {
                 <Button disabled={!passwordEdit} variant="contained" onClick={handleUpdatePassword}>
                     עדכן
                 </Button>
+
+                <Dialog open={isDialogOpen} onClose={handleCloseDialog}>
+                    <DialogTitle>עדכון סיסמה</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>סיסמתך החדשה עודכנה בהצלחה!</DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleCloseDialog}>סגור</Button>
+                    </DialogActions>
+                </Dialog>
             </Box>
         </>
     );
