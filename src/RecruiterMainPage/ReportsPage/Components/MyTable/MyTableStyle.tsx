@@ -10,7 +10,7 @@ export const dataGridContainerStyle: SxProps = {
 	padding: 0,
 	marginTop: '15px',
 	marginBottom: '15px',
-	width: "50%",
+	width: "70%",
 	display: "flex",
 	justifyContent: "center",
 	alignItems: "center",

@@ -38,7 +38,7 @@ export const scheduleInterviewButton: SxProps = {
 export const chooseJobAndInterviewContainerSx: SxProps = {
     display: "flex",
     flexDirection: {xs: "column", md:"row"},
-    justifyContent: "start",
+    justifyContent: "center",
     width: "100%"
 }
 
@@ -68,7 +68,6 @@ export const interviewSummaryButtonsContainerSx: SxProps = {
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
-    width: { sx: "100%", md: "90%" },
     marginTop: "1rem",
     marginBottom: "4rem"
 }

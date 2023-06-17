@@ -12,7 +12,7 @@ export const dialogContentSx: SxProps = {
     display: "flex",
     // flexDirection: { xs: "column", md: "row" },
     flexDirection: "column",
-    minHeight: "340px",
+    minHeight: "350px",
 }
 
 export const locationTitleSx: SxProps = {

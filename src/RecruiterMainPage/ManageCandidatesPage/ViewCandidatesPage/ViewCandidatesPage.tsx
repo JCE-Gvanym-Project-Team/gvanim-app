@@ -3,17 +3,16 @@ import { Button, Typography, Box, Stack, Rating, Divider } from '@mui/material'
 import EditIcon from '@mui/icons-material/Edit';
 import { editButtonSx, textSx, titleSx, mainStackSx, ContainerGradientSx, candidateNameSx, candidateNameAndEditButtonContainerSx, jobTextSx, notesButtonSx, interviewsButtonSx, changeJobButtonSx, recommendationsButtonSx } from './ViewCandidatesPageStyle';
 import { BoxGradientSx } from '../../PageStyles';
-import JobsTable from './Components/JobsTable/JobsTable';
 import { Candidate, getFilteredCandidates } from '../../../Firebase/FirebaseFunctions/Candidate';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Job, getFilteredJobs } from '../../../Firebase/FirebaseFunctions/Job';
 import { CandidateJobStatus, getFilteredCandidateJobStatuses } from '../../../Firebase/FirebaseFunctions/CandidateJobStatus';
 import NotesPopup from './Components/NotesPopup/NotesPopup';
-import { AccountCircle, ArticleOutlined, EditNote, PictureAsPdfSharp, QuestionAnswer, SpeakerNotes } from '@mui/icons-material';
+import { AccountCircle, ArticleOutlined, EditNote, PictureAsPdfSharp, QuestionAnswer, SpeakerNotes, TrendingUpOutlined } from '@mui/icons-material';
 import AboutDialog from './Components/AboutDialog/AboutDialog';
 import MyLoading from '../../../Components/MyLoading/MyLoading';
 import RecommendersDialog from './Components/RecommendersDialog/RecommendersDialog';
-import JobsTable2 from './Components/JobsTable/JobsTable';
+import JobsTable from './Components/JobsTable/JobsTable';
 import AreYouSureDialog from './Components/AreYouSureDialog/AreYouSureDialog';
 import SuccessMessageSnackbar from './Components/SuccessMessageSnackbar/SuccessMessageSnackbar';
 
@@ -57,6 +56,14 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 
 		setLoading(false);
 	}, [])
+
+	useEffect(() =>
+	{
+		if (state === "success")
+		{
+			setSnackBarOpen(true);
+		}
+	}, [state])
 
 	// comments popup handlers
 	const [popupOpen, setPopupOpen] = useState(false);
@@ -288,18 +295,41 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 													setAreYouSureDialogOpen(true);
 													setAreYouSureDialogMessage("פעולה זו תשנה את דרגת ההתאמה הכללית של המועמד");
 													setAreYouSureCallback((() =>
-													{
-														return () =>
+
+														() =>
 														{
 															candidateInfo?.updateGeneralRating(newValue ? newValue : -1);
 															setGeneralRating(newValue ? newValue : -1);
+															return true;
 														}
-													}))
+													))
 												}}
 												size='large'
 											/>
 										</Box>
 
+									</Box>
+
+									{/* CV Button */}
+									<Box sx={{ display: { md: "none", xs: "flex" }, justifyContent: "space-between" }}>
+										<Button sx={{
+											color: "white",
+											backgroundColor: "#3333ff"
+										}}
+
+											variant="contained"
+											startIcon={<PictureAsPdfSharp />}
+											onClick={async () =>
+											{
+												setLoading(true);
+												const cvLink = (await candidateInfo?.getCvUrl()!);
+												setLoading(false);
+												window.open(cvLink);
+
+											}}
+										>
+											קו"ח
+										</Button>
 									</Box>
 
 									<Divider />
@@ -323,7 +353,53 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 										setSnackBarOpen={setSnackBarOpen}
 									/>
 									<SuccessMessageSnackbar open={snackBarOpen} onClose={snackBarOnClose} />
-									<Box sx={{ display: "flex", justifyContent: "space-between" }}>
+
+									{/* Comments and interviews buttons */}
+									<Box sx={candidateNameAndEditButtonContainerSx}>
+										<Button sx={interviewsButtonSx} variant="contained" startIcon={<QuestionAnswer />} onClick={() =>
+										{
+											interviewsPageHandler(candidateId);
+										}}>
+											ראיונות
+										</Button>
+
+										<Button sx={notesButtonSx} variant="contained" onClick={commentsPopupOpenHandler} startIcon={<SpeakerNotes />}>
+											הערות
+										</Button>
+										<NotesPopup
+											open={popupOpen}
+											onClose={commentsPopupCloseHandler}
+											candidate={candidateInfo}
+											initialData={initialData}
+											setLoading={setLoading}
+											loading={loading}
+										/>
+									</Box>
+
+									{/* text */}
+									<Box sx={candidateNameAndEditButtonContainerSx}>
+										<Typography sx={jobTextSx} variant='h4'>
+											משרות
+										</Typography>
+									</Box>
+
+									{/* Jobs table */}
+									<JobsTable
+										setDataSize={setDataSize}
+										candidateJobs={candidateJobs}
+										candidateInfo={candidateInfo}
+										// about dialog
+										setAboutDialogOpen={setAboutDialogOpen}
+										aboutDialogOnClose={aboutDialogonClose}
+										setAboutDialogJobId={setAboutDialogJobId}
+										// recommenders dialog
+										setRecommendersDialogOpen={setRecommendersDialogOpen}
+										setRecommendersDialogJobId={setRecommendersDialogJobId}
+										closeRecommendersDialog={closeRecommendersDialog}
+									/>
+
+									{/* CV Button */}
+									<Box sx={{ display: { xs: "none", md: "flex" }, justifyContent: "space-between" }}>
 										<Button sx={{
 											color: "white",
 											backgroundColor: "#3333ff"
@@ -342,49 +418,6 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 										>
 											קו"ח
 										</Button>
-									</Box>
-
-									{/* text */}
-									<Box sx={candidateNameAndEditButtonContainerSx}>
-										<Typography sx={jobTextSx} variant='h4'>
-											משרות
-										</Typography>
-									</Box>
-
-									{/* Jobs table */}
-									<JobsTable2
-										setDataSize={setDataSize}
-										candidateJobs={candidateJobs}
-										candidateInfo={candidateInfo}
-										// about dialog
-										setAboutDialogOpen={setAboutDialogOpen}
-										aboutDialogOnClose={aboutDialogonClose}
-										setAboutDialogJobId={setAboutDialogJobId}
-										// recommenders dialog
-										setRecommendersDialogOpen={setRecommendersDialogOpen}
-										setRecommendersDialogJobId={setRecommendersDialogJobId}
-										closeRecommendersDialog={closeRecommendersDialog}
-									/>
-
-									{/* Bottom Buttons */}
-									<Box sx={candidateNameAndEditButtonContainerSx}>
-										<Button sx={interviewsButtonSx} variant="contained" startIcon={<QuestionAnswer />} onClick={() =>
-										{
-											interviewsPageHandler(candidateId);
-										}}>
-											ראיונות
-										</Button>
-										<Button sx={notesButtonSx} variant="contained" onClick={commentsPopupOpenHandler} startIcon={<SpeakerNotes />}>
-											הערות
-										</Button>
-										<NotesPopup
-											open={popupOpen}
-											onClose={commentsPopupCloseHandler}
-											candidate={candidateInfo}
-											initialData={initialData}
-											setLoading={setLoading}
-											loading={loading}
-										/>
 									</Box>
 
 								</Stack>
