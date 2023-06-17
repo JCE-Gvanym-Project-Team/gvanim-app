@@ -114,6 +114,7 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 		if (!isEdit) {
 			const newRecruter = new Recruiter(email, firstName, lastName, sectorsSelection);
 			const firstPassword = generateCodeFromEmail(email);
+			console.log(firstPassword);
 			await newRecruter.add(firstPassword);
 			setDialogOpen(true);
 			setDialogEmail(email);
@@ -124,6 +125,9 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 
 			setOpen(false);
 		}
+		setFirstName('')
+		setLastName('');
+		setEmail('');
 	};
 
 
@@ -332,7 +336,7 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 				</Stack>
 
 			</Dialog>
-           <Button onClick={()=>{test()}}></Button>
+			<Button onClick={() => { test() }}></Button>
 		</Box>
 	);
 

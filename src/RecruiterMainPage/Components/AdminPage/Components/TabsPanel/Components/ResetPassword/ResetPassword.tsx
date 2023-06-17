@@ -59,7 +59,8 @@ export default function UpdateAccount() {
   };
 
   const handleResetPassword = () => {
-    // sendResetMail(recruitersSelected[0]); 
+    console.log(recruitersSelected[0]);
+    sendResetMail(recruitersSelected[0]); 
     if (recruiterSelect) setOpenDialog(true);
   };
 
@@ -68,8 +69,8 @@ export default function UpdateAccount() {
   };
 
   const resetThePasswordOfTheCurrentUser = () => {
-    console.log("hi");
-    return;
+    sendResetMail(userEmail);
+    setOpenDialog(true);
   };
 
 
