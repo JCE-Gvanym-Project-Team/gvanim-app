@@ -86,7 +86,7 @@ const NewCandidatePage = () => {
     useState<boolean>(false);
   const [errorJobSelection, setErrorJobSelection] = useState<boolean>(false);
   // my "editJob"
-  const [myCandidate, setMyCandidate] = useState<Candidate>();
+  const [myCandidate, setMyCandidate] = useState<Candidate | undefined>();
   const [generalRating, setGeneralRating] = useState<number>(-1);
 
   // my loading
@@ -118,7 +118,7 @@ const NewCandidatePage = () => {
 
     setLoading(true);
 
-    let candidate_ = await getFilteredCandidates(
+    const candidate_ = await getFilteredCandidates(
       ["candidateId"],
       [state?.candidate?._candidateId?.toString()]
     );
@@ -146,7 +146,7 @@ const NewCandidatePage = () => {
 
   const navigate = useNavigate();
 
-  const handleSubmit = async (event: any) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     if (!selectedJob) {
       setErrorJobSelection(true);
@@ -160,27 +160,15 @@ const NewCandidatePage = () => {
       candidatePhone.length === 0 ||
       candidateNote.length === 0
     ) {
-      if (candidateFirstName.length === 0) {
-        setErrorCandidateFirstName(true);
-      }
-      if (candidateLastName.length === 0) {
-        setErrorCandidateLastName(true);
-      }
-      if (candidatePhone.length === 0) {
-        setErrorCandidatePhone(true);
-      }
-      if (candidateEmail.length === 0) {
-        setErrorCandidateEmail(true);
-      }
-      if (candidateNote.length === 0) {
-        setErrorCandidateNote(true);
-      }
-      if (candidateGeneralRating === -1) {
-        setErrorCandidateGeneralRating(true);
-      }
+      setErrorCandidateFirstName(candidateFirstName.length === 0);
+      setErrorCandidateLastName(candidateLastName.length === 0);
+      setErrorCandidatePhone(candidatePhone.length === 0);
+      setErrorCandidateEmail(candidateEmail.length === 0);
+      setErrorCandidateNote(candidateNote.length === 0);
+      setErrorCandidateGeneralRating(candidateGeneralRating === -1);
     } else {
       // edit
-      if (state !== null && myCandidate !== null) {
+      if (state !== null && myCandidate !== undefined) {
         setLoading(true);
 
         if (myCandidate) {
@@ -204,7 +192,7 @@ const NewCandidatePage = () => {
       // add
       else {
         setLoading(true);
-        let NewCandidateId = await generateCandidateId();
+        const NewCandidateId = await generateCandidateId();
 
         let candidate = new Candidate(
           NewCandidateId,
@@ -217,20 +205,25 @@ const NewCandidatePage = () => {
         );
 
         // Add the candidate to the selected job
-        const jobNumber = selectedJob._jobNumber;
-        const candidateJobStatus = new CandidateJobStatus(
-          jobNumber,
-          candidate._id,
-          "הוגשה מועמדות"
-        );
-        await candidateJobStatus.add();
-        if (!(await candidate.add())) {
-          candidate = await getFilteredCandidates(
-            ["eMail", "phone"],
-            [candidateEmail, candidatePhone]
-          )[0];
-          NewCandidateId = candidate._id;
+        const jobNumber = selectedJob?._jobNumber;
+        if (jobNumber) {
+          const candidateJobStatus = new CandidateJobStatus(
+            jobNumber,
+            candidate._id,
+            "הוגשה מועמדות"
+          );
+          await candidateJobStatus.add();
         }
+
+        if (!(await candidate.add())) {
+          candidate = (
+            await getFilteredCandidates(
+              ["eMail", "phone"],
+              [candidateEmail, candidatePhone]
+            )
+          )[0];
+        }
+
         setLoading(false);
 
         navigate("/management/manageCandidates", {
@@ -250,7 +243,7 @@ const NewCandidatePage = () => {
   };
 
   const handleDelete = async () => {
-    if (state !== null && myCandidate !== null) {
+    if (state !== null && myCandidate !== undefined) {
       setLoading(true);
       await myCandidate?.remove();
     }
@@ -1016,6 +1009,7 @@ const NewCandidatePage = () => {
               </Container>
             </Box>
           </Box>
+
           <Box style={{ position: "absolute", top: "100px", right: "50px" }}>
             <Button onClick={handleClick} sx={designReturnButton}>
               <ArrowForwardIosIcon></ArrowForwardIosIcon>
