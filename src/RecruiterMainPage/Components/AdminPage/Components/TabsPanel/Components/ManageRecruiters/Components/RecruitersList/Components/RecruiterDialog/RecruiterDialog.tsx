@@ -11,7 +11,7 @@ import { EditNote, GroupAdd } from '@mui/icons-material';
 import { MyFieldsSx } from './RecruiterDialogStyle';
 import Tooltip from '@mui/material/Tooltip';
 import RemoveConfirmPopup from './Components/RemoveConfirmPopup/RemoveConfirmPopup';
-import { Recruiter } from '../../../../../../../../../../../Firebase/FirebaseFunctions/Recruiter';
+import { Recruiter, getRecruitersFromDatabase } from '../../../../../../../../../../../Firebase/FirebaseFunctions/Recruiter';
 import SectorsChip from './Components/SectorsChip/SectorsChip/SectorsChip';
 import { getAllSectors } from '../../../../../../../../../../../Firebase/FirebaseFunctions/Sector';
 import { Sector } from '../../../../../../../../../../../Firebase/FirebaseFunctions/Sector'
@@ -78,10 +78,13 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 
 	const handleRemoveRecruiter = async () => {
 		console.log(typeof recruiterRow);
+		const recruiters = await getRecruitersFromDatabase();
+		const recruiterToRemove = recruiters.filter((recruiter) => recruiter._email === recruiterRow?._email)!;
+		recruiterToRemove[0]?.remove();
 		//await recruiterRow?.remove();
 		// const updateData = recruiters.filter(rec => rec._id !== recruiterRow._id);
 		// setRecruiters(updateData);
-		// setOpen(false);
+		setOpen(false);
 
 		// postMessage(`המגייס/ת ${recruiterRow._firstName} ${recruiterRow._lastName} נמחק/ה בהצלחה מהמערכת.`);
 		// setSnackbar(true);
@@ -330,7 +333,7 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 				</Stack>
 
 			</Dialog>
-
+           <Button onClick={()=>{test()}}></Button>
 		</Box>
 	);
 
@@ -366,3 +369,12 @@ function generateCodeFromEmail(email) {
 	return code;
 }
 
+
+
+async function test() {
+	const recruiter = new Recruiter("112123@gmail.com", "ראובן", "לוי", ['אשכול 10']);
+	await recruiter.add();
+	// recruiter.edit("ירון", "לוי");
+	const reqs = await getRecruitersFromDatabase();
+	console.log(reqs);
+}
