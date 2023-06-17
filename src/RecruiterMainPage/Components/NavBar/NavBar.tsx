@@ -54,7 +54,7 @@ export default function NavBar(props: { handlelogout: any })
 
                             <Stack direction='row'>
                                 <Typography sx={{ color: 'black', fontSize: '0.9rem', lineHeight: '1.625', fontWeight: 600 }} >
-                                    {recruiter?._firstName}
+                                    {recruiter?._firstNam}
                                 </Typography>
 
                             </Stack>
