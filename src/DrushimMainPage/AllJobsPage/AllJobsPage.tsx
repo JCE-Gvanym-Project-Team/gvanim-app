@@ -1,5 +1,5 @@
 import { Box, Button, Divider, Grid, Stack, Typography, useTheme } from '@mui/material';
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useEffect, useMemo } from 'react'
 import { ColorModeContext, colorTokens } from '../theme';
 import JobItem from './Components/JobItem/JobItem';
 import SearchBar from './Components/SearchBar/SearchBar';
@@ -73,6 +73,9 @@ export default function AllJobsPage(props: { jobs: any }) {
         [location]
     );
 
+    useEffect(() => {
+        setSearch("א");
+    })
 
     const handleFilter = () => {
 
