@@ -730,11 +730,12 @@ export default function OneJobPage()
                                     display: "flex",
                                     flexDirection: { xs: "column", md: "row" },
                                     marginRight: { xs: "0", md: "7px" },
+                                    flexGrow: 1
                                 }}
                             >
                                 {/* Firstname */}
                                 <Box>
-                                    <Typography variant={screenSize === "xs" ? "subtitle1" : 'h4'} color={"primary.jobTitle"} sx={{ marginBottom: "15px" }}>
+                                    <Typography variant={screenSize === "xs" ? "subtitle1" : 'h4'} color={"primary.jobTitle"} sx={{ marginTop: "15px" }}>
                                         שם פרטי:
                                     </Typography>
                                     <TextField
@@ -778,7 +779,7 @@ export default function OneJobPage()
                                         marginLeft: { xs: "0", md: "7px" },
                                     }}
                                 >
-                                    <Typography variant={screenSize === "xs" ? "subtitle1" : 'h4'} color={"primary.jobTitle"} sx={{ marginBottom: "15px" }}>
+                                    <Typography variant={screenSize === "xs" ? "subtitle1" : 'h4'} color={"primary.jobTitle"} sx={{ marginTop: "15px" }}>
                                         שם משפחה:
                                     </Typography>
                                     <TextField
@@ -824,12 +825,12 @@ export default function OneJobPage()
                                 sx={{
                                     display: "flex",
                                     flexDirection: { xs: "column", md: "row" },
-                                    
+
                                 }}
                             >
                                 {/* Phone */}
                                 <Box >
-                                    <Typography variant={screenSize === "xs" ? "subtitle1" : 'h4'} color={"primary.jobTitle"} sx={{ marginBottom: "15px" }}>
+                                    <Typography variant={screenSize === "xs" ? "subtitle1" : 'h4'} color={"primary.jobTitle"} sx={{ marginTop: "15px" }}>
                                         טלפון:
                                     </Typography>
                                     <TextField
@@ -871,10 +872,10 @@ export default function OneJobPage()
                                 <Box
                                     sx={{
                                         marginLeft: { xs: "0", md: "7px" },
-                                       
+
                                     }}
                                 >
-                                    <Typography variant={screenSize === "xs" ? "subtitle1" : 'h4'} color={"primary.jobTitle"} sx={{ marginBottom: "15px" }}>
+                                    <Typography variant={screenSize === "xs" ? "subtitle1" : 'h4'} color={"primary.jobTitle"} sx={{ marginTop: "15px" }}>
                                         אימייל:
                                     </Typography>
                                     <TextField
@@ -973,11 +974,16 @@ export default function OneJobPage()
                                 type="file"
                                 inputRef={cvFileInputRef}
                                 style={{ display: 'none' }}
+                                inputProps={{
+                                    accept: "application/pdf"
+                                }}
                                 onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
                                 {
                                     const files = event.target.files!;
-                                    setCvFile(files[0]);
-                                    setCvFileError(false);
+                                    if (files[0].type === "application/pdf"){
+                                        setCvFile(files[0]);
+                                        setCvFileError(false);
+                                    }
                                 }}
                             />
                             <Button
@@ -1026,7 +1032,7 @@ export default function OneJobPage()
                                 </Box>
                             </Button>
                             {/* display filename to the user */}
-                            <Typography variant='h5'>
+                            <Typography variant='h5' >
                                 {cvFile ? "קובץ שצורף: " : ""}
                                 {cvFile?.name.slice(0, 20)}
                                 {cvFile?.name.length! > 20 ? '...' : ''}
@@ -1050,10 +1056,9 @@ export default function OneJobPage()
                                 display: "flex",
                                 alignSelf: "center",
                                 flexDirection: "column",
-                                alignItems: "start",
+                                alignItems: { xs: "center", md: "start" },
                                 width: "100%",
                                 marginTop: "134px",
-
                             }}
                         >
 
@@ -1389,16 +1394,18 @@ export default function OneJobPage()
                                                         {/* Attach recommender file button */}
                                                         <Box sx={{ display: "flex", flexDirection: "column", alignSelf: { xs: "center", md: "end" }, marginTop: "49px" }}>
                                                             {/* display filename to the user */}
-                                                            <Typography variant='h5' sx={{ alignSelf: "center" }}>
-                                                                {recommendersList[index][1] ? "קובץ שצורף: " : ""}
-                                                                {recommendersList[index][1]?.name.length! > 12 ? '...' : ''}
-                                                                {recommendersList[index][1] ? recommendersList[index][1]?.name.slice(0, 12) : ""}
-                                                            </Typography>
+                                                            <Box sx={{ position: "absolute", marginTop: "-20px", marginLeft: "20px" }}>
+                                                                <Typography variant='h5' sx={{ alignSelf: "center" }}>
+                                                                    {recommendersList[index][1] ? "קובץ שצורף: " : ""}
+                                                                    {recommendersList[index][1]?.name.length! > 12 ? '...' : ''}
+                                                                    {recommendersList[index][1] ? recommendersList[index][1]?.name.slice(0, 12) : ""}
+                                                                </Typography>
+                                                            </Box>
                                                             <Box
                                                                 sx={{
                                                                     display: "flex",
                                                                     flexDirection: "row",
-                                                                    alignSelf: "end",
+                                                                    alignSelf: "end"
                                                                 }}
                                                             >
                                                                 {/* TODO: pdf files only  */}
@@ -1407,11 +1414,14 @@ export default function OneJobPage()
                                                                     type="file"
                                                                     inputRef={(input) => (recommenderFileInputRefs.current[index] = input)}
                                                                     style={{ display: 'none' }}
+                                                                    inputProps={{
+                                                                        accept: "application/pdf"
+                                                                    }}
                                                                     onChange={(event) =>
                                                                     {
                                                                         const inputElement = event.target as HTMLInputElement;
                                                                         const files = inputElement.files;
-                                                                        if (files && files.length > 0)
+                                                                        if (files && files.length > 0 && files[0].type === "application/pdf")
                                                                         {
                                                                             updateRecommendersListAtIndex(recommendersList[index][0], files[0], index);
                                                                         }
