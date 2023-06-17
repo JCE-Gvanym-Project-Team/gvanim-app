@@ -12,6 +12,7 @@ import { Job, getFilteredJobs } from "../../../../../../Firebase/FirebaseFunctio
 import { useNavigate } from "react-router-dom";
 import AreYouSureDialog from "../../../Components/AreYouSureDialog/AreYouSureDialog";
 import SuccessMessageSnackbar from "../../../Components/SuccessMessageSnackbar/SuccessMessageSnackbar";
+import { getConnectedUser } from "../../../../../../Firebase/FirebaseFunctions/Authentication";
 
 const filter = createFilterOptions<string>();
 
@@ -143,7 +144,7 @@ export default function ScheduleInterviewDialog(props: {
 
         onClose(event, "submit");
 
-        navigate("/management/manageCandidates/" + candidate?._id, { state: true });
+        
     }
 
     const handleSubmitSaveRejectionReason = async (event) =>
@@ -164,6 +165,7 @@ export default function ScheduleInterviewDialog(props: {
         setLoading(false);
         setDefaults();
         onClose(event, "submit");
+        
     }
 
     const handleSubmitSendWhatsappMessage = async (event) =>
@@ -181,8 +183,7 @@ export default function ScheduleInterviewDialog(props: {
         setLoading(false);
         setDefaults();
         window.open(link);
-
-        setDefaults();
+        
         onClose(event, "submit");
     }
 
@@ -321,14 +322,6 @@ export default function ScheduleInterviewDialog(props: {
                     renderInput={(params) => <TextField {...params} label="סטטוס חדש" />}
                     onInputChange={(event, value) =>
                     {
-                        // set whatsapp message
-                        const temp = new Candidate(candidate ? candidate._id : "", candidate?._firstName, candidate?._lastName, candidate?._phone, candidate?._eMail, candidate?._generalRating, candidate?._note);
-
-                        // todo: get real recruiter here
-                        const tempRecruiter = new Recruiter("recruiteremail@gmail.com", "firstname", "lastname", ["asd", "asdasd"]);
-                        const jobNumberString = chosenJobValue?.match(/\d+/)?.[0];
-                        const jobNumber = jobNumberString ? parseInt(jobNumberString) : NaN;
-                        const chosenJob = (allJobs.filter((job) => job._jobNumber === jobNumber))[0];
 
                         setWhatsappMessage(getWhatsappMessage(candidate, chosenJobValue, allJobs, value, interviewDate));
 
@@ -480,7 +473,7 @@ export default function ScheduleInterviewDialog(props: {
                     callback={areYouSureCallback}
                     setSnackBarOpen={setSnackBarOpen}
                 />
-                <SuccessMessageSnackbar open={snackBarOpen} onClose={snackBarOnClose}/>
+                <SuccessMessageSnackbar open={snackBarOpen} onClose={snackBarOnClose} />
             </DialogContent>
 
 
@@ -497,7 +490,7 @@ export default function ScheduleInterviewDialog(props: {
                                 setAreYouSureDialogMessage("פעולה זו תשנה את המשרה של המועמד: " +
                                     candidate?._firstName + " " + candidate?._lastName +
                                     "\nמ: " + fromJobValue + " ל: " + toJobValue);
-                                setAreYouSureCallback(() => () => { handleSubmitChangeJob(event); });
+                                setAreYouSureCallback(() => () => { handleSubmitChangeJob(event); setSnackBarOpen(true); return true; });
                             }} variant="contained" sx={submitButtonSx}>
                                 העברת משרה
                             </Button>
@@ -510,7 +503,7 @@ export default function ScheduleInterviewDialog(props: {
                             {
                                 setAreYouSureDialogOpen(true);
                                 setAreYouSureDialogMessage("פעולה זו תשנה את המשרה של המועמד: " + candidate?._firstName + " " + candidate?._lastName);
-                                setAreYouSureCallback(() => () => { handleSubmitSaveRejectionReason(event); });
+                                setAreYouSureCallback(() => () => { handleSubmitSaveRejectionReason(event); setSnackBarOpen(true);return true; });
                             }} variant="contained" sx={submitButtonSx}>
                                 שמירה
                             </Button>
@@ -523,7 +516,7 @@ export default function ScheduleInterviewDialog(props: {
                             {
                                 setAreYouSureDialogOpen(true);
                                 setAreYouSureDialogMessage('פעולה זו תשנה את הסטטוס של המועמד ל: ' + newStatus + '\nותנתב אותך לאתר של וואצאפ על מנת לשלוח למועמד הודעה');
-                                setAreYouSureCallback(() => () => { handleSubmitSendWhatsappMessage(event); });
+                                setAreYouSureCallback(() => () => { handleSubmitSendWhatsappMessage(event); setSnackBarOpen(true); return true; });
                             }} variant="contained" sx={submitButtonSx}>
                                 <WhatsApp sx={{ marginRight: "0.5rem" }} />
                                 שליחת הודעה למועמד
@@ -535,7 +528,7 @@ export default function ScheduleInterviewDialog(props: {
                         {
                             setAreYouSureDialogOpen(true);
                             setAreYouSureDialogMessage(" פעולה זו תשנה את סטטוס המועמד ל: " + newStatus);
-                            setAreYouSureCallback(() => () => { handleSubmitSaveStatus(event); });
+                            setAreYouSureCallback(() => () => { handleSubmitSaveStatus(event);setSnackBarOpen(true); return true; });
                         }} variant="contained" sx={{ backgroundColor: "blueviolet" }}>
                             שמירת סטטוס
                         </Button>
@@ -597,6 +590,11 @@ const getWhatsappMessage = function (candidate, chosenJobValue, allJobs, status,
 
     // todo: get real recruiter here
     const tempRecruiter = new Recruiter("recruiteremail@gmail.com", "firstname", "lastname", ["asd", "asdasd"]);
+
+    // get currently connected recruiter
+    const user = getConnectedUser();
+    console.log(user);
+
     const jobNumberString = chosenJobValue?.match(/\d+/)?.[0];
     const jobNumber = jobNumberString ? parseInt(jobNumberString) : NaN;
     const chosenJob = (allJobs.filter((job) => job._jobNumber === jobNumber))[0];

@@ -129,6 +129,7 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 			await candidateJobStatus?.updateMatchingRate(matchingRate);
 			setLoading(false);
 			setRerenderKey(rerenderKey === "1" ? "0" : "1");
+			return true;
 		});
 	}
 

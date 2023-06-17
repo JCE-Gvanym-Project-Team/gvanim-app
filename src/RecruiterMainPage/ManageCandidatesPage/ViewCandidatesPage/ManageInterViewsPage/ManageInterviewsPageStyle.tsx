@@ -38,7 +38,7 @@ export const scheduleInterviewButton: SxProps = {
 export const chooseJobAndInterviewContainerSx: SxProps = {
     display: "flex",
     flexDirection: {xs: "column", md:"row"},
-    justifyContent: "start",
+    justifyContent: "center",
     width: "100%"
 }
 

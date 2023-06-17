@@ -9,7 +9,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Job, getFilteredJobs } from '../../../Firebase/FirebaseFunctions/Job';
 import { CandidateJobStatus, getFilteredCandidateJobStatuses } from '../../../Firebase/FirebaseFunctions/CandidateJobStatus';
 import NotesPopup from './Components/NotesPopup/NotesPopup';
-import { AccountCircle, ArticleOutlined, EditNote, PictureAsPdfSharp, QuestionAnswer, SpeakerNotes } from '@mui/icons-material';
+import { AccountCircle, ArticleOutlined, EditNote, PictureAsPdfSharp, QuestionAnswer, SpeakerNotes, TrendingUpOutlined } from '@mui/icons-material';
 import AboutDialog from './Components/AboutDialog/AboutDialog';
 import MyLoading from '../../../Components/MyLoading/MyLoading';
 import RecommendersDialog from './Components/RecommendersDialog/RecommendersDialog';
@@ -57,6 +57,14 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 
 		setLoading(false);
 	}, [])
+
+	useEffect(() =>
+	{
+		if (state === "success")
+		{
+			setSnackBarOpen(true);
+		}
+	}, [state])
 
 	// comments popup handlers
 	const [popupOpen, setPopupOpen] = useState(false);
@@ -288,18 +296,41 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 													setAreYouSureDialogOpen(true);
 													setAreYouSureDialogMessage("פעולה זו תשנה את דרגת ההתאמה הכללית של המועמד");
 													setAreYouSureCallback((() =>
-													{
-														return () =>
+
+														() =>
 														{
 															candidateInfo?.updateGeneralRating(newValue ? newValue : -1);
 															setGeneralRating(newValue ? newValue : -1);
+															return true;
 														}
-													}))
+													))
 												}}
 												size='large'
 											/>
 										</Box>
 
+									</Box>
+
+									{/* CV Button */}
+									<Box sx={{ display: { md: "none", xs: "flex" }, justifyContent: "space-between" }}>
+										<Button sx={{
+											color: "white",
+											backgroundColor: "#3333ff"
+										}}
+
+											variant="contained"
+											startIcon={<PictureAsPdfSharp />}
+											onClick={async () =>
+											{
+												setLoading(true);
+												const cvLink = (await candidateInfo?.getCvUrl()!);
+												setLoading(false);
+												window.open(cvLink);
+
+											}}
+										>
+											קו"ח
+										</Button>
 									</Box>
 
 									<Divider />
@@ -323,25 +354,27 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 										setSnackBarOpen={setSnackBarOpen}
 									/>
 									<SuccessMessageSnackbar open={snackBarOpen} onClose={snackBarOnClose} />
-									<Box sx={{ display: "flex", justifyContent: "space-between" }}>
-										<Button sx={{
-											color: "white",
-											backgroundColor: "#3333ff"
-										}}
 
-											variant="contained"
-											startIcon={<PictureAsPdfSharp />}
-											onClick={async () =>
-											{
-												setLoading(true);
-												const cvLink = (await candidateInfo?.getCvUrl()!);
-												setLoading(false);
-												window.open(cvLink);
-
-											}}
-										>
-											קו"ח
+									{/* Comments and interviews buttons */}
+									<Box sx={candidateNameAndEditButtonContainerSx}>
+										<Button sx={interviewsButtonSx} variant="contained" startIcon={<QuestionAnswer />} onClick={() =>
+										{
+											interviewsPageHandler(candidateId);
+										}}>
+											ראיונות
 										</Button>
+
+										<Button sx={notesButtonSx} variant="contained" onClick={commentsPopupOpenHandler} startIcon={<SpeakerNotes />}>
+											הערות
+										</Button>
+										<NotesPopup
+											open={popupOpen}
+											onClose={commentsPopupCloseHandler}
+											candidate={candidateInfo}
+											initialData={initialData}
+											setLoading={setLoading}
+											loading={loading}
+										/>
 									</Box>
 
 									{/* text */}
@@ -366,25 +399,26 @@ export default function ViewCandidatesPage(props: { candidateId: string })
 										closeRecommendersDialog={closeRecommendersDialog}
 									/>
 
-									{/* Bottom Buttons */}
-									<Box sx={candidateNameAndEditButtonContainerSx}>
-										<Button sx={interviewsButtonSx} variant="contained" startIcon={<QuestionAnswer />} onClick={() =>
-										{
-											interviewsPageHandler(candidateId);
-										}}>
-											ראיונות
+									{/* CV Button */}
+									<Box sx={{ display: { xs: "none", md: "flex" }, justifyContent: "space-between" }}>
+										<Button sx={{
+											color: "white",
+											backgroundColor: "#3333ff"
+										}}
+
+											variant="contained"
+											startIcon={<PictureAsPdfSharp />}
+											onClick={async () =>
+											{
+												setLoading(true);
+												const cvLink = (await candidateInfo?.getCvUrl()!);
+												setLoading(false);
+												window.open(cvLink);
+
+											}}
+										>
+											קו"ח
 										</Button>
-										<Button sx={notesButtonSx} variant="contained" onClick={commentsPopupOpenHandler} startIcon={<SpeakerNotes />}>
-											הערות
-										</Button>
-										<NotesPopup
-											open={popupOpen}
-											onClose={commentsPopupCloseHandler}
-											candidate={candidateInfo}
-											initialData={initialData}
-											setLoading={setLoading}
-											loading={loading}
-										/>
 									</Box>
 
 								</Stack>
