@@ -17,3 +17,13 @@ export const MySearchBarContainerStyle = {
   padding: 0,
   width: "100%",
 };
+
+export const designReturnButton = {
+  background: "rgba(255, 255, 255, 0.5)",
+  textAlign: "left",
+  fontFamily: "'Noto Sans Hebrew', sans-serif",
+  color: "black",
+  fontSize: "18px",
+  justifyContent: "flex-start",
+  boxShadow: "0 1px 2px rgba(0, 0, 0, 0.2)",
+};
