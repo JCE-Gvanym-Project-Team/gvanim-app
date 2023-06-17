@@ -10,7 +10,7 @@ import { ColorModeContext, colorTokens } from '../theme';
 import AreYouSureDialog from './Components/AreYouSureDialog/AreYouSureDialog';
 import SuccessDialog from './Components/SuccessDialog/SuccessDialog';
 import ErrorDialog from './Components/ErrorDialog/ErrorDialog';
-import JobsDetails from './Components/JobDetails/JobDetails';
+import JobDetails from './Components/JobDetails/JobDetails';
 // icons
 import { ReactComponent as CloudSVG } from './Resources/Cloud.svg';
 import { ReactComponent as BackgroundSVG } from './Resources/Background.svg'
@@ -605,6 +605,16 @@ export default function OneJobPage()
                                         })}
                                     </Typography>
 
+                                    <Box sx={{ display: "flex", flexDirection: "column" }}>
+
+                                        <Button>asd</Button>
+                                        <Button>asd</Button>
+                                        <Button>asd</Button>
+                                        <Button>asd</Button>
+                                        <Button>asd</Button>
+                                    </Box>
+
+
                                 </Box>
 
                                 {/* not sure about additional info */}
@@ -636,24 +646,22 @@ export default function OneJobPage()
 
                             </Box>
 
-
-
                             {/* Job Details */}
-                            <JobsDetails job={job} screenSize={screenSize} />
+                            <JobDetails job={job} screenSize={screenSize} />
 
                         </Box>
 
                         {/* button that redirects to details */}
-                        <Box sx={{ display: {md: "none", lg: "block"}, position: "absolute", left: { lg: "20px", xl: "1.5vw" }, marginTop: "-60px"}}>
+                        <Box sx={{ display: { md: "none", lg: "block" }, position: "absolute", left: { lg: "20px", xl: "1.5vw" }, marginTop: "-60px" }}>
                             <Button
-                                
+
                                 sx={{
                                     paddingTop: "13px",
                                     paddingBottom: "13px",
                                     paddingLeft: "28px",
                                     paddingRight: "28px",
                                     backgroundColor: "background.cvButton",
-                                    "&:hover" : {
+                                    "&:hover": {
                                         backgroundColor: "background.cvButtonHover"
                                     },
                                     boxShadow: "0px 3px 6px #00000029",
@@ -713,7 +721,7 @@ export default function OneJobPage()
                                 display: "flex",
                                 flexDirection: { xs: "column", md: "row" },
                                 justifyContent: "center",
-                                alignItems: "center"
+                                alignItems: "center",
                             }}
                         >
                             {/* Firstname and Lastname */}
@@ -721,7 +729,7 @@ export default function OneJobPage()
                                 sx={{
                                     display: "flex",
                                     flexDirection: { xs: "column", md: "row" },
-                                    marginRight: { xs: "0", md: "7px" }
+                                    marginRight: { xs: "0", md: "7px" },
                                 }}
                             >
                                 {/* Firstname */}
@@ -753,7 +761,8 @@ export default function OneJobPage()
                                     <Box sx={{
                                         display: candidateNameError ? "flex" : "none",
                                         flexDirection: "row",
-                                        alignItems: "center"
+                                        alignItems: "center",
+                                        position: "absolute"
                                     }}>
                                         <ErrorOutlineRounded sx={{ fontSize: "24px", color: "error.main" }} />
 
@@ -766,7 +775,7 @@ export default function OneJobPage()
                                 {/* Lastname */}
                                 <Box
                                     sx={{
-                                        marginLeft: { xs: "0", md: "7px" }
+                                        marginLeft: { xs: "0", md: "7px" },
                                     }}
                                 >
                                     <Typography variant={screenSize === "xs" ? "subtitle1" : 'h4'} color={"primary.jobTitle"} sx={{ marginBottom: "15px" }}>
@@ -796,7 +805,8 @@ export default function OneJobPage()
                                     <Box sx={{
                                         display: candidateSurnameError ? "flex" : "none",
                                         flexDirection: "row",
-                                        alignItems: "center"
+                                        alignItems: "center",
+                                        position: "absolute"
                                     }}>
                                         <ErrorOutlineRounded sx={{ fontSize: "24px", color: "error.main" }} />
 
@@ -813,11 +823,12 @@ export default function OneJobPage()
                             <Box
                                 sx={{
                                     display: "flex",
-                                    flexDirection: { xs: "column", md: "row" }
+                                    flexDirection: { xs: "column", md: "row" },
+                                    
                                 }}
                             >
                                 {/* Phone */}
-                                <Box>
+                                <Box >
                                     <Typography variant={screenSize === "xs" ? "subtitle1" : 'h4'} color={"primary.jobTitle"} sx={{ marginBottom: "15px" }}>
                                         טלפון:
                                     </Typography>
@@ -845,7 +856,8 @@ export default function OneJobPage()
                                     <Box sx={{
                                         display: candidatePhoneError ? "flex" : "none",
                                         flexDirection: "row",
-                                        alignItems: "center"
+                                        alignItems: "center",
+                                        position: "absolute"
                                     }}>
                                         <ErrorOutlineRounded sx={{ fontSize: "24px", color: "error.main" }} />
 
@@ -858,7 +870,8 @@ export default function OneJobPage()
                                 {/* Email */}
                                 <Box
                                     sx={{
-                                        marginLeft: { xs: "0", md: "7px" }
+                                        marginLeft: { xs: "0", md: "7px" },
+                                       
                                     }}
                                 >
                                     <Typography variant={screenSize === "xs" ? "subtitle1" : 'h4'} color={"primary.jobTitle"} sx={{ marginBottom: "15px" }}>
@@ -889,7 +902,8 @@ export default function OneJobPage()
                                     <Box sx={{
                                         display: candidateEmailError ? "flex" : "none",
                                         flexDirection: "row",
-                                        alignItems: "center"
+                                        alignItems: "center",
+                                        position: "absolute"
                                     }}>
                                         <ErrorOutlineRounded sx={{ fontSize: "24px", color: "error.main" }} />
 
@@ -954,7 +968,7 @@ export default function OneJobPage()
                         </Box>
 
                         {/* attach CV file button */}
-                        <Box sx={{ marginTop: "50px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", alignSelf: { xs: "center", md: "start" }, width: "fit-content" }}>
+                        <Box sx={{ marginTop: "35px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", alignSelf: { xs: "center", md: "start" }, width: "fit-content" }}>
                             <Input
                                 type="file"
                                 inputRef={cvFileInputRef}
@@ -1296,7 +1310,8 @@ export default function OneJobPage()
                                                             <Box sx={{
                                                                 display: recommendersErrors[index][0] ? "flex" : "none",
                                                                 flexDirection: "row",
-                                                                alignItems: "center"
+                                                                alignItems: "center",
+                                                                position: "absolute"
                                                             }}>
                                                                 <ErrorOutlineRounded sx={{ fontSize: "24px", color: "error.main" }} />
 
@@ -1361,7 +1376,8 @@ export default function OneJobPage()
                                                             <Box sx={{
                                                                 display: recommendersErrors[index][1] ? "flex" : "none",
                                                                 flexDirection: "row",
-                                                                alignItems: "center"
+                                                                alignItems: "center",
+                                                                position: "absolute"
                                                             }}>
                                                                 <ErrorOutlineRounded sx={{ color: "error.main" }} />
 
