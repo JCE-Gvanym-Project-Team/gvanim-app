@@ -1,19 +1,15 @@
 import { Job, getFilteredJobs, generateJobNumber } from "./Job";
-import { loginAdmin, loginRecruiter, getConnectedUser } from "./Authentication";
 import { Candidate, getFilteredCandidates, generateCandidateId } from "./Candidate";
 import { CandidateJobStatus, getFilteredCandidateJobStatuses, allStatus, getMessage } from "./CandidateJobStatus";
 import { Recomendation } from "./Recomendation";
 import { Role, getAllRoles, getOpenRoles, getClosedRoles } from "./Role";
 import { Stage, getAllStages, getOpenStages, getClosedStages } from "./Stage";
 import { Sector, getAllSectors, getOpenSectors, getClosedSectors } from "./Sector";
-
-export
-{
+import { updateRecruiterPassword, loginAdmin, loginRecruiter, getConnectedUser, sendResetMail, isConnected,loguotRecruiter } from './Authentication';
+export {
     Job,
     getFilteredJobs,
     generateJobNumber,
-    loginAdmin,
-    loginRecruiter,
     Candidate,
     getFilteredCandidates,
     generateCandidateId,
@@ -34,5 +30,11 @@ export
     getAllSectors,
     getOpenSectors,
     getClosedSectors,
-    getConnectedUser
+    loginAdmin,
+    loginRecruiter,
+    getConnectedUser,
+    sendResetMail,
+    isConnected,
+    loguotRecruiter,
+    updateRecruiterPassword
 }
