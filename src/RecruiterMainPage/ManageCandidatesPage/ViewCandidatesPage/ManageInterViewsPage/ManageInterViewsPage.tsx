@@ -350,7 +350,7 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 												sx={{
 													'& .MuiOutlinedInput-root': {
 														'& fieldset': {
-															borderColor: selectedJobError && jobValue === "" ? 'red' : "", // Set the border color here
+															borderColor: selectedJobError && jobValue === "" ? 'red' : "",
 														}
 													},
 												}}
@@ -368,6 +368,10 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 											}
 											setInterviewSummary("");
 											setInterviewIndex(-1);
+											if (!value || value === "")
+											{
+												setCandidateJobStatus(null);
+											}
 											setJobValue(value);
 										}}
 									/>
@@ -426,7 +430,7 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 								callback={areYouSureCallback}
 								setSnackBarOpen={setSnackBarOpen}
 							/>
-							<SuccessMessageSnackbar open={snackBarOpen} onClose={snackBarOnClose}/>
+							<SuccessMessageSnackbar open={snackBarOpen} onClose={snackBarOnClose} />
 
 							{/* Summary of interview */}
 							{interviewIndex !== -1 && jobValue !== "" ?
@@ -446,25 +450,27 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 										onInput={handleinterviewSummaryChange}
 									/>
 									{/* Level of compatibility */}
-									<FormControl>
-										<FormLabel>דרגת התאמה (יותר גבוה = יותר מתאים)</FormLabel>
-										<RadioGroup row value={matchingRate.toString()} onChange={handleMatchingRateRadioButtons}>
-											<FormControlLabel value="1" control={<Radio />} label="1" />
-											<FormControlLabel value="2" control={<Radio />} label="2" />
-											<FormControlLabel value="3" control={<Radio />} label="3" />
-											<FormControlLabel value="4" control={<Radio />} label="4" />
-											<FormControlLabel value="5" control={<Radio />} label="5" />
-										</RadioGroup>
-									</FormControl>
-									{/* form buttons */}
-									<Box sx={interviewSummaryButtonsContainerSx}>
-										<Button
-											variant='contained'
-											sx={{ backgroundColor: GlobalStyle.NavbarBackgroundColor, justifySelf: "start", alignSelf: "start" }}
-											onClick={handleSaveButtonClick}
-										>שמירה
-										</Button>
-									</Box >
+									<Box sx={{display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%"}}>
+										<FormControl>
+											<FormLabel>דרגת התאמה (יותר גבוה = יותר מתאים)</FormLabel>
+											<RadioGroup row value={matchingRate.toString()} onChange={handleMatchingRateRadioButtons}>
+												<FormControlLabel value="1" control={<Radio />} label="1" />
+												<FormControlLabel value="2" control={<Radio />} label="2" />
+												<FormControlLabel value="3" control={<Radio />} label="3" />
+												<FormControlLabel value="4" control={<Radio />} label="4" />
+												<FormControlLabel value="5" control={<Radio />} label="5" />
+											</RadioGroup>
+										</FormControl>
+										{/* form buttons */}
+										<Box sx={interviewSummaryButtonsContainerSx}>
+											<Button
+												variant='contained'
+												sx={{ backgroundColor: GlobalStyle.NavbarBackgroundColor, justifySelf: "start", alignSelf: "start" }}
+												onClick={handleSaveButtonClick}
+											>שמירה
+											</Button>
+										</Box >
+									</Box>
 								</Box>
 								: <></>
 							}

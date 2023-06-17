@@ -68,7 +68,6 @@ export const interviewSummaryButtonsContainerSx: SxProps = {
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
-    width: { sx: "100%", md: "90%" },
     marginTop: "1rem",
     marginBottom: "4rem"
 }
