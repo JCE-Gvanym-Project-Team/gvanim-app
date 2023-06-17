@@ -243,7 +243,6 @@ export default function OneJobPage()
 
         if (recommendersListOpen && !checkRecommenders())
         {
-            console.log(recommendersErrors);
             return;
         }
         setCvFileError(false);
@@ -440,7 +439,7 @@ export default function OneJobPage()
                         marginLeft: marginLeftAndRight,
                         marginRight: marginLeftAndRight,
                         backgroundColor: "background.main",
-                        marginTop: "179px",
+                        marginTop: "136px",
                     }}
                 >
 
@@ -509,43 +508,81 @@ export default function OneJobPage()
                     {/* Separator */}
                     <Box sx={{ width: { xs: "100%", md: "36.6vw" }, backgroundColor: "background.jobTitleSeparator", height: 2, opacity: 0.2, marginTop: "27px" }} />
 
-                    {/* Job description, stats and requirements */}
-                    <Box
-                        sx={{
-                            display: "flex",
-                            flexDirection: { xs: "column", md: "row" },
-                            justifyContent: "stretch",
-                            backgroundColor: "background.main",
-                            marginTop: { xs: "44px", md: "128px" }
-                        }}
-                    >
+                    <Box>
 
-                        {/* Description, requirements, stats and additional info */}
+                        {/* Job description, stats and requirements */}
                         <Box
                             sx={{
                                 display: "flex",
-                                flexDirection: "column",
-                                backgroundColor: "background.box",
-                                flex: 100,
-                                marginRight: { xs: "0", md: "1rem" },
+                                flexDirection: { xs: "column", md: "row" },
+                                justifyContent: "stretch",
+                                backgroundColor: "background.main",
+                                marginTop: { xs: "44px", md: "128px" }
                             }}
                         >
-                            {/* description and requirements */}
+
+                            {/* Description, requirements, stats and additional info */}
                             <Box
                                 sx={{
                                     display: "flex",
-                                    flexDirection: "column"
+                                    flexDirection: "column",
+                                    backgroundColor: "background.box",
+                                    flex: 100,
+                                    marginRight: { xs: "0", md: "1rem" },
                                 }}
                             >
-
-                                {/* description */}
+                                {/* description and requirements */}
                                 <Box
                                     sx={{
-                                        flex: 7
+                                        display: "flex",
+                                        flexDirection: "column"
                                     }}
                                 >
-                                    <Typography variant={screenSize === "xs" ? "subtitle1" : 'h2'} color={"primary.descAndReqTitle"}>
-                                        תיאור המשרה:
+
+                                    {/* description */}
+                                    <Box
+                                        sx={{
+                                            flex: 7
+                                        }}
+                                    >
+                                        <Typography variant={screenSize === "xs" ? "subtitle1" : 'h2'} color={"primary.descAndReqTitle"}>
+                                            תיאור המשרה:
+                                        </Typography>
+
+                                        <Typography
+                                            variant={screenSize === "xs" ? "subtitle2" : 'h4'}
+                                            marginTop={"15px"}
+                                            sx={{
+                                                backgroundColor: "background.boxInner",
+                                                color: "secondary.descAndReqText",
+                                                width: { xs: "100%", md: "30vw" }
+                                            }}
+                                        >
+                                            {job?._description?.length! >= 1 ?
+                                                job?._description[0].split('\n').map((line, index) =>
+                                                {
+                                                    return (
+                                                        <React.Fragment key={"jobDescriptionLine" + index}>
+                                                            {line}
+                                                            <br />
+                                                        </React.Fragment>
+                                                    )
+                                                })
+                                                : ""
+                                            }
+                                        </Typography>
+                                    </Box>
+
+                                </Box>
+                                {/* requirements */}
+                                <Box
+                                    sx={{
+                                        backgroundColor: "transparent",
+                                        flex: 4
+                                    }}
+                                >
+                                    <Typography variant={screenSize === "xs" ? "subtitle1" : 'h2'} sx={{ color: "primary.descAndReqTitle", marginTop: { xs: "44px", md: "73px" } }}>
+                                        דרישות התפקיד:
                                     </Typography>
 
                                     <Typography
@@ -554,60 +591,24 @@ export default function OneJobPage()
                                         sx={{
                                             backgroundColor: "background.boxInner",
                                             color: "secondary.descAndReqText",
-                                            width: { xs: "100%", md: "30vw" }
+                                            width: { xs: "100%", md: "28vw" }
                                         }}
                                     >
-                                        {job?._description?.length! >= 1 ?
-                                            job?._description[0].split('\n').map((line, index) =>
-                                            {
-                                                return (
-                                                    <React.Fragment key={"jobDescriptionLine" + index}>
-                                                        {line}
-                                                        <br />
-                                                    </React.Fragment>
-                                                )
-                                            })
-                                            : ""
-                                        }
+                                        {job?._requirements.split('\n').map((line, index) =>
+                                        {
+                                            return (
+                                                <React.Fragment key={"jobRequirementsLine" + index}>
+                                                    {line}
+                                                    <br />
+                                                </React.Fragment>
+                                            )
+                                        })}
                                     </Typography>
+
                                 </Box>
 
-                            </Box>
-                            {/* requirements */}
-                            <Box
-                                sx={{
-                                    backgroundColor: "transparent",
-                                    flex: 4
-                                }}
-                            >
-                                <Typography variant={screenSize === "xs" ? "subtitle1" : 'h2'} sx={{ color: "primary.descAndReqTitle", marginTop: { xs: "44px", md: "73px" } }}>
-                                    דרישות התפקיד:
-                                </Typography>
-
-                                <Typography
-                                    variant={screenSize === "xs" ? "subtitle2" : 'h4'}
-                                    marginTop={"15px"}
-                                    sx={{
-                                        backgroundColor: "background.boxInner",
-                                        color: "secondary.descAndReqText",
-                                        width: { xs: "100%", md: "28vw" }
-                                    }}
-                                >
-                                    {job?._requirements.split('\n').map((line, index) =>
-                                    {
-                                        return (
-                                            <React.Fragment key={"jobRequirementsLine" + index}>
-                                                {line}
-                                                <br />
-                                            </React.Fragment>
-                                        )
-                                    })}
-                                </Typography>
-
-                            </Box>
-
-                            {/* not sure about additional info */}
-                            {/* Additional Info
+                                {/* not sure about additional info */}
+                                {/* Additional Info
                             <Box
                                 sx={{
                                     display: job?._description?.length! >= 2 ? "none" : "block"
@@ -633,11 +634,46 @@ export default function OneJobPage()
                                 </Typography>
                             </Box> */}
 
+                            </Box>
+
+
+
+                            {/* Job Details */}
+                            <JobsDetails job={job} screenSize={screenSize} />
+
                         </Box>
 
-                        {/* Job Details */}
-                        <JobsDetails job={job} screenSize={screenSize} />
+                        {/* button that redirects to details */}
+                        <Box sx={{ position: "absolute", left: { lg: "20px", xl: "10px" }, marginTop: "-60px"}}>
+                            <Button
+                                
+                                sx={{
+                                    paddingTop: "13px",
+                                    paddingBottom: "13px",
+                                    paddingLeft: "28px",
+                                    paddingRight: "28px",
+                                    backgroundColor: "background.cvButton",
+                                    "&:hover" : {
+                                        backgroundColor: "background.cvButtonHover"
+                                    },
+                                    boxShadow: "0px 3px 6px #00000029",
+                                    borderRadius: "36px"
+                                }}
+                                onClick={() => sendToDetails()}
+                            >
+                                <Typography
+                                    variant='h4'
+                                    color={"primary.textBright"}
+                                    sx={{ display: { lg: "none", xl: "block" } }}>
+                                    להגשת מועמדות
+                                </Typography>
 
+                                <Icon sx={{ height: "30px", width: "40px", color: "primary.textBright", marginLeft: { xs: "2px", md: "12px" } }}
+                                    component={DownArrowSVG}
+                                />
+
+                            </Button>
+                        </Box>
                     </Box>
 
                     {/* Apply Icon + Apply Text*/}
