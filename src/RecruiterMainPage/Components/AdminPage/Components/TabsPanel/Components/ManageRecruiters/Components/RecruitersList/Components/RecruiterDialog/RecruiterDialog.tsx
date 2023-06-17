@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
 import { TransitionProps } from '@mui/material/transitions';
-import { Box, Button, Chip, Divider, Stack, TextField, Typography } from '@mui/material';
+import { Box, Button, Chip, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, Stack, TextField, Typography } from '@mui/material';
 import { EditNote, GroupAdd } from '@mui/icons-material';
 import { MyFieldsSx } from './RecruiterDialogStyle';
 import Tooltip from '@mui/material/Tooltip';
@@ -27,7 +27,7 @@ const Transition = React.forwardRef(function Transition(
 	return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function RecruiterDialog(props: { recruiterRow: Recruiter, recruiters: any, setRecruiters: any, setSnackbar: any, isEdit: boolean}): JSX.Element {
+export default function RecruiterDialog(props: { recruiterRow: Recruiter, recruiters: any, setRecruiters: any, setSnackbar: any, isEdit: boolean }): JSX.Element {
 	const { recruiterRow, recruiters, setRecruiters, setSnackbar, isEdit } = props;
 	const [recruiterSectors, setRecruiterSectors] = React.useState<string[]>([]);
 	const [sectorsSelection, setSectorsSelection] = React.useState<string[]>([]);
@@ -35,10 +35,15 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 	const [firstName, setFirstName] = React.useState('');
 	const [lastName, setLastName] = React.useState('');
 	const [email, setEmail] = React.useState('');
+	const [firstNameError, setFirstNameError] = React.useState('');
+	const [lastNameError, setLastNameError] = React.useState('');
+	const [emailError, setEmailError] = React.useState('');
 	const [saveButton, setSaveButton] = React.useState(false);
 	const [open, setOpen] = React.useState(false);
+	const [dialogOpen, setDialogOpen] = React.useState(false);
+	const [dialogEmail, setDialogEmail] = React.useState('');
+	const [dialogPassword, setDialogPassword] = React.useState('');;
 	const rew = new Recruiter();
-	console.log(typeof rew);
 
 	React.useEffect(() => {
 		const fetchData = async () => {
@@ -72,7 +77,7 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 
 
 	const handleRemoveRecruiter = async () => {
-        console.log(typeof recruiterRow);
+		console.log(typeof recruiterRow);
 		//await recruiterRow?.remove();
 		// const updateData = recruiters.filter(rec => rec._id !== recruiterRow._id);
 		// setRecruiters(updateData);
@@ -83,20 +88,42 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 
 	}
 	const handleSubmit = async () => {
+		if (firstName.trim() === '') {
+			setFirstNameError('שדה זה הוא חובה');
+			return;
+		}
+
+		if (lastName.trim() === '') {
+			setLastNameError('שדה זה הוא חובה');
+			return;
+		}
+
+		if (email.trim() === '') {
+			setEmailError('שדה זה הוא חובה');
+			return;
+		}
 		const isValidEmail = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email);
 		if (!isValidEmail) {
 			alert('יש להזין כתובת תקינה');
 			setEmail('');
 			return;
 		}
+		if (!isEdit) {
+			const newRecruter = new Recruiter(email, firstName, lastName, sectorsSelection);
+			const firstPassword = generateCodeFromEmail(email);
+			//	await newRecruter.add(firstPassword);
+			setDialogOpen(true);
+			setDialogEmail(email);
+			setDialogPassword(firstPassword);
+		}
+		else {
+			// recruiter.edit(email, firstName, lastName);  // one more argument is needed (Sectors)
 
-		const newRecruter = new Recruiter(email, firstName, lastName, sectorsSelection);
-		await newRecruter.add();
-		await console.log(newRecruter);
-		// recruiter.edit(email, firstName, lastName);  // one more argument is needed (Sectors)
-		// setOpen(false);
-		//alert("need to implement");
+			//alert("need to implement");
+			setOpen(false);
+		}
 	};
+
 
 	const handleClickOpen = () => {
 		setOpen(true);
@@ -106,6 +133,10 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 		setOpen(false);
 	};
 
+	const handleDialogClose = () => {
+		setDialogOpen(false);
+		setOpen(false);
+	};
 
 	return (
 		<Box>
@@ -180,10 +211,14 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 														if (!isHebrewInput && e.target.value.length > 0) {
 															setFirstName('');
 															alert('יש להקליד בעברית בלבד');
+															return;
 														}
 														setFirstName(e.target.value); setSaveButton(true);
+														setFirstNameError('');
 													}
 												}
+												error={firstNameError !== ''}
+												helperText={firstNameError}
 											/>
 										</Box>
 
@@ -205,7 +240,10 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 															return;
 														}
 														setLastName(e.target.value); setSaveButton(true);
+														setLastNameError('');
 													}}
+												error={lastNameError !== ''}
+												helperText={lastNameError}
 											/>
 										</Box>
 
@@ -222,16 +260,13 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 												value={email}
 												onChange={
 													(e) => {
-														// const isHebrewInput = /^[א-ת\s]+$/u.test(e.target.value);
-														// if (!isHebrewInput && e.target.value.length > 0) {
-															// setEmail('');
-															// alert('יש להזין כתובת תקינה');
-															// return;
-														// }
 														setEmail(e.target.value);
 														setSaveButton(true);
+														setEmailError('');
 													}
 												}
+												error={emailError !== ''}
+												helperText={emailError}
 											/>
 										</Box>
 
@@ -240,6 +275,19 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 										</Box>
 									</Stack>
 								</Box>
+								<Dialog open={dialogOpen} onClose={handleDialogClose}>
+									<DialogTitle>מגייס/ת חדש/ה הצטרפ/ה למערכת</DialogTitle>
+									<DialogContent>
+										<DialogContentText>
+											מייל: {dialogEmail}
+											<br />
+											סיסמא זמנית: {dialogPassword}
+										</DialogContentText>
+									</DialogContent>
+									<DialogActions>
+										<Button onClick={handleDialogClose}>סגור</Button>
+									</DialogActions>
+								</Dialog>
 								<Divider sx={{ mt: 3 }} />
 								{/* <Box sx={{
 									mt: 1,
@@ -268,9 +316,9 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 				<Divider />
 				<Stack spacing={1} direction='row' sx={{ padding: 2, display: 'flex', justifyContent: 'space-between' }}>
 					{isEdit && (
-					<Box>
-						<RemoveConfirmPopup handleRemoveRecruiter={handleRemoveRecruiter} />
-					</Box>)
+						<Box>
+							<RemoveConfirmPopup handleRemoveRecruiter={handleRemoveRecruiter} />
+						</Box>)
 					}
 
 					<Button disabled={!saveButton} onClick={handleSubmit} variant='contained' color='primary'>
@@ -288,4 +336,33 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 
 }
 
+
+
+
+
+
+
+
+
+
+
+
+function generateCodeFromEmail(email) {
+	const atIndex = email.indexOf('@');
+
+	if (atIndex === -1) {
+		throw new Error('Invalid email format');
+	}
+
+	const username = email.substring(0, atIndex);
+	const usernameSubstring = username.substring(0, Math.min(4, username.length));
+
+	let code = usernameSubstring;
+
+	while (code.length < 6) {
+		code += Math.floor(Math.random() * 10);
+	}
+
+	return code;
+}
 
