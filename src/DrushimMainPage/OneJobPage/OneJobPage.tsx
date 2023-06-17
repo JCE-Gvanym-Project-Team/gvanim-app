@@ -190,7 +190,6 @@ export default function OneJobPage()
     // submit
     const handleSubmit = async () =>
     {
-        console.log(candidateName);
         // handle errors
         if (!candidateName || candidateName === "")
         {
@@ -224,23 +223,31 @@ export default function OneJobPage()
             setCandidateEmailError(false);
         }
 
-        if (candidateName === "" || candidateSurname === "" || candidatePhone === "" || candidateEmail === "")
-        {
-            return;
-        }
-
         if (!cvFile)
         {
             setCvFileError(true);
+        }
+
+        if (candidateName === "" ||
+            candidateSurname === "" ||
+            candidatePhone === "" ||
+            candidateEmail === "" ||
+            !isPhoneValid(candidatePhone) ||
+            !isEmailValid(candidateEmail) ||
+            !cvFile
+        )
+        {
+            sendToDetails();
             return;
         }
-        setCvFileError(false);
 
         if (recommendersListOpen && !checkRecommenders())
         {
             console.log(recommendersErrors);
             return;
         }
+        setCvFileError(false);
+
 
         // insert candidate into database
         setLoading(true);
