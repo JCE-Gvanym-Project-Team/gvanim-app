@@ -39,7 +39,6 @@ export default function PasswordSettings(props: { passwordEdit: any }) {
                 setConfirmPasswordError(true);
             } else { // if sucsess
                 setConfirmPasswordError(false);
-
                 // Perform password update logic here
             }
         }
