@@ -53,8 +53,8 @@ export default function TabsPane() {
         if (userCredential?.email != null)
           setUserEmail(userCredential?.email);
         console.log(userEmail);
-        // if (process.env.REACT_APP_ADMIN_MAIL === userEmail)
-          // setIsAdminUser(true);
+        if (process.env.REACT_APP_ADMIN_MAIL === userEmail)
+          setIsAdminUser(true);
       })
       .catch((error) => {
         console.log(error);
