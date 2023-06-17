@@ -6,7 +6,9 @@ import {
   FormControlLabel,
   FormHelperText,
   FormLabel,
+  MenuItem,
   Rating,
+  Select,
   Stack,
   Switch,
   TextField,
@@ -47,6 +49,7 @@ import {
   jobTextSx,
   mainStackSx,
 } from "../ViewCandidatesPage/ViewCandidatesPageStyle";
+import { CandidateJobStatus } from "../../../Firebase/FirebaseFunctions/CandidateJobStatus";
 
 const Form = styled("form")(({ theme }) => ({
   width: "100%",
@@ -65,6 +68,9 @@ const NewCandidatePage = () => {
   const [candidateGeneralRating, setCandidateGeneralRating] =
     useState<number>(-1);
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [jobs, setJobs] = useState<Job[]>([]);
+  const [selectedJob, setSelectedJob] = useState<Job | null>(null);
+  const [cvFile, setCvFile] = useState<File | null>(null);
 
   // errors
   const [errorCandidateFirstName, setErrorCandidateFirstName] =
@@ -78,7 +84,7 @@ const NewCandidatePage = () => {
   const [errorCandidateNote, setErrorCandidateNote] = useState<boolean>(false);
   const [errorCandidateGeneralRating, setErrorCandidateGeneralRating] =
     useState<boolean>(false);
-
+  const [errorJobSelection, setErrorJobSelection] = useState<boolean>(false);
   // my "editJob"
   const [myCandidate, setMyCandidate] = useState<Candidate>();
   const [generalRating, setGeneralRating] = useState<number>(-1);
@@ -122,6 +128,11 @@ const NewCandidatePage = () => {
     setLoading(false);
   };
 
+  const fetchJobs = async () => {
+    const fetchedJobs = await getFilteredJobs();
+    setJobs(fetchedJobs);
+  };
+
   useEffect(() => {
     setLoading(false);
     if (state !== null) {
@@ -130,12 +141,17 @@ const NewCandidatePage = () => {
         fetchCandidate();
       }
     }
+    fetchJobs();
   }, []);
 
   const navigate = useNavigate();
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
+    if (!selectedJob) {
+      setErrorJobSelection(true);
+      return;
+    }
     setFormSubmitted(true);
     if (
       candidateFirstName.length === 0 ||
@@ -188,19 +204,33 @@ const NewCandidatePage = () => {
       // add
       else {
         setLoading(true);
+        let NewCandidateId = await generateCandidateId();
 
         let candidate = new Candidate(
-          await generateCandidateId(),
+          NewCandidateId,
           candidateFirstName,
           candidateLastName,
           candidateEmail,
           candidatePhone,
-          candidateGeneralRating,
+          -1,
           candidateNote
         );
 
-        await candidate.add();
-
+        // Add the candidate to the selected job
+        const jobNumber = selectedJob._jobNumber;
+        const candidateJobStatus = new CandidateJobStatus(
+          jobNumber,
+          candidate._id,
+          "הוגשה מועמדות"
+        );
+        await candidateJobStatus.add();
+        if (!(await candidate.add())) {
+          candidate = await getFilteredCandidates(
+            ["eMail", "phone"],
+            [candidateEmail, candidatePhone]
+          )[0];
+          NewCandidateId = candidate._id;
+        }
         setLoading(false);
 
         navigate("/management/manageCandidates", {
@@ -209,6 +239,13 @@ const NewCandidatePage = () => {
           },
         });
       }
+    }
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      const file = event.target.files[0];
+      setCvFile(file);
     }
   };
 
@@ -672,22 +709,9 @@ const NewCandidatePage = () => {
                                 setPhoneNumber={setCandidatePhone}
                                 error={errorCandidatePhone}
                                 setError={setErrorCandidatePhone}
+                                formSubmitted={formSubmitted} // Pass formSubmitted prop to PhoneNumberSelection
                               />
                             </Box>
-                            {errorCandidatePhone && (
-                              <FormHelperText
-                                error
-                                hidden={!errorCandidatePhone}
-                                security="invalid"
-                                style={{
-                                  color: "#ef5350",
-                                  marginRight: 0,
-                                  marginTop: 0,
-                                }}
-                              >
-                                זהו שדה חובה.
-                              </FormHelperText>
-                            )}
                           </Box>
 
                           <Box sx={{ width: "100%" }}>
@@ -827,17 +851,6 @@ const NewCandidatePage = () => {
                           />
 
                           <FormHelperText
-                            hidden={!errorCandidateGeneralRating}
-                            security="invalid"
-                            style={{
-                              color: "#ef5350",
-                              marginRight: "2px",
-                              marginTop: 0,
-                            }}
-                          >
-                            זהו שדה חובה.
-                          </FormHelperText>
-                          <FormHelperText
                             hidden={errorCandidateGeneralRating}
                             security="invalid"
                             style={{
@@ -849,6 +862,123 @@ const NewCandidatePage = () => {
                             דירוג זה ישמש להערכה כללית.{" "}
                           </FormHelperText>
                         </Box>
+
+                        <Divider sx={{ mt: 4 }} />
+
+                        <Box sx={{ width: "100%" }}>
+                          <FormLabel
+                            sx={{
+                              display: "flex",
+                              flexDirection: "row",
+                              justifyContent: "start",
+                            }}
+                          >
+                            <Typography sx={MyLabelSx}>
+                              קובץ קורות חיים:
+                            </Typography>
+                          </FormLabel>
+
+                          <TextField
+                            type="file"
+                            id="resume"
+                            variant="outlined"
+                            onChange={handleFileChange}
+                          />
+                        </Box>
+
+                        <Box sx={{ width: "100%" }}>
+                          <FormLabel
+                            sx={{
+                              display: "flex",
+                              flexDirection: "row",
+                              justifyContent: "start",
+                            }}
+                          >
+                            <Typography sx={MyLabelSx}>משרה:</Typography>
+                            <Typography sx={{ fontSize: 14, color: "#e91e63" }}>
+                              *
+                            </Typography>
+                          </FormLabel>
+
+                          <Select
+                            sx={{
+                              "& .muirtl-9ddj71-MuiInputBase-root-MuiOutlinedInput-root":
+                                {
+                                  borderRadius: "0.375rem",
+                                  font: "small-caption",
+                                },
+                              "& .muirtl-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input":
+                                {
+                                  ":focus": {
+                                    boxShadow: "0 0 0 0.2rem #c0cefc",
+                                    backgroundColor: "#fff",
+                                    border: "1px solid #7795f8",
+                                    borderRadius: "0.375rem",
+                                    outline: 0,
+                                  },
+                                },
+                              "& .muirtl-9ddj71-MuiInputBase-root-MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline":
+                                {
+                                  border: "1px solid #7795f8",
+                                },
+
+                              "& .muirtl-9ddj71-MuiInputBase-root-MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline":
+                                {
+                                  borderColor: "rgba(220,53,69)",
+                                },
+                              "& .muirtl-9ddj71-MuiInputBase-root-MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+                                {
+                                  border: "1px",
+                                },
+                            }}
+                            style={{ width: "100%" }}
+                            id="jobNumber"
+                            required
+                            value={selectedJob ? selectedJob._jobNumber : ""}
+                            error={errorJobSelection}
+                            onChange={(e) => {
+                              const jobNumber = parseInt(
+                                e.target.value as string
+                              );
+                              const selectedJob =
+                                jobs.find(
+                                  (job) => job._jobNumber === jobNumber
+                                ) || null;
+                              setSelectedJob(selectedJob);
+                              if (!selectedJob && errorJobSelection) {
+                                setErrorJobSelection(false);
+                              }
+                            }}
+                          >
+                            <MenuItem value="">
+                              <em>אנא בחר משרה</em>
+                            </MenuItem>
+                            {jobs.map((job) => (
+                              <MenuItem
+                                key={job._jobNumber}
+                                value={job._jobNumber}
+                              >
+                                {job._title}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                          <FormHelperText
+                            hidden={!errorJobSelection}
+                            security="invalid"
+                            style={{
+                              color: "#ef5350",
+                              marginRight: "2px",
+                              marginTop: 0,
+                            }}
+                          >
+                            זהו שדה חובה.
+                          </FormHelperText>
+                        </Box>
+                        <Stack
+                          direction="row"
+                          spacing={2}
+                          sx={{ mt: 3, mb: 3 }}
+                        ></Stack>
 
                         <Stack
                           direction="row"
