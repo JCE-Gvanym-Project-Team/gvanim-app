@@ -4,7 +4,6 @@ import { ColorModeContext, colorTokens } from '../theme';
 import JobItem from './Components/JobItem/JobItem';
 import SearchBar from './Components/SearchBar/SearchBar';
 import { Job } from '../../Firebase/FirebaseFunctions/Job';
-import { ReactComponent as LocationSVG } from '../AllJobsPage/Resources/icon-location2.svg';
 import { ReactComponent as ScopeSVG } from '../AllJobsPage/Resources/Icon awesome-clock.svg';
 import { ReactComponent as RoleSVG } from '../AllJobsPage/Resources/Group 71.svg';
 import { ReactComponent as FilterSVG } from '../AllJobsPage/Resources/Group 1.svg';
