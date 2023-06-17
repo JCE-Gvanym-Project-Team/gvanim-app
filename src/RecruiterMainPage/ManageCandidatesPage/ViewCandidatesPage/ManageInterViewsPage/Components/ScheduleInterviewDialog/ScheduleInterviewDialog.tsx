@@ -64,7 +64,7 @@ export default function ScheduleInterviewDialog(props: {
     const navigate = useNavigate();
 
     // time changed 
-    const handleDateChange = (value) =>
+    const handleDateChange = async (value) =>
     {
         setDate(value);
         const chosenDate: Date = value?.$d;
@@ -73,10 +73,10 @@ export default function ScheduleInterviewDialog(props: {
         chosenDate?.setMinutes(chosenTime ? chosenTime.getMinutes() : 0);
         setInterviewDate(chosenDate);
 
-        setWhatsappMessage(getWhatsappMessage(candidate, chosenJobValue, allJobs, newStatus, chosenDate));
+        setWhatsappMessage(await getWhatsappMessage(candidate, chosenJobValue, allJobs, newStatus, chosenDate));
     };
 
-    const handleTimeChange = (value) =>
+    const handleTimeChange = async (value) =>
     {
         setTime(value);
         const chosenDate: Date = date?.$d;
@@ -86,7 +86,7 @@ export default function ScheduleInterviewDialog(props: {
         chosenTime?.setDate(chosenDate ? chosenDate.getDate() : 0);
         setInterviewDate(chosenDate);
 
-        setWhatsappMessage(getWhatsappMessage(candidate, chosenJobValue, allJobs, newStatus, chosenTime));
+        setWhatsappMessage(await getWhatsappMessage(candidate, chosenJobValue, allJobs, newStatus, chosenTime));
     };
 
     const setDefaults = () =>
@@ -320,10 +320,10 @@ export default function ScheduleInterviewDialog(props: {
                         </MenuItem>
                     }
                     renderInput={(params) => <TextField {...params} label="סטטוס חדש" />}
-                    onInputChange={(event, value) =>
+                    onInputChange={async(event, value) =>
                     {
 
-                        setWhatsappMessage(getWhatsappMessage(candidate, chosenJobValue, allJobs, value, interviewDate));
+                        setWhatsappMessage(await getWhatsappMessage(candidate, chosenJobValue, allJobs, value, interviewDate));
 
                         handleStatusChanged(value);
                     }}
@@ -584,7 +584,7 @@ const rerender = function (rerenderKey, setRerenderKey)
     }
 }
 
-const getWhatsappMessage = function (candidate, chosenJobValue, allJobs, status, interviewDate)
+const getWhatsappMessage = async function (candidate, chosenJobValue, allJobs, status, interviewDate)
 {
     const temp = new Candidate(candidate ? candidate._id : "", candidate?._firstName, candidate?._lastName, candidate?._phone, candidate?._eMail, candidate?._generalRating, candidate?._note);
 
@@ -592,7 +592,7 @@ const getWhatsappMessage = function (candidate, chosenJobValue, allJobs, status,
     const tempRecruiter = new Recruiter("recruiteremail@gmail.com", "firstname", "lastname", ["asd", "asdasd"]);
 
     // get currently connected recruiter
-    const user = getConnectedUser();
+    const user = await getConnectedUser();
     console.log(user);
 
     const jobNumberString = chosenJobValue?.match(/\d+/)?.[0];
