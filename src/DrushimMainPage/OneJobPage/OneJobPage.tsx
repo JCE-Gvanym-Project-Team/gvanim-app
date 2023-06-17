@@ -606,12 +606,7 @@ export default function OneJobPage()
                                     </Typography>
 
                                     <Box sx={{ display: "flex", flexDirection: "column" }}>
-
-                                        <Button>asd</Button>
-                                        <Button>asd</Button>
-                                        <Button>asd</Button>
-                                        <Button>asd</Button>
-                                        <Button>asd</Button>
+                                        
                                     </Box>
 
 
