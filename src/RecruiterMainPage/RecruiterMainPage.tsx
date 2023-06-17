@@ -18,94 +18,100 @@ import { CssBaseline } from "@mui/material";
 import CandidateFiltersForm from "./ReportsPage/Components/Reports/CandidatesFiltersForm";
 import JobsFiltersForm from "./ReportsPage/Components/Reports/JobsFitersForm";
 import ManageInterviewsPage from "./ManageCandidatesPage/ViewCandidatesPage/ManageInterViewsPage/ManageInterViewsPage";
+import UpdateAccount from "./Components/AdminPage/Components/TabsPanel/Components/ManageAccount/Components/AccountSettings/UpdateAccount/UpdateAccount";
 import NewCandidatePage from "./ManageCandidatesPage/CreateCandidatePage/NewCandidatePage";
 
-function RecruiterMainPage({ handlelogout }) {
-  const [allJobs, setAllJobs] = React.useState<any[]>([]);
-  const [candidateIDs, setCandidateIDs] = useState<string[]>([]);
+function RecruiterMainPage({ handlelogout })
+{
+	const [allJobs, setAllJobs] = React.useState<any[]>([]);
+	const [candidateIDs, setCandidateIDs] = useState<string[]>([]);
 
-  const fetchAllJobs = async () => {
-    const jobs = await getFilteredJobs();
-    const jobsWithId = jobs.map((job) => ({ ...job, id: job._jobNumber }));
-    setAllJobs(jobsWithId);
-  };
+	const fetchAllJobs = async () =>
+	{
+		const jobs = await getFilteredJobs();
+		const jobsWithId = jobs.map((job) => ({ ...job, id: job._jobNumber }));
+		setAllJobs(jobsWithId);
+	};
 
-  const fetchCandidateIDs = async () => {
-    const candidates = await getFilteredCandidates();
-    setCandidateIDs(candidates.map((candidate) => candidate._id));
-  };
+	const fetchCandidateIDs = async () =>
+	{
+		const candidates = await getFilteredCandidates();
+		setCandidateIDs(candidates.map((candidate) => candidate._id));
+	};
 
-  useEffect(() => {
-    fetchAllJobs();
-    fetchCandidateIDs();
-  }, []);
+	useEffect(() =>
+	{
+		fetchAllJobs();
+		fetchCandidateIDs();
+	}, []);
 
-  return (
-    <>
-      <CssBaseline />
-      <NavBar handlelogout={handlelogout} />
-      {allJobs.map((job) => (
-        <Link key={job.id} to={"/management/jobs/" + job.id} />
-      ))}
-      <Routes>
-        {allJobs.map((job) => (
-          <Route
-            path={`jobs/${job.id}`}
-            key={job.id}
-            element={<SingleJob id={job.id}></SingleJob>}
-          />
-        ))}
+	return (
+		<>
+			<CssBaseline />
+			<NavBar handlelogout={handlelogout} />
+			{allJobs.map((job) => (
+				<Link key={job.id} to={"/management/jobs/" + job.id} />
+			))}
+			<Routes>
+				{allJobs.map((job) => (
+					<Route
+						path={`jobs/${job.id}`}
+						key={job.id}
+						element={<SingleJob id={job.id}></SingleJob>}
+					/>
+				))}
 
-        <Route path="" element={<WelcomePage />} />
-        {/* Jobs Routes */}
-        <Route path="manageJobs" element={<ManageJobsPage />} />
-        <Route path="createJob" element={<NewJobPage />} />
+				<Route path="" element={<WelcomePage />} />
+				{/* Jobs Routes */}
+				<Route path="manageJobs" element={<ManageJobsPage />} />
+				<Route path="createJWob" element={<NewJobPage />} />
 
-        {/* Candidate Routes */}
-        <Route path="editCandidate" element={<EditCandidate />} />
-        <Route path="manageCandidates" element={<ManageCandidatesPage />} />
-        <Route path="createCandidate" element={<NewCandidatePage />} />
-        {candidateIDs.map((candidateId) => {
-          return (
-            <React.Fragment key={candidateId + "fragment"}>
-              <Route
-                path={"manageCandidates/" + candidateId}
-                element={
-                  <ViewCandidatesPage
-                    candidateId={candidateId}
-                    key={candidateId + "ViewCandidatesPage"}
-                  />
-                }
-                key={candidateId}
-              />
-              <Route
-                path={"manageCandidates/" + candidateId + "/interviews"}
-                element={
-                  <ManageInterviewsPage
-                    candidateId={candidateId}
-                    key={candidateId + "ViewCandidatesPage"}
-                  />
-                }
-                key={candidateId + "interviews"}
-              />
-            </React.Fragment>
-          );
-        })}
+				{/* Candidate Routes */}
+				<Route path="editCandidate" element={<EditCandidate />} />
+				<Route path="manageCandidates" element={<ManageCandidatesPage />} />
+				<Route path="createCandidate" element={<NewCandidatePage />} />
+				{candidateIDs.map((candidateId) =>
+				{
+					return (
+						<React.Fragment key={candidateId + "fragment"}>
+							<Route
+								path={"manageCandidates/" + candidateId}
+								element={
+									<ViewCandidatesPage
+										candidateId={candidateId}
+										key={candidateId + "ViewCandidatesPage"}
+									/>
+								}
+								key={candidateId}
+							/>
+							<Route
+								path={"manageCandidates/" + candidateId + "/interviews"}
+								element={
+									<ManageInterviewsPage
+										candidateId={candidateId}
+										key={candidateId + "ViewCandidatesPage"}
+									/>
+								}
+								key={candidateId + "interviews"}
+							/>
+						</React.Fragment>
+					);
+				})}
 
-        {/* Reports Routes */}
-        <Route path="reports" element={<ReportsPage />} />
-        <Route path="reports/JobsByFilters" element={<JobsFiltersForm />} />
-        <Route
-          path="reports/CandidateByFilters"
-          element={<CandidateFiltersForm />}
-        />
+				{/* Reports Routes */}
+				<Route path="reports" element={<ReportsPage />} />
+				<Route path="reports/JobsByFilters" element={<JobsFiltersForm />} />
+				<Route
+					path="reports/CandidateByFilters"
+					element={<CandidateFiltersForm />}
+				/>
 
-        {/* Admin Routes */}
-        <Route path="settings" element={<AdminPage />} />
-      </Routes>
-      <Footer />
-    </>
-  );
+				{/* Admin Routes */}
+				<Route path="settings" element={<AdminPage />} />
+			</Routes>
+			<Footer />
+		</>
+	);
 }
 
 export default RecruiterMainPage;
