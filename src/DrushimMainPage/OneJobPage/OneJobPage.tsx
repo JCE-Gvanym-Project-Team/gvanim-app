@@ -38,6 +38,9 @@ export default function OneJobPage()
     const colors = colorTokens(theme.palette.mode);
     const colorMode = useContext(ColorModeContext);
 
+    // scroll into details after error
+    const errorRef = useRef<HTMLParagraphElement>(null);
+
     // dialogs
     const [successDialogOpen, setSuccessDialogOpen] = useState(false);
     const [errorDialogOpen, setErrorDialogOpen] = useState(false);
@@ -176,6 +179,14 @@ export default function OneJobPage()
         setLoading(false);
     }, [location.state])
 
+    const sendToDetails = () =>
+    {
+        if (errorRef.current)
+        {
+            errorRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+
     // submit
     const handleSubmit = async () =>
     {
@@ -215,7 +226,6 @@ export default function OneJobPage()
 
         if (candidateName === "" || candidateSurname === "" || candidatePhone === "" || candidateEmail === "")
         {
-            console.log(candidateNameError);
             return;
         }
 
@@ -397,12 +407,12 @@ export default function OneJobPage()
                     overflow: 'hidden',
                     zIndex: "-1"
                 }}>
-                    {screenSize === "xs" ? 
+                    {screenSize === "xs" ?
                         <img src={MobileBackground}
                             height={"408px"}
                             width={"100%"}
                         />
-                    :
+                        :
                         <Icon sx={{
                             position: 'absolute',
                             top: 0,
@@ -624,7 +634,10 @@ export default function OneJobPage()
                     </Box>
 
                     {/* Apply Icon + Apply Text*/}
-                    <Box sx={{ marginTop: "179px", alignSelf: "center", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+                    <Box
+                        ref={errorRef}
+                        sx={{ marginTop: "179px", alignSelf: "center", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}
+                    >
                         <Icon
                             sx={{ width: { xs: "118px", md: "208px" }, height: { xs: "65px", md: "115px" } }}
                             component={CloudSVG}
