@@ -37,7 +37,7 @@ import { recommendationsButtonSx } from '../../ViewCandidatesPageStyle';
 
 
 
-export default function JobsTable2(props: {
+export default function JobsTable(props: {
     setDataSize: any,
     candidateJobs: any,
     candidateInfo: Candidate | null,

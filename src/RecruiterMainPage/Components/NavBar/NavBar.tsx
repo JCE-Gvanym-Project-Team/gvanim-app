@@ -1,13 +1,34 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Box, Button, Divider, Link, Stack, Typography } from '@mui/material';
 import { ArticleOutlined, AssessmentOutlined, Home, PeopleAltOutlined, Settings } from '@mui/icons-material';
 import { useNavigate } from "react-router-dom";
 import { NavBarSx } from './NavBarStyle';
 import MyDrawer from './Components/MyDrawer/MyDrawer';
 import MyLogoutDialog from './Components/LogoutDialog';
+import { getConnectedUser } from '../../../Firebase/FirebaseFunctions/Authentication';
+import { Recruiter, getRecruitersFromDatabase } from '../../../Firebase/FirebaseFunctions/Recruiter';
 
-export default function NavBar(props: { handlelogout: any }) {
-	const userFirstName = "משתמש";
+export default function NavBar(props: { handlelogout: any })
+{
+    const [recruiter, setRecruiter] = useState<Recruiter | undefined>(undefined);
+
+    useEffect(() =>
+    {
+        (async () =>
+        {
+            const user = await getConnectedUser();
+            const recruiters = await getRecruitersFromDatabase();
+
+            const current_recrutier = recruiters.find((recruiter) =>
+            {
+                return recruiter._email === user?.email;
+            });
+
+            setRecruiter(current_recrutier);
+
+        })()
+
+    }, [])
     const { handlelogout } = props;
     const navigate = useNavigate();
 
@@ -21,28 +42,28 @@ export default function NavBar(props: { handlelogout: any }) {
                     <Box id="drawer-button" display={{ xs: 'inline-block', sm: 'inline-block', md: 'inline-block', lg: 'none', xl: 'none' }} sx={{
                         pt: '0.5rem', pb: '0.5rem', width: '100%'
                     }}>
-                        <MyDrawer handlelogout={handlelogout} userFirstName={userFirstName} />
+                        <MyDrawer handlelogout={handlelogout} userFirstName={recruiter?._firstName} />
                     </Box>
 
 
                     <Stack id='welcome-user' display={{ xs: 'none', sm: 'none', md: 'none', lg: 'flex', xl: 'flex' }} sx={{ width: 'fit-content', borderRight: '1px solid rgba(0, 0, 0, 0.125)', paddingLeft: 1, paddingRight: 3 }}>
                         <Stack direction='row' spacing={1}>
-                            <Typography sx={{ color: '#344767', fontSize: '0.875rem', lineHeight: '1.625',opacity: 0.8 }} >
+                            <Typography sx={{ color: '#344767', fontSize: '0.875rem', lineHeight: '1.625', opacity: 0.8 }} >
                                 שלום
                             </Typography>
 
                             <Stack direction='row'>
                                 <Typography sx={{ color: 'black', fontSize: '0.9rem', lineHeight: '1.625', fontWeight: 600 }} >
-                                    {userFirstName}
+                                    {recruiter?._firstName}
                                 </Typography>
 
                             </Stack>
                         </Stack>
-                        <Typography sx={{ color: '#344767', fontSize: '0.875rem', lineHeight: '1.625',opacity: 0.8  }} >
-                            ברוך הבא!
+                        <Typography sx={{ color: '#344767', fontSize: '0.875rem', lineHeight: '1.625', opacity: 0.8 }} >
+                            ברוך\ה הבא\ה!
                         </Typography>
                     </Stack>
-					
+
 
                     <Stack id='items' divider={<Divider sx={{ height: '50%', alignSelf: 'center' }} orientation="vertical" flexItem />} display={{ xs: 'none', sm: 'none', md: 'none', lg: 'flex', xl: 'flex' }} direction='row' spacing={'1.7rem'}>
                         <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
@@ -50,7 +71,7 @@ export default function NavBar(props: { handlelogout: any }) {
                             <Stack spacing={1} direction='row' sx={{ height: 'fit-content' }}>
                                 <Link onClick={() => navigate('/management')}
                                     sx={{
-										cursor: 'pointer', 
+                                        cursor: 'pointer',
                                         ":hover > #home": {
                                             transition: 'all .2s cubic-bezier(.34,1.61,.7,1.3)',
                                             transform: 'translateY(-2px)',
@@ -71,7 +92,7 @@ export default function NavBar(props: { handlelogout: any }) {
                             <Stack spacing={1} direction='row' sx={{ height: 'fit-content' }}>
                                 <Link onClick={() => navigate('/management/manageJobs')}
                                     sx={{
-										cursor: 'pointer',
+                                        cursor: 'pointer',
                                         ":hover > #jobsIcon": {
                                             transition: 'all .2s cubic-bezier(.34,1.61,.7,1.3)',
                                             transform: 'translateY(-2px)',
@@ -93,7 +114,7 @@ export default function NavBar(props: { handlelogout: any }) {
                             <Stack spacing={1} direction='row' sx={{ height: 'fit-content' }}>
                                 <Link onClick={() => navigate('/management/manageCandidates')}
                                     sx={{
-										cursor: 'pointer',
+                                        cursor: 'pointer',
                                         ":hover > #candidatesIcon": {
                                             transition: 'all .2s cubic-bezier(.34,1.61,.7,1.3)',
                                             transform: 'translateY(-2px)',
@@ -115,7 +136,7 @@ export default function NavBar(props: { handlelogout: any }) {
                             <Stack spacing={1} direction='row' sx={{ height: 'fit-content' }}>
                                 <Link onClick={() => navigate('/management/reports')}
                                     sx={{
-										cursor: 'pointer',
+                                        cursor: 'pointer',
                                         ":hover > #reportsIcon": {
                                             transition: 'all .2s cubic-bezier(.34,1.61,.7,1.3)',
                                             transform: 'translateY(-2px)',

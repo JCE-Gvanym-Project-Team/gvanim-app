@@ -8,7 +8,7 @@ import { ReactComponent as JobStartSVG } from '../../Resources/JobStart.svg';
 import { ReactComponent as YellowEllipseSVG } from '../../Resources/YellowEllipse.svg'
 import { ReactComponent as PinkEllipseSVG } from '../../Resources/PinkEllipse.svg'
 
-export default function FloatingBox(props: { job, screenSize })
+export default function JobDetails(props: { job, screenSize })
 {
     const { job, screenSize } = props;
     const [floatingTop, setFloatingTop] = useState<number>(0);
@@ -66,7 +66,7 @@ export default function FloatingBox(props: { job, screenSize })
             <Box
                 sx={{
                     position: "sticky",
-                    top: floatingTop,
+                    top: 0,
                     maxHeight: "fit-content",
                     paddingRight: "50px",
                     paddingBottom: "46px",

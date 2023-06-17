@@ -1,18 +1,50 @@
 import { Box, Divider, Grid, Link, Paper, Stack, Typography } from '@mui/material'
 import { BoxGradientSx, MyGridItemSx, MyGridSx, MyPaperSx, MyTypographyInfoSx, MyTypographyMainSx, MyTypographyTitleSx } from './WelcomePageStyle'
-import { ArrowBack } from '@mui/icons-material';
+import { ArrowBack, Assessment } from '@mui/icons-material';
 import { useNavigate } from "react-router-dom";
 import MyLoading from '../../Components/MyLoading/MyLoading';
 import { useState, useEffect } from "react";
+import { getFilteredJobs } from '../../Firebase/FirebaseFunctions/Job';
+import { Candidate, getFilteredCandidates } from '../../Firebase/FirebaseFunctions/Candidate';
+import { getFilteredCandidateJobStatuses } from '../../Firebase/FirebaseFunctions/CandidateJobStatus';
 
 
-export default function WelcomePage() {
+export default function WelcomePage()
+{
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
+    const [numJobs, setNumJobs] = useState(0);
+    const [numCandidates, setNumCandidates] = useState(0);
 
 
-    useEffect(() => {
+    const fetchjobs = async () =>
+    {
+        let allJobs = (await getFilteredJobs());
+        allJobs = allJobs.filter((job) =>
+        {
+            return job._open;
+        });
+        setNumJobs((await getFilteredJobs()).length);
+    }
+
+    const fetchCandidates = async () =>
+    {
+        let candidates: any[] = [];
+        let candidateJobStatuses = (await getFilteredCandidateJobStatuses());
+        candidateJobStatuses.forEach((candidateJobStatus) =>
+        {
+            if (!candidates.includes(candidateJobStatus._candidateId)){
+                candidates.push(candidateJobStatus._candidateId);
+            }
+        })
+        setNumCandidates(candidates.length);
+    }
+
+    useEffect(() =>
+    {
         setLoading(false);
+        fetchjobs();
+        fetchCandidates();
     }, []);
 
 
@@ -121,15 +153,15 @@ export default function WelcomePage() {
                             <Grid sx={MyGridSx}>
                                 <Grid item sx={MyGridItemSx}>
                                     <Typography sx={MyTypographyMainSx}>
-                                        70
+                                        {numJobs}
                                     </Typography>
 
                                     <Typography sx={MyTypographyTitleSx}>
-                                        משרות חדשות
+                                        משרות באתר
                                     </Typography>
 
                                     <Typography sx={MyTypographyInfoSx}>
-                                        משרות חדשות שנוספו או עודכנו, למעבר לדף ניהול המשרות:
+                                        למעבר לדף ניהול המשרות:
                                     </Typography>
 
                                     <Box sx={{ display: 'flex', justifyContent: 'center', mt: 1 }}>
@@ -168,15 +200,15 @@ export default function WelcomePage() {
                                 <Grid item sx={MyGridItemSx}>
 
                                     <Typography sx={MyTypographyMainSx}>
-                                        13
+                                        <Assessment sx={MyTypographyMainSx}/>
                                     </Typography>
 
                                     <Typography sx={MyTypographyTitleSx}>
-                                        דוחות חדשים
+                                        הפקת דוחות
                                     </Typography>
 
                                     <Typography sx={MyTypographyInfoSx}>
-                                        דוחות חדשים שנוספו או עודכנו, למעבר לדף ניהול הדוחות:
+                                        למעבר לדף ניהול הדוחות:
                                     </Typography>
 
 
@@ -216,15 +248,15 @@ export default function WelcomePage() {
 
                                 <Grid item sx={MyGridItemSx}>
                                     <Typography sx={MyTypographyMainSx}>
-                                        22
+                                        {numCandidates}
                                     </Typography>
 
                                     <Typography sx={MyTypographyTitleSx}>
-                                        מועמדים חדשים
+                                        מועמדים אקטיביים
                                     </Typography>
 
                                     <Typography sx={MyTypographyInfoSx}>
-                                        מועמדים חדשים שנוספו או שחל שינוי בסטטוס שלהם, למעבר לדף ניהול המועמדים:
+                                        מועמדים שבאמצע תהליך כרגע במערכת. למעבר לדף ניהול המועמדים:
                                     </Typography>
 
                                     <Box sx={{ display: 'flex', justifyContent: 'center', mt: 1 }}>
