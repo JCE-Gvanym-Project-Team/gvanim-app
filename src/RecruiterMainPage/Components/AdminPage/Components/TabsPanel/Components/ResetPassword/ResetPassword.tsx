@@ -27,7 +27,7 @@ export default function UpdateAccount() {
   const [openDialog, setOpenDialog] = React.useState(false);
   const [recruiterSelect, setRecruiterSelect] = React.useState(false);
   const [isAdminUser, setIsAdminUser] = React.useState(false);
-  const [userEmail, setUserEmail] = React.useState('')
+  const [userEmail, setUserEmail] = React.useState('');
 
   React.useEffect(() => {
     const currentUser = getConnectedUser()

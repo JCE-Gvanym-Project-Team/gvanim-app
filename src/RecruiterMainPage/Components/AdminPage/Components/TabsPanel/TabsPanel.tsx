@@ -12,6 +12,7 @@ import ManageRecruiters from './Components/ManageRecruiters/ManageRecruiters';
 import MyLoading from '../../../../../Components/MyLoading/MyLoading';
 import Temp from './Components/ManageRecruiters/Components/RecruitersList/Temp';
 import RessetPassword from '../TabsPanel/Components/ResetPassword/ResetPassword';
+import { getConnectedUser } from '../../../../../Firebase/FirebaseFunctions/Authentication';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -43,6 +44,23 @@ function a11yProps(index: number) {
 export default function TabsPane() {
   const [loading, setLoading] = React.useState(true);
   const [value, setValue] = React.useState(0);
+  const [isAdminUser, setIsAdminUser] = React.useState(false);
+  const [userEmail, setUserEmail] = React.useState('');
+
+  React.useEffect(() => {
+    const currentUser = getConnectedUser()
+      .then((userCredential) => {
+        if (userCredential?.email != null)
+          setUserEmail(userCredential?.email);
+        console.log(userEmail);
+        // if (process.env.REACT_APP_ADMIN_MAIL === userEmail)
+          // setIsAdminUser(true);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -64,17 +82,23 @@ export default function TabsPane() {
             centered
             sx={{ display: { xs: 'flex', sm: 'none', md: 'none', lg: 'none', xl: 'none' }, borderBottom: '1px solid rgba(0, 0, 0, 0.1)' }}
           >
+
             <Tooltip title={'איפוס סיסמא'}>
               <Tab disableRipple icon={<LockOutlinedIcon />} {...a11yProps(0)} />
             </Tooltip>
+            {isAdminUser && (
+              <>
+                <Tooltip title={'ניהול מגייסים'}>
+                  <Tab disableRipple icon={<PeopleAltOutlined />} {...a11yProps(1)} />
+                </Tooltip>
 
-            <Tooltip title={'ניהול מגייסים'}>
-              <Tab disableRipple icon={<PeopleAltOutlined />} {...a11yProps(1)} />
-            </Tooltip>
+                <Tooltip title={'אשכולות ותפקידים'}>
+                  <Tab disableRipple icon={<AccountTree />} {...a11yProps(2)} />
+                </Tooltip>
 
-            <Tooltip title={'אשכולות ותפקידים'}>
-              <Tab disableRipple icon={<AccountTree />} {...a11yProps(2)} />
-            </Tooltip>
+              </>
+            )}
+
           </Tabs>
 
           <Tabs
@@ -86,9 +110,14 @@ export default function TabsPane() {
           >
             <Tab disableRipple label="איפוס סיסמא" {...a11yProps(0)} />
 
-            <Tab disableRipple label="ניהול מגייסים" {...a11yProps(1)} />
+            {isAdminUser && (
+              <>
+                <Tab disableRipple label="ניהול מגייסים" {...a11yProps(1)} />
 
-            <Tab disableRipple label="אשכולות ותפקידים" {...a11yProps(2)} />
+                <Tab disableRipple label="אשכולות ותפקידים" {...a11yProps(2)} />
+              </>
+            )}
+
           </Tabs>
 
           <TabPanel value={value} index={0}>
