@@ -10,7 +10,6 @@ export const BoxGradientSx: SxProps = {
     background: 'linear-gradient(310deg, #7795f8,#555abf)',
     // background: 'linear-gradient(150deg, #7795f8 15%, #6772e5 70%, #555abf 94%)',
     // background: 'radial-gradient(circle at 18.7% 37.8%, rgb(250, 250, 250) 0%, rgb(225, 234, 238) 90%)'
-    // background: 'linear-gradient(112.1deg, rgb(32, 38, 57) 11.4%, rgb(63, 76, 119) 70.2%)'
 }
 
 
