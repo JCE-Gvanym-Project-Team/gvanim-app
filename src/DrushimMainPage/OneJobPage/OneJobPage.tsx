@@ -644,7 +644,7 @@ export default function OneJobPage()
                         </Box>
 
                         {/* button that redirects to details */}
-                        <Box sx={{ position: "absolute", left: { lg: "20px", xl: "10px" }, marginTop: "-60px"}}>
+                        <Box sx={{ display: {md: "none", lg: "block"}, position: "absolute", left: { lg: "20px", xl: "1.5vw" }, marginTop: "-60px"}}>
                             <Button
                                 
                                 sx={{
