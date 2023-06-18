@@ -13,7 +13,7 @@ export default function SuccessDialog(props: { open, onClose })
         >
             <Alert
                 variant="filled"
-                sx={{ alignItems: 'flex-start' }}
+                sx={{ alignItems: 'flex-start', backgroundColor: "success.main" }}
                 action={
                     <React.Fragment>
                         <IconButton
