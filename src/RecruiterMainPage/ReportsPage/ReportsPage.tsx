@@ -117,7 +117,7 @@ function ReportsPage() {
 			<Box>
 				<Typography variant='h2' style={{ textAlign: "center", marginTop: "20px", marginBottom: "20px" }}>משרות לפי ערים</Typography>
 				<JobsByRegions></JobsByRegions>
-				<Typography variant='h2' style={{ textAlign: "center",marginTop: "250px", marginBottom: "0px"}}>תפקידים פופולריים</Typography>
+				<Typography variant='h2' style={{ textAlign: "center",marginTop: "250px", marginBottom: "0px"}}>משרות פופולריות</Typography>
 				<CandidatesByRoles></CandidatesByRoles>
 				<h2 style={{ textAlign: "center" }}>דוחות נוספים</h2>
 				<MyTable></MyTable>
