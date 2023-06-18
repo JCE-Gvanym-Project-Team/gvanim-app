@@ -1,39 +1,37 @@
-import * as React from 'react';
 import { Alert, AlertProps, Box, Button, Chip, LinearProgress, Snackbar, Stack, SxProps, Theme, alpha, styled, useTheme } from '@mui/material';
-import MyDropMenu from '../../../../ManageJobsPage/Components/MyDropMenu/MyDropMenu';
 import
 {
     DataGrid,
-    GridToolbarFilterButton,
     GridColDef,
-    GridToolbarDensitySelector,
+    GridColumnHeaders,
+    GridPrintExportMenuItem,
+    GridRow,
     GridToolbarColumnsButton,
     GridToolbarContainer,
-    GridToolbarQuickFilter,
+    GridToolbarDensitySelector,
     GridToolbarExportContainer,
-    GridPrintExportMenuItem,
+    GridToolbarFilterButton,
+    GridToolbarQuickFilter,
+    gridClasses,
     gridPageCountSelector,
     gridPageSelector,
+    heIL,
     useGridApiContext,
     useGridSelector,
-    GridColumnHeaders,
-    gridClasses,
-    GridRow,
-    heIL,
-
 } from '@mui/x-data-grid';
+import * as React from 'react';
+import MyDropMenu from '../../../../ManageJobsPage/Components/MyDropMenu/MyDropMenu';
 
+import { Recommend, Sms } from '@mui/icons-material';
 import Pagination from '@mui/material/Pagination';
 import PaginationItem from '@mui/material/PaginationItem';
-import CandidatesListFullScreenDialog from '../../../../ManageJobsPage/Components/CandidatesListDialog/CandidatesListDialog';
-import { getFilteredJobs } from '../../../../../Firebase/FirebaseFunctions/Job';
-import { useNavigate } from "react-router-dom";
-import { ArticleOutlined, Recommend, Sms } from '@mui/icons-material';
-import MyLoading from '../../../../../Components/MyLoading/MyLoading';
 import { unstable_useForkRef as useForkRef } from '@mui/utils';
-import { Candidate, CandidateJobStatus } from '../../../../../Firebase/FirebaseFunctions/functionIndex';
-import MyChip from '../MyChip/MyChip';
+import { useNavigate } from "react-router-dom";
+import MyLoading from '../../../../../Components/MyLoading/MyLoading';
+import { Candidate } from '../../../../../Firebase/FirebaseFunctions/functionIndex';
+import CandidatesListFullScreenDialog from '../../../../ManageJobsPage/Components/CandidatesListDialog/CandidatesListDialog';
 import { recommendationsButtonSx } from '../../ViewCandidatesPageStyle';
+import MyChip from '../MyChip/MyChip';
 
 
 
@@ -152,7 +150,6 @@ export default function JobsTable(props: {
 
             renderCell: (job) =>
             {
-                setAboutDialogJobId(job.id.toString());
                 return (
                     <>
                         <Button
@@ -161,6 +158,7 @@ export default function JobsTable(props: {
                             onClick={() =>
                             {
                                 setAboutDialogOpen(true);
+                                setAboutDialogJobId(job.id.toString());
                             }}>
                             ספר עליך
                         </Button>
