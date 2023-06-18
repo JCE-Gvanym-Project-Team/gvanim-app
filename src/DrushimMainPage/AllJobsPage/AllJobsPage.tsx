@@ -11,6 +11,7 @@ import RoleSingleSelection from './Components/RoleSingleSelection/RoleSingleSele
 import LocationSingleSelection from './Components/LocationSingleSelection/LocationSingleSelection';
 import { Place } from '@mui/icons-material';
 import NavbarDrushim from '../Components/Navbar/Navbar';
+import NavBar from '../AllJobsPage/Resources/navbar.jpeg';
 
 export default function AllJobsPage(props: { jobs: any }) {
     const { jobs } = props;
@@ -96,8 +97,7 @@ export default function AllJobsPage(props: { jobs: any }) {
         </Button> */}
 
 
-
-        <NavbarDrushim />
+        <img src={NavBar} alt="NavBar" style={{ width: '100%' }} />
             <Stack direction='row' sx={{padding: 6, mb: 10}}>
 
                 <Box sx={{ width: '25%', mr: '20px'}}>
