@@ -50,6 +50,7 @@ import {
   mainStackSx,
 } from "../ViewCandidatesPage/ViewCandidatesPageStyle";
 import { CandidateJobStatus } from "../../../Firebase/FirebaseFunctions/CandidateJobStatus";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
 const Form = styled("form")(({ theme }) => ({
   width: "100%",
@@ -778,7 +779,7 @@ const NewCandidatePage = () => {
                                   border: "1px",
                                 },
                             }}
-                            style={{ width: "100%" }}
+                            style={{ width: "50%" }}
                             size="small"
                             id="_requirements"
                             type="text"
@@ -866,27 +867,6 @@ const NewCandidatePage = () => {
                               justifyContent: "start",
                             }}
                           >
-                            <Typography sx={MyLabelSx}>
-                              קובץ קורות חיים:
-                            </Typography>
-                          </FormLabel>
-
-                          <TextField
-                            type="file"
-                            id="resume"
-                            variant="outlined"
-                            onChange={handleFileChange}
-                          />
-                        </Box>
-
-                        <Box sx={{ width: "100%" }}>
-                          <FormLabel
-                            sx={{
-                              display: "flex",
-                              flexDirection: "row",
-                              justifyContent: "start",
-                            }}
-                          >
                             <Typography sx={MyLabelSx}>משרה:</Typography>
                             <Typography sx={{ fontSize: 14, color: "#e91e63" }}>
                               *
@@ -924,7 +904,7 @@ const NewCandidatePage = () => {
                                   border: "1px",
                                 },
                             }}
-                            style={{ width: "100%" }}
+                            style={{ width: "50%" }}
                             id="jobNumber"
                             required
                             value={selectedJob ? selectedJob._jobNumber : ""}
@@ -972,6 +952,34 @@ const NewCandidatePage = () => {
                           spacing={2}
                           sx={{ mt: 3, mb: 3 }}
                         ></Stack>
+
+                        <Box sx={{ width: "100%" }}>
+                          <FormLabel
+                            sx={{
+                              display: "flex",
+                              flexDirection: "row",
+                              justifyContent: "start",
+                            }}
+                          >
+                            <Typography sx={MyLabelSx}>
+                              קובץ קורות חיים:
+                            </Typography>
+                          </FormLabel>
+
+                          <Button
+                            variant="contained"
+                            component="label"
+                            startIcon={<CloudUploadIcon />}
+                          >
+                            טען קו"ח
+                            <input
+                              type="file"
+                              hidden
+                              id="resume"
+                              onChange={handleFileChange}
+                            />
+                          </Button>
+                        </Box>
 
                         <Stack
                           direction="row"
