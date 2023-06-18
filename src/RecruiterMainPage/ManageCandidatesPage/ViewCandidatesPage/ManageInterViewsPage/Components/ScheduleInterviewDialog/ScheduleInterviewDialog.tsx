@@ -66,22 +66,24 @@ export default function ScheduleInterviewDialog(props: {
     // returns the whatsapp message to be sent to the candidate
     const getWhatsappMessage = async function (candidate, chosenJobValue, allJobs, status, interviewDate)
     {
-        const temp = new Candidate(candidate ? candidate._id : "", candidate?._firstName, candidate?._lastName, candidate?._phone, candidate?._eMail, candidate?._generalRating, candidate?._note);
-
         // get currently connected recruiter
         const user = await getConnectedUser();
         const recruiters = await getRecruitersFromDatabase();
-
-        const current_recrutier = recruiters.find((recruiter) =>
+        
+        let current_recruiter = recruiters.find((recruiter) =>
         {
             return recruiter._email === user?.email;
         });
+        if (!current_recruiter){
+            current_recruiter = new Recruiter("","אדמין", "אדמין",[]);
+        }
 
         const jobNumberString = chosenJobValue?.match(/\d+/)?.[0];
         const jobNumber = jobNumberString ? parseInt(jobNumberString) : NaN;
         const chosenJob = (allJobs.filter((job) => job._jobNumber === jobNumber))[0];
+        
 
-        return getMessage(temp, chosenJob, current_recrutier!, status, interviewDate, ":");
+        return getMessage(candidate, chosenJob, current_recruiter!, status, interviewDate, ":");
     }
 
     // time changed 
@@ -158,6 +160,8 @@ export default function ScheduleInterviewDialog(props: {
 
         // send whatsapp message
         const link = await candidateJobStatus?.getWhatsappUrl(whatsappMessage);
+
+        console.log(link);
 
         window.open(link);
 
