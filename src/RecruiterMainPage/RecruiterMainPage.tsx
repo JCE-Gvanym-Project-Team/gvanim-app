@@ -64,7 +64,7 @@ function RecruiterMainPage({ handlelogout })
 				<Route path="" element={<WelcomePage />} />
 				{/* Jobs Routes */}
 				<Route path="manageJobs" element={<ManageJobsPage />} />
-				<Route path="createJWob" element={<NewJobPage />} />
+				<Route path="createJob" element={<NewJobPage />} />
 
 				{/* Candidate Routes */}
 				<Route path="editCandidate" element={<EditCandidate />} />

@@ -112,7 +112,7 @@ export default function TabsPane() {
               <Tab disableRipple icon={<LockOutlinedIcon />} {...a11yProps(0)} />
             </Tooltip>
             {isAdminUser && (
-              <>
+              <Box>
                 <Tooltip title={'ניהול מגייסים'}>
                   <Tab disableRipple icon={<PeopleAltOutlined />} {...a11yProps(1)} />
                 </Tooltip>
@@ -121,7 +121,7 @@ export default function TabsPane() {
                   <Tab disableRipple icon={<AccountTree />} {...a11yProps(2)} />
                 </Tooltip>
 
-              </>
+              </Box>
             )}
 
           </Tabs>
