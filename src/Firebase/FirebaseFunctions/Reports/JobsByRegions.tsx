@@ -64,7 +64,7 @@ const JobsComponent: React.FC = () => {
             type: "column",
             name: "מספר משרות",
             data: quantities,
-            color: "#0000FF", // כחול כהה
+            color: "#6666ff", // כחול כהה
           },
         ],
       });
