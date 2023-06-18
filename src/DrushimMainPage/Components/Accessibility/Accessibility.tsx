@@ -1,7 +1,7 @@
 
 import { Accessible, Contrast, FontDownload, LightMode, Nightlight, Replay, ZoomInRounded, ZoomOutRounded } from '@mui/icons-material';
-import { Box, Button, Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, Typography, keyframes, styled } from '@mui/material';
-import { useTheme } from '@mui/material/styles'
+import { Box, Button, Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, Typography, styled } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import React, { useContext, useState } from 'react';
 import { ColorModeContext, FontContext, colorTokens } from '../../theme';
 
@@ -35,31 +35,15 @@ export default function Accessibility()
         setOpen(open);
     }
 
-    // is active for each accessibility option
-    const [isActive, setIsActive] = useState(false);
-
-
-    const floatingAnimation = keyframes`
-        from {
-        transform: translateX(0);
-        }
-        50% {
-        transform: translateX(20px);
-        }
-        to {
-        transform: translateX(0);
-        }
-  `;
-
     const StyledButton = styled(Button)`
-  transition: transform 0.3s ease-in-out;
-  &:hover {
-    transform: translateX(-20px);
-  }
-  &:not(:hover) {
-    transform: translateX(0);
-  }
-`;
+        transition: transform 0.3s ease-in-out;
+        &:hover {
+            transform: translateX(-20px);
+        }
+        &:not(:hover) {
+            transform: translateX(0);
+        }
+    `;
 
 
     return (
