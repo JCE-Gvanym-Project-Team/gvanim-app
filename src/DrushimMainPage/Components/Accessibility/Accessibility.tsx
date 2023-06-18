@@ -1,7 +1,7 @@
 
 import { Accessible, Contrast, FontDownload, LightMode, Nightlight, Replay, ZoomInRounded, ZoomOutRounded } from '@mui/icons-material';
-import { Box, Button, Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, Typography, styled } from '@mui/material';
-import {useTheme} from '@mui/material/styles'
+import { Box, Button, Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, Typography, keyframes, styled } from '@mui/material';
+import { useTheme } from '@mui/material/styles'
 import React, { useContext, useState } from 'react';
 import { ColorModeContext, FontContext, colorTokens } from '../../theme';
 
@@ -38,6 +38,30 @@ export default function Accessibility()
     // is active for each accessibility option
     const [isActive, setIsActive] = useState(false);
 
+
+    const floatingAnimation = keyframes`
+        from {
+        transform: translateX(0);
+        }
+        50% {
+        transform: translateX(20px);
+        }
+        to {
+        transform: translateX(0);
+        }
+  `;
+
+    const StyledButton = styled(Button)`
+  transition: transform 0.3s ease-in-out;
+  &:hover {
+    transform: translateX(-20px);
+  }
+  &:not(:hover) {
+    transform: translateX(0);
+  }
+`;
+
+
     return (
         <React.Fragment>
             <Box
@@ -50,14 +74,11 @@ export default function Accessibility()
                     zIndex: "10" // on top of everything but the drawer
                 }}
             >
-                <Button
+                <StyledButton
                     variant='contained'
                     sx={{
                         left: 0,
                         backgroundColor: "secondary.main",
-                        "&:hover": {
-                            backgroundColor: "secondary.dark"
-                        }
                     }}
                     onClick={() => toggleDrawer(true)}
                 >
@@ -65,7 +86,7 @@ export default function Accessibility()
                         <Accessible sx={{ fontSize: "24px" }} />
                         נגישות
                     </Typography>
-                </Button>
+                </StyledButton>
             </Box>
 
             <CustomDrawer
@@ -81,7 +102,7 @@ export default function Accessibility()
                     {/* increase or decrease font size */}
                     <List>
                         {/* Decrease font size */}
-                        <ListItem disablePadding sx={{marginTop: "100px"}}>
+                        <ListItem disablePadding sx={{ marginTop: "100px" }}>
                             <ListItemButton
                                 onClick={() =>
                                 {
