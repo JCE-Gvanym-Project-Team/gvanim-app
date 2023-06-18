@@ -81,7 +81,7 @@ export default function Accessibility()
                     {/* increase or decrease font size */}
                     <List>
                         {/* Decrease font size */}
-                        <ListItem disablePadding>
+                        <ListItem disablePadding sx={{marginTop: "100px"}}>
                             <ListItemButton
                                 onClick={() =>
                                 {
