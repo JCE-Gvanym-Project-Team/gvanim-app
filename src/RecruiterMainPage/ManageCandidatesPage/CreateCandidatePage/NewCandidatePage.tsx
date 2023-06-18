@@ -821,7 +821,7 @@ const NewCandidatePage = () => {
                               fontSize: 10,
                             }}
                           >
-                            הערות כלליות על המועמד
+                            הערות כלליות על המועמד (בשביל המגייס/ מנהל)
                           </FormHelperText>
                         </Box>
 
@@ -1006,7 +1006,7 @@ const NewCandidatePage = () => {
                             }}
                             fullWidth
                           >
-                            {state === null ? "פרסם" : "עדכן"}
+                            {state === null ? " צור מועמד חדש " : "עדכן"}
                           </Button>
 
                           {state === null ? (
