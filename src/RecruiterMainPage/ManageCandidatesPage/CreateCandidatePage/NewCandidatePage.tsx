@@ -931,14 +931,16 @@ const NewCandidatePage = () => {
                             <MenuItem value="">
                               <em>אנא בחר משרה</em>
                             </MenuItem>
-                            {jobs.map((job) => (
-                              <MenuItem
-                                key={job._jobNumber}
-                                value={job._jobNumber}
-                              >
-                                {`${job._jobNumber}   -    |    ${job._region}     |    -  ${job._title}    `}{" "}
-                              </MenuItem>
-                            ))}
+                            {jobs
+                              .filter((job) => job._open)
+                              .map((job) => (
+                                <MenuItem
+                                  key={job._jobNumber}
+                                  value={job._jobNumber}
+                                >
+                                  {`${job._jobNumber}   -    |    ${job._region}     |    -  ${job._role}    `}{" "}
+                                </MenuItem>
+                              ))}
                           </Select>
                           <FormHelperText
                             hidden={!errorJobSelection}
