@@ -1006,7 +1006,7 @@ const NewCandidatePage = () => {
                             }}
                             fullWidth
                           >
-                            {state === null ? "צור מועמד חדש" : "עדכן"}
+                            {state === null ? " צור מועמד חדש " : "עדכן"}
                           </Button>
 
                           {state === null ? (
