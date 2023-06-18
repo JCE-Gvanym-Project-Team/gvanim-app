@@ -242,7 +242,7 @@ export default function JobDetails(props: { job, screenSize })
                         variant={screenSize === "xs" ? "subtitle2" : 'h4'}
                     >
                         {/* TODO: add job start */}
-                        {job?._jobNumber}
+                        {job?._startOn}
                     </Typography>
                 </Box >
             </Box >
