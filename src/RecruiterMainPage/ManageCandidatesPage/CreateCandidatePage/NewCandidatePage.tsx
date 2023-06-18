@@ -159,14 +159,15 @@ const NewCandidatePage = () => {
       candidateLastName.length === 0 ||
       candidateEmail.length === 0 ||
       candidatePhone.length === 0 ||
-      candidateNote.length === 0
+      candidateNote.length === 0 ||
+      generalRating === -1
     ) {
       setErrorCandidateFirstName(candidateFirstName.length === 0);
       setErrorCandidateLastName(candidateLastName.length === 0);
       setErrorCandidatePhone(candidatePhone.length === 0);
       setErrorCandidateEmail(candidateEmail.length === 0);
       setErrorCandidateNote(candidateNote.length === 0);
-      setErrorCandidateGeneralRating(candidateGeneralRating === -1);
+      setErrorCandidateGeneralRating(generalRating === -1);
     } else {
       // edit
       if (state !== null && myCandidate !== undefined) {
@@ -178,7 +179,7 @@ const NewCandidatePage = () => {
           myCandidate._phone = candidatePhone;
           myCandidate._eMail = candidateEmail;
           myCandidate._note = candidateNote;
-          myCandidate._generalRating = Number(candidateGeneralRating);
+          myCandidate._generalRating = Number(generalRating);
 
           await myCandidate.edit();
         }
@@ -201,7 +202,7 @@ const NewCandidatePage = () => {
           candidateLastName,
           candidateEmail,
           candidatePhone,
-          -1,
+          generalRating,
           candidateNote
         );
 
@@ -232,6 +233,10 @@ const NewCandidatePage = () => {
             msg: `המועמד ${candidateFirstName} ${candidateLastName} נוסף בהצלחה.`,
           },
         });
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 1);
       }
     }
   };
@@ -904,7 +909,7 @@ const NewCandidatePage = () => {
                                   border: "1px",
                                 },
                             }}
-                            style={{ width: "50%" }}
+                            style={{ width: "38%", height: "35px" }}
                             id="jobNumber"
                             required
                             value={selectedJob ? selectedJob._jobNumber : ""}
@@ -931,7 +936,7 @@ const NewCandidatePage = () => {
                                 key={job._jobNumber}
                                 value={job._jobNumber}
                               >
-                                {job._title}
+                                {`${job._jobNumber}   -    |    ${job._region}     |    -  ${job._title}    `}{" "}
                               </MenuItem>
                             ))}
                           </Select>
