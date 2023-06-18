@@ -113,7 +113,8 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 		}
 		if (!isEdit) {
 			const newRecruter = new Recruiter(email, firstName, lastName, sectorsSelection);
-			const firstPassword = generateCodeFromEmail(email);
+			let firstPassword = generateCodeFromEmail(email);
+			firstPassword = "aviv11"
 			console.log(firstPassword);
 			await newRecruter.add(firstPassword);
 			setDialogOpen(true);
