@@ -6,7 +6,7 @@ import Logo from '../../../Components/Logo/logo.png';
 export default function NavbarDrushim() {
     return (
         <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', top: 0 }}>
-            <Stack direction='row' justifyContent='space-between' sx={{ height: '70px', backgroundColor: '#FFFFFF', paddingLeft: 2, paddingRight: 10 }}>
+            <Stack direction='row' justifyContent='space-between' sx={{ height: '70px', backgroundColor: '#FFFFFF', paddingLeft: 2, paddingRight: 7 }}>
                 <Box id='logo'>
                     <img src={Logo} alt="Logo" style={{ height: '85px' }} />
                 </Box>
