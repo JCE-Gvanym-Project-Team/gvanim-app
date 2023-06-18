@@ -29,13 +29,6 @@ export const ManageCandidatesPageGlobalStyle = {
     changeJobButtonColor: "#3d5afe",
     notesButtonColor: "#637bfe",
     recommendationsButtonColor: "#1769aa",
-    interviewsButtonColor: "#4dabf5",
-    
-    // Manage Candidates
-
-    // Interviews Page
+    interviewsButtonColor: "#4dabf5"
 }
 
-export const ReportsPageGlobalStyle = {
-    
-}
