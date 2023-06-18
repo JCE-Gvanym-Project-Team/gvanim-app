@@ -8,12 +8,12 @@ export default function SuccessDialog(props: { open, onClose })
     return (
         <Snackbar
             open={open}
-            onClose={(event, reason) => {onClose(event, reason, false)}}
-            anchorOrigin={{vertical: "bottom", horizontal: "center"}}
+            onClose={(event, reason) => { onClose(event, reason, false) }}
+            anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         >
             <Alert
-                variant="filled"
-                sx={{ alignItems: 'flex-start', backgroundColor: "success.main" }}
+                variant="outlined"
+                sx={{ alignItems: 'flex-start', backgroundColor: "background.main" }}
                 action={
                     <React.Fragment>
                         <IconButton
@@ -31,26 +31,29 @@ export default function SuccessDialog(props: { open, onClose })
                     <Typography variant='h3'>
                         מועמדותך נקלטה בהצלחה
                     </Typography>
-                    <Typography variant='h4' sx={{ mt: 1 }}>
+                    <Typography variant='h4' sx={{ mt: 1 }} >
                         האם תרצה/י להגיש מועמדות למשרות נוספות?
                     </Typography>
                     <Box sx={{ mt: 2, display: 'flex', justifyContent: 'space-between' }}>
                         <Button
                             variant="contained"
                             sx={{
-                                backgroundColor: "secondary.main",
+                                backgroundColor: "success.main",
                                 "&:hover": {
-                                    backgroundColor: "secondary.dark",
+                                    backgroundColor: "background.successHover",
                                     color: "primary.textBright"
                                 }
                             }}
-                            onClick={(event) => {onClose(event, undefined, true)}}>
+                            onClick={(event) => { onClose(event, undefined, true) }}>
                             כן
                         </Button>
-                        <Button 
-                        variant="outlined" 
-
-                        onClick={(event) => {onClose(event, undefined, false)}}>
+                        <Button
+                            variant="outlined"
+                            sx={{
+                                color: "primary.main",
+                                backgroundColor: "background.main"
+                            }}
+                            onClick={(event) => { onClose(event, undefined, false) }}>
                             לא
                         </Button>
                     </Box>
