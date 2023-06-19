@@ -23,6 +23,7 @@ import JobsFiltersForm from "./ReportsPage/Components/Reports/JobsFitersForm";
 import ManageInterviewsPage from "./ManageCandidatesPage/ViewCandidatesPage/ManageInterViewsPage/ManageInterViewsPage";
 import UpdateAccount from "./Components/AdminPage/Components/TabsPanel/Components/ManageAccount/Components/AccountSettings/UpdateAccount/UpdateAccount";
 import NewCandidatePage from "./ManageCandidatesPage/CreateCandidatePage/NewCandidatePage";
+import { Update } from "@mui/icons-material";
 
 function RecruiterMainPage({ handlelogout }) {
   const [allJobs, setAllJobs] = React.useState<any[]>([]);
@@ -107,6 +108,7 @@ function RecruiterMainPage({ handlelogout }) {
 
         {/* Admin Routes */}
         <Route path="settings" element={<AdminPage />} />
+        <Route path="updateAccount" element={<UpdateAccount />} />
       </Routes>
       <Footer />
     </>
