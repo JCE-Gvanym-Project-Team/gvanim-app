@@ -5,10 +5,10 @@ export class Sector {
     public _name: string;
     public _open: boolean;
     public _recruitersUid: string[];
-    constructor(name: string, open: boolean, recruiterUid: string[]=[]) {
+    constructor(name: string, open: boolean, recruitersUid: string[]=[]) {
         this._name = name;
         this._open = open;
-        this._recruitersUid = recruiterUid;
+        this._recruitersUid = recruitersUid;
     }
     /**
      * Gets the path of the current stage in the realtime DB.
