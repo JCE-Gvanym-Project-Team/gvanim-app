@@ -12,6 +12,14 @@ export const getFilteredJobsCloudFunction = functions
   .region("europe-west1")
   .https
   .onRequest(async (request, response) => {
+    response.set("Access-Control-Allow-Origin", "*");
+    response.set("Access-Control-Allow-Methods", "GET, POST");
+    response.set("Access-Control-Allow-Headers", "Content-Type");
+    if (request.method === "OPTIONS") {
+      // Handle the preflight OPTIONS request
+      response.status(204).send("");
+      return;
+    }
     try {
       const {attributes, values, sortBy} = request.body;
       const filteredJobs = await getFilteredJobs(attributes, values, sortBy);
@@ -44,27 +52,25 @@ async function getFilteredJobs(
     console.log("the attributes length not match to values length");
     return [];
   }
-  let jobs: Job[] = (await admin.database().
-    ref("Jobs/").
-    once("value")).
-    val().
-    map((job: Job) => ({
-      _title: job._title,
-      _jobNumber: job._jobNumber,
-      _role: job._role,
-      _scope: job._scope,
-      _region: job._region,
-      _sector: job._sector,
-      _description: job._description,
-      _requirements: job._requirements,
-      _open: job._open,
-      _highPriority: job._highPriority,
-      _viewsPerPlatform: job._viewsPerPlatform,
-      _applyPerPlatform: job._applyPerPlatform,
-      _creationDate: job._creationDate,
-      _startOn: job._startOn,
-    }));
+  const jobsSnapshot = await admin.database().ref("Jobs/").once("value");
+  const jobsData = jobsSnapshot.val();
 
+  let jobs: Job[] = Object.values(jobsData).map((job: any) => ({
+    _title: job._title,
+    _jobNumber: job._jobNumber,
+    _role: job._role,
+    _scope: job._scope,
+    _region: job._region,
+    _sector: job._sector,
+    _description: job._description,
+    _requirements: job._requirements,
+    _open: job._open,
+    _highPriority: job._highPriority,
+    _viewsPerPlatform: job._viewsPerPlatform,
+    _applyPerPlatform: job._applyPerPlatform,
+    _creationDate: job._creationDate,
+    _startOn: job._startOn,
+  }));
   // filtering
   let i = attributes.indexOf("jobNumber");
   if (i >= 0) {

@@ -4,6 +4,8 @@ import { CandidateJobStatus, getFilteredCandidateJobStatuses } from "./Candidate
 import { appendToDatabase, getFirebaseIdsAtPath, removeObjectAtPath, replaceData } from "./DBfuncs";
 import { getOpenRoles } from "./Role";
 import { getOpenSectors } from "./Sector";
+import axios from 'axios';
+
 const database = realtimeDB;
 
 export class Job {
@@ -86,19 +88,19 @@ export class Job {
     }
 
     public async updateRole(role: string) {
-        if (await this.exists() && ((await getOpenRoles()).map((r)=>r._name)).includes(role)) {
+        if (await this.exists() && ((await getOpenRoles()).map((r) => r._name)).includes(role)) {
             this._role = role;
             replaceData((await this.getPath()), this);
         }
     }
 
     public async updateScope(scope: Array<number>) {
-        if (await this.exists() && scope.length===2) {
-            if(scope[0]<scope[1])
+        if (await this.exists() && scope.length === 2) {
+            if (scope[0] < scope[1])
                 this._scope = scope;
-            else{
-                this._scope[0]=scope[1];
-                this._scope[1]=scope[0];
+            else {
+                this._scope[0] = scope[1];
+                this._scope[1] = scope[0];
             }
             replaceData((await this.getPath()), this);
         }
@@ -112,7 +114,7 @@ export class Job {
     }
 
     public async updateSector(sector: string) {
-        if (await this.exists() && ((await getOpenSectors()).map((s)=>s._name)).includes(sector)) {
+        if (await this.exists() && ((await getOpenSectors()).map((s) => s._name)).includes(sector)) {
             this._sector = sector;
             replaceData((await this.getPath()), this);
         }
@@ -247,6 +249,7 @@ export class Job {
  * @returns {Promise<Job[]>} A promise that resolves to an array of Job objects.
  * @throws {Error} If there is an error fetching the jobs from the database.
  */
+/*
 async function getJobsFromDatabase(): Promise<Job[]> {
     try {
         const snapshot = await database.ref("/Jobs").once("value");
@@ -289,6 +292,7 @@ export async function generateJobNumber(): Promise<number> {
  * @param {string} [sortBy=""] - The attribute to sort the jobs by.
  * @returns {Promise<Job[]>} - A promise that resolves to an array of Job objects that match the filter criteria and sorted by desired attribute.
  */
+/*
 export async function getFilteredJobs(attributes: string[] = [], values: string[] = [], sortBy: string = ""): Promise<Job[]> {
     if (attributes.length !== values.length) {
         console.log("the attributes length not match to values length")
@@ -354,7 +358,7 @@ export async function getFilteredJobs(attributes: string[] = [], values: string[
         , job._region, job._sector, job._description, job._requirements,
         job._open, job._highPriority, job._viewsPerPlatform, job._applyPerPlatform, job._creationDate, job._startOn));
 }
-/* compare function for sort */
+/* compare function for sort 
 function compareByTitle(a: Job, b: Job): number {
     return a._title.localeCompare(b._title);
 }
@@ -410,4 +414,38 @@ function compareByCreationDate(a: Job, b: Job): number {
     if (b._creationDate < a._creationDate)
         return -1;
     return 0;
+}
+*/
+export async function getFilteredJobs(attributes: string[] = [], values: string[] = [], sortBy: string = ""): Promise<Job[]> {
+    return new Promise<Job[]>((resolve, reject) => {
+        axios.post('https://europe-west1-gvanim-app.cloudfunctions.net/getFilteredJobsCloudFunction', {
+            attributes: attributes,
+            values: values,
+            sortBy: sortBy
+        })
+            .then(response => {
+                const jobs = response.data;
+                resolve(jobs.map(job => new Job(
+                    job._jobNumber,
+                    job._title,
+                    job._role,
+                    job._scope,
+                    job._region,
+                    job._sector,
+                    job._description,
+                    job._requirements,
+                    job._open,
+                    job._highPriority,
+                    job._viewsPerPlatform,
+                    job._applyPerPlatform,
+                    job._creationDate,
+                    job._startOn
+                )));
+            })
+            .catch(error => {
+                console.error('Error calling the Cloud Function:', error);
+                reject(error);
+            });
+    });
+
 }
