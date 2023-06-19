@@ -110,8 +110,8 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 		// setRecruiters(updateData);
 		setOpen(false);
 
-		 postMessage(`המגייס/ת ${recruiterRow._firstName} ${recruiterRow._lastName} נמחק/ה בהצלחה מהמערכת.`);
-		 setSnackbar(true);
+		postMessage(`המגייס/ת ${recruiterRow._firstName} ${recruiterRow._lastName} נמחק/ה בהצלחה מהמערכת.`);
+		setSnackbar(true);
 
 	}
 	const handleSubmit = async () => {
@@ -137,8 +137,16 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 		}
 		if (!isEdit) {
 			const newRecruter = new Recruiter(email, firstName, lastName, sectorsSelection);
-			let firstPassword:string = generateCodeFromEmail(email);
-			await newRecruter.add("al1212");
+			let firstPassword: string = generateCodeFromEmail(email);
+			try {
+				await newRecruter.add(firstPassword);
+				// console.log("real email:" + email);
+			}
+			catch (error) {
+				alert('האימייל כבר קיים במערכת!');
+				setEmail('');
+				return;
+			}
 			setDialogOpen(true);
 			setDialogEmail(email);
 			setDialogPassword(firstPassword);
@@ -292,7 +300,7 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 												value={email}
 												onChange={
 													(e) => {
-														setEmail(e.target.value );
+														setEmail(e.target.value);
 														setSaveButton(true);
 														setEmailError('');
 													}
@@ -385,7 +393,7 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 
 
 
-function generateCodeFromEmail(email:string) {
+function generateCodeFromEmail(email: string) {
 	const atIndex = email.indexOf('@');
 
 	if (atIndex === -1) {
@@ -395,7 +403,7 @@ function generateCodeFromEmail(email:string) {
 	const username = email.substring(0, atIndex);
 	const usernameSubstring = username.substring(0, Math.min(4, username.length));
 
-	let code:string = usernameSubstring;
+	let code: string = usernameSubstring;
 
 	while (code.length < 6) {
 		code += Math.floor(Math.random() * 10) + "";
