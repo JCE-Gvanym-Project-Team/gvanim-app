@@ -61,10 +61,10 @@ export default function SectorChips(props: {
 
     if (indexToRemove === -1) {
       const updatedListToShow = [...listToShow, sector];
-      setListToShow(updatedListToShow);
+      await setListToShow(updatedListToShow);
     } else {
       const updatedListToShow = listToShow.filter((item) => item !== sector);
-      setListToShow(updatedListToShow);
+      await setListToShow(updatedListToShow);
     }
 
     // // ------------------------------------------------------------
