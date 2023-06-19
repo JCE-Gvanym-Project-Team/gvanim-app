@@ -1,9 +1,5 @@
 import "firebase/database";
 import { realtimeDB } from "../FirebaseConfig/firebase";
-import { loginAdmin, loginRecruiter } from "./Authentication";
-import { Job, generateJobNumber } from "./Job";
-import { Candidate } from "./Candidate";
-import { getFilteredCandidateJobStatuses } from "./CandidateJobStatus";
 
 const database = realtimeDB;
 /**

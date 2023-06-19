@@ -1,9 +1,8 @@
-import { Email } from "@mui/icons-material";
 import { realtimeDB } from "../FirebaseConfig/firebase";
 import { CandidateJobStatus, getFilteredCandidateJobStatuses } from "./CandidateJobStatus";
-import { removeObjectAtPath, getFirebaseIdsAtPath, replaceData, appendToDatabase } from "./DBfuncs";
-import { getFilteredJobs, Job } from "./Job";
-import { uploadFileToFirestore, getDownloadUrlFromFirestorePath, getFileExtensionsInFolder, deleteFile, fileExists, renameFirestorePath } from "./firestoreFunc";
+import { appendToDatabase, getFirebaseIdsAtPath, removeObjectAtPath, replaceData } from "./DBfuncs";
+import { Job, getFilteredJobs } from "./Job";
+import { deleteFile, fileExists, getDownloadUrlFromFirestorePath, getFileExtensionsInFolder, uploadFileToFirestore } from "./firestoreFunc";
 const database = realtimeDB;
 export class Candidate
 {

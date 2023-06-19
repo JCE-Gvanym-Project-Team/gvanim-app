@@ -1,12 +1,8 @@
-import { auth } from "firebase-functions/v1";
 import { isConnected, loginAdmin, loginRecruiter, loguotRecruiter } from "./Authentication";
-import { Candidate, generateCandidateId, getFilteredCandidates } from "./Candidate";
+import { Candidate, generateCandidateId } from "./Candidate";
+import { CandidateJobStatus, allStatus, getFilteredCandidateJobStatuses, getMessage } from "./CandidateJobStatus";
 import { Job, generateJobNumber, getFilteredJobs } from "./Job";
 import { Recruiter, generateRandomString } from "./Recruiter";
-import { getFileExtensionsInFolder, uploadFileToFirestore } from "./firestoreFunc";
-import { Sector } from "./Sector";
-import { CandidateJobStatus, getMessage, allStatus, getFilteredCandidateJobStatuses } from "./CandidateJobStatus";
-import { convertTypeAcquisitionFromJson } from "typescript";
 export function sleep(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
 }

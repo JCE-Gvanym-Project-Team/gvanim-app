@@ -1,9 +1,8 @@
-import { CandidateJobStatus, getFilteredCandidateJobStatuses } from "./CandidateJobStatus";
 import { realtimeDB } from "../FirebaseConfig/firebase";
 import { Candidate, getFilteredCandidates } from "./Candidate";
+import { CandidateJobStatus, getFilteredCandidateJobStatuses } from "./CandidateJobStatus";
 import { appendToDatabase, getFirebaseIdsAtPath, removeObjectAtPath, replaceData } from "./DBfuncs";
-import { Stage } from "./Stage";
-import { Role, getOpenRoles } from "./Role";
+import { getOpenRoles } from "./Role";
 import { getOpenSectors } from "./Sector";
 const database = realtimeDB;
 

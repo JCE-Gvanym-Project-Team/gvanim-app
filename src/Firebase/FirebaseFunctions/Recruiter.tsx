@@ -1,7 +1,7 @@
+import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { realtimeDB } from "../FirebaseConfig/firebase";
-import { getObjectAtPath, removeObjectAtPath, getFirebaseIdsAtPath, appendToDatabase, replaceData } from "./DBfuncs";
+import { appendToDatabase, getFirebaseIdsAtPath, getObjectAtPath, removeObjectAtPath, replaceData } from "./DBfuncs";
 import { Sector, getAllSectors } from "./Sector";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "firebase/auth";
 const auth = getAuth();
 
 

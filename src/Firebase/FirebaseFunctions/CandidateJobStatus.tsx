@@ -1,10 +1,10 @@
 import { dataref } from "../FirebaseConfig/firebase";
-import { Recomendation } from './Recomendation';
-import { getObjectAtPath, removeObjectAtPath, getFirebaseIdsAtPath, replaceData, appendToDatabase } from "./DBfuncs";
-import { uploadFileToFirestore, getDownloadUrlFromFirestorePath, getFileExtensionsInFolder, deleteFile, fileExists } from "./firestoreFunc";
 import { Candidate, getFilteredCandidates } from "./Candidate";
+import { appendToDatabase, getFirebaseIdsAtPath, getObjectAtPath, removeObjectAtPath, replaceData } from "./DBfuncs";
+import { Job } from "./Job";
+import { Recomendation } from './Recomendation';
 import { Recruiter } from "./Recruiter";
-import { Job, getFilteredJobs } from "./Job";
+import { deleteFile, fileExists, getDownloadUrlFromFirestorePath, getFileExtensionsInFolder, uploadFileToFirestore } from "./firestoreFunc";
 const database = dataref;
 export const allStatus = [
     "הוגשה מועמדות",

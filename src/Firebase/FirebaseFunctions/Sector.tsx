@@ -1,6 +1,6 @@
 import { realtimeDB } from "../FirebaseConfig/firebase";
-import { removeObjectAtPath, getFirebaseIdsAtPath, replaceData, appendToDatabase } from "./DBfuncs";
-import { getRecruitersFromDatabase, Recruiter } from "./Recruiter";
+import { appendToDatabase, getFirebaseIdsAtPath, removeObjectAtPath, replaceData } from "./DBfuncs";
+import { Recruiter, getRecruitersFromDatabase } from "./Recruiter";
 export class Sector {
     public _name: string;
     public _open: boolean;
