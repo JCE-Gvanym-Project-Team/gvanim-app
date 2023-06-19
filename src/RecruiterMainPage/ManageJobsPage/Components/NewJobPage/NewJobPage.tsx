@@ -1,4 +1,4 @@
-import { Box, Button, Container, Divider, FormControlLabel, FormHelperText, FormLabel, Stack, Switch, TextField, TextareaAutosize, Typography, alpha, styled } from '@mui/material'
+import { Autocomplete, Box, Button, Container, Divider, FormControlLabel, FormHelperText, FormLabel, Stack, Switch, TextField, TextareaAutosize, Typography, alpha, createFilterOptions, styled } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { BoxGradientSx, MyLabelSx, MyPaperSx, MyTextFieldSx, SwitchPaperSx } from './NewJobStyle'
 import JobScopeSlider from './Components/ScopeSlider/ScopeSlider';
@@ -12,6 +12,8 @@ import RoleSingleSelection from './Components/RoleSingleSelection/RoleSingleSele
 import SectorSingleSelection from './Components/SectorSingleSelection/SectorSingleSelection';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { designReturnButton } from '../../ManageJobsPageStyle';
+
+const filter = createFilterOptions<string>();
 
 const Form = styled('form')(({ theme }) => ({
     width: '100%',
@@ -50,7 +52,7 @@ const NewJobPage = () =>
     // my loading
     const [loading, setLoading] = useState(true);
 
-
+    const [availableLocations, setAvailableLocations] = useState<string[]>([]);
 
     const fetchJob = async () =>
     {
@@ -81,6 +83,24 @@ const NewJobPage = () =>
         setLoading(false);
     }
 
+    const fetchLocations = async () =>
+    {
+        const jobs = await getFilteredJobs();
+        let regions = jobs.map((job) =>
+        {
+            return job._region;
+        })
+        regions = regions.reduce((accumulator: string[], value: string) =>
+        {
+            if (!accumulator.includes(value))
+            {
+                accumulator.push(value);
+            }
+            return accumulator;
+        }, []);
+        setAvailableLocations(regions);
+    }
+
 
     useEffect(() =>
     {
@@ -92,6 +112,7 @@ const NewJobPage = () =>
                 fetchJob();
             }
         }
+        fetchLocations()
     }, []);
 
 
@@ -456,41 +477,72 @@ const NewJobPage = () =>
                                                             <Typography sx={MyLabelSx}>איזור:</Typography>
                                                             <Typography sx={{ fontSize: 14, color: '#e91e63' }}>*</Typography>
                                                         </FormLabel>
-                                                        <TextField
-                                                            sx={{
-                                                                '& .muirtl-9ddj71-MuiInputBase-root-MuiOutlinedInput-root': {
-                                                                    borderRadius: '0.375rem',
-                                                                    font: 'small-caption',
-                                                                },
-                                                                '& .muirtl-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input': {
-                                                                    ':focus': {
-                                                                        boxShadow: '0 0 0 0.2rem #c0cefc',
-                                                                        backgroundColor: '#fff',
-                                                                        border: '1px solid #7795f8',
+                                                        <Autocomplete
+                                                            disablePortal
+                                                            id="combo-box-demo"
+                                                            options={availableLocations}
+                                                            sx={{ width: 300 }}
+                                                            style={{ width: '100%' }}
+                                                            renderInput={(params) => <TextField
+                                                                {...params}
+                                                                sx={{
+                                                                    '& .muirtl-9ddj71-MuiInputBase-root-MuiOutlinedInput-root': {
                                                                         borderRadius: '0.375rem',
-                                                                        outline: 0,
+                                                                        font: 'small-caption',
                                                                     },
-                                                                },
-                                                                '& .muirtl-9ddj71-MuiInputBase-root-MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
-                                                                    border: '1px solid #7795f8'
-                                                                },
+                                                                    '& .muirtl-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input': {
+                                                                        ':focus': {
+                                                                            boxShadow: '0 0 0 0.2rem #c0cefc',
+                                                                            backgroundColor: '#fff',
+                                                                            border: '1px solid #7795f8',
+                                                                            borderRadius: '0.375rem',
+                                                                            outline: 0,
+                                                                        },
+                                                                    },
+                                                                    '& .muirtl-9ddj71-MuiInputBase-root-MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+                                                                        border: '1px solid #7795f8'
+                                                                    },
 
-                                                                '& .muirtl-9ddj71-MuiInputBase-root-MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline': {
-                                                                    borderColor: 'rgba(220,53,69)'
+                                                                    '& .muirtl-9ddj71-MuiInputBase-root-MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline': {
+                                                                        borderColor: 'rgba(220,53,69)'
 
-                                                                },
-                                                                '& .muirtl-9ddj71-MuiInputBase-root-MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                                                                    border: '1px',
-                                                                },
-                                                            }}
-                                                            style={{ width: '100%' }} size='small' id="_region" type="text"
-                                                            required
-                                                            value={jobRegion}
-                                                            error={errorJobRegion}
-                                                            onChange={(e) =>
+                                                                    },
+                                                                    '& .muirtl-9ddj71-MuiInputBase-root-MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                                                        border: '1px',
+                                                                    },
+                                                                }}
+                                                                size='small'
+                                                                id="_region"
+                                                                type="text"
+                                                                required
+                                                                value={jobRegion}
+                                                                error={errorJobRegion}
+                                                                onChange={(e) =>
+                                                                {
+                                                                    if (jobRegion.length > 0 && errorJobRegion) { setErrorJobRegion(false); }
+                                                                }}
+                                                            />
+                                                            }
+                                                            onChange={(event, value) =>
                                                             {
-                                                                setJobRegion(e.target.value);
-                                                                if (jobRegion.length > 0 && errorJobRegion) { setErrorJobRegion(false); }
+                                                                if (value?.includes("אחר: "))
+                                                                {
+                                                                    setJobRegion(value?.replace("אחר: ", ""));
+                                                                } else
+                                                                {
+                                                                    setJobRegion(value ? value : "");
+                                                                }
+                                                            }}
+                                                            filterOptions={(options, params) =>
+                                                            {
+                                                                const filtered = filter(options, params);
+
+                                                                if (Object.keys(filtered).length === 0)
+                                                                {
+                                                                    filtered.push("אחר: " + params.inputValue);
+                                                                }
+
+                                                                return filtered;
                                                             }}
                                                         />
 

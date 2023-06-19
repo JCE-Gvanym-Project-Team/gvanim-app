@@ -62,12 +62,12 @@ export default function Accessibility()
                 <StyledButton
                     variant='contained'
                     sx={{
-                        width:"110px",
+                        width:"120px",
                         backgroundColor: "secondary.jobDetails",
                         "&:hover" : {
                             backgroundColor: "secondary.jobDetails"
                         },
-                        left: "10px",
+                        left: "20px",
                         borderBottomLeftRadius: "56px",
                         borderTopLeftRadius: "56px"
                     }}

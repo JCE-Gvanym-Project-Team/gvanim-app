@@ -14,7 +14,7 @@ export default function DrushimMainPage()
 
 	const fetchJobs = async () =>
 	{
-		setJobs(await getFilteredJobs());
+		setJobs(await getFilteredJobs(["open"],["true"]));
 	}
 
 	useEffect(() =>
