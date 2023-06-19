@@ -60,6 +60,7 @@ const NewJobPage = () =>
         if ((typeof state?.job?._region === 'string')) { setJobRegion(state?.job?._region); }
         if ((typeof state?.job?._sector === 'string')) { setJobSector(state?.job?._sector); }
         if ((typeof state?.job?._requirements === 'string')) { setJobRequirements(state?.job?._requirements); }
+        if ((typeof state?.job?._startOn === 'string')) { setJobStart(state?.job?._startOn); }
 
         if ((state?.job?._description?.length >= 1) && (typeof state?.job?._description[0] === 'string')) { setJobDescription(state?.job?._description[0]); }
         if ((state?.job?._description?.length >= 2) && (typeof state?.job?._description[1] === 'string')) { setJobDescriptionSkills(state?.job?._description[1]); }
