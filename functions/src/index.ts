@@ -1,5 +1,7 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
+import { Job } from "./interfaces";
+
 
 admin.initializeApp(); // Initialize the Firebase Admin SDK
 
@@ -28,12 +30,28 @@ export const getFilteredJobsCloudFunction = functions
  * @param {string} [sortBy=""] - The attribute to sort the jobs by.
  * @returns {Promise<Job[]>} - A promise that resolves to an array of Job objects that match the filter criteria and sorted by desired attribute.
  */
-export async function getFilteredJobs(attributes: string[] = [], values: string[] = [], sortBy: string = ""): Promise<Job[]> {
+async function getFilteredJobs(attributes: string[] = [], values: string[] = [], sortBy: string = ""): Promise<Job[]> {
     if (attributes.length !== values.length) {
         console.log("the attributes length not match to values length")
         return [];
     }
-    let jobs = ;
+    let jobs: Job[] = (await admin.database().ref('Jobs/').once('value')).val().map((job: any) => ({
+        _title: job._title,
+        _jobNumber: job._jobNumber,
+        _role: job._role,
+        _scope: job._scope,
+        _region: job._region,
+        _sector: job._sector,
+        _description: job._description,
+        _requirements: job._requirements,
+        _open: job._open,
+        _highPriority: job._highPriority,
+        _viewsPerPlatform: job._viewsPerPlatform,
+        _applyPerPlatform: job._applyPerPlatform,
+        _creationDate: job._creationDate,
+        _startOn: job._startOn,
+      }));
+      
     //filtering
     let i = attributes.indexOf("jobNumber");
     if (i >= 0) {
@@ -50,7 +68,7 @@ export async function getFilteredJobs(attributes: string[] = [], values: string[
     i = attributes.indexOf("scope");
     if (i >= 0) {
         let scope = values[i].split(",").map(num => parseInt(num))
-        jobs = jobs.filter((job) => job._scope[0] <= scope[0] || scope[1] <= job._scope[1]);
+        jobs = jobs.filter((job) => parseInt(job._scope[0]) <= scope[0] || scope[1] <= parseInt(job._scope[1]));
     }
     i = attributes.indexOf("description");
     if (i >= 0) {
@@ -89,9 +107,7 @@ export async function getFilteredJobs(attributes: string[] = [], values: string[
         return jobs.sort(compareByCreationDate);
     if (sortBy === "views")
         return jobs.sort(compareByViews);
-    return jobs.map((job) => new Job(job._jobNumber, job._title, job._role, job._scope
-        , job._region, job._sector, job._description, job._requirements,
-        job._open, job._highPriority, job._viewsPerPlatform, job._applyPerPlatform, job._creationDate, job._startOn));
+    return jobs;
 }
 /* compare function for sort */
 function compareByTitle(a: Job, b: Job): number {
@@ -107,7 +123,7 @@ function compareByRole(a: Job, b: Job): number {
 }
 
 function compareByScope(a: Job, b: Job): number {
-    return a._scope[1] - b._scope[1];
+    return parseInt(a._scope[1]) - parseInt(b._scope[1]);
 }
 
 function compareByRegion(a: Job, b: Job): number {
@@ -150,3 +166,4 @@ function compareByCreationDate(a: Job, b: Job): number {
         return -1;
     return 0;
 }
+
