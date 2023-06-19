@@ -29,8 +29,16 @@ const Transition = React.forwardRef(function Transition(
 
 export default function RecruiterDialog(props: { recruiterRow: Recruiter, recruiters: any, setRecruiters: any, setSnackbar: any, isEdit: boolean }): JSX.Element {
 	const { recruiterRow, recruiters, setRecruiters, setSnackbar, isEdit } = props;
-	const [recruiterSectors, setRecruiterSectors] = React.useState<string[]>([]);
+	const [recruiter, setRecruiter] = React.useState<Recruiter>();
+	const [allSectors, setAllSectors] = React.useState<string[]>([]);
 	const [sectorsSelection, setSectorsSelection] = React.useState<string[]>([]);
+	const [recruiterCurentSectors, setRecruiterCurentSectors] = React.useState<string[]>([]);
+	const [listToDel, setListToDel] = React.useState<string[]>([]);
+	const [listToAdd, setListToAdd] = React.useState<string[]>([]);
+
+	const [listToShow, setListToShow] = React.useState<string[]>([]);
+
+
 	const [loading, setLoading] = React.useState(true);
 	const [firstName, setFirstName] = React.useState('');
 	const [lastName, setLastName] = React.useState('');
@@ -42,25 +50,43 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 	const [open, setOpen] = React.useState(false);
 	const [dialogOpen, setDialogOpen] = React.useState(false);
 	const [dialogEmail, setDialogEmail] = React.useState('');
-	const [dialogPassword, setDialogPassword] = React.useState('');;
+	const [dialogPassword, setDialogPassword] = React.useState('');
+	const [sectorsChanged, setSectorsChanged] = React.useState(false);
+
 	const rew = new Recruiter();
+
+	// 
+	// React.useEffect(() => {
+	// console.log(sectorsSelection);
+	// }, [sectorsSelection])
+
 
 	React.useEffect(() => {
 		const fetchData = async () => {
 			const sectors = await getAllSectors();
 			const sectorStrings = sectors.map((sector: Sector) => sector._name.toString());
-			setRecruiterSectors(sectorStrings);
+			setAllSectors(sectorStrings);
 			setLoading(false);
+			const recruiters = await getRecruitersFromDatabase();
+			const recruiterCurrent = recruiters.filter((recruiter) => recruiter._email === recruiterRow?._email);
+			setRecruiter(recruiterCurrent[0]);
+			setListToShow(recruiterCurentSectors);
+
+
 			if (isEdit) {
-				typeof recruiterRow?._firstName === 'string' && setFirstName(recruiterRow?._firstName);
-				typeof recruiterRow?._lastName === 'string' && setLastName(recruiterRow?._lastName);
-				typeof recruiterRow?._email === 'string' && setEmail(recruiterRow?._email);
-				recruiterRow?._sectors !== null && setRecruiterSectors(recruiterRow?._sectors);
+				setFirstName(recruiterRow?._firstName);
+				setLastName(recruiterRow?._lastName);
+				setEmail(recruiterRow?._email);
+				setRecruiterCurentSectors(recruiterRow?._sectors);
+
 			}
 		};
 
 		fetchData();
-	}, []);
+		setSectorsChanged(false);
+
+
+	}, [sectorsChanged]);
 
 	if (loading) {
 		return <div>Loading...</div>;
@@ -77,11 +103,11 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 
 
 	const handleRemoveRecruiter = async () => {
-		console.log(typeof recruiterRow);
-		const recruiters = await getRecruitersFromDatabase();
-		const recruiterToRemove = recruiters.filter((recruiter) => recruiter._email === recruiterRow?._email)!;
-		recruiterToRemove[0]?.remove();
-		//await recruiterRow?.remove();
+		// const recruiters = await getRecruitersFromDatabase();
+		// const recruiterToRemove = recruiters.filter((recruiter) => recruiter._email === recruiterRow?._email)!;
+		// recruiterToRemove[0]?.remove();
+		recruiter?.remove();
+		// await recruiterRow?.remove();
 		// const updateData = recruiters.filter(rec => rec._id !== recruiterRow._id);
 		// setRecruiters(updateData);
 		setOpen(false);
@@ -119,10 +145,13 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 			setDialogOpen(true);
 			setDialogEmail(email);
 			setDialogPassword(firstPassword);
+			// updateSectors(sectorsSelection,);
 		}
 		else {
-			await recruiterRow.edit(firstName, lastName);  // one more argument is needed (Sectors)
-
+			if (recruiter !== undefined) {
+				await recruiter.edit(firstName, lastName);
+				await updateSectors(recruiter, setSectorsChanged, listToShow, recruiterCurentSectors, setSaveButton);
+			}
 			setOpen(false);
 		}
 		setFirstName('')
@@ -274,10 +303,24 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 												error={emailError !== ''}
 												helperText={emailError}
 											/>
-										</Box>
 
-										<Box sx={{ display: 'flex', justifyContent: 'center' }}>
-											<SectorsChip recruiterSectors={recruiterSectors} setRecruiterSectors={setRecruiterSectors} setSaveButton={setSaveButton} sectorsSelection={sectorsSelection} setSectorsSelection={setSectorsSelection} />
+										</Box>
+										{/* Sectors */}
+										<Box sx={{ justifyContent: 'center' }}>
+											<SectorsChip
+												allSectors={allSectors}
+												setSectorsSelection={setSectorsSelection}
+												sectorsSelection={sectorsSelection}
+												recruiterCurentSectors={recruiterCurentSectors}
+												setSaveButton={setSaveButton}
+												isEdit={isEdit}
+												setListToDel={setListToDel}
+												listToDel={listToDel}
+												setListToAdd={setListToAdd}
+												listToAdd={listToAdd}
+												setListToShow={setListToShow}
+												listToShow={listToShow}
+											/>
 										</Box>
 									</Stack>
 								</Box>
@@ -336,19 +379,11 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 				</Stack>
 
 			</Dialog>
-			<Button onClick={() => { test() }}></Button>
+			{/* <Button onClick={() => { test() }}></Button> */}
 		</Box>
 	);
 
 }
-
-
-
-
-
-
-
-
 
 
 
@@ -373,11 +408,29 @@ function generateCodeFromEmail(email) {
 }
 
 
+//
+// async function test() {
+// const recruiter = new Recruiter("112123@gmail.com", "ראובן", "לוי", ['אשכול 10']);
+// await recruiter.add();
+// recruiter.edit("ירון", "לוי");
+// const reqs = await getRecruitersFromDatabase();
+// console.log(reqs);
+// }
 
-async function test() {
-	const recruiter = new Recruiter("112123@gmail.com", "ראובן", "לוי", ['אשכול 10']);
-	await recruiter.add();
-	// recruiter.edit("ירון", "לוי");
-	const reqs = await getRecruitersFromDatabase();
-	console.log(reqs);
+
+async function updateSectors(recruiter: Recruiter, setSectorsChanged: (value: boolean) => void, newList: string[], listCurrent: string[], setSaveButton: (value: boolean) => void) {
+
+	// for (let i = 0; i < newList.length; i++) {
+		// if (listCurrent.indexOf(newList[i]) === -1) {
+			// await recruiter.addSector(newList[i]);
+		// }
+	// }
+
+	for (let i = 0; i < listCurrent.length; i++)
+		if (newList.indexOf(listCurrent[i]) === -1)
+			await recruiter.removeSector(listCurrent[i]);
+
+
+	// setSaveButton(true);
+	setSectorsChanged(true);
 }

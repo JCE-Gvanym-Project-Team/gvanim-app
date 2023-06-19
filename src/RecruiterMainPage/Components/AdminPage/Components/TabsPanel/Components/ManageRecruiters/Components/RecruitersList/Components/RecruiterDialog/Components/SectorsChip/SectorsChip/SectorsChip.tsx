@@ -9,7 +9,8 @@ import { Checkbox, FormLabel, Input, ListItemText, OutlinedInput, Stack, TextFie
 import { MyPaperSx } from './SectorsChipStyle';
 import SelectInput from '@mui/material/Select/SelectInput';
 import { getAllSectors } from '../../../../../../../../../../../../../../Firebase/FirebaseFunctions/Sector';
-
+import { Dispatch, SetStateAction } from 'react';
+import { sleep } from '../../../../../../../../../../../../../../Firebase/FirebaseFunctions/test';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -23,56 +24,101 @@ const MenuProps = {
 };
 
 
+export default function SectorChips(props: {
+  allSectors: string[],
+  setSectorsSelection: React.Dispatch<React.SetStateAction<string[]>>,
+  sectorsSelection: string[],
+  recruiterCurentSectors: string[],
+  setSaveButton: Dispatch<SetStateAction<boolean>>;
+  isEdit: boolean,
+  setListToDel: React.Dispatch<React.SetStateAction<string[]>>,
+  listToDel: string[],
+  setListToAdd: React.Dispatch<React.SetStateAction<string[]>>,
+  listToAdd: string[],
+  setListToShow:React.Dispatch<React.SetStateAction<string[]>>,
+  listToShow:string[]
+}) {
+  const { allSectors, setSectorsSelection, sectorsSelection, recruiterCurentSectors, setSaveButton, isEdit, setListToDel, listToDel, setListToAdd, listToAdd, setListToShow, listToShow } = props;
+  const [selectNow, setSelectNow] = React.useState<string[]>([]);
+  // const [listToShow, setListToShow] = React.useState<string[]>([]);
+// 
+  // React.useEffect(() => {
+    // setListToShow(recruiterCurentSectors);
+  // }, []);
+// 
 
-function getStyles(name: string, personName: readonly string[], theme: Theme) {
-  return {
-    fontWeight:
-      personName.indexOf(name) === -1
-        ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium,
-  };
-}
 
-export default function SectorChips(props: { recruiterSectors: string[], setRecruiterSectors: any, setSaveButton: any, sectorsSelection:string[], setSectorsSelection:any }) {
-  const { recruiterSectors, setRecruiterSectors, setSaveButton,sectorsSelection, setSectorsSelection} = props;
-  const theme = useTheme();
-
-  const handleChange = (event: SelectChangeEvent<typeof recruiterSectors>) => {
-    setSaveButton(true);
+  const handleChange = async (event: SelectChangeEvent<typeof allSectors>) => {
     const {
       target: { value },
     } = event;
-    setSectorsSelection(
-      // On autofill we get a stringified value.
-      typeof value === 'string' ? value.split(',') : value,
-    );
+
+    const sector: string = event.target.value[0] as string;
+    console.log(sector);
+
+    // -------------to show-----------------------------------------------
+    let indexToRemove = listToShow.indexOf(sector);
+
+    if (indexToRemove === -1) {
+      const updatedListToShow = [...listToShow, sector];
+      setListToShow(updatedListToShow);
+    } else {
+      const updatedListToShow = listToShow.filter((item) => item !== sector);
+      setListToShow(updatedListToShow);
+    }
+
+    // // ------------------------------------------------------------
+    // indexToRemove = listToDel.indexOf(sector);
+
+    // if (indexToRemove > -1) {
+    //   console.log("1");
+    //   // remove
+    //   const updatedListToDel = listToDel.filter((item) => item !== sector)
+    //   setListToDel(updatedListToDel);
+    //   return;
+    // }
+
+    // // ------------------------------------------------------------
+    // indexToRemove = listToAdd.indexOf(sector);
+
+    // if (indexToRemove > -1) {
+    //   console.log("2");
+    //   // remove 
+    //   const updatedListToAdd = listToAdd.filter((item) => item !== sector);
+    //   setListToAdd(updatedListToAdd);
+    //   return;
+    // }
+
+    // // ------------------------------------------------------------
+    // indexToRemove = listToShow.indexOf(sector);
+
+    // if (indexToRemove > -1) { // not in
+    //   console.log("3");
+    //   // add 
+    //   setListToAdd((prevList) => [...prevList, sector]);
+    //   return;
+    // }
+
+    // // ------------------------------------------------------------
+    // indexToRemove = listToShow.indexOf(sector);
+    // if (indexToRemove === -1) { // in
+    //   // add
+    //   console.log("4");
+    //   setListToDel((prevList) => [...prevList, sector]);
+    // }
+    // console.log("fail");
+
   };
-
-  React.useEffect(() => {
-    console.log(sectorsSelection);
-  }, [sectorsSelection]);
-  
-
-  // const fetchSectors = () => {
-   // recruiterSectors !== null && setSectorsSelection(recruiterSectors)
-  // };
-
-  // React.useEffect(() => {
-    // fetchSectors();
-  // }, []);
-
-
 
   return (
     <Box sx={{ width: '100%' }}>
-
       <FormControl sx={{ width: '100%', maxWidth: '100%' }}>
         <label>אשכולות:</label>
         <Select
           multiple
           size='small'
           label="אשכולות"
-          value={sectorsSelection}
+          value={selectNow}
           multiline
           onChange={handleChange}
           input={<OutlinedInput />}
@@ -80,18 +126,17 @@ export default function SectorChips(props: { recruiterSectors: string[], setRecr
           MenuProps={MenuProps}
           required
         >
-          {recruiterSectors.map((sector) => (
+          {allSectors.map((sector) => (
             <MenuItem key={sector} value={sector}>
               <Checkbox
-                checked={sectorsSelection.indexOf(sector) > -1}
+                checked={listToShow.indexOf(sector) > -1}
+                onChange={() => { }}
               />
               <ListItemText primary={sector} />
             </MenuItem>
           ))}
-
         </Select>
       </FormControl>
-
-    </Box >
+    </Box>
   );
 }
