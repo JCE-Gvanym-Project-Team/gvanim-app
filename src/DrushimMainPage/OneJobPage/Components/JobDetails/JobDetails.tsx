@@ -8,11 +8,11 @@ import { ReactComponent as JobStartSVG } from '../../Resources/JobStart.svg';
 import { ReactComponent as YellowEllipseSVG } from '../../Resources/YellowEllipse.svg'
 import { ReactComponent as PinkEllipseSVG } from '../../Resources/PinkEllipse.svg'
 
-export default function FloatingBox(props: { job, screenSize })
+export default function JobDetails(props: { job, screenSize })
 {
     const { job, screenSize } = props;
     const [floatingTop, setFloatingTop] = useState<number>(0);
-    const [containerHeight, setContainerHeight] = useState<number>(10);
+    const [containerHeight, setContainerHeight] = useState<number>(100);
 
     useEffect(() =>
     {
@@ -38,11 +38,11 @@ export default function FloatingBox(props: { job, screenSize })
     }, [floatingTop, containerHeight]);
 
     return (
-        <Box sx={{ flex: { xs: 0, md: 45 }, marginTop: { xs: "102px", md: "0" },alignSelf: "center" }}>
+        <Box sx={{ flex: { xs: 0, md: 45 }, marginTop: { xs: "102px", md: "0" },  }}>
             {/* Ellipses */}
             <Box sx={{
                 width: '100%',
-                zIndex: "4"
+                zIndex: "4",
             }}
             >
                 <Icon sx={{
@@ -241,8 +241,7 @@ export default function FloatingBox(props: { job, screenSize })
                         }}
                         variant={screenSize === "xs" ? "subtitle2" : 'h4'}
                     >
-                        {/* TODO: add job start */}
-                        {job?._jobNumber}
+                        {job?._startOn}
                     </Typography>
                 </Box >
             </Box >

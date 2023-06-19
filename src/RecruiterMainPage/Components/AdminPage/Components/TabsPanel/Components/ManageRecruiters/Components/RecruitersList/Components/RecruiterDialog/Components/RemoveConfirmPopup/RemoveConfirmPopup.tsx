@@ -60,6 +60,11 @@ export default function RemoveConfirmPopup(props: { handleRemoveRecruiter: any }
         setOpen(false);
     };
 
+    const handleRemoveAndClose = () =>{
+        handleRemoveRecruiter();
+        handleClose();
+    }
+
     return (
         <>
             <Button type='submit' onClick={handleClickOpen} variant='contained' color='error'>
@@ -84,7 +89,7 @@ export default function RemoveConfirmPopup(props: { handleRemoveRecruiter: any }
                     <Button variant='text' autoFocus onClick={handleClose}>
                         ביטול
                     </Button>
-                    <Button variant='text' color='error' type='submit' autoFocus onClick={handleRemoveRecruiter}>
+                    <Button variant='text' color='error' type='submit' autoFocus onClick={handleRemoveAndClose}>
                         הסר
                     </Button>
                 </DialogActions>

@@ -7,11 +7,12 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import 'dayjs/locale/he'
 import { Candidate } from "../../../../../../Firebase/FirebaseFunctions/Candidate";
 import { CandidateJobStatus, allStatus, getAllRejectCause, getFilteredCandidateJobStatuses, getMessage } from "../../../../../../Firebase/FirebaseFunctions/CandidateJobStatus";
-import { Recruiter } from "../../../../../../Firebase/FirebaseFunctions/Recruiter";
+import { Recruiter, getRecruitersFromDatabase } from "../../../../../../Firebase/FirebaseFunctions/Recruiter";
 import { Job, getFilteredJobs } from "../../../../../../Firebase/FirebaseFunctions/Job";
 import { useNavigate } from "react-router-dom";
 import AreYouSureDialog from "../../../Components/AreYouSureDialog/AreYouSureDialog";
 import SuccessMessageSnackbar from "../../../Components/SuccessMessageSnackbar/SuccessMessageSnackbar";
+import { getConnectedUser } from "../../../../../../Firebase/FirebaseFunctions/Authentication";
 
 const filter = createFilterOptions<string>();
 
@@ -62,8 +63,31 @@ export default function ScheduleInterviewDialog(props: {
 
     const navigate = useNavigate();
 
+    // returns the whatsapp message to be sent to the candidate
+    const getWhatsappMessage = async function (candidate, chosenJobValue, allJobs, status, interviewDate)
+    {
+        // get currently connected recruiter
+        const user = await getConnectedUser();
+        const recruiters = await getRecruitersFromDatabase();
+        
+        let current_recruiter = recruiters.find((recruiter) =>
+        {
+            return recruiter._email === user?.email;
+        });
+        if (!current_recruiter){
+            current_recruiter = new Recruiter("","אדמין", "אדמין",[]);
+        }
+
+        const jobNumberString = chosenJobValue?.match(/\d+/)?.[0];
+        const jobNumber = jobNumberString ? parseInt(jobNumberString) : NaN;
+        const chosenJob = (allJobs.filter((job) => job._jobNumber === jobNumber))[0];
+        
+
+        return getMessage(candidate, chosenJob, current_recruiter!, status, interviewDate, ":");
+    }
+
     // time changed 
-    const handleDateChange = (value) =>
+    const handleDateChange = async (value) =>
     {
         setDate(value);
         const chosenDate: Date = value?.$d;
@@ -72,10 +96,10 @@ export default function ScheduleInterviewDialog(props: {
         chosenDate?.setMinutes(chosenTime ? chosenTime.getMinutes() : 0);
         setInterviewDate(chosenDate);
 
-        setWhatsappMessage(getWhatsappMessage(candidate, chosenJobValue, allJobs, newStatus, chosenDate));
+        setWhatsappMessage(await getWhatsappMessage(candidate, chosenJobValue, allJobs, newStatus, chosenDate));
     };
 
-    const handleTimeChange = (value) =>
+    const handleTimeChange = async (value) =>
     {
         setTime(value);
         const chosenDate: Date = date?.$d;
@@ -85,7 +109,7 @@ export default function ScheduleInterviewDialog(props: {
         chosenTime?.setDate(chosenDate ? chosenDate.getDate() : 0);
         setInterviewDate(chosenDate);
 
-        setWhatsappMessage(getWhatsappMessage(candidate, chosenJobValue, allJobs, newStatus, chosenTime));
+        setWhatsappMessage(await getWhatsappMessage(candidate, chosenJobValue, allJobs, newStatus, chosenTime));
     };
 
     const setDefaults = () =>
@@ -137,13 +161,15 @@ export default function ScheduleInterviewDialog(props: {
         // send whatsapp message
         const link = await candidateJobStatus?.getWhatsappUrl(whatsappMessage);
 
+        console.log(link);
+
         window.open(link);
 
         setDefaults();
 
         onClose(event, "submit");
 
-        navigate("/management/manageCandidates/" + candidate?._id, { state: true });
+
     }
 
     const handleSubmitSaveRejectionReason = async (event) =>
@@ -164,6 +190,7 @@ export default function ScheduleInterviewDialog(props: {
         setLoading(false);
         setDefaults();
         onClose(event, "submit");
+
     }
 
     const handleSubmitSendWhatsappMessage = async (event) =>
@@ -182,7 +209,6 @@ export default function ScheduleInterviewDialog(props: {
         setDefaults();
         window.open(link);
 
-        setDefaults();
         onClose(event, "submit");
     }
 
@@ -319,19 +345,10 @@ export default function ScheduleInterviewDialog(props: {
                         </MenuItem>
                     }
                     renderInput={(params) => <TextField {...params} label="סטטוס חדש" />}
-                    onInputChange={(event, value) =>
+                    onInputChange={async (event, value) =>
                     {
-                        // set whatsapp message
-                        const temp = new Candidate(candidate ? candidate._id : "", candidate?._firstName, candidate?._lastName, candidate?._phone, candidate?._eMail, candidate?._generalRating, candidate?._note);
 
-                        // todo: get real recruiter here
-                        const tempRecruiter = new Recruiter("recruiteremail@gmail.com", "firstname", "lastname", ["asd", "asdasd"]);
-                        const jobNumberString = chosenJobValue?.match(/\d+/)?.[0];
-                        const jobNumber = jobNumberString ? parseInt(jobNumberString) : NaN;
-                        const chosenJob = (allJobs.filter((job) => job._jobNumber === jobNumber))[0];
-
-                        setWhatsappMessage(getWhatsappMessage(candidate, chosenJobValue, allJobs, value, interviewDate));
-
+                        setWhatsappMessage(await getWhatsappMessage(candidate, chosenJobValue, allJobs, value, interviewDate));
                         handleStatusChanged(value);
                     }}
                 />
@@ -480,7 +497,7 @@ export default function ScheduleInterviewDialog(props: {
                     callback={areYouSureCallback}
                     setSnackBarOpen={setSnackBarOpen}
                 />
-                <SuccessMessageSnackbar open={snackBarOpen} onClose={snackBarOnClose}/>
+                <SuccessMessageSnackbar open={snackBarOpen} onClose={snackBarOnClose} />
             </DialogContent>
 
 
@@ -497,7 +514,7 @@ export default function ScheduleInterviewDialog(props: {
                                 setAreYouSureDialogMessage("פעולה זו תשנה את המשרה של המועמד: " +
                                     candidate?._firstName + " " + candidate?._lastName +
                                     "\nמ: " + fromJobValue + " ל: " + toJobValue);
-                                setAreYouSureCallback(() => () => { handleSubmitChangeJob(event); });
+                                setAreYouSureCallback(() => () => { handleSubmitChangeJob(event); setSnackBarOpen(true); return true; });
                             }} variant="contained" sx={submitButtonSx}>
                                 העברת משרה
                             </Button>
@@ -510,7 +527,7 @@ export default function ScheduleInterviewDialog(props: {
                             {
                                 setAreYouSureDialogOpen(true);
                                 setAreYouSureDialogMessage("פעולה זו תשנה את המשרה של המועמד: " + candidate?._firstName + " " + candidate?._lastName);
-                                setAreYouSureCallback(() => () => { handleSubmitSaveRejectionReason(event); });
+                                setAreYouSureCallback(() => () => { handleSubmitSaveRejectionReason(event); setSnackBarOpen(true); return true; });
                             }} variant="contained" sx={submitButtonSx}>
                                 שמירה
                             </Button>
@@ -523,7 +540,7 @@ export default function ScheduleInterviewDialog(props: {
                             {
                                 setAreYouSureDialogOpen(true);
                                 setAreYouSureDialogMessage('פעולה זו תשנה את הסטטוס של המועמד ל: ' + newStatus + '\nותנתב אותך לאתר של וואצאפ על מנת לשלוח למועמד הודעה');
-                                setAreYouSureCallback(() => () => { handleSubmitSendWhatsappMessage(event); });
+                                setAreYouSureCallback(() => () => { handleSubmitSendWhatsappMessage(event); setSnackBarOpen(true); return true; });
                             }} variant="contained" sx={submitButtonSx}>
                                 <WhatsApp sx={{ marginRight: "0.5rem" }} />
                                 שליחת הודעה למועמד
@@ -535,7 +552,7 @@ export default function ScheduleInterviewDialog(props: {
                         {
                             setAreYouSureDialogOpen(true);
                             setAreYouSureDialogMessage(" פעולה זו תשנה את סטטוס המועמד ל: " + newStatus);
-                            setAreYouSureCallback(() => () => { handleSubmitSaveStatus(event); });
+                            setAreYouSureCallback(() => () => { handleSubmitSaveStatus(event); setSnackBarOpen(true); return true; });
                         }} variant="contained" sx={{ backgroundColor: "blueviolet" }}>
                             שמירת סטטוס
                         </Button>
@@ -589,17 +606,4 @@ const rerender = function (rerenderKey, setRerenderKey)
     {
         setRerenderKey("0");
     }
-}
-
-const getWhatsappMessage = function (candidate, chosenJobValue, allJobs, status, interviewDate)
-{
-    const temp = new Candidate(candidate ? candidate._id : "", candidate?._firstName, candidate?._lastName, candidate?._phone, candidate?._eMail, candidate?._generalRating, candidate?._note);
-
-    // todo: get real recruiter here
-    const tempRecruiter = new Recruiter("recruiteremail@gmail.com", "firstname", "lastname", ["asd", "asdasd"]);
-    const jobNumberString = chosenJobValue?.match(/\d+/)?.[0];
-    const jobNumber = jobNumberString ? parseInt(jobNumberString) : NaN;
-    const chosenJob = (allJobs.filter((job) => job._jobNumber === jobNumber))[0];
-
-    return getMessage(temp, chosenJob, tempRecruiter, status, interviewDate, "makom");
 }

@@ -14,7 +14,7 @@ export default function DrushimMainPage()
 
 	const fetchJobs = async () =>
 	{
-		setJobs(await getFilteredJobs());
+		setJobs(await getFilteredJobs(["open"],["true"]));
 	}
 
 	useEffect(() =>
@@ -30,7 +30,7 @@ export default function DrushimMainPage()
 			<Accessibility />
 			<Routes>
 				{/* All Jobs Page Route*/}
-				<Route path='jobs' element={<AllJobsPage />} />
+				<Route path='jobs' element={<AllJobsPage jobs={jobs} />} />
 
 				{/* One Job Pages Routes */}
 				{jobs.map(job => <Route path={'jobs/' + job._jobNumber} element={<OneJobPage />} key={job._jobNumber} />)}
