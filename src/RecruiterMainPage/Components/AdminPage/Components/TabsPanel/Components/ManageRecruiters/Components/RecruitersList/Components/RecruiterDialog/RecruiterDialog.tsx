@@ -137,10 +137,11 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 		}
 		if (!isEdit) {
 			const newRecruter = new Recruiter(email, firstName, lastName, sectorsSelection);
-			let firstPassword:string = generateCodeFromEmail(email);
-			firstPassword = "aviv11"
-			await newRecruter.add(firstPassword);
-			console.log(firstPassword);
+			console.log("real email: " + email);
+			let firstPassword:string = generateCodeFromEmail("adi@gmail.com");
+			// console.log("fake email: example@gmail.com ");
+			// console.log("fake first password: " + firstPassword);
+			// console.log(firstPassword);
 			await newRecruter.add(firstPassword);
 			setDialogOpen(true);
 			setDialogEmail(email);
@@ -295,7 +296,7 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 												value={email}
 												onChange={
 													(e) => {
-														setEmail(e.target.value);
+														setEmail(e.target.value );
 														setSaveButton(true);
 														setEmailError('');
 													}
@@ -388,7 +389,7 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 
 
 
-function generateCodeFromEmail(email) {
+function generateCodeFromEmail(email:string) {
 	const atIndex = email.indexOf('@');
 
 	if (atIndex === -1) {
@@ -398,10 +399,10 @@ function generateCodeFromEmail(email) {
 	const username = email.substring(0, atIndex);
 	const usernameSubstring = username.substring(0, Math.min(4, username.length));
 
-	let code = usernameSubstring;
+	let code:string = usernameSubstring + "";
 
 	while (code.length < 6) {
-		code += Math.floor(Math.random() * 10);
+		code += Math.floor(Math.random() * 10) + "";
 	}
 
 	return code;
