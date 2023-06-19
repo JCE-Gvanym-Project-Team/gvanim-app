@@ -110,8 +110,8 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 		// setRecruiters(updateData);
 		setOpen(false);
 
-		// postMessage(`המגייס/ת ${recruiterRow._firstName} ${recruiterRow._lastName} נמחק/ה בהצלחה מהמערכת.`);
-		// setSnackbar(true);
+		 postMessage(`המגייס/ת ${recruiterRow._firstName} ${recruiterRow._lastName} נמחק/ה בהצלחה מהמערכת.`);
+		 setSnackbar(true);
 
 	}
 	const handleSubmit = async () => {
@@ -138,9 +138,7 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 		if (!isEdit) {
 			const newRecruter = new Recruiter(email, firstName, lastName, sectorsSelection);
 			let firstPassword:string = generateCodeFromEmail(email);
-			// firstPassword = "aviv11"
-			console.log(firstPassword);
-			await newRecruter.add(firstPassword);
+			await newRecruter.add("al1212");
 			setDialogOpen(true);
 			setDialogEmail(email);
 			setDialogPassword(firstPassword);

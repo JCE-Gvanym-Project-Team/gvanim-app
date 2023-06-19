@@ -9,7 +9,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Grid from '@mui/material/Grid';
 import { getConnectedUser, sendResetMail } from '../../../../../../../Firebase/FirebaseFunctions/Authentication';
 
-const ITEM_HEIGHT = 48;
+const ITEM_HEIGHT = 38;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
   PaperProps: {
@@ -53,14 +53,22 @@ export default function UpdateAccount() {
   }, []);
 
   const handleChange = (event: SelectChangeEvent<string[]>) => {
-    setRecruitersSelected(event.target.value as string[]);
-    setRecruiterSelect(true);
+    const selectedValue = event.target.value as string[];
+
+    if (selectedValue.length === 1) {
+      setRecruitersSelected(selectedValue);
+      setRecruiterSelect(true);
+    } else {
+      setRecruitersSelected([]);
+      setRecruiterSelect(false);
+    }
     // setOpenDialog(true);
   };
 
   const handleResetPassword = () => {
     console.log(recruitersSelected[0]);
-    sendResetMail(recruitersSelected[0]); 
+    const mail: string = recruitersSelected[0];
+    sendResetMail(mail);
     if (recruiterSelect) setOpenDialog(true);
   };
 
@@ -75,12 +83,12 @@ export default function UpdateAccount() {
 
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'fixed', alignItems: 'center', height: '30vh' }}>
+    <Box sx={{ display: 'flex', justifyContent: 'fixed', alignItems: 'center', height: '270px' }}>
       <Grid container justifyContent="center">
         <Grid item xs={8} sm={6} md={4} lg={3}>
           {isAdminUser && (
             <>
-              <FormControl sx={{ width: '100%', marginBottom: '1rem', marginTop: '3rem' }}>
+              <FormControl sx={{ width: '100%', marginBottom: '10px', marginTop: '20px' }}>
                 <label>אנא בחר/י מגייס/ת:</label>
                 <Select
                   multiple
@@ -133,6 +141,14 @@ export default function UpdateAccount() {
               אפס/י את הסיסמא של החשבון הנוכחי
             </Button>
           </Box>
+
+          {!isAdminUser && (
+          <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
+            <Button variant="outlined" onClick={resetThePasswordOfTheCurrentUser} sx={{ width: '85%' }}>
+              אפס/י את הסיסמא של החשבון הנוכחי
+            </Button>
+          </Box>
+          )}
 
         </Grid>
       </Grid>
