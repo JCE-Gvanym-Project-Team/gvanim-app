@@ -1,9 +1,10 @@
 
 import { Accessible, Contrast, FontDownload, LightMode, Nightlight, Replay, ZoomInRounded, ZoomOutRounded } from '@mui/icons-material';
 import { Box, Button, Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, Typography, styled } from '@mui/material';
-import {useTheme} from '@mui/material/styles'
+import { useTheme } from '@mui/material/styles';
 import React, { useContext, useState } from 'react';
 import { ColorModeContext, FontContext, colorTokens } from '../../theme';
+import AccessibilityIcon from './Accessibility.png'
 
 
 const CustomDrawer = styled(Drawer)(({ theme }) => ({
@@ -35,8 +36,16 @@ export default function Accessibility()
         setOpen(open);
     }
 
-    // is active for each accessibility option
-    const [isActive, setIsActive] = useState(false);
+    const StyledButton = styled(Button)`
+        transition: transform 0.3s ease-in-out;
+        &:hover {
+            transform: translateX(-10px);
+        }
+        &:not(:hover) {
+            transform: translateX(0);
+        }
+    `;
+
 
     return (
         <React.Fragment>
@@ -45,28 +54,29 @@ export default function Accessibility()
                     display: "flex",
                     justifyContent: "end",
                     position: "fixed",
-                    top: "35%",
+                    top: "467px",
                     right: "0",
                     zIndex: "10" // on top of everything but the drawer
                 }}
             >
-                <Button
+                <StyledButton
                     variant='contained'
                     sx={{
-                        left: 0,
-                        backgroundColor: "secondary.main",
-                        "&:hover": {
-                            backgroundColor: "secondary.dark"
-                        }
+                        width:"110px",
+                        backgroundColor: "secondary.jobDetails",
+                        "&:hover" : {
+                            backgroundColor: "secondary.jobDetails"
+                        },
+                        left: "10px",
+                        borderBottomLeftRadius: "56px",
+                        borderTopLeftRadius: "56px"
                     }}
                     onClick={() => toggleDrawer(true)}
                 >
-                    <Typography variant='h4' color={"primary.textBright"} sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
-                        <Accessible sx={{ fontSize: "24px" }} />
-                        נגישות
-                    </Typography>
-                </Button>
+                    <img src={AccessibilityIcon} style={{ height: "63px", width: "63px",  marginLeft: 32 }} />
+                </StyledButton>
             </Box>
+
 
             <CustomDrawer
                 anchor="left"
@@ -81,7 +91,7 @@ export default function Accessibility()
                     {/* increase or decrease font size */}
                     <List>
                         {/* Decrease font size */}
-                        <ListItem disablePadding>
+                        <ListItem disablePadding sx={{ marginTop: "100px" }}>
                             <ListItemButton
                                 onClick={() =>
                                 {
@@ -122,7 +132,7 @@ export default function Accessibility()
                     <Divider />
                     <List >
                         {/* dark contrast */}
-                        <ListItem disablePadding>
+                        <ListItem disablePadding sx={{backgroundColor: "#0022AA22"}}>
                             <ListItemButton
                                 onClick={() =>
                                 {
@@ -155,7 +165,7 @@ export default function Accessibility()
                         </ListItem>
 
                         {/* Black and white */}
-                        <ListItem disablePadding>
+                        <ListItem disablePadding sx={{backgroundColor: "#EEEEEE"}}>
                             <ListItemButton
                                 onClick={() =>
                                 {

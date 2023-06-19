@@ -438,39 +438,9 @@ export default function OneJobPage()
                         justifyContent: "stretch",
                         marginLeft: marginLeftAndRight,
                         marginRight: marginLeftAndRight,
-                        backgroundColor: "background.main",
                         marginTop: "136px",
                     }}
                 >
-
-                    {/* Go back to all jobs button
-                    <Button
-                        variant='outlined'
-                        sx={{
-                            alignSelf: "start",
-                            backgroundColor: "background.boxInner",
-                            "&:hover": {
-                                backgroundColor: "background.main"
-                            },
-                            marginTop: "1rem"
-                        }}
-                        onClick={() => navigate("/career/jobs")}
-
-                    >
-                        <Typography
-                            variant='h5'
-                            sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                fontWeight: "bold",
-                                color: "primary.title"
-                            }}
-                        >
-
-                            <Redo sx={{ marginRight: "0.3rem" }} />
-                            לכל המשרות
-                        </Typography>
-                    </Button> */}
 
                     {/* Job Number */}
                     <Box sx={{ display: "flex", flexDirection: "row", width: { xs: "100%", md: "41.71875vw" } }}>
@@ -486,7 +456,6 @@ export default function OneJobPage()
                     {/* Job Title */}
                     <Box
                         sx={{
-                            backgroundColor: "background.box",
                             display: "flex",
                             justifyContent: "start",
                             alignItems: "center",
@@ -516,7 +485,6 @@ export default function OneJobPage()
                                 display: "flex",
                                 flexDirection: { xs: "column", md: "row" },
                                 justifyContent: "stretch",
-                                backgroundColor: "background.main",
                                 marginTop: { xs: "44px", md: "128px" }
                             }}
                         >
@@ -606,12 +574,7 @@ export default function OneJobPage()
                                     </Typography>
 
                                     <Box sx={{ display: "flex", flexDirection: "column" }}>
-
-                                        <Button>asd</Button>
-                                        <Button>asd</Button>
-                                        <Button>asd</Button>
-                                        <Button>asd</Button>
-                                        <Button>asd</Button>
+                                        
                                     </Box>
 
 
@@ -652,7 +615,7 @@ export default function OneJobPage()
                         </Box>
 
                         {/* button that redirects to details */}
-                        <Box sx={{ display: { md: "none", lg: "block" }, position: "absolute", left: { lg: "20px", xl: "1.5vw" }, marginTop: "-60px" }}>
+                        <Box sx={{ display: { xs: "none", md: "none", lg: "block" }, position: "absolute", left: { lg: "20px", xl: "1.5vw" }, marginTop: "-60px" }}>
                             <Button
 
                                 sx={{
@@ -676,7 +639,7 @@ export default function OneJobPage()
                                     להגשת מועמדות
                                 </Typography>
 
-                                <Icon sx={{ height: "30px", width: "40px", color: "primary.textBright", marginLeft: { xs: "2px", md: "12px" } }}
+                                <Icon sx={{ height: "30px", width: "40px", color: "primary.textBright", marginLeft: { xs: "2px", md: "0px" } }}
                                     component={DownArrowSVG}
                                 />
 
@@ -980,7 +943,7 @@ export default function OneJobPage()
                                 onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
                                 {
                                     const files = event.target.files!;
-                                    if (files[0].type === "application/pdf"){
+                                    if (files && files[0] && files[0].type === "application/pdf"){
                                         setCvFile(files[0]);
                                         setCvFileError(false);
                                     }
@@ -1421,7 +1384,7 @@ export default function OneJobPage()
                                                                     {
                                                                         const inputElement = event.target as HTMLInputElement;
                                                                         const files = inputElement.files;
-                                                                        if (files && files.length > 0 && files[0].type === "application/pdf")
+                                                                        if (files && files.length > 0 && files[0] && files[0].type === "application/pdf")
                                                                         {
                                                                             updateRecommendersListAtIndex(recommendersList[index][0], files[0], index);
                                                                         }

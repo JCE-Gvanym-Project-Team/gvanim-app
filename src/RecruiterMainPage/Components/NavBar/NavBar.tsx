@@ -11,12 +11,16 @@ import { Recruiter, getRecruitersFromDatabase } from '../../../Firebase/Firebase
 export default function NavBar(props: { handlelogout: any })
 {
     const [recruiter, setRecruiter] = useState<Recruiter | undefined>(undefined);
+    const [admin, setAdming] = useState<string | undefined>(undefined);
 
     useEffect(() =>
     {
         (async () =>
         {
             const user = await getConnectedUser();
+            if (user?.email === "admin@gmail.com"){
+                setAdming('admin');
+            }
             const recruiters = await getRecruitersFromDatabase();
 
             const current_recrutier = recruiters.find((recruiter) =>
@@ -54,7 +58,7 @@ export default function NavBar(props: { handlelogout: any })
 
                             <Stack direction='row'>
                                 <Typography sx={{ color: 'black', fontSize: '0.9rem', lineHeight: '1.625', fontWeight: 600 }} >
-                                    {recruiter?._firstName}
+                                    {admin !== undefined ? "אדמין" : recruiter?._firstName}
                                 </Typography>
 
                             </Stack>

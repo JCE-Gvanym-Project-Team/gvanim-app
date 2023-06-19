@@ -18,7 +18,7 @@ const Chart = () => {
       
       for (let i = 0; i < filteredJobs.length; i++) {
         const job = filteredJobs[i];
-        const role = job._role;
+        const role = "משרה מס' " + job._jobNumber + " | " + job._role;
         const sum_cands =  (await job.getCandidatures()).length;
         if(sum_cands > 0){
         if (job != undefined && role != undefined) {

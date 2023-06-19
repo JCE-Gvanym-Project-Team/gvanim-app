@@ -47,13 +47,14 @@ export const colorTokens = (mode) =>
                 cvButtonHover: "#77CFEF",
                 submitButtonHover: "#2768B4",
                 recommendersBox: "rgba(91, 161, 170, 0.14)",
-                footer: "#002652"
+                footer: "#002652",
+                successHover: "#009900"
             },
             error: {
                 main: "#FF0000"
             },
             success: {
-                main: "#00FF00"
+                main: "#00AA00"
             }
         }
 
@@ -95,7 +96,8 @@ export const colorTokens = (mode) =>
                 cvButtonHover: "#e4f5fc",
                 submitButtonHover: "#cfe0f5",
                 recommendersBox: "rgba(91, 161, 170, 0.14)",
-                footer: "#a9d1ff"
+                footer: "#a9d1ff",
+                successHover: "#009900"
             },
             error: {
                 main: "#FF0000"
@@ -108,7 +110,7 @@ export const colorTokens = (mode) =>
     {
         return {
             primary: {
-                main: "#000000",
+                main: "#FFFFFF",
                 textBright: "#FFFFFF",
                 faded: "#ffffff",
                 jobTitle: "#6cadf9",
@@ -142,7 +144,8 @@ export const colorTokens = (mode) =>
                 cvButtonHover: "#083140",
                 submitButtonHover: "#081524",
                 recommendersBox: "rgba(91, 161, 170, 0.14)",
-                footer: "#000810"
+                footer: "#000810",
+                successHover: "#009900"
             },
             error: {
                 main: "#FF0000"
@@ -190,7 +193,8 @@ export const colorTokens = (mode) =>
                 cvButtonHover: colorToGrayscale("#77CFEF"),
                 submitButtonHover: colorToGrayscale("#2768B4"),
                 recommendersBox: colorToGrayscale("rgba(91, 161, 170, 0.14)"),
-                footer: colorToGrayscale("#002652")
+                footer: colorToGrayscale("#002652"),
+                successHover: colorToGrayscale("#009900")
             },
             error: {
                 main: colorToGrayscale("#FF0000")
@@ -241,7 +245,8 @@ export const themeSettings = (mode, actualMode, fontSize, fontFamily) =>
                 cvButtonHover: colors.background?.cvButtonHover,
                 submitButtonHover: colors.background?.submitButtonHover,
                 recommendersBox: colors.background?.recommendersBox,
-                footer: colors.background?.footer
+                footer: colors.background?.footer,
+                successHover: colors.background?.successHover
             },
             error: {
                 main: colors.error?.main!

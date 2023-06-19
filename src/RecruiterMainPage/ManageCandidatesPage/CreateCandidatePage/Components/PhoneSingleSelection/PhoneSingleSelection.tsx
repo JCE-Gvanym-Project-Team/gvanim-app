@@ -9,7 +9,7 @@ import {
   Box,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -28,31 +28,32 @@ export default function PhoneNumberSelection(props: {
   setPhoneNumber: any;
   error: any;
   setError: any;
+  formSubmitted: boolean;
 }) {
-  const { phoneNumber, setPhoneNumber, error, setError } = props;
-  const [prefix, setPrefix] = useState("");
+  const { phoneNumber, setPhoneNumber, error, setError, formSubmitted } = props;
+  const [prefix, setPrefix] = useState("050");
   const [number, setNumber] = useState("");
 
   const handlePrefixChange = (event: SelectChangeEvent<string>) => {
-    const {
-      target: { value },
-    } = event;
-    setPrefix(value);
-    if (value?.length > 0 && error) {
-      setError(false);
-    }
+    setPrefix(event.target.value);
   };
 
   const handleNumberChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
     setNumber(newValue);
-    if (newValue?.length === 7 && !error && prefix?.length === 3) {
+    if (newValue?.length !== 7) {
+      setError(true);
+    } else {
       setError(false);
       setPhoneNumber(prefix + newValue);
-    } else {
-      setError(true);
     }
   };
+
+  useEffect(() => {
+    if (formSubmitted && !number) {
+      setError(true);
+    }
+  }, [formSubmitted, number, setError]);
 
   return (
     <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
@@ -63,7 +64,7 @@ export default function PhoneNumberSelection(props: {
             value={number}
             placeholder="1234567"
             onChange={handleNumberChange}
-            error={error}
+            error={formSubmitted && error}
             sx={{
               "& .MuiOutlinedInput-input": {
                 font: "small-caption",
@@ -75,8 +76,8 @@ export default function PhoneNumberSelection(props: {
                 borderColor: "#7795f8",
               },
               "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                borderColor: "#4A90E2", // <-- Noticeable blue color when focused
-                borderWidth: "2px", // <-- Increase border width when focused
+                borderColor: "#4A90E2",
+                borderWidth: "2px",
               },
             }}
             size="small"
@@ -90,18 +91,13 @@ export default function PhoneNumberSelection(props: {
         <InputLabel id="phone-prefix-label"></InputLabel>
         <Select
           sx={{
-            "& .muirtl-jedpe8-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.muirtl-jedpe8-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.muirtl-jedpe8-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-              {
-                font: "small-caption",
-              },
-            "& .muirtl-1d3z3hw-MuiOutlinedInput-notchedOutline": {
+            "& .MuiSelect-select": {
+              font: "small-caption",
+            },
+            "& .MuiOutlinedInput-notchedOutline": {
               borderRadius: "0.375rem !important",
             },
-
-            "& .muirtl-hfutr2-MuiSvgIcon-root-MuiSelect-icon": {
-              color: "#7795f8 !important",
-            },
-            "& .muirtl-bpeome-MuiSvgIcon-root-MuiSelect-icon": {
+            "& .MuiSvgIcon-root": {
               color: "#7795f8 !important",
             },
           }}
@@ -109,8 +105,6 @@ export default function PhoneNumberSelection(props: {
           value={prefix}
           onChange={handlePrefixChange}
           input={<OutlinedInput />}
-          renderValue={(selected) => selected.toString()}
-          error={error}
           MenuProps={MenuProps}
         >
           {PHONE_PREFIXES.map((prefix) => (

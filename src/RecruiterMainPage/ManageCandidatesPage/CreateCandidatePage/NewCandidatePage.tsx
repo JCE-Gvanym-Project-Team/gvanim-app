@@ -6,7 +6,9 @@ import {
   FormControlLabel,
   FormHelperText,
   FormLabel,
+  MenuItem,
   Rating,
+  Select,
   Stack,
   Switch,
   TextField,
@@ -47,6 +49,8 @@ import {
   jobTextSx,
   mainStackSx,
 } from "../ViewCandidatesPage/ViewCandidatesPageStyle";
+import { CandidateJobStatus } from "../../../Firebase/FirebaseFunctions/CandidateJobStatus";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
 const Form = styled("form")(({ theme }) => ({
   width: "100%",
@@ -65,6 +69,9 @@ const NewCandidatePage = () => {
   const [candidateGeneralRating, setCandidateGeneralRating] =
     useState<number>(-1);
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [jobs, setJobs] = useState<Job[]>([]);
+  const [selectedJob, setSelectedJob] = useState<Job | null>(null);
+  const [cvFile, setCvFile] = useState<File | null>(null);
 
   // errors
   const [errorCandidateFirstName, setErrorCandidateFirstName] =
@@ -78,9 +85,9 @@ const NewCandidatePage = () => {
   const [errorCandidateNote, setErrorCandidateNote] = useState<boolean>(false);
   const [errorCandidateGeneralRating, setErrorCandidateGeneralRating] =
     useState<boolean>(false);
-
+  const [errorJobSelection, setErrorJobSelection] = useState<boolean>(false);
   // my "editJob"
-  const [myCandidate, setMyCandidate] = useState<Candidate>();
+  const [myCandidate, setMyCandidate] = useState<Candidate | undefined>();
   const [generalRating, setGeneralRating] = useState<number>(-1);
 
   // my loading
@@ -112,7 +119,7 @@ const NewCandidatePage = () => {
 
     setLoading(true);
 
-    let candidate_ = await getFilteredCandidates(
+    const candidate_ = await getFilteredCandidates(
       ["candidateId"],
       [state?.candidate?._candidateId?.toString()]
     );
@@ -120,6 +127,11 @@ const NewCandidatePage = () => {
 
     window.history.replaceState({}, document.title); // clean state
     setLoading(false);
+  };
+
+  const fetchJobs = async () => {
+    const fetchedJobs = await getFilteredJobs();
+    setJobs(fetchedJobs);
   };
 
   useEffect(() => {
@@ -130,41 +142,35 @@ const NewCandidatePage = () => {
         fetchCandidate();
       }
     }
+    fetchJobs();
   }, []);
 
   const navigate = useNavigate();
 
-  const handleSubmit = async (event: any) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    if (!selectedJob) {
+      setErrorJobSelection(true);
+      return;
+    }
     setFormSubmitted(true);
     if (
       candidateFirstName.length === 0 ||
       candidateLastName.length === 0 ||
       candidateEmail.length === 0 ||
       candidatePhone.length === 0 ||
-      candidateNote.length === 0
+      candidateNote.length === 0 ||
+      generalRating === -1
     ) {
-      if (candidateFirstName.length === 0) {
-        setErrorCandidateFirstName(true);
-      }
-      if (candidateLastName.length === 0) {
-        setErrorCandidateLastName(true);
-      }
-      if (candidatePhone.length === 0) {
-        setErrorCandidatePhone(true);
-      }
-      if (candidateEmail.length === 0) {
-        setErrorCandidateEmail(true);
-      }
-      if (candidateNote.length === 0) {
-        setErrorCandidateNote(true);
-      }
-      if (candidateGeneralRating === -1) {
-        setErrorCandidateGeneralRating(true);
-      }
+      setErrorCandidateFirstName(candidateFirstName.length === 0);
+      setErrorCandidateLastName(candidateLastName.length === 0);
+      setErrorCandidatePhone(candidatePhone.length === 0);
+      setErrorCandidateEmail(candidateEmail.length === 0);
+      setErrorCandidateNote(candidateNote.length === 0);
+      setErrorCandidateGeneralRating(generalRating === -1);
     } else {
       // edit
-      if (state !== null && myCandidate !== null) {
+      if (state !== null && myCandidate !== undefined) {
         setLoading(true);
 
         if (myCandidate) {
@@ -173,7 +179,7 @@ const NewCandidatePage = () => {
           myCandidate._phone = candidatePhone;
           myCandidate._eMail = candidateEmail;
           myCandidate._note = candidateNote;
-          myCandidate._generalRating = Number(candidateGeneralRating);
+          myCandidate._generalRating = Number(generalRating);
 
           await myCandidate.edit();
         }
@@ -188,18 +194,37 @@ const NewCandidatePage = () => {
       // add
       else {
         setLoading(true);
+        const NewCandidateId = await generateCandidateId();
 
         let candidate = new Candidate(
-          await generateCandidateId(),
+          NewCandidateId,
           candidateFirstName,
           candidateLastName,
           candidateEmail,
           candidatePhone,
-          candidateGeneralRating,
+          generalRating,
           candidateNote
         );
 
-        await candidate.add();
+        // Add the candidate to the selected job
+        const jobNumber = selectedJob?._jobNumber;
+        if (jobNumber) {
+          const candidateJobStatus = new CandidateJobStatus(
+            jobNumber,
+            candidate._id,
+            "הוגשה מועמדות"
+          );
+          await candidateJobStatus.add();
+        }
+
+        if (!(await candidate.add())) {
+          candidate = (
+            await getFilteredCandidates(
+              ["eMail", "phone"],
+              [candidateEmail, candidatePhone]
+            )
+          )[0];
+        }
 
         setLoading(false);
 
@@ -208,12 +233,23 @@ const NewCandidatePage = () => {
             msg: `המועמד ${candidateFirstName} ${candidateLastName} נוסף בהצלחה.`,
           },
         });
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 1);
       }
     }
   };
 
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      const file = event.target.files[0];
+      setCvFile(file);
+    }
+  };
+
   const handleDelete = async () => {
-    if (state !== null && myCandidate !== null) {
+    if (state !== null && myCandidate !== undefined) {
       setLoading(true);
       await myCandidate?.remove();
     }
@@ -672,22 +708,9 @@ const NewCandidatePage = () => {
                                 setPhoneNumber={setCandidatePhone}
                                 error={errorCandidatePhone}
                                 setError={setErrorCandidatePhone}
+                                formSubmitted={formSubmitted} // Pass formSubmitted prop to PhoneNumberSelection
                               />
                             </Box>
-                            {errorCandidatePhone && (
-                              <FormHelperText
-                                error
-                                hidden={!errorCandidatePhone}
-                                security="invalid"
-                                style={{
-                                  color: "#ef5350",
-                                  marginRight: 0,
-                                  marginTop: 0,
-                                }}
-                              >
-                                זהו שדה חובה.
-                              </FormHelperText>
-                            )}
                           </Box>
 
                           <Box sx={{ width: "100%" }}>
@@ -761,7 +784,7 @@ const NewCandidatePage = () => {
                                   border: "1px",
                                 },
                             }}
-                            style={{ width: "100%" }}
+                            style={{ width: "50%" }}
                             size="small"
                             id="_requirements"
                             type="text"
@@ -798,7 +821,7 @@ const NewCandidatePage = () => {
                               fontSize: 10,
                             }}
                           >
-                            הערות כלליות על המועמד
+                            הערות כלליות על המועמד (בשביל המגייס/ מנהל)
                           </FormHelperText>
                         </Box>
 
@@ -827,17 +850,6 @@ const NewCandidatePage = () => {
                           />
 
                           <FormHelperText
-                            hidden={!errorCandidateGeneralRating}
-                            security="invalid"
-                            style={{
-                              color: "#ef5350",
-                              marginRight: "2px",
-                              marginTop: 0,
-                            }}
-                          >
-                            זהו שדה חובה.
-                          </FormHelperText>
-                          <FormHelperText
                             hidden={errorCandidateGeneralRating}
                             security="invalid"
                             style={{
@@ -848,6 +860,132 @@ const NewCandidatePage = () => {
                           >
                             דירוג זה ישמש להערכה כללית.{" "}
                           </FormHelperText>
+                        </Box>
+
+                        <Divider sx={{ mt: 4 }} />
+
+                        <Box sx={{ width: "100%" }}>
+                          <FormLabel
+                            sx={{
+                              display: "flex",
+                              flexDirection: "row",
+                              justifyContent: "start",
+                            }}
+                          >
+                            <Typography sx={MyLabelSx}>משרה:</Typography>
+                            <Typography sx={{ fontSize: 14, color: "#e91e63" }}>
+                              *
+                            </Typography>
+                          </FormLabel>
+
+                          <Select
+                            sx={{
+                              "& .muirtl-9ddj71-MuiInputBase-root-MuiOutlinedInput-root":
+                                {
+                                  borderRadius: "0.375rem",
+                                  font: "small-caption",
+                                },
+                              "& .muirtl-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input":
+                                {
+                                  ":focus": {
+                                    boxShadow: "0 0 0 0.2rem #c0cefc",
+                                    backgroundColor: "#fff",
+                                    border: "1px solid #7795f8",
+                                    borderRadius: "0.375rem",
+                                    outline: 0,
+                                  },
+                                },
+                              "& .muirtl-9ddj71-MuiInputBase-root-MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline":
+                                {
+                                  border: "1px solid #7795f8",
+                                },
+
+                              "& .muirtl-9ddj71-MuiInputBase-root-MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline":
+                                {
+                                  borderColor: "rgba(220,53,69)",
+                                },
+                              "& .muirtl-9ddj71-MuiInputBase-root-MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+                                {
+                                  border: "1px",
+                                },
+                            }}
+                            style={{ width: "38%", height: "35px" }}
+                            id="jobNumber"
+                            required
+                            value={selectedJob ? selectedJob._jobNumber : ""}
+                            error={errorJobSelection}
+                            onChange={(e) => {
+                              const jobNumber = parseInt(
+                                e.target.value as string
+                              );
+                              const selectedJob =
+                                jobs.find(
+                                  (job) => job._jobNumber === jobNumber
+                                ) || null;
+                              setSelectedJob(selectedJob);
+                              if (!selectedJob && errorJobSelection) {
+                                setErrorJobSelection(false);
+                              }
+                            }}
+                          >
+                            <MenuItem value="">
+                              <em>אנא בחר משרה</em>
+                            </MenuItem>
+                            {jobs
+                              .filter((job) => job._open)
+                              .map((job) => (
+                                <MenuItem
+                                  key={job._jobNumber}
+                                  value={job._jobNumber}
+                                >
+                                  {`${job._jobNumber}   -    |    ${job._region}     |    -  ${job._role}    `}{" "}
+                                </MenuItem>
+                              ))}
+                          </Select>
+                          <FormHelperText
+                            hidden={!errorJobSelection}
+                            security="invalid"
+                            style={{
+                              color: "#ef5350",
+                              marginRight: "2px",
+                              marginTop: 0,
+                            }}
+                          >
+                            זהו שדה חובה.
+                          </FormHelperText>
+                        </Box>
+                        <Stack
+                          direction="row"
+                          spacing={2}
+                          sx={{ mt: 3, mb: 3 }}
+                        ></Stack>
+
+                        <Box sx={{ width: "100%" }}>
+                          <FormLabel
+                            sx={{
+                              display: "flex",
+                              flexDirection: "row",
+                              justifyContent: "start",
+                            }}
+                          >
+                            <Typography sx={MyLabelSx}>
+                              קובץ קורות חיים:
+                            </Typography>
+                          </FormLabel>
+
+                          <Button
+                            variant="contained"
+                            component="label"
+                            startIcon={<CloudUploadIcon />}
+                          >
+                            טען קו"ח
+                            <input
+                              type="file"
+                              hidden
+                              id="resume"
+                              onChange={handleFileChange}
+                            />
+                          </Button>
                         </Box>
 
                         <Stack
@@ -868,7 +1006,7 @@ const NewCandidatePage = () => {
                             }}
                             fullWidth
                           >
-                            {state === null ? "פרסם" : "עדכן"}
+                            {state === null ? " צור מועמד חדש " : "עדכן"}
                           </Button>
 
                           {state === null ? (
@@ -886,6 +1024,7 @@ const NewCandidatePage = () => {
               </Container>
             </Box>
           </Box>
+
           <Box style={{ position: "absolute", top: "100px", right: "50px" }}>
             <Button onClick={handleClick} sx={designReturnButton}>
               <ArrowForwardIosIcon></ArrowForwardIosIcon>
