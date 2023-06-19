@@ -52,10 +52,10 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 			setRecruiterSectors(sectorStrings);
 			setLoading(false);
 			if (isEdit) {
+				setSectorsSelection(recruiterRow?._sectors ? recruiterRow._sectors : []);
 				typeof recruiterRow?._firstName === 'string' && setFirstName(recruiterRow?._firstName);
 				typeof recruiterRow?._lastName === 'string' && setLastName(recruiterRow?._lastName);
 				typeof recruiterRow?._email === 'string' && setEmail(recruiterRow?._email);
-				recruiterRow?._sectors !== null && setRecruiterSectors(recruiterRow?._sectors);
 			}
 		};
 
@@ -122,7 +122,8 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 			setDialogPassword(firstPassword);
 		}
 		else {
-			await recruiterRow.edit(firstName, lastName);  // one more argument is needed (Sectors)
+			await recruiterRow?.edit(firstName, lastName);  // one more argument is needed (Sectors)
+			
 
 			setOpen(false);
 		}
