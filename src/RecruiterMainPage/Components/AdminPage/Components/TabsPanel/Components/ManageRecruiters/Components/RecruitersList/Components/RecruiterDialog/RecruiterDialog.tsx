@@ -138,7 +138,10 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 		if (!isEdit) {
 			const newRecruter = new Recruiter(email, firstName, lastName, sectorsSelection);
 			let firstPassword:string = generateCodeFromEmail(email);
-			await newRecruter.add("al1212");
+			firstPassword = "aviv11"
+			await newRecruter.add(firstPassword);
+			console.log(firstPassword);
+			await newRecruter.add(firstPassword);
 			setDialogOpen(true);
 			setDialogEmail(email);
 			setDialogPassword(firstPassword);
@@ -395,10 +398,10 @@ function generateCodeFromEmail(email) {
 	const username = email.substring(0, atIndex);
 	const usernameSubstring = username.substring(0, Math.min(4, username.length));
 
-	let code:string = usernameSubstring;
+	let code = usernameSubstring;
 
 	while (code.length < 6) {
-		code += Math.floor(Math.random() * 10) + "";
+		code += Math.floor(Math.random() * 10);
 	}
 
 	return code;
