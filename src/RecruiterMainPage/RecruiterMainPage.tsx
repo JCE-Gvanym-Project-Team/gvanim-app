@@ -108,7 +108,7 @@ function RecruiterMainPage({ handlelogout }) {
 
         {/* Admin Routes */}
         <Route path="settings" element={<AdminPage />} />
-        <Route path="updateAccount" element={<UpdateAccount />} />
+        <Route path="/settings/updateAccount" element={<UpdateAccount />} />
       </Routes>
       <Footer />
     </>
