@@ -1,6 +1,6 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
-import {Job} from "./interfaces";
+import {Job, candidate} from "./interfaces";
 
 
 admin.initializeApp(); // Initialize the Firebase Admin SDK
@@ -8,6 +8,7 @@ admin.initializeApp(); // Initialize the Firebase Admin SDK
 // Your getFilteredJobs function code goes here
 
 // Export the Cloud Function
+// ========================== Job =================================== //
 export const getFilteredJobsCloudFunction = functions
   .region("europe-west1")
   .https
@@ -257,4 +258,145 @@ function compareByCreationDate(a: Job, b: Job): number {
   }
   return 0;
 }
+// ========================== Candidate =================================== //
+export const getFilteredCandidatesCloudFunction = functions
+  .region("europe-west1")
+  .https
+  .onRequest(async (request, response) => {
+    response.set("Access-Control-Allow-Origin", "*");
+    response.set("Access-Control-Allow-Methods", "GET, POST");
+    response.set("Access-Control-Allow-Headers", "Content-Type");
+    if (request.method === "OPTIONS") {
+      // Handle the preflight OPTIONS request
+      response.status(204).send("");
+      return;
+    }
+    try {
+      const {attributes, values, sortBy} = request.body;
+      const filteredCandidates = await getFilteredCandidates(attributes, values, sortBy);
+      response.json(filteredCandidates);
+    } catch (error) {
+      console.error("Error executing getFilteredcandidates:", error);
+      response.status(500).send("error occurred while executing the function.");
+    }
+  });
+  async function getFilteredCandidates(
+    attributes: string[] = [], values: string[] = [], sortBy = "")
+    : Promise<candidate[]> {
+    if (attributes.length !== values.length) {
+      console.log("the attributes length not match to values length");
+      return [];
+    }
+    const candidatesSnapshot = await admin.database().ref("Candidates/").once("value");
+    const candsData = candidatesSnapshot.val();
+  
+    let candidates: candidate[] = Object.values(candsData).map((cand: any) => ({
+      _id: cand._id,
+      _firstName: cand._firstName,
+      _lastName: cand._lastName,
+      _phone: cand._phone,
+      _eMail: cand._eMail,
+      _generalRating: cand._generalRating,
+      _note: cand._note
+    }));
+    // filtering
+    let i = attributes.indexOf("id");
+    if (i >= 0) {
+      candidates = candidates.filter((cand) => cand._id === values.at(i));
+    }
+    i = attributes.indexOf("firstName");
+    if (i >= 0) {
+      candidates = candidates.filter((cand) => cand._firstName === values.at(i));
+    }
+    i = attributes.indexOf("lastName");
+    if (i >= 0) {
+      candidates = candidates.filter((cand) => cand._lastName === values.at(i));
+    }
+    i = attributes.indexOf("phone");
+    if (i >= 0) {
+      candidates = candidates.filter((cand) => cand._phone === values.at(i));
+    }
+    i = attributes.indexOf("eMail");
+    if (i >= 0) {
+      candidates = candidates.filter((cand) => cand._eMail === values.at(i));
+    }
+    i = attributes.indexOf("generalRating");
+    if (i >= 0) {
+      candidates = candidates.filter((cand) => cand._generalRating.toString() === values.at(i));
+    }
+    // sorting
+    if (sortBy === "id") {
+      return candidates.sort(compareById);
+    }
+    if (sortBy === "firstName") {
+      return candidates.sort(compareByFirstName);
+    }
+    if (sortBy === "lastName") {
+      return candidates.sort(compareByLastName);
+    }
+    if (sortBy === "phone") {
+      return candidates.sort(compareByPhone);
+    }
+    if (sortBy === "eMail") {
+      return candidates.sort(compareByEmail);
+    }
+    if (sortBy === "generalRating") {
+      return candidates.sort(compareByGeneralRating);
+    }
+    return candidates;
+  }
 
+/**
+ * compare the candidate by id
+* @param {Candidate} [a] - the first candidate
+ * @param {candidate} [b] - the second candidate
+ * @return {number} - positive if a>b negative if b>a else 0
+ */
+function compareById(a: candidate, b: candidate): number {
+  return parseInt(a._id)-parseInt(b._id);
+}
+/**
+ * compare the candidate by first name
+* @param {Candidate} [a] - the first candidate
+ * @param {candidate} [b] - the second candidate
+ * @return {number} - positive if a>b negative if b>a else 0
+ */
+function compareByFirstName(a: candidate, b: candidate): number {
+  return a._firstName.localeCompare(b._firstName);
+}
+/**
+ * compare the candidate by last name
+* @param {Candidate} [a] - the first candidate
+ * @param {candidate} [b] - the second candidate
+ * @return {number} - positive if a>b negative if b>a else 0
+ */
+function compareByLastName(a: candidate, b: candidate): number {
+  return a._lastName.localeCompare(b._lastName);
+}
+/**
+ * compare the candidate by phone
+* @param {Candidate} [a] - the first candidate
+ * @param {candidate} [b] - the second candidate
+ * @return {number} - positive if a>b negative if b>a else 0
+ */
+function compareByPhone(a: candidate, b: candidate): number {
+  return a._phone.localeCompare(b._phone);
+}
+/**
+ * compare the candidate by eMail
+* @param {Candidate} [a] - the first candidate
+ * @param {candidate} [b] - the second candidate
+ * @return {number} - positive if a>b negative if b>a else 0
+ */
+function compareByEmail(a: candidate, b: candidate): number {
+  return a._eMail.localeCompare(b._eMail);
+}
+/**
+ * compare the candidate by general rating
+* @param {Candidate} [a] - the first candidate
+ * @param {candidate} [b] - the second candidate
+ * @return {number} - positive if a>b negative if b>a else 0
+ */
+function compareByGeneralRating(a: candidate, b: candidate): number {
+  return a._lastName.localeCompare(b._lastName);
+}
