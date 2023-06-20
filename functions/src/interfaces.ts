@@ -14,7 +14,7 @@ export interface Job {
   _creationDate: string;
   _startOn: string;
 }
-export interface candidate{
+export interface Candidate{
   _id: string;
   _firstName: string;
   _lastName: string;
@@ -37,7 +37,17 @@ export interface CandidateJobStatus {
   _rejectCause: string;
 }
 interface Recomendation{
-	_fullName: string;
-	_phone: string;
-	_eMail: string;
+  _fullName: string;
+  _phone: string;
+  _eMail: string;
 }
+export const allStatus = [
+  "הוגשה מועמדות",
+  "זומן לראיון ראשון",
+  "עבר ראיון ראשון",
+  "זומן לראיון שני",
+  "עבר ראיון שני",
+  "התקבל",
+  "הועבר למשרה אחרת",
+  "נדחה",
+  "אינו מעוניין במשרה"];
