@@ -14,7 +14,7 @@ import { NavigateBefore } from '@mui/icons-material';
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
     ...theme.typography.body2,
-    width: '521px',
+    // width: '521px', 
     borderTop: '5px solid #053B7A',
     borderRadius: '0px 0px 10px 10px',
     background: '#FFFFFF 0% 0% no-repeat padding-box',
@@ -31,7 +31,7 @@ export default function JobItem(props: { job: any }) {
 
     return (
         <Stack direction='row-reverse'>
-            <Item id='JobCard'>
+            <Item id='JobCard' sx={{width: {xs: '100%', sm: '100%', md: '521px'}}}>
 
                 <Box sx={{
                     top: '48px',
@@ -44,7 +44,7 @@ export default function JobItem(props: { job: any }) {
                     borderRadius: '0px 31px 31px 0px',
                     opacity: 1,
                     marginTop: '48px',
-                    ml: '-20px',
+                    ml: {xs: 0, sm: 0, md: '-10px', lg: '-20px'},
                     mr: '100px',
                     width: 'fit-content'
 
@@ -59,7 +59,7 @@ export default function JobItem(props: { job: any }) {
                         color: '#FFFFFF',
                         opacity: 1,
                         maxWidth: '80%',
-                        ml: '47px',
+                        ml: {xs: '25px', sm: '25px', md: '38px', lg: '47px'},
                         mr: '40px',
 
                     }}>

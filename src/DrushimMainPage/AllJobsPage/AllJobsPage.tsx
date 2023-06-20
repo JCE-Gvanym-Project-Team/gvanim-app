@@ -97,10 +97,10 @@ export default function AllJobsPage(props: { jobs: any }) {
         </Button> */}
 
 
-        <img src={NavBar} alt="NavBar" style={{ width: '100%' }} />
+        {/* <img src={NavBar} alt="NavBar" style={{ width: '100%' }} /> */}
             <Stack direction='row' sx={{padding: 6, mb: 10}}>
 
-                <Box sx={{ width: '25%', mr: '20px'}}>
+                <Box display={{xs: 'none', sm: 'none', md: 'none', lg: 'block', xl: 'block'}} sx={{ width: {lg: '35%', xl: '25%'}, mr: '20px'}}>
 
                     <Box sx={{ width: '25%', mr: '20px'}}>
                         <Stack direction='row' spacing={2} justifyContent='start' sx={{ paddingLeft: 2}}>
@@ -262,12 +262,12 @@ export default function AllJobsPage(props: { jobs: any }) {
                 </Box>
 
 
-                <Grid container maxWidth='1100px' spacing={2} columns={{ xs: 8, sm: 8, md: 8 }} sx={{padding: 2}}>
-                <Box sx={{ background: '#D3D3D3 0% 0% no-repeat padding-box', height: '2px', width: '98.5%', mt: 2, mb: 2, ml: 'auto' }} />
+                <Grid container width='100%' maxWidth={{xs: '100%', sm: '100%', md: '100%', lg: '70%', xl: '70%'}} spacing={{xs: 2, sm: 2, md: 4, lg: 4, xl: 4}} columns={{ xs: 8, sm: 8, md: 8, lg: 8, xl: 8 }} sx={{padding: {xs: 0, sm: 0, md: 2}}}>
+                <Box sx={{ background: '#D3D3D3 0% 0% no-repeat padding-box', height: '2px', width: '96%', mt: 2, mb: 2, ml: 'auto' }} />
 
                     {filteredJobs?.map((job: Job, index: any) => (
 
-                        <Grid item xs={2} sm={4} md={4} key={index} >
+                        <Grid item xs={8} sm={8} md={4} lg={4} xl={4} key={index} >
 
                             <JobItem job={job} />
 
