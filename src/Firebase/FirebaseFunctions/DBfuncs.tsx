@@ -1,6 +1,5 @@
 import "firebase/database";
 import { realtimeDB } from "../FirebaseConfig/firebase";
-import { getFilteredJobs } from './Job';
 const database = realtimeDB;
 /**
  * get the data located at the given path in the Firebase Realtime Database.
@@ -87,8 +86,4 @@ export async function getSectors(): Promise<string[]> {
 }
 
 export async function main() {	//for debugging dont use
-	const j = (await getFilteredJobs(["jobNumber"],["14"]))[0];
-	console.log(j);
-	j.edit("dif title");
-	console.log(j);
 }	
