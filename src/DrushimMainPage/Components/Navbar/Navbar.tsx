@@ -5,18 +5,18 @@ import Logo from '../../../Components/Logo/logo.png';
 
 export default function Navbar() {
     return (
-        // <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', top: 0 }}>
-        //     <Stack direction='row' justifyContent='space-between' sx={{ height: '85px', backgroundColor: '#FFFFFF', paddingLeft: 2, paddingRight: 4, borderTop: '5px solid #053B7A' }}>
-        //         <Stack direction='row' id='logo' sx={{ mt: '5px' }} spacing={10}>
-        //             <img src={Logo} alt="Logo" style={{ height: '70px' }} />
-        //             <Stack direction='column' justifyContent='center' >
-        //                 <Stack direction='row' spacing={4}>
-        //                     <Box>
-        //                         <Link style={{ display: 'flex', flexDirection: 'row', textDecoration: 'none' }} to={`https://www.gvanim.org.il/`}>
-        //                             <Box>
-        //                             <Typography sx={{ color: '#053B7A', font: 'normal normal normal 22px Rubik', opacity: 1, letterSpacing: '0px', mb: 0 }}>
-        //                                 ראשי
-        //                             </Typography>
+        <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', top: 0 }}>
+            <Stack direction='row' justifyContent='space-between' sx={{ height: '85px', backgroundColor: '#FFFFFF', paddingLeft: 2, paddingRight: 4, borderTop: '5px solid #053B7A' }}>
+                <Stack direction='row' id='logo' sx={{ mt: '5px' }} spacing={10}>
+                    <img src={Logo} alt="Logo" style={{ height: '70px' }} />
+                    <Stack direction='column' justifyContent='center' >
+                        <Stack direction='row' spacing={4}>
+                            <Box>
+                                <Link style={{ display: 'flex', flexDirection: 'row', textDecoration: 'none' }} to={`https://www.gvanim.org.il/`}>
+                                    <Box>
+                                    <Typography sx={{ color: '#053B7A', font: 'normal normal normal 22px Rubik', opacity: 1, letterSpacing: '0px', mb: 0 }}>
+                                        ראשי
+                                    </Typography>
 
         //                             <Box sx={{
         //                                 mt: 0,
