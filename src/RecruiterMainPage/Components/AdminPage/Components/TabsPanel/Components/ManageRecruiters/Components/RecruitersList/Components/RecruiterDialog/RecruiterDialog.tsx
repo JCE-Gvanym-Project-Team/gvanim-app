@@ -384,7 +384,7 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 				</Stack>
 
 			</Dialog>
-			{/* <Button onClick={() => { test() }}></Button> */}
+			 <Button onClick={() => { test() }}>click me</Button> 
 		</Box>
 	);
 
@@ -413,14 +413,14 @@ function generateCodeFromEmail(email: string) {
 }
 
 
-//
-// async function test() {
-// const recruiter = new Recruiter("112123@gmail.com", "ראובן", "לוי", ['אשכול 10']);
-// await recruiter.add();
-// recruiter.edit("ירון", "לוי");
-// const reqs = await getRecruitersFromDatabase();
-// console.log(reqs);
-// }
+
+ async function test() {
+ const recruiter = new Recruiter("112123@gmail.com", "ראובן", "לוי", ['אשכול 10']);
+ await recruiter.add("123456");
+//  recruiter.edit("ירון", "לוי");
+//  const reqs = await getRecruitersFromDatabase();
+//  console.log(reqs);
+ }
 
 
 async function updateSectors(recruiter: Recruiter, setSectorsChanged: (value: boolean) => void, newList: string[], listCurrent: string[], setSaveButton: (value: boolean) => void) {

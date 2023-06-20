@@ -117,14 +117,13 @@ export default function UpdateAccount() {
                         </Stack>
 
                         <Typography sx={{ opacity: 0.6, width: '100%', textAlign: 'center', color: '#fff', fontSize: '16px', fontFamily: "'Noto Sans Hebrew', sans-serif", mt: 1 }} variant='subtitle1'>
-                            בחר\י סיסמא חזקה בעלת לפחות 6 תווים
+                             בחר\י סיסמא חזקה בעלת 8-12 תווים וחייבת לכלול אות גדולה ואות קטנה באנגלית וספרה בין 0-9
                         </Typography>
                         <Box sx={{ background: 'linear-gradient(90deg,hsla(0,0%,100%,0),#fff,hsla(0,0%,100%,0))', padding: 0.05, width: '100%', mt: 2 }} />
                     </Stack>
 
                 </Box>
             </Box>
-
 
 
             <Box sx={MyPaperSx}>

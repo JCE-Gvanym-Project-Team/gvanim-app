@@ -2,6 +2,7 @@ import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, D
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { sleep } from '../../../../../../../../../Firebase/FirebaseFunctions/test';
+import { updateRecruiterPassword } from '../../../../../../../../../Firebase/FirebaseFunctions/Authentication';
 
 export default function PasswordSettings(props: { passwordEdit: any }) {
     const { passwordEdit } = props;
@@ -37,16 +38,21 @@ export default function PasswordSettings(props: { passwordEdit: any }) {
 
     const handleCloseDialog = () => {
         setDialogOpen(false);
-      };
+    };
 
     const handleUpdatePassword = async () => {
-        if (newPassword.length < 6) {
+        const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d@$#]{8,}$/;
+
+        if (newPassword.length < 8 || !regex.test(newPassword)) {
+            setNewPassword('');
+            setConfirmPassword('');
             setPasswordError(true);
         } else {
             setPasswordError(false);
             if (newPassword !== confirmPassword) {
                 setConfirmPasswordError(true);
             } else { // if sucsess
+                updateRecruiterPassword(newPassword);
                 setConfirmPasswordError(false);
                 setDialogOpen(true);
                 setNewPassword('');
@@ -78,7 +84,7 @@ export default function PasswordSettings(props: { passwordEdit: any }) {
                             value={newPassword}
                             onChange={handleNewPasswordChange}
                             error={passwordError}
-                            helperText={passwordError ? 'הסיסמא חייבת להיות 6 תווים לפחות, אותיות a-z, A-Z והתווים @,#,$' : ''}
+                            helperText={passwordError ? 'אורך הסיסמא חייבת להיות 8-12 תווים, אות גדולה ואות קטנה באנגלית ומספר. תווים מותרים הם גם @ $ #' : ''}
                         />
 
 
