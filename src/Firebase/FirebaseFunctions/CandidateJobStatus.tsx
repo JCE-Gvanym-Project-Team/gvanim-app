@@ -5,6 +5,7 @@ import { Job } from "./Job";
 import { Recomendation } from './Recomendation';
 import { Recruiter } from "./Recruiter";
 import { deleteFile, fileExists, getDownloadUrlFromFirestorePath, getFileExtensionsInFolder, uploadFileToFirestore } from "./firestoreFunc";
+import axios from "axios";
 const database = dataref;
 export const allStatus = [
     "הוגשה מועמדות",
@@ -252,26 +253,7 @@ export class CandidateJobStatus {
         return "";
     }
 }
-/**
- * Retrieves candidate job statuses from the Firebase Realtime Database.
- * @returns {Promise<CandidateJobStatus[]>} - A promise that resolves to an array of candidate job statuses.
- * @throws {Error} - If there is an error fetching the data from the database.
- */
-async function getCandidateJobStatusFromDatabase(): Promise<CandidateJobStatus[]> {
-    try {
-        const snapshot = await database.ref("/CandidatesJobStatus").once("value");
-        const candidateJobStatusData = snapshot.val();
-        const candidateJobStatuses: CandidateJobStatus[] = [];
-        for (const candidateJobStatusId in candidateJobStatusData) {
-            const candidateJobStatus = candidateJobStatusData[candidateJobStatusId];
-            candidateJobStatuses.push(candidateJobStatus);
-        }
-        return candidateJobStatuses;
-    } catch (error) {
-        console.error(error);
-        throw new Error("Failed to fetch candidate job statuses from database.");
-    }
-}
+
 //["הוגשה מועמדות","זומן לראיון ראשון","עבר ראיון ראשון","זומן לראיון שני","עבר ראיון שני","התקבל","הועבר למשרה אחרת","נדחה","הפסיק את התהליך"];
 //       8               7                  6         5          4                      3                  2                  1                  0
 export function getMessage(cand: Candidate, job: Job, rec: Recruiter, status: string, interviewDate: Date = new Date(0, 0, 0), place: string = "") {
@@ -321,106 +303,31 @@ export async function getAllRejectCause() {
  * @returns {Promise<CandidateJobStatus[]>} - A promise that resolves to an array of filtered candidate job statuses.
  */
 export async function getFilteredCandidateJobStatuses(attributes: string[] = [], values: string[] = [], sortBy: string = "") {
-    if (attributes.length !== values.length) {
-        console.log("the attributes length not match to values length");
-        return [];
-    }
-
-    let candidateJobStatuses = await getCandidateJobStatusFromDatabase();
-
-    // filtering
-    let i = attributes.indexOf("jobNumber");
-    if (i >= 0) {
-        candidateJobStatuses = candidateJobStatuses.filter(
-            (status) => status._jobNumber === Number(values[i])
-        );
-    }
-    i = attributes.indexOf("candidateId");
-    if (i >= 0) {
-        candidateJobStatuses = candidateJobStatuses.filter(
-            (status) => status._candidateId === values[i]
-        );
-    }
-    i = attributes.indexOf("status");
-    if (i >= 0) {
-        candidateJobStatuses = candidateJobStatuses.filter(
-            (status) => status._status === values[i]
-        );
-    }
-    i = attributes.indexOf("matchingRate");
-    if (i >= 0) {
-        candidateJobStatuses = candidateJobStatuses.filter(
-            (status) => status._matchingRate === Number(values[i])
-        );
-    }
-    i = attributes.indexOf("applyDate");
-    if (i >= 0) {
-        candidateJobStatuses = candidateJobStatuses.filter(
-            (status) => status._applyDate.toISOString() === values[i]
-        );
-    }
-    i = attributes.indexOf("lastUpdate");
-    if (i >= 0) {
-        candidateJobStatuses = candidateJobStatuses.filter(
-            (status) => status._lastUpdate.toISOString() === values[i]
-        );
-    }
-    i = attributes.indexOf("rejectCause");
-    if (i >= 0) {
-        candidateJobStatuses = candidateJobStatuses.filter(
-            (status) => status._rejectCause === values[i]
-        );
-    }
-    if (sortBy === "jobNumber")
-        return candidateJobStatuses.sort(sortByJobNumber);
-    if (sortBy === "candidateId")
-        return candidateJobStatuses.sort(sortByCandidateId);
-    if (sortBy === "status")
-        return candidateJobStatuses.sort(sortByStatus);
-    if (sortBy === "matchingRate")
-        return candidateJobStatuses.sort(sortByMatchingRate);
-    if (sortBy === "applyDate")
-        return candidateJobStatuses.sort(sortByApplyDate);
-    if (sortBy === "lastUpdate")
-        return candidateJobStatuses.sort(sortByLastUpdate);
-    return candidateJobStatuses.map((s) => new CandidateJobStatus(s._jobNumber,
-        s._candidateId, s._status, s._about,
-        s._matchingRate, s._applyDate, s._lastUpdate,
-        s._interviewDate, s._interviewsSummery,
-        s._recomendations, s._rejectCause));
-}
-function sortByJobNumber(a: CandidateJobStatus, b: CandidateJobStatus): number {
-    return a._jobNumber - b._jobNumber;
-}
-
-function sortByCandidateId(a: CandidateJobStatus, b: CandidateJobStatus): number {
-    if (a._candidateId.toLowerCase() < b._candidateId.toLowerCase()) {
-        return -1;
-    }
-    if (a._candidateId.toLowerCase() > b._candidateId.toLowerCase()) {
-        return 1;
-    }
-    return 0;
-}
-
-function sortByStatus(a: CandidateJobStatus, b: CandidateJobStatus): number {
-    if (a._status.toLowerCase() < b._status.toLowerCase()) {
-        return -1;
-    }
-    if (a._status.toLowerCase() > b._status.toLowerCase()) {
-        return 1;
-    }
-    return 0;
-}
-
-function sortByMatchingRate(a: CandidateJobStatus, b: CandidateJobStatus): number {
-    return b._matchingRate - a._matchingRate;
-}
-
-function sortByApplyDate(a: CandidateJobStatus, b: CandidateJobStatus): number {
-    return a._applyDate.getTime() - b._applyDate.getTime();
-}
-
-function sortByLastUpdate(a: CandidateJobStatus, b: CandidateJobStatus): number {
-    return a._lastUpdate.getTime() - b._lastUpdate.getTime();
+    return new Promise<CandidateJobStatus[]>((resolve, reject) => {
+        axios.post('https://europe-west1-gvanim-app.cloudfunctions.net/getFilteredCandidatesJobStatusCloudFunction', {
+            attributes: attributes,
+            values: values,
+            sortBy: sortBy
+        })
+            .then(response => {
+                const cjs = response.data;
+                resolve(cjs.map(s => new CandidateJobStatus(
+                    s._jobNumber,
+                    s._candidateId,
+                    s._status,
+                    s._about,
+                    s._matchingRate,
+                    s._applyDate,
+                    s._lastUpdate,
+                    s._interviewDate,
+                    s._interviewsSummery,
+                    s._recomendations,
+                    s._rejectCause
+                )));
+            })
+            .catch(error => {
+                console.error('Error calling the Cloud Function:', error);
+                reject(error);
+            });
+    });
 }

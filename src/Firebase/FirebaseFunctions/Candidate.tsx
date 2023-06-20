@@ -3,6 +3,7 @@ import { CandidateJobStatus, getFilteredCandidateJobStatuses } from "./Candidate
 import { appendToDatabase, getFirebaseIdsAtPath, removeObjectAtPath, replaceData } from "./DBfuncs";
 import { Job, getFilteredJobs } from "./Job";
 import { deleteFile, fileExists, getDownloadUrlFromFirestorePath, getFileExtensionsInFolder, uploadFileToFirestore } from "./firestoreFunc";
+import axios from "axios";
 const database = realtimeDB;
 export class Candidate
 {
@@ -247,31 +248,6 @@ export class Candidate
         return extensions.length.toString();
     }
 }
-
-/**
- * Retrieves a list of candidates from the Firebase Realtime Database.
- * @returns {Promise<Candidate[]>} A promise that resolves to an array of Candidate objects.
- * @throws {Error} If there is an error fetching the candidates from the database.
- */
-async function getCandidatesFromDatabase(): Promise<Candidate[]>
-{
-    try
-    {
-        const snapshot = await database.ref("/Candidates").once("value");
-        const candidatesData = snapshot.val();
-        const candidates: Candidate[] = [];
-        for (const candidateId in candidatesData)
-        {
-            const candidate = candidatesData[candidateId];
-            candidates.push(candidate);
-        }
-        return candidates;
-    } catch (error)
-    {
-        console.error(error);
-        throw new Error("Failed to fetch candidates from database.");
-    }
-}
 export async function generateCandidateId(): Promise<string>
 {
     const candidates = await getFilteredCandidates();
@@ -294,112 +270,28 @@ export async function generateCandidateId(): Promise<string>
  * @returns {Promise<Candidate[]>} - A promise that resolves to an array of Candidate objects.
  * @throws None
  */
-export async function getFilteredCandidates(attributes: string[] = [], values: string[] = [], sortBy: string = ""): Promise<Candidate[]>
-{
-    if (attributes.length !== values.length)
-    {
-        console.log("the attributes length not match to values length")
-        return [];
-    }
-    let candidates = await getCandidatesFromDatabase();
-    //filtering
-    let i = attributes.indexOf("id");
-    if (i >= 0)
-    {
-        candidates = candidates.filter(candidate => candidate._id === values.at(i))
-    }
-    i = attributes.indexOf("firstName");
-    if (i >= 0)
-    {
-        candidates = candidates.filter(candidate => candidate._firstName === values.at(i))
-    }
-    i = attributes.indexOf("lastName");
-    if (i >= 0)
-    {
-        candidates = candidates.filter(candidate => candidate._lastName === values.at(i))
-    }
-    i = attributes.indexOf("phone");
-    if (i >= 0)
-    {
-        candidates = candidates.filter(candidate => candidate._phone === values.at(i))
-    }
-    i = attributes.indexOf("eMail");
-    if (i >= 0)
-    {
-        candidates = candidates.filter(candidate => candidate._eMail === values.at(i))
-    }
-    i = attributes.indexOf("generalRating");
-    if (i >= 0)
-    {
-        candidates = candidates.filter(candidate => candidate._generalRating.toString() === values.at(i))
-    }
-    if (sortBy === 'firstName')
-        return candidates.sort(sortByFirstName);
-    if (sortBy === 'lastName')
-        return candidates.sort(sortByLastName);
-    if (sortBy === 'phone')
-        return candidates.sort(sortByPhone);
-    if (sortBy === 'eMail')
-        return candidates.sort(sortByEmail);
-    if (sortBy === 'generalRating')
-        return candidates.sort(sortByGeneralRating);
-    return candidates.map((cand) => new Candidate(cand._id, cand._firstName, cand._lastName, cand._phone,
-        cand._eMail, cand._generalRating, cand._note));
-}
-/* compare function for sort */
-function sortByFirstName(a: Candidate, b: Candidate): number
-{
-    if (a._firstName.toLowerCase() < b._firstName.toLowerCase())
-    {
-        return -1;
-    }
-    if (a._firstName.toLowerCase() > b._firstName.toLowerCase())
-    {
-        return 1;
-    }
-    return 0;
-}
-
-function sortByLastName(a: Candidate, b: Candidate): number
-{
-    if (a._lastName.toLowerCase() < b._lastName.toLowerCase())
-    {
-        return -1;
-    }
-    if (a._lastName.toLowerCase() > b._lastName.toLowerCase())
-    {
-        return 1;
-    }
-    return 0;
-}
-
-function sortByPhone(a: Candidate, b: Candidate): number
-{
-    if (a._phone < b._phone)
-    {
-        return -1;
-    }
-    if (a._phone > b._phone)
-    {
-        return 1;
-    }
-    return 0;
-}
-
-function sortByEmail(a: Candidate, b: Candidate): number
-{
-    if (a._eMail.toLowerCase() < b._eMail.toLowerCase())
-    {
-        return -1;
-    }
-    if (a._eMail.toLowerCase() > b._eMail.toLowerCase())
-    {
-        return 1;
-    }
-    return 0;
-}
-
-function sortByGeneralRating(a: Candidate, b: Candidate): number
-{
-    return b._generalRating - a._generalRating;
+export async function getFilteredCandidates(attributes: string[] = [], values: string[] = [], sortBy: string = ""): Promise<Candidate[]>{
+    return new Promise<Candidate[]>((resolve, reject) => {
+        axios.post('https://europe-west1-gvanim-app.cloudfunctions.net/getFilteredCandidatesCloudFunction', {
+            attributes: attributes,
+            values: values,
+            sortBy: sortBy
+        })
+            .then(response => {
+                const cands = response.data;
+                resolve(cands.map(cand => new Candidate(
+                    cand._id,
+                    cand._firstName,
+                    cand._lastName,
+                    cand._phone,
+                    cand._eMail,
+                    cand._generalRating,
+                    cand._note
+                )));
+            })
+            .catch(error => {
+                console.error('Error calling the Cloud Function:', error);
+                reject(error);
+            });
+    });
 }
