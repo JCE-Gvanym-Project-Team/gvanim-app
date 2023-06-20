@@ -50,6 +50,7 @@ import {
   mainStackSx,
 } from "../ViewCandidatesPage/ViewCandidatesPageStyle";
 import { CandidateJobStatus } from "../../../Firebase/FirebaseFunctions/CandidateJobStatus";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
 const Form = styled("form")(({ theme }) => ({
   width: "100%",
@@ -158,14 +159,15 @@ const NewCandidatePage = () => {
       candidateLastName.length === 0 ||
       candidateEmail.length === 0 ||
       candidatePhone.length === 0 ||
-      candidateNote.length === 0
+      candidateNote.length === 0 ||
+      generalRating === -1
     ) {
       setErrorCandidateFirstName(candidateFirstName.length === 0);
       setErrorCandidateLastName(candidateLastName.length === 0);
       setErrorCandidatePhone(candidatePhone.length === 0);
       setErrorCandidateEmail(candidateEmail.length === 0);
       setErrorCandidateNote(candidateNote.length === 0);
-      setErrorCandidateGeneralRating(candidateGeneralRating === -1);
+      setErrorCandidateGeneralRating(generalRating === -1);
     } else {
       // edit
       if (state !== null && myCandidate !== undefined) {
@@ -177,7 +179,7 @@ const NewCandidatePage = () => {
           myCandidate._phone = candidatePhone;
           myCandidate._eMail = candidateEmail;
           myCandidate._note = candidateNote;
-          myCandidate._generalRating = Number(candidateGeneralRating);
+          myCandidate._generalRating = Number(generalRating);
 
           await myCandidate.edit();
         }
@@ -200,7 +202,7 @@ const NewCandidatePage = () => {
           candidateLastName,
           candidateEmail,
           candidatePhone,
-          -1,
+          generalRating,
           candidateNote
         );
 
@@ -231,6 +233,10 @@ const NewCandidatePage = () => {
             msg: `המועמד ${candidateFirstName} ${candidateLastName} נוסף בהצלחה.`,
           },
         });
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 1);
       }
     }
   };
@@ -778,7 +784,7 @@ const NewCandidatePage = () => {
                                   border: "1px",
                                 },
                             }}
-                            style={{ width: "100%" }}
+                            style={{ width: "50%" }}
                             size="small"
                             id="_requirements"
                             type="text"
@@ -815,7 +821,7 @@ const NewCandidatePage = () => {
                               fontSize: 10,
                             }}
                           >
-                            הערות כלליות על המועמד
+                            הערות כלליות על המועמד (בשביל המגייס/ מנהל)
                           </FormHelperText>
                         </Box>
 
@@ -866,27 +872,6 @@ const NewCandidatePage = () => {
                               justifyContent: "start",
                             }}
                           >
-                            <Typography sx={MyLabelSx}>
-                              קובץ קורות חיים:
-                            </Typography>
-                          </FormLabel>
-
-                          <TextField
-                            type="file"
-                            id="resume"
-                            variant="outlined"
-                            onChange={handleFileChange}
-                          />
-                        </Box>
-
-                        <Box sx={{ width: "100%" }}>
-                          <FormLabel
-                            sx={{
-                              display: "flex",
-                              flexDirection: "row",
-                              justifyContent: "start",
-                            }}
-                          >
                             <Typography sx={MyLabelSx}>משרה:</Typography>
                             <Typography sx={{ fontSize: 14, color: "#e91e63" }}>
                               *
@@ -924,7 +909,7 @@ const NewCandidatePage = () => {
                                   border: "1px",
                                 },
                             }}
-                            style={{ width: "100%" }}
+                            style={{ width: "38%", height: "35px" }}
                             id="jobNumber"
                             required
                             value={selectedJob ? selectedJob._jobNumber : ""}
@@ -946,14 +931,16 @@ const NewCandidatePage = () => {
                             <MenuItem value="">
                               <em>אנא בחר משרה</em>
                             </MenuItem>
-                            {jobs.map((job) => (
-                              <MenuItem
-                                key={job._jobNumber}
-                                value={job._jobNumber}
-                              >
-                                {job._title}
-                              </MenuItem>
-                            ))}
+                            {jobs
+                              .filter((job) => job._open)
+                              .map((job) => (
+                                <MenuItem
+                                  key={job._jobNumber}
+                                  value={job._jobNumber}
+                                >
+                                  {`${job._jobNumber}   -    |    ${job._region}     |    -  ${job._role}    `}{" "}
+                                </MenuItem>
+                              ))}
                           </Select>
                           <FormHelperText
                             hidden={!errorJobSelection}
@@ -973,6 +960,34 @@ const NewCandidatePage = () => {
                           sx={{ mt: 3, mb: 3 }}
                         ></Stack>
 
+                        <Box sx={{ width: "100%" }}>
+                          <FormLabel
+                            sx={{
+                              display: "flex",
+                              flexDirection: "row",
+                              justifyContent: "start",
+                            }}
+                          >
+                            <Typography sx={MyLabelSx}>
+                              קובץ קורות חיים:
+                            </Typography>
+                          </FormLabel>
+
+                          <Button
+                            variant="contained"
+                            component="label"
+                            startIcon={<CloudUploadIcon />}
+                          >
+                            טען קו"ח
+                            <input
+                              type="file"
+                              hidden
+                              id="resume"
+                              onChange={handleFileChange}
+                            />
+                          </Button>
+                        </Box>
+
                         <Stack
                           direction="row"
                           spacing={2}
@@ -991,7 +1006,7 @@ const NewCandidatePage = () => {
                             }}
                             fullWidth
                           >
-                            {state === null ? "פרסם" : "עדכן"}
+                            {state === null ? " צור מועמד חדש " : "עדכן"}
                           </Button>
 
                           {state === null ? (

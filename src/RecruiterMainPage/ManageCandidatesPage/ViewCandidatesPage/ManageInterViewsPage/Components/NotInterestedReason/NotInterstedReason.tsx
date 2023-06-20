@@ -51,6 +51,8 @@ export default function NotInterestedReason(props: { reasons: string[], candidat
                         filtered.push("אחר: " + params.inputValue);
                     }
 
+                    
+
                     return filtered;
                 }}
                 options={reasons}

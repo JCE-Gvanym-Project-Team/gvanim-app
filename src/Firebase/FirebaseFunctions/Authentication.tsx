@@ -1,10 +1,6 @@
 import 'firebase/auth';
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, User, sendPasswordResetEmail, updatePassword } from "firebase/auth";
-import { sleep } from "./test";
+import { User, getAuth, sendPasswordResetEmail, signInWithEmailAndPassword, updatePassword } from "firebase/auth";
 
-import { Recruiter } from "./Recruiter";
-import { appendToDatabase } from "./DBfuncs";
-import { Sector } from './Sector';
 const auth = getAuth();
 
 /**
@@ -66,7 +62,7 @@ export async function updateRecruiterPassword(newPass: string){
 	else
 		console.log('error while updating password');
 }
-
+/*
 export async function main() {
 	await loginAdmin();
 	let rec = new Recruiter('ex@gmail.com',"el","ta");
@@ -78,3 +74,4 @@ export async function main() {
 	await sleep(5000);
 	console.log(`5)exist?(t) ${await rec.exists()}`);
 }
+*/

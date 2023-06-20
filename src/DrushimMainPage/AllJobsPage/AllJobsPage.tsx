@@ -11,7 +11,7 @@ import RoleSingleSelection from './Components/RoleSingleSelection/RoleSingleSele
 import LocationSingleSelection from './Components/LocationSingleSelection/LocationSingleSelection';
 import { Place } from '@mui/icons-material';
 import NavbarDrushim from '../Components/Navbar/Navbar';
-import NavBar from '../AllJobsPage/Resources/navbar.jpeg';
+import NavBar from '../AllJobsPage/Resources/navbar2.jpg';
 
 export default function AllJobsPage(props: { jobs: any }) {
     const { jobs } = props;

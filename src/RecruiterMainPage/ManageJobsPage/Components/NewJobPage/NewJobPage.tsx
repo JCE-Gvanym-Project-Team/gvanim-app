@@ -1,4 +1,4 @@
-import { Box, Button, Container, Divider, FormControlLabel, FormHelperText, FormLabel, Stack, Switch, TextField, TextareaAutosize, Typography, alpha, styled } from '@mui/material'
+import { Autocomplete, Box, Button, Container, Divider, FormControlLabel, FormHelperText, FormLabel, Stack, Switch, TextField, TextareaAutosize, Typography, alpha, createFilterOptions, styled } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { BoxGradientSx, MyLabelSx, MyPaperSx, MyTextFieldSx, SwitchPaperSx } from './NewJobStyle'
 import JobScopeSlider from './Components/ScopeSlider/ScopeSlider';
@@ -13,12 +13,15 @@ import SectorSingleSelection from './Components/SectorSingleSelection/SectorSing
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { designReturnButton } from '../../ManageJobsPageStyle';
 
+const filter = createFilterOptions<string>();
+
 const Form = styled('form')(({ theme }) => ({
     width: '100%',
     marginTop: theme.spacing(1),
 }));
 
-const NewJobPage = () => {
+const NewJobPage = () =>
+{
     const { state } = useLocation();
 
     // values
@@ -27,6 +30,7 @@ const NewJobPage = () => {
     const [jobRegion, setJobRegion] = useState<string>('');
     const [jobSector, setJobSector] = useState<string>('');
     const [jobRequirements, setJobRequirements] = useState<string>('');
+    const [jobStart, setJobStart] = useState<string>('');
     const [jobDescription, setJobDescription] = useState<string>('');
     const [jobDescriptionSkills, setJobDescriptionSkills] = useState<string>('');
     const [jobAdditionalInfo, setJobAdditionalInfo] = useState<string>('');
@@ -48,15 +52,17 @@ const NewJobPage = () => {
     // my loading
     const [loading, setLoading] = useState(true);
 
+    const [availableLocations, setAvailableLocations] = useState<string[]>([]);
 
-
-    const fetchJob = async () => {
+    const fetchJob = async () =>
+    {
 
         if ((typeof state?.job?._title === 'string')) { setJobName(state?.job?._title); }
         if ((typeof state?.job?._role === 'string')) { setJobRole(state?.job?._role); }
         if ((typeof state?.job?._region === 'string')) { setJobRegion(state?.job?._region); }
         if ((typeof state?.job?._sector === 'string')) { setJobSector(state?.job?._sector); }
         if ((typeof state?.job?._requirements === 'string')) { setJobRequirements(state?.job?._requirements); }
+        if ((typeof state?.job?._startOn === 'string')) { setJobStart(state?.job?._startOn); }
 
         if ((state?.job?._description?.length >= 1) && (typeof state?.job?._description[0] === 'string')) { setJobDescription(state?.job?._description[0]); }
         if ((state?.job?._description?.length >= 2) && (typeof state?.job?._description[1] === 'string')) { setJobDescriptionSkills(state?.job?._description[1]); }
@@ -77,14 +83,36 @@ const NewJobPage = () => {
         setLoading(false);
     }
 
+    const fetchLocations = async () =>
+    {
+        const jobs = await getFilteredJobs();
+        let regions = jobs.map((job) =>
+        {
+            return job._region;
+        })
+        regions = regions.reduce((accumulator: string[], value: string) =>
+        {
+            if (!accumulator.includes(value))
+            {
+                accumulator.push(value);
+            }
+            return accumulator;
+        }, []);
+        setAvailableLocations(regions);
+    }
 
-    useEffect(() => {
+
+    useEffect(() =>
+    {
         setLoading(false);
-        if (state !== null) { // edit job    
-            if (state?.job !== null) {
+        if (state !== null)
+        { // edit job    
+            if (state?.job !== null)
+            {
                 fetchJob();
             }
         }
+        fetchLocations()
     }, []);
 
 
@@ -92,19 +120,24 @@ const NewJobPage = () => {
     const navigate = useNavigate();
 
 
-    const handleSubmit = async (event: any) => {
+    const handleSubmit = async (event: any) =>
+    {
         event.preventDefault();
 
-        if (jobName.length === 0 || jobRole.length === 0 || jobRegion.length === 0 || jobSector.length === 0 || jobRequirements.length === 0) {
+        if (jobName.length === 0 || jobRole.length === 0 || jobRegion.length === 0 || jobSector.length === 0 || jobRequirements.length === 0)
+        {
             if (jobName.length === 0) { setErrorJobName(true); } if (jobRegion.length === 0) { setErrorJobRegion(true); }
             if (jobRole.length === 0) { setErrorJobRole(true); } if (jobSector.length === 0) { setErrorJobSector(true); }
             if (jobRequirements.length === 0) { setErrorJobRequirements(true); }
         }
-        else {
+        else
+        {
             //edit
-            if (state !== null) {
+            if (state !== null)
+            {
 
-                if (myJob !== null) {
+                if (myJob !== null)
+                {
 
                     setLoading(true);
 
@@ -120,13 +153,16 @@ const NewJobPage = () => {
                         myJob._highPriority = jobPriority
                     );
 
+                    await myJob?.updateStartOn(jobStart);
+
                     setLoading(false);
                 }
 
                 navigate("/management/manageJobs", { state: { msg: `השינויים עבור משרה מס' ${myJob?._jobNumber} נשמרו בהצלחה.` } });
             }
             //add
-            else {
+            else
+            {
                 setLoading(true);
 
                 let job = new Job(
@@ -144,6 +180,8 @@ const NewJobPage = () => {
 
                 await job.add();
 
+                await job.updateStartOn(jobStart);
+
                 setLoading(false);
 
                 navigate("/management/manageJobs", { state: { msg: `משרה מס' ${job._jobNumber} נוספה בהצלחה.` } });
@@ -151,9 +189,11 @@ const NewJobPage = () => {
         }
     }
 
-    const handleDelete = async () => {
+    const handleDelete = async () =>
+    {
 
-        if (state !== null && myJob !== null) {
+        if (state !== null && myJob !== null)
+        {
             setLoading(true);
             await myJob?.remove();
         }
@@ -163,7 +203,8 @@ const NewJobPage = () => {
         navigate("/management/manageJobs", { state: { msg: `משרה מס' ${myJob?._jobNumber} הוסרה בהצלחה.` } });
     }
 
-    const handleClick = () => {
+    const handleClick = () =>
+    {
         navigate("/management/manageJobs");
     };
 
@@ -421,7 +462,8 @@ const NewJobPage = () => {
                                                             autoComplete='off'
                                                             value={jobName}
                                                             error={errorJobName}
-                                                            onChange={(e) => {
+                                                            onChange={(e) =>
+                                                            {
                                                                 setJobName(e.target.value);
                                                                 if (jobName.length > 0 && errorJobName) { setErrorJobName(false); }
                                                             }}
@@ -435,40 +477,72 @@ const NewJobPage = () => {
                                                             <Typography sx={MyLabelSx}>איזור:</Typography>
                                                             <Typography sx={{ fontSize: 14, color: '#e91e63' }}>*</Typography>
                                                         </FormLabel>
-                                                        <TextField
-                                                            sx={{
-                                                                '& .muirtl-9ddj71-MuiInputBase-root-MuiOutlinedInput-root': {
-                                                                    borderRadius: '0.375rem',
-                                                                    font: 'small-caption',
-                                                                },
-                                                                '& .muirtl-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input': {
-                                                                    ':focus': {
-                                                                        boxShadow: '0 0 0 0.2rem #c0cefc',
-                                                                        backgroundColor: '#fff',
-                                                                        border: '1px solid #7795f8',
+                                                        <Autocomplete
+                                                            disablePortal
+                                                            id="combo-box-demo"
+                                                            options={availableLocations}
+                                                            sx={{ width: 300 }}
+                                                            style={{ width: '100%' }}
+                                                            renderInput={(params) => <TextField
+                                                                {...params}
+                                                                sx={{
+                                                                    '& .muirtl-9ddj71-MuiInputBase-root-MuiOutlinedInput-root': {
                                                                         borderRadius: '0.375rem',
-                                                                        outline: 0,
+                                                                        font: 'small-caption',
                                                                     },
-                                                                },
-                                                                '& .muirtl-9ddj71-MuiInputBase-root-MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
-                                                                    border: '1px solid #7795f8'
-                                                                },
+                                                                    '& .muirtl-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input': {
+                                                                        ':focus': {
+                                                                            boxShadow: '0 0 0 0.2rem #c0cefc',
+                                                                            backgroundColor: '#fff',
+                                                                            border: '1px solid #7795f8',
+                                                                            borderRadius: '0.375rem',
+                                                                            outline: 0,
+                                                                        },
+                                                                    },
+                                                                    '& .muirtl-9ddj71-MuiInputBase-root-MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+                                                                        border: '1px solid #7795f8'
+                                                                    },
 
-                                                                '& .muirtl-9ddj71-MuiInputBase-root-MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline': {
-                                                                    borderColor: 'rgba(220,53,69)'
+                                                                    '& .muirtl-9ddj71-MuiInputBase-root-MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline': {
+                                                                        borderColor: 'rgba(220,53,69)'
 
-                                                                },
-                                                                '& .muirtl-9ddj71-MuiInputBase-root-MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                                                                    border: '1px',
-                                                                },
+                                                                    },
+                                                                    '& .muirtl-9ddj71-MuiInputBase-root-MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                                                        border: '1px',
+                                                                    },
+                                                                }}
+                                                                size='small'
+                                                                id="_region"
+                                                                type="text"
+                                                                required
+                                                                value={jobRegion}
+                                                                error={errorJobRegion}
+                                                                onChange={(e) =>
+                                                                {
+                                                                    if (jobRegion.length > 0 && errorJobRegion) { setErrorJobRegion(false); }
+                                                                }}
+                                                            />
+                                                            }
+                                                            onChange={(event, value) =>
+                                                            {
+                                                                if (value?.includes("אחר: "))
+                                                                {
+                                                                    setJobRegion(value?.replace("אחר: ", ""));
+                                                                } else
+                                                                {
+                                                                    setJobRegion(value ? value : "");
+                                                                }
                                                             }}
-                                                            style={{ width: '100%' }} size='small' id="_region" type="text"
-                                                            required
-                                                            value={jobRegion}
-                                                            error={errorJobRegion}
-                                                            onChange={(e) => {
-                                                                setJobRegion(e.target.value);
-                                                                if (jobRegion.length > 0 && errorJobRegion) { setErrorJobRegion(false); }
+                                                            filterOptions={(options, params) =>
+                                                            {
+                                                                const filtered = filter(options, params);
+
+                                                                if (Object.keys(filtered).length === 0)
+                                                                {
+                                                                    filtered.push("אחר: " + params.inputValue);
+                                                                }
+
+                                                                return filtered;
                                                             }}
                                                         />
 
@@ -513,7 +587,7 @@ const NewJobPage = () => {
 
                                                 <Box sx={{ width: '100%', mt: 1 }}>
                                                     <FormLabel sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'start' }}>
-                                                        <Typography sx={MyLabelSx}>דרישות:</Typography>
+                                                        <Typography sx={MyLabelSx}>תחילת עבודה:</Typography>
                                                         <Typography sx={{ fontSize: 14, color: '#e91e63' }}>*</Typography>
                                                     </FormLabel>
 
@@ -547,9 +621,10 @@ const NewJobPage = () => {
                                                         style={{ width: '100%' }} size='small' id="_requirements" type="text"
                                                         required
                                                         error={errorJobRequirements}
-                                                        value={jobRequirements}
-                                                        onChange={(e) => {
-                                                            setJobRequirements(e.target.value);
+                                                        value={jobStart}
+                                                        onChange={(e) =>
+                                                        {
+                                                            setJobStart(e.target.value);
                                                             if (jobRequirements.length > 0 && errorJobRequirements) { setErrorJobRequirements(false); }
                                                         }}
                                                     />
@@ -584,25 +659,18 @@ const NewJobPage = () => {
 
                                                         <TextareaAutosize id="_description_skills"
                                                             className="MyTextField" minRows={2} required
-                                                            value={jobDescriptionSkills}
-                                                            onChange={(e) => { setJobDescriptionSkills(e.target.value) }}
+                                                            value={jobRequirements}
+                                                            onChange={(e) =>
+                                                            {
+                                                                setJobRequirements(e.target.value);
+                                                                if (jobRequirements.length > 0 && errorJobRequirements) { setErrorJobRequirements(false); }
+                                                            }}
                                                         />
                                                         <FormHelperText security="invalid" style={{ marginRight: '2px', marginTop: 0, fontSize: 10 }}>
                                                             תיאור מפורט יותר לגבי הדרישות, יופיע בתור "מה אנחנו מחפשים" בדף המשרה.</FormHelperText>
                                                     </Stack>
 
                                                 </Stack>
-                                                <Box sx={{ mt: 1 }}>
-                                                    <FormLabel sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'start' }}>
-                                                        <Typography sx={MyLabelSx}>מידע נוסף:</Typography>
-                                                    </FormLabel>
-
-                                                    <TextareaAutosize id="_additional_info"
-                                                        className="MyTextField" minRows={2} required
-                                                        value={jobAdditionalInfo}
-                                                        onChange={(e) => { setJobAdditionalInfo(e.target.value) }}
-                                                    />
-                                                </Box>
 
                                                 <Box sx={{ mt: 1 }}>
                                                     <FormLabel sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'start' }}>
@@ -653,15 +721,15 @@ const NewJobPage = () => {
 
 
                     </Box>
-                        <Box style={{ position: 'absolute', top: '100px', right: '50px' }}>
-                            <Button
-                                onClick={handleClick}
-                                sx={designReturnButton}
-                            >
-                                <ArrowForwardIosIcon></ArrowForwardIosIcon>
-                                חזור
-                            </Button>
-                        </Box>
+                    <Box style={{ position: 'absolute', top: '100px', right: '50px' }}>
+                        <Button
+                            onClick={handleClick}
+                            sx={designReturnButton}
+                        >
+                            <ArrowForwardIosIcon></ArrowForwardIosIcon>
+                            חזור
+                        </Button>
+                    </Box>
 
 
 
