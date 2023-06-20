@@ -102,8 +102,7 @@ export class Recruiter {
 		const sectors = await getAllSectors();
 		for (let i = 0; i < sectors.length; i++) {
 			if (sectors[i]._name === sector) {
-				let sec = new Sector(sectors[i]._name, sectors[i]._open, sectors[i]._recruitersUid);
-				await sec.addRecruiter(this);
+				await sectors[i].addRecruiter(this);
 				break;
 			}
 		}

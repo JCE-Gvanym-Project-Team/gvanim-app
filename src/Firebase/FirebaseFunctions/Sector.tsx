@@ -69,8 +69,7 @@ export class Sector {
     public async addRecruiter(recruiter: Recruiter) {
         if (await this.exists()) {
             this._recruitersUid.push(await recruiter.getUid());
-            await this.remove();
-            await this.add();
+            await replaceData((await this.getPath()), this);
         }
         else
             console.log(`Sector ${this._name} not exist add it before edit`);
