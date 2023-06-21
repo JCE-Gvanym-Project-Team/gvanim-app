@@ -24,6 +24,7 @@ import ManageInterviewsPage from "./ManageCandidatesPage/ViewCandidatesPage/Mana
 import UpdateAccount from "./Components/AdminPage/Components/TabsPanel/Components/ManageAccount/Components/AccountSettings/UpdateAccount/UpdateAccount";
 import NewCandidatePage from "./ManageCandidatesPage/CreateCandidatePage/NewCandidatePage";
 import { Update } from "@mui/icons-material";
+import PasswordRecover from "./RecoveryPasswordPage/RecoveryPasswordPage";
 
 function RecruiterMainPage({ handlelogout }) {
   const [allJobs, setAllJobs] = React.useState<any[]>([]);
@@ -109,6 +110,7 @@ function RecruiterMainPage({ handlelogout }) {
         {/* Admin Routes */}
         <Route path="settings" element={<AdminPage />} />
         <Route path="/settings/updateAccount" element={<UpdateAccount />} />
+        <Route path="passwordRecovery" element={<PasswordRecover />} />
       </Routes>
       <Footer />
     </>
