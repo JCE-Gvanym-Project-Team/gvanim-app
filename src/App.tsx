@@ -3,11 +3,11 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import DrushimMainPage from './DrushimMainPage/DrushimMainPage';
 import { ColorModeContext, FontContext, useMode } from './DrushimMainPage/theme';
 import Auth from './RecruiterMainPage/Components/Auth/Auth';
-import { main } from './Firebase/FirebaseFunctions/test';
+
 const recruitersPageTheme = createTheme({
 	direction: 'rtl',
 });
-//main();
+
 function App()
 {
 
