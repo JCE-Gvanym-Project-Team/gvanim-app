@@ -1,6 +1,6 @@
 import 'firebase/auth';
 import * as admin from "firebase-admin";
-import { User, getAuth, sendPasswordResetEmail, signInWithEmailAndPassword, updatePassword, deleteUser } from "firebase/auth";
+import { User, getAuth, sendPasswordResetEmail, signInWithEmailAndPassword, updatePassword, confirmPasswordReset } from "firebase/auth";
 import axios from 'axios';
 const auth = getAuth();
 
@@ -56,7 +56,16 @@ export async function getConnectedUser(): Promise<User | null> {
 export async function sendResetMail(mail: string) {
 	sendPasswordResetEmail(auth, mail);
 }
-export async function updateRecruiterPassword(newPass: string) {
+export async function updateLinkRecruiterPassword(newPass: string, oobCode: string) {
+	confirmPasswordReset(auth, oobCode, newPass)
+		.then(() => {
+			return true;
+		})
+		.catch((error) => {
+			return false;
+		});
+}
+export async function updateConnectedRecruiterPassword(newPass: string) {
 	const user = await getConnectedUser();
 	if (user)
 		updatePassword(user, newPass);
@@ -65,18 +74,18 @@ export async function updateRecruiterPassword(newPass: string) {
 }
 export async function deleteUserAccount(mail: string) {
 	return new Promise<Boolean>((resolve, reject) => {
-        axios.post('https://europe-west1-gvanim-app.cloudfunctions.net/deleteRecruiter', {
-            mail: mail,
-        })
-            .then(response => {
-                const status = response.data;
-                resolve(status);
-            })
-            .catch(error => {
-                console.error('Error calling the Cloud Function:', error);
-                reject(error);
-            });
-    });
+		axios.post('https://europe-west1-gvanim-app.cloudfunctions.net/deleteRecruiter', {
+			mail: mail,
+		})
+			.then(response => {
+				const status = response.data;
+				resolve(status);
+			})
+			.catch(error => {
+				console.error('Error calling the Cloud Function:', error);
+				reject(error);
+			});
+	});
 }
 
 /*
