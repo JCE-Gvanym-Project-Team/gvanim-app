@@ -5,7 +5,7 @@ export class Sector {
     public _name: string;
     public _open: boolean;
     public _recruitersUid: string[];
-    constructor(name: string, open: boolean, recruitersUid: string[]=[]) {
+    constructor(name: string, open: boolean, recruitersUid: string[] = []) {
         this._name = name;
         this._open = open;
         this._recruitersUid = recruitersUid;
@@ -35,14 +35,14 @@ export class Sector {
      */
     public async remove() {
         if (!(await this.exists()))
-            return;
-        else {
-            let recs = await getRecruitersFromDatabase();
-            recs.filter((rec) => rec._sectors.includes(this._name));
-            for (let i = 0; i < recs.length; i++)
-                recs.at(i)?.removeSector(this._name);
-            removeObjectAtPath("/Sectors/" + this._name);
-        }
+            return 1;
+        let recs = await getRecruitersFromDatabase();
+        recs.filter((rec) => rec._sectors.includes(this._name));
+        for (let i = 0; i < recs.length; i++)
+            recs.at(i)?.removeSector(this._name);
+        removeObjectAtPath("/Sectors/" + this._name);
+        return 0;
+
     }
     /**
      * Edits the name and open status of the current stage.
@@ -53,38 +53,45 @@ export class Sector {
     public async edit(name: string = this._name, open: boolean = this._open) {
         this._name = name;
         this._open = open;
-        if ((await this.exists()))
+        if ((await this.exists())) {
             replaceData((await this.getPath()), this);
+            return 0;
+        }
+        return -1;
     }
     /**
      * Adds the current Sector to the realtime DB if it does not already exist.
      * @returns None
      */
     public async add() {
-        if (!(await this.exists()))
+        if (!(await this.exists())) {
             appendToDatabase(this, "/Sectors", this._name);
-        else
-            console.log("the Sector already exists");
+            return 0;
+        }
+        console.log("the Sector already exists");
+        return 1;
     }
     public async addRecruiter(recruiter: Recruiter) {
         if (await this.exists()) {
             this._recruitersUid.push(await recruiter.getUid());
             await replaceData((await this.getPath()), this);
+            return 0;
         }
-        else
-            console.log(`Sector ${this._name} not exist add it before edit`);
+        console.log(`Sector ${this._name} not exist add it before edit`);
+        return -1;
     }
     public async removeRecruiter(recruiter: Recruiter) {
         if (await this.exists()) {
             this._recruitersUid = this._recruitersUid.filter(async (uid) => uid !== (await recruiter.getUid()))
-            replaceData(`/Sectors/${this._name}`,this);
+            replaceData(`/Sectors/${this._name}`, this);
+            return 0;
         }
-        else
-            console.log(`Sector ${this._name} not exist add it before edit`);
+        console.log(`Sector ${this._name} not exist add it before edit`);
+        return -1;
     }
 }
 /**
- * Retrieves all stages from the Firebase Realtime Database.
+ * Retrieves all sectors from the Firebase Realtime Database.
  * @returns {Promise<Sector[]>} A promise that resolves with an array of Stage objects.
  * @throws {Error} If there is an error fetching the stages from the database.
  */

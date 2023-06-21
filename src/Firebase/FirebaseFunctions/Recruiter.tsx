@@ -48,7 +48,9 @@ export class Recruiter {
 			}
 			await removeObjectAtPath("/Recruiters/" + this._id);
 			await deleteUserAccount(this._email);
+			return 0;
 		}
+		return 1;
 	}
 	/**
 	 * Adds the recruiter to the realtime DB if they do not already exist.
@@ -58,7 +60,7 @@ export class Recruiter {
 	public async add(password: string = "") {
 		if ((await this.exists())) {
 			console.log(`${this._email} already in use`);
-			return;
+			return 1;
 		}
 		if (password.length > 0) {
 			const userCredential = await createUserWithEmailAndPassword(auth, this._email, password);
@@ -67,14 +69,17 @@ export class Recruiter {
 			const user = process.env.REACT_APP_ADMIN_MAIL;
 			const pass = process.env.REACT_APP_ADMIN_PASS;
 			if (user != null && pass != null) {
-				await signInWithEmailAndPassword(auth, user, pass)
+				await signInWithEmailAndPassword(auth, user, pass);
 				for (let i = 0; i < this._sectors.length; i++) {
 					let sec = new Sector(this._sectors[i], true);
 					sec.addRecruiter(this);
 				}
 			}
 			await appendToDatabase(userUid, "/RecUid", this._id);
-			//todo notify by mail the recruiter that their account was created and send the password for first login
+			if(userCredential)
+				return 0;
+			else
+				return -1;
 		}
 		await appendToDatabase(this, "/Recruiters", this._id);
 	}
@@ -92,12 +97,12 @@ export class Recruiter {
 		let sectObj = new Sector(sector, true);
 		if (!(await sectObj.exists())) {
 			console.log(`sector: ${sector} not exists in DB`);
-			return;
+			return -1;
 		}
 		if (!this._sectors.includes(sector))
 			this._sectors.push(sector);
 		else
-			return;
+			return 1;
 		replaceData(`/Recruiters/${this._id}`, this);
 		const sectors = await getAllSectors();
 		for (let i = 0; i < sectors.length; i++) {
@@ -106,6 +111,7 @@ export class Recruiter {
 				break;
 			}
 		}
+		return 0;
 	}
 	/**
 	 * Remove editing permissions to the recruiter to the sector
@@ -115,10 +121,13 @@ export class Recruiter {
 	public async removeSector(sector: string) {
 		if (this._sectors.includes(sector))
 			this._sectors.filter((val) => val !== sector);
+		else
+			return 1;
 		replaceData(`/Recruiters/${this._id}`,this);
 		appendToDatabase(this, "/Recruiters", this._id);
 		const uid = await this.getUid();
 		removeObjectAtPath(`Sectors/${sector}/${uid}`);
+		return 0;
 	}
 	/**
 	 * Gets the uid of the Recruiter, for internal use(you have no reason to call it).

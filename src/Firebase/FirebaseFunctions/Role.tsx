@@ -31,8 +31,9 @@ import { appendToDatabase, getFirebaseIdsAtPath, removeObjectAtPath, replaceData
      */
     public async remove() {
         if (!(await this.exists()))
-            return;
+            return 1;
         removeObjectAtPath("/Roles/" + this._name);
+        return 0;
     }
     /**
      * Edits the name and open status of the current Role object.
@@ -41,18 +42,23 @@ import { appendToDatabase, getFirebaseIdsAtPath, removeObjectAtPath, replaceData
      * @returns None
      */
     public async edit(open: boolean = this._open) {
+        if(!(await this.exists()))
+            return -1;
         this._open = open;
         replaceData((await this.getPath()), this);
+        return 0;
     }
     /**
      * Adds the current Role object to the database if it does not already exist.
      * @returns None
      */
     public async add() {
-        if (!(await this.exists()))
+        if (!(await this.exists())){
             appendToDatabase(this, "/Roles", this._name);
-        else
-            console.log("the Rloe already exists");
+            return 0;
+        }
+        console.log("the Rloe already exists");
+        return 1;
     }
  }
  /**
