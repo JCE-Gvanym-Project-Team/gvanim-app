@@ -1,5 +1,5 @@
 import { realtimeDB } from "../FirebaseConfig/firebase";
-import { removeObjectAtPath, getFirebaseIdsAtPath, replaceData, appendToDatabase } from "./DBfuncs";
+import { appendToDatabase, getFirebaseIdsAtPath, removeObjectAtPath, replaceData } from "./DBfuncs";
  export class Role{
     public _name: string;
     public _open: boolean;

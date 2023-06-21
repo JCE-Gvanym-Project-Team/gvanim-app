@@ -5,7 +5,6 @@ import 'firebase/compat/database';
 import * as admin from 'firebase-admin';
 import { getFirestore } from "firebase/firestore";
 
-
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 export const firebaseConfig = {
 	apiKey: process.env.REACT_APP_API_KEY,

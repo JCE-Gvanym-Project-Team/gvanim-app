@@ -1,7 +1,8 @@
+import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { realtimeDB } from "../FirebaseConfig/firebase";
-import { getObjectAtPath, removeObjectAtPath, getFirebaseIdsAtPath, appendToDatabase, replaceData } from "./DBfuncs";
+import { appendToDatabase, getFirebaseIdsAtPath, getObjectAtPath, removeObjectAtPath, replaceData } from "./DBfuncs";
+import { deleteUserAccount } from "./Authentication";
 import { Sector, getAllSectors } from "./Sector";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "firebase/auth";
 const auth = getAuth();
 
 
@@ -45,8 +46,8 @@ export class Recruiter {
 				let sec = new Sector(secs[i]._name, secs[i]._open, secs[i]._recruitersUid);
 				sec.removeRecruiter(this);
 			}
-
 			await removeObjectAtPath("/Recruiters/" + this._id);
+			await deleteUserAccount(this._email);
 		}
 	}
 	/**
@@ -98,16 +99,13 @@ export class Recruiter {
 		else
 			return;
 		replaceData(`/Recruiters/${this._id}`, this);
-		console.log(`2)exist?(t) ${await this.exists()}`);
 		const sectors = await getAllSectors();
 		for (let i = 0; i < sectors.length; i++) {
 			if (sectors[i]._name === sector) {
-				let sec = new Sector(sectors[i]._name, sectors[i]._open, sectors[i]._recruitersUid);
-				await sec.addRecruiter(this);
+				await sectors[i].addRecruiter(this);
 				break;
 			}
 		}
-		console.log(`3)exist?(t) ${await this.exists()}`)
 	}
 	/**
 	 * Remove editing permissions to the recruiter to the sector

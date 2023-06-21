@@ -1,12 +1,9 @@
-import { auth } from "firebase-functions/v1";
 import { isConnected, loginAdmin, loginRecruiter, loguotRecruiter } from "./Authentication";
-import { Candidate, generateCandidateId, getFilteredCandidates } from "./Candidate";
+import { Candidate, generateCandidateId } from "./Candidate";
+import { CandidateJobStatus, allStatus, getFilteredCandidateJobStatuses, getMessage } from "./CandidateJobStatus";
 import { Job, generateJobNumber, getFilteredJobs } from "./Job";
 import { Recruiter, generateRandomString } from "./Recruiter";
-import { getFileExtensionsInFolder, uploadFileToFirestore } from "./firestoreFunc";
-import { Sector } from "./Sector";
-import { CandidateJobStatus, getMessage, allStatus, getFilteredCandidateJobStatuses } from "./CandidateJobStatus";
-import { convertTypeAcquisitionFromJson } from "typescript";
+
 export function sleep(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -144,7 +141,7 @@ async function testEditCandidate() {
 async function testAddRecruiterNoSectors() {
     await loginAdmin();
     let rec = new Recruiter("ex@gmail.com", "el", "ta");
-    await rec.add('123456');
+    await rec.add(generateRandomString());
     const status = await rec.exists();
     await rec.remove();
     return status;
@@ -154,7 +151,7 @@ async function testLoginRecruiter() {
     let rec = new Recruiter("ex@gmail.com", "el", "ta");
     await rec.add('123456');
     await loguotRecruiter();
-    await loginRecruiter("ex@gmail.com", "123456");
+    await loginRecruiter("ex@gmail.com", '123456');
     const status = await isConnected();
     await loguotRecruiter();
     await rec.remove();
@@ -165,6 +162,31 @@ async function testEditRecruiter() {
     let rec = new Recruiter("ex@gmail.com", "el", "ta");
     await rec.add('123456');
     rec.edit("new","name");
+}
+async function testAddSectorToRecruiter() {
+    await loginAdmin();
+    let rec = new Recruiter("ex@gmail.com", "el", "ta");
+    await rec.add('123456');
+    await loguotRecruiter();
+    await loginRecruiter("ex@gmail.com", "123456");
+    const status = await isConnected();
+    await loguotRecruiter();
+    await loginAdmin();
+    await rec.addSector('אשכול 10');
+    await rec.remove();
+    return status;
+}
+async function testRemoveSectorFromRecruiter() {
+    await loginAdmin();
+    let rec = new Recruiter("ex@gmail.com", "el", "ta");
+    await rec.add('123456');
+    await loguotRecruiter();
+    await loginRecruiter("ex@gmail.com", "123456");
+    await loguotRecruiter();
+    await loginAdmin();
+    await rec.addSector('אשכול 10');
+    await rec.removeSector('אשכול 10');
+    await rec.remove();
 }
 async function testMessgaeFormat() {
     let cand = new Candidate("73645","דוג","מה");
@@ -223,5 +245,7 @@ export async function main() {
     //testMessgaeFormat();
     //testGetRecomendationsUrl();
     //testGetCvUrl();
-    testAddRecomendation();
+    //testAddRecomendation();
+    //console.log(await testAddRecruiterNoSectors());
+    testRemoveSectorFromRecruiter();
 }

@@ -1,14 +1,14 @@
 import { realtimeDB } from "../FirebaseConfig/firebase";
-import { removeObjectAtPath, getFirebaseIdsAtPath, replaceData, appendToDatabase } from "./DBfuncs";
-import { getRecruitersFromDatabase, Recruiter } from "./Recruiter";
+import { appendToDatabase, getFirebaseIdsAtPath, removeObjectAtPath, replaceData } from "./DBfuncs";
+import { Recruiter, getRecruitersFromDatabase } from "./Recruiter";
 export class Sector {
     public _name: string;
     public _open: boolean;
     public _recruitersUid: string[];
-    constructor(name: string, open: boolean, recruiterUid: string[]=[]) {
+    constructor(name: string, open: boolean, recruitersUid: string[]=[]) {
         this._name = name;
         this._open = open;
-        this._recruitersUid = recruiterUid;
+        this._recruitersUid = recruitersUid;
     }
     /**
      * Gets the path of the current stage in the realtime DB.
@@ -69,8 +69,7 @@ export class Sector {
     public async addRecruiter(recruiter: Recruiter) {
         if (await this.exists()) {
             this._recruitersUid.push(await recruiter.getUid());
-            await this.remove();
-            await this.add();
+            await replaceData((await this.getPath()), this);
         }
         else
             console.log(`Sector ${this._name} not exist add it before edit`);

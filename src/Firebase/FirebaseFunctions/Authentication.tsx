@@ -1,10 +1,7 @@
 import 'firebase/auth';
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, User, sendPasswordResetEmail, updatePassword } from "firebase/auth";
-import { sleep } from "./test";
-
-import { Recruiter } from "./Recruiter";
-import { appendToDatabase } from "./DBfuncs";
-import { Sector } from './Sector';
+import * as admin from "firebase-admin";
+import { User, getAuth, sendPasswordResetEmail, signInWithEmailAndPassword, updatePassword, confirmPasswordReset } from "firebase/auth";
+import axios from 'axios';
 const auth = getAuth();
 
 /**
@@ -53,20 +50,45 @@ export async function isConnected(): Promise<boolean> {
 		return false;
 }
 
-export async function getConnectedUser(): Promise<User | null>{
+export async function getConnectedUser(): Promise<User | null> {
 	return getAuth().currentUser;
 }
 export async function sendResetMail(mail: string) {
 	sendPasswordResetEmail(auth, mail);
 }
-export async function updateRecruiterPassword(newPass: string){
+export async function updateLinkRecruiterPassword(newPass: string, oobCode: string) {
+	confirmPasswordReset(auth, oobCode, newPass)
+		.then(() => {
+			return true;
+		})
+		.catch((error) => {
+			return false;
+		});
+}
+export async function updateConnectedRecruiterPassword(newPass: string) {
 	const user = await getConnectedUser();
-	if(user)
+	if (user)
 		updatePassword(user, newPass);
 	else
 		console.log('error while updating password');
 }
+export async function deleteUserAccount(mail: string) {
+	return new Promise<Boolean>((resolve, reject) => {
+		axios.post('https://europe-west1-gvanim-app.cloudfunctions.net/deleteRecruiter', {
+			mail: mail,
+		})
+			.then(response => {
+				const status = response.data;
+				resolve(status);
+			})
+			.catch(error => {
+				console.error('Error calling the Cloud Function:', error);
+				reject(error);
+			});
+	});
+}
 
+/*
 export async function main() {
 	await loginAdmin();
 	let rec = new Recruiter('ex@gmail.com',"el","ta");
@@ -78,3 +100,4 @@ export async function main() {
 	await sleep(5000);
 	console.log(`5)exist?(t) ${await rec.exists()}`);
 }
+*/

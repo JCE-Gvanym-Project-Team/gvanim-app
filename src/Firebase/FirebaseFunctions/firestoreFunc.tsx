@@ -1,7 +1,7 @@
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/storage';
-import 'firebase/compat/firestore';
 import axios from 'axios';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/firestore';
+import 'firebase/compat/storage';
 
 /**
  * Uploads a file to Firebase Storage and adds a reference to the file in Firestore.

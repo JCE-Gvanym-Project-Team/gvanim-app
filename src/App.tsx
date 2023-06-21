@@ -4,8 +4,6 @@ import DrushimMainPage from './DrushimMainPage/DrushimMainPage';
 import { ColorModeContext, FontContext, useMode } from './DrushimMainPage/theme';
 import Auth from './RecruiterMainPage/Components/Auth/Auth';
 
-
-//main();
 const recruitersPageTheme = createTheme({
 	direction: 'rtl',
 });
