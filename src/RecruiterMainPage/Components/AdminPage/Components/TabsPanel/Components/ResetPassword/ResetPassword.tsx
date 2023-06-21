@@ -120,7 +120,21 @@ export default function UpdateAccount() {
                 </Button>
               </Box>
 
+
+              <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '5rem' }}>
+                <Button variant="outlined" onClick={resetThePasswordOfTheCurrentUser} sx={{ width: '85%' }}>
+                  אפס/י את הסיסמא של החשבון הנוכחי
+                </Button>
+              </Box>
             </>
+          )}
+
+          {!isAdminUser && (
+            <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
+              <Button variant="outlined" onClick={resetThePasswordOfTheCurrentUser} sx={{ width: '85%' }}>
+                אפס/י את הסיסמא של החשבון הנוכחי
+              </Button>
+            </Box>
           )}
 
           <Dialog open={openDialog} onClose={handleCloseDialog}>
@@ -128,6 +142,7 @@ export default function UpdateAccount() {
             <DialogContent>
               <Box sx={{ textAlign: 'center', margin: '1rem 0' }}>
                 <p>אנא עקב/י אחרי ההוראות במייל:</p>
+                <p>{userEmail}</p>
                 <p>{recruitersSelected.join(', ')}</p>
               </Box>
             </DialogContent>
@@ -135,20 +150,6 @@ export default function UpdateAccount() {
               <Button onClick={handleCloseDialog}>סגור</Button>
             </DialogActions>
           </Dialog>
-
-          <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '5rem' }}>
-            <Button variant="outlined" onClick={resetThePasswordOfTheCurrentUser} sx={{ width: '85%' }}>
-              אפס/י את הסיסמא של החשבון הנוכחי
-            </Button>
-          </Box>
-
-          {!isAdminUser && (
-          <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
-            <Button variant="outlined" onClick={resetThePasswordOfTheCurrentUser} sx={{ width: '85%' }}>
-              אפס/י את הסיסמא של החשבון הנוכחי
-            </Button>
-          </Box>
-          )}
 
         </Grid>
       </Grid>
