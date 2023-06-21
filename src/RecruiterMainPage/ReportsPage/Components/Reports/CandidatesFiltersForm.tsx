@@ -39,25 +39,38 @@ export default function CandidateFiltersForm() {
     React.useEffect(() => {
         const fileData = async () => {
             // --- sectors 
+            
+            let i = 20;
             const sectorsFromDb = await getAllSectors();
-            let i = 10;
-            setSectors([]);
-            sectorsFromDb.map((sector) => {
-                const sectorObj: typeMyData = { id: i, name: sector._name };
-                setSectors((prev_sectors) => [...prev_sectors, sectorObj]);
-                i = i + 10
-            });
+            let updatedSectors = [{ id: 10, name: 'כל האשכולות' }];
+
+            updatedSectors = updatedSectors.concat(
+                sectorsFromDb.map((sector) => {
+                    const sectorObj = { id: i, name: sector._name };
+                    i = i + 10
+                    return sectorObj;
+                })
+            );
+
+            setSectors(updatedSectors);
+
 
             // ---- roles
             const rolesFromDb = await getAllRoles();
-            i = 10;
-            setRoles([])
-            rolesFromDb.map((role) => {
-                const roleObj: typeMyData = { id: i, name: role._name };
-                    
-                setRoles((prev_roles) => [...prev_roles, roleObj]);
-                i = i + 10;
-            })
+            i = 20;
+
+            let updatedRoles = [{ id: 10, name: "כל התפקידים" }];
+
+            updatedRoles = updatedRoles.concat(
+                rolesFromDb.map((role) => {
+                    const roleObj = { id: i, name: role._name };
+                    i = i + 10;
+                    return roleObj;
+                })
+            );
+
+            setRoles(updatedRoles);
+
         };
 
         
@@ -317,8 +330,8 @@ export default function CandidateFiltersForm() {
                                         <Select
                                             labelId="demo-simple-select-label"
                                             id="demo-simple-select"
-                                            value={selectedSector} // שנה את הערך של value ל-rejectionCause
-                                            label="sector" // שנה את הערך של label ל-rejectionCause
+                                            value={selectedSector} 
+                                            label="sector" 
                                             onChange={handleChangeSector}
                                         >
                                             {sectors.map((sector) => (
