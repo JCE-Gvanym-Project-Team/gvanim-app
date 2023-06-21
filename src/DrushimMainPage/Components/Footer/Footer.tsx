@@ -1,9 +1,6 @@
-import { Box, Breakpoint, Icon, Theme, Typography, useMediaQuery, useTheme } from '@mui/material'
-import React from 'react'
-import Logo1 from './Resources/Logo1.png'
+import { Box, Breakpoint, Theme, Typography, useMediaQuery, useTheme } from '@mui/material'
 import Logo2 from './Resources/Logo2.png'
 import MobileLogo from './Resources/MobileLogo.png'
-import { PaddingOutlined } from '@mui/icons-material';
 
 export default function Footer()
 {

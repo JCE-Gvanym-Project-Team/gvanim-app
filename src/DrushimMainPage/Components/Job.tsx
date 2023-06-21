@@ -1,8 +1,6 @@
 import { Box, Stack, Typography } from '@mui/material';
-import React, { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Job, getFilteredJobs } from '../../Firebase/FirebaseFunctions/Job';
-import { BorderStyle } from '@mui/icons-material';
-import Button from '@mui/base/Button';
 
 
 const SingleJob = (props: { id: any }) => {

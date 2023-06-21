@@ -1,6 +1,5 @@
 import { Close } from '@mui/icons-material';
 import { Box, Dialog, DialogContent, DialogTitle, IconButton, Typography } from '@mui/material';
-import React from 'react'
 import { dialogContentStyle, dialogContentSx, dialogSx, dialogTopAreaSx } from './ErrorDialogStyle';
 
 export default function ErrorDialog(props: { open, onClose })
