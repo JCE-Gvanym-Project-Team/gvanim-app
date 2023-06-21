@@ -113,7 +113,7 @@ function RecruiterMainPage({ handlelogout }) {
         {/* Admin Routes */}
         <Route path="settings" element={<AdminPage />} />
         <Route path="/settings/updateAccount" element={<UpdateAccount />} />
-        <Route path="passwordRecovery" element={<PasswordRecover />} />
+        <Route path="/passwordRecovery" element={<PasswordRecover />} />
       </Routes>
       <Footer />
     </>

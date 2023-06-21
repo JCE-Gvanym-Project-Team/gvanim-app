@@ -45,17 +45,7 @@ function App() {
 					<Navigate to='/career/jobs' />
 				} />
 
-				{/* forgetPassword */}
-				<Route path='management/forgetPassword' element={
-					<FontContext.Provider value={fontMode} >
-						<ColorModeContext.Provider value={colorMode} >
-							<ThemeProvider theme={PasswordRecover}>
-								<PasswordRecover />
-							</ThemeProvider>
-						</ColorModeContext.Provider >
-					</FontContext.Provider>
-				}
-				/>
+
 			</Routes>
 		</>
 	);

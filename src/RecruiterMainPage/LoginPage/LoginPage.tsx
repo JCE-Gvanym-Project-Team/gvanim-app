@@ -128,7 +128,7 @@ const Login = (props: { email: any; setEmail: any; password: any; setPassword: a
 
                                 <Grid container sx={{ mt: 1 }}>
                                     <Grid item>
-                                        <Link type="submit" href={"management/forgetPassword"} variant="caption">
+                                        <Link type="submit" href={"/passwordRecovery"} variant="caption">
                                             שכחת את הסיסמה?
                                         </Link>
                                     </Grid>

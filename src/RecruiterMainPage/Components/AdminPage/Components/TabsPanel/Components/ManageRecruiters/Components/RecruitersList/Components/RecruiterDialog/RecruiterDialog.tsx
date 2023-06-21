@@ -15,6 +15,7 @@ import { Recruiter, getRecruitersFromDatabase } from '../../../../../../../../..
 import SectorsChip from './Components/SectorsChip/SectorsChip/SectorsChip';
 import { getAllSectors } from '../../../../../../../../../../../Firebase/FirebaseFunctions/Sector';
 import { Sector } from '../../../../../../../../../../../Firebase/FirebaseFunctions/Sector'
+import { sleep } from '../../../../../../../../../../../Firebase/FirebaseFunctions/test';
 
 
 
@@ -67,9 +68,15 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 			const sectorStrings = sectors.map((sector: Sector) => sector._name.toString());
 			setAllSectors(sectorStrings);
 			setLoading(false);
-			const recruiters = await getRecruitersFromDatabase();
-			const recruiterCurrent = recruiters.filter((recruiter) => recruiter._email === recruiterRow?._email);
-			setRecruiter(recruiterCurrent[0]);
+			await sleep(1000);
+			try {
+				let recruiters = await getRecruitersFromDatabase();
+				const recruiterCurrent = recruiters.filter((recruiter) => recruiter._email === recruiterRow?._email);
+				setRecruiter(recruiterCurrent[0]);
+			} catch (error) {
+				console.log(error);
+			}
+
 
 			if (isEdit) {
 				setFirstName(recruiterRow?._firstName);
@@ -84,7 +91,7 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 		setSectorsChanged(false);
 
 
-	}, [sectorsChanged]);
+	}, []);
 
 	if (loading) {
 		return <div>Loading...</div>;
@@ -138,15 +145,16 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 		if (!isEdit) {
 			const newRecruter = new Recruiter(email, firstName, lastName, sectorsSelection);
 			let firstPassword: string = generateCodeFromEmail(email);
-			try {
-				await newRecruter.add(firstPassword);
-				// console.log("real email:" + email);
-			}
-			catch (error) {
-				alert('האימייל כבר קיים במערכת!');
-				setEmail('');
-				return;
-			}
+			console.log(firstPassword);
+			// try {
+			await newRecruter.add(firstPassword);
+			// console.log("real email:" + email);
+			// }
+			// catch () {
+			// alert('האימייל כבר קיים במערכת!');
+			// setEmail('');
+			// return;
+			// }
 			setDialogOpen(true);
 			setDialogEmail(email);
 			setDialogPassword(firstPassword);
@@ -384,7 +392,7 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 				</Stack>
 
 			</Dialog>
-			 <Button onClick={() => { test() }}>click me</Button> 
+			<Button onClick={() => { test() }}>click me</Button>
 		</Box>
 	);
 
@@ -414,13 +422,12 @@ function generateCodeFromEmail(email: string) {
 
 
 
- async function test() {
- const recruiter = new Recruiter("112123@gmail.com", "ראובן", "לוי", ['אשכול 10']);
- await recruiter.add("123456");
-//  recruiter.edit("ירון", "לוי");
-//  const reqs = await getRecruitersFromDatabase();
-//  console.log(reqs);
- }
+async function test() {
+	const recruiter = new Recruiter("112123@gmail.com", "ראובן", "לוי", ['אשכול 10']);
+	await recruiter.add("123456");
+	recruiter.edit("ירון", "לוי");
+	recruiter.remove();
+}
 
 
 async function updateSectors(recruiter: Recruiter, setSectorsChanged: (value: boolean) => void, newList: string[], listCurrent: string[], setSaveButton: (value: boolean) => void) {
