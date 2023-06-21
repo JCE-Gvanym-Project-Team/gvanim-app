@@ -2,7 +2,8 @@ import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, D
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { sleep } from '../../../../../../../../../Firebase/FirebaseFunctions/test';
-import { updateRecruiterPassword } from '../../../../../../../../../Firebase/FirebaseFunctions/Authentication';
+import { updateConnectedRecruiterPassword, updateLinkRecruiterPassword } from '../../../../../../../../../Firebase/FirebaseFunctions/Authentication';
+import { Token } from '@mui/icons-material';
 
 export default function PasswordSettings(props: { passwordEdit: any }) {
     const { passwordEdit } = props;
@@ -52,7 +53,17 @@ export default function PasswordSettings(props: { passwordEdit: any }) {
             if (newPassword !== confirmPassword) {
                 setConfirmPasswordError(true);
             } else { // if sucsess
-                updateRecruiterPassword(newPassword);
+                // Assuming the URL is in the following format: http://example.com/reset-password?token=abc123
+                const urlParams = new URLSearchParams(window.location.search);
+                console.log(urlParams);
+                const token = urlParams.get('oobCode') || '';
+                console.log(token); // Output: abc123
+                if (token.length > 0) { // the user is not connected
+                    updateLinkRecruiterPassword(newPassword, token);
+                }
+                else {
+                    updateConnectedRecruiterPassword(newPassword);
+                }
                 setConfirmPasswordError(false);
                 setDialogOpen(true);
                 setNewPassword('');

@@ -3,13 +3,13 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import DrushimMainPage from './DrushimMainPage/DrushimMainPage';
 import { ColorModeContext, FontContext, useMode } from './DrushimMainPage/theme';
 import Auth from './RecruiterMainPage/Components/Auth/Auth';
+import PasswordRecover from './RecruiterMainPage/RecoveryPasswordPage/RecoveryPasswordPage'
 
 const recruitersPageTheme = createTheme({
 	direction: 'rtl',
 });
 
-function App()
-{
+function App() {
 
 	// for drushim page
 	const [drushimPageTheme, colorMode, fontMode] = useMode();
@@ -44,6 +44,18 @@ function App()
 				<Route path='/career' element={
 					<Navigate to='/career/jobs' />
 				} />
+
+				{/* forgetPassword */}
+				<Route path='management/forgetPassword' element={
+					<FontContext.Provider value={fontMode} >
+						<ColorModeContext.Provider value={colorMode} >
+							<ThemeProvider theme={PasswordRecover}>
+								<PasswordRecover />
+							</ThemeProvider>
+						</ColorModeContext.Provider >
+					</FontContext.Provider>
+				}
+				/>
 			</Routes>
 		</>
 	);
