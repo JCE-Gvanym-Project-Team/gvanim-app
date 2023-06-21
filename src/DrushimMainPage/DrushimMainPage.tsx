@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react'
-import { Route, Routes } from 'react-router-dom'
+import { CssBaseline } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { Route, Routes } from 'react-router-dom';
 import { Job, getFilteredJobs } from '../Firebase/FirebaseFunctions/functionIndex';
 import AllJobsPage from './AllJobsPage/AllJobsPage';
-import OneJobPage from './OneJobPage/OneJobPage';
-import { CssBaseline } from '@mui/material';
-import Navbar from './Components/Navbar/Navbar'
-import Footer from './Components/Footer/Footer';
 import Accessibility from './Components/Accessibility/Accessibility';
+import Footer from './Components/Footer/Footer';
+import Navbar from './Components/Navbar/Navbar';
+import OneJobPage from './OneJobPage/OneJobPage';
 
 export default function DrushimMainPage()
 {
