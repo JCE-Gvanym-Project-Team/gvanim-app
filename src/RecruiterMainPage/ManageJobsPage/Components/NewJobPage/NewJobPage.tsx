@@ -1,17 +1,17 @@
-import { Autocomplete, Box, Button, Container, Divider, FormControlLabel, FormHelperText, FormLabel, Stack, Switch, TextField, TextareaAutosize, Typography, alpha, createFilterOptions, styled } from '@mui/material'
-import { useEffect, useState } from 'react'
-import { BoxGradientSx, MyLabelSx, MyPaperSx, MyTextFieldSx, SwitchPaperSx } from './NewJobStyle'
-import JobScopeSlider from './Components/ScopeSlider/ScopeSlider';
-import { Job, generateJobNumber, getFilteredJobs } from '../../../../Firebase/FirebaseFunctions/Job';
-import { useLocation, useNavigate } from 'react-router-dom';
-import MyJobRemoveDialog from './Components/RemoveJobDialog/RemoveJobDialog';
-import "./NewJobPage.css"
 import { ArticleOutlined } from '@mui/icons-material';
-import MyLoading from '../../../../Components/MyLoading/MyLoading';
-import RoleSingleSelection from './Components/RoleSingleSelection/RoleSingleSelection';
-import SectorSingleSelection from './Components/SectorSingleSelection/SectorSingleSelection';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { Autocomplete, Box, Button, Container, Divider, FormHelperText, FormLabel, Stack, Switch, TextField, TextareaAutosize, Typography, createFilterOptions, styled } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import MyLoading from '../../../../Components/MyLoading/MyLoading';
+import { Job, generateJobNumber, getFilteredJobs } from '../../../../Firebase/FirebaseFunctions/Job';
 import { designReturnButton } from '../../ManageJobsPageStyle';
+import MyJobRemoveDialog from './Components/RemoveJobDialog/RemoveJobDialog';
+import RoleSingleSelection from './Components/RoleSingleSelection/RoleSingleSelection';
+import JobScopeSlider from './Components/ScopeSlider/ScopeSlider';
+import SectorSingleSelection from './Components/SectorSingleSelection/SectorSingleSelection';
+import "./NewJobPage.css";
+import { BoxGradientSx, MyLabelSx, MyPaperSx } from './NewJobStyle';
 
 const filter = createFilterOptions<string>();
 

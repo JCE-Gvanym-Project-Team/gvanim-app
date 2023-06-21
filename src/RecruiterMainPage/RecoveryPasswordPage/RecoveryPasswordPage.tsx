@@ -1,28 +1,29 @@
 // components
-import {
-    Button,
-    Container,
-    FormHelperText,
-    Typography,
-    Alert,
-    CssBaseline,
-    TextField,
-    Collapse,
-    Paper
-} from '@mui/material'
+import
+    {
+        Alert,
+        Button,
+        Collapse,
+        Container,
+        CssBaseline,
+        FormHelperText,
+        Paper,
+        TextField,
+        Typography
+    } from '@mui/material';
 
-import { styled } from '@mui/material/styles'
+import { styled } from '@mui/material/styles';
 
 //firebase
-import firebase1 from "../../Firebase/FirebaseConfig/firebase";
 import "firebase/compat/auth";
+import firebase1 from "../../Firebase/FirebaseConfig/firebase";
 
 //react
 import { useState } from "react";
 
 // svg importer
 import { ReactSVG } from "react-svg";
-import SvgLogo from "../../Components/Logo/Logo.svg"
+import SvgLogo from "../../Components/Logo/Logo.svg";
 // -----------------------------------------------------------------
 
 

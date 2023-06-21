@@ -1,22 +1,20 @@
-import * as React from 'react';
+import { ArticleOutlined } from "@mui/icons-material";
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { Box, Button, Container, FormControlLabel, MenuItem, Radio, RadioGroup, Select, SelectChangeEvent, Stack, Typography } from '@mui/material';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { Box, Typography, FormControlLabel, MenuItem, Radio, RadioGroup, Select, SelectChangeEvent, Stack, Container, Button } from '@mui/material';
-import { CandidateJobStatus, Job, allStatus, generateJobNumber, getAllRoles, getAllSectors, getFilteredCandidateJobStatuses, getFilteredCandidates, getFilteredJobs, loginAdmin } from '../../../../Firebase/FirebaseFunctions/functionIndex';
-import { exportToExcel } from '../../../../Firebase/FirebaseFunctions/Reports/GlobalFunctions'
-import CandidatesByFilters from '../../../../Firebase/FirebaseFunctions/Reports/CandidatesFilters';
-import { MyReportStyle, formContainerStyles, radioStyle } from '../../ReportPageStyle';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MyPaperSx, BoxGradientSx } from '../../../ManageJobsPage/Components/NewJobPage/NewJobStyle';
-import { ArticleOutlined, Margin } from "@mui/icons-material";
+import CandidatesByFilters from '../../../../Firebase/FirebaseFunctions/Reports/CandidatesFilters';
+import { exportToExcel } from '../../../../Firebase/FirebaseFunctions/Reports/GlobalFunctions';
+import { getAllRoles, getAllSectors, getFilteredCandidateJobStatuses, loginAdmin } from '../../../../Firebase/FirebaseFunctions/functionIndex';
+import { BoxGradientSx, MyPaperSx } from '../../../ManageJobsPage/Components/NewJobPage/NewJobStyle';
 import { designReturnButton } from '../../../ManageJobsPage/ManageJobsPageStyle';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { getAllByRole } from '@testing-library/react';
-import RoleSingleSelection from '../../../ManageJobsPage/Components/NewJobPage/Components/RoleSingleSelection/RoleSingleSelection';
+import { MyReportStyle, radioStyle } from '../../ReportPageStyle';
 
 interface typeMyData {
     id: number;

@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from 'react'
-import { appliedDateTextSx, autoCompleteSx, candidateNameAndButtonSx, candidateNameSx, chooseJobAndInterviewContainerSx, chooseJobContainerSx, errorTextSx, interviewSummaryButtonsContainerSx, interviewSummaryContentSx, interviewSummaryRedButtonsContainerSx, interviewSummaryTextSx, mainStackSx, scheduleInterviewButton, scheduleInterviewContainer, scheduleInterviewText, textSx, titleSx } from './ManageInterviewsPageStyle';
-import { BoxGradientSx } from '../../../PageStyles';
-import { Autocomplete, Box, Button, Divider, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Stack, TextField, TextareaAutosize, Typography } from '@mui/material';
-import { GlobalStyle } from '../../../PageStyles';
+import { CalendarMonth, ErrorOutline, QuestionAnswer } from '@mui/icons-material';
+import { Autocomplete, Box, Button, Divider, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Stack, TextField, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import MyLoading from '../../../../Components/MyLoading/MyLoading';
 import { Candidate, getFilteredCandidates } from '../../../../Firebase/FirebaseFunctions/Candidate';
 import { CandidateJobStatus, allStatus, getFilteredCandidateJobStatuses } from '../../../../Firebase/FirebaseFunctions/CandidateJobStatus';
 import { Job, getFilteredJobs } from '../../../../Firebase/FirebaseFunctions/Job';
-import { AccountCircle, CalendarMonth, ErrorOutline, QuestionAnswer } from '@mui/icons-material';
-import ScheduleInterviewDialog from './Components/ScheduleInterviewDialog/ScheduleInterviewDialog';
-import MyLoading from '../../../../Components/MyLoading/MyLoading';
+import { BoxGradientSx, GlobalStyle } from '../../../PageStyles';
 import AreYouSureDialog from '../Components/AreYouSureDialog/AreYouSureDialog';
 import SuccessMessageSnackbar from '../Components/SuccessMessageSnackbar/SuccessMessageSnackbar';
+import ScheduleInterviewDialog from './Components/ScheduleInterviewDialog/ScheduleInterviewDialog';
+import { appliedDateTextSx, autoCompleteSx, candidateNameAndButtonSx, candidateNameSx, chooseJobAndInterviewContainerSx, chooseJobContainerSx, errorTextSx, interviewSummaryButtonsContainerSx, interviewSummaryContentSx, interviewSummaryTextSx, mainStackSx, scheduleInterviewButton, scheduleInterviewContainer, scheduleInterviewText, textSx } from './ManageInterviewsPageStyle';
 export default function ManageInterviewsPage(props: { candidateId: string })
 {
 

@@ -1,15 +1,14 @@
-import * as React from 'react';
 import Menu, { MenuActions } from '@mui/base/Menu';
 import MenuItem, { menuItemClasses } from '@mui/base/MenuItem';
 import Popper from '@mui/base/Popper';
-import { styled } from '@mui/system';
 import { ListActionTypes } from '@mui/base/useList';
-import { Box, IconButton, ListItemIcon, Tooltip, Typography } from '@mui/material';
 import { Assignment, Edit, MoreVert } from '@mui/icons-material';
-import { MenuItemIconSx, MenuItemTypographySx, blue, grey } from './MyDropManuStyle';
+import { Box, IconButton, ListItemIcon, Tooltip, Typography } from '@mui/material';
+import { styled } from '@mui/system';
+import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Link } from "react-router-dom";
 import { Job } from '../../../../Firebase/FirebaseFunctions/Job';
+import { MenuItemIconSx, MenuItemTypographySx, blue, grey } from './MyDropManuStyle';
 
 
 export default function MyDropMenu(props: { job: Job }) {

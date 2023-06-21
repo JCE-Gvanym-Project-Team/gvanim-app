@@ -1,7 +1,5 @@
-import React from 'react'
 import { SxProps } from '@mui/material/styles';
 import { GlobalStyle, ManageCandidatesPageGlobalStyle } from '../../../PageStyles';
-import { CSSProperties } from '@mui/material/styles/createTypography';
 
 
 export const textSx: SxProps = {

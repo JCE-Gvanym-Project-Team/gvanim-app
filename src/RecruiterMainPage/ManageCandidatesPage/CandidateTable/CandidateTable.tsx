@@ -1,39 +1,37 @@
-import * as React from "react";
-import Typography from "@mui/material/Typography";
-import { Box, Button, Stack, styled, useTheme } from "@mui/material";
-import DropMenu from "../DropMenu/DropMenu";
-import {
-  DataGrid,
-  GridToolbarFilterButton,
-  GridColDef,
-  GridToolbarDensitySelector,
-  GridToolbarColumnsButton,
-  useGridApiContext,
-  GridToolbarContainer,
-  heIL,
-  GridToolbarQuickFilter,
-} from "@mui/x-data-grid";
-import { getFilteredCandidates } from "../../../Firebase/FirebaseFunctions/Candidate";
-import { useNavigate } from "react-router-dom";
-import { unstable_useForkRef as useForkRef } from "@mui/utils";
-import { MyButtonSx } from "./CandidateTableStyle";
-import { PictureAsPdfSharp, SortByAlpha } from "@mui/icons-material";
-import { getFilteredJobs } from "../../../Firebase/FirebaseFunctions/Job";
+import { PictureAsPdfSharp } from "@mui/icons-material";
+import { Box, Button, Chip, LinearProgress, Stack, SxProps, Theme, alpha, styled, useTheme } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
 import PaginationItem from "@mui/material/PaginationItem";
-import {
-  gridPageCountSelector,
-  gridPageSelector,
-  useGridSelector,
-  GridColumnHeaders,
-  gridClasses,
-  GridRow,
-} from "@mui/x-data-grid";
-import { Chip, LinearProgress, SxProps, Theme, alpha } from "@mui/material";
-import MyLoading from "../../../Components/MyLoading/MyLoading";
+import Typography from "@mui/material/Typography";
+import { unstable_useForkRef as useForkRef } from "@mui/utils";
+import
+  {
+    DataGrid,
+    GridColDef,
+    GridColumnHeaders,
+    GridRow,
+    GridToolbarColumnsButton,
+    GridToolbarContainer,
+    GridToolbarDensitySelector,
+    GridToolbarFilterButton,
+    GridToolbarQuickFilter,
+    gridClasses,
+    gridPageCountSelector,
+    gridPageSelector,
+    heIL,
+    useGridApiContext,
+    useGridSelector,
+  } from "@mui/x-data-grid";
+import * as React from "react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import MyLoading from "../../../Components/MyLoading/MyLoading";
+import { getFilteredCandidates } from "../../../Firebase/FirebaseFunctions/Candidate";
 import { getFilteredCandidateJobStatuses } from "../../../Firebase/FirebaseFunctions/CandidateJobStatus";
+import { getFilteredJobs } from "../../../Firebase/FirebaseFunctions/Job";
+import DropMenu from "../DropMenu/DropMenu";
 import MyChip from "../ViewCandidatesPage/Components/MyChip/MyChip";
+import { MyButtonSx } from "./CandidateTableStyle";
 
 // -------------------Use Memorie for better performance----------------------------------------------------
 const TraceUpdates = React.forwardRef<any, any>((props, ref) => {

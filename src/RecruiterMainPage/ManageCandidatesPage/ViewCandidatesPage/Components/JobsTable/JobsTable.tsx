@@ -1,24 +1,24 @@
 import { Alert, AlertProps, Box, Button, Chip, LinearProgress, Snackbar, Stack, SxProps, Theme, alpha, styled, useTheme } from '@mui/material';
 import
-{
-    DataGrid,
-    GridColDef,
-    GridColumnHeaders,
-    GridPrintExportMenuItem,
-    GridRow,
-    GridToolbarColumnsButton,
-    GridToolbarContainer,
-    GridToolbarDensitySelector,
-    GridToolbarExportContainer,
-    GridToolbarFilterButton,
-    GridToolbarQuickFilter,
-    gridClasses,
-    gridPageCountSelector,
-    gridPageSelector,
-    heIL,
-    useGridApiContext,
-    useGridSelector,
-} from '@mui/x-data-grid';
+    {
+        DataGrid,
+        GridColDef,
+        GridColumnHeaders,
+        GridPrintExportMenuItem,
+        GridRow,
+        GridToolbarColumnsButton,
+        GridToolbarContainer,
+        GridToolbarDensitySelector,
+        GridToolbarExportContainer,
+        GridToolbarFilterButton,
+        GridToolbarQuickFilter,
+        gridClasses,
+        gridPageCountSelector,
+        gridPageSelector,
+        heIL,
+        useGridApiContext,
+        useGridSelector,
+    } from '@mui/x-data-grid';
 import * as React from 'react';
 import MyDropMenu from '../../../../ManageJobsPage/Components/MyDropMenu/MyDropMenu';
 

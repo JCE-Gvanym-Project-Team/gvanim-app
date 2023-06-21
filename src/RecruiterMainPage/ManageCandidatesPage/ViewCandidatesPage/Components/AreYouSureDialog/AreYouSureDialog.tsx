@@ -1,8 +1,7 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton } from '@mui/material'
-import React, { useState } from 'react'
-import { dialogActionsSx, dialogContentStyle, dialogContentSx, dialogSx, dialogTitleSx, dialogTopAreaSx } from './AreYouSureDialogStyle';
 import { Close } from '@mui/icons-material';
-import SuccessMessageSnackbar from '../SuccessMessageSnackbar/SuccessMessageSnackbar';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton } from '@mui/material';
+import React from 'react';
+import { dialogActionsSx, dialogContentStyle, dialogContentSx, dialogSx, dialogTitleSx, dialogTopAreaSx } from './AreYouSureDialogStyle';
 
 export default function AreYouSureDialog(props: { open, onClose, message, callback, setSnackBarOpen })
 {

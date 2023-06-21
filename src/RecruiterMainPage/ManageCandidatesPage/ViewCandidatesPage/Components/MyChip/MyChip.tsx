@@ -1,8 +1,8 @@
-import { Chip } from '@mui/material';
-import React, { useEffect, useState } from 'react'
-import { CandidateJobStatus, allStatus, getFilteredCandidateJobStatuses } from '../../../../../Firebase/FirebaseFunctions/CandidateJobStatus';
-import { Candidate } from '../../../../../Firebase/FirebaseFunctions/Candidate';
 import { Autorenew, Check, DoneAll, MoodBad, ThumbDown, ThumbUp } from '@mui/icons-material';
+import { Chip } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { Candidate } from '../../../../../Firebase/FirebaseFunctions/Candidate';
+import { CandidateJobStatus, allStatus, getFilteredCandidateJobStatuses } from '../../../../../Firebase/FirebaseFunctions/CandidateJobStatus';
 
 export default function MyChip(props: { jobId: string, candidate: Candidate | null, purpose })
 {

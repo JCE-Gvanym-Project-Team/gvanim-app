@@ -1,15 +1,16 @@
+import
+  {
+    Box,
+    FormControl,
+    InputLabel,
+    MenuItem,
+    OutlinedInput,
+    Select,
+    SelectChangeEvent,
+    Typography,
+  } from "@mui/material";
 import * as React from "react";
-import {
-  FormControl,
-  InputLabel,
-  MenuItem,
-  OutlinedInput,
-  Select,
-  SelectChangeEvent,
-  Box,
-  Typography,
-} from "@mui/material";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;

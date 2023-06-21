@@ -1,13 +1,12 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
-import MyTable from "./Components/MyTable/MyTable";
-import { Alert, AlertProps, Box, Snackbar, Stack, Typography } from "@mui/material";
-import MyLoading from "../../Components/MyLoading/MyLoading";
-import { ManageJobPageBoxSx } from "./ManageJobsPageStyle";
-import TransitionComponentSnackbar from "./Components/NewJobPage/Components/SuccessSnackBar/SuccessSnackBar";
-import { useLocation } from "react-router-dom";
-import { BoxGradientSx } from "../PageStyles";
 import { ArticleOutlined } from "@mui/icons-material";
+import { Alert, AlertProps, Box, Snackbar, Stack, Typography } from "@mui/material";
+import { useLocation } from "react-router-dom";
+import MyLoading from "../../Components/MyLoading/MyLoading";
+import { BoxGradientSx } from "../PageStyles";
+import MyTable from "./Components/MyTable/MyTable";
+import { ManageJobPageBoxSx } from "./ManageJobsPageStyle";
 
 
 const ManageJobsPage = () => {
