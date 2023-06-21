@@ -1,7 +1,7 @@
 import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { realtimeDB } from "../FirebaseConfig/firebase";
 import { appendToDatabase, getFirebaseIdsAtPath, getObjectAtPath, removeObjectAtPath, replaceData } from "./DBfuncs";
-import { deleteUserByEmail } from "./Authentication";
+import { deleteUserAccount } from "./Authentication";
 import { Sector, getAllSectors } from "./Sector";
 const auth = getAuth();
 
@@ -47,7 +47,7 @@ export class Recruiter {
 				sec.removeRecruiter(this);
 			}
 			await removeObjectAtPath("/Recruiters/" + this._id);
-			await deleteUserByEmail(this._email);
+			await deleteUserAccount(this._email);
 		}
 	}
 	/**

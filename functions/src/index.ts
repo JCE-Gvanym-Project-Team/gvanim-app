@@ -444,7 +444,7 @@ functions
       response.status(500).send("error occurred while executing the function.");
     }
   });
-  /**
+/**
  * Filters the list of candidatesJobstatus
  * based on the given attributes and values,
  *  and sorts the result
@@ -644,3 +644,40 @@ function compareByRejectCause(
   a: CandidateJobStatus, b: CandidateJobStatus): number {
   return a._rejectCause.localeCompare(b._rejectCause);
 }
+// ============================ Admin SDK =================================== //
+/**
+ * delete User By Email
+ * @param {string} [email] -
+ * @return {Promise<Boolean>} - true if successes
+ */
+async function deleteUserByEmail(email: string) {
+  try {
+    const userRecord = await admin.auth().getUserByEmail(email);
+    await admin.auth().deleteUser(userRecord.uid);
+    return true;
+  } catch (error) {
+    console.log("Error deleting user:", error);
+    return false;
+  }
+}
+exports.deleteRecruiter = functions
+  .region("europe-west1")
+  .https
+  .onRequest(async (request, response) => {
+    response.set("Access-Control-Allow-Origin", "*");
+    response.set("Access-Control-Allow-Methods", "GET, POST");
+    response.set("Access-Control-Allow-Headers", "Content-Type");
+    if (request.method === "OPTIONS") {
+      // Handle the preflight OPTIONS request
+      response.status(204).send("");
+      return;
+    }
+    try {
+      const {mail} = request.body;
+      const status = await deleteUserByEmail(mail);
+      response.json(status);
+    } catch (error) {
+      console.error("Error executing deleteRecruiter:", error);
+      response.status(500).send("error occurred while executing the function.");
+    }
+  });

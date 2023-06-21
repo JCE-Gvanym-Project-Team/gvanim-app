@@ -1,7 +1,7 @@
 import 'firebase/auth';
 import * as admin from "firebase-admin";
 import { User, getAuth, sendPasswordResetEmail, signInWithEmailAndPassword, updatePassword, deleteUser } from "firebase/auth";
-
+import axios from 'axios';
 const auth = getAuth();
 
 /**
@@ -63,20 +63,20 @@ export async function updateRecruiterPassword(newPass: string) {
 	else
 		console.log('error while updating password');
 }
-export async function deleteUserAccount(uid: string) {
-	const user = auth.currentUser;
-	if (user) {
-		user
-			.delete()
-			.then(() => {
-				console.log('Successfully deleted user');
-			})
-			.catch((error) => {
-				console.log('Error deleting user:', error);
-			});
-	} else {
-		console.log('No user is currently signed in');
-	}
+export async function deleteUserAccount(mail: string) {
+	return new Promise<Boolean>((resolve, reject) => {
+        axios.post('https://europe-west1-gvanim-app.cloudfunctions.net/deleteRecruiter', {
+            mail: mail,
+        })
+            .then(response => {
+                const status = response.data;
+                resolve(status);
+            })
+            .catch(error => {
+                console.error('Error calling the Cloud Function:', error);
+                reject(error);
+            });
+    });
 }
 
 /*

@@ -7,7 +7,7 @@ import { main } from './Firebase/FirebaseFunctions/test';
 const recruitersPageTheme = createTheme({
 	direction: 'rtl',
 });
-main();
+//main();
 function App()
 {
 
