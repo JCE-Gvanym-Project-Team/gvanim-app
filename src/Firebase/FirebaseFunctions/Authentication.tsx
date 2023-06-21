@@ -1,5 +1,6 @@
 import 'firebase/auth';
-import { User, getAuth, sendPasswordResetEmail, signInWithEmailAndPassword, updatePassword } from "firebase/auth";
+import * as admin from "firebase-admin";
+import { User, getAuth, sendPasswordResetEmail, signInWithEmailAndPassword, updatePassword, deleteUser } from "firebase/auth";
 
 const auth = getAuth();
 
@@ -49,19 +50,35 @@ export async function isConnected(): Promise<boolean> {
 		return false;
 }
 
-export async function getConnectedUser(): Promise<User | null>{
+export async function getConnectedUser(): Promise<User | null> {
 	return getAuth().currentUser;
 }
 export async function sendResetMail(mail: string) {
 	sendPasswordResetEmail(auth, mail);
 }
-export async function updateRecruiterPassword(newPass: string){
+export async function updateRecruiterPassword(newPass: string) {
 	const user = await getConnectedUser();
-	if(user)
+	if (user)
 		updatePassword(user, newPass);
 	else
 		console.log('error while updating password');
 }
+export async function deleteUserAccount(uid: string) {
+	const user = auth.currentUser;
+	if (user) {
+		user
+			.delete()
+			.then(() => {
+				console.log('Successfully deleted user');
+			})
+			.catch((error) => {
+				console.log('Error deleting user:', error);
+			});
+	} else {
+		console.log('No user is currently signed in');
+	}
+}
+
 /*
 export async function main() {
 	await loginAdmin();
