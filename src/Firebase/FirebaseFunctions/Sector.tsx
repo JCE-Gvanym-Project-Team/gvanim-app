@@ -37,7 +37,7 @@ export class Sector {
         if (!(await this.exists()))
             return 1;
         let recs = await getRecruitersFromDatabase();
-        recs.filter((rec) => rec._sectors.includes(this._name));
+        recs = recs.filter((rec) => rec._sectors.includes(this._name));
         for (let i = 0; i < recs.length; i++)
             recs.at(i)?.removeSector(this._name);
         removeObjectAtPath("/Sectors/" + this._name);
