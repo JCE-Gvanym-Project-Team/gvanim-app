@@ -74,6 +74,7 @@ const PasswordRecover = () => {
 
 
     return (
+        
         <>
             <CssBaseline />
             <div className='d-flex' dir='rtl' style={{ alignItems: 'center', height: '100vh' }}>

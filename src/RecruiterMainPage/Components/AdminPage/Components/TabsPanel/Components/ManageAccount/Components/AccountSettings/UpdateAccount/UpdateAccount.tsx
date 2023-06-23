@@ -100,30 +100,27 @@ export default function UpdateAccount() {
                     borderRadius: '50%',
                     position: 'absolute',
                 }} />
-
                 <Box sx={{ display: 'flex', flexDirection: 'column', top: "165px", position: "absolute" }}>
                     <Stack direction='column'>
                         <Stack direction='row' justifyContent='center' spacing={1}>
 
-                            {/* <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}> */}
-                            {/* <ArticleOutlined sx={{ color: '#fff' }} /> */}
-                            {/* </Box> */}
+                            <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                                <ArticleOutlined sx={{ color: '#fff' }} />
+                            </Box>
                             <Typography sx={{ fontFamily: "'Noto Sans Hebrew', sans-serif", color: '#fff', textAlign: 'center' }} variant='h4'>
-                                <LockOpenIcon sx={{ color: 'rgb(52, 71, 103)', fontSize: 20 }} /> אפס\י סיסמא 
-
-
+                                הפקת דוחות על משרות לפי מס' קטגוריות
                             </Typography>
 
                         </Stack>
-
-                        <Typography sx={{ opacity: 0.6, width: '100%', textAlign: 'center', color: '#fff', fontSize: '16px', fontFamily: "'Noto Sans Hebrew', sans-serif", mt: 1 }} variant='subtitle1'>
-                             בחר\י סיסמא חזקה בעלת 8-12 תווים וחייבת לכלול אות גדולה ואות קטנה באנגלית וספרה בין 0-9
-                        </Typography>
-                        <Box sx={{ background: 'linear-gradient(90deg,hsla(0,0%,100%,0),#fff,hsla(0,0%,100%,0))', padding: 0.05, width: '100%', mt: 2 }} />
+            <Typography sx={{ opacity: 0.6, width: '100%', textAlign: 'center', color: '#fff', fontSize: '16px', fontFamily: "'Noto Sans Hebrew', sans-serif", mt: 1 }} variant='subtitle1'>
+                בחר\י סיסמא חזקה בעלת 8-12 תווים וחייבת לכלול אות גדולה ואות קטנה באנגלית וספרה בין 0-9
+            </Typography>
+            <Box sx={{ background: 'linear-gradient(90deg,hsla(0,0%,100%,0),#fff,hsla(0,0%,100%,0))', padding: 0.05, width: '100%', mt: 2 }} />
                     </Stack>
-
                 </Box>
             </Box>
+
+
 
 
             <Box sx={MyPaperSx}>
