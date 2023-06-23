@@ -58,9 +58,11 @@ export default function PasswordSettings(props: { passwordEdit: any }) {
                 const token = urlParams.get('oobCode') || '';
                 console.log(token); 
                 if (token.length > 0) { // the user is not connected
+                    console.log("is NOT connected");
                     updateLinkRecruiterPassword(newPassword, token);
                 }
                 else { // the user is connected
+                    console.log("is connected");
                     updateConnectedRecruiterPassword(newPassword);
                 }
                 setConfirmPasswordError(false);
