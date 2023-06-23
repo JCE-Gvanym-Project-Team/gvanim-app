@@ -1,7 +1,7 @@
-import * as React from 'react';
+import { styled } from '@mui/material';
 import Box from '@mui/material/Box';
 import Slider, { SliderThumb } from '@mui/material/Slider';
-import { Typography, styled } from '@mui/material';
+import * as React from 'react';
 import { MyPaperSx } from './ScopeSliderStyle';
 
 

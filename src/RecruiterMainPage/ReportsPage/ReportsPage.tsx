@@ -1,12 +1,10 @@
-import * as React from 'react';
-import Typography from '@mui/material/Typography';
-import { Box, Button, Container, Stack, useTheme } from '@mui/material';
-import MyTable from '../ReportsPage/Components/MyTable/MyTable';
-import { BoxGradientSx } from '../PageStyles';
-import { ManageJobPageBoxSx } from '../ManageJobsPage/ManageJobsPageStyle';
 import AssessmentIcon from '@mui/icons-material/Assessment';
-import JobsByRegions from '../../Firebase/FirebaseFunctions/Reports/JobsByRegions';
+import { Box, Stack } from '@mui/material';
+import Typography from '@mui/material/Typography';
 import CandidatesByRoles from '../../Firebase/FirebaseFunctions/Reports/CandidatesByRoles';
+import JobsByRegions from '../../Firebase/FirebaseFunctions/Reports/JobsByRegions';
+import { BoxGradientSx } from '../PageStyles';
+import MyTable from '../ReportsPage/Components/MyTable/MyTable';
 
 
 function ReportsPage() {

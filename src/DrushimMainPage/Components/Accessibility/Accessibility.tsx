@@ -1,10 +1,10 @@
 
-import { Accessible, Contrast, FontDownload, LightMode, Nightlight, Replay, ZoomInRounded, ZoomOutRounded } from '@mui/icons-material';
+import { Contrast, FontDownload, LightMode, Nightlight, Replay, ZoomInRounded, ZoomOutRounded } from '@mui/icons-material';
 import { Box, Button, Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, Typography, styled } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import React, { useContext, useState } from 'react';
 import { ColorModeContext, FontContext, colorTokens } from '../../theme';
-import AccessibilityIcon from './Accessibility.png'
+import AccessibilityIcon from './Accessibility.png';
 
 
 const CustomDrawer = styled(Drawer)(({ theme }) => ({

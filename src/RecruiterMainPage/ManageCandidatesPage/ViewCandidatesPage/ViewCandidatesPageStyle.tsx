@@ -1,4 +1,3 @@
-import React from 'react'
 import { SxProps } from '@mui/material/styles';
 import { GlobalStyle, ManageCandidatesPageGlobalStyle } from '../../PageStyles';
 

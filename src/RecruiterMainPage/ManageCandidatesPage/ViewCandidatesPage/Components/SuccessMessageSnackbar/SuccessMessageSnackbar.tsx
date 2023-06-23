@@ -1,6 +1,4 @@
-import { Close } from '@mui/icons-material';
-import { Alert, Box, IconButton, Snackbar, Typography } from '@mui/material'
-import React from 'react'
+import { Alert, Snackbar } from '@mui/material';
 
 export default function SuccessMessageSnackbar(props: { open, onClose })
 {

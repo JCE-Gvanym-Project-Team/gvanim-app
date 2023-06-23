@@ -1,5 +1,5 @@
-import { AddBoxSharp, ArrowDownward, ArrowUpward, AttachFile, DeleteForeverOutlined, DeleteOutlined, ErrorOutlineRounded, FileUpload, FileUploadOutlined, Redo, Send } from '@mui/icons-material';
-import { Box, Breakpoint, Button, Divider, Icon, Input, TextField, Theme, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { DeleteForeverOutlined, DeleteOutlined, ErrorOutlineRounded } from '@mui/icons-material';
+import { Box, Breakpoint, Button, Icon, Input, TextField, Theme, Typography, useMediaQuery, useTheme } from '@mui/material';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import MyLoading from '../../Components/MyLoading/MyLoading';
@@ -8,18 +8,18 @@ import { Recomendation } from '../../Firebase/FirebaseFunctions/Recomendation';
 import { Candidate, generateCandidateId, getFilteredCandidateJobStatuses, getFilteredCandidates } from '../../Firebase/FirebaseFunctions/functionIndex';
 import { ColorModeContext, colorTokens } from '../theme';
 import AreYouSureDialog from './Components/AreYouSureDialog/AreYouSureDialog';
-import SuccessDialog from './Components/SuccessDialog/SuccessDialog';
 import ErrorDialog from './Components/ErrorDialog/ErrorDialog';
 import JobDetails from './Components/JobDetails/JobDetails';
+import SuccessDialog from './Components/SuccessDialog/SuccessDialog';
 // icons
+import { ReactComponent as AttachFileSVG } from './Resources/AttachFile.svg';
+import { ReactComponent as BackgroundSVG } from './Resources/Background.svg';
 import { ReactComponent as CloudSVG } from './Resources/Cloud.svg';
-import { ReactComponent as BackgroundSVG } from './Resources/Background.svg'
-import { ReactComponent as UploadIconSVG } from './Resources/UploadIcon.svg'
-import { ReactComponent as DownArrowSVG } from './Resources/DownArrow.svg'
-import { ReactComponent as UpArrowSVG } from './Resources/UpArrow.svg'
-import { ReactComponent as PlusIconSVG } from './Resources/Plus.svg'
-import { ReactComponent as AttachFileSVG } from './Resources/AttachFile.svg'
-import MobileBackground from './Resources/MobileBackground.png'
+import { ReactComponent as DownArrowSVG } from './Resources/DownArrow.svg';
+import MobileBackground from './Resources/MobileBackground.png';
+import { ReactComponent as PlusIconSVG } from './Resources/Plus.svg';
+import { ReactComponent as UpArrowSVG } from './Resources/UpArrow.svg';
+import { ReactComponent as UploadIconSVG } from './Resources/UploadIcon.svg';
 
 
 const ABOUT_MAX_LENGTH = 1000;
@@ -179,6 +179,17 @@ export default function OneJobPage()
         setLoading(false);
     }, [location.state])
 
+    useEffect(() =>
+    {
+        const urlParams = new URLSearchParams(window.location.search);
+        const platform = urlParams.get('platform');
+        if (platform)
+        {
+            job?.incrementViews(platform);
+            console.log(job?._viewsPerPlatform!);
+        }
+    }, [window.location.href])
+
     const sendToDetails = () =>
     {
         if (errorRef.current)
@@ -246,6 +257,14 @@ export default function OneJobPage()
             return;
         }
         setCvFileError(false);
+
+        // increment apply
+        const urlParams = new URLSearchParams(window.location.search);
+        const platform = urlParams.get('platform');
+        if (platform)
+        {
+            job?.incrementApply(platform);
+        }
 
 
         // insert candidate into database
@@ -574,7 +593,7 @@ export default function OneJobPage()
                                     </Typography>
 
                                     <Box sx={{ display: "flex", flexDirection: "column" }}>
-                                        
+
                                     </Box>
 
 
@@ -943,7 +962,8 @@ export default function OneJobPage()
                                 onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
                                 {
                                     const files = event.target.files!;
-                                    if (files && files[0] && files[0].type === "application/pdf"){
+                                    if (files && files[0] && files[0].type === "application/pdf")
+                                    {
                                         setCvFile(files[0]);
                                         setCvFileError(false);
                                     }
