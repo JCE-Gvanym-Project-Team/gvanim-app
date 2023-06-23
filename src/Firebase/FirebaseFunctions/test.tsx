@@ -1,4 +1,4 @@
-import { isConnected, loginAdmin, loginRecruiter, loguotRecruiter } from "./Authentication";
+import { isConnected, loginAdmin, loginRecruiter, loguotRecruiter, sendResetMail } from "./Authentication";
 import { Candidate, generateCandidateId } from "./Candidate";
 import { CandidateJobStatus, allStatus, getFilteredCandidateJobStatuses, getMessage } from "./CandidateJobStatus";
 import { Job, generateJobNumber, getFilteredJobs } from "./Job";
@@ -136,7 +136,7 @@ async function testEditCandidate() {
     //await loginAdmin();
     //await cand.edit("newName");
     let d = new Date();
-   // console.log(d.getDate());
+    // console.log(d.getDate());
 }
 async function testAddRecruiterNoSectors() {
     await loginAdmin();
@@ -161,7 +161,7 @@ async function testEditRecruiter() {
     await loginAdmin();
     let rec = new Recruiter("ex@gmail.com", "el", "ta");
     await rec.add('123456');
-    rec.edit("new","name");
+    rec.edit("new", "name");
 }
 async function testAddSectorToRecruiter() {
     await loginAdmin();
@@ -177,46 +177,47 @@ async function testAddSectorToRecruiter() {
     return status;
 }
 async function testRemoveSectorFromRecruiter() {
-    await loginAdmin();
-    let rec = new Recruiter("ex@gmail.com", "el", "ta");
+    // await loginAdmin();
+    let rec = new Recruiter("zax@gmail.com", "חרא", "ta");
     await rec.add('123456');
-    await loguotRecruiter();
-    await loginRecruiter("ex@gmail.com", "123456");
-    await loguotRecruiter();
-    await loginAdmin();
+    // await loguotRecruiter();
+    // await loginRecruiter("zax@gmail.com", "123456");
+    // await loguotRecruiter();
+    // await loginAdmin();
     await rec.addSector('אשכול 10');
+    await sleep(2000);
     await rec.removeSector('אשכול 10');
-    await rec.remove();
+    // await rec.remove();
 }
 async function testMessgaeFormat() {
-    let cand = new Candidate("73645","דוג","מה");
-    let job = new Job(45,"כותרת");
-    let rec = new Recruiter("re@gmil.com","גברת","גוונים");
-    console.log(getMessage(cand, job, rec, allStatus[6],new Date(),"מיקום כלשהו"));
+    let cand = new Candidate("73645", "דוג", "מה");
+    let job = new Job(45, "כותרת");
+    let rec = new Recruiter("re@gmil.com", "גברת", "גוונים");
+    console.log(getMessage(cand, job, rec, allStatus[6], new Date(), "מיקום כלשהו"));
 }
 async function testGetRecomendationsUrl() {
     const candId = await generateCandidateId();
     const jobId = await generateJobNumber();
-    let cand = new Candidate(candId,"","",generateRandomString(),generateRandomString());
+    let cand = new Candidate(candId, "", "", generateRandomString(), generateRandomString());
     let job = new Job(jobId);
     await cand.add();
     await job.add();
-    await cand.apply(jobId,"");
+    await cand.apply(jobId, "");
     let sLocal = new CandidateJobStatus(jobId, candId);
-    while(!(await sLocal.exists()));
-    let s = (await getFilteredCandidateJobStatuses(["candidateId","jobNumber"],[candId,jobId.toString()]))[0];
-    console.log(s); 
-    let f = new File([],"uevwuv.pdf");
+    while (!(await sLocal.exists()));
+    let s = (await getFilteredCandidateJobStatuses(["candidateId", "jobNumber"], [candId, jobId.toString()]))[0];
+    console.log(s);
+    let f = new File([], "uevwuv.pdf");
     await sleep(5000);
-    if(s===undefined){
+    if (s === undefined) {
         await cand.remove();
         await job.remove();
         console.log('s is undefined');
         return;
     }
-    await s.addRecomendation("aziz","0501234567","ex@gmail.com", f);
-    console.log(s); 
-    s = (await getFilteredCandidateJobStatuses(["candidateId","jobNumber"],[candId,jobId.toString()]))[0];
+    await s.addRecomendation("aziz", "0501234567", "ex@gmail.com", f);
+    console.log(s);
+    s = (await getFilteredCandidateJobStatuses(["candidateId", "jobNumber"], [candId, jobId.toString()]))[0];
     console.log(s);
     console.log(await s.getRecomendationsUrl());
     cand.remove();
@@ -228,12 +229,29 @@ async function testGetCvUrl() {
     console.log((await cand.getCvUrl()));
 }
 async function testAddRecomendation() {
-    const f = new File([],'jgcc.pdf');
-    let s = (await getFilteredCandidateJobStatuses(["jobNumber","candidateId"],["32","53"]))[0];
+    const f = new File([], 'jgcc.pdf');
+    let s = (await getFilteredCandidateJobStatuses(["jobNumber", "candidateId"], ["32", "53"]))[0];
     console.log(s);
     console.log(await s.getRecomendationsUrl());
 }
+
+async function resetPaswordToRequire() {
+    // const mail = "cvc@gmail.com"   
+    // const new_requrter = new Recruiter(mail, "el", "ta");
+    // await new_requrter.add()
+    // await sleep(6000)
+    try {
+        sendResetMail("eli089743@gmail_com")
+    }
+    catch (error) {
+        console.log(error)
+    }
+    // await sleep(4000)
+}
+
+
 export async function main() {
+    testRemoveSectorFromRecruiter();
     //console.log(`testSingleJobAddNoConfilct(): ${await testSingleJobAddNoConfilct()}`);
     //console.log(`testSingleJobAddConfilct(): ${await testSingleJobAddConfilct()}`);
     //console.log(`testGenerateJobNumber(): ${await testGenerateJobNumber()}`);
@@ -247,5 +265,5 @@ export async function main() {
     //testGetCvUrl();
     //testAddRecomendation();
     //console.log(await testAddRecruiterNoSectors());
-    testRemoveSectorFromRecruiter();
+    // testRemoveSectorFromRecruiter();
 }

@@ -114,7 +114,7 @@ export class Recruiter {
 	 */
 	public async removeSector(sector: string) {
 		if (this._sectors.includes(sector))
-			this._sectors.filter((val) => val !== sector);
+			this._sectors = this._sectors.filter((val) => val !== sector);
 		replaceData(`/Recruiters/${this._id}`,this);
 		appendToDatabase(this, "/Recruiters", this._id);
 		const uid = await this.getUid();

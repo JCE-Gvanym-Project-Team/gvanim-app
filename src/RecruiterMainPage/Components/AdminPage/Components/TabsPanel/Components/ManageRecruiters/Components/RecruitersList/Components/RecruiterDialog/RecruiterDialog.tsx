@@ -15,7 +15,7 @@ import { Recruiter, getRecruitersFromDatabase } from '../../../../../../../../..
 import SectorsChip from './Components/SectorsChip/SectorsChip/SectorsChip';
 import { getAllSectors } from '../../../../../../../../../../../Firebase/FirebaseFunctions/Sector';
 import { Sector } from '../../../../../../../../../../../Firebase/FirebaseFunctions/Sector'
-import { sleep } from '../../../../../../../../../../../Firebase/FirebaseFunctions/test';
+import { main, sleep } from '../../../../../../../../../../../Firebase/FirebaseFunctions/test';
 
 
 
@@ -34,10 +34,7 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 	const [allSectors, setAllSectors] = React.useState<string[]>([]);
 	const [sectorsSelection, setSectorsSelection] = React.useState<string[]>([]);
 	const [recruiterCurentSectors, setRecruiterCurentSectors] = React.useState<string[]>([]);
-
 	const [listToShow, setListToShow] = React.useState<string[]>([]);
-
-
 	const [loading, setLoading] = React.useState(true);
 	const [firstName, setFirstName] = React.useState('');
 	const [lastName, setLastName] = React.useState('');
@@ -133,18 +130,17 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 			return;
 		}
 		if (!isEdit) {
-			const newRecruter = new Recruiter(email, firstName, lastName, sectorsSelection);
+			const newRecruter = new Recruiter(email, firstName, lastName, listToShow);
 			let firstPassword: string = generateCodeFromEmail(email);
 			console.log(firstPassword);
-			// try {
-			await newRecruter.add(firstPassword);
-			// console.log("real email:" + email);
-			// }
-			// catch () {
-			// alert('האימייל כבר קיים במערכת!');
-			// setEmail('');
-			// return;
-			// }
+			try {
+				await newRecruter.add(firstPassword);
+			}
+			catch (erorr) {
+				alert('האימייל כבר קיים במערכת!');
+				setEmail('');
+				return;
+			}
 			setDialogOpen(true);
 			setDialogEmail(email);
 			setDialogPassword(firstPassword);
@@ -376,7 +372,7 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 				</Stack>
 
 			</Dialog>
-			<Button onClick={() => { test() }}>click me</Button>
+			<Button onClick={() => { main(); }}>click me</Button>
 		</Box>
 	);
 
@@ -406,42 +402,35 @@ function generateCodeFromEmail(email: string) {
 
 
 
-async function test() {
-	const recruiter = new Recruiter("112123@gmail.com", "ראובן", "לוי", ['אשכול 10']);
-	await recruiter.add("123456");
-	await sleep(1000);
-	recruiter.edit("ירון", "לוי");
-	recruiter.addSector('אשכול');
-	recruiter.removeSector('אשכול');
-	await sleep(1000);
+// async function test() {
+// 	const recruiter = new Recruiter("eli089743@gmail.com", "אליהו", "לוי", ['אשכול 10']);
+// 	await recruiter.add("123456");
+// 	await sleep(1000);
+// 	recruiter.edit("ירון", "לוי");
+// 	recruiter.addSector('אשכול');
+// 	recruiter.removeSector('אשכול');
+// 	await sleep(1000);
 
-	recruiter.remove();
-}
+// 	// recruiter.remove();
+// }
 
 
 async function updateSectors(recruiter: Recruiter, setSectorsChanged: (value: boolean) => void, listToShow: string[], recruiterCurentSectors: string[], setSaveButton: (value: boolean) => void) {
-	// console.log("listToShow " + listToShow);
-	// console.log("recruiterCurentSectors: " + recruiterCurentSectors);
+	console.log("listToShow " + listToShow);
+	console.log("recruiterCurentSectors: " + recruiterCurentSectors);
 
-	// for (let i = 0; i < listToShow.length; i++) {
-	// 	if (recruiterCurentSectors.indexOf(listToShow[i]) === -1) {
-	// 		await recruiter.addSector(listToShow[i]);
-	// 	}
-	// }
-	// await sleep(1000);
-	
-	// for (let i = 0; i < recruiterCurentSectors.length; i++) {
-	// 	if (listToShow.indexOf(recruiterCurentSectors[i]) === -1) {
-	// 		console.log(recruiter._firstName);
-	// 		await recruiter.removeSector(recruiterCurentSectors[i]);
-	// 		console.log(recruiterCurentSectors[i]);
-	// 	}
-	// }
+	for (let i = 0; i < listToShow.length; i++) {
+		if (recruiterCurentSectors.indexOf(listToShow[i]) === -1) {
+			await recruiter.addSector(listToShow[i]);
+		}
+	}
+	await sleep(1000);
 
-	// await sleep(1000);
-    // await recruiter.addSector('אשכול 10');
-    await recruiter.removeSector('אשכול 10');
-    
+	for (let i = 0; i < recruiterCurentSectors.length; i++) {
+		if (listToShow.indexOf(recruiterCurentSectors[i]) === -1) {
+			await recruiter.removeSector(recruiterCurentSectors[i]);
+		}
+	}
 	setSaveButton(true);
 	setSectorsChanged(true);
 }
