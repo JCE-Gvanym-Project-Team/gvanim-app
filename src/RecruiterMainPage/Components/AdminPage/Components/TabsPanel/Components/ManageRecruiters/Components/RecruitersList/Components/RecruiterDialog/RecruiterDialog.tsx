@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
 import { TransitionProps } from '@mui/material/transitions';
-import { Box, Button, Chip, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, Stack, TextField, Typography } from '@mui/material';
+import { Alert, Box, Button, Chip, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, Snackbar, Stack, TextField, Typography } from '@mui/material';
 import { EditNote, GroupAdd } from '@mui/icons-material';
 import { MyFieldsSx } from './RecruiterDialogStyle';
 import Tooltip from '@mui/material/Tooltip';
@@ -84,26 +84,10 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 		return <div>Loading...</div>;
 	}
 
-	// React.useEffect(() => {
-	// 	if (isEdit) {
-	// 		typeof recruiterRow?._firstName === 'string' && setFirstName(recruiterRow?._firstName);
-	// 		typeof recruiterRow?._lastName === 'string' && setLastName(recruiterRow?._lastName);
-	// 		typeof recruiterRow?._email === 'string' && setEmail(recruiterRow?._email);
-	// 		recruiterRow?._sectors !== null && setRecruiterSectors(recruiterRow?._sectors);
-	// 	}
-	// }, []);
-
 
 	const handleRemoveRecruiter = async () => {
-		// const recruiters = await getRecruitersFromDatabase();
-		// const recruiterToRemove = recruiters.filter((recruiter) => recruiter._email === recruiterRow?._email)!;
-		// recruiterToRemove[0]?.remove();
 		recruiter?.remove();
-		// await recruiterRow?.remove();
-		// const updateData = recruiters.filter(rec => rec._id !== recruiterRow._id);
-		// setRecruiters(updateData);
 		setOpen(false);
-
 		postMessage(`המגייס/ת ${recruiterRow._firstName} ${recruiterRow._lastName} נמחק/ה בהצלחה מהמערכת.`);
 		setSnackbar(true);
 
@@ -135,16 +119,16 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 			console.log(firstPassword);
 			try {
 				await newRecruter.add(firstPassword);
+				setDialogEmail(email);
+				setDialogPassword(firstPassword);
+				setDialogOpen(true);
 			}
 			catch (erorr) {
 				alert('האימייל כבר קיים במערכת!');
 				setEmail('');
 				return;
 			}
-			setDialogOpen(true);
-			setDialogEmail(email);
-			setDialogPassword(firstPassword);
-			// updateSectors(sectorsSelection,);
+
 		}
 		else {
 			if (recruiter !== undefined) {
@@ -175,8 +159,29 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 		setOpen(false);
 	};
 
+
 	return (
 		<Box>
+
+			<Snackbar open={dialogOpen} autoHideDuration={6000} >
+				<Alert  severity="info">
+					הודעת המשתמש כאן
+				</Alert>
+			</Snackbar>
+
+			<Dialog open={dialogOpen} onClose={handleDialogClose}>
+				<DialogTitle>מגייס/ת חדש/ה הצטרפ/ה למערכת</DialogTitle>
+				<DialogContent>
+					<DialogContentText>
+						מייל: {email}
+						<br />
+						סיסמא זמנית: {dialogPassword}
+					</DialogContentText>
+				</DialogContent>
+				<DialogActions>
+					<Button onClick={handleDialogClose}>סגור</Button>
+				</DialogActions>
+			</Dialog>
 
 			{/* <ListItemIcon>
 				<IconButton onClick={handleClickOpen}>
@@ -317,19 +322,7 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 										</Box>
 									</Stack>
 								</Box>
-								<Dialog open={dialogOpen} onClose={handleDialogClose}>
-									<DialogTitle>מגייס/ת חדש/ה הצטרפ/ה למערכת</DialogTitle>
-									<DialogContent>
-										<DialogContentText>
-											מייל: {dialogEmail}
-											<br />
-											סיסמא זמנית: {dialogPassword}
-										</DialogContentText>
-									</DialogContent>
-									<DialogActions>
-										<Button onClick={handleDialogClose}>סגור</Button>
-									</DialogActions>
-								</Dialog>
+
 								<Divider sx={{ mt: 3 }} />
 								{/* <Box sx={{
 									mt: 1,
@@ -372,7 +365,7 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 				</Stack>
 
 			</Dialog>
-			<Button onClick={() => { main(); }}>click me</Button>
+			{/* <Button onClick={() => { main(); }}>click me</Button> */}
 		</Box>
 	);
 
@@ -416,9 +409,6 @@ function generateCodeFromEmail(email: string) {
 
 
 async function updateSectors(recruiter: Recruiter, setSectorsChanged: (value: boolean) => void, listToShow: string[], recruiterCurentSectors: string[], setSaveButton: (value: boolean) => void) {
-	console.log("listToShow " + listToShow);
-	console.log("recruiterCurentSectors: " + recruiterCurentSectors);
-
 	for (let i = 0; i < listToShow.length; i++) {
 		if (recruiterCurentSectors.indexOf(listToShow[i]) === -1) {
 			await recruiter.addSector(listToShow[i]);

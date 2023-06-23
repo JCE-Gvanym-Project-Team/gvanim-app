@@ -53,15 +53,14 @@ export default function PasswordSettings(props: { passwordEdit: any }) {
             if (newPassword !== confirmPassword) {
                 setConfirmPasswordError(true);
             } else { // if sucsess
-                // Assuming the URL is in the following format: http://example.com/reset-password?token=abc123
                 const urlParams = new URLSearchParams(window.location.search);
                 console.log(urlParams);
                 const token = urlParams.get('oobCode') || '';
-                console.log(token); // Output: abc123
+                console.log(token); 
                 if (token.length > 0) { // the user is not connected
                     updateLinkRecruiterPassword(newPassword, token);
                 }
-                else {
+                else { // the user is connected
                     updateConnectedRecruiterPassword(newPassword);
                 }
                 setConfirmPasswordError(false);
