@@ -72,16 +72,16 @@ export default function MySectorRemoveDialog(props: { handleDelete: any, selecte
     const deleteSector = async () => {
         handleDelete();
         setOpen(false);
-        // remove the sector from all recruiters
-        const recruiters: Recruiter[] = await getRecruitersFromDatabase();
-        recruiters.forEach(async (recruiter) => {
-            const sectorName = selectedRowParams.currentRow.sector_name;
-            const sectors: string[] = await recruiter._sectors;
-            if (sectors.indexOf(sectorName) !== -1) {
-                 recruiter.removeSector(sectorName);
-                await sleep(3000);
-            }
-        });
+        //remove the sector from all recruiters
+        // const recruiters: Recruiter[] = await getRecruitersFromDatabase();
+        // recruiters.forEach(async (recruiter) => {
+            // const sectorName = selectedRowParams.currentRow.sector_name;
+            // const sectors: string[] = await recruiter._sectors;
+            // if (sectors.indexOf(sectorName) !== -1) {
+                //  recruiter.removeSector(sectorName);
+                // await sleep(3000);
+            // }
+        // });
     };
 
     return (

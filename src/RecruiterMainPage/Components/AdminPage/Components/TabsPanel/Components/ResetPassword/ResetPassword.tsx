@@ -22,6 +22,24 @@ const MenuProps = {
 };
 
 
+
+
+function replaceCharInHtherChar(str: string, charReplaced: string, newChar: string): string {
+  let newStr: string = '';
+  for (let i = str.length - 1; i >= 0; i--) {
+    if (str[i] === charReplaced) {
+      newStr += newChar;
+    }
+    else
+      newStr += str[i];
+  }
+
+  let strArray = newStr.split("");
+  strArray.reverse();
+  let reversedStr = strArray.join("");
+  return reversedStr;
+}
+
 export default function UpdateAccount() {
   const [recruitersSelected, setRecruitersSelected] = React.useState<string[]>([]);
   const [recruiters, setRecruiters] = React.useState<Recruiter[]>([]);
@@ -33,14 +51,15 @@ export default function UpdateAccount() {
   React.useEffect(() => {
     const currentUser = getConnectedUser()
       .then((userCredential) => {
-        if (userCredential?.email != null)
-          setUserEmail(userCredential?.email);
-        console.log(userEmail);
+        if (userCredential?.email != null) {
+          const mail = replaceCharInHtherChar(userCredential?.email, '_', '.');
+          setUserEmail(mail);
+        }
         if (process.env.REACT_APP_ADMIN_MAIL === userEmail)
           setIsAdminUser(true);
       })
       .catch((error) => {
-        console.log(error);
+        return;
       });
   }, [userEmail]);
 
@@ -67,8 +86,8 @@ export default function UpdateAccount() {
   };
 
   const handleResetPassword = () => {
-    console.log(recruitersSelected[0]);
-    const mail: string = recruitersSelected[0];
+    const mailwithpoint = recruitersSelected[0];
+    const mail = replaceCharInHtherChar(mailwithpoint, '_', '.');
     sendResetMail(mail);
     if (recruiterSelect) setOpenDialog(true);
   };
@@ -142,17 +161,13 @@ export default function UpdateAccount() {
             <DialogTitle sx={{ textAlign: 'center', margin: '1rem 0' }}>הסיסמא אופסה בהצלחה!</DialogTitle>
             <DialogContent>
               <Box sx={{ textAlign: 'center', margin: '1rem 0' }}>
-                <p>אנא עקב/י אחרי ההוראות במייל:</p>
-                <p>{userEmail}</p>
+                <p>אנא עקב/י אחרי ההוראות במייל</p>
               </Box>
             </DialogContent>
             <DialogActions>
               <Button onClick={handleCloseDialog}>סגור</Button>
             </DialogActions>
           </Dialog>
-
-          <Button onClick={()=> {main();}}>test</Button>
-
         </Grid>
       </Grid>
     </Box>
