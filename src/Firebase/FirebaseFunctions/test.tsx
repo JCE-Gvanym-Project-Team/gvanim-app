@@ -1,3 +1,4 @@
+import { async } from "@firebase/util";
 import { isConnected, loginAdmin, loginRecruiter, loguotRecruiter, sendResetMail } from "./Authentication";
 import { Candidate, generateCandidateId } from "./Candidate";
 import { CandidateJobStatus, allStatus, getFilteredCandidateJobStatuses, getMessage } from "./CandidateJobStatus";
@@ -234,22 +235,15 @@ async function testAddRecomendation() {
     console.log(s);
     console.log(await s.getRecomendationsUrl());
 }
-
-async function resetPaswordToRequire() {
-    // const mail = "cvc@gmail.com"   
-    // const new_requrter = new Recruiter(mail, "el", "ta");
-    // await new_requrter.add()
-    // await sleep(6000)
-    try {
-        sendResetMail("eli089743@gmail_com")
-    }
-    catch (error) {
-        console.log(error)
-    }
-    // await sleep(4000)
+async function testSimpleSendResetMail() {
+    let rec = new Recruiter("elyaathlan1998@gmail.com", "el", "ta");
+    await loginAdmin();
+    await rec.remove();
+    await loguotRecruiter();
+    //await sendResetMail("elyaathlan@gmail.com");
+    // await sleep(3000);
+    // rec.remove();
 }
-
-
 export async function main() {
     testRemoveSectorFromRecruiter();
     //console.log(`testSingleJobAddNoConfilct(): ${await testSingleJobAddNoConfilct()}`);
@@ -265,5 +259,6 @@ export async function main() {
     //testGetCvUrl();
     //testAddRecomendation();
     //console.log(await testAddRecruiterNoSectors());
-    // testRemoveSectorFromRecruiter();
+    //testRemoveSectorFromRecruiter();
+    testSimpleSendResetMail();
 }
