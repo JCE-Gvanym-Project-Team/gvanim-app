@@ -84,14 +84,18 @@ export class Job {
         if (await this.exists()) {
             this._title = title;
             replaceData((await this.getPath()), this);
+            return 0;
         }
+        return -1;
     }
 
     public async updateRole(role: string) {
         if (await this.exists() && ((await getOpenRoles()).map((r) => r._name)).includes(role)) {
             this._role = role;
             replaceData((await this.getPath()), this);
+            return 0;
         }
+        return -1;
     }
 
     public async updateScope(scope: Array<number>) {
@@ -103,55 +107,71 @@ export class Job {
                 this._scope[1] = scope[0];
             }
             replaceData((await this.getPath()), this);
+            return 0;
         }
+        return -1;
     }
 
     public async updateRegion(region: string) {
         if (await this.exists()) {
             this._region = region;
             replaceData((await this.getPath()), this);
+            return 0;
         }
+        return -1;
     }
 
     public async updateSector(sector: string) {
         if (await this.exists() && ((await getOpenSectors()).map((s) => s._name)).includes(sector)) {
             this._sector = sector;
             replaceData((await this.getPath()), this);
+            return 0;
         }
+        return -1;
     }
 
     public async updateDescription(description: string[]) {
         if (await this.exists()) {
             this._description = description;
             replaceData((await this.getPath()), this);
+            return 0;
         }
+        return -1;
     }
 
     public async updateRequirements(requirements: string) {
         if (await this.exists()) {
             this._requirements = requirements;
             replaceData((await this.getPath()), this);
+            return 0;
         }
+        return -1;
     }
 
     public async updateOpen(open: boolean) {
         if (await this.exists()) {
             this._open = open;
             replaceData((await this.getPath()), this);
+            return 0;
         }
+        return -1;
     }
 
     public async updateHighPriority(highPriority: boolean) {
         if (await this.exists()) {
             this._highPriority = highPriority;
             replaceData((await this.getPath()), this);
+            return 0;
         }
+        return -1;
     }
     public async updateStartOn(startOn: string) {
         if (await this.exists()) {
             this._startOn = startOn;
             replaceData((await this.getPath()), this);
+            return 0;
         }
+        return -1;
     }
     /**
      * Removes the current job from the realtime DB and all associated candidatures.
@@ -160,8 +180,11 @@ export class Job {
     public async remove() {
         const candidatures = await getFilteredCandidateJobStatuses(["jobNumber"], [this._jobNumber.toString()]);
         candidatures.forEach((c) => c.remove());
-        if ((await this.exists()))
+        if ((await this.exists())){
             removeObjectAtPath("/Jobs/" + this._jobNumber);
+            return 0;
+        }
+        return -1;
     }
     /**
      * Gets the path of the current job in the realtime DB.
@@ -211,16 +234,19 @@ export class Job {
         this._highPriority = highPriority;
 
         if (!(await this.exists()))
-            this.add();
+            return -1;
         replaceData((await this.getPath()), this);
+        return 0;
     }
     /**
      * Adds the current job to the database if it does not already exist.
      * @returns None
      */
     public async add() {
-        if (!(await this.exists()))
-            appendToDatabase(this, "/Jobs", this._jobNumber.toString());
+        if (await this.exists())
+            return 1;
+        appendToDatabase(this, "/Jobs", this._jobNumber.toString());
+        return 0;
     }
     public async incrementViews(platform: string) {
         let views = this._viewsPerPlatform.get(platform);
@@ -228,8 +254,9 @@ export class Job {
             views = 0;
         this._viewsPerPlatform.set(platform, views + 1);
         if (!(await this.exists()))
-            this.add();
+            return -1;
         replaceData((await this.getPath()), this);
+        return 0;
     }
     public async incrementApply(platform: string) {
         let apply = this._applyPerPlatform.get(platform);
@@ -237,8 +264,9 @@ export class Job {
             apply = 0;
         this._applyPerPlatform.set(platform, apply + 1);
         if (!(await this.exists()))
-            this.add();
+            return -1;
         replaceData((await this.getPath()), this);
+        return 0;
     }
 }
 /* Jobs functions */

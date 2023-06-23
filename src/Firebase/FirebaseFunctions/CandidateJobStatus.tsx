@@ -65,46 +65,57 @@ export class CandidateJobStatus {
      */
     public async addRecomendation(fullName: string, phone: string, eMail: string, recomendation: File) {
         if (this._recomendations.length >= 3)
-            return;
+            return -1;
         if (this._recomendations.map((rec) => rec._phone).includes(phone))
-            return;
+            return -1;
         this._recomendations.push(new Recomendation(fullName, phone, eMail));
         const extension = recomendation.name.split('.')[recomendation.name.split('.').length - 1];
         uploadFileToFirestore(recomendation, `CandidatesFiles/${this._candidateId}/rec`, `${phone}_${this._jobNumber}_REC.${extension}`);
         replaceData((await this.getPath()), this);
+        return 0;
     }
     public async updateAbout(about: string) {
         if (await this.exists()) {
             this._about = about;
             replaceData((await this.getPath()), this);
+            return 0;
         }
+        return -1;
     }
     public async updateMatchingRate(matchingRate: number) {
         if (await this.exists()) {
             this._matchingRate = matchingRate;
             replaceData((await this.getPath()), this);
+             return 0;
         }
+        return -1;
     }
 
     public async updateInterviewDate(interviewDate: Date) {
         if (await this.exists()) {
             this._interviewDate = interviewDate;
             replaceData((await this.getPath()), this);
+             return 0;
         }
+        return -1;
     }
 
     public async updateInterviewsSummery(interviewsSummery: Array<string>) {
         if (await this.exists()) {
             this._interviewsSummery = interviewsSummery;
             replaceData((await this.getPath()), this);
+             return 0;
         }
+        return -1;
     }
 
     public async updateRejectCause(rejectCause: string) {
         if (await this.exists()) {
             this._rejectCause = rejectCause;
             replaceData((await this.getPath()), this);
+             return 0;
         }
+        return -1;
     }
     /**
      * Retrieves the URLs of the recommendation files for the current candidate.
@@ -167,11 +178,14 @@ export class CandidateJobStatus {
      * @returns None
      */
     public async edit(matchingRate: number = this._matchingRate, about: string = this._about, interviewDate: Date = this._interviewDate, rejectCause: string = this._rejectCause) {
+        if(!(await this.exists()))
+            return -1;
         this._matchingRate = matchingRate;
         this._interviewDate = interviewDate;
         this._about = about;
         this._rejectCause = rejectCause;
         replaceData((await this.getPath()), this);
+        return 0;
     }
     /**
      * Retrieves the path of the realtime DB object that corresponds to the
@@ -215,6 +229,7 @@ export class CandidateJobStatus {
                 ((await getObjectAtPath("/CandidatesJobStatus/" + id))._jobNumber === this._jobNumber))
                 removeObjectAtPath("/CandidatesJobStatus/" + id);
         });
+        return 0;
     }
     /**
      * Adds the current object to the realtime DB. 
@@ -223,11 +238,11 @@ export class CandidateJobStatus {
     public async add() {
         if (!(await this.exists())){
             await appendToDatabase(this, "/CandidatesJobStatus");
-            return true;
+            return 0;
         }
         else{
             console.log("the CandidatesJobStatus already exists");
-            return false;
+            return 1;
 
         }
     }
@@ -236,13 +251,14 @@ export class CandidateJobStatus {
      * @param {string} newStatus - The new status to update the candidate job application to.
      * @param {Date} [interviewDate=this._interviewDate] - The interview date for the candidate job application leave empty if the new satatus not require interview.
      */
-    public async updateStatus(newStatus: string, interviewDate: Date = this._interviewDate): Promise<void> {
+    public async updateStatus(newStatus: string, interviewDate: Date = this._interviewDate): Promise<number> {
         if (!(await this.exists())) {
             console.log("candidate job status not found in the database");
-            return;
+            return -1;
         }
         this._status = newStatus;
         replaceData((await this.getPath()), this);
+            return 0;
     }
     public async getWhatsappUrl(text: string): Promise<string> {
         const cand = (await getFilteredCandidates(["id"], [this._candidateId])).at(0);
