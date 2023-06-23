@@ -1,5 +1,4 @@
 import 'firebase/auth';
-import * as admin from "firebase-admin";
 import { User, getAuth, sendPasswordResetEmail, signInWithEmailAndPassword, updatePassword, confirmPasswordReset } from "firebase/auth";
 import axios from 'axios';
 const auth = getAuth();

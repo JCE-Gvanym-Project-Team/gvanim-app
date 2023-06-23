@@ -47,6 +47,7 @@ export class Recruiter {
 				sec.removeRecruiter(this);
 			}
 			await removeObjectAtPath("/Recruiters/" + this._id);
+			await removeObjectAtPath("/RecUid" + this._id);
 			await deleteUserAccount(this._email);
 			return 0;
 		}
@@ -76,6 +77,7 @@ export class Recruiter {
 				}
 			}
 			await appendToDatabase(userUid, "/RecUid", this._id);
+			await appendToDatabase(this, '/Recruiters',this._id);
 			if(userCredential)
 				return 0;
 			else
@@ -103,7 +105,7 @@ export class Recruiter {
 			this._sectors.push(sector);
 		else
 			return 1;
-		replaceData(`/Recruiters/${this._id}`, this);
+		replaceData(await this.getPath(), this);
 		const sectors = await getAllSectors();
 		for (let i = 0; i < sectors.length; i++) {
 			if (sectors[i]._name === sector) {
@@ -123,8 +125,7 @@ export class Recruiter {
 			this._sectors.filter((val) => val !== sector);
 		else
 			return 1;
-		replaceData(`/Recruiters/${this._id}`,this);
-		appendToDatabase(this, "/Recruiters", this._id);
+		replaceData(await this.getPath(),this);
 		const uid = await this.getUid();
 		removeObjectAtPath(`Sectors/${sector}/${uid}`);
 		return 0;

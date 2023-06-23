@@ -1,4 +1,5 @@
-import { isConnected, loginAdmin, loginRecruiter, loguotRecruiter } from "./Authentication";
+import { async } from "@firebase/util";
+import { isConnected, loginAdmin, loginRecruiter, loguotRecruiter, sendResetMail } from "./Authentication";
 import { Candidate, generateCandidateId } from "./Candidate";
 import { CandidateJobStatus, allStatus, getFilteredCandidateJobStatuses, getMessage } from "./CandidateJobStatus";
 import { Job, generateJobNumber, getFilteredJobs } from "./Job";
@@ -233,6 +234,15 @@ async function testAddRecomendation() {
     console.log(s);
     console.log(await s.getRecomendationsUrl());
 }
+async function testSimpleSendResetMail() {
+    let rec = new Recruiter("elyaathlan1998@gmail.com", "el", "ta");
+    await loginAdmin();
+    await rec.remove();
+    await loguotRecruiter();
+    //await sendResetMail("elyaathlan@gmail.com");
+    // await sleep(3000);
+    // rec.remove();
+}
 export async function main() {
     //console.log(`testSingleJobAddNoConfilct(): ${await testSingleJobAddNoConfilct()}`);
     //console.log(`testSingleJobAddConfilct(): ${await testSingleJobAddConfilct()}`);
@@ -247,5 +257,6 @@ export async function main() {
     //testGetCvUrl();
     //testAddRecomendation();
     //console.log(await testAddRecruiterNoSectors());
-    testRemoveSectorFromRecruiter();
+    //testRemoveSectorFromRecruiter();
+    testSimpleSendResetMail();
 }
