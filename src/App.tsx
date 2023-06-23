@@ -4,12 +4,14 @@ import DrushimMainPage from './DrushimMainPage/DrushimMainPage';
 import { ColorModeContext, FontContext, useMode } from './DrushimMainPage/theme';
 import Auth from './RecruiterMainPage/Components/Auth/Auth';
 import PasswordRecover from './RecruiterMainPage/RecoveryPasswordPage/RecoveryPasswordPage'
+import UpdateAccount from './RecruiterMainPage/Components/AdminPage/Components/TabsPanel/Components/ResetPassword/ResetPassword';
 
 const recruitersPageTheme = createTheme({
 	direction: 'rtl',
 });
 
-function App() {
+function App()
+{
 
 	// for drushim page
 	const [drushimPageTheme, colorMode, fontMode] = useMode();
@@ -45,7 +47,9 @@ function App() {
 					<Navigate to='/career/jobs' />
 				} />
 
-
+				{/* reset password routes */}
+				<Route path="/settings/updateAccount" element={<UpdateAccount />} />
+				<Route path="/passwordRecovery" element={<PasswordRecover />} />
 			</Routes>
 		</>
 	);
