@@ -5,7 +5,7 @@ export class Sector {
     public _name: string;
     public _open: boolean;
     public _recruitersUid: string[];
-    constructor(name: string, open: boolean, recruitersUid: string[] = []) {
+    constructor(name: string, open: boolean = true, recruitersUid: string[] = []) {
         this._name = name;
         this._open = open;
         this._recruitersUid = recruitersUid;
@@ -75,6 +75,7 @@ export class Sector {
         if (await this.exists()) {
             this._recruitersUid.push(await recruiter.getUid());
             await replaceData((await this.getPath()), this);
+            await appendToDatabase(recruiter._email, await this.getPath(),await recruiter.getUid());
             return 0;
         }
         console.log(`Sector ${this._name} not exist add it before edit`);
@@ -84,6 +85,7 @@ export class Sector {
         if (await this.exists()) {
             this._recruitersUid = this._recruitersUid.filter(async (uid) => uid !== (await recruiter.getUid()))
             replaceData(`/Sectors/${this._name}`, this);
+            await removeObjectAtPath(await this.getPath() + '/' + await recruiter.getUid());
             return 0;
         }
         console.log(`Sector ${this._name} not exist add it before edit`);
