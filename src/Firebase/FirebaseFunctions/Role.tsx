@@ -57,7 +57,6 @@ import { appendToDatabase, getFirebaseIdsAtPath, removeObjectAtPath, replaceData
             appendToDatabase(this, "/Roles", this._name);
             return 0;
         }
-        console.log("the Rloe already exists");
         return 1;
     }
  }

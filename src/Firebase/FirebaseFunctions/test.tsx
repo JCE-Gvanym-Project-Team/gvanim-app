@@ -244,19 +244,4 @@ async function testSimpleSendResetMail() {
     // rec.remove();
 }
 export async function main() {
-    //console.log(`testSingleJobAddNoConfilct(): ${await testSingleJobAddNoConfilct()}`);
-    //console.log(`testSingleJobAddConfilct(): ${await testSingleJobAddConfilct()}`);
-    //console.log(`testGenerateJobNumber(): ${await testGenerateJobNumber()}`);
-    //console.log(`testJobEditNoConfilct(): ${await testJobEditNoConflict()}`);
-    //console.log(`testAddSingleCandidateNoConflict(): ${await testAddSingleCandidateNoConflict()}`);
-    //console.log(`testAddRecruiterNoSectors(): ${await testAddRecruiterNoSectors()}`);
-    //console.log(`testLoginRecruiter(): ${await testLoginRecruiter()}`);
-    //testEditRecruiter();
-    //testMessgaeFormat();
-    //testGetRecomendationsUrl();
-    //testGetCvUrl();
-    //testAddRecomendation();
-    //console.log(await testAddRecruiterNoSectors());
-    //testRemoveSectorFromRecruiter();
-    testSimpleSendResetMail();
 }

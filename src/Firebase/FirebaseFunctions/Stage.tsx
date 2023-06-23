@@ -59,7 +59,6 @@ export class Stage {
             appendToDatabase(this, "/Stages", this._name);
             return 0;
         }
-        console.log("the Stage already exists");
         return 1;
     }
     public async getMessages(candidateName: string, recruiterName: string, interviewDate: Date = new Date(0, 0, 0), location: string = ""): Promise<string> {
