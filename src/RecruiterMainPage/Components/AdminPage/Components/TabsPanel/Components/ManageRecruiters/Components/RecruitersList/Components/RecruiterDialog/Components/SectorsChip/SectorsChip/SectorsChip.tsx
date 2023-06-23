@@ -26,19 +26,10 @@ const MenuProps = {
 
 export default function SectorChips(props: {
   allSectors: string[],
-  setSectorsSelection: React.Dispatch<React.SetStateAction<string[]>>,
-  sectorsSelection: string[],
-  recruiterCurentSectors: string[],
-  setSaveButton: Dispatch<SetStateAction<boolean>>;
-  isEdit: boolean,
-  setListToDel: React.Dispatch<React.SetStateAction<string[]>>,
-  listToDel: string[],
-  setListToAdd: React.Dispatch<React.SetStateAction<string[]>>,
-  listToAdd: string[],
   setListToShow:React.Dispatch<React.SetStateAction<string[]>>,
   listToShow:string[]
 }) {
-  const { allSectors, setSectorsSelection, sectorsSelection, recruiterCurentSectors, setSaveButton, isEdit, setListToDel, listToDel, setListToAdd, listToAdd, setListToShow, listToShow } = props;
+  const { allSectors, setListToShow, listToShow } = props;
   const [selectNow, setSelectNow] = React.useState<string[]>([]);
   // const [listToShow, setListToShow] = React.useState<string[]>([]);
 // 
@@ -46,6 +37,7 @@ export default function SectorChips(props: {
     // setListToShow(recruiterCurentSectors);
   // }, []);
 // 
+  // console.log("listToShow: " + listToShow);
 
 
   const handleChange = async (event: SelectChangeEvent<typeof allSectors>) => {
@@ -54,7 +46,6 @@ export default function SectorChips(props: {
     } = event;
 
     const sector: string = event.target.value[0] as string;
-    console.log(sector);
 
     // -------------to show-----------------------------------------------
     let indexToRemove = listToShow.indexOf(sector);
@@ -66,48 +57,6 @@ export default function SectorChips(props: {
       const updatedListToShow = listToShow.filter((item) => item !== sector);
       await setListToShow(updatedListToShow);
     }
-
-    // // ------------------------------------------------------------
-    // indexToRemove = listToDel.indexOf(sector);
-
-    // if (indexToRemove > -1) {
-    //   console.log("1");
-    //   // remove
-    //   const updatedListToDel = listToDel.filter((item) => item !== sector)
-    //   setListToDel(updatedListToDel);
-    //   return;
-    // }
-
-    // // ------------------------------------------------------------
-    // indexToRemove = listToAdd.indexOf(sector);
-
-    // if (indexToRemove > -1) {
-    //   console.log("2");
-    //   // remove 
-    //   const updatedListToAdd = listToAdd.filter((item) => item !== sector);
-    //   setListToAdd(updatedListToAdd);
-    //   return;
-    // }
-
-    // // ------------------------------------------------------------
-    // indexToRemove = listToShow.indexOf(sector);
-
-    // if (indexToRemove > -1) { // not in
-    //   console.log("3");
-    //   // add 
-    //   setListToAdd((prevList) => [...prevList, sector]);
-    //   return;
-    // }
-
-    // // ------------------------------------------------------------
-    // indexToRemove = listToShow.indexOf(sector);
-    // if (indexToRemove === -1) { // in
-    //   // add
-    //   console.log("4");
-    //   setListToDel((prevList) => [...prevList, sector]);
-    // }
-    // console.log("fail");
-
   };
 
   return (
