@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Typography, Box, IconButton, FormControl, InputLabel, Select, MenuItem, Autocomplete, Icon } from '@mui/material';
-import { dialogActionsSx, dialogContentStyle, dialogContentSx, dialogSx, dialogTitleSx, dialogTopAreaSx } from './ChangeJobDialogStyle';
-import CloseIcon from '@mui/icons-material/Close';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
-import { CandidateJobStatus, getFilteredCandidateJobStatuses } from '../../../../../Firebase/FirebaseFunctions/CandidateJobStatus';
-import { Candidate } from '../../../../../Firebase/FirebaseFunctions/Candidate';
+import CloseIcon from '@mui/icons-material/Close';
+import { Autocomplete, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, TextField } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Recomendation } from '../../../../../Firebase/FirebaseFunctions/Recomendation';
+import { Candidate } from '../../../../../Firebase/FirebaseFunctions/Candidate';
+import { getFilteredCandidateJobStatuses } from '../../../../../Firebase/FirebaseFunctions/CandidateJobStatus';
+import { dialogActionsSx, dialogContentStyle, dialogContentSx, dialogSx, dialogTitleSx, dialogTopAreaSx } from './ChangeJobDialogStyle';
 
 export default function ChangeJobDialog(props: { open, onClose, candidateAppliedJobs, allJobs, candidate: Candidate | null })
 {

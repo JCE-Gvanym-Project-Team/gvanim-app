@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import Box from '@mui/material/Box';
 import { Icon, Typography } from '@mui/material';
-import { ReactComponent as JobRoleSVG } from '../../Resources/JobRole.svg';
+import Box from '@mui/material/Box';
+import { useEffect, useState } from 'react';
 import { ReactComponent as JobLocationSVG } from '../../Resources/JobLocation.svg';
+import { ReactComponent as JobRoleSVG } from '../../Resources/JobRole.svg';
 import { ReactComponent as JobScopeSVG } from '../../Resources/JobScope.svg';
 import { ReactComponent as JobStartSVG } from '../../Resources/JobStart.svg';
-import { ReactComponent as YellowEllipseSVG } from '../../Resources/YellowEllipse.svg'
-import { ReactComponent as PinkEllipseSVG } from '../../Resources/PinkEllipse.svg'
+import { ReactComponent as PinkEllipseSVG } from '../../Resources/PinkEllipse.svg';
+import { ReactComponent as YellowEllipseSVG } from '../../Resources/YellowEllipse.svg';
 
 export default function JobDetails(props: { job, screenSize })
 {

@@ -1,12 +1,11 @@
-import { Box, Divider, Grid, Link, Paper, Stack, Typography } from '@mui/material'
-import { BoxGradientSx, MyGridItemSx, MyGridSx, MyPaperSx, MyTypographyInfoSx, MyTypographyMainSx, MyTypographyTitleSx } from './WelcomePageStyle'
 import { ArrowBack, Assessment } from '@mui/icons-material';
+import { Box, Divider, Grid, Link, Paper, Stack, Typography } from '@mui/material';
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MyLoading from '../../Components/MyLoading/MyLoading';
-import { useState, useEffect } from "react";
-import { getFilteredJobs } from '../../Firebase/FirebaseFunctions/Job';
-import { Candidate, getFilteredCandidates } from '../../Firebase/FirebaseFunctions/Candidate';
 import { getFilteredCandidateJobStatuses } from '../../Firebase/FirebaseFunctions/CandidateJobStatus';
+import { getFilteredJobs } from '../../Firebase/FirebaseFunctions/Job';
+import { BoxGradientSx, MyGridItemSx, MyGridSx, MyPaperSx, MyTypographyInfoSx, MyTypographyMainSx, MyTypographyTitleSx } from './WelcomePageStyle';
 
 
 export default function WelcomePage()

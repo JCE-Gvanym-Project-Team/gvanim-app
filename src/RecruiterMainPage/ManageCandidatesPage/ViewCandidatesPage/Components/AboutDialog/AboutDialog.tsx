@@ -1,10 +1,10 @@
 import { Close } from '@mui/icons-material';
-import { Box, Button, Dialog, DialogContent, DialogTitle, IconButton, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react'
-import { dialogContentStyle, dialogContentSx, dialogSx, dialogTitleSx, dialogTopAreaSx } from './AboutDialogStyle';
+import { Box, Dialog, DialogContent, DialogTitle, IconButton, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import { Candidate } from '../../../../../Firebase/FirebaseFunctions/Candidate';
-import { ManageCandidatesPageGlobalStyle } from '../../../../PageStyles';
 import { CandidateJobStatus, getFilteredCandidateJobStatuses } from '../../../../../Firebase/FirebaseFunctions/CandidateJobStatus';
+import { ManageCandidatesPageGlobalStyle } from '../../../../PageStyles';
+import { dialogContentStyle, dialogContentSx, dialogSx, dialogTitleSx, dialogTopAreaSx } from './AboutDialogStyle';
 
 export default function AboutDialog(props: { open, onClose, candidate: Candidate | null, jobId: string })
 {

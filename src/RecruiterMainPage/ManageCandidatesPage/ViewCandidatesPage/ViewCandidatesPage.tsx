@@ -1,20 +1,19 @@
-import { useEffect, useState } from 'react'
-import { Button, Typography, Box, Stack, Rating, Divider } from '@mui/material'
-import EditIcon from '@mui/icons-material/Edit';
-import { editButtonSx, textSx, titleSx, mainStackSx, ContainerGradientSx, candidateNameSx, candidateNameAndEditButtonContainerSx, jobTextSx, notesButtonSx, interviewsButtonSx, changeJobButtonSx, recommendationsButtonSx } from './ViewCandidatesPageStyle';
-import { BoxGradientSx } from '../../PageStyles';
-import { Candidate, getFilteredCandidates } from '../../../Firebase/FirebaseFunctions/Candidate';
+import { AccountCircle, EditNote, PictureAsPdfSharp, QuestionAnswer, SpeakerNotes } from '@mui/icons-material';
+import { Box, Button, Divider, Rating, Stack, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Job, getFilteredJobs } from '../../../Firebase/FirebaseFunctions/Job';
-import { CandidateJobStatus, getFilteredCandidateJobStatuses } from '../../../Firebase/FirebaseFunctions/CandidateJobStatus';
-import NotesPopup from './Components/NotesPopup/NotesPopup';
-import { AccountCircle, ArticleOutlined, EditNote, PictureAsPdfSharp, QuestionAnswer, SpeakerNotes, TrendingUpOutlined } from '@mui/icons-material';
-import AboutDialog from './Components/AboutDialog/AboutDialog';
 import MyLoading from '../../../Components/MyLoading/MyLoading';
-import RecommendersDialog from './Components/RecommendersDialog/RecommendersDialog';
-import JobsTable from './Components/JobsTable/JobsTable';
+import { Candidate, getFilteredCandidates } from '../../../Firebase/FirebaseFunctions/Candidate';
+import { getFilteredCandidateJobStatuses } from '../../../Firebase/FirebaseFunctions/CandidateJobStatus';
+import { Job, getFilteredJobs } from '../../../Firebase/FirebaseFunctions/Job';
+import { BoxGradientSx } from '../../PageStyles';
+import AboutDialog from './Components/AboutDialog/AboutDialog';
 import AreYouSureDialog from './Components/AreYouSureDialog/AreYouSureDialog';
+import JobsTable from './Components/JobsTable/JobsTable';
+import NotesPopup from './Components/NotesPopup/NotesPopup';
+import RecommendersDialog from './Components/RecommendersDialog/RecommendersDialog';
 import SuccessMessageSnackbar from './Components/SuccessMessageSnackbar/SuccessMessageSnackbar';
+import { candidateNameAndEditButtonContainerSx, candidateNameSx, editButtonSx, interviewsButtonSx, jobTextSx, mainStackSx, notesButtonSx } from './ViewCandidatesPageStyle';
 
 export default function ViewCandidatesPage(props: { candidateId: string })
 {

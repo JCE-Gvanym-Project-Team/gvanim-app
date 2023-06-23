@@ -1,6 +1,6 @@
 import { CSSProperties } from "@mui/material/styles/createTypography";
 import { SxProps } from "@mui/system";
-import { GlobalStyle, ManageCandidatesPageGlobalStyle } from "../../../../../PageStyles";
+import { ManageCandidatesPageGlobalStyle } from "../../../../../PageStyles";
 
 
 export const dialogSx: SxProps = {
