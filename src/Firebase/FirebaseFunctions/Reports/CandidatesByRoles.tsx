@@ -12,13 +12,13 @@ const Chart = () => {
   useEffect(() => {
 
     async function fetchData() {
-      const filteredJobs = await getFilteredJobs();
+      const filteredJobs = await getFilteredJobs(['open'], ['true']);
       console.log(filteredJobs);
       const candidatesByRole: { [role: string]: number } = {};
       
       for (let i = 0; i < filteredJobs.length; i++) {
         const job = filteredJobs[i];
-        const role = "משרה מס' " + job._jobNumber + " | " + job._role;
+        const role = "משרה מס' " + job._jobNumber + " | תפקיד: " + job._role + " | מספר הגשות: ";
         const sum_cands =  (await job.getCandidatures()).length;
         if(sum_cands > 0){
         if (job != undefined && role != undefined) {
