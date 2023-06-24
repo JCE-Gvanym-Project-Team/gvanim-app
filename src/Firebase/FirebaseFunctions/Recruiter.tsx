@@ -60,7 +60,6 @@ export class Recruiter {
 	 */
 	public async add(password: string = "") {
 		if ((await this.exists())) {
-			console.log(`${this._email} already in use`);
 			return 1;
 		}
 		if (password.length > 0) {
@@ -98,7 +97,6 @@ export class Recruiter {
 	public async addSector(sector: string) {
 		let sectObj = new Sector(sector, true);
 		if (!(await sectObj.exists())) {
-			console.log(`sector: ${sector} not exists in DB`);
 			return -1;
 		}
 		if (!this._sectors.includes(sector))
