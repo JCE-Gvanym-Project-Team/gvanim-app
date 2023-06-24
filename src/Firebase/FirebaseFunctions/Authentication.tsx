@@ -10,9 +10,9 @@ const auth = getAuth();
  * @returns None
  * @throws {FirebaseError} If there is an error with the Firebase authentication.
  */
-export async function loginRecruiter(email: string, password: string): Promise<object> {
+export async function loginRecruiter(email: string, password: string): Promise<Object> {
 	if (await isConnected()) {
-		console.log('alrady connected');
+		return {};
 	}
 	else {
 		return await signInWithEmailAndPassword(auth, email, password);
@@ -66,10 +66,12 @@ export async function updateLinkRecruiterPassword(newPass: string, oobCode: stri
 }
 export async function updateConnectedRecruiterPassword(newPass: string) {
 	const user = await getConnectedUser();
-	if (user)
+	if (user){
 		updatePassword(user, newPass);
+		return true;
+	}
 	else
-		console.log('error while updating password');
+		return false;
 }
 export async function deleteUserAccount(mail: string) {
 	return new Promise<Boolean>((resolve, reject) => {
@@ -86,17 +88,3 @@ export async function deleteUserAccount(mail: string) {
 			});
 	});
 }
-
-/*
-export async function main() {
-	await loginAdmin();
-	let rec = new Recruiter('ex@gmail.com',"el","ta");
-	await rec.add('123456');
-	let sec = new Sector('sec1', true);
-	await sec.add();
-	await rec.addSector('sec1');
-	console.log(`4)exist?(t) ${await rec.exists()}`);
-	await sleep(5000);
-	console.log(`5)exist?(t) ${await rec.exists()}`);
-}
-*/

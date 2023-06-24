@@ -241,7 +241,6 @@ export class CandidateJobStatus {
             return 0;
         }
         else{
-            console.log("the CandidatesJobStatus already exists");
             return 1;
 
         }
@@ -253,7 +252,6 @@ export class CandidateJobStatus {
      */
     public async updateStatus(newStatus: string, interviewDate: Date = this._interviewDate): Promise<number> {
         if (!(await this.exists())) {
-            console.log("candidate job status not found in the database");
             return -1;
         }
         this._status = newStatus;

@@ -162,7 +162,6 @@ export class Candidate
     {
         if (!(await this.exists()))
         {
-            console.log(`you must add() candidate before call edit()`);
             return -1;
         }
         this._firstName = firstName;
@@ -178,7 +177,6 @@ export class Candidate
             }
             else
             {
-                console.log(`a candidate alredy exist with the same mail and phone, othe field was chenged`);
                 return 1;
             }
         }
@@ -199,7 +197,6 @@ export class Candidate
         }
         else
         {
-            console.log("the candidate already exists");
             return 1;
         }
     }
@@ -214,7 +211,6 @@ export class Candidate
     {
         if (!(await this.exists()))
         {
-            console.log(`you need to add() candidate before call apply()`);
             return -1;
         }
         let candidatuers = new CandidateJobStatus(jobNumber, this._id, "הוגשה מועמדות", about, -1, new Date(), new Date());

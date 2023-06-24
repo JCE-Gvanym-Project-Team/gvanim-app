@@ -68,7 +68,6 @@ export class Sector {
             appendToDatabase(this, "/Sectors", this._name);
             return 0;
         }
-        console.log("the Sector already exists");
         return 1;
     }
     public async addRecruiter(recruiter: Recruiter) {
@@ -78,7 +77,6 @@ export class Sector {
             await appendToDatabase(recruiter._email, await this.getPath(),await recruiter.getUid());
             return 0;
         }
-        console.log(`Sector ${this._name} not exist add it before edit`);
         return -1;
     }
     public async removeRecruiter(recruiter: Recruiter) {
@@ -88,7 +86,6 @@ export class Sector {
             await removeObjectAtPath(await this.getPath() + '/' + await recruiter.getUid());
             return 0;
         }
-        console.log(`Sector ${this._name} not exist add it before edit`);
         return -1;
     }
 }
