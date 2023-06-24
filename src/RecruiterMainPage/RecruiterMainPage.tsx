@@ -104,6 +104,9 @@ function RecruiterMainPage({ handlelogout }) {
           element={<CandidateFiltersForm />}
         />
 
+        {/* reset passwors */}
+        {/* <Route path='forgotPassword' element={<PasswordRecover/>} /> */}
+
         {/* Admin Routes */}
         <Route path="settings" element={<AdminPage />} />
       </Routes>

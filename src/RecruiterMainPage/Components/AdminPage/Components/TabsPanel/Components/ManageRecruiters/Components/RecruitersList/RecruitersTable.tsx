@@ -7,25 +7,6 @@ import RecruiterDialog from './Components/RecruiterDialog/RecruiterDialog';
 import SuccessSnackBar from '../SuccessSnackBar/SuccessSnackBar';
 
 
-
-const recruiters = [
-    { email: 'yossi324@gmail.com', firstname: 'יוסי', lastname: 'כהן', sectors: ["sec1", "sec2"] },
-    { email: 'asi333@gmail.com', firstname: 'אסי', lastname: 'לוי', sectors: ["sec1", "sec2"] },
-    { email: 'itzik232@gmail.com', firstname: 'איציק', lastname: 'מזרחי', sectors: ["sec1", "sec2"] },
-    { email: 'gavriel333@gmail.com', firstname: 'גבריאל', lastname: 'שלם', sectors: ["sec1", "sec2"] },
-    { email: 'omer43@gmail.com', firstname: 'עומר', lastname: "תורג'מן", sectors: ["sec1", "sec2"] },
-    { email: 'eden32@gmail.com', firstname: 'עדן', lastname: 'ועקנין', sectors: ["sec1", "sec2"] },
-
-
-    { email: 'israel322@gmail.com', firstname: 'ישראל', lastname: 'כהן', sectors: ["sec1", "sec2"] },
-    { email: 'amit3232@gmail.com', firstname: 'עמית', lastname: 'כהן', sectors: ["sec1", "sec2"] },
-    { email: 'doron333@gmail.com', firstname: 'דורון', lastname: "תורג'מן", sectors: ["sec1", "sec2"] },
-    { email: 'tamar32@gmail.com', firstname: 'תמר', lastname: 'כהן', sectors: ["sec1", "sec2"] }
-
-];
-
-
-
 export default function RecruitersList() {
     const [recruitersList, setRecruitersList] = React.useState<Recruiter[]>();
     const [searchValue, setSearchValue] = React.useState("");

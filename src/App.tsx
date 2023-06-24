@@ -3,6 +3,9 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import DrushimMainPage from './DrushimMainPage/DrushimMainPage';
 import { ColorModeContext, FontContext, useMode } from './DrushimMainPage/theme';
 import Auth from './RecruiterMainPage/Components/Auth/Auth';
+import PasswordRecover from './RecruiterMainPage/RecoveryPasswordPage/RecoveryPasswordPage'
+import PasswordSettings from './RecruiterMainPage/Components/AdminPage/Components/TabsPanel/Components/ManageAccount/Components/PasswordSettings/PasswordSettings';
+import UpdateAccount from './RecruiterMainPage/Components/AdminPage/Components/TabsPanel/Components/ManageAccount/Components/AccountSettings/UpdateAccount/UpdateAccount';
 
 const recruitersPageTheme = createTheme({
 	direction: 'rtl',
@@ -44,6 +47,10 @@ function App()
 				<Route path='/career' element={
 					<Navigate to='/career/jobs' />
 				} />
+
+				{/* reset password routes */}
+				<Route path="/settings/updateAccount" element={<UpdateAccount />} />
+				<Route path="/passwordRecovery" element={<PasswordRecover />} />
 			</Routes>
 		</>
 	);

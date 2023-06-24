@@ -22,6 +22,7 @@ import { styled } from "@mui/material/styles";
 import { ReactSVG } from "react-svg";
 import SvgLogo from "../../Components/Logo/Logo.svg"
 import MyAvatar from "../../Components/GvanimAvatar/GvanimAvatar";
+import PasswordRecover from "../RecoveryPasswordPage/RecoveryPasswordPage";
 // -----------------------------------------------------------------
 
 
@@ -127,7 +128,7 @@ const Login = (props: { email: any; setEmail: any; password: any; setPassword: a
 
                                 <Grid container sx={{ mt: 1 }}>
                                     <Grid item>
-                                        <Link type="submit" href={"/#/recovery"} variant="caption">
+                                        <Link type="submit" href={"/passwordRecovery"} variant="caption">
                                             שכחת את הסיסמה?
                                         </Link>
                                     </Grid>
