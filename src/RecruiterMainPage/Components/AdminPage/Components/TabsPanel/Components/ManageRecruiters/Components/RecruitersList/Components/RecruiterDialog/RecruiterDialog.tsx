@@ -318,6 +318,7 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 												allSectors={allSectors}
 												setListToShow={setListToShow}
 												listToShow={listToShow}
+												setSaveButton = { setSaveButton}
 											/>
 										</Box>
 									</Stack>
