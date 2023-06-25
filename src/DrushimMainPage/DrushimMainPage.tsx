@@ -30,7 +30,7 @@ export default function DrushimMainPage()
 			<Accessibility />
 			<Routes>
 				{/* All Jobs Page Route*/}
-				<Route path='jobs' element={<AllJobsPage jobs={jobs} />} />
+				<Route path='jobs' element={<AllJobsPage />} />
 
 				{/* One Job Pages Routes */}
 				{jobs.map(job => <Route path={'jobs/' + job._jobNumber} element={<OneJobPage />} key={job._jobNumber} />)}
