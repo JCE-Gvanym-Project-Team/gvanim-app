@@ -243,5 +243,21 @@ async function testSimpleSendResetMail() {
     // await sleep(3000);
     // rec.remove();
 }
+async function testIncrementViews() {
+    const vpp: { [key: string]: number } = {
+        "facebook": 1,
+      };
+    await loginAdmin();
+    const id = await generateJobNumber();
+    const job = new Job(id,"inc","",[0,0],"","ghdghg",[""],"",true,true);
+    await job.add();
+    await sleep(2000);
+    console.log((await getFilteredJobs(['jobNumber'],[id.toString()]))[0]);
+    await job.incrementViews('whatsApp');
+    await sleep(2000);
+    console.log((await getFilteredJobs(['jobNumber'],[id.toString()]))[0]);
+    
+    job.remove();
+}
 export async function main() {
 }

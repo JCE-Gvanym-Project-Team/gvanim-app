@@ -19,8 +19,8 @@ export class Job {
     public _requirements: string;
     public _open: boolean;
     public _highPriority: boolean;
-    public _viewsPerPlatform: Map<string, number>;
-    public _applyPerPlatform: Map<string, number>;
+    public _viewsPerPlatform: {[key :string]: number};
+    public _applyPerPlatform: {[key :string]: number};
     public _creationDate: Date;
     public _startOn: string;
 
@@ -35,8 +35,8 @@ export class Job {
         requirements: string = "",
         open: boolean = true,
         highPriority: boolean = false,
-        viewsPerPlatform: Map<string, number> = new Map<string, number>(),
-        applyPerPlatform: Map<string, number> = new Map<string, number>(),
+        viewsPerPlatform: {[key :string]: number} = {},
+        applyPerPlatform: {[key :string]: number} = {},
         creationDate = new Date(0, 0, 0),
         startOn = 'מיידי'
     ) {
@@ -249,20 +249,22 @@ export class Job {
         return 0;
     }
     public async incrementViews(platform: string) {
-        let views = this._viewsPerPlatform.get(platform);
-        if (views === undefined)
-            views = 0;
-        this._viewsPerPlatform.set(platform, views + 1);
+        if (platform in this._viewsPerPlatform)
+            this._viewsPerPlatform[platform] +=1 ;
+        else{
+            this._viewsPerPlatform[platform] = 1
+        }
         if (!(await this.exists()))
             return -1;
         replaceData((await this.getPath()), this);
         return 0;
     }
     public async incrementApply(platform: string) {
-        let apply = this._applyPerPlatform.get(platform);
-        if (apply === undefined)
-            apply = 0;
-        this._applyPerPlatform.set(platform, apply + 1);
+        if (platform in this._applyPerPlatform)
+            this._applyPerPlatform[platform] +=1 ;
+        else{
+            this._applyPerPlatform[platform] = 1
+        }
         if (!(await this.exists()))
             return -1;
         replaceData((await this.getPath()), this);
