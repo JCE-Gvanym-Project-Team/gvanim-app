@@ -235,11 +235,15 @@ function compareByHighPriority(a: Job, b: Job): number {
 function compareByViews(a: Job, b: Job): number {
   let asum = 0;
   let bsum = 0;
-  for (const [, value] of Array.from(a._viewsPerPlatform)) {
-    asum += value;
+  for (const plat in a._viewsPerPlatform) {
+    if (Object.prototype.hasOwnProperty.call(a._viewsPerPlatform, plat)) {
+      asum += a._viewsPerPlatform[plat];
+    }
   }
-  for (const [, value] of Array.from(b._viewsPerPlatform)) {
-    bsum += value;
+  for (const plat in b._viewsPerPlatform) {
+    if (Object.prototype.hasOwnProperty.call(b._viewsPerPlatform, plat)) {
+      bsum += b._viewsPerPlatform[plat];
+    }
   }
   return bsum - asum;
 }

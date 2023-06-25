@@ -27,9 +27,10 @@ const MenuProps = {
 export default function SectorChips(props: {
   allSectors: string[],
   setListToShow:React.Dispatch<React.SetStateAction<string[]>>,
-  listToShow:string[]
+  listToShow:string[],
+  setSaveButton: React.Dispatch<React.SetStateAction<boolean>>
 }) {
-  const { allSectors, setListToShow, listToShow } = props;
+  const { allSectors, setListToShow, listToShow, setSaveButton } = props;
   const [selectNow, setSelectNow] = React.useState<string[]>([]);
   // const [listToShow, setListToShow] = React.useState<string[]>([]);
 // 
@@ -44,16 +45,15 @@ export default function SectorChips(props: {
     const {
       target: { value },
     } = event;
-
     const sector: string = event.target.value[0] as string;
-
-    // -------------to show-----------------------------------------------
+    
+    setSaveButton(true);
     let indexToRemove = listToShow.indexOf(sector);
-
     if (indexToRemove === -1) {
       const updatedListToShow = [...listToShow, sector];
       await setListToShow(updatedListToShow);
-    } else {
+    } 
+    else {
       const updatedListToShow = listToShow.filter((item) => item !== sector);
       await setListToShow(updatedListToShow);
     }

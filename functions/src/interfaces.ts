@@ -10,8 +10,8 @@ export interface Job
   _requirements: string;
   _open: boolean;
   _highPriority: boolean;
-  _viewsPerPlatform: Map<string, number>;
-  _applyPerPlatform: Map<string, number>;
+  _viewsPerPlatform: {[key :string]: number};
+  _applyPerPlatform: {[key :string]: number};
   _creationDate: string;
   _startOn: string;
 }

@@ -318,13 +318,14 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 												allSectors={allSectors}
 												setListToShow={setListToShow}
 												listToShow={listToShow}
+												setSaveButton = { setSaveButton}
 											/>
 										</Box>
 									</Stack>
 								</Box>
 
 								<Divider sx={{ mt: 3 }} />
-								{/* <Box sx={{
+								 <Box sx={{
 									mt: 1,
 									flexWrap: 'wrap',
 									gap: 1,
@@ -332,10 +333,12 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 									height: 'fit-content',
 									display: 'flex',
 								}}>
-									{recruiterSectors.map((value) => (
-										<Chip color='primary' onDelete={() => { setRecruiterSectors(recruiterSectors.filter((sector) => sector !== value)) }} key={value} label={value} />
-									))}
-								</Box> */}
+									{listToShow.map((value) => (
+										<Chip color='primary' onDelete={() => { setListToShow(listToShow.filter((sector) => sector !== value)); setSaveButton(true); }} key={value} label={value} />
+									))
+									    
+									}
+								</Box>
 
 							</Stack>
 
