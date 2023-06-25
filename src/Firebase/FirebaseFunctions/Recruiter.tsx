@@ -120,7 +120,7 @@ export class Recruiter {
 	 */
 	public async removeSector(sector: string) {
 		if (this._sectors.includes(sector))
-			this._sectors.filter((val) => val !== sector);
+			this._sectors = this._sectors.filter((val) => val !== sector);
 		else
 			return 1;
 		replaceData(await this.getPath(),this);
