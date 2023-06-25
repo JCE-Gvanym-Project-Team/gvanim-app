@@ -11,10 +11,11 @@ import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { exportToExcel } from '../../../../Firebase/FirebaseFunctions/Reports/GlobalFunctions';
 import JobsByFilters from '../../../../Firebase/FirebaseFunctions/Reports/JobsFilters';
-import { getAllRoles, getAllSectors } from '../../../../Firebase/FirebaseFunctions/functionIndex';
+import { Job, generateJobNumber, getAllRoles, getAllSectors, getFilteredJobs } from '../../../../Firebase/FirebaseFunctions/functionIndex';
 import { BoxGradientSx, MyPaperSx } from '../../../ManageJobsPage/Components/NewJobPage/NewJobStyle';
 import { designReturnButton } from '../../../ManageJobsPage/ManageJobsPageStyle';
 import { MyReportStyle, radioStyle } from '../../ReportPageStyle';
+import { sleep } from '../../../../Firebase/FirebaseFunctions/test';
 
 
 
@@ -23,6 +24,9 @@ interface typeMyData {
     id: number;
     name: string;
 }
+
+
+
 
 export default function JobsFiltersForm() {
     const navigate = useNavigate();
@@ -34,13 +38,14 @@ export default function JobsFiltersForm() {
     const [openJobs, setOpenJobs] = React.useState('yes');
     const [highPriority, setHighPriority] = React.useState('no');
     const [viewsAndApplyPerPlatform, setViewsAndApplyPerPlatform] = React.useState('');
+    const [platforms, setPlatforms] = React.useState<typeMyData[]>([]);
     const [startDate, setStartDate] = React.useState(null);
     const [endDate, setEndDate] = React.useState(null);
 
     React.useEffect(() => {
         const fileData = async () => {
             // --- sectors 
-            
+
             let i = 20;
             const sectorsFromDb = await getAllSectors();
             let updatedSectors = [{ id: 10, name: 'כל האשכולות' }];
@@ -69,12 +74,33 @@ export default function JobsFiltersForm() {
                     return roleObj;
                 })
             );
-
             setRoles(updatedRoles);
 
-            // setSectors([{ id: 10, name: 'כל האשכולות' }]);
-        };
+            const allJobs = await getFilteredJobs();
+            i = 20;
+            let updatedJobs = [{ id: 10, name: 'כל הפלטפורמות' }];
 
+            updatedJobs = updatedJobs.concat(
+                allJobs.flatMap((job) => {
+                    let jobPlatforms = Array.from(job._applyPerPlatform.keys());
+                    let newPlatforms: typeMyData[] = [];
+
+                    for (let j = 0; j < jobPlatforms.length; j++) {
+                        let platform = jobPlatforms[j];
+
+                        if (!platforms.some((p) => p.name === platform)) {
+                            const platformObj: typeMyData = { id: i, name: platform };
+                            i += 10;
+                            newPlatforms.push(platformObj);
+                        }
+                    }
+
+                    return newPlatforms;
+                })
+            );
+
+            setPlatforms(updatedJobs);
+        };
 
         fileData();
     }, []);
@@ -82,11 +108,11 @@ export default function JobsFiltersForm() {
 
 
 
-    const createReport = (roleName, scope_ind, sectorName, openJobs_ind, highPriority_ind, viewsAndApplyPerPlatform_ind, startDate, endDate) => {
+    const createReport = (roleName, scope_ind, sectorName, openJobs_ind, highPriority_ind, Platform, startDate, endDate) => {
         // checking if the user select all the buttons
         const isDateSelected = startDate && endDate;
-    
-        if (!roleName || !scope_ind || !sectorName || !viewsAndApplyPerPlatform_ind || !isDateSelected) {
+
+        if (!roleName || !scope_ind || !sectorName || !Platform || !isDateSelected) {
             // displaying an error message or indicating to the user that the parameters are mandatory
             alert('יש למלא את כל השדות');
             return;
@@ -94,7 +120,7 @@ export default function JobsFiltersForm() {
 
         const scopeArr = [25, 50, 75, 100, 1]; // [1] mean evry scope of jobs
         const choice = ["true", "false"];
-        const viewsAndApplyPerPlatformArr: string[] = ["אל תכלול", "פייסבוק", "יד 2", "מאסטר גוב", "גוגל", "כל הפלטפורמות"];
+        // const viewsAndApplyPerPlatformArr: string[] = ["אל תכלול", "פייסבוק", "יד 2", "מאסטר גוב", "גוגל", "כל הפלטפורמות"];
         const scope = scopeArr[Math.floor(scope_ind / 10) - 1];
 
         let openJobs: boolean;
@@ -109,11 +135,11 @@ export default function JobsFiltersForm() {
         else
             highPriority = false;
 
-        const viewsAndApplyPerPlatform = viewsAndApplyPerPlatformArr[Math.floor(viewsAndApplyPerPlatform_ind / 10) - 1];
+        // const viewsAndApplyPerPlatform = viewsAndApplyPerPlatformArr[Math.floor(viewsAndApplyPerPlatform_ind / 10) - 1];
         const formattedStartDate = startDate.toDate();
         const formattedEndDate = endDate.toDate();
 
-        const result = JobsByFilters(roleName, scope, sectorName, openJobs, highPriority, viewsAndApplyPerPlatform, formattedStartDate, formattedEndDate)
+        const result = JobsByFilters(roleName, scope, sectorName, openJobs, highPriority, Platform, formattedStartDate, formattedEndDate)
             .then((result) => {
                 if (result.length === 0)
                     alert('אין נתונים להצגה');
@@ -164,7 +190,6 @@ export default function JobsFiltersForm() {
     const handleClick = () => {
         navigate("/management/reports");
     };
-
 
 
     return (
@@ -321,9 +346,9 @@ export default function JobsFiltersForm() {
                                                 onChange={handleChangeScope}
                                             >
                                                 <MenuItem value={10}>25%-משרות בין 0 </MenuItem>
-                                                <MenuItem value={20}>50%-משרות בין 26%</MenuItem>
-                                                <MenuItem value={30}>75%-משרות בין 51%</MenuItem>
-                                                <MenuItem value={40}>100%-76% משרות בין</MenuItem>
+                                                <MenuItem value={20}>50%-משרות בין 25%</MenuItem>
+                                                <MenuItem value={30}>75%-משרות בין 50%</MenuItem>
+                                                <MenuItem value={40}>100%-75% משרות בין</MenuItem>
                                                 <MenuItem value={50}>בחר את כל אחוזי המשרה</MenuItem>
                                             </Select>
                                         </FormControl>
@@ -390,12 +415,11 @@ export default function JobsFiltersForm() {
                                                 label="sector"
                                                 onChange={handleViewsAndApplyPerPlatform}
                                             >
-                                                <MenuItem value={10}>אל תכלול</MenuItem>
-                                                <MenuItem value={20}>פייסבוק</MenuItem>
-                                                <MenuItem value={30}>יד 2</MenuItem>
-                                                <MenuItem value={40}>מאסטר גוב</MenuItem>
-                                                <MenuItem value={50}>גוגל</MenuItem>
-                                                <MenuItem value={60}>כל הפלטפורמות</MenuItem>
+                                                {platforms.map((plat) => (
+                                                    <MenuItem key={plat.id} value={plat.name}>
+                                                        {plat.name}
+                                                    </MenuItem>
+                                                ))}
                                             </Select>
                                         </FormControl>
 
@@ -430,20 +454,42 @@ export default function JobsFiltersForm() {
                     </Container>
                 </Box >
             </Box>
+            <Button onClick={() => { main() }}>add job</Button >
 
-            <Box style={{ position: 'absolute', top: '100px', right: '50px' }}>
-                <Button
-                    onClick={handleClick}
-                    sx={designReturnButton}
-                >
-                    <ArrowForwardIosIcon></ArrowForwardIosIcon>
-                    חזור
-                </Button>
-            </Box>
+                <Box style={{ position: 'absolute', top: '100px', right: '50px' }}>
+                    <Button
+                        onClick={handleClick}
+                        sx={designReturnButton}
+                    >
+                        <ArrowForwardIosIcon></ArrowForwardIosIcon>
+                        חזור
+                    </Button>
+                </Box>
+
 
         </>
 
     )
+}
+
+async function main() {
+    console.log("hi");
+    const job = new Job(
+        777,                            
+        "דרוש מדריך",                  
+        "מדריך",                       
+        [100, 100],                    
+        "חדרה",                        
+        "אשכול 10",                    
+        ["description"],               
+        "requirements",                
+        true,                          
+        false,                                                 
+    );
+    await job.add();
+    await sleep(4000);
+    job.incrementApply("allJobs");
+
 }
 
 

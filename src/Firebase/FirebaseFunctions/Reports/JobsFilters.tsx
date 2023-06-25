@@ -34,31 +34,27 @@ export default async function JobsByFilters(role: string, scope: number, sector:
         values.push(sector);
     }
 
-    const jobs = await getFilteredJobs();
+    let jobs = await getFilteredJobs();
 
     const promises: Promise<any>[] = [];
 
     const jobsByRegion: { [region: string]: number } = {};
-
-
+    console.log(sector);
+    
 
     for (let i = 0; i < jobs.length; i++) {
         let job = jobs[i];
 
-        if (dayjs(job._creationDate).isBetween(dayjs(startDate), dayjs(endDate), null, '[]')) {
-            if ((job._scope[1] <= scope && job._scope[0] >= scope - 24) || scope == 1) {
-                const region = job._region;
-
-                if (jobsByRegion[region]) {
-                    jobsByRegion[region]++;
-                } else {
-                    jobsByRegion[region] = 1;
+        // if (dayjs(job._creationDate).isBetween(dayjs(startDate), dayjs(endDate), null, '[]')) {
+        if (((job._scope[1] >= scope && job._scope[0] <= scope) || scope === 1) &&
+             (job._applyPerPlatform.has(viewsAndApplyPerPlatform) || viewsAndApplyPerPlatform === 'כל הפלטפורמות' ||
+              viewsAndApplyPerPlatform === 'אל תכלול'))
+            if ((job._sector === sector || sector === 'כל האשכולות') && (job._role === role || role === 'כל התפקידים'))
+                if ((job._open === openJobs || openJobs === false) && (job._highPriority === highPriority || highPriority === false)) {
+                    let promise = helperJobFilter(job, role, job._scope, sector, openJobs, highPriority, viewsAndApplyPerPlatform);
+                    promises.push(promise);
                 }
-
-                let promise = helperJobFilter(job, role, job._scope, sector, openJobs, highPriority, viewsAndApplyPerPlatform);
-                promises.push(promise);
-            }
-        }
+        // }
     }
 
     const resultJobs = await Promise.all(promises);
