@@ -2,19 +2,24 @@ import Menu, { MenuActions } from "@mui/base/Menu";
 import MenuItem, { menuItemClasses } from "@mui/base/MenuItem";
 import Popper from "@mui/base/Popper";
 import { ListActionTypes } from "@mui/base/useList";
-import { Assignment, MoreVert } from "@mui/icons-material";
-import { Box, IconButton, ListItemIcon, Typography } from "@mui/material";
+import { Assignment, Edit, MoreVert, Visibility } from "@mui/icons-material";
+import {
+  Box,
+  Divider,
+  IconButton,
+  ListItemIcon,
+  Typography,
+} from "@mui/material";
 import { styled } from "@mui/system";
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
-import
-  {
-    MenuItemIconSx,
-    MenuItemTypographySx,
-    MoreVertSx,
-    blue,
-    grey,
-  } from "./DropMenuStyle";
+import {
+  MenuItemIconSx,
+  MenuItemTypographySx,
+  MoreVertSx,
+  blue,
+  grey,
+} from "./DropMenuStyle";
 
 function MenuSection({ children, label }: MenuSectionProps) {
   return (
@@ -38,10 +43,10 @@ export default function DropMenu(props: { CandidateId: any }) {
     setButtonElement(node);
   }, []);
 
-  const handleEditClick = () => {
+  const editCandidateHandler = () => {
+    navigate(`/management/manageCandidates/${CandidateId._id}`);
     setOpen(false);
     buttonElement?.focus();
-    navigate("/management/editCandidate", { state: CandidateId });
   };
 
   const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -126,7 +131,12 @@ export default function DropMenu(props: { CandidateId: any }) {
             <Typography sx={MenuItemTypographySx}>לדף המשרה</Typography>
           </ListItemIcon>
         </StyledMenuItem>
-
+        <StyledMenuItem onClick={editCandidateHandler}>
+          <ListItemIcon>
+            <Visibility sx={MenuItemIconSx} /> {/* The "Visibility" icon */}
+            <Typography sx={MenuItemTypographySx}>צפייה במועמד</Typography>
+          </ListItemIcon>
+        </StyledMenuItem>
         {/* </MenuSection> */}
       </Menu>
     </Box>

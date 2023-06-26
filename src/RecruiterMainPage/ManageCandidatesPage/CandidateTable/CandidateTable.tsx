@@ -1,27 +1,44 @@
-import { PictureAsPdfSharp } from "@mui/icons-material";
-import { Box, Button, Chip, LinearProgress, Stack, SxProps, Theme, alpha, styled, useTheme } from "@mui/material";
+import { Description, PictureAsPdfSharp } from "@mui/icons-material";
+import {
+  Avatar,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Chip,
+  Icon,
+  LinearProgress,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  Stack,
+  SxProps,
+  Theme,
+  alpha,
+  styled,
+  useTheme,
+} from "@mui/material";
 import Pagination from "@mui/material/Pagination";
 import PaginationItem from "@mui/material/PaginationItem";
 import Typography from "@mui/material/Typography";
 import { unstable_useForkRef as useForkRef } from "@mui/utils";
-import
-  {
-    DataGrid,
-    GridColDef,
-    GridColumnHeaders,
-    GridRow,
-    GridToolbarColumnsButton,
-    GridToolbarContainer,
-    GridToolbarDensitySelector,
-    GridToolbarFilterButton,
-    GridToolbarQuickFilter,
-    gridClasses,
-    gridPageCountSelector,
-    gridPageSelector,
-    heIL,
-    useGridApiContext,
-    useGridSelector,
-  } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  GridColDef,
+  GridColumnHeaders,
+  GridRow,
+  GridToolbarColumnsButton,
+  GridToolbarContainer,
+  GridToolbarDensitySelector,
+  GridToolbarFilterButton,
+  GridToolbarQuickFilter,
+  gridClasses,
+  gridPageCountSelector,
+  gridPageSelector,
+  heIL,
+  useGridApiContext,
+  useGridSelector,
+} from "@mui/x-data-grid";
 import * as React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -32,6 +49,7 @@ import { getFilteredJobs } from "../../../Firebase/FirebaseFunctions/Job";
 import DropMenu from "../DropMenu/DropMenu";
 import MyChip from "../ViewCandidatesPage/Components/MyChip/MyChip";
 import { MyButtonSx } from "./CandidateTableStyle";
+import EventIcon from "@mui/icons-material/Event";
 
 // -------------------Use Memorie for better performance----------------------------------------------------
 const TraceUpdates = React.forwardRef<any, any>((props, ref) => {
@@ -271,7 +289,7 @@ const columns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     sortable: true,
-    sortComparator: (v1, v2, params1, params2) =>
+    sortComparator: (_v1, _v2, params1, params2) =>
       params1.api
         .getCellValue(params1.id, "firstName")
         .localeCompare(params2.api.getCellValue(params2.id, "firstName")),
@@ -284,7 +302,7 @@ const columns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     sortable: true,
-    sortComparator: (v1, v2, params1, params2) =>
+    sortComparator: (_v1, _v2, params1, params2) =>
       params1.api
         .getCellValue(params1.id, "_lastName")
         .localeCompare(params2.api.getCellValue(params2.id, "_lastName")),
@@ -294,6 +312,8 @@ const columns: GridColDef[] = [
     field: "_jobNumbers",
     headerName: "מספר המשרה ",
     width: 150,
+    headerAlign: "center",
+    align: "center",
     sortable: false,
     renderCell: (params) => {
       const jobNumbers = params.value as number[];
@@ -318,7 +338,7 @@ const columns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     sortable: true,
-    sortComparator: (v1, v2, params1, params2) =>
+    sortComparator: (_v1, _v2, params1, params2) =>
       params1.api
         .getCellValue(params1.id, "_jobArea")
         .localeCompare(params2.api.getCellValue(params2.id, "_jobArea")),
@@ -331,18 +351,29 @@ const columns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     sortable: true,
-    sortComparator: (v1, v2, cellParams1, cellParams2) => {
+    sortComparator: (v1, v2, _cellParams1, _cellParams2) => {
       const date1 = new Date(v1);
       const date2 = new Date(v2);
       return date1.getTime() - date2.getTime();
     },
-    valueGetter: (params) => {
-      const submissionDate = new Date(params.row._applyDate);
-      return submissionDate.toLocaleDateString("he-IL", {
+    valueGetter: (params) => params.row._applyDate,
+    renderCell: (params) => {
+      const submissionDate = new Date(params.value);
+      const formattedDate = submissionDate.toLocaleDateString("he-IL", {
         day: "numeric",
         month: "numeric",
         year: "numeric",
       });
+      return (
+        <ListItem>
+          <ListItemAvatar>
+            <Avatar>
+              <EventIcon />
+            </Avatar>
+          </ListItemAvatar>
+          <ListItemText primary={formattedDate} />
+        </ListItem>
+      );
     },
   },
   {
@@ -384,9 +415,9 @@ const CvButton = ({ candidate }) => {
   return (
     <Box sx={{ display: "flex", justifyContent: "space-between" }}>
       <Button
-        sx={{ color: "white", backgroundColor: "#3333ff" }}
+        sx={{ color: "white", backgroundColor: "#448aff" }}
         variant="contained"
-        startIcon={<PictureAsPdfSharp />}
+        startIcon={<Description />}
         onClick={handleCvClick}
         disabled={loading}
       >
@@ -492,7 +523,7 @@ const CustomPaginationAndFooter = () => {
           count={pageCount}
           // @ts-expect-error
           renderItem={(props2) => <PaginationItem {...props2} disableRipple />}
-          onChange={(event: React.ChangeEvent<unknown>, value: number) =>
+          onChange={(_event: React.ChangeEvent<unknown>, value: number) =>
             apiRef.current.setPage(value - 1)
           }
         />
@@ -558,6 +589,7 @@ export default function CandidateTable() {
 
         const lastJobStatus = jobStatuses[0];
         const jobNumber = lastJobStatus._jobNumber;
+        const applyDate = lastJobStatus._applyDate;
 
         // Find the job associated with the last job status.
         const associatedJob = jobs.find((job) => job._jobNumber === jobNumber);
@@ -567,15 +599,24 @@ export default function CandidateTable() {
           return null;
         }
 
-        return {
-          ...candidate,
-          _jobNumber: jobNumber,
-          _status: lastJobStatus._status,
-          _applyDate: lastJobStatus._applyDate,
-          _region: associatedJob._region,
-          _jobNumbers: jobStatuses.map((status) => status._jobNumber),
-          getCvUrl: candidate.getCvUrl,
-        };
+        // Check if the apply date belongs to the specific candidate and the specific job
+        if (
+          lastJobStatus._applyDate &&
+          lastJobStatus._candidateId === candidate._id &&
+          lastJobStatus._jobNumber === jobNumber
+        ) {
+          return {
+            ...candidate,
+            _jobNumber: jobNumber,
+            _status: lastJobStatus._status,
+            _applyDate: lastJobStatus._applyDate,
+            _region: associatedJob._region,
+            _jobNumbers: jobStatuses.map((status) => status._jobNumber),
+            getCvUrl: candidate.getCvUrl,
+          };
+        }
+
+        return null;
       })
       .filter((row) => row !== null) as CombinedCandidate[]; // Use type assertion to assign the correct type
 
