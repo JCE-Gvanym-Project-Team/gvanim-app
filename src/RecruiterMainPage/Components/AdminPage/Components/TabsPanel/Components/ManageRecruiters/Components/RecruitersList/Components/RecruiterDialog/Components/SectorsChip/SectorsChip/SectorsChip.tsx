@@ -1,16 +1,9 @@
-import * as React from 'react';
-import { Theme, useTheme } from '@mui/material/styles';
+import { Checkbox, ListItemText, OutlinedInput } from '@mui/material';
 import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
+import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { Checkbox, FormLabel, Input, ListItemText, OutlinedInput, Stack, TextField } from '@mui/material';
-import { MyPaperSx } from './SectorsChipStyle';
-import SelectInput from '@mui/material/Select/SelectInput';
-import { getAllSectors } from '../../../../../../../../../../../../../../Firebase/FirebaseFunctions/Sector';
-import { Dispatch, SetStateAction } from 'react';
-import { sleep } from '../../../../../../../../../../../../../../Firebase/FirebaseFunctions/test';
+import * as React from 'react';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
