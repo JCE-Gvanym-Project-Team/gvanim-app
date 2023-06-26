@@ -8,7 +8,6 @@ import { Dialog, DialogActions, DialogContent, DialogTitle, OutlinedInput } from
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Grid from '@mui/material/Grid';
 import { getConnectedUser, sendResetMail } from '../../../../../../../Firebase/FirebaseFunctions/Authentication';
-import { main } from '../../../../../../../Firebase/FirebaseFunctions/test';
 
 const ITEM_HEIGHT = 38;
 const ITEM_PADDING_TOP = 8;

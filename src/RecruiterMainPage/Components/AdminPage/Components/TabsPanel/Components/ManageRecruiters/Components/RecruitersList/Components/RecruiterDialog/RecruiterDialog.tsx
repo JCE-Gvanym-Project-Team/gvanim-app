@@ -1,21 +1,19 @@
-import * as React from 'react';
-import Dialog from '@mui/material/Dialog';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
-import Slide from '@mui/material/Slide';
-import { TransitionProps } from '@mui/material/transitions';
-import { Alert, Box, Button, Chip, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, Snackbar, Stack, TextField, Typography } from '@mui/material';
 import { EditNote, GroupAdd } from '@mui/icons-material';
-import { MyFieldsSx } from './RecruiterDialogStyle';
+import CloseIcon from '@mui/icons-material/Close';
+import { Alert, Box, Button, Chip, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, Snackbar, Stack, TextField, Typography } from '@mui/material';
+import AppBar from '@mui/material/AppBar';
+import Dialog from '@mui/material/Dialog';
+import IconButton from '@mui/material/IconButton';
+import Slide from '@mui/material/Slide';
+import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
-import RemoveConfirmPopup from './Components/RemoveConfirmPopup/RemoveConfirmPopup';
+import { TransitionProps } from '@mui/material/transitions';
+import * as React from 'react';
 import { Recruiter, getRecruitersFromDatabase } from '../../../../../../../../../../../Firebase/FirebaseFunctions/Recruiter';
+import { Sector, getAllSectors } from '../../../../../../../../../../../Firebase/FirebaseFunctions/Sector';
+import RemoveConfirmPopup from './Components/RemoveConfirmPopup/RemoveConfirmPopup';
 import SectorsChip from './Components/SectorsChip/SectorsChip/SectorsChip';
-import { getAllSectors } from '../../../../../../../../../../../Firebase/FirebaseFunctions/Sector';
-import { Sector } from '../../../../../../../../../../../Firebase/FirebaseFunctions/Sector'
-import { main, sleep } from '../../../../../../../../../../../Firebase/FirebaseFunctions/test';
+import { MyFieldsSx } from './RecruiterDialogStyle';
 
 
 
@@ -27,7 +25,7 @@ const Transition = React.forwardRef(function Transition(
 ) {
 	return <Slide direction="up" ref={ref} {...props} />;
 });
-
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 export default function RecruiterDialog(props: { recruiterRow: Recruiter, recruiters: any, setRecruiters: any, setSnackbar: any, isEdit: boolean }): JSX.Element {
 	const { recruiterRow, recruiters, setRecruiters, setSnackbar, isEdit } = props;
 	const [recruiter, setRecruiter] = React.useState<Recruiter>();
