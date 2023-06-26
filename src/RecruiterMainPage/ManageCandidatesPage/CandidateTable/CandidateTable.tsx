@@ -1,12 +1,9 @@
-import { Description, PictureAsPdfSharp } from "@mui/icons-material";
+import { Description } from "@mui/icons-material";
 import {
   Avatar,
   Box,
   Button,
-  Card,
-  CardContent,
   Chip,
-  Icon,
   LinearProgress,
   ListItem,
   ListItemAvatar,
@@ -589,7 +586,6 @@ export default function CandidateTable() {
 
         const lastJobStatus = jobStatuses[0];
         const jobNumber = lastJobStatus._jobNumber;
-        const applyDate = lastJobStatus._applyDate;
 
         // Find the job associated with the last job status.
         const associatedJob = jobs.find((job) => job._jobNumber === jobNumber);
@@ -617,10 +613,13 @@ export default function CandidateTable() {
         }
 
         return null;
-      })
-      .filter((row) => row !== null) as CombinedCandidate[]; // Use type assertion to assign the correct type
+      }) as (CombinedCandidate | null)[];
 
-    setRows(combinedRows);
+    const filteredRows = combinedRows.filter(
+      (row) => row !== null
+    ) as CombinedCandidate[];
+
+    setRows(filteredRows);
 
     setDataLoading(false);
   };
