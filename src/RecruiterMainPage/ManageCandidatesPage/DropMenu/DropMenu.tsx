@@ -3,13 +3,7 @@ import MenuItem, { menuItemClasses } from "@mui/base/MenuItem";
 import Popper from "@mui/base/Popper";
 import { ListActionTypes } from "@mui/base/useList";
 import { Assignment, Edit, MoreVert, Visibility } from "@mui/icons-material";
-import {
-  Box,
-  Divider,
-  IconButton,
-  ListItemIcon,
-  Typography,
-} from "@mui/material";
+import { Box, IconButton, ListItemIcon, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
@@ -82,14 +76,6 @@ export default function DropMenu(props: { CandidateId: any }) {
         });
       }
     }
-  };
-
-  const createHandleMenuClick = (menuItem: string) => {
-    return () => {
-      console.log(`Clicked on ${menuItem}`);
-      setOpen(false);
-      buttonElement?.focus();
-    };
   };
 
   return (
