@@ -254,10 +254,10 @@ function compareByViews(a: Job, b: Job): number {
  * @return {number} - positive if a>b negative if b>a else 0
  */
 function compareByCreationDate(a: Job, b: Job): number {
-  if (b._creationDate > a._creationDate) {
+  if (new Date(b._creationDate) > new Date(a._creationDate)) {
     return 1;
   }
-  if (b._creationDate < a._creationDate) {
+  if (new Date(b._creationDate) < new Date(a._creationDate)) {
     return -1;
   }
   return 0;
@@ -598,10 +598,10 @@ function compareByMatchingRate(
 */
 function compareByApplyDate(
   a: CandidateJobStatus, b: CandidateJobStatus): number {
-  if (a._applyDate < b._applyDate) {
+  if (new Date(a._applyDate) < new Date(b._applyDate)) {
     return 1;
   }
-  if (a._applyDate > b._applyDate) {
+  if (new Date(a._applyDate) > new Date(b._applyDate)) {
     return -1;
   }
   return 0;
@@ -614,10 +614,10 @@ function compareByApplyDate(
 */
 function compareByLastUpdate(
   a: CandidateJobStatus, b: CandidateJobStatus): number {
-  if (a._lastUpdate < b._lastUpdate) {
+  if (new Date(a._lastUpdate) < new Date(b._lastUpdate)) {
     return 1;
   }
-  if (a._lastUpdate > b._lastUpdate) {
+  if (new Date(a._lastUpdate) > new Date(b._lastUpdate)) {
     return -1;
   }
   return 0;
@@ -630,10 +630,10 @@ function compareByLastUpdate(
 */
 function compareByInterviewDate(
   a: CandidateJobStatus, b: CandidateJobStatus): number {
-  if (a._interviewDate < b._interviewDate) {
+  if (new Date(a._interviewDate) < new Date(b._interviewDate)) {
     return 1;
   }
-  if (a._interviewDate > b._interviewDate) {
+  if (new Date(a._interviewDate) > new Date(b._interviewDate)) {
     return -1;
   }
   return 0;

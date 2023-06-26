@@ -21,7 +21,7 @@ export class Job {
     public _highPriority: boolean;
     public _viewsPerPlatform: {[key :string]: number};
     public _applyPerPlatform: {[key :string]: number};
-    public _creationDate: Date;
+    public _creationDate: string;
     public _startOn: string;
 
     constructor(
@@ -53,9 +53,9 @@ export class Job {
         this._applyPerPlatform = applyPerPlatform;
         const defaultDate = new Date(0, 0, 0);
         if (creationDate === defaultDate)
-            this._creationDate = new Date();
+            this._creationDate = (new Date()).toString();
         else
-            this._creationDate = creationDate;
+            this._creationDate = creationDate.toString();
         this._jobNumber = jobNumber;
         this._startOn = startOn;
     }

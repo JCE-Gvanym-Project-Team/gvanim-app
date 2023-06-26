@@ -24,9 +24,9 @@ export class CandidateJobStatus {
     public _status: string;
     public _about: string;
     public _matchingRate: number;
-    public _applyDate: Date;
-    public _lastUpdate: Date;
-    public _interviewDate: Date;
+    public _applyDate: string;
+    public _lastUpdate: string;
+    public _interviewDate: string;
     public _interviewsSummery: Array<string>;
     public _recomendations: Array<Recomendation>;
     public _rejectCause: string;
@@ -47,9 +47,9 @@ export class CandidateJobStatus {
         this._candidateId = candidateId;
         this._status = status;
         this._matchingRate = matchingRate;
-        this._applyDate = applyDate;
-        this._lastUpdate = lastUpdate;
-        this._interviewDate = interviewDate;
+        this._applyDate = applyDate.toString();
+        this._lastUpdate = lastUpdate.toString();
+        this._interviewDate = interviewDate.toString();
         this._interviewsSummery = interviewsSummery;
         this._about = about;
         this._recomendations = recomendations;
@@ -93,7 +93,7 @@ export class CandidateJobStatus {
 
     public async updateInterviewDate(interviewDate: Date) {
         if (await this.exists()) {
-            this._interviewDate = interviewDate;
+            this._interviewDate = interviewDate.toString();
             replaceData((await this.getPath()), this);
              return 0;
         }
@@ -177,11 +177,11 @@ export class CandidateJobStatus {
      * @param {string} [candidateId=this._candidateId] - The new candidate ID to set, dont use this paarmeter.
      * @returns None
      */
-    public async edit(matchingRate: number = this._matchingRate, about: string = this._about, interviewDate: Date = this._interviewDate, rejectCause: string = this._rejectCause) {
+    public async edit(matchingRate: number = this._matchingRate, about: string = this._about, interviewDate: Date = new Date(this._interviewDate), rejectCause: string = this._rejectCause) {
         if(!(await this.exists()))
             return -1;
         this._matchingRate = matchingRate;
-        this._interviewDate = interviewDate;
+        this._interviewDate = interviewDate.toString();
         this._about = about;
         this._rejectCause = rejectCause;
         replaceData((await this.getPath()), this);
@@ -250,11 +250,13 @@ export class CandidateJobStatus {
      * @param {string} newStatus - The new status to update the candidate job application to.
      * @param {Date} [interviewDate=this._interviewDate] - The interview date for the candidate job application leave empty if the new satatus not require interview.
      */
-    public async updateStatus(newStatus: string, interviewDate: Date = this._interviewDate): Promise<number> {
+    public async updateStatus(newStatus: string, interviewDate: Date = new Date(this._interviewDate)): Promise<number> {
         if (!(await this.exists())) {
             return -1;
         }
         this._status = newStatus;
+        this._interviewDate = interviewDate.toString();
+        this._lastUpdate = (new Date()).toString();
         replaceData((await this.getPath()), this);
             return 0;
     }
