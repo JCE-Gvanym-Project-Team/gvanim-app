@@ -1,5 +1,5 @@
 import { realtimeDB } from "../FirebaseConfig/firebase";
-import { CandidateJobStatus, getFilteredCandidateJobStatuses } from "./CandidateJobStatus";
+import { CandidateJobStatus, getFilteredCandidateJobStatuses, allStatus } from "./CandidateJobStatus";
 import { appendToDatabase, getFirebaseIdsAtPath, removeObjectAtPath, replaceData } from "./DBfuncs";
 import { Job, getFilteredJobs } from "./Job";
 import { deleteFile, fileExists, getDownloadUrlFromFirestorePath, getFileExtensionsInFolder, uploadFileToFirestore } from "./firestoreFunc";
@@ -311,4 +311,14 @@ export async function getFilteredCandidates(attributes: string[] = [], values: s
                 reject(error);
             });
     });
+}
+export async function getWaitingCandidate() {
+    let jobStatus: CandidateJobStatus[] = [];
+    for( let i = 0; i<allStatus.length; i++)
+        if(i !== 5 && i !== 8 && i !== 7){
+            let cur = await getFilteredCandidateJobStatuses(['status'],[allStatus[i]]);
+            cur.forEach(element => jobStatus.push(element));
+        }
+    return jobStatus;
+    
 }
