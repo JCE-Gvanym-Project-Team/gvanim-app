@@ -1,41 +1,44 @@
-import { Description } from "@mui/icons-material";
-import {
-  Avatar,
-  Box,
-  Button,
-  Chip,
-  LinearProgress,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
-  Stack,
-  SxProps,
-  Theme,
-  alpha,
-  styled,
-  useTheme,
-} from "@mui/material";
+import { Description, Mail } from "@mui/icons-material";
+import
+  {
+    Avatar,
+    Box,
+    Button,
+    Chip,
+    LinearProgress,
+    ListItem,
+    ListItemAvatar,
+    ListItemText,
+    Rating,
+    Stack,
+    SxProps,
+    Theme,
+    alpha,
+    styled,
+    useTheme,
+  } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
 import PaginationItem from "@mui/material/PaginationItem";
 import Typography from "@mui/material/Typography";
 import { unstable_useForkRef as useForkRef } from "@mui/utils";
-import {
-  DataGrid,
-  GridColDef,
-  GridColumnHeaders,
-  GridRow,
-  GridToolbarColumnsButton,
-  GridToolbarContainer,
-  GridToolbarDensitySelector,
-  GridToolbarFilterButton,
-  GridToolbarQuickFilter,
-  gridClasses,
-  gridPageCountSelector,
-  gridPageSelector,
-  heIL,
-  useGridApiContext,
-  useGridSelector,
-} from "@mui/x-data-grid";
+import
+  {
+    DataGrid,
+    GridColDef,
+    GridColumnHeaders,
+    GridRow,
+    GridToolbarColumnsButton,
+    GridToolbarContainer,
+    GridToolbarDensitySelector,
+    GridToolbarFilterButton,
+    GridToolbarQuickFilter,
+    gridClasses,
+    gridPageCountSelector,
+    gridPageSelector,
+    heIL,
+    useGridApiContext,
+    useGridSelector,
+  } from "@mui/x-data-grid";
 import * as React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -49,21 +52,25 @@ import { MyButtonSx } from "./CandidateTableStyle";
 import EventIcon from "@mui/icons-material/Event";
 
 // -------------------Use Memorie for better performance----------------------------------------------------
-const TraceUpdates = React.forwardRef<any, any>((props, ref) => {
+const TraceUpdates = React.forwardRef<any, any>((props, ref) =>
+{
   const { Component, ...other } = props;
   const rootRef = React.useRef<HTMLElement>();
   const handleRef = useForkRef(rootRef, ref);
 
-  React.useEffect(() => {
+  React.useEffect(() =>
+  {
     const root = rootRef.current;
     root!.classList.add("updating");
     root!.classList.add("updated");
 
-    const timer = setTimeout(() => {
+    const timer = setTimeout(() =>
+    {
       root!.classList.remove("updating");
     }, 360);
 
-    return () => {
+    return () =>
+    {
       clearTimeout(timer);
     };
   });
@@ -71,11 +78,13 @@ const TraceUpdates = React.forwardRef<any, any>((props, ref) => {
   return <Component ref={handleRef} {...other} />;
 });
 
-const RowWithTracer = React.forwardRef((props, ref) => {
+const RowWithTracer = React.forwardRef((props, ref) =>
+{
   return <TraceUpdates ref={ref} Component={GridRow} {...props} />;
 });
 
-const ColumnHeadersWithTracer = React.forwardRef((props, ref) => {
+const ColumnHeadersWithTracer = React.forwardRef((props, ref) =>
+{
   return <TraceUpdates ref={ref} Component={GridColumnHeaders} {...props} />;
 });
 
@@ -124,30 +133,25 @@ const MyDataGrid = (theme: Theme): SxProps => ({
   letterSpacing: "normal",
   "& .MuiDataGrid-columnsContainer": {
     backgroundColor: theme.palette.mode === "light" ? "#fafafa" : "#1d1d1d",
-    borderBottom: `1px solid ${
-      theme.palette.mode === "light" ? "#f0f0f0" : "#303030"
-    }`,
+    borderBottom: `1px solid ${theme.palette.mode === "light" ? "#f0f0f0" : "#303030"
+      }`,
   },
   "& .MuiDataGrid-iconSeparator": {
     display: "none",
   },
   "& .MuiDataGrid-columnHeader": {
-    borderBottom: `1px solid ${
-      theme.palette.mode === "light" ? "#f0f0f0" : "#303030"
-    }`,
+    borderBottom: `1px solid ${theme.palette.mode === "light" ? "#f0f0f0" : "#303030"
+      }`,
   },
   "& .MuiDataGrid-columnHeader, .MuiDataGrid-cell": {
-    borderRight: `1px solid ${
-      theme.palette.mode === "light" ? "#f0f0f0" : "#303030"
-    }`,
-    borderBottom: `1px solid ${
-      theme.palette.mode === "light" ? "#f0f0f0" : "#303030"
-    }`,
+    borderRight: `1px solid ${theme.palette.mode === "light" ? "#f0f0f0" : "#303030"
+      }`,
+    borderBottom: `1px solid ${theme.palette.mode === "light" ? "#f0f0f0" : "#303030"
+      }`,
   },
   "& .MuiDataGrid-columnsContainer, .MuiDataGrid-cell": {
-    borderBottom: `1px solid ${
-      theme.palette.mode === "light" ? "#f0f0f0" : "#303030"
-    }`,
+    borderBottom: `1px solid ${theme.palette.mode === "light" ? "#f0f0f0" : "#303030"
+      }`,
   },
   "& .MuiDataGrid-cell": {
     color:
@@ -175,8 +179,8 @@ const MyDataGrid = (theme: Theme): SxProps => ({
         backgroundColor: alpha(
           theme.palette.primary.main,
           ODD_OPACITY +
-            theme.palette.action.selectedOpacity +
-            theme.palette.action.hoverOpacity
+          theme.palette.action.selectedOpacity +
+          theme.palette.action.hoverOpacity
         ),
         // Reset on touch devices, it doesn't add specificity
         "@media (hover: none)": {
@@ -214,7 +218,8 @@ const StyledGridOverlay = styled("div")(({ theme }) => ({
   },
 }));
 
-function CustomNoRowsOverlay() {
+function CustomNoRowsOverlay()
+{
   return (
     <StyledGridOverlay>
       <svg
@@ -275,7 +280,8 @@ const columns: GridColDef[] = [
     editable: false,
     align: "center",
 
-    renderCell: (candidate) => {
+    renderCell: (candidate) =>
+    {
       return <DropMenu CandidateId={candidate?.row} />;
     },
   },
@@ -307,16 +313,18 @@ const columns: GridColDef[] = [
   },
   {
     field: "_jobNumbers",
-    headerName: "מספר המשרה ",
+    headerName: "משרות",
     width: 150,
     headerAlign: "center",
     align: "center",
     sortable: false,
-    renderCell: (params) => {
+    renderCell: (params) =>
+    {
       const jobNumbers = params.value as number[];
 
       let displayJobNumbers = jobNumbers;
-      if (jobNumbers.length > 2) {
+      if (jobNumbers.length > 2)
+      {
         displayJobNumbers = jobNumbers.slice(0, 2);
         displayJobNumbers.push(-1); // Add a placeholder number to indicate ellipsis
       }
@@ -330,7 +338,7 @@ const columns: GridColDef[] = [
   },
   {
     field: "_jobArea",
-    headerName: "אזור",
+    headerName: "טלפון",
     width: 150,
     headerAlign: "center",
     align: "center",
@@ -339,51 +347,45 @@ const columns: GridColDef[] = [
       params1.api
         .getCellValue(params1.id, "_jobArea")
         .localeCompare(params2.api.getCellValue(params2.id, "_jobArea")),
-    valueGetter: (params) => params.row._region,
+    valueGetter: (params) => params.row._phone,
   },
   {
     field: "_applyDate",
-    headerName: "תאריך הגשת מועמדות",
-    width: 200,
+    headerName: "אימייל",
     headerAlign: "center",
+    width: 400,
+    resizable: true,
     align: "center",
     sortable: true,
-    sortComparator: (v1, v2, _cellParams1, _cellParams2) => {
-      const date1 = new Date(v1);
-      const date2 = new Date(v2);
-      return date1.getTime() - date2.getTime();
+    sortComparator: (v1, v2, _cellParams1, _cellParams2) =>
+    {
+      return v1 - v2;
     },
-    valueGetter: (params) => params.row._applyDate,
-    renderCell: (params) => {
-      const submissionDate = new Date(params.value);
-      const formattedDate = submissionDate.toLocaleDateString("he-IL", {
-        day: "numeric",
-        month: "numeric",
-        year: "numeric",
-      });
+    valueGetter: (params) => params.row._eMail,
+    renderCell: (params) =>
+    {
       return (
         <ListItem>
           <ListItemAvatar>
             <Avatar>
-              <EventIcon />
+              <Mail />
             </Avatar>
           </ListItemAvatar>
-          <ListItemText primary={formattedDate} />
+          <ListItemText primary={params.row._eMail} />
         </ListItem>
       );
     },
   },
   {
     field: "status",
-    headerName: "סטטוס המועמד",
+    headerName: "דרגת התאמה כללית",
     width: 150,
     headerAlign: "center",
     align: "center",
     sortable: true,
-    renderCell: (params) => {
-      const jobId = params.row?._jobNumber.toString();
-      const candidate = params.row;
-      return <MyChip jobId={jobId} candidate={candidate} purpose="status" />;
+    renderCell: (params) =>
+    {
+      return <Rating name="read-only" value={params.row._generalRating} readOnly />
     },
   },
   {
@@ -393,16 +395,19 @@ const columns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     sortable: false,
-    renderCell: (params) => {
+    renderCell: (params) =>
+    {
       return <CvButton candidate={params.row} />;
     },
   },
 ];
 
-const CvButton = ({ candidate }) => {
+const CvButton = ({ candidate }) =>
+{
   const [loading, setLoading] = useState(false);
 
-  const handleCvClick = async () => {
+  const handleCvClick = async () =>
+  {
     setLoading(true);
     const cvLink = await candidate.getCvUrl();
     setLoading(false);
@@ -424,10 +429,12 @@ const CvButton = ({ candidate }) => {
   );
 };
 
-const GridCustomToolbar = () => {
+const GridCustomToolbar = () =>
+{
   const navigate = useNavigate();
 
-  const handleCreateCandidate = () => {
+  const handleCreateCandidate = () =>
+  {
     navigate("/management/createCandidate", { state: null });
   };
 
@@ -441,10 +448,10 @@ const GridCustomToolbar = () => {
             sx={{
               width: "100%",
               "& .muirtl-2ehmn7-MuiInputBase-root-MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
-                {
-                  borderRadius: "0.75rem",
-                  border: "1px solid rgba(0, 0, 0, 0.23)",
-                },
+              {
+                borderRadius: "0.75rem",
+                border: "1px solid rgba(0, 0, 0, 0.23)",
+              },
               "& .muirtl-ptiqhd-MuiSvgIcon-root": {
                 color: "rgba(0, 0, 0, 0.23)",
               },
@@ -491,7 +498,8 @@ const GridCustomToolbar = () => {
   );
 };
 
-const CustomPaginationAndFooter = () => {
+const CustomPaginationAndFooter = () =>
+{
   const apiRef = useGridApiContext();
   const page = useGridSelector(apiRef, gridPageSelector);
   const pageCount = useGridSelector(apiRef, gridPageCountSelector);
@@ -537,7 +545,8 @@ const CustomPaginationAndFooter = () => {
   );
 };
 
-export default function CandidateTable() {
+export default function CandidateTable()
+{
   const [pageloading, setPageLoading] = React.useState(true);
   const [dataloading, setDataLoading] = React.useState(true);
   type CombinedCandidate = {
@@ -556,7 +565,8 @@ export default function CandidateTable() {
   const [rows, setRows] = React.useState<CombinedCandidate[]>([]);
   const navigate = useNavigate();
 
-  const fetchAllData = async () => {
+  const fetchAllData = async () =>
+  {
     setDataLoading(true);
 
     // Fetch all necessary data.
@@ -567,13 +577,15 @@ export default function CandidateTable() {
     // Combine data into a new array for the rows.
     const combinedRows = candidates
       .filter((candidate) => candidate._firstName && candidate._lastName)
-      .map((candidate) => {
+      .map((candidate) =>
+      {
         // Find the job statuses for the current candidate.
         const jobStatuses = candidateJobStatuses.filter(
           (status) => status._candidateId === candidate._id
         );
 
-        if (jobStatuses.length === 0) {
+        if (jobStatuses.length === 0)
+        {
           // Candidate has no job statuses
           return null;
         }
@@ -590,7 +602,8 @@ export default function CandidateTable() {
         // Find the job associated with the last job status.
         const associatedJob = jobs.find((job) => job._jobNumber === jobNumber);
 
-        if (!associatedJob) {
+        if (!associatedJob)
+        {
           // Last job status does not have a corresponding job
           return null;
         }
@@ -600,7 +613,8 @@ export default function CandidateTable() {
           lastJobStatus._applyDate &&
           lastJobStatus._candidateId === candidate._id &&
           lastJobStatus._jobNumber === jobNumber
-        ) {
+        )
+        {
           return {
             ...candidate,
             _jobNumber: jobNumber,
@@ -624,7 +638,8 @@ export default function CandidateTable() {
     setDataLoading(false);
   };
 
-  React.useEffect(() => {
+  React.useEffect(() =>
+  {
     setPageLoading(false);
     fetchAllData();
   }, []);
