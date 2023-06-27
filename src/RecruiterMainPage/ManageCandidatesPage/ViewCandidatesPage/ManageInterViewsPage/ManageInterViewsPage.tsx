@@ -318,7 +318,7 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 											סטטוס השתנה ב:
 										</Typography>
 										<Typography sx={scheduleInterviewText}>
-											{candidateJobStatus?._lastUpdate.toLocaleString()}
+											{(new Date(candidateJobStatus?._lastUpdate!)).toLocaleString()}
 										</Typography>
 									</Box>
 								</Box>
@@ -376,7 +376,7 @@ export default function ManageInterviewsPage(props: { candidateId: string })
 									/>
 									{jobValue !== "" ?
 										<Typography sx={appliedDateTextSx}>
-											הגיש\ה ב: {candidateJobStatus?._applyDate.toLocaleDateString()}
+											הגיש\ה ב: {new Date(candidateJobStatus?._applyDate!).toLocaleDateString()}
 										</Typography> :
 										<></>
 									}
