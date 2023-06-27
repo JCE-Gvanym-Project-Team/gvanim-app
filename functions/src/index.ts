@@ -424,6 +424,56 @@ function compareByEmail(a: Candidate, b: Candidate): number {
 function compareByGeneralRating(a: Candidate, b: Candidate): number {
   return a._lastName.localeCompare(b._lastName);
 }
+export const getCandidatesByIdsFromCloud = functions
+  .region("europe-west1")
+  .https
+  .onRequest(async (request, response) => {
+    response.set("Access-Control-Allow-Origin", "*");
+    response.set("Access-Control-Allow-Methods", "GET, POST");
+    response.set("Access-Control-Allow-Headers", "Content-Type");
+    if (request.method === "OPTIONS") {
+      // Handle the preflight OPTIONS request
+      response.status(204).send("");
+      return;
+    }
+    try {
+      const {ids} = request.body;
+      const filteredCandidates =
+      await getCandidatesByIds(ids);
+      response.json(filteredCandidates);
+    } catch (error) {
+      console.error("Error executing getFilteredcandidates:", error);
+      response.status(500).send("error occurred while executing the function.");
+    }
+  });
+/**
+ * Filters the list of candidates based on the given attributes and values,
+ * and sorts the result
+ * @param {string[]} [ids=[]] -
+ * An array of attributes name to filter by.
+ * @return {Promise<Candidate[]>} -
+ * A promise that resolves to an array of Job objects that match the
+ * filter criteria and sorted by desired attribute.
+ */
+async function getCandidatesByIds(
+  ids: string)
+  : Promise<Candidate[]> {
+  const candidatesSnapshot =
+  await admin.database().ref("Candidates/").once("value");
+  const candsData = candidatesSnapshot.val();
+
+  const candidates: Candidate[] = Object.values(candsData).map((cand: any) => ({
+    _id: cand._id,
+    _firstName: cand._firstName,
+    _lastName: cand._lastName,
+    _phone: cand._phone,
+    _eMail: cand._eMail,
+    _generalRating: cand._generalRating,
+    _note: cand._note,
+  }));
+  return candidates.filter((cand) => ids.includes(cand._id));
+}
+
 // ====================== CandidatesJobStatus =============================== //
 export const getFilteredCandidatesJobStatusCloudFunction=
 functions
