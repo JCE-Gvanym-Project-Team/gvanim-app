@@ -8,10 +8,10 @@ export default function Navbar() {
     const [open, setOpen] = React.useState<boolean>(false);
     return (
         <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', top: 0 }}>
-            <Stack direction='row' justifyContent='space-between' sx={{ height: '85px', backgroundColor: '#FFFFFF', paddingLeft: 2, paddingRight: 4, borderTop: '5px solid #053B7A' }}>
+            <Stack direction='row' justifyContent='space-between' sx={{ height: '85px', backgroundColor: '#000000', paddingLeft: 2, paddingRight: 4, borderTop: '5px solid #053B7A' }}>
                 <Stack direction='row' id='desk' sx={{ mt: '5px', width: 'fit-content' }} spacing={{ xs: 5, sm: 5, md: 10 }} justifyContent='start' display={{ xs: 'none', sm: 'none', md: 'flex' }}>
-                    <Box>
-                        <img src={Logo} alt="Logo" style={{ height: '70px' }} />
+                    <Box sx={{backgroundColor: '#000000',}}>
+                        <img src={Logo} alt="Logo" style={{ height: '70px',backgroundColor: '#000000', }} />
                     </Box>
                     <Stack direction='column' justifyContent='center' display={{ xs: 'none', sm: 'none', md: 'flex' }}>
                         <Stack direction='row' spacing={4}>
@@ -165,7 +165,7 @@ export default function Navbar() {
                 </Stack>
             </Stack>
 
-            <Collapse in={open} sx={{display: {xs: 'flex', sm: 'flex', md: 'none'}}}>
+            <Collapse in={open} sx={{display: {xs: 'flex', sm: 'flex', md: 'none',}}}>
             
                 <Stack direction='column' justifyContent='center' divider={<Divider />} marginTop={4} paddingBottom={2} spacing={2} width='100%' height='fit-content'>
                     <Stack direction='row' justifyContent='center' width='100%'>

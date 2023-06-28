@@ -1,42 +1,41 @@
 import { experimentalStyled as styled, useTheme } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
-import { Box, Link, Stack, Typography } from '@mui/material';
+import { Box, Icon, Link, ListItemIcon, Stack, Typography } from '@mui/material';
 import { useNavigate } from "react-router-dom";
 import { ReactComponent as LocationSVG } from '../JobItem/Resources/icon-location1.svg';
 import { ReactComponent as ClockSVG } from '../JobItem/Resources/icon-clock1.svg';
-import { NavigateBefore } from '@mui/icons-material';
+import { NavigateBefore, Place, WatchLater } from '@mui/icons-material';
+import { colorTokens } from '../../../theme';
+import { color } from 'highcharts';
 
-
-
-
-
-const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-    ...theme.typography.body2,
-    // width: '521px', 
-    borderTop: '5px solid #053B7A',
-    borderRadius: '0px 0px 10px 10px',
-    background: '#FFFFFF 0% 0% no-repeat padding-box',
-    boxShadow: ' 0px 3px 10px #00000029',
-    textAlign: 'center',
-
-}));
 
 
 export default function JobItem(props: { job: any }) {
     const { job } = props;
 
     const navigate = useNavigate();
-    const theme = useTheme();
 
+    
     return (
         <Stack direction='row-reverse'>
-            <Item id='JobCard' sx={{ width: { xs: '100%', sm: '100%', md: '521px' } }}>
+            <Box borderTop={`5px solid`} id='JobCard' sx={{ 
+                width: { xs: '100%', sm: '100%', md: '521px' },
+                borderRadius: '0px 0px 10px 10px',
+                // boxShadow: ' 0px 3px 10px #FFFFFF', //dark #7c7c7c
+
+                boxShadow: '0px 3px 10px',
+                color: 'primary.myBoxShadow',
+             
+                borderColor: 'background.JobTitle2',
+                // borderTop: '5px solid #053B7A',
+                textAlign: 'center',
+                }}>
 
                 <Box sx={{
                     mt: { xs: '28px', sm: '28px', md: '48px' },
 
-                    background: '#053B7A 0% 0% no-repeat padding-box',
+                    // backgroundColor: '#9FC5E8',
+                    backgroundColor: 'background.JobTitle2',
                     direction: 'column',
                     paddingTop: 0.5,
                     paddingBottom: 0.5,
@@ -50,13 +49,11 @@ export default function JobItem(props: { job: any }) {
 
                 }}>
 
-                    <Typography sx={{
+                    <Typography variant='body1' sx={{
                         textAlign: 'left',
-                        fontFamily: "'Rubik'",
-                        fontWeight: 500,
-                        fontSize: '23px',
+                        fontWeight: 600,
                         letterSpacing: '0px',
-                        color: '#FFFFFF',
+                        color: 'primary.JobTitle2',
                         opacity: 1,
                         maxWidth: '80%',
                         ml: { xs: '20px', sm: '20px', md: '32px', lg: '39px' },
@@ -69,11 +66,11 @@ export default function JobItem(props: { job: any }) {
 
 
                 <Box sx={{ width: '100%', paddingLeft: { xs: 2.5, sm: 2.5, md: '26px' }, paddingRight: '26px', paddingTop: '10px', mt: 1 }}>
-                    <Typography sx={{
+                    <Typography variant='h5' display='block' sx={{
                         textAlign: 'left',
-                        font: 'normal normal normal 17px Rubik',
                         letterSpacing: '0px',
-                        color: '#767676',
+                        // color: 'secondary.descAndReqText',
+                        color: 'primary.myCardText',
                         opacity: 1,
                         ml: 0.25
                     }}
@@ -82,26 +79,27 @@ export default function JobItem(props: { job: any }) {
                     </Typography>
 
                     <Stack direction='row' spacing={1.5} justifyContent='start' sx={{ mt: 4 }}>
-                        <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                        {/* <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                             <LocationSVG style={{ width: '16px', height: '16px' }} />
+                        </Box> */}
+
+                
+                        <Box display='flex' flexDirection='column' justifyContent='center'>
+                        <Place fontSize='inherit' sx={{color:'secondary.jobDetails'}}/>
                         </Box>
 
                         <Stack direction='row' spacing={1} alignItems='center'>
-                            <Typography sx={{
-
+                            <Typography display='block' variant='caption' sx={{
                                 textAlign: 'left',
-                                fontFamily: 'Rubik',
-                                fontSize: '17px',
                                 letterSpacing: '0px',
-                                color: '#AC2F69',
+                                color: 'secondary.jobDetails',
                                 opacity: 1,
+
                             }}>מיקום:</Typography>
-                            <Typography sx={{
+                            <Typography display='block' variant='caption' sx={{
                                 textAlign: 'left',
-                                fontFamily: 'Rubik',
-                                fontSize: '17px',
                                 letterSpacing: '0px',
-                                color: '#767676',
+                                color: 'primary.myCardText',
                                 opacity: 1,
                             }}>
                                 {job?._region}
@@ -110,27 +108,27 @@ export default function JobItem(props: { job: any }) {
 
                     </Stack>
 
-                    <Stack direction='row' spacing={1.65} justifyContent='start' sx={{ mt: 1.5, ml: 0.14 }}>
-                        <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                    <Stack direction='row' spacing={1.5} justifyContent='start' sx={{ mt: 1.5 }}>
+                        {/* <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                             <ClockSVG style={{ width: '13px', height: '13px' }} />
-                        </Box>
+                        </Box> */}
 
+                        {/* WatchLater */}
+                        <Box display='flex' flexDirection='column' justifyContent='center'>
+                        <WatchLater fontSize='inherit' sx={{padding: 0.15, color:'secondary.jobDetails'}}/>
+                        </Box>
+                        {/* WatchLater */}
                         <Stack direction='row' spacing={1} alignItems='center'>
-                            <Typography sx={{
+                            <Typography display='block' variant='caption' sx={{
                                 textAlign: 'left',
-                                fontFamily: 'Rubik',
-                                fontSize: '17px',
                                 letterSpacing: '0px',
-                                color: '#AC2F69',
+                                color: 'secondary.jobDetails',
                                 opacity: 1,
                             }}>היקף משרה:</Typography>
-                            <Typography sx={{
-
+                            <Typography display='block' variant='caption' sx={{
                                 textAlign: 'left',
-                                fontFamily: 'Rubik',
-                                fontSize: '17px',
                                 letterSpacing: '0px',
-                                color: '#767676',
+                                color: 'primary.myCardText',
                                 opacity: 1,
                             }}>
 
@@ -150,44 +148,42 @@ export default function JobItem(props: { job: any }) {
                                 ":hover > #arrow": {
                                     transition: 'all .3s cubic-bezier(.34,1.61,.7,1.3)',
                                     transform: 'translateX(5px)',
-                                    color: '#72C3CE'
+                                    color: 'secondary.visitJobButton'
                                 },
                                 ":hover #element1": {
-                                    color: '#72C3CE',
+                                    color: 'secondary.visitJobButton',
                                 },
                                 ":hover #element2": {
-                                    backgroundColor: '#72C3CE',
+                                    backgroundColor: 'secondary.visitJobButton',
                                 },
                                 ":hover": {
-                                    color: '#72C3CE'
+                                    color: 'secondary.visitJobButton'
                                 },
                             }}
-                            >
+                        >
                             {/* to={`${job?._jobNumber}`} */}
                             <Box>
-                                <Typography id="element1" sx={{
-                                    color: '#5BA1AA',
-                                    font: 'normal normal normal 17px Rubik',
+                                <Typography display='block' variant='caption' id="element1" sx={{
+                                    textAlign: 'left',
+                                     color: 'primary.visitJobButton',
+                                         // #d9ddbd
+                                        //  color: '#d9ddbd', hover: '#e8ead7'
                                     opacity: 1,
+                                    textDecorationLine: 'underline',
                                     letterSpacing: '0px',
                                     mb: 0,
-                                    ':hover': { color: '#72C3CE' }
+                                    ':hover': { color: 'secondary.visitJobButton' }
                                 }}>
                                     צפייה במשרה והגשת מועמדות
                                 </Typography>
 
-                                <Box id="element2" sx={{
-                                    mt: 0,
-                                    background: '#5BA1AA 0% 0% no-repeat padding-box',
-                                    height: '1.5px',
-                                    borderRadius: '1px',
-                                }} />
                             </Box>
 
                             <NavigateBefore id="arrow" sx={{
-                                color: '#5BA1AA',
+                                color: 'primary.visitJobButton',
                                 fontSize: 21.5,
-                                alignSelf: 'center'
+                                alignSelf: 'center',
+                                mt: 0.3
 
                             }} />
                         </Link>
@@ -198,19 +194,16 @@ export default function JobItem(props: { job: any }) {
                 </Box>
 
                 <Stack direction='row' justifyContent={{ xs: 'start', sm: 'start', md: 'end' }} spacing={1} sx={{ mt: { xs: 5, sm: 5, md: 2 }, paddingBottom: 2, paddingRight: 2.5, paddingLeft: 2.5, paddingTop: 2.5 }}>
-                    <Typography sx={{
+                    <Typography display='block' variant='caption' sx={{
                         textAlign: 'left',
-                        font: 'normal normal normal 17px Rubik',
                         letterSpacing: '0px',
-                        color: '#AC2F69',
+                        color: 'secondary.jobDetails',
                         opacity: 1,
                     }}>משרה מספר:</Typography>
-                    <Typography sx={{
-
+                    <Typography display='block' variant='caption' sx={{
                         textAlign: 'left',
-                        font: 'normal normal normal 17px Rubik',
                         letterSpacing: '0px',
-                        color: '#767676',
+                        color: 'primary.myCardText',
                         opacity: 1,
                     }}>
 
@@ -218,7 +211,7 @@ export default function JobItem(props: { job: any }) {
                     </Typography>
                 </Stack>
 
-            </Item>
+            </Box>
         </Stack>
 
 
