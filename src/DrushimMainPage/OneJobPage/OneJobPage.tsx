@@ -280,14 +280,17 @@ export default function OneJobPage()
             ""
         );
         // add candidate, or get existing candidate
-        if (!await newCandidate.add())
+        if (await newCandidate.exists())
         {
             newCandidate = (await getFilteredCandidates(["eMail", "phone"], [candidateEmail, candidatePhone]))[0];
             newCandidateId = newCandidate._id;
+        } else
+        {
+            await newCandidate.add();
         }
 
         // apply 
-        if (!await newCandidate.apply(job?._jobNumber!, aboutText))
+        if ((await newCandidate.apply(job?._jobNumber!, aboutText)) == -1)
         {
             setLoading(false);
             setErrorDialogOpen(true);
