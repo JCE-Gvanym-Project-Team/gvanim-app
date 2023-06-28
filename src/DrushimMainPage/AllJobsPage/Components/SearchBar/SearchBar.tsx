@@ -1,6 +1,7 @@
 import InputBase from '@mui/material/InputBase';
 import { Box, Stack, useTheme } from '@mui/material';
 import { ReactComponent as SearchSVG } from './Resources/Icon feather-search.svg';
+import { SearchRounded } from '@mui/icons-material';
 
 export default function SearchBar(props: { text: string, setText: any }) {
   const { text, setText } = props;
@@ -16,13 +17,14 @@ export default function SearchBar(props: { text: string, setText: any }) {
 
 
   const theme = useTheme();
+  
 
   return (
     <Box
       component="form"
       sx={{
         display: 'flex', mb: 1, mt: 2,
-        
+
         // borderBottom: '2px solid #053B7A'
         // border: theme.palette.mode === 'dark' ? '1px solid grey' : '1px solid rgba(0, 0, 0, 0.095)'
       }}
@@ -31,20 +33,22 @@ export default function SearchBar(props: { text: string, setText: any }) {
         <Stack direction='row'>
 
           <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-            <SearchSVG style={{ width: '21px', height: '21px' }} />
+            <SearchRounded fontSize='small' sx={{ color: 'background.JobTitle2' }} />
           </Box>
 
 
           <InputBase
+          
             sx={{
-              flex: 1, ml: 2, font: 'normal normal normal 19px Rubik', color: '#053B7A',
+              fontSize: 'large',
+              flex: 1, ml: 1.5, color: 'background.JobTitle2',
               opacity: 1, letterSpacing: '0px',
               input: {
-                color: '#053B7A',
-                "&::placeholder": {  
-                   opacity: 1,
+                color: 'background.JobTitle2',
+                "&::placeholder": {
+                  opacity: 1,
                 },
-             },
+              },
             }}
             placeholder='כתבו כאן...'
             inputProps={{ 'aria-label': 'search' }}
@@ -55,10 +59,11 @@ export default function SearchBar(props: { text: string, setText: any }) {
         </Stack >
         <Box sx={{
           mt: 0,
-          background: '#053B7A 0% 0% no-repeat padding-box',
+          backgroundColor: 'background.JobTitle2',
           height: '1.5px',
-          borderRadius: '3px',
+          borderRadius: 2,
           opacity: 1,
+          
         }} />
       </Box>
 

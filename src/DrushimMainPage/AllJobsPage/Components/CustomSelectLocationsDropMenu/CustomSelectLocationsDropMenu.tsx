@@ -1,7 +1,9 @@
 import { KeyboardArrowDown } from "@mui/icons-material";
-import { Box, LinearProgress, Stack } from "@mui/material";
-import { useEffect, useState, useRef } from "react";
+import { Box, LinearProgress, Stack
+ } from "@mui/material";
+import { useEffect, useState, useRef, useContext } from "react";
 import { default as ReactSelect, components, InputAction, PlaceholderProps, IndicatorSeparatorProps, DropdownIndicatorProps } from "react-select";
+
 
 
 export type Option = {
@@ -10,6 +12,8 @@ export type Option = {
 };
 
 const MultiSelect = (props: any) => {
+    
+    
     const [loading, setLoading] = useState(true);
 
     const [selectInput, setSelectInput] = useState<string>("");
@@ -40,7 +44,6 @@ const MultiSelect = (props: any) => {
 
                             key={props.value}
                             type="checkbox"
-                            style={{ color: 'green' }}
                             ref={(input) => {
                                 if (input) input.indeterminate = true;
                             }}
@@ -49,7 +52,6 @@ const MultiSelect = (props: any) => {
                         <input
                             key={props.value}
                             type="checkbox"
-                            style={{ color: 'green' }}
                             checked={props.isSelected || isAllSelected.current}
                             onChange={() => { }}
                         />
@@ -89,7 +91,11 @@ const MultiSelect = (props: any) => {
     ) => {
         return (
             <components.DropdownIndicator {...props}>
-                <KeyboardArrowDown fontSize='small' sx={{ color: '#053B7A' }} />
+                <KeyboardArrowDown fontSize='small' sx={{ 
+                     color: 'background.JobTitle2',
+                    // color: '#b2d0ec',
+                    '&:hover':{cursor: 'pointer'}
+                     }} />
             </components.DropdownIndicator>
         );
     };
@@ -147,27 +153,48 @@ const MultiSelect = (props: any) => {
             ]);
     };
 
-    const customStyles = {
+    const indicatorSeparatorStyle = {
+        alignSelf: 'stretch',
+        backgroundColor: '#424242',
+        marginBottom: 8,
+        marginTop: 8,
+        width: 1,
+      };
+      
+      const IndicatorSeparator = ({
+        innerProps,
+      }: IndicatorSeparatorProps<any, true>) => {
+        return <span style={indicatorSeparatorStyle} {...innerProps} />;
+      };
+
+      
+
+    const customStyles =  {
         control: (baseStyles: any) => ({
             ...baseStyles,
             border: 0,
-            backgroundColor: '#EDEDED',
+            boxShadow: 'none',
+            backgroundColor: '#2d2d2d',
         }),
 
         multiValueLabel: (def: any) => ({
             ...def,
-            // backgroundColor: "#053B7A",
+            backgroundColor: "#b2d0ec",
             // color: '#fff',
+            borderRadius: 0,
             fontSize: 'small',
-            padding: 1,
+         
         }),
         multiValueRemove: (def: any) => ({
             ...def,
-            backgroundColor: "unset",
+            backgroundColor: "#b2d0ec",
+            borderRadius: 0,
+            paddingLeft: 2,
+            '&:hover':{cursor: 'pointer', backgroundColor: '#b2d0ec'}
         }),
         valueContainer: (base: any) => ({
             ...base,
-            maxHeight: "65px",
+            minHeight: "38px",
             overflow: "auto",
         }),
         option: (styles: any, { isSelected, isFocused }: any) => {
@@ -179,19 +206,19 @@ const MultiSelect = (props: any) => {
                         : isFocused && !isSelected
                             ? styles.backgroundColor
                             : isFocused && isSelected
-                                ? "#DEEBFF"
-                                : null,
+                                ? "primary.JobTitle2"
+                                : null, // here
                 color: isSelected ? null : null,
 
             };
         },
         menu: (def: any) => ({ ...def, zIndex: 9999 }),
 
-        placeholder: (base) => ({
+        placeholder: (base: any) => ({
             ...base,
-            fontSize: '0.7em',
-            paddingLeft: 4,
-            color: '#053B7A',
+            fontSize: 'medium',
+            paddingLeft: 4,  
+            color: '#b2d0ec',
             fontWeight: 400,
         }),
     };
@@ -226,10 +253,13 @@ const MultiSelect = (props: any) => {
                         Input: Input,
                         ...props.components,
                         DropdownIndicator,
+                        IndicatorSeparator
                     }}
                     filterOption={customFilterOption}
                     menuPlacement={props.menuPlacement ?? "auto"}
+                    // borderColor: state.menuIsOpen ? 'grey' : 'red',
                     styles={customStyles}
+                    
                     isMulti
                     closeMenuOnSelect={false}
                     tabSelectsValue={false}
