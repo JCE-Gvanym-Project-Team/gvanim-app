@@ -1,117 +1,150 @@
-import * as React from 'react';
+import { ArticleOutlined } from "@mui/icons-material";
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { Box, Button, Container, FormControlLabel, MenuItem, Radio, RadioGroup, Select, SelectChangeEvent, Stack, Typography } from '@mui/material';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { Box, Typography, FormControlLabel, MenuItem, Radio, RadioGroup, Select, SelectChangeEvent, Stack, Container, Button } from '@mui/material';
-import { CandidateJobStatus, Job, generateJobNumber, getFilteredCandidateJobStatuses, getFilteredCandidates, getFilteredJobs, loginAdmin } from '../../../../Firebase/FirebaseFunctions/functionIndex';
-import { exportToExcel } from '../../../../Firebase/FirebaseFunctions/Reports/GlobalFunctions'
-import CandidatesByFilters from '../../../../Firebase/FirebaseFunctions/Reports/CandidatesFilters';
-import { MyReportStyle, formContainerStyles, radioStyle } from '../../ReportPageStyle';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MyPaperSx, BoxGradientSx } from '../../../ManageJobsPage/Components/NewJobPage/NewJobStyle';
-import { ArticleOutlined, Margin } from "@mui/icons-material";
+import CandidatesByFilters from '../../../../Firebase/FirebaseFunctions/Reports/CandidatesFilters';
+import { exportToExcel } from '../../../../Firebase/FirebaseFunctions/Reports/GlobalFunctions';
+import { getAllRoles, getAllSectors, getFilteredCandidateJobStatuses, loginAdmin } from '../../../../Firebase/FirebaseFunctions/functionIndex';
+import { BoxGradientSx, MyPaperSx } from '../../../ManageJobsPage/Components/NewJobPage/NewJobStyle';
 import { designReturnButton } from '../../../ManageJobsPage/ManageJobsPageStyle';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { MyReportStyle, radioStyle } from '../../ReportPageStyle';
 
+interface typeMyData {
+    id: number;
+    name: string;
+}
 
-
-export default function CandidateFiltersForm()
-{
-    const createReport = (status_ind, timeOnStatus_ind, sector_ind, role_ind, selectGarde, selectInterviewDate, startDate, endDate) =>
-    {
-        // checking if the user select all the buttons
-        const isDateSelected = startDate && endDate;
-
-        if (!status_ind || !timeOnStatus_ind || !sector_ind || !role_ind || !selectGarde || !isDateSelected)
-        {
-            // displaying an error message or indicating to the user that the parameters are mandatory
-            alert('יש למלא את כל השדות');
-            return;
-        }
-
-        const statusChiseArr = ["הוגשה מועמדות", "זומן לראיון ראשון", "עבר ראיון ראשון", "זומן לראיון שני", "עבר ראיון שני", "התקבל", "הועבר למשרה אחרת", "נדחה", "אינו מעוניין במשרה", "בחר כל הסטטוסים"];
-        const timeThatOnCurrentStatusArr = ["שבוע", "חודש", "כל זמן"];
-        const regionArr = ["מרכז", "צפון", "דרום", "כל הארץ"];
-        const roleArr = ["מנהל", "עובד סוציאלי", "מתנדב", "כל התפקידים"];
-        const choice = ["כן", "לא"];
-
-        const status = statusChiseArr[Math.floor(status_ind / 10) - 1];
-        const timeOnStatus = timeThatOnCurrentStatusArr[Math.floor(timeOnStatus_ind / 10) - 1];
-        const sector = regionArr[Math.floor(sector_ind / 10) - 1];
-        const role = roleArr[Math.floor(role_ind / 10) - 1];
-        const formattedStartDate = startDate.toDate();
-        const formattedEndDate = endDate.toDate();
-
-        const result = CandidatesByFilters(status, timeOnStatus, sector, role, selectGarde, selectInterviewDate, formattedStartDate, formattedEndDate)
-            .then((result) => {
-                if (result.length === 0){
-                    alert('אין נתונים להצגה');
-                    return;
-                }
-                else{
-                    exportToExcel(result, "מועמדים");
-                }
-            })
-            .catch((error) =>
-            {
-                // handle the error
-                console.log(error);
-            });
-    }
-
-
-    // const 
+export default function CandidateFiltersForm() {
     const [status, setSelectStatus] = React.useState('');
     const [timeOnStatus, setTimeOnStatus] = React.useState('');
-    const [sector, setRegion] = React.useState('');
-    const [role, setRole] = React.useState('');
+    const [roles, setRoles] =  React.useState<typeMyData[]>([]);
+    const [sectors, setSectors] = React.useState<typeMyData[]>([]);
+    const [selectedRole, setSelectedRole] =  React.useState<string>();
+    const [selectedSector, setSelectedSector] = React.useState<string>();
     const [includeGrade, setSelectGarde] = React.useState('yes');
     const [includeInterviewDate, setSelectInterviewDate] = React.useState('yes');
     const [startDate, setStartDate] = React.useState(null);
     const [endDate, setEndDate] = React.useState(null);
 
 
+    React.useEffect(() => {
+        const fileData = async () => {
+            // --- sectors 
+            
+            let i = 20;
+            const sectorsFromDb = await getAllSectors();
+            let updatedSectors = [{ id: 10, name: 'כל האשכולות' }];
+
+            updatedSectors = updatedSectors.concat(
+                sectorsFromDb.map((sector) => {
+                    const sectorObj = { id: i, name: sector._name };
+                    i = i + 10
+                    return sectorObj;
+                })
+            );
+
+            setSectors(updatedSectors);
+
+
+            // ---- roles
+            const rolesFromDb = await getAllRoles();
+            i = 20;
+
+            let updatedRoles = [{ id: 10, name: "כל התפקידים" }];
+
+            updatedRoles = updatedRoles.concat(
+                rolesFromDb.map((role) => {
+                    const roleObj = { id: i, name: role._name };
+                    i = i + 10;
+                    return roleObj;
+                })
+            );
+
+            setRoles(updatedRoles);
+
+        };
+
+        
+        fileData();
+    }, []);
+
+
+    const createReport = (statusName, timeOnStatus, sectorName, roleName, selectGarde, selectInterviewDate, startDate, endDate) => {
+        // checking if the user select all the buttons
+        const isDateSelected = startDate && endDate;
+
+        if (!statusName || !timeOnStatus || !sectorName || !roleName|| !selectGarde || !isDateSelected) {
+            // displaying an error message or indicating to the user that the parameters are mandatory
+            alert('יש למלא את כל השדות');
+            return;
+        }
+
+        // const statusChiseArr = ["הוגשה מועמדות", "זומן לראיון ראשון", "עבר ראיון ראשון", "זומן לראיון שני", "עבר ראיון שני", "התקבל", "הועבר למשרה אחרת", "נדחה", "אינו מעוניין במשרה", "בחר כל הסטטוסים"];
+        //const timeThatOnCurrentStatusArr = ["שבוע", "חודש", "כל זמן"];
+        // const regionArr = ["מרכז", "צפון", "דרום", "כל הארץ"];
+        // const roleArr = ["מנהל", "עובד סוציאלי", "מתנדב", "כל התפקידים"];
+        const choice = ["כן", "לא"];
+
+        // const timeOnStatus = timeThatOnCurrentStatusArr[Math.floor(timeOnStatus_ind / 10) - 1];
+        const formattedStartDate = startDate.toDate();
+        const formattedEndDate = endDate.toDate();
+
+        const result = CandidatesByFilters(statusName, timeOnStatus, sectorName, roleName, selectGarde, selectInterviewDate, formattedStartDate, formattedEndDate)
+            .then((result) => {
+                if (result.length === 0) {
+                    alert('אין נתונים להצגה');
+                    return;
+                }
+                else {
+                    exportToExcel(result, "מועמדים");
+                }
+            })
+            .catch((error) => {
+                // handle the error
+                console.log(error);
+            });
+    }
+
+
+    
+
     // handls
-    function handleChangeStatus(event: SelectChangeEvent<string>, child: React.ReactNode): void
-    {
+    function handleChangeStatus(event: SelectChangeEvent<string>, child: React.ReactNode): void {
         setSelectStatus(event.target.value);
     }
 
-    function handleChangeTimeInStatus(event: SelectChangeEvent<string>, child: React.ReactNode): void
-    {
+    function handleChangeTimeInStatus(event: SelectChangeEvent<string>, child: React.ReactNode): void {
         setTimeOnStatus(event.target.value);
     }
 
-    const handleChangeSector = (event) =>
-    {
-        setRegion(event.target.value);
+    const handleChangeSector = (event) => {
+        setSelectedSector(event.target.value);
     };
 
-    const handleChangeRole = (event) =>
-    {
-        setRole(event.target.value);
+    const handleChangeRole = (event) => {
+        setSelectedRole(event.target.value);
     };
 
-    const handleChangeIncludeGrade = (event) =>
-    {
+    const handleChangeIncludeGrade = (event) => {
         setSelectGarde(event.target.value);
     };
 
-    const handleChangeIncludeInterviewDate = (event) =>
-    {
+    const handleChangeIncludeInterviewDate = (event) => {
         setSelectInterviewDate(event.target.value);
     };
 
-    const handleChangeStartDate = (date) =>
-    {
+    const handleChangeStartDate = (date) => {
         setStartDate(date);
     };
 
-    const handleChangeEndDate = (date) =>
-    {
+    const handleChangeEndDate = (date) => {
         setEndDate(date);
     };
 
@@ -120,8 +153,6 @@ export default function CandidateFiltersForm()
     const handleClick = () => {
         navigate("/management/reports");
     };
-
-
 
     return (
         <>
@@ -229,7 +260,7 @@ export default function CandidateFiltersForm()
 
 
                         <Typography sx={{ opacity: 0.6, width: '100%', textAlign: 'center', color: '#fff', fontSize: '16px', fontFamily: "'Noto Sans Hebrew', sans-serif", mt: 1 }} variant='subtitle1'>
-                        הפקת דוחות על מועמדים לפי מס' קטגוריות
+                            הפקת דוחות על מועמדים לפי מס' קטגוריות
                         </Typography>
                         <Box sx={{ background: 'linear-gradient(90deg,hsla(0,0%,100%,0),#fff,hsla(0,0%,100%,0))', padding: 0.05, width: '100%', mt: 2 }} />
                     </Stack>
@@ -258,16 +289,16 @@ export default function CandidateFiltersForm()
                                             label="selectStatus"
                                             onChange={handleChangeStatus}
                                         >
-                                            <MenuItem value={10}>הוגשה מועמדות</MenuItem>
-                                            <MenuItem value={20}>זומן לראיון ראשון</MenuItem>
-                                            <MenuItem value={30}>עבר ראיון ראשון</MenuItem>
-                                            <MenuItem value={40}>זומן לראיון שני</MenuItem>
-                                            <MenuItem value={50}>עבר ראיון שני</MenuItem>
-                                            <MenuItem value={60}>התקבל</MenuItem>
-                                            <MenuItem value={70}>הועבר למשרה אחרת</MenuItem>
-                                            <MenuItem value={80}>נדחה</MenuItem>
-                                            <MenuItem value={90}>אינו מעוניין במשרה</MenuItem>
-                                            <MenuItem value={100}>בחר כל הסטטוסים</MenuItem>
+                                            <MenuItem value={'הוגשה מועמדות'}>הוגשה מועמדות</MenuItem>
+                                            <MenuItem value={"זומן לראיון ראשון"}>זומן לראיון ראשון</MenuItem>
+                                            <MenuItem value={"עבר ראיון ראשון"}>עבר ראיון ראשון</MenuItem>
+                                            <MenuItem value={"זומן לראיון שני"}>זומן לראיון שני</MenuItem>
+                                            <MenuItem value={"עבר ראיון שני"}>עבר ראיון שני</MenuItem>
+                                            <MenuItem value={"התקבל"}>התקבל</MenuItem>
+                                            <MenuItem value={"הועבר למשרה אחרת"}>הועבר למשרה אחרת</MenuItem>
+                                            <MenuItem value={"נדחה"}>נדחה</MenuItem>
+                                            <MenuItem value={"אינו מעוניין במשרה"}>אינו מעוניין במשרה</MenuItem>
+                                            <MenuItem value={"בחר כל הסטטוסים"}>בחר כל הסטטוסים</MenuItem>
 
                                         </Select>
                                     </FormControl>
@@ -283,9 +314,9 @@ export default function CandidateFiltersForm()
                                             label="timeOnStatus"
                                             onChange={handleChangeTimeInStatus}
                                         >
-                                            <MenuItem value={10}>עד שבוע</MenuItem>
-                                            <MenuItem value={20}>עד חודש</MenuItem>
-                                            <MenuItem value={30}>כל זמן</MenuItem>
+                                            <MenuItem value={'עד שבוע'}>עד שבוע</MenuItem>
+                                            <MenuItem value={'עד חודש'}>עד חודש</MenuItem>
+                                            <MenuItem value={'כל זמן'}>כל זמן</MenuItem>
                                         </Select>
                                     </FormControl>
 
@@ -297,14 +328,15 @@ export default function CandidateFiltersForm()
                                         <Select
                                             labelId="demo-simple-select-label"
                                             id="demo-simple-select"
-                                            value={sector} // שנה את הערך של value ל-rejectionCause
-                                            label="sector" // שנה את הערך של label ל-rejectionCause
+                                            value={selectedSector} 
+                                            label="sector" 
                                             onChange={handleChangeSector}
                                         >
-                                            <MenuItem value={10}>מרכז</MenuItem>
-                                            <MenuItem value={20}>צפון</MenuItem>
-                                            <MenuItem value={30}>דרום</MenuItem>
-                                            <MenuItem value={40}>כל הארץ</MenuItem>
+                                            {sectors.map((sector) => (
+                                                <MenuItem key={sector.id} value={sector.name}>
+                                                    {sector.name}
+                                                </MenuItem>
+                                            ))}
                                         </Select>
                                     </FormControl>
 
@@ -316,15 +348,16 @@ export default function CandidateFiltersForm()
                                         <Select
                                             labelId="demo-simple-select-label"
                                             id="demo-simple-select"
-                                            value={role} // שנה את הערך של value ל-rejectionCause
+                                            value={selectedRole} // שנה את הערך של value ל-rejectionCause
                                             label="rejectionCause" // שנה את הערך של label ל-rejectionCause
                                             onChange={handleChangeRole}
                                         >
-                                            <MenuItem value={10}>מנהל</MenuItem>
-                                            <MenuItem value={20}>עובד סוציאלי</MenuItem>
-                                            <MenuItem value={30}>מתנדב</MenuItem>
-                                            <MenuItem value={40}>כל התפקידים</MenuItem>
-                                        </Select>
+                                            {roles.map((role) => (
+                                                <MenuItem key={role.id} value={role.name}>
+                                                    {role.name}
+                                                </MenuItem>
+                                            ))}
+                                            </Select>
                                     </FormControl>
                                     <br />
 
@@ -374,7 +407,7 @@ export default function CandidateFiltersForm()
                                     <br />
                                     {/* create report */}
 
-                                    <button onClick={() => createReport(status, timeOnStatus, sector, role, includeGrade, includeInterviewDate, startDate, endDate)}>צור דוח</button>
+                                    <button onClick={() => createReport(status, timeOnStatus, selectedSector, selectedRole, includeGrade, includeInterviewDate, startDate, endDate)}>צור דוח</button>
 
                                     {/* <button onClick={() => main()}>add data</button> */}
 
@@ -386,7 +419,7 @@ export default function CandidateFiltersForm()
                 </Box >
             </Box>
 
-       
+
             <Box style={{ position: 'absolute', top: '100px', right: '50px' }}>
                 <Button
                     onClick={handleClick}
@@ -405,10 +438,8 @@ export default function CandidateFiltersForm()
 
 
 
-export async function main()
-{
-    loginAdmin().then(async () =>
-    {
+export async function main() {
+    loginAdmin().then(async () => {
         // 
         // let jobstatus1 = new CandidateJobStatus(109, "28", "נדחה",  "לא מתאים לגוונים בגלל..", 1,  new Date(2023, 4, 1),new Date(2023, 5, 1), new Date(0, 0, 0), ["ded", "ded"], [], "פערים על היקף משרה"  );
         // let jobstatus2 = new CandidateJobStatus(102, "28", "עבר ראיון ראשון",  "בחור מצוין", 4,  new Date(2023, 4, 1), new Date(2023, 4, 5), new Date(2023, 6, 25), ["ed", "ed"], [], "" );

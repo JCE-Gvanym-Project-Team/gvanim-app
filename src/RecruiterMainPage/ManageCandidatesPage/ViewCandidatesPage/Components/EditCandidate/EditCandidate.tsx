@@ -1,16 +1,16 @@
 import { Edit } from '@mui/icons-material';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { Box, Button, Container, Divider, FormHelperText, Stack, TextField, Typography, styled } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import MyLoading from '../../../../../Components/MyLoading/MyLoading';
 import { Candidate, getFilteredCandidates } from '../../../../../Firebase/FirebaseFunctions/Candidate';
+import { designReturnButton } from '../../../../ManageJobsPage/ManageJobsPageStyle';
 import { candidateNameSx } from '../../ViewCandidatesPageStyle';
 import AreYouSureDialog from '../AreYouSureDialog/AreYouSureDialog';
 import SuccessMessageSnackbar from '../SuccessMessageSnackbar/SuccessMessageSnackbar';
 import RemoveCandidateDialog from './../RemoveCandidateDialog/RemoveCandidateDialog';
 import { BoxGradientSx, MyPaperSx } from './EditCandidateStyle';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { designReturnButton } from '../../../../ManageJobsPage/ManageJobsPageStyle';
-import MyLoading from '../../../../../Components/MyLoading/MyLoading';
 
 const Form = styled('form')(({ theme }) => ({
     width: '100%',

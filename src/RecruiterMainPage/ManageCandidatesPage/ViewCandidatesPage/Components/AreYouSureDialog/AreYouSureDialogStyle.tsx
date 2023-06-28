@@ -1,6 +1,6 @@
 import { CSSProperties } from "@mui/material/styles/createTypography";
 import { SxProps } from "@mui/system";
-import { ManageCandidatesPageGlobalStyle, GlobalStyle } from "../../../../PageStyles";
+import { GlobalStyle, ManageCandidatesPageGlobalStyle } from "../../../../PageStyles";
 
 
 

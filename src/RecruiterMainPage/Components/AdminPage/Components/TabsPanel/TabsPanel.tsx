@@ -1,19 +1,16 @@
-import * as React from 'react';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Box from '@mui/material/Box';
-import { AccountTree, Edit, ManageAccounts, PeopleAltOutlined } from '@mui/icons-material';
+import { AccountTree, PeopleAltOutlined } from '@mui/icons-material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Box from '@mui/material/Box';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
+import * as React from 'react';
 
 import { Tooltip } from '@mui/material';
-import ManageFields from './Components/ManageFields/ManageFields';
-import ManageAccount from './Components/ManageAccount/Components/AccountSettings/UpdateAccount/UpdateAccount';
-import ManageRecruiters from './Components/ManageRecruiters/ManageRecruiters';
 import MyLoading from '../../../../../Components/MyLoading/MyLoading';
-import Temp from './Components/ManageRecruiters/Components/RecruitersList/Temp';
-import RessetPassword from '../TabsPanel/Components/ResetPassword/ResetPassword';
 import { getConnectedUser } from '../../../../../Firebase/FirebaseFunctions/Authentication';
-import { sleep } from '../../../../../Firebase/FirebaseFunctions/test';
+import RessetPassword from '../TabsPanel/Components/ResetPassword/ResetPassword';
+import ManageFields from './Components/ManageFields/ManageFields';
+import Temp from './Components/ManageRecruiters/Components/RecruitersList/Temp';
 
 interface TabPanelProps {
   children?: React.ReactNode;

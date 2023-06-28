@@ -1,18 +1,18 @@
+import { ArrowBack, ArrowDownward, Autorenew, Check, Close, DoneAll, MoodBad, ThumbDown, ThumbUp, WhatsApp } from "@mui/icons-material";
 import { Autocomplete, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, MenuItem, TextField, Typography, createFilterOptions } from "@mui/material";
-import { useEffect, useState } from "react";
-import { changeJobContainerStyle, changeJobContainerSx, currentStatusTextSx, dialogActionsSx, dialogContentSx, dialogSx, dialogTitleSx, dialogTopAreaSx, locationTextFieldSx, locationTitleSx, submitButtonSx } from "./ScheduleInterviewDialogStyle";
-import { ArrowBack, ArrowDownward, Autorenew, Check, Close, DoneAll, ElevatorSharp, MoodBad, NestCamWiredStandOutlined, ThumbDown, ThumbUp, WhatsApp } from "@mui/icons-material";
 import { DatePicker, LocalizationProvider, MobileTimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import 'dayjs/locale/he'
+import 'dayjs/locale/he';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { getConnectedUser } from "../../../../../../Firebase/FirebaseFunctions/Authentication";
 import { Candidate } from "../../../../../../Firebase/FirebaseFunctions/Candidate";
 import { CandidateJobStatus, allStatus, getAllRejectCause, getFilteredCandidateJobStatuses, getMessage } from "../../../../../../Firebase/FirebaseFunctions/CandidateJobStatus";
+import { Job } from "../../../../../../Firebase/FirebaseFunctions/Job";
 import { Recruiter, getRecruitersFromDatabase } from "../../../../../../Firebase/FirebaseFunctions/Recruiter";
-import { Job, getFilteredJobs } from "../../../../../../Firebase/FirebaseFunctions/Job";
-import { useNavigate } from "react-router-dom";
 import AreYouSureDialog from "../../../Components/AreYouSureDialog/AreYouSureDialog";
 import SuccessMessageSnackbar from "../../../Components/SuccessMessageSnackbar/SuccessMessageSnackbar";
-import { getConnectedUser } from "../../../../../../Firebase/FirebaseFunctions/Authentication";
+import { changeJobContainerStyle, changeJobContainerSx, currentStatusTextSx, dialogActionsSx, dialogContentSx, dialogSx, dialogTitleSx, dialogTopAreaSx, locationTextFieldSx, locationTitleSx, submitButtonSx } from "./ScheduleInterviewDialogStyle";
 
 const filter = createFilterOptions<string>();
 

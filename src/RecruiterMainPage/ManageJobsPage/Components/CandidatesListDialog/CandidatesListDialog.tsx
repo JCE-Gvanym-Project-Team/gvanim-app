@@ -1,24 +1,23 @@
-import * as React from 'react';
+import { ChevronLeft } from '@mui/icons-material';
+import CloseIcon from '@mui/icons-material/Close';
+import { Avatar, Box, ListItemAvatar, ListItemButton, ListItemIcon, Rating } from '@mui/material';
+import AppBar from '@mui/material/AppBar';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import ListItemText from '@mui/material/ListItemText';
-import ListItem from '@mui/material/ListItem';
-import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import CloseIcon from '@mui/icons-material/Close';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
 import Slide from '@mui/material/Slide';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
 import { TransitionProps } from '@mui/material/transitions';
-import { Avatar, Box, Link, ListItemAvatar, ListItemButton, ListItemIcon, Rating } from '@mui/material';
-import { ListItemTypographySx } from './CandidatesListDialogStyle';
-import { ArrowBack, ChevronLeft } from '@mui/icons-material';
+import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Candidate, getFilteredCandidates } from '../../../../Firebase/FirebaseFunctions/Candidate';
 import { getFilteredCandidateJobStatuses } from '../../../../Firebase/FirebaseFunctions/CandidateJobStatus';
-import { MyTypographyInfoSx } from '../../../WelcomePage/WelcomePageStyle';
+import { ListItemTypographySx } from './CandidatesListDialogStyle';
 
 const Transition = React.forwardRef(function Transition(
 	props: TransitionProps & {

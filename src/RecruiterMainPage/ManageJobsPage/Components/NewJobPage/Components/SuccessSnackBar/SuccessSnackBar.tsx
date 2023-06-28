@@ -1,11 +1,11 @@
-import * as React from 'react';
-import { Transition } from 'react-transition-group';
-import { styled } from '@mui/system';
-import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
-import CloseIcon from '@mui/icons-material/Close';
 import Snackbar from '@mui/base/Snackbar';
 import { SnackbarCloseReason } from '@mui/base/useSnackbar';
-import { Button, Typography } from '@mui/material';
+import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
+import CloseIcon from '@mui/icons-material/Close';
+import { Typography } from '@mui/material';
+import { styled } from '@mui/system';
+import * as React from 'react';
+import { Transition } from 'react-transition-group';
 
 export default function TransitionComponentSnackbar(props: { open: any, setOpen: any, message: any }) {
   // const [open, setOpen] = React.useState(false);

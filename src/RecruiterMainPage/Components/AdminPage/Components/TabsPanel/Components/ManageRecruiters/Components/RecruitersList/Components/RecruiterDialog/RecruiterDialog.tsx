@@ -1,20 +1,19 @@
-import * as React from 'react';
-import Dialog from '@mui/material/Dialog';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
-import Slide from '@mui/material/Slide';
-import { TransitionProps } from '@mui/material/transitions';
-import { Box, Button, Chip, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, Stack, TextField, Typography } from '@mui/material';
 import { EditNote, GroupAdd } from '@mui/icons-material';
-import { MyFieldsSx } from './RecruiterDialogStyle';
+import CloseIcon from '@mui/icons-material/Close';
+import { Alert, Box, Button, Chip, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, Snackbar, Stack, TextField, Typography } from '@mui/material';
+import AppBar from '@mui/material/AppBar';
+import Dialog from '@mui/material/Dialog';
+import IconButton from '@mui/material/IconButton';
+import Slide from '@mui/material/Slide';
+import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
-import RemoveConfirmPopup from './Components/RemoveConfirmPopup/RemoveConfirmPopup';
+import { TransitionProps } from '@mui/material/transitions';
+import * as React from 'react';
 import { Recruiter, getRecruitersFromDatabase } from '../../../../../../../../../../../Firebase/FirebaseFunctions/Recruiter';
+import { Sector, getAllSectors } from '../../../../../../../../../../../Firebase/FirebaseFunctions/Sector';
+import RemoveConfirmPopup from './Components/RemoveConfirmPopup/RemoveConfirmPopup';
 import SectorsChip from './Components/SectorsChip/SectorsChip/SectorsChip';
-import { getAllSectors } from '../../../../../../../../../../../Firebase/FirebaseFunctions/Sector';
-import { Sector } from '../../../../../../../../../../../Firebase/FirebaseFunctions/Sector'
+import { MyFieldsSx } from './RecruiterDialogStyle';
 
 
 
@@ -26,11 +25,14 @@ const Transition = React.forwardRef(function Transition(
 ) {
 	return <Slide direction="up" ref={ref} {...props} />;
 });
-
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 export default function RecruiterDialog(props: { recruiterRow: Recruiter, recruiters: any, setRecruiters: any, setSnackbar: any, isEdit: boolean }): JSX.Element {
 	const { recruiterRow, recruiters, setRecruiters, setSnackbar, isEdit } = props;
-	const [recruiterSectors, setRecruiterSectors] = React.useState<string[]>([]);
+	const [recruiter, setRecruiter] = React.useState<Recruiter>();
+	const [allSectors, setAllSectors] = React.useState<string[]>([]);
 	const [sectorsSelection, setSectorsSelection] = React.useState<string[]>([]);
+	const [recruiterCurentSectors, setRecruiterCurentSectors] = React.useState<string[]>([]);
+	const [listToShow, setListToShow] = React.useState<string[]>([]);
 	const [loading, setLoading] = React.useState(true);
 	const [firstName, setFirstName] = React.useState('');
 	const [lastName, setLastName] = React.useState('');
@@ -42,52 +44,50 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 	const [open, setOpen] = React.useState(false);
 	const [dialogOpen, setDialogOpen] = React.useState(false);
 	const [dialogEmail, setDialogEmail] = React.useState('');
-	const [dialogPassword, setDialogPassword] = React.useState('');;
-	const rew = new Recruiter();
+	const [dialogPassword, setDialogPassword] = React.useState('');
+	const [sectorsChanged, setSectorsChanged] = React.useState(false);
 
 	React.useEffect(() => {
 		const fetchData = async () => {
 			const sectors = await getAllSectors();
 			const sectorStrings = sectors.map((sector: Sector) => sector._name.toString());
-			setRecruiterSectors(sectorStrings);
+			setAllSectors(sectorStrings);
 			setLoading(false);
+			await sleep(1000);
+			try {
+				let recruiters = await getRecruitersFromDatabase();
+				const recruiterCurrent = recruiters.filter((recruiter) => recruiter._email === recruiterRow?._email);
+				setRecruiter(recruiterCurrent[0]);
+			} catch (error) {
+				return;
+			}
+
+
 			if (isEdit) {
-				setSectorsSelection(recruiterRow?._sectors ? recruiterRow._sectors : []);
-				typeof recruiterRow?._firstName === 'string' && setFirstName(recruiterRow?._firstName);
-				typeof recruiterRow?._lastName === 'string' && setLastName(recruiterRow?._lastName);
-				typeof recruiterRow?._email === 'string' && setEmail(recruiterRow?._email);
+				setFirstName(recruiterRow?._firstName);
+				setLastName(recruiterRow?._lastName);
+				setEmail(recruiterRow?._email);
+				setRecruiterCurentSectors(recruiterRow?._sectors);
+				setListToShow(recruiterRow?._sectors);
 			}
 		};
 
 		fetchData();
+		setSectorsChanged(false);
+
+
 	}, []);
 
 	if (loading) {
 		return <div>Loading...</div>;
 	}
 
-	// React.useEffect(() => {
-	// 	if (isEdit) {
-	// 		typeof recruiterRow?._firstName === 'string' && setFirstName(recruiterRow?._firstName);
-	// 		typeof recruiterRow?._lastName === 'string' && setLastName(recruiterRow?._lastName);
-	// 		typeof recruiterRow?._email === 'string' && setEmail(recruiterRow?._email);
-	// 		recruiterRow?._sectors !== null && setRecruiterSectors(recruiterRow?._sectors);
-	// 	}
-	// }, []);
-
 
 	const handleRemoveRecruiter = async () => {
-		console.log(typeof recruiterRow);
-		const recruiters = await getRecruitersFromDatabase();
-		const recruiterToRemove = recruiters.filter((recruiter) => recruiter._email === recruiterRow?._email)!;
-		recruiterToRemove[0]?.remove();
-		//await recruiterRow?.remove();
-		// const updateData = recruiters.filter(rec => rec._id !== recruiterRow._id);
-		// setRecruiters(updateData);
+		recruiter?.remove();
 		setOpen(false);
-
-		// postMessage(`המגייס/ת ${recruiterRow._firstName} ${recruiterRow._lastName} נמחק/ה בהצלחה מהמערכת.`);
-		// setSnackbar(true);
+		postMessage(`המגייס/ת ${recruiterRow._firstName} ${recruiterRow._lastName} נמחק/ה בהצלחה מהמערכת.`);
+		setSnackbar(true);
 
 	}
 	const handleSubmit = async () => {
@@ -112,19 +112,30 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 			return;
 		}
 		if (!isEdit) {
-			const newRecruter = new Recruiter(email, firstName, lastName, sectorsSelection);
-			let firstPassword = generateCodeFromEmail(email);
-			firstPassword = "aviv11"
+			const newRecruter = new Recruiter(email, firstName, lastName, listToShow);
+			let firstPassword: string = generateCodeFromEmail(email);
 			console.log(firstPassword);
-			await newRecruter.add(firstPassword);
-			setDialogOpen(true);
-			setDialogEmail(email);
-			setDialogPassword(firstPassword);
+			try {
+				await newRecruter.add(firstPassword);
+				setDialogEmail(email);
+				setDialogPassword(firstPassword);
+				setDialogOpen(true);
+			}
+			catch (erorr) {
+				alert('האימייל כבר קיים במערכת!');
+				setEmail('');
+				return;
+			}
+
 		}
 		else {
-			await recruiterRow?.edit(firstName, lastName);  // one more argument is needed (Sectors)
-			
-
+			if (recruiter !== undefined) {
+				await recruiter.edit(firstName, lastName);
+				// async function updateSectors(recruiter: Recruiter, setSectorsChanged: (value: boolean) => void, newList: string[], recruiterCurentSectors: string[], setSaveButton: (value: boolean) => void) {
+				// console.log("recruiterCurentSectors:" + recruiterCurentSectors);
+				// console.log("listToShow: " + listToShow);
+				await updateSectors(recruiter, setSectorsChanged, listToShow, recruiterCurentSectors, setSaveButton);
+			}
 			setOpen(false);
 		}
 		setFirstName('')
@@ -146,8 +157,29 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 		setOpen(false);
 	};
 
+
 	return (
 		<Box>
+
+			<Snackbar open={dialogOpen} autoHideDuration={6000} >
+				<Alert  severity="info">
+					הודעת המשתמש כאן
+				</Alert>
+			</Snackbar>
+
+			<Dialog open={dialogOpen} onClose={handleDialogClose}>
+				<DialogTitle>מגייס/ת חדש/ה הצטרפ/ה למערכת</DialogTitle>
+				<DialogContent>
+					<DialogContentText>
+						מייל: {email}
+						<br />
+						סיסמא זמנית: {dialogPassword}
+					</DialogContentText>
+				</DialogContent>
+				<DialogActions>
+					<Button onClick={handleDialogClose}>סגור</Button>
+				</DialogActions>
+			</Dialog>
 
 			{/* <ListItemIcon>
 				<IconButton onClick={handleClickOpen}>
@@ -276,28 +308,22 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 												error={emailError !== ''}
 												helperText={emailError}
 											/>
-										</Box>
 
-										<Box sx={{ display: 'flex', justifyContent: 'center' }}>
-											<SectorsChip recruiterSectors={recruiterSectors} setRecruiterSectors={setRecruiterSectors} setSaveButton={setSaveButton} sectorsSelection={sectorsSelection} setSectorsSelection={setSectorsSelection} />
+										</Box>
+										{/* Sectors */}
+										<Box sx={{ justifyContent: 'center' }}>
+											<SectorsChip
+												allSectors={allSectors}
+												setListToShow={setListToShow}
+												listToShow={listToShow}
+												setSaveButton = { setSaveButton}
+											/>
 										</Box>
 									</Stack>
 								</Box>
-								<Dialog open={dialogOpen} onClose={handleDialogClose}>
-									<DialogTitle>מגייס/ת חדש/ה הצטרפ/ה למערכת</DialogTitle>
-									<DialogContent>
-										<DialogContentText>
-											מייל: {dialogEmail}
-											<br />
-											סיסמא זמנית: {dialogPassword}
-										</DialogContentText>
-									</DialogContent>
-									<DialogActions>
-										<Button onClick={handleDialogClose}>סגור</Button>
-									</DialogActions>
-								</Dialog>
+
 								<Divider sx={{ mt: 3 }} />
-								{/* <Box sx={{
+								 <Box sx={{
 									mt: 1,
 									flexWrap: 'wrap',
 									gap: 1,
@@ -305,10 +331,12 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 									height: 'fit-content',
 									display: 'flex',
 								}}>
-									{recruiterSectors.map((value) => (
-										<Chip color='primary' onDelete={() => { setRecruiterSectors(recruiterSectors.filter((sector) => sector !== value)) }} key={value} label={value} />
-									))}
-								</Box> */}
+									{listToShow.map((value) => (
+										<Chip color='primary' onDelete={() => { setListToShow(listToShow.filter((sector) => sector !== value)); setSaveButton(true); }} key={value} label={value} />
+									))
+									    
+									}
+								</Box>
 
 							</Stack>
 
@@ -338,7 +366,7 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 				</Stack>
 
 			</Dialog>
-			<Button onClick={() => { test() }}></Button>
+			{/* <Button onClick={() => { main(); }}>click me</Button> */}
 		</Box>
 	);
 
@@ -347,15 +375,7 @@ export default function RecruiterDialog(props: { recruiterRow: Recruiter, recrui
 
 
 
-
-
-
-
-
-
-
-
-function generateCodeFromEmail(email) {
+function generateCodeFromEmail(email: string) {
 	const atIndex = email.indexOf('@');
 
 	if (atIndex === -1) {
@@ -365,10 +385,10 @@ function generateCodeFromEmail(email) {
 	const username = email.substring(0, atIndex);
 	const usernameSubstring = username.substring(0, Math.min(4, username.length));
 
-	let code = usernameSubstring;
+	let code: string = usernameSubstring;
 
 	while (code.length < 6) {
-		code += Math.floor(Math.random() * 10);
+		code += Math.floor(Math.random() * 10) + "";
 	}
 
 	return code;
@@ -376,10 +396,32 @@ function generateCodeFromEmail(email) {
 
 
 
-async function test() {
-	const recruiter = new Recruiter("112123@gmail.com", "ראובן", "לוי", ['אשכול 10']);
-	await recruiter.add();
-	// recruiter.edit("ירון", "לוי");
-	const reqs = await getRecruitersFromDatabase();
-	console.log(reqs);
+// async function test() {
+// 	const recruiter = new Recruiter("eli089743@gmail.com", "אליהו", "לוי", ['אשכול 10']);
+// 	await recruiter.add("123456");
+// 	await sleep(1000);
+// 	recruiter.edit("ירון", "לוי");
+// 	recruiter.addSector('אשכול');
+// 	recruiter.removeSector('אשכול');
+// 	await sleep(1000);
+
+// 	// recruiter.remove();
+// }
+
+
+async function updateSectors(recruiter: Recruiter, setSectorsChanged: (value: boolean) => void, listToShow: string[], recruiterCurentSectors: string[], setSaveButton: (value: boolean) => void) {
+	for (let i = 0; i < listToShow.length; i++) {
+		if (recruiterCurentSectors.indexOf(listToShow[i]) === -1) {
+			await recruiter.addSector(listToShow[i]);
+		}
+	}
+	await sleep(1000);
+
+	for (let i = 0; i < recruiterCurentSectors.length; i++) {
+		if (listToShow.indexOf(recruiterCurentSectors[i]) === -1) {
+			await recruiter.removeSector(recruiterCurentSectors[i]);
+		}
+	}
+	setSaveButton(true);
+	setSectorsChanged(true);
 }

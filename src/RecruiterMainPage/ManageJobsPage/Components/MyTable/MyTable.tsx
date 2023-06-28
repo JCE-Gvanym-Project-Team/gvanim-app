@@ -1,33 +1,33 @@
-import * as React from 'react';
-import { Box, Button, Chip, LinearProgress, Stack, SxProps, Theme, Tooltip, Typography, alpha, styled, useTheme } from '@mui/material';
-import MyDropMenu from '../MyDropMenu/MyDropMenu';
-import {
-	DataGrid,
-	GridToolbarFilterButton,
-	GridColDef,
-	GridToolbarDensitySelector,
-	GridToolbarColumnsButton,
-	GridToolbarContainer,
-	GridToolbarQuickFilter,
-	gridPageCountSelector,
-	gridPageSelector,
-	useGridApiContext,
-	useGridSelector,
-	GridColumnHeaders,
-	gridClasses,
-	GridRow,
-	heIL,
-
+import { Box, Button, Chip, LinearProgress, Stack, SxProps, Theme, Typography, alpha, styled, useTheme } from '@mui/material';
+import
+	{
+		DataGrid,
+		GridColDef,
+		GridColumnHeaders,
+		GridRow,
+		GridToolbarColumnsButton,
+		GridToolbarContainer,
+		GridToolbarDensitySelector,
+		GridToolbarFilterButton,
+		GridToolbarQuickFilter,
+		gridClasses,
+		gridPageCountSelector,
+		gridPageSelector,
+		heIL,
+		useGridApiContext,
+		useGridSelector,
 	} from '@mui/x-data-grid';
+import * as React from 'react';
+import MyDropMenu from '../MyDropMenu/MyDropMenu';
 
+import { Lock, LockOpen } from '@mui/icons-material';
 import Pagination from '@mui/material/Pagination';
 import PaginationItem from '@mui/material/PaginationItem';
-import CandidatesListFullScreenDialog from '../CandidatesListDialog/CandidatesListDialog';
-import { Job, getFilteredJobs } from '../../../../Firebase/FirebaseFunctions/Job';
-import { useNavigate } from "react-router-dom";
-import { ArticleOutlined, LockOpen, Lock } from '@mui/icons-material';
-import MyLoading from '../../../../Components/MyLoading/MyLoading';
 import { unstable_useForkRef as useForkRef } from '@mui/utils';
+import { useNavigate } from "react-router-dom";
+import MyLoading from '../../../../Components/MyLoading/MyLoading';
+import { Job, getFilteredJobs } from '../../../../Firebase/FirebaseFunctions/Job';
+import CandidatesListFullScreenDialog from '../CandidatesListDialog/CandidatesListDialog';
 import { MyButtonSx } from './MyTableStyle';
 
 

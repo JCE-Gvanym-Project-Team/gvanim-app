@@ -1,46 +1,17 @@
-# Getting Started with Create React App
+# Introduction
+The project focuses on recruitment management for the "Gvanim" association. "Gvanim" is an association that employs social workers, volunteers, and caregivers for people with physical disabilities or people on the autism spectrum.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+The association has encountered difficulties managing recruitment processes in society, and all management has been done so far through Excel, which has created significant difficulties in management.
 
-## Available Scripts
+We were asked to create a website that would manage the recruitment system. Recruiters will be able to upload job openings, candidates will upload their resumes, and the recruiter from their interface will be able to easily view submissions. Each candidate will have a profile where recruiters can keep notes, interview summaries, send generic emails, and keep the candidate's details for future reference. 
 
-In the project directory, you can run:
 
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+# Coding Conventions
+- variable and function names: mainPageAndAnotherWord instead of main_page_and_another_word. also no capital letters at the start of the word
+- no css at all inside a .tsx file
+- spacing: tab = 4 spaces
+- always document your functions, and components
+- identation: always format your files
+- use Material-UI for basic components, and React Router to traverse between pages
+- use the Components folder (there is one inside the folder you are working on) to add new files to the project, those files should represent a Component with some kind of meaning, for example a component called "Navbar" will represent the top of the page, and will contain all the code for it
+- Design the website with mobile integration in mind, don't forget to read the requirements.

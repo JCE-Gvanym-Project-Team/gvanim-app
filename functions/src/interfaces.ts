@@ -1,4 +1,5 @@
-export interface Job {
+export interface Job
+{
   _title: string;
   _jobNumber: number;
   _role: string;
@@ -9,12 +10,13 @@ export interface Job {
   _requirements: string;
   _open: boolean;
   _highPriority: boolean;
-  _viewsPerPlatform: Map<string, number>;
-  _applyPerPlatform: Map<string, number>;
+  _viewsPerPlatform: {[key :string]: number};
+  _applyPerPlatform: {[key :string]: number};
   _creationDate: string;
   _startOn: string;
 }
-export interface Candidate{
+export interface Candidate
+{
   _id: string;
   _firstName: string;
   _lastName: string;
@@ -23,20 +25,22 @@ export interface Candidate{
   _generalRating: number;
   _note: string;
 }
-export interface CandidateJobStatus {
+export interface CandidateJobStatus
+{
   _jobNumber: number;
   _candidateId: string;
   _status: string;
   _about: string;
   _matchingRate: number;
-  _applyDate: Date;
-  _lastUpdate: Date;
-  _interviewDate: Date;
+  _applyDate: string;
+  _lastUpdate: string;
+  _interviewDate: string;
   _interviewsSummery: Array<string>;
   _recomendations: Array<Recomendation>;
   _rejectCause: string;
 }
-interface Recomendation{
+interface Recomendation
+{
   _fullName: string;
   _phone: string;
   _eMail: string;

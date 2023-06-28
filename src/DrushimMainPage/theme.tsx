@@ -1,7 +1,5 @@
-import { createContext, useState, useMemo } from "react"
-import { createTheme } from "@mui/material/styles"
-import { color } from "highcharts";
-import { main } from "../Firebase/FirebaseFunctions/test";
+import { createTheme } from "@mui/material/styles";
+import { createContext, useMemo, useState } from "react";
 
 const MAX_FONT_SIZE = 40;
 const MIN_FONT_SIZE = 12;

@@ -20,9 +20,10 @@ export async function removeObjectAtPath(path: string) {
 	try {
 		const ref = database.ref(path);
 		await ref.remove();
-		console.log(`${path} romoved from DB`);
+		return true;
 	} catch (error) {
 		console.error("Error removing object:", error);
+		return false;
 	}
 }
 /**
@@ -61,10 +62,11 @@ export async function appendToDatabase(obj: any, path: string, id: string = "") 
 	}
 	databaseRef.set(obj)
 		.then(() => {
-			console.log(`Object stored successfully at path ${path}/${id}`);
+			return true;
 		})
 		.catch((error) => {
 			console.error(`Error storing object at path ${path}/${id}: ${error}`);
+			return false;
 		});
 }
 /**

@@ -1,28 +1,27 @@
-import React, { useState, useEffect } from "react";
-import WelcomePage from "./WelcomePage/WelcomePage";
-import { Route, Routes } from "react-router-dom";
-import ManageCandidatesPage from "./ManageCandidatesPage/ManageCandidatesPage";
-import ManageJobsPage from "./ManageJobsPage/ManageJobsPage";
-import ReportsPage from "./ReportsPage/ReportsPage";
-import NavBar from "./Components/NavBar/NavBar";
-import NewJobPage from "./ManageJobsPage/Components/NewJobPage/NewJobPage";
-import { getFilteredJobs } from "../Firebase/FirebaseFunctions/Job";
-import { Link } from "react-router-dom";
-import SingleJob from "../DrushimMainPage/Components/Job";
-import EditCandidate from "./ManageCandidatesPage/ViewCandidatesPage/Components/EditCandidate/EditCandidate";
-import AdminPage from "./Components/AdminPage/AdminPage";
-import {
-  Candidate,
-  getFilteredCandidates,
-} from "../Firebase/FirebaseFunctions/Candidate";
-import ViewCandidatesPage from "./ManageCandidatesPage/ViewCandidatesPage/ViewCandidatesPage";
-import Footer from "./Components/Footer/Footer";
 import { CssBaseline } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Link, Route, Routes } from "react-router-dom";
+import SingleJob from "../DrushimMainPage/Components/Job";
+import
+  {
+    Candidate,
+    getFilteredCandidates,
+  } from "../Firebase/FirebaseFunctions/Candidate";
+import { getFilteredJobs } from "../Firebase/FirebaseFunctions/Job";
+import AdminPage from "./Components/AdminPage/AdminPage";
+import Footer from "./Components/Footer/Footer";
+import NavBar from "./Components/NavBar/NavBar";
+import NewCandidatePage from "./ManageCandidatesPage/CreateCandidatePage/NewCandidatePage";
+import ManageCandidatesPage from "./ManageCandidatesPage/ManageCandidatesPage";
+import EditCandidate from "./ManageCandidatesPage/ViewCandidatesPage/Components/EditCandidate/EditCandidate";
+import ManageInterviewsPage from "./ManageCandidatesPage/ViewCandidatesPage/ManageInterViewsPage/ManageInterViewsPage";
+import ViewCandidatesPage from "./ManageCandidatesPage/ViewCandidatesPage/ViewCandidatesPage";
+import NewJobPage from "./ManageJobsPage/Components/NewJobPage/NewJobPage";
+import ManageJobsPage from "./ManageJobsPage/ManageJobsPage";
 import CandidateFiltersForm from "./ReportsPage/Components/Reports/CandidatesFiltersForm";
 import JobsFiltersForm from "./ReportsPage/Components/Reports/JobsFitersForm";
-import ManageInterviewsPage from "./ManageCandidatesPage/ViewCandidatesPage/ManageInterViewsPage/ManageInterViewsPage";
-import UpdateAccount from "./Components/AdminPage/Components/TabsPanel/Components/ManageAccount/Components/AccountSettings/UpdateAccount/UpdateAccount";
-import NewCandidatePage from "./ManageCandidatesPage/CreateCandidatePage/NewCandidatePage";
+import ReportsPage from "./ReportsPage/ReportsPage";
+import WelcomePage from "./WelcomePage/WelcomePage";
 
 function RecruiterMainPage({ handlelogout }) {
   const [allJobs, setAllJobs] = React.useState<any[]>([]);
@@ -104,6 +103,9 @@ function RecruiterMainPage({ handlelogout }) {
           path="reports/CandidateByFilters"
           element={<CandidateFiltersForm />}
         />
+
+        {/* reset passwors */}
+        {/* <Route path='forgotPassword' element={<PasswordRecover/>} /> */}
 
         {/* Admin Routes */}
         <Route path="settings" element={<AdminPage />} />

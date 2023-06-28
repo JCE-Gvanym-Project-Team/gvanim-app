@@ -1,10 +1,11 @@
+import
+  {
+    FormControl,
+    FormHelperText,
+    OutlinedInput,
+    Stack,
+  } from "@mui/material";
 import * as React from "react";
-import {
-  FormControl,
-  OutlinedInput,
-  Stack,
-  FormHelperText,
-} from "@mui/material";
 
 interface EmailInputProps {
   email: string;

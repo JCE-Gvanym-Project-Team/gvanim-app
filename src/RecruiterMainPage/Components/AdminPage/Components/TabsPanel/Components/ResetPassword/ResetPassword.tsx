@@ -9,7 +9,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Grid from '@mui/material/Grid';
 import { getConnectedUser, sendResetMail } from '../../../../../../../Firebase/FirebaseFunctions/Authentication';
 
-const ITEM_HEIGHT = 48;
+const ITEM_HEIGHT = 38;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
   PaperProps: {
@@ -20,6 +20,24 @@ const MenuProps = {
   },
 };
 
+
+
+
+function replaceCharInHtherChar(str: string, charReplaced: string, newChar: string): string {
+  let newStr: string = '';
+  for (let i = str.length - 1; i >= 0; i--) {
+    if (str[i] === charReplaced) {
+      newStr += newChar;
+    }
+    else
+      newStr += str[i];
+  }
+
+  let strArray = newStr.split("");
+  strArray.reverse();
+  let reversedStr = strArray.join("");
+  return reversedStr;
+}
 
 export default function UpdateAccount() {
   const [recruitersSelected, setRecruitersSelected] = React.useState<string[]>([]);
@@ -32,14 +50,15 @@ export default function UpdateAccount() {
   React.useEffect(() => {
     const currentUser = getConnectedUser()
       .then((userCredential) => {
-        if (userCredential?.email != null)
-          setUserEmail(userCredential?.email);
-        console.log(userEmail);
+        if (userCredential?.email != null) {
+          const mail = replaceCharInHtherChar(userCredential?.email, '_', '.');
+          setUserEmail(mail);
+        }
         if (process.env.REACT_APP_ADMIN_MAIL === userEmail)
           setIsAdminUser(true);
       })
       .catch((error) => {
-        console.log(error);
+        return;
       });
   }, [userEmail]);
 
@@ -53,14 +72,22 @@ export default function UpdateAccount() {
   }, []);
 
   const handleChange = (event: SelectChangeEvent<string[]>) => {
-    setRecruitersSelected(event.target.value as string[]);
-    setRecruiterSelect(true);
+    const selectedValue = event.target.value as string[];
+
+    if (selectedValue.length === 1) {
+      setRecruitersSelected(selectedValue);
+      setRecruiterSelect(true);
+    } else {
+      setRecruitersSelected([]);
+      setRecruiterSelect(false);
+    }
     // setOpenDialog(true);
   };
 
   const handleResetPassword = () => {
-    console.log(recruitersSelected[0]);
-    sendResetMail(recruitersSelected[0]); 
+    const mailwithpoint = recruitersSelected[0];
+    const mail = replaceCharInHtherChar(mailwithpoint, '_', '.');
+    sendResetMail(mail);
     if (recruiterSelect) setOpenDialog(true);
   };
 
@@ -75,12 +102,12 @@ export default function UpdateAccount() {
 
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'fixed', alignItems: 'center', height: '30vh' }}>
+    <Box sx={{ display: 'flex', justifyContent: 'fixed', alignItems: 'center', height: '270px' }}>
       <Grid container justifyContent="center">
         <Grid item xs={8} sm={6} md={4} lg={3}>
           {isAdminUser && (
             <>
-              <FormControl sx={{ width: '100%', marginBottom: '1rem', marginTop: '3rem' }}>
+              <FormControl sx={{ width: '100%', marginBottom: '10px', marginTop: '20px' }}>
                 <label>אנא בחר/י מגייס/ת:</label>
                 <Select
                   multiple
@@ -112,28 +139,34 @@ export default function UpdateAccount() {
                 </Button>
               </Box>
 
+
+              <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '5rem' }}>
+                <Button variant="outlined" onClick={resetThePasswordOfTheCurrentUser} sx={{ width: '85%' }}>
+                  אפס/י את הסיסמא של החשבון הנוכחי
+                </Button>
+              </Box>
             </>
+          )}
+
+          {!isAdminUser && (
+            <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
+              <Button variant="outlined" onClick={resetThePasswordOfTheCurrentUser} sx={{ width: '85%' }}>
+                אפס/י את הסיסמא של החשבון הנוכחי
+              </Button>
+            </Box>
           )}
 
           <Dialog open={openDialog} onClose={handleCloseDialog}>
             <DialogTitle sx={{ textAlign: 'center', margin: '1rem 0' }}>הסיסמא אופסה בהצלחה!</DialogTitle>
             <DialogContent>
               <Box sx={{ textAlign: 'center', margin: '1rem 0' }}>
-                <p>אנא עקב/י אחרי ההוראות במייל:</p>
-                <p>{recruitersSelected.join(', ')}</p>
+                <p>אנא עקב/י אחרי ההוראות במייל</p>
               </Box>
             </DialogContent>
             <DialogActions>
               <Button onClick={handleCloseDialog}>סגור</Button>
             </DialogActions>
           </Dialog>
-
-          <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '5rem' }}>
-            <Button variant="outlined" onClick={resetThePasswordOfTheCurrentUser} sx={{ width: '85%' }}>
-              אפס/י את הסיסמא של החשבון הנוכחי
-            </Button>
-          </Box>
-
         </Grid>
       </Grid>
     </Box>

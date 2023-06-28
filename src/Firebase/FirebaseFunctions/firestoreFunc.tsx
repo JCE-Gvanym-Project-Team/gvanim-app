@@ -11,7 +11,6 @@ import 'firebase/compat/storage';
  * @returns A Promise that resolves when the file has been uploaded and the reference has been added to Firestore.
  */
 export async function uploadFileToFirestore(file: File, path: string, name: string): Promise<void> {
-  console.log(`path: ${path}\nname: ${name}`);
   const storageRef = firebase.storage().ref();
   const fileRef = storageRef.child(`${path}/${name}`);
   const snapshot = await fileRef.put(file);
@@ -21,7 +20,6 @@ export async function uploadFileToFirestore(file: File, path: string, name: stri
   await docRef.set({
     downloadUrl: downloadUrl
   });
-  console.log(`File ${name} uploaded to Firestore at path ${path}`);
 }
 
 export async function getDownloadUrlFromFirestorePath(path: string): Promise<string> {
@@ -76,7 +74,7 @@ export async function fileExists(path: string) {
     return false;
   }
 }
-export async function renameFirestorePath(path: string, newName: string): Promise<void> {
+export async function renameFirestorePath(path: string, newName: string): Promise<boolean> {
   try {
     // Get the original document or collection data
     const originalData = await getFirestorePathData(path);
@@ -88,9 +86,10 @@ export async function renameFirestorePath(path: string, newName: string): Promis
     // Delete the original document or collection
     await deleteFirestorePath(path);
 
-    console.log(`Successfully renamed path: ${path} to ${newPath}`);
+    return true;
   } catch (error) {
     console.error(`Error renaming path: ${path}`, error);
+    return false;
   }
 }
 

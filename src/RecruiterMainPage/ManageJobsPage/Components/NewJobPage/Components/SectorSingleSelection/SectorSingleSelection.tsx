@@ -1,10 +1,9 @@
-import * as React from 'react';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import ListItemText from '@mui/material/ListItemText';
+import MenuItem from '@mui/material/MenuItem';
+import OutlinedInput from '@mui/material/OutlinedInput';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import * as React from 'react';
 import { Sector, getOpenSectors } from '../../../../../../Firebase/FirebaseFunctions/Sector';
 
 const ITEM_HEIGHT = 48;

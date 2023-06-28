@@ -1,6 +1,5 @@
 import { SxProps } from "@mui/material";
 import { CSSProperties } from "@mui/material/styles/createTypography";
-import { ManageCandidatesPageGlobalStyle } from "../../../../PageStyles";
 
 export const MyTextFieldSx = {
     boxShadow: '0px 2px 24px #DAECFF',

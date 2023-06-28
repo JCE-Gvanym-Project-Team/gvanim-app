@@ -1,14 +1,14 @@
-import * as React from 'react';
-import Button from '@mui/material/Button';
-import { styled } from '@mui/material/styles';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
-import Typography from '@mui/material/Typography';
 import { Delete } from '@mui/icons-material';
+import CloseIcon from '@mui/icons-material/Close';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import { styled } from '@mui/material/styles';
+import * as React from 'react';
 
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -66,6 +66,21 @@ export default function MySectorRemoveDialog(props: { handleDelete: any, selecte
         setOpen(false);
     };
 
+    const deleteSector = async () => {
+        handleDelete();
+        setOpen(false);
+        //remove the sector from all recruiters
+        // const recruiters: Recruiter[] = await getRecruitersFromDatabase();
+        // recruiters.forEach(async (recruiter) => {
+            // const sectorName = selectedRowParams.currentRow.sector_name;
+            // const sectors: string[] = await recruiter._sectors;
+            // if (sectors.indexOf(sectorName) !== -1) {
+                //  recruiter.removeSector(sectorName);
+                // await sleep(3000);
+            // }
+        // });
+    };
+
     return (
         <>
             <IconButton onClick={handleClickOpen} disabled={!selectedRowParams}>
@@ -84,9 +99,9 @@ export default function MySectorRemoveDialog(props: { handleDelete: any, selecte
                 <DialogContent dividers>
                     <Typography gutterBottom>
 
-                            לתשומת ליבך! מחיקת האשכול לצמיתות עלולה להשפיע על נתוני הסטטיסטיקות, יש באפשרותך לשנות את סטטוס האשכול ל-'סגור',
-                        האם בכל זאת את/ה מעוניין/ת להמשיך בפעולה ולהסיר את האשכול <strong style={{textDecoration: 'underline'}}>{selectedRowParams ?  `'${selectedRowParams!.currentRow!.sector_name}'` : 'לא ידוע'}</strong> לצמיתות?
-                       
+                        לתשומת ליבך! מחיקת האשכול לצמיתות עלולה להשפיע על נתוני הסטטיסטיקות, יש באפשרותך לשנות את סטטוס האשכול ל-'סגור',
+                        האם בכל זאת את/ה מעוניין/ת להמשיך בפעולה ולהסיר את האשכול <strong style={{ textDecoration: 'underline' }}>{selectedRowParams ? `'${selectedRowParams!.currentRow!.sector_name}'` : 'לא ידוע'}</strong> לצמיתות?
+
 
                     </Typography>
                 </DialogContent>
@@ -94,7 +109,7 @@ export default function MySectorRemoveDialog(props: { handleDelete: any, selecte
                     <Button variant='text' autoFocus onClick={handleClose}>
                         ביטול
                     </Button>
-                    <Button variant='text' color='error' type='submit' autoFocus onClick={() => { handleDelete(); setOpen(false); }}>
+                    <Button variant='text' color='error' type='submit' autoFocus onClick={() => { deleteSector(); }}>
                         הסר
                     </Button>
                 </DialogActions>

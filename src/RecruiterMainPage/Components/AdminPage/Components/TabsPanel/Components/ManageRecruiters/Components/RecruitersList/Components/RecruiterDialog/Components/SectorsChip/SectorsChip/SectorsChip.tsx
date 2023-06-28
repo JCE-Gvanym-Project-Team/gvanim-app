@@ -1,15 +1,9 @@
-import * as React from 'react';
-import { Theme, useTheme } from '@mui/material/styles';
+import { Checkbox, ListItemText, OutlinedInput } from '@mui/material';
 import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
+import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { Checkbox, FormLabel, Input, ListItemText, OutlinedInput, Stack, TextField } from '@mui/material';
-import { MyPaperSx } from './SectorsChipStyle';
-import SelectInput from '@mui/material/Select/SelectInput';
-import { getAllSectors } from '../../../../../../../../../../../../../../Firebase/FirebaseFunctions/Sector';
-
+import * as React from 'react';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -23,56 +17,50 @@ const MenuProps = {
 };
 
 
+export default function SectorChips(props: {
+  allSectors: string[],
+  setListToShow:React.Dispatch<React.SetStateAction<string[]>>,
+  listToShow:string[],
+  setSaveButton: React.Dispatch<React.SetStateAction<boolean>>
+}) {
+  const { allSectors, setListToShow, listToShow, setSaveButton } = props;
+  const [selectNow, setSelectNow] = React.useState<string[]>([]);
+  // const [listToShow, setListToShow] = React.useState<string[]>([]);
+// 
+  // React.useEffect(() => {
+    // setListToShow(recruiterCurentSectors);
+  // }, []);
+// 
+  // console.log("listToShow: " + listToShow);
 
-function getStyles(name: string, personName: readonly string[], theme: Theme) {
-  return {
-    fontWeight:
-      personName.indexOf(name) === -1
-        ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium,
-  };
-}
 
-export default function SectorChips(props: { recruiterSectors: string[], setRecruiterSectors: any, setSaveButton: any, sectorsSelection:string[], setSectorsSelection:any }) {
-  const { recruiterSectors, setRecruiterSectors, setSaveButton,sectorsSelection, setSectorsSelection} = props;
-  const theme = useTheme();
-
-  const handleChange = (event: SelectChangeEvent<typeof recruiterSectors>) => {
-    setSaveButton(true);
+  const handleChange = async (event: SelectChangeEvent<typeof allSectors>) => {
     const {
       target: { value },
     } = event;
-    setSectorsSelection(
-      // On autofill we get a stringified value.
-      typeof value === 'string' ? value.split(',') : value,
-    );
+    const sector: string = event.target.value[0] as string;
+    
+    setSaveButton(true);
+    let indexToRemove = listToShow.indexOf(sector);
+    if (indexToRemove === -1) {
+      const updatedListToShow = [...listToShow, sector];
+      await setListToShow(updatedListToShow);
+    } 
+    else {
+      const updatedListToShow = listToShow.filter((item) => item !== sector);
+      await setListToShow(updatedListToShow);
+    }
   };
-
-  React.useEffect(() => {
-    console.log(sectorsSelection);
-  }, [sectorsSelection]);
-  
-
-  // const fetchSectors = () => {
-   // recruiterSectors !== null && setSectorsSelection(recruiterSectors)
-  // };
-
-  // React.useEffect(() => {
-    // fetchSectors();
-  // }, []);
-
-
 
   return (
     <Box sx={{ width: '100%' }}>
-
       <FormControl sx={{ width: '100%', maxWidth: '100%' }}>
         <label>אשכולות:</label>
         <Select
           multiple
           size='small'
           label="אשכולות"
-          value={sectorsSelection}
+          value={selectNow}
           multiline
           onChange={handleChange}
           input={<OutlinedInput />}
@@ -80,18 +68,17 @@ export default function SectorChips(props: { recruiterSectors: string[], setRecr
           MenuProps={MenuProps}
           required
         >
-          {recruiterSectors.map((sector) => (
+          {allSectors.map((sector) => (
             <MenuItem key={sector} value={sector}>
               <Checkbox
-                checked={sectorsSelection.indexOf(sector) > -1}
+                checked={listToShow.indexOf(sector) > -1}
+                onChange={() => { }}
               />
               <ListItemText primary={sector} />
             </MenuItem>
           ))}
-
         </Select>
       </FormControl>
-
-    </Box >
+    </Box>
   );
 }

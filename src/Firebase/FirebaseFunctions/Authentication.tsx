@@ -1,6 +1,6 @@
 import 'firebase/auth';
-import { User, getAuth, sendPasswordResetEmail, signInWithEmailAndPassword, updatePassword } from "firebase/auth";
-
+import { User, getAuth, sendPasswordResetEmail, signInWithEmailAndPassword, updatePassword, confirmPasswordReset } from "firebase/auth";
+import axios from 'axios';
 const auth = getAuth();
 
 /**
@@ -10,9 +10,9 @@ const auth = getAuth();
  * @returns None
  * @throws {FirebaseError} If there is an error with the Firebase authentication.
  */
-export async function loginRecruiter(email: string, password: string): Promise<object> {
+export async function loginRecruiter(email: string, password: string): Promise<Object> {
 	if (await isConnected()) {
-		console.log('alrady connected');
+		return {};
 	}
 	else {
 		return await signInWithEmailAndPassword(auth, email, password);
@@ -49,29 +49,42 @@ export async function isConnected(): Promise<boolean> {
 		return false;
 }
 
-export async function getConnectedUser(): Promise<User | null>{
+export async function getConnectedUser(): Promise<User | null> {
 	return getAuth().currentUser;
 }
 export async function sendResetMail(mail: string) {
 	sendPasswordResetEmail(auth, mail);
 }
-export async function updateRecruiterPassword(newPass: string){
+export async function updateLinkRecruiterPassword(newPass: string, oobCode: string) {
+	confirmPasswordReset(auth, oobCode, newPass)
+		.then(() => {
+			return true;
+		})
+		.catch((error) => {
+			return false;
+		});
+}
+export async function updateConnectedRecruiterPassword(newPass: string) {
 	const user = await getConnectedUser();
-	if(user)
+	if (user){
 		updatePassword(user, newPass);
+		return true;
+	}
 	else
-		console.log('error while updating password');
+		return false;
 }
-/*
-export async function main() {
-	await loginAdmin();
-	let rec = new Recruiter('ex@gmail.com',"el","ta");
-	await rec.add('123456');
-	let sec = new Sector('sec1', true);
-	await sec.add();
-	await rec.addSector('sec1');
-	console.log(`4)exist?(t) ${await rec.exists()}`);
-	await sleep(5000);
-	console.log(`5)exist?(t) ${await rec.exists()}`);
+export async function deleteUserAccount(mail: string) {
+	return new Promise<Boolean>((resolve, reject) => {
+		axios.post('https://europe-west1-gvanim-app.cloudfunctions.net/deleteRecruiter', {
+			mail: mail,
+		})
+			.then(response => {
+				const status = response.data;
+				resolve(status);
+			})
+			.catch(error => {
+				console.error('Error calling the Cloud Function:', error);
+				reject(error);
+			});
+	});
 }
-*/

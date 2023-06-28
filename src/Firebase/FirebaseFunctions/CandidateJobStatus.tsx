@@ -24,9 +24,9 @@ export class CandidateJobStatus {
     public _status: string;
     public _about: string;
     public _matchingRate: number;
-    public _applyDate: Date;
-    public _lastUpdate: Date;
-    public _interviewDate: Date;
+    public _applyDate: string;
+    public _lastUpdate: string;
+    public _interviewDate: string;
     public _interviewsSummery: Array<string>;
     public _recomendations: Array<Recomendation>;
     public _rejectCause: string;
@@ -47,9 +47,9 @@ export class CandidateJobStatus {
         this._candidateId = candidateId;
         this._status = status;
         this._matchingRate = matchingRate;
-        this._applyDate = applyDate;
-        this._lastUpdate = lastUpdate;
-        this._interviewDate = interviewDate;
+        this._applyDate = applyDate.toString();
+        this._lastUpdate = lastUpdate.toString();
+        this._interviewDate = interviewDate.toString();
         this._interviewsSummery = interviewsSummery;
         this._about = about;
         this._recomendations = recomendations;
@@ -65,46 +65,57 @@ export class CandidateJobStatus {
      */
     public async addRecomendation(fullName: string, phone: string, eMail: string, recomendation: File) {
         if (this._recomendations.length >= 3)
-            return;
+            return -1;
         if (this._recomendations.map((rec) => rec._phone).includes(phone))
-            return;
+            return -1;
         this._recomendations.push(new Recomendation(fullName, phone, eMail));
         const extension = recomendation.name.split('.')[recomendation.name.split('.').length - 1];
         uploadFileToFirestore(recomendation, `CandidatesFiles/${this._candidateId}/rec`, `${phone}_${this._jobNumber}_REC.${extension}`);
         replaceData((await this.getPath()), this);
+        return 0;
     }
     public async updateAbout(about: string) {
         if (await this.exists()) {
             this._about = about;
             replaceData((await this.getPath()), this);
+            return 0;
         }
+        return -1;
     }
     public async updateMatchingRate(matchingRate: number) {
         if (await this.exists()) {
             this._matchingRate = matchingRate;
             replaceData((await this.getPath()), this);
+             return 0;
         }
+        return -1;
     }
 
     public async updateInterviewDate(interviewDate: Date) {
         if (await this.exists()) {
-            this._interviewDate = interviewDate;
+            this._interviewDate = interviewDate.toString();
             replaceData((await this.getPath()), this);
+             return 0;
         }
+        return -1;
     }
 
     public async updateInterviewsSummery(interviewsSummery: Array<string>) {
         if (await this.exists()) {
             this._interviewsSummery = interviewsSummery;
             replaceData((await this.getPath()), this);
+             return 0;
         }
+        return -1;
     }
 
     public async updateRejectCause(rejectCause: string) {
         if (await this.exists()) {
             this._rejectCause = rejectCause;
             replaceData((await this.getPath()), this);
+             return 0;
         }
+        return -1;
     }
     /**
      * Retrieves the URLs of the recommendation files for the current candidate.
@@ -166,12 +177,15 @@ export class CandidateJobStatus {
      * @param {string} [candidateId=this._candidateId] - The new candidate ID to set, dont use this paarmeter.
      * @returns None
      */
-    public async edit(matchingRate: number = this._matchingRate, about: string = this._about, interviewDate: Date = this._interviewDate, rejectCause: string = this._rejectCause) {
+    public async edit(matchingRate: number = this._matchingRate, about: string = this._about, interviewDate: Date = new Date(this._interviewDate), rejectCause: string = this._rejectCause) {
+        if(!(await this.exists()))
+            return -1;
         this._matchingRate = matchingRate;
-        this._interviewDate = interviewDate;
+        this._interviewDate = interviewDate.toString();
         this._about = about;
         this._rejectCause = rejectCause;
         replaceData((await this.getPath()), this);
+        return 0;
     }
     /**
      * Retrieves the path of the realtime DB object that corresponds to the
@@ -215,6 +229,7 @@ export class CandidateJobStatus {
                 ((await getObjectAtPath("/CandidatesJobStatus/" + id))._jobNumber === this._jobNumber))
                 removeObjectAtPath("/CandidatesJobStatus/" + id);
         });
+        return 0;
     }
     /**
      * Adds the current object to the realtime DB. 
@@ -223,11 +238,10 @@ export class CandidateJobStatus {
     public async add() {
         if (!(await this.exists())){
             await appendToDatabase(this, "/CandidatesJobStatus");
-            return true;
+            return 0;
         }
         else{
-            console.log("the CandidatesJobStatus already exists");
-            return false;
+            return 1;
 
         }
     }
@@ -236,13 +250,15 @@ export class CandidateJobStatus {
      * @param {string} newStatus - The new status to update the candidate job application to.
      * @param {Date} [interviewDate=this._interviewDate] - The interview date for the candidate job application leave empty if the new satatus not require interview.
      */
-    public async updateStatus(newStatus: string, interviewDate: Date = this._interviewDate): Promise<void> {
+    public async updateStatus(newStatus: string, interviewDate: Date = new Date(this._interviewDate)): Promise<number> {
         if (!(await this.exists())) {
-            console.log("candidate job status not found in the database");
-            return;
+            return -1;
         }
         this._status = newStatus;
+        this._interviewDate = interviewDate.toString();
+        this._lastUpdate = (new Date()).toString();
         replaceData((await this.getPath()), this);
+            return 0;
     }
     public async getWhatsappUrl(text: string): Promise<string> {
         const cand = (await getFilteredCandidates(["id"], [this._candidateId])).at(0);

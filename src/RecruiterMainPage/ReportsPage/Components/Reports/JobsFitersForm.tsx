@@ -1,35 +1,92 @@
-import * as React from 'react';
+import { ArticleOutlined } from '@mui/icons-material';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { Box, Button, Container, FormControlLabel, MenuItem, Radio, RadioGroup, Select, SelectChangeEvent, Stack, Typography } from '@mui/material';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { Box, Typography, FormControlLabel, MenuItem, Radio, RadioGroup, Select, SelectChangeEvent, Stack, Container, Button } from '@mui/material';
-import { CandidateJobStatus, Job, generateJobNumber, getFilteredCandidateJobStatuses, getFilteredCandidates, getFilteredJobs, loginAdmin } from '../../../../Firebase/FirebaseFunctions/functionIndex';
-import { exportToExcel } from '../../../../Firebase/FirebaseFunctions/Reports/GlobalFunctions'
-import CandidatesByFilters from '../../../../Firebase/FirebaseFunctions/Reports/CandidatesFilters';
-import { MyReportStyle, formContainerStyles, radioStyle } from '../../ReportPageStyle';
-import JobsByFilters from '../../../../Firebase/FirebaseFunctions/Reports/JobsFilters'
-import { MyPaperSx, BoxGradientSx } from '../../../ManageJobsPage/Components/NewJobPage/NewJobStyle';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { exportToExcel } from '../../../../Firebase/FirebaseFunctions/Reports/GlobalFunctions';
+import JobsByFilters from '../../../../Firebase/FirebaseFunctions/Reports/JobsFilters';
+import { getAllRoles, getAllSectors } from '../../../../Firebase/FirebaseFunctions/functionIndex';
+import { BoxGradientSx, MyPaperSx } from '../../../ManageJobsPage/Components/NewJobPage/NewJobStyle';
 import { designReturnButton } from '../../../ManageJobsPage/ManageJobsPageStyle';
-import { ArticleOutlined } from '@mui/icons-material';
+import { MyReportStyle, radioStyle } from '../../ReportPageStyle';
 
 
 
-export default function JobsFiltersForm()
-{
 
-    const createReport = (role_ind, scope_ind, sector_ind, openJobs_ind, highPriority_ind, viewsAndApplyPerPlatform_ind, startDate, endDate) =>
-    {
+interface typeMyData {
+    id: number;
+    name: string;
+}
+
+export default function JobsFiltersForm() {
+    const navigate = useNavigate();
+    const [roles, setRoles] = React.useState<typeMyData[]>([]);
+    const [sectors, setSectors] = React.useState<typeMyData[]>([]);
+    const [selectedRole, setSelectedRole] = React.useState<string>();
+    const [selectedSector, setSelectedSector] = React.useState<string>();
+    const [scope, setScope] = React.useState('');
+    const [openJobs, setOpenJobs] = React.useState('yes');
+    const [highPriority, setHighPriority] = React.useState('no');
+    const [viewsAndApplyPerPlatform, setViewsAndApplyPerPlatform] = React.useState('');
+    const [startDate, setStartDate] = React.useState(null);
+    const [endDate, setEndDate] = React.useState(null);
+
+    React.useEffect(() => {
+        const fileData = async () => {
+            // --- sectors 
+            
+            let i = 20;
+            const sectorsFromDb = await getAllSectors();
+            let updatedSectors = [{ id: 10, name: 'כל האשכולות' }];
+
+            updatedSectors = updatedSectors.concat(
+                sectorsFromDb.map((sector) => {
+                    const sectorObj = { id: i, name: sector._name };
+                    i = i + 10
+                    return sectorObj;
+                })
+            );
+
+            setSectors(updatedSectors);
+
+
+            // ---- roles
+            const rolesFromDb = await getAllRoles();
+            i = 20;
+
+            let updatedRoles = [{ id: 10, name: "כל התפקידים" }];
+
+            updatedRoles = updatedRoles.concat(
+                rolesFromDb.map((role) => {
+                    const roleObj = { id: i, name: role._name };
+                    i = i + 10;
+                    return roleObj;
+                })
+            );
+
+            setRoles(updatedRoles);
+
+            // setSectors([{ id: 10, name: 'כל האשכולות' }]);
+        };
+
+
+        fileData();
+    }, []);
+
+
+
+
+    const createReport = (roleName, scope_ind, sectorName, openJobs_ind, highPriority_ind, viewsAndApplyPerPlatform_ind, startDate, endDate) => {
         // checking if the user select all the buttons
         const isDateSelected = startDate && endDate;
-
-
-        if (!role_ind || !scope_ind || !sector_ind || !role_ind || !viewsAndApplyPerPlatform_ind || !isDateSelected)
-        {
+    
+        if (!roleName || !scope_ind || !sectorName || !viewsAndApplyPerPlatform_ind || !isDateSelected) {
             // displaying an error message or indicating to the user that the parameters are mandatory
             alert('יש למלא את כל השדות');
             return;
@@ -38,12 +95,7 @@ export default function JobsFiltersForm()
         const scopeArr = [25, 50, 75, 100, 1]; // [1] mean evry scope of jobs
         const choice = ["true", "false"];
         const viewsAndApplyPerPlatformArr: string[] = ["אל תכלול", "פייסבוק", "יד 2", "מאסטר גוב", "גוגל", "כל הפלטפורמות"];
-        const roleArr = ["מנהל", "עובד סוציאלי", "מתנדב", "כל התפקידים"];
-        const sectorArr = ["מרכז", "צפון", "דרום", "כל הארץ"];
-
-        const role = roleArr[Math.floor(role_ind / 10) - 1];
         const scope = scopeArr[Math.floor(scope_ind / 10) - 1];
-        const sector = sectorArr[Math.floor(sector_ind / 10) - 1];
 
         let openJobs: boolean;
         if (openJobs_ind === 'yes')
@@ -61,78 +113,57 @@ export default function JobsFiltersForm()
         const formattedStartDate = startDate.toDate();
         const formattedEndDate = endDate.toDate();
 
-        const result = JobsByFilters(role, scope, sector, openJobs, highPriority, viewsAndApplyPerPlatform, formattedStartDate, formattedEndDate)
-            .then((result) =>
-            {
+        const result = JobsByFilters(roleName, scope, sectorName, openJobs, highPriority, viewsAndApplyPerPlatform, formattedStartDate, formattedEndDate)
+            .then((result) => {
                 if (result.length === 0)
                     alert('אין נתונים להצגה');
                 else
                     exportToExcel(result, "משרות");
             })
-            .catch((error) =>
-            {
+            .catch((error) => {
                 // handle the error
                 console.log(error);
             });
     }
 
 
-    // const 
-    const navigate = useNavigate();
-
-    const [role, setRole] = React.useState('');
-    const [scope, setScope] = React.useState('');
-    const [sector, setSector] = React.useState('');
-    const [openJobs, setOpenJobs] = React.useState('yes');
-    const [highPriority, setHighPriority] = React.useState('no');
-    const [viewsAndApplyPerPlatform, setViewsAndApplyPerPlatform] = React.useState('');
-    const [startDate, setStartDate] = React.useState(null);
-    const [endDate, setEndDate] = React.useState(null);
 
 
     // handls
-    function handleChangeRole(event: SelectChangeEvent<string>, child: React.ReactNode): void
-    {
-        setRole(event.target.value);
+    function handleChangeRole(event: SelectChangeEvent<string>, child: React.ReactNode): void {
+        setSelectedRole(event.target.value);
     }
 
-    function handleChangeScope(event: SelectChangeEvent<string>, child: React.ReactNode): void
-    {
+    function handleChangeScope(event: SelectChangeEvent<string>, child: React.ReactNode): void {
         setScope(event.target.value);
     }
 
-    const handleChangeSector = (event) =>
-    {
-        setSector(event.target.value);
+    const handleChangeSector = (event) => {
+        setSelectedSector(event.target.value);
     };
 
-    const handleChangeOpenJobs = (event) =>
-    {
+    const handleChangeOpenJobs = (event) => {
         setOpenJobs(event.target.value);
     };
 
-    const handleChangeHighPriority = (event) =>
-    {
+    const handleChangeHighPriority = (event) => {
         setHighPriority(event.target.value);
     };
 
-    const handleViewsAndApplyPerPlatform = (event) =>
-    {
+    const handleViewsAndApplyPerPlatform = (event) => {
         setViewsAndApplyPerPlatform(event.target.value);
     }
-    const handleChangeStartDate = (date) =>
-    {
+    const handleChangeStartDate = (date) => {
         setStartDate(date);
     };
 
-    const handleChangeEndDate = (date) =>
-    {
+    const handleChangeEndDate = (date) => {
         setEndDate(date);
     };
 
     const handleClick = () => {
         navigate("/management/reports");
-    }; 
+    };
 
 
 
@@ -265,14 +296,15 @@ export default function JobsFiltersForm()
                                             <Select
                                                 labelId="demo-simple-select-label"
                                                 id="demo-simple-select"
-                                                value={role}
+                                                value={selectedRole}
                                                 label="rejectionCause"
                                                 onChange={handleChangeRole}
                                             >
-                                                <MenuItem value={10}>מנהל</MenuItem>
-                                                <MenuItem value={20}>עובד סוציאלי</MenuItem>
-                                                <MenuItem value={30}>מתנדב</MenuItem>
-                                                <MenuItem value={40}>כל התפקידים</MenuItem>
+                                                {roles.map((role) => (
+                                                    <MenuItem key={role.id} value={role.name}>
+                                                        {role.name}
+                                                    </MenuItem>
+                                                ))}
                                             </Select>
                                         </FormControl>
                                         <br />
@@ -304,14 +336,16 @@ export default function JobsFiltersForm()
                                             <Select
                                                 labelId="demo-simple-select-label"
                                                 id="demo-simple-select"
-                                                value={sector}
+                                                value={selectedSector}
                                                 label="sector"
                                                 onChange={handleChangeSector}
                                             >
-                                                <MenuItem value={10}>מרכז</MenuItem>
-                                                <MenuItem value={20}>צפון</MenuItem>
-                                                <MenuItem value={30}>דרום</MenuItem>
-                                                <MenuItem value={40}>כל הארץ</MenuItem>
+                                                {sectors.map((sector) => (
+                                                    <MenuItem key={sector.id} value={sector.name}>
+                                                        {sector.name}
+                                                    </MenuItem>
+                                                ))}
+
                                             </Select>
                                         </FormControl>
 
@@ -387,8 +421,7 @@ export default function JobsFiltersForm()
                                         <br />
 
                                         {/* create report */}
-                                        <button onClick={() => createReport(role, scope, sector, openJobs, highPriority, viewsAndApplyPerPlatform, startDate, endDate)}>צור דוח</button>
-                                        {/* <button onClick={() => main()}>צור גובס</button> */}
+                                        <button onClick={() => createReport(selectedRole, scope, selectedSector, openJobs, highPriority, viewsAndApplyPerPlatform, startDate, endDate)}>צור דוח</button>
                                     </FormControl>
                                 </Box>
                             </Box>

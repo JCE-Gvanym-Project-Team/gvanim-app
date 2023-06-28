@@ -1,20 +1,19 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
-import {
-  Alert,
-  AlertProps,
-  Box,
-  Snackbar,
-  Stack,
-  Typography,
-} from "@mui/material";
-import MyLoading from "../../Components/MyLoading/MyLoading";
-import TransitionComponentSnackbar from "../ManageJobsPage/Components/NewJobPage/Components/SuccessSnackBar/SuccessSnackBar";
-import { useLocation } from "react-router-dom";
-import { BoxGradientSx } from "../PageStyles";
 import { ArticleOutlined } from "@mui/icons-material";
+import
+  {
+    Alert,
+    AlertProps,
+    Box,
+    Snackbar,
+    Stack,
+    Typography,
+  } from "@mui/material";
+import { useLocation } from "react-router-dom";
+import MyLoading from "../../Components/MyLoading/MyLoading";
+import { BoxGradientSx } from "../PageStyles";
 import CandidateTable from "./CandidateTable/CandidateTable";
-import { Candidate } from "./../../Firebase/FirebaseFunctions/Candidate";
 import { ManageCandidatesPageBoxSx } from "./ManageCandidatesPageStyle";
 
 const ManageCandidatesPage = () => {

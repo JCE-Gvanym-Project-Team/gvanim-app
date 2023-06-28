@@ -1,11 +1,12 @@
-import * as React from "react";
 import Menu, { MenuActions } from "@mui/base/Menu";
 import MenuItem, { menuItemClasses } from "@mui/base/MenuItem";
 import Popper from "@mui/base/Popper";
-import { styled } from "@mui/system";
 import { ListActionTypes } from "@mui/base/useList";
+import { Assignment, Edit, MoreVert, Visibility } from "@mui/icons-material";
 import { Box, IconButton, ListItemIcon, Typography } from "@mui/material";
-import { Assignment, Edit, Label, MoreVert, Print } from "@mui/icons-material";
+import { styled } from "@mui/system";
+import * as React from "react";
+import { useNavigate } from "react-router-dom";
 import {
   MenuItemIconSx,
   MenuItemTypographySx,
@@ -13,8 +14,6 @@ import {
   blue,
   grey,
 } from "./DropMenuStyle";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
 
 function MenuSection({ children, label }: MenuSectionProps) {
   return (
@@ -38,10 +37,10 @@ export default function DropMenu(props: { CandidateId: any }) {
     setButtonElement(node);
   }, []);
 
-  const handleEditClick = () => {
+  const editCandidateHandler = () => {
+    navigate(`/management/manageCandidates/${CandidateId._id}`);
     setOpen(false);
     buttonElement?.focus();
-    navigate("/management/editCandidate", { state: CandidateId });
   };
 
   const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -77,14 +76,6 @@ export default function DropMenu(props: { CandidateId: any }) {
         });
       }
     }
-  };
-
-  const createHandleMenuClick = (menuItem: string) => {
-    return () => {
-      console.log(`Clicked on ${menuItem}`);
-      setOpen(false);
-      buttonElement?.focus();
-    };
   };
 
   return (
@@ -126,7 +117,12 @@ export default function DropMenu(props: { CandidateId: any }) {
             <Typography sx={MenuItemTypographySx}>לדף המשרה</Typography>
           </ListItemIcon>
         </StyledMenuItem>
-
+        <StyledMenuItem onClick={editCandidateHandler}>
+          <ListItemIcon>
+            <Visibility sx={MenuItemIconSx} /> {/* The "Visibility" icon */}
+            <Typography sx={MenuItemTypographySx}>צפייה במועמד</Typography>
+          </ListItemIcon>
+        </StyledMenuItem>
         {/* </MenuSection> */}
       </Menu>
     </Box>

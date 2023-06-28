@@ -1,7 +1,10 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormGroup, Stack, TextField, Typography } from '@mui/material';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Stack, TextField, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { sleep } from '../../../../../../../../../Firebase/FirebaseFunctions/test';
+
+import { updateConnectedRecruiterPassword, updateLinkRecruiterPassword } from '../../../../../../../../../Firebase/FirebaseFunctions/Authentication';
+
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 export default function PasswordSettings(props: { passwordEdit: any }) {
     const { passwordEdit } = props;
@@ -37,16 +40,32 @@ export default function PasswordSettings(props: { passwordEdit: any }) {
 
     const handleCloseDialog = () => {
         setDialogOpen(false);
-      };
+    };
 
     const handleUpdatePassword = async () => {
-        if (newPassword.length < 6) {
+        const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d@$#]{8,}$/;
+
+        if (newPassword.length < 8 || !regex.test(newPassword)) {
+            setNewPassword('');
+            setConfirmPassword('');
             setPasswordError(true);
         } else {
             setPasswordError(false);
             if (newPassword !== confirmPassword) {
                 setConfirmPasswordError(true);
             } else { // if sucsess
+                const urlParams = new URLSearchParams(window.location.search);
+                console.log(urlParams);
+                const token = urlParams.get('oobCode') || '';
+                console.log(token); 
+                if (token.length > 0) { // the user is not connected
+                    console.log("is NOTconnected");
+                    updateLinkRecruiterPassword(newPassword, token);
+                }
+                else { // the user is connected
+                    console.log("is connected");
+                    updateConnectedRecruiterPassword(newPassword);
+                }
                 setConfirmPasswordError(false);
                 setDialogOpen(true);
                 setNewPassword('');
@@ -78,7 +97,7 @@ export default function PasswordSettings(props: { passwordEdit: any }) {
                             value={newPassword}
                             onChange={handleNewPasswordChange}
                             error={passwordError}
-                            helperText={passwordError ? 'הסיסמא חייבת להיות 6 תווים לפחות, אותיות a-z, A-Z והתווים @,#,$' : ''}
+                            helperText={passwordError ? 'אורך הסיסמא חייבת להיות 8-12 תווים, אות גדולה ואות קטנה באנגלית ומספר. תווים מותרים הם גם @ $ #' : ''}
                         />
 
 

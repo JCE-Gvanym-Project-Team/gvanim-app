@@ -1,56 +1,48 @@
-import {
-  Box,
-  Button,
-  Container,
-  Divider,
-  FormControlLabel,
-  FormHelperText,
-  FormLabel,
-  MenuItem,
-  Rating,
-  Select,
-  Stack,
-  Switch,
-  TextField,
-  TextareaAutosize,
-  Typography,
-  alpha,
-  styled,
-} from "@mui/material";
-import { useEffect, useState } from "react";
-import {
-  BoxGradientSx,
-  MyLabelSx,
-  MyPaperSx,
-  MyTextFieldSx,
-  SwitchPaperSx,
-} from "./NewCandidatePageStyle";
-import JobScopeSlider from "./Components/ScopeSlider/ScopeSlider";
-import {
-  Job,
-  generateJobNumber,
-  getFilteredJobs,
-} from "../../../Firebase/FirebaseFunctions/Job";
-import { useLocation, useNavigate } from "react-router-dom";
-import "./NewCandidatePage.css";
 import { ArticleOutlined } from "@mui/icons-material";
-import MyLoading from "../../../Components/MyLoading/MyLoading";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import { designReturnButton } from "../ManageCandidatesPageStyle";
-import {
-  Candidate,
-  generateCandidateId,
-  getFilteredCandidates,
-} from "../../../Firebase/FirebaseFunctions/Candidate";
-import PhoneNumberSelection from "./Components/PhoneSingleSelection/PhoneSingleSelection";
-import EmailInput from "./Components/emailSingleSelection/EmailSelection";
-import RemoveCandidateDialog from "./Components/RemoveCandidateDialog/RemoveCandidateDialog";
-import {
-  jobTextSx,
-  mainStackSx,
-} from "../ViewCandidatesPage/ViewCandidatesPageStyle";
-import { CandidateJobStatus } from "../../../Firebase/FirebaseFunctions/CandidateJobStatus";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import
+  {
+    Box,
+    Button,
+    Container,
+    Divider,
+    FormHelperText,
+    FormLabel,
+    MenuItem,
+    Rating,
+    Select,
+    Stack,
+    TextField,
+    Typography,
+    styled
+  } from "@mui/material";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import MyLoading from "../../../Components/MyLoading/MyLoading";
+import
+  {
+    Candidate,
+    generateCandidateId,
+    getFilteredCandidates,
+  } from "../../../Firebase/FirebaseFunctions/Candidate";
+import { CandidateJobStatus } from "../../../Firebase/FirebaseFunctions/CandidateJobStatus";
+import
+  {
+    Job,
+    getFilteredJobs
+  } from "../../../Firebase/FirebaseFunctions/Job";
+import { designReturnButton } from "../ManageCandidatesPageStyle";
+import PhoneNumberSelection from "./Components/PhoneSingleSelection/PhoneSingleSelection";
+import RemoveCandidateDialog from "./Components/RemoveCandidateDialog/RemoveCandidateDialog";
+import EmailInput from "./Components/emailSingleSelection/EmailSelection";
+import "./NewCandidatePage.css";
+import
+  {
+    BoxGradientSx,
+    MyLabelSx,
+    MyPaperSx
+  } from "./NewCandidatePageStyle";
 
 const Form = styled("form")(({ theme }) => ({
   width: "100%",
@@ -130,7 +122,7 @@ const NewCandidatePage = () => {
   };
 
   const fetchJobs = async () => {
-    const fetchedJobs = await getFilteredJobs();
+    const fetchedJobs = await getFilteredJobs(["open"],["true"]);
     setJobs(fetchedJobs);
   };
 

@@ -1,8 +1,7 @@
 import { Box, Stack, Typography, IconButton, Collapse, Divider } from '@mui/material'
 import { Link } from 'react-router-dom';
-import React from 'react'
 import Logo from '../../../Components/Logo/logo.png';
-import MyDrawer from '../../../RecruiterMainPage/Components/NavBar/Components/MyDrawer/MyDrawer';
+import React from 'react';
 
 export default function Navbar() {
     const [open, setOpen] = React.useState<boolean>(false);

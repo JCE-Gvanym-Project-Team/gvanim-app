@@ -1,4 +1,4 @@
-import { SxProps, Theme } from "@mui/material";
+import { SxProps } from "@mui/material";
 
 export const MenuItemIconSx: SxProps = {
     color: 'rgb(62, 80, 96)',

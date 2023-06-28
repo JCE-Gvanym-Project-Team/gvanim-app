@@ -1,4 +1,4 @@
-import { SxProps, createTheme } from "@mui/material";
+import { SxProps } from "@mui/material";
 import { Theme } from "@mui/material/styles";
 
 export const MyButtonSx: SxProps = {
