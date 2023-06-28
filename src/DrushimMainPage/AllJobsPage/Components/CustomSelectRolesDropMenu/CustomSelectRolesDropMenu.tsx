@@ -1,7 +1,8 @@
 import { KeyboardArrowDown } from "@mui/icons-material";
-import { Box, LinearProgress, Stack } from "@mui/material";
-import { useEffect, useState, useRef } from "react";
+import { Box, LinearProgress, Stack, useTheme } from "@mui/material";
+import { useEffect, useState, useRef, useContext } from "react";
 import { default as ReactSelect, components, InputAction, PlaceholderProps, DropdownIndicatorProps } from "react-select";
+import { ColorModeContext, colorTokens } from "../../../theme";
 
 
 export type Option = {
@@ -10,6 +11,14 @@ export type Option = {
 };
 
 const MultiSelect = (props: any) => {
+
+    const theme = useTheme();
+    const colorMode = useContext(ColorModeContext);
+
+    useEffect(() => {
+        console.log(colorMode.getActualMode());
+    }, [colorMode.getActualMode()])
+
     const [loading, setLoading] = useState(true);
 
     const [selectInput, setSelectInput] = useState<string>("");

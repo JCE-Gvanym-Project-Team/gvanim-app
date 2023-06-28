@@ -7,8 +7,10 @@ const MAX_FONT_SIZE = 40;
 const MIN_FONT_SIZE = 12;
 
 // colors based on mode
-export const colorTokens = (mode) => {
-    if (mode === "light") {
+export const colorTokens = (mode) =>
+{
+    if (mode === "light")
+    {
         return {
             primary: {
                 main: "#000000",
@@ -68,7 +70,8 @@ export const colorTokens = (mode) => {
             }
         }
 
-    } else if (mode === "bright-contrast") {
+    } else if (mode === "bright-contrast")
+    {
         return {
             primary: {
                 main: "#000000",
@@ -118,7 +121,8 @@ export const colorTokens = (mode) => {
                 main: "#00FF00"
             }
         }
-    } else if (mode === "dark-contrast") {
+    } else if (mode === "dark-contrast")
+    {
         return {
             primary: {
                 main: "#FFFFFF",
@@ -178,7 +182,8 @@ export const colorTokens = (mode) => {
                 main: "#00FF00"
             }
         }
-    } else {
+    } else
+    {
         // black and white
         return {
             primary: {
@@ -235,7 +240,8 @@ export const colorTokens = (mode) => {
     }
 }
 
-export const themeSettings = (mode, actualMode, fontSize, fontFamily) => {
+export const themeSettings = (mode, actualMode, fontSize, fontFamily) =>
+{
     const colors = colorTokens(actualMode);
     return {
         palette: {
@@ -343,6 +349,7 @@ export const themeSettings = (mode, actualMode, fontSize, fontFamily) => {
 
 export const ColorModeContext = createContext({
     toggleColorMode: (mode) => { },
+    getActualMode: () => { }
 });
 
 export const FontContext = createContext({
@@ -352,7 +359,8 @@ export const FontContext = createContext({
     changeFontFamily: (fontFamily) => { },
 });
 
-export const useMode = () => {
+export const useMode = () =>
+{
     // default is light
     const [mode, setMode] = useState("light");
     const [fontSize, setFontSize] = useState(20);
@@ -362,27 +370,37 @@ export const useMode = () => {
 
     const colorMode = useMemo(() =>
     ({
-        toggleColorMode: (mode) => {
+        toggleColorMode: (mode) =>
+        {
             setActualMode(mode);
+        },
+
+        getActualMode: () =>
+        {
+            return actualMode;
         }
     }), [actualMode]);
 
 
     const fontMode = useMemo(() =>
     ({
-        increaseFontSize: (increaseBy) => {
+        increaseFontSize: (increaseBy) =>
+        {
             setFontSize(fontSize + increaseBy > MAX_FONT_SIZE ? fontSize : fontSize + increaseBy);
         },
 
-        decreaseFontSize: (decreaseBy) => {
+        decreaseFontSize: (decreaseBy) =>
+        {
             setFontSize(fontSize - decreaseBy < MIN_FONT_SIZE ? fontSize : fontSize - decreaseBy);
         },
 
-        changeFontFamily: (fontFamily) => {
+        changeFontFamily: (fontFamily) =>
+        {
             setFontFamily(fontFamily);
         },
 
-        changeFontSize: (fontSize) => {
+        changeFontSize: (fontSize) =>
+        {
             setFontSize(fontSize);
         }
     }), [fontSize, fontFamily]);
@@ -398,7 +416,8 @@ export const useMode = () => {
 }
 
 // helper function for black and white theme
-function colorToGrayscale(color) {
+function colorToGrayscale(color)
+{
     color = color.replace('#', '');
     const red = parseInt(color.substring(0, 2), 16);
     const green = parseInt(color.substring(2, 4), 16);
@@ -421,7 +440,8 @@ function colorToGrayscale(color) {
 }
 
 // helper function for bright contrast 
-function getContrastingColor(hexColor) {
+function getContrastingColor(hexColor)
+{
     const hex = hexColor.replace("#", "");
     const r = parseInt(hex.substring(0, 2), 16);
     const g = parseInt(hex.substring(2, 4), 16);
@@ -434,7 +454,8 @@ function getContrastingColor(hexColor) {
     return contrastingColor;
 }
 
-function getDarkContrastingColor(hexColor) {
+function getDarkContrastingColor(hexColor)
+{
     // Convert hexadecimal color to RGB
     const hex = hexColor.replace("#", "");
     const r = parseInt(hex.substring(0, 2), 16);
