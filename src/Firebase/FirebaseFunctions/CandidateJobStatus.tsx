@@ -63,7 +63,7 @@ export class CandidateJobStatus {
      * @param {File} recomendation - The file containing the recommendation.
      * @returns None
      */
-    public async addRecomendation(fullName: string, phone: string, eMail: string, recomendation: File) {
+    public async addRecomendation(fullName: string, phone: string, eMail: string, recomendation: File ) {
         if (this._recomendations.length >= 3)
             return -1;
         if (this._recomendations.map((rec) => rec._phone).includes(phone))
