@@ -18,7 +18,7 @@ export class Recruiter {
 		this._firstName = firstName;
 		this._lastName = lastName;
 		this._sectors = sectors;
-		this._id = email.replace('.', '_');
+		this._id = email.replaceAll('.', '_');
 	}
 	/**
 	 * Gets the path of the current recruiter in the The realtime DB.
@@ -47,7 +47,7 @@ export class Recruiter {
 				sec.removeRecruiter(this);
 			}
 			await removeObjectAtPath("/Recruiters/" + this._id);
-			await removeObjectAtPath("/RecUid" + this._id);
+			await removeObjectAtPath("/RecUid/" + this._id);
 			await deleteUserAccount(this._email);
 			return 0;
 		}
