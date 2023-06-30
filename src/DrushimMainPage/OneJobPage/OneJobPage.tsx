@@ -289,33 +289,41 @@ export default function OneJobPage()
             await newCandidate.add();
         }
 
-        // apply 
+        // old but gold
+        // if (recommendersListOpen)
+        // {
+        //     let candidateJobStatus = (await getFilteredCandidateJobStatuses(["jobNumber", "candidateId"], [job?._jobNumber.toString()!, newCandidateId]))[0];
+        //     await candidateJobStatus.updateAbout(aboutText);
+        //     recommendersList?.forEach(async (recommender) =>
+        //     {
+        //         const recommenderInfo = recommender[0];
+        //         const file = recommender[1];
+        //         if (recommenderInfo)
+        //         {
+        //             if (!file)
+        //             {
+        //                 await candidateJobStatus.addRecomendation(recommenderInfo._fullName, recommenderInfo._phone, recommenderInfo._eMail, new File([''], ''));
+        //             } else
+        //             {
+        //                 await candidateJobStatus.addRecomendation(recommenderInfo._fullName, recommenderInfo._phone, recommenderInfo._eMail, file);
+        //             }
+        //         }
+        //     })
+        // }
+
+        // // apply 
+        // if ((await newCandidate.apply(job?._jobNumber!, aboutText)) === -1)
+        // {
+        //     setLoading(false);
+        //     setErrorDialogOpen(true);
+        //     return;
+        // }
+
         if ((await newCandidate.apply(job?._jobNumber!, aboutText)) === -1)
         {
             setLoading(false);
             setErrorDialogOpen(true);
             return;
-        }
-
-        if (recommendersListOpen)
-        {
-            let candidateJobStatus = (await getFilteredCandidateJobStatuses(["jobNumber", "candidateId"], [job?._jobNumber.toString()!, newCandidateId]))[0];
-            await candidateJobStatus.updateAbout(aboutText);
-            recommendersList?.forEach(async (recommender) =>
-            {
-                const recommenderInfo = recommender[0];
-                const file = recommender[1];
-                if (recommenderInfo)
-                {
-                    if (!file)
-                    {
-                        await candidateJobStatus.addRecomendation(recommenderInfo._fullName, recommenderInfo._phone, recommenderInfo._eMail, new File([''], ''));
-                    } else
-                    {
-                        await candidateJobStatus.addRecomendation(recommenderInfo._fullName, recommenderInfo._phone, recommenderInfo._eMail, file);
-                    }
-                }
-            })
         }
 
         newCandidate.uploadCv(cvFile);

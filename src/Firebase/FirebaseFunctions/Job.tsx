@@ -1,5 +1,5 @@
 import { realtimeDB } from "../FirebaseConfig/firebase";
-import { Candidate, getFilteredCandidates } from "./Candidate";
+import { Candidate, getFilteredCandidates, getCandidatesByIds } from "./Candidate";
 import { CandidateJobStatus, getFilteredCandidateJobStatuses } from "./CandidateJobStatus";
 import { appendToDatabase, getFirebaseIdsAtPath, removeObjectAtPath, replaceData } from "./DBfuncs";
 import { getOpenRoles } from "./Role";
@@ -75,10 +75,7 @@ export class Job {
         let candidates;
         let ids = (await this.getCandidatures()).map((obj) => obj._candidateId);
         ids = Array.from(new Set(ids));
-        //candidtesId.forEach((id) => candidates.push(getFilteredCandidates(["id"], [id])[0]))
-        for (let i = 0; i < ids.length; i++)
-            candidates.push((await getFilteredCandidates(["id"], [ids[i]])));
-        return candidates;
+        return getCandidatesByIds(ids);
     }
     public async updateTitle(title: string) {
         if (await this.exists()) {
