@@ -16,17 +16,12 @@ import { BoxGradientSx, MyPaperSx } from '../../../ManageJobsPage/Components/New
 import { designReturnButton } from '../../../ManageJobsPage/ManageJobsPageStyle';
 import { MyReportStyle, radioStyle } from '../../ReportPageStyle';
 import { sleep } from '../../../../Firebase/FirebaseFunctions/test';
-
-
-
+import { useEffect } from 'react';
 
 interface typeMyData {
     id: number;
     name: string;
 }
-
-
-
 
 export default function JobsFiltersForm() {
     const navigate = useNavigate();
@@ -37,15 +32,20 @@ export default function JobsFiltersForm() {
     const [scope, setScope] = React.useState('');
     const [openJobs, setOpenJobs] = React.useState('yes');
     const [highPriority, setHighPriority] = React.useState('no');
-    const [viewsAndApplyPerPlatform, setViewsAndApplyPerPlatform] = React.useState('');
-    const [platforms, setPlatforms] = React.useState<typeMyData[]>([]);
+    const [startOn, setStartOn] = React.useState('no');
+    const [platformForApplys, setPlatformForApplys] = React.useState<typeMyData[]>([]);
+    const [platformForViews, setPlatformForViews] = React.useState<typeMyData[]>([]);
+    const [applayPlatformUserSelected, setApplayPlatformUserSelected] = React.useState<string>();
+    const [viewPlatformUserSelected, setViewPlatformUserSelected] = React.useState<string>();
     const [startDate, setStartDate] = React.useState(null);
     const [endDate, setEndDate] = React.useState(null);
+    const [platformIsExist, setPlatformIsExist] = React.useState(false);
 
-    React.useEffect(() => {
+
+    useEffect(() => {
         const fileData = async () => {
-            // --- sectors 
 
+            // get sectors 
             let i = 20;
             const sectorsFromDb = await getAllSectors();
             let updatedSectors = [{ id: 10, name: 'כל האשכולות' }];
@@ -60,13 +60,10 @@ export default function JobsFiltersForm() {
 
             setSectors(updatedSectors);
 
-
-            // ---- roles
+            // get roles
             const rolesFromDb = await getAllRoles();
             i = 20;
-
             let updatedRoles = [{ id: 10, name: "כל התפקידים" }];
-
             updatedRoles = updatedRoles.concat(
                 rolesFromDb.map((role) => {
                     const roleObj = { id: i, name: role._name };
@@ -76,30 +73,53 @@ export default function JobsFiltersForm() {
             );
             setRoles(updatedRoles);
 
-            const allJobs = await getFilteredJobs();
-            i = 20;
-            let updatedJobs = [{ id: 10, name: 'כל הפלטפורמות' }];
 
-            updatedJobs = updatedJobs.concat(
-                allJobs.flatMap((job) => {
-                    let jobPlatforms = Array.from(job._applyPerPlatform.keys());
-                    let newPlatforms: typeMyData[] = [];
+            let oneChoice: typeMyData = { id: 10, name: 'כל הפלטפורמות' };
+            let secondChoice: typeMyData = { id: 20, name: 'איני רוצה לבחור אף פלטפורמה' };
 
-                    for (let j = 0; j < jobPlatforms.length; j++) {
-                        let platform = jobPlatforms[j];
+            // platform for apply
+            const jobs = await getFilteredJobs();
+            let updatedPlatformsForApply: typeMyData[] = [];
+            updatedPlatformsForApply.push(oneChoice);
+            updatedPlatformsForApply.push(secondChoice);
+            i = 30;
 
-                        if (!platforms.some((p) => p.name === platform)) {
-                            const platformObj: typeMyData = { id: i, name: platform };
-                            i += 10;
-                            newPlatforms.push(platformObj);
-                        }
+            for (let k = 0; k < jobs.length; k++) {
+                const jobPlatformsApply = Object.keys(jobs[k]._applyPerPlatform) as string[];
+                for (let j = 0; j < jobPlatformsApply.length; j++) {
+                    const platform = jobPlatformsApply[j];
+                    const isPlatformExist = updatedPlatformsForApply.some((item) => item.name === platform);
+
+                    if (!isPlatformExist) {
+                        const platformObj: typeMyData = { id: i, name: platform };
+                        updatedPlatformsForApply.push(platformObj);
+                        i += 10;
                     }
+                }
+            }
+           setPlatformForApplys(updatedPlatformsForApply);
 
-                    return newPlatforms;
-                })
-            );
+            // platform for views 
 
-            setPlatforms(updatedJobs);
+            let updatedPlatformsForViews: typeMyData[] = [];
+            updatedPlatformsForViews.push(oneChoice);
+            updatedPlatformsForViews.push(secondChoice);
+            i = 30;
+
+            for (let k = 0; k < jobs.length; k++) {
+                const jobPlatformsViews = Object.keys(jobs[k]._viewsPerPlatform) as string[];
+                for (let j = 0; j < jobPlatformsViews.length; j++) {
+                    const platform = jobPlatformsViews[j];
+                    const isPlatformExist = updatedPlatformsForViews.some((item) => item.name === platform);
+
+                    if (!isPlatformExist) {
+                        const platformObj: typeMyData = { id: i, name: platform };
+                        updatedPlatformsForViews.push(platformObj);
+                        i += 10;
+                    }
+                }
+            }
+            setPlatformForViews(updatedPlatformsForViews);
         };
 
         fileData();
@@ -108,38 +128,42 @@ export default function JobsFiltersForm() {
 
 
 
-    const createReport = (roleName, scope_ind, sectorName, openJobs_ind, highPriority_ind, Platform, startDate, endDate) => {
+    const createReport = (roleName, scope_ind, sectorName, openJobs_ind, highPriority_ind, startOn_ind, platformForApply, platformForView, startDate, endDate) => {
         // checking if the user select all the buttons
         const isDateSelected = startDate && endDate;
 
-        if (!roleName || !scope_ind || !sectorName || !Platform || !isDateSelected) {
+        if (!roleName || !scope_ind || !sectorName || !platformForApply || !platformForView || !isDateSelected) {
             // displaying an error message or indicating to the user that the parameters are mandatory
             alert('יש למלא את כל השדות');
             return;
         }
-
-        const scopeArr = [25, 50, 75, 100, 1]; // [1] mean evry scope of jobs
+        console.log("sectorName: " +  sectorName);
+        const scopeArr = [[0,25], [25,50], [50,75], [100, 100], [1]]; // [1] mean evry scope of jobs
         const choice = ["true", "false"];
-        // const viewsAndApplyPerPlatformArr: string[] = ["אל תכלול", "פייסבוק", "יד 2", "מאסטר גוב", "גוגל", "כל הפלטפורמות"];
         const scope = scopeArr[Math.floor(scope_ind / 10) - 1];
-
         let openJobs: boolean;
+        let highPriority: boolean;
+        let startOn: boolean;
+
         if (openJobs_ind === 'yes')
             openJobs = true;
         else
             openJobs = false;
 
-        let highPriority: boolean;
         if (highPriority_ind === 'yes')
             highPriority = true;
         else
             highPriority = false;
 
-        // const viewsAndApplyPerPlatform = viewsAndApplyPerPlatformArr[Math.floor(viewsAndApplyPerPlatform_ind / 10) - 1];
+        if (startOn_ind === 'yes')
+            startOn = true;
+        else
+            startOn = false;
+
         const formattedStartDate = startDate.toDate();
         const formattedEndDate = endDate.toDate();
 
-        const result = JobsByFilters(roleName, scope, sectorName, openJobs, highPriority, Platform, formattedStartDate, formattedEndDate)
+        const result = JobsByFilters(roleName, scope, sectorName, openJobs, highPriority, startOn, platformForApply, platformForView, formattedStartDate, formattedEndDate)
             .then((result) => {
                 if (result.length === 0)
                     alert('אין נתונים להצגה');
@@ -147,8 +171,7 @@ export default function JobsFiltersForm() {
                     exportToExcel(result, "משרות");
             })
             .catch((error) => {
-                // handle the error
-                console.log(error);
+                return
             });
     }
 
@@ -176,8 +199,16 @@ export default function JobsFiltersForm() {
         setHighPriority(event.target.value);
     };
 
-    const handleViewsAndApplyPerPlatform = (event) => {
-        setViewsAndApplyPerPlatform(event.target.value);
+    const handleChangeStartOn = (event) => {
+        setStartOn(event.target.value);
+    };
+
+    const handleApplyPerPlatform = (event) => {
+        setApplayPlatformUserSelected(event.target.value);
+    }
+
+    const handleViewPerPlatform = (event) => {
+        setViewPlatformUserSelected(event.target.value);
     }
     const handleChangeStartDate = (date) => {
         setStartDate(date);
@@ -391,6 +422,7 @@ export default function JobsFiltersForm() {
                                         </RadioGroup>
                                         <br />
 
+
                                         {/* select include mathcing rate */}
                                         <RadioGroup
                                             value={highPriority}
@@ -405,24 +437,59 @@ export default function JobsFiltersForm() {
                                         </RadioGroup>
                                         <br />
 
-                                        {/* בחירת צפיות דרך פלטפורמה*/}
+                                        {/* select include job that startOn*/}
+                                        <RadioGroup
+                                            value={startOn}
+                                            onChange={handleChangeStartOn}
+                                            aria-label="include-grade"
+                                            name="startOn"
+                                        >
+                                            <div style={radioStyle}>
+                                                <FormControlLabel value="yes" control={<Radio />} label="בחר משרות לתחילת עבודה מיידית" />
+                                                <FormControlLabel value="no" control={<Radio />} label="כלול הכל" />
+                                            </div>
+                                        </RadioGroup>
+                                        <br />
+
+
+
+
+                                        {/* בחירת הגשות דרך פלטפורמה*/}
                                         <FormControl fullWidth>
-                                            <InputLabel id="demo-simple-select-label">צפיות והגשות בפלטפורמות:</InputLabel>
+                                            <InputLabel id="demo-simple-select-label">כמה הגישו קורות חיים דרך הפלטפורמה הבאה:</InputLabel>
                                             <Select
                                                 labelId="demo-simple-select-label"
                                                 id="demo-simple-select"
-                                                value={viewsAndApplyPerPlatform}
-                                                label="sector"
-                                                onChange={handleViewsAndApplyPerPlatform}
+                                                value={applayPlatformUserSelected}
+                                                label="platformForApplys"
+                                                onChange={handleApplyPerPlatform}
                                             >
-                                                {platforms.map((plat) => (
+                                                {platformForApplys.map((plat) => (
                                                     <MenuItem key={plat.id} value={plat.name}>
                                                         {plat.name}
                                                     </MenuItem>
                                                 ))}
                                             </Select>
                                         </FormControl>
+                                        <br />
 
+                                        {/* בחירת צפיות דרך פלטפורמה*/}
+                                        <FormControl fullWidth>
+                                            <InputLabel id="demo-simple-select-label">כמה צפו בעמוד המשרה דרך הפלטפורמה הבאה:</InputLabel>
+                                            <Select
+                                                labelId="demo-simple-select-label"
+                                                id="demo-simple-select"
+                                                value={viewPlatformUserSelected}
+                                                label="platformForViews"
+                                                onChange={handleViewPerPlatform}
+                                            >
+                                                {platformForViews.map((plat) => (
+                                                    <MenuItem key={plat.id} value={plat.name}>
+                                                        {plat.name}
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
 
                                         <br />
                                         {/* select time */}
@@ -445,7 +512,7 @@ export default function JobsFiltersForm() {
                                         <br />
 
                                         {/* create report */}
-                                        <button onClick={() => createReport(selectedRole, scope, selectedSector, openJobs, highPriority, viewsAndApplyPerPlatform, startDate, endDate)}>צור דוח</button>
+                                        <button onClick={() => createReport(selectedRole, scope, selectedSector, openJobs, highPriority, startOn, applayPlatformUserSelected, viewPlatformUserSelected, startDate, endDate)}>צור דוח</button>
                                     </FormControl>
                                 </Box>
                             </Box>
@@ -456,15 +523,15 @@ export default function JobsFiltersForm() {
             </Box>
             <Button onClick={() => { main() }}>add job</Button >
 
-                <Box style={{ position: 'absolute', top: '100px', right: '50px' }}>
-                    <Button
-                        onClick={handleClick}
-                        sx={designReturnButton}
-                    >
-                        <ArrowForwardIosIcon></ArrowForwardIosIcon>
-                        חזור
-                    </Button>
-                </Box>
+            <Box style={{ position: 'absolute', top: '100px', right: '50px' }}>
+                <Button
+                    onClick={handleClick}
+                    sx={designReturnButton}
+                >
+                    <ArrowForwardIosIcon></ArrowForwardIosIcon>
+                    חזור
+                </Button>
+            </Box>
 
 
         </>
@@ -475,21 +542,25 @@ export default function JobsFiltersForm() {
 async function main() {
     console.log("hi");
     const job = new Job(
-        777,                            
-        "דרוש מדריך",                  
-        "מדריך",                       
-        [100, 100],                    
-        "חדרה",                        
-        "אשכול 10",                    
-        ["description"],               
-        "requirements",                
-        true,                          
-        false,                                                 
+        1222,
+        "דרוש מנהל",
+        "מנהל",
+        [100, 100],
+        "צפת",
+        "אשכול 100",
+        ["description"],
+        "requirements",
+        true,
+        false,
+        {},
+        {},
+        new Date(),
+        "לא מיידי"
     );
     await job.add();
     await sleep(4000);
-    job.incrementApply("allJobs");
-
+    job.incrementApply("Facebbook");
+    job.incrementViews("Linkadin");
 }
 
 
