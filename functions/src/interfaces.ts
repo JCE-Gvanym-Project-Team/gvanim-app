@@ -32,9 +32,9 @@ export interface CandidateJobStatus
   _status: string;
   _about: string;
   _matchingRate: number;
-  _applyDate: Date;
-  _lastUpdate: Date;
-  _interviewDate: Date;
+  _applyDate: string;
+  _lastUpdate: string;
+  _interviewDate: string;
   _interviewsSummery: Array<string>;
   _recomendations: Array<Recomendation>;
   _rejectCause: string;

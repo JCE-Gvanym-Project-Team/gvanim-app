@@ -1,9 +1,10 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormGroup, Stack, TextField, Typography } from '@mui/material';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Stack, TextField, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { sleep } from '../../../../../../../../../Firebase/FirebaseFunctions/test';
+
 import { updateConnectedRecruiterPassword, updateLinkRecruiterPassword } from '../../../../../../../../../Firebase/FirebaseFunctions/Authentication';
-import { Token } from '@mui/icons-material';
+
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 export default function PasswordSettings(props: { passwordEdit: any }) {
     const { passwordEdit } = props;

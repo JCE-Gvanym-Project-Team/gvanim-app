@@ -254,10 +254,10 @@ function compareByViews(a: Job, b: Job): number {
  * @return {number} - positive if a>b negative if b>a else 0
  */
 function compareByCreationDate(a: Job, b: Job): number {
-  if (b._creationDate > a._creationDate) {
+  if (new Date(b._creationDate) > new Date(a._creationDate)) {
     return 1;
   }
-  if (b._creationDate < a._creationDate) {
+  if (new Date(b._creationDate) < new Date(a._creationDate)) {
     return -1;
   }
   return 0;
@@ -424,6 +424,56 @@ function compareByEmail(a: Candidate, b: Candidate): number {
 function compareByGeneralRating(a: Candidate, b: Candidate): number {
   return a._lastName.localeCompare(b._lastName);
 }
+export const getCandidatesByIdsFromCloud = functions
+  .region("europe-west1")
+  .https
+  .onRequest(async (request, response) => {
+    response.set("Access-Control-Allow-Origin", "*");
+    response.set("Access-Control-Allow-Methods", "GET, POST");
+    response.set("Access-Control-Allow-Headers", "Content-Type");
+    if (request.method === "OPTIONS") {
+      // Handle the preflight OPTIONS request
+      response.status(204).send("");
+      return;
+    }
+    try {
+      const {ids} = request.body;
+      const filteredCandidates =
+      await getCandidatesByIds(ids);
+      response.json(filteredCandidates);
+    } catch (error) {
+      console.error("Error executing getFilteredcandidates:", error);
+      response.status(500).send("error occurred while executing the function.");
+    }
+  });
+/**
+ * Filters the list of candidates based on the given attributes and values,
+ * and sorts the result
+ * @param {string[]} [ids=[]] -
+ * An array of attributes name to filter by.
+ * @return {Promise<Candidate[]>} -
+ * A promise that resolves to an array of Job objects that match the
+ * filter criteria and sorted by desired attribute.
+ */
+async function getCandidatesByIds(
+  ids: string)
+  : Promise<Candidate[]> {
+  const candidatesSnapshot =
+  await admin.database().ref("Candidates/").once("value");
+  const candsData = candidatesSnapshot.val();
+
+  const candidates: Candidate[] = Object.values(candsData).map((cand: any) => ({
+    _id: cand._id,
+    _firstName: cand._firstName,
+    _lastName: cand._lastName,
+    _phone: cand._phone,
+    _eMail: cand._eMail,
+    _generalRating: cand._generalRating,
+    _note: cand._note,
+  }));
+  return candidates.filter((cand) => ids.includes(cand._id));
+}
+
 // ====================== CandidatesJobStatus =============================== //
 export const getFilteredCandidatesJobStatusCloudFunction=
 functions
@@ -598,10 +648,10 @@ function compareByMatchingRate(
 */
 function compareByApplyDate(
   a: CandidateJobStatus, b: CandidateJobStatus): number {
-  if (a._applyDate < b._applyDate) {
+  if (new Date(a._applyDate) < new Date(b._applyDate)) {
     return 1;
   }
-  if (a._applyDate > b._applyDate) {
+  if (new Date(a._applyDate) > new Date(b._applyDate)) {
     return -1;
   }
   return 0;
@@ -614,10 +664,10 @@ function compareByApplyDate(
 */
 function compareByLastUpdate(
   a: CandidateJobStatus, b: CandidateJobStatus): number {
-  if (a._lastUpdate < b._lastUpdate) {
+  if (new Date(a._lastUpdate) < new Date(b._lastUpdate)) {
     return 1;
   }
-  if (a._lastUpdate > b._lastUpdate) {
+  if (new Date(a._lastUpdate) > new Date(b._lastUpdate)) {
     return -1;
   }
   return 0;
@@ -630,10 +680,10 @@ function compareByLastUpdate(
 */
 function compareByInterviewDate(
   a: CandidateJobStatus, b: CandidateJobStatus): number {
-  if (a._interviewDate < b._interviewDate) {
+  if (new Date(a._interviewDate) < new Date(b._interviewDate)) {
     return 1;
   }
-  if (a._interviewDate > b._interviewDate) {
+  if (new Date(a._interviewDate) > new Date(b._interviewDate)) {
     return -1;
   }
   return 0;

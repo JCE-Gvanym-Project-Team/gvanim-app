@@ -1,5 +1,5 @@
 import { realtimeDB } from "../FirebaseConfig/firebase";
-import { CandidateJobStatus, getFilteredCandidateJobStatuses } from "./CandidateJobStatus";
+import { CandidateJobStatus, getFilteredCandidateJobStatuses, allStatus } from "./CandidateJobStatus";
 import { appendToDatabase, getFirebaseIdsAtPath, removeObjectAtPath, replaceData } from "./DBfuncs";
 import { Job, getFilteredJobs } from "./Job";
 import { deleteFile, fileExists, getDownloadUrlFromFirestorePath, getFileExtensionsInFolder, uploadFileToFirestore } from "./firestoreFunc";
@@ -311,4 +311,47 @@ export async function getFilteredCandidates(attributes: string[] = [], values: s
                 reject(error);
             });
     });
+}
+export async function getCandidatesByIds(ids: string[]): Promise<Candidate[]>{
+    return new Promise<Candidate[]>((resolve, reject) => {
+        axios.post('https://europe-west1-gvanim-app.cloudfunctions.net/getCandidatesByIdsFromCloud', {
+            ids: ids
+        })
+            .then(response => {
+                const cands = response.data;
+                resolve(cands.map(cand => new Candidate(
+                    cand._id,
+                    cand._firstName,
+                    cand._lastName,
+                    cand._phone,
+                    cand._eMail,
+                    cand._generalRating,
+                    cand._note
+                )));
+            })
+            .catch(error => {
+                console.error('Error calling the Cloud Function:', error);
+                reject(error);
+            });
+    });
+}
+export async function getWaitingCandidate(): Promise<Candidate[]> {
+    let jobStatus: CandidateJobStatus[] = [];
+    for( let i = 0; i<allStatus.length; i++)
+        if(i !== 5 && i !== 8 && i !== 7){
+            let cur = await getFilteredCandidateJobStatuses(['status'],[allStatus[i]]);
+            cur.forEach(element => jobStatus.push(element));
+        }
+    const ids = jobStatus.map(j => j._candidateId);
+    return getCandidatesByIds(ids);    
+}
+export async function getRejectedCandidate() {
+    let jobStatus: CandidateJobStatus[] = [];
+    for( let i = 0; i<allStatus.length; i++)
+        if(i === 5 || i === 8 || i === 7){
+            let cur = await getFilteredCandidateJobStatuses(['status'],[allStatus[i]]);
+            cur.forEach(element => jobStatus.push(element));
+        }
+    const ids = jobStatus.map(j => j._candidateId);
+    return getCandidatesByIds(ids);
 }

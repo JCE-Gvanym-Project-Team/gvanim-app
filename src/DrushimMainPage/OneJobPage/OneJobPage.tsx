@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import MyLoading from '../../Components/MyLoading/MyLoading';
 import { Job, getFilteredJobs } from '../../Firebase/FirebaseFunctions/Job';
 import { Recomendation } from '../../Firebase/FirebaseFunctions/Recomendation';
-import { Candidate, generateCandidateId, getFilteredCandidateJobStatuses, getFilteredCandidates } from '../../Firebase/FirebaseFunctions/functionIndex';
+import { Candidate, CandidateJobStatus, generateCandidateId, getFilteredCandidateJobStatuses, getFilteredCandidates } from '../../Firebase/FirebaseFunctions/functionIndex';
 import { ColorModeContext, colorTokens } from '../theme';
 import AreYouSureDialog from './Components/AreYouSureDialog/AreYouSureDialog';
 import ErrorDialog from './Components/ErrorDialog/ErrorDialog';
@@ -280,14 +280,17 @@ export default function OneJobPage()
             ""
         );
         // add candidate, or get existing candidate
-        if (!await newCandidate.add())
+        if (await newCandidate.exists())
         {
             newCandidate = (await getFilteredCandidates(["eMail", "phone"], [candidateEmail, candidatePhone]))[0];
             newCandidateId = newCandidate._id;
+        } else
+        {
+            await newCandidate.add();
         }
 
         // apply 
-        if (!await newCandidate.apply(job?._jobNumber!, aboutText))
+        if ((await newCandidate.apply(job?._jobNumber!, aboutText)) === -1)
         {
             setLoading(false);
             setErrorDialogOpen(true);
@@ -296,7 +299,6 @@ export default function OneJobPage()
 
         if (recommendersListOpen)
         {
-            // add recommenders and CV
             let candidateJobStatus = (await getFilteredCandidateJobStatuses(["jobNumber", "candidateId"], [job?._jobNumber.toString()!, newCandidateId]))[0];
             await candidateJobStatus.updateAbout(aboutText);
             recommendersList?.forEach(async (recommender) =>

@@ -122,7 +122,7 @@ const NewCandidatePage = () => {
   };
 
   const fetchJobs = async () => {
-    const fetchedJobs = await getFilteredJobs();
+    const fetchedJobs = await getFilteredJobs(["open"],["true"]);
     setJobs(fetchedJobs);
   };
 
