@@ -13,7 +13,7 @@ const JobsComponent: React.FC = () => {
     HighchartsExportData(Highcharts);
 
     const fetchDataAndCreateChart = async () => {
-      const filteredJobs = await getFilteredJobs();
+      const filteredJobs = await getFilteredJobs(['open'],['true']);
       setJobs(filteredJobs); // Update the jobs state with filtered jobs
     };
 
@@ -64,7 +64,7 @@ const JobsComponent: React.FC = () => {
             type: "column",
             name: "מספר משרות",
             data: quantities,
-            color: "#6666ff", // כחול כהה
+            color: "#6666ff",  
           },
         ],
       });

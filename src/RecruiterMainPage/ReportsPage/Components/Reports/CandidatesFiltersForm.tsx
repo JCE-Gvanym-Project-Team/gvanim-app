@@ -24,9 +24,9 @@ interface typeMyData {
 export default function CandidateFiltersForm() {
     const [status, setSelectStatus] = React.useState('');
     const [timeOnStatus, setTimeOnStatus] = React.useState('');
-    const [roles, setRoles] =  React.useState<typeMyData[]>([]);
+    const [roles, setRoles] = React.useState<typeMyData[]>([]);
     const [sectors, setSectors] = React.useState<typeMyData[]>([]);
-    const [selectedRole, setSelectedRole] =  React.useState<string>();
+    const [selectedRole, setSelectedRole] = React.useState<string>();
     const [selectedSector, setSelectedSector] = React.useState<string>();
     const [includeGrade, setSelectGarde] = React.useState('yes');
     const [includeInterviewDate, setSelectInterviewDate] = React.useState('yes');
@@ -36,8 +36,7 @@ export default function CandidateFiltersForm() {
 
     React.useEffect(() => {
         const fileData = async () => {
-            // --- sectors 
-            
+            // --- sectors         
             let i = 20;
             const sectorsFromDb = await getAllSectors();
             let updatedSectors = [{ id: 10, name: 'כל האשכולות' }];
@@ -49,14 +48,11 @@ export default function CandidateFiltersForm() {
                     return sectorObj;
                 })
             );
-
             setSectors(updatedSectors);
-
 
             // ---- roles
             const rolesFromDb = await getAllRoles();
             i = 20;
-
             let updatedRoles = [{ id: 10, name: "כל התפקידים" }];
 
             updatedRoles = updatedRoles.concat(
@@ -68,31 +64,20 @@ export default function CandidateFiltersForm() {
             );
 
             setRoles(updatedRoles);
-
         };
-
-        
         fileData();
     }, []);
-
 
     const createReport = (statusName, timeOnStatus, sectorName, roleName, selectGarde, selectInterviewDate, startDate, endDate) => {
         // checking if the user select all the buttons
         const isDateSelected = startDate && endDate;
 
-        if (!statusName || !timeOnStatus || !sectorName || !roleName|| !selectGarde || !isDateSelected) {
+        if (!statusName || !timeOnStatus || !sectorName || !roleName || !selectGarde || !isDateSelected) {
             // displaying an error message or indicating to the user that the parameters are mandatory
             alert('יש למלא את כל השדות');
             return;
         }
-
-        // const statusChiseArr = ["הוגשה מועמדות", "זומן לראיון ראשון", "עבר ראיון ראשון", "זומן לראיון שני", "עבר ראיון שני", "התקבל", "הועבר למשרה אחרת", "נדחה", "אינו מעוניין במשרה", "בחר כל הסטטוסים"];
-        //const timeThatOnCurrentStatusArr = ["שבוע", "חודש", "כל זמן"];
-        // const regionArr = ["מרכז", "צפון", "דרום", "כל הארץ"];
-        // const roleArr = ["מנהל", "עובד סוציאלי", "מתנדב", "כל התפקידים"];
         const choice = ["כן", "לא"];
-
-        // const timeOnStatus = timeThatOnCurrentStatusArr[Math.floor(timeOnStatus_ind / 10) - 1];
         const formattedStartDate = startDate.toDate();
         const formattedEndDate = endDate.toDate();
 
@@ -111,9 +96,6 @@ export default function CandidateFiltersForm() {
                 console.log(error);
             });
     }
-
-
-    
 
     // handls
     function handleChangeStatus(event: SelectChangeEvent<string>, child: React.ReactNode): void {
@@ -156,9 +138,7 @@ export default function CandidateFiltersForm() {
 
     return (
         <>
-
             <Box sx={BoxGradientSx}>
-
                 <Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
                     right: '2%',
                     left: 'auto',
@@ -258,7 +238,6 @@ export default function CandidateFiltersForm() {
 
                         </Stack>
 
-
                         <Typography sx={{ opacity: 0.6, width: '100%', textAlign: 'center', color: '#fff', fontSize: '16px', fontFamily: "'Noto Sans Hebrew', sans-serif", mt: 1 }} variant='subtitle1'>
                             הפקת דוחות על מועמדים לפי מס' קטגוריות
                         </Typography>
@@ -268,16 +247,13 @@ export default function CandidateFiltersForm() {
                 </Box>
             </Box>
 
-
             <Box sx={MyPaperSx}>
 
                 <Box sx={MyReportStyle}>
                     <Container>
                         <Box >
-
                             <Box className="col-md-12">
                                 <Box className="section-title"></Box>
-
                                 <FormControl>
                                     {/* select the status */}
                                     <FormControl fullWidth>
@@ -289,6 +265,7 @@ export default function CandidateFiltersForm() {
                                             label="selectStatus"
                                             onChange={handleChangeStatus}
                                         >
+                                            <MenuItem value={"בחר כל הסטטוסים"}>בחר כל הסטטוסים</MenuItem>
                                             <MenuItem value={'הוגשה מועמדות'}>הוגשה מועמדות</MenuItem>
                                             <MenuItem value={"זומן לראיון ראשון"}>זומן לראיון ראשון</MenuItem>
                                             <MenuItem value={"עבר ראיון ראשון"}>עבר ראיון ראשון</MenuItem>
@@ -298,8 +275,6 @@ export default function CandidateFiltersForm() {
                                             <MenuItem value={"הועבר למשרה אחרת"}>הועבר למשרה אחרת</MenuItem>
                                             <MenuItem value={"נדחה"}>נדחה</MenuItem>
                                             <MenuItem value={"אינו מעוניין במשרה"}>אינו מעוניין במשרה</MenuItem>
-                                            <MenuItem value={"בחר כל הסטטוסים"}>בחר כל הסטטוסים</MenuItem>
-
                                         </Select>
                                     </FormControl>
 
@@ -328,8 +303,8 @@ export default function CandidateFiltersForm() {
                                         <Select
                                             labelId="demo-simple-select-label"
                                             id="demo-simple-select"
-                                            value={selectedSector} 
-                                            label="sector" 
+                                            value={selectedSector}
+                                            label="sector"
                                             onChange={handleChangeSector}
                                         >
                                             {sectors.map((sector) => (
@@ -341,7 +316,6 @@ export default function CandidateFiltersForm() {
                                     </FormControl>
 
                                     <br />
-
                                     {/* select role */}
                                     <FormControl fullWidth>
                                         <InputLabel id="demo-simple-select-label">בחר תפקיד</InputLabel>
@@ -357,7 +331,7 @@ export default function CandidateFiltersForm() {
                                                     {role.name}
                                                 </MenuItem>
                                             ))}
-                                            </Select>
+                                        </Select>
                                     </FormControl>
                                     <br />
 
@@ -387,6 +361,7 @@ export default function CandidateFiltersForm() {
                                             <FormControlLabel value="no" control={<Radio />} label="אל תכלול" />
                                         </div>
                                     </RadioGroup>
+
                                     <br />
                                     {/* select time */}
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -403,22 +378,16 @@ export default function CandidateFiltersForm() {
                                             />
                                         </DemoContainer>
                                     </LocalizationProvider>
-
                                     <br />
+
                                     {/* create report */}
-
                                     <button onClick={() => createReport(status, timeOnStatus, selectedSector, selectedRole, includeGrade, includeInterviewDate, startDate, endDate)}>צור דוח</button>
-
-                                    {/* <button onClick={() => main()}>add data</button> */}
-
-
                                 </FormControl>
                             </Box>
                         </Box>
                     </Container>
                 </Box >
             </Box>
-
 
             <Box style={{ position: 'absolute', top: '100px', right: '50px' }}>
                 <Button
@@ -429,10 +398,7 @@ export default function CandidateFiltersForm() {
                     חזור
                 </Button>
             </Box>
-
-
         </>
-
     );
 }
 
