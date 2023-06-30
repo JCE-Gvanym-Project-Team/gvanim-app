@@ -319,7 +319,29 @@ export default function OneJobPage()
         //     return;
         // }
 
-        if ((await newCandidate.apply(job?._jobNumber!, aboutText)) === -1)
+        let recommendersOnlyList: Recomendation[] = []
+        let recommendersFilesOnlyList: File[] = []
+        if (recommendersListOpen)
+        {
+            recommendersList?.forEach(async (recommender) =>
+            {
+                const recommenderInfo = recommender[0];
+                const file = recommender[1];
+                if (recommenderInfo)
+                {
+                    recommendersOnlyList.push(recommenderInfo);
+                    if (!file)
+                    {
+                        recommendersFilesOnlyList.push(new File([''], ''));
+                    } else
+                    {
+                        recommendersFilesOnlyList.push(file);
+                    }
+                }
+            })
+        }
+
+        if ((await newCandidate.apply(job?._jobNumber!, aboutText, recommendersOnlyList, recommendersFilesOnlyList)) === -1)
         {
             setLoading(false);
             setErrorDialogOpen(true);
