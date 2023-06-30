@@ -11,11 +11,10 @@ import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { exportToExcel } from '../../../../Firebase/FirebaseFunctions/Reports/GlobalFunctions';
 import JobsByFilters from '../../../../Firebase/FirebaseFunctions/Reports/JobsFilters';
-import { Job, generateJobNumber, getAllRoles, getAllSectors, getFilteredJobs } from '../../../../Firebase/FirebaseFunctions/functionIndex';
+import { Job, generateJobNumber, getAllRoles, getAllSectors, getFilteredCandidateJobStatuses, getFilteredCandidates, getFilteredJobs } from '../../../../Firebase/FirebaseFunctions/functionIndex';
 import { BoxGradientSx, MyPaperSx } from '../../../ManageJobsPage/Components/NewJobPage/NewJobStyle';
 import { designReturnButton } from '../../../ManageJobsPage/ManageJobsPageStyle';
 import { MyReportStyle, radioStyle } from '../../ReportPageStyle';
-import { sleep } from '../../../../Firebase/FirebaseFunctions/test';
 import { useEffect } from 'react';
 
 interface typeMyData {
@@ -44,7 +43,6 @@ export default function JobsFiltersForm() {
 
     useEffect(() => {
         const fileData = async () => {
-
             // get sectors 
             let i = 20;
             const sectorsFromDb = await getAllSectors();
@@ -59,7 +57,6 @@ export default function JobsFiltersForm() {
             );
 
             setSectors(updatedSectors);
-
             // get roles
             const rolesFromDb = await getAllRoles();
             i = 20;
@@ -72,7 +69,6 @@ export default function JobsFiltersForm() {
                 })
             );
             setRoles(updatedRoles);
-
 
             let oneChoice: typeMyData = { id: 10, name: 'כל הפלטפורמות' };
             let secondChoice: typeMyData = { id: 20, name: 'איני רוצה לבחור אף פלטפורמה' };
@@ -97,10 +93,9 @@ export default function JobsFiltersForm() {
                     }
                 }
             }
-           setPlatformForApplys(updatedPlatformsForApply);
+            setPlatformForApplys(updatedPlatformsForApply);
 
             // platform for views 
-
             let updatedPlatformsForViews: typeMyData[] = [];
             updatedPlatformsForViews.push(oneChoice);
             updatedPlatformsForViews.push(secondChoice);
@@ -126,8 +121,6 @@ export default function JobsFiltersForm() {
     }, []);
 
 
-
-
     const createReport = (roleName, scope_ind, sectorName, openJobs_ind, highPriority_ind, startOn_ind, platformForApply, platformForView, startDate, endDate) => {
         // checking if the user select all the buttons
         const isDateSelected = startDate && endDate;
@@ -137,8 +130,8 @@ export default function JobsFiltersForm() {
             alert('יש למלא את כל השדות');
             return;
         }
-        console.log("sectorName: " +  sectorName);
-        const scopeArr = [[0,25], [25,50], [50,75], [100, 100], [1]]; // [1] mean evry scope of jobs
+        console.log("sectorName: " + sectorName);
+        const scopeArr = [[0, 25], [25, 50], [50, 75], [100, 100], [1]]; // [1] mean evry scope of jobs
         const choice = ["true", "false"];
         const scope = scopeArr[Math.floor(scope_ind / 10) - 1];
         let openJobs: boolean;
@@ -222,12 +215,9 @@ export default function JobsFiltersForm() {
         navigate("/management/reports");
     };
 
-
     return (
         <>
-
             <Box sx={BoxGradientSx}>
-
                 <Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
                     right: '2%',
                     left: 'auto',
@@ -327,24 +317,20 @@ export default function JobsFiltersForm() {
 
                         </Stack>
 
-
                         <Typography sx={{ opacity: 0.6, width: '100%', textAlign: 'center', color: '#fff', fontSize: '16px', fontFamily: "'Noto Sans Hebrew', sans-serif", mt: 1 }} variant='subtitle1'>
                             הפקת דוחות על משרות לפי מס' קטגוריות
                         </Typography>
                         <Box sx={{ background: 'linear-gradient(90deg,hsla(0,0%,100%,0),#fff,hsla(0,0%,100%,0))', padding: 0.05, width: '100%', mt: 2 }} />
                     </Stack>
-
                 </Box>
             </Box>
 
             <Box sx={MyPaperSx}>
-
                 <Box sx={MyReportStyle}>
                     <Container>
                         <Box >
                             <Box className="col-md-12">
                                 <Box className="section-title">
-
                                     <FormControl  >
                                         {/* select role */}
                                         <FormControl fullWidth>
@@ -365,7 +351,6 @@ export default function JobsFiltersForm() {
                                         </FormControl>
                                         <br />
 
-
                                         {/* select % scope of job */}
                                         <FormControl fullWidth>
                                             <InputLabel id="demo-simple-select-label">בחר משרות על פי אחוזי משרה</InputLabel>
@@ -385,7 +370,6 @@ export default function JobsFiltersForm() {
                                         </FormControl>
 
                                         <br />
-
                                         {/* sector*/}
                                         <FormControl fullWidth>
                                             <InputLabel id="demo-simple-select-label">בחירת אשכול</InputLabel>
@@ -404,9 +388,7 @@ export default function JobsFiltersForm() {
 
                                             </Select>
                                         </FormControl>
-
                                         <br />
-
 
                                         {/* select include grade */}
                                         <RadioGroup
@@ -421,7 +403,6 @@ export default function JobsFiltersForm() {
                                             </div>
                                         </RadioGroup>
                                         <br />
-
 
                                         {/* select include mathcing rate */}
                                         <RadioGroup
@@ -451,10 +432,7 @@ export default function JobsFiltersForm() {
                                         </RadioGroup>
                                         <br />
 
-
-
-
-                                        {/* בחירת הגשות דרך פלטפורמה*/}
+                                        {/*בחירת הגשות דרך פלטפורמה*/}
                                         <FormControl fullWidth>
                                             <InputLabel id="demo-simple-select-label">כמה הגישו קורות חיים דרך הפלטפורמה הבאה:</InputLabel>
                                             <Select
@@ -510,7 +488,6 @@ export default function JobsFiltersForm() {
                                         </LocalizationProvider>
 
                                         <br />
-
                                         {/* create report */}
                                         <button onClick={() => createReport(selectedRole, scope, selectedSector, openJobs, highPriority, startOn, applayPlatformUserSelected, viewPlatformUserSelected, startDate, endDate)}>צור דוח</button>
                                     </FormControl>
@@ -521,7 +498,6 @@ export default function JobsFiltersForm() {
                     </Container>
                 </Box >
             </Box>
-            <Button onClick={() => { main() }}>add job</Button >
 
             <Box style={{ position: 'absolute', top: '100px', right: '50px' }}>
                 <Button
@@ -532,36 +508,6 @@ export default function JobsFiltersForm() {
                     חזור
                 </Button>
             </Box>
-
-
         </>
-
     )
 }
-
-async function main() {
-    console.log("hi");
-    const job = new Job(
-        1222,
-        "דרוש מנהל",
-        "מנהל",
-        [100, 100],
-        "צפת",
-        "אשכול 100",
-        ["description"],
-        "requirements",
-        true,
-        false,
-        {},
-        {},
-        new Date(),
-        "לא מיידי"
-    );
-    await job.add();
-    await sleep(4000);
-    job.incrementApply("Facebbook");
-    job.incrementViews("Linkadin");
-}
-
-
-

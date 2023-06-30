@@ -10,27 +10,26 @@ const Chart = () => {
   const [chartOuterRadius, setChartOuterRadius] = useState(window.innerWidth * 0.2);
 
   useEffect(() => {
-
     async function fetchData() {
       const filteredJobs = await getFilteredJobs(['open'], ['true']);
       console.log(filteredJobs);
       const candidatesByRole: { [role: string]: number } = {};
-      
+
       for (let i = 0; i < filteredJobs.length; i++) {
         const job = filteredJobs[i];
         const role = "משרה מס' " + job._jobNumber + " | תפקיד: " + job._role + " | מספר הגשות: ";
-        const sum_cands =  (await job.getCandidatures()).length;
-        if(sum_cands > 0){
-        if (job != undefined && role != undefined) {
-          if (candidatesByRole[role]) {
-            candidatesByRole[role] += sum_cands;
-          } else {
-            candidatesByRole[role] = sum_cands;
-            const newColor = randomColor();
-            colors.push(newColor);
+        const sum_cands = (await job.getCandidatures()).length;
+        if (sum_cands > 0) {
+          if (job != undefined && role != undefined) {
+            if (candidatesByRole[role]) {
+              candidatesByRole[role] += sum_cands;
+            } else {
+              candidatesByRole[role] = sum_cands;
+              const newColor = randomColor();
+              colors.push(newColor);
+            }
           }
         }
-      }
       }
 
       const newData: { name: string; value: number; fill: string; }[] = Object.entries(candidatesByRole).map(([role, quantity], index) => ({
@@ -38,12 +37,12 @@ const Chart = () => {
         value: quantity,
         fill: colors[index % colors.length],
       }));
-      
+
       if (newData != undefined)
-      setData(newData);
+        setData(newData);
     }
-    
-       fetchData();
+
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -76,7 +75,7 @@ const Chart = () => {
           dataKey="value"
           isAnimationActive={true}
           data={data}
-          outerRadius={chartOuterRadius} 
+          outerRadius={chartOuterRadius}
           fill="fill"
           label
         />
@@ -84,8 +83,8 @@ const Chart = () => {
       </PieChart>
     </div>
   );
-  
-  
+
+
 };
 
-export default Chart  ;
+export default Chart;
