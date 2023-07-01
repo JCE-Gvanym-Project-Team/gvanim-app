@@ -8,7 +8,7 @@ export default function Navbar() {
     const colorMode = React.useContext(ColorModeContext);
     const [open, setOpen] = React.useState<boolean>(false);
     return (
-        <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', top: 0 }}>
+        <Box sx={{ position: "sticky",width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', top: 0, boxShadow: "0px 3px 10px #00000029;", zIndex: 20 }}>
             <Stack direction='row' justifyContent='space-between'
                 sx={{
                     height: '85px',
