@@ -1,10 +1,10 @@
-import { KeyboardArrowDown } from "@mui/icons-material"; // TODO
-import { Box, LinearProgress, Stack, useTheme
- } from "@mui/material";
+import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material"; // TODO
+import {
+    Box, LinearProgress, Stack, Typography, useTheme
+} from "@mui/material";
 import { useEffect, useState, useRef, useContext } from "react";
-import { default as ReactSelect, components, InputAction, PlaceholderProps, IndicatorSeparatorProps, DropdownIndicatorProps } from "react-select";
-import { ColorModeContext, colorTokens } from "../../../theme";
-
+import { default as ReactSelect, components, InputAction, PlaceholderProps, DropdownIndicatorProps } from "react-select";
+import { ColorModeContext } from "../../../theme";
 
 
 export type Option = {
@@ -13,14 +13,8 @@ export type Option = {
 };
 
 const MultiSelect = (props: any) => {
-    
-    const theme = useTheme();
-    const colors = colorTokens(theme.palette.mode);
+    const [open, setOpen] = useState<boolean>(false);
     const colorMode = useContext(ColorModeContext);
-
-    useEffect(() => {
-        console.log(colorMode.getActualMode());
-    }, [colorMode.getActualMode()])
 
     const [loading, setLoading] = useState(true);
 
@@ -42,14 +36,20 @@ const MultiSelect = (props: any) => {
     let filteredSelectedOptions = filterOptions(props.value, selectInput);
 
     const Option = (props: any) => (
-        <Box sx={{ borderBottom: '1px solid #CCCCCC' }}>
+        <Box sx={{
+            borderBottom:
+                colorMode?.getActualMode()! === 'light'
+                    ? '1px solid #CCCCCC'
+                    : colorMode?.getActualMode()! === 'dark-contrast'  // dark
+                        ? '1px solid #505050'
+                        : '1px solid #CCCCCC'
+        }}>
             <components.Option {...props}>
                 <Stack direction='row' margin={0.5} spacing={1}>
                     {props.value === "*" &&
                         !isAllSelected.current &&
                         filteredSelectedOptions?.length > 0 ? (
                         <input
-
                             key={props.value}
                             type="checkbox"
                             ref={(input) => {
@@ -68,7 +68,7 @@ const MultiSelect = (props: any) => {
                         fontFamily: 'Rubik',
                         fontSize: '15px',
                         letterSpacing: '0px',
-                        color: '#6E6E6E',
+                        color: colorMode?.getActualMode()! === 'light' ? '#6E6E6E' : null,
                         opacity: 1
                     }}>{props.label}</Box>
                 </Stack>
@@ -81,15 +81,15 @@ const MultiSelect = (props: any) => {
     const Input = (props: any) => (
         <>
             {selectInput.length === 0 ? (
+
                 <components.Input autoFocus={props.selectProps.menuIsOpen} {...props}>
                     {props.children}
                 </components.Input>
+
             ) : (
-                <div style={{ border: "1px dotted gray" }}>
-                    <components.Input autoFocus={props.selectProps.menuIsOpen} {...props}>
-                        {props.children}
-                    </components.Input>
-                </div>
+                <components.Input autoFocus={props.selectProps.menuIsOpen} {...props}>
+                    {props.children}
+                </components.Input>
             )}
         </>
     );
@@ -97,14 +97,27 @@ const MultiSelect = (props: any) => {
     const DropdownIndicator = (
         props: DropdownIndicatorProps<any, true>
     ) => {
+        const { selectProps } = props;
         return (
-            <components.DropdownIndicator {...props}>
-                <KeyboardArrowDown fontSize='small' sx={{ 
-                     color: 'background.JobTitle2',
-                    // color: '#b2d0ec',
-                    '&:hover':{cursor: 'pointer'}
-                     }} />
-            </components.DropdownIndicator>
+            <>
+                {selectProps.menuIsOpen ? (
+                    <components.DropdownIndicator {...props}>
+                        <KeyboardArrowUp fontSize='small' sx={{
+                            color: colorMode?.getActualMode()! === 'bright-contrast' ? '#6e86a2' : 'background.JobTitle2',
+                            '&:hover': { cursor: 'pointer' }
+                        }} />
+                    </components.DropdownIndicator>
+                )
+                    : (
+                        <components.DropdownIndicator {...props}>
+                            <KeyboardArrowDown fontSize='small' sx={{
+                                color: colorMode?.getActualMode()! === 'bright-contrast' ? '#6e86a2' : 'background.JobTitle2',
+                                '&:hover': { cursor: 'pointer' }
+                            }} />
+                        </components.DropdownIndicator>
+                    )}
+            </>
+
         );
     };
 
@@ -161,73 +174,210 @@ const MultiSelect = (props: any) => {
             ]);
     };
 
-    const indicatorSeparatorStyle = {
-        alignSelf: 'stretch',
-        backgroundColor: '#424242',
-        marginBottom: 8,
-        marginTop: 8,
-        width: 1,
-      };
-      
-      const IndicatorSeparator = ({
-        innerProps,
-      }: IndicatorSeparatorProps<any, true>) => {
-        return <span style={indicatorSeparatorStyle} {...innerProps} />;
-      };
+    const msgStyles = {
+        backgroundColor:
+            colorMode?.getActualMode()! === 'light'
+                ? '#EDEDED'
+                : colorMode?.getActualMode()! === 'bright-contrast'
+                    ? '#f7f7f7'
+                    : colorMode?.getActualMode()! === 'dark-contrast'
+                        ? '#2d2d2d'
+                        : '#EDEDED', // black & white mode
+        fontSize: 'small',
+    };
 
-      
+    const NoOptionsMessage = props => {
+        return (
+            <components.NoOptionsMessage {...props}>
+                <span>אין תוצאות</span>
+            </components.NoOptionsMessage>
+        );
+    };
 
-    const customStyles =  {
+
+    const customStyles = {
+        input: (base: any) => ({
+            ...base,
+            paddingLeft: 4,
+            fontSize: 'medium',
+            color:
+                colorMode.getActualMode()! === 'light'
+                    ? '#053B7A'
+                    : colorMode.getActualMode()! === 'dark-contrast'
+                        ? '#b2d0ec'
+                        : colorMode.getActualMode()! === 'bright-contrast'
+                            ? '#6e86a2'
+                            : '#000000', // black & white mode
+        }),
+        noOptionsMessage: (base: any) => ({ ...base, ...msgStyles }),
+        indicatorSeparator: (baseStyles: any) => ({
+            ...baseStyles,
+            alignSelf: 'stretch',
+            backgroundColor:
+                colorMode?.getActualMode()! === 'light'
+                    ? 'hsl(0, 0%, 85%)'
+                    : colorMode?.getActualMode()! === 'bright-contrast'
+                        ? 'hsl(0, 0%, 85%)'
+                        : colorMode?.getActualMode()! === 'dark-contrast'
+                            ? '#424242'
+                            : 'hsl(0, 0%, 85%)', // black & white mode
+            marginBottom: 8,
+            marginTop: 8,
+            width: 1,
+            borderRadius: 1,
+        }),
         control: (baseStyles: any) => ({
             ...baseStyles,
             border: 0,
             boxShadow: 'none',
-            backgroundColor: '#2d2d2d',
+
+            backgroundColor:
+                colorMode?.getActualMode()! === 'light'
+                    ? '#EDEDED'
+                    : colorMode?.getActualMode()! === 'bright-contrast'
+                        ? '#EDEDED'
+                        : colorMode?.getActualMode()! === 'dark-contrast'
+                            ? '#2d2d2d'
+                            : '#EDEDED', // black & white mode
+            '&:hover': { cursor: !open && 'pointer' },
         }),
 
         multiValueLabel: (def: any) => ({
             ...def,
-            backgroundColor: "#b2d0ec",
-            // color: '#fff',
+            backgroundColor:
+                colorMode?.getActualMode()! === 'light'
+                    ? '#053B7A'
+                    : colorMode?.getActualMode()! === 'bright-contrast'
+                        ? '#6e86a2'
+                        : colorMode?.getActualMode()! === 'dark-contrast'
+                            ? '#b2d0ec'
+                            : '#000000' // black & white mode
+
+            ,
+            color:
+                colorMode?.getActualMode()! === 'light'
+                    ? '#FFFFFF' :
+                    colorMode?.getActualMode()! === 'bright-contrast'
+                        ? '#FFFFFF'
+                        : colorMode?.getActualMode()! === 'dark-contrast'
+                            ? '#2d2d2d'
+                            : '#FFFFFF',
             borderRadius: 0,
             fontSize: 'small',
-         
+
         }),
         multiValueRemove: (def: any) => ({
             ...def,
-            backgroundColor: "#b2d0ec",
+            backgroundColor:
+                colorMode?.getActualMode()! === 'light'
+                    ? '#053B7A'
+                    : colorMode?.getActualMode()! === 'bright-contrast'
+                        ? '#6e86a2'
+                        : colorMode?.getActualMode()! === 'dark-contrast'
+                            ? '#b2d0ec'
+                            : '#000000', // black & white mode
+
+            color:
+                colorMode?.getActualMode()! === 'light'
+                    ? '#FFFFFF'
+                    : colorMode?.getActualMode()! === 'bright-contrast'
+                        ? '#FFFFFF'
+                        : colorMode?.getActualMode()! === 'dark-contrast'
+                            ? '#000000'
+                            : '#FFFFFF', // black & white mode
+
             borderRadius: 0,
             paddingLeft: 2,
-            '&:hover':{cursor: 'pointer', backgroundColor: '#b2d0ec'}
+            '&:hover': {
+                cursor: 'pointer',
+                backgroundColor:
+                    colorMode?.getActualMode()! === 'light' ? '#053B7A' : colorMode?.getActualMode()! === 'bright-contrast' ? '#6e86a2' : "#b2d0ec",
+            }
         }),
         valueContainer: (base: any) => ({
             ...base,
             minHeight: "38px",
-            overflow: "auto",
+            overflow: 'visible',
         }),
         option: (styles: any, { isSelected, isFocused }: any) => {
             return {
                 ...styles,
-                backgroundColor:
-                    isSelected && !isFocused
-                        ? null
-                        : isFocused && !isSelected
-                            ? styles.backgroundColor
-                            : isFocused && isSelected
-                                ? "primary.JobTitle2"
-                                : null, // here
-                color: isSelected ? null : null,
 
+                color:
+                    colorMode?.getActualMode()! === 'light'
+                        ? (isSelected ? null : null)
+                        : colorMode?.getActualMode()! === 'dark-contrast'
+                            ? (isFocused ? '#000000' : '#FFFFFF')
+                            : colorMode?.getActualMode()! === 'bright-contrast'
+                                ? (isSelected ? null : null)
+                                : (isSelected ? null : null), // black & white mode
+                backgroundColor:
+
+                    isSelected && !isFocused
+                        ? colorMode?.getActualMode()! === 'light'
+                            ? '#FFFFFF'
+                            : colorMode?.getActualMode()! === 'dark-contrast'
+                                ? '#2d2d2d'
+                                : colorMode?.getActualMode()! === 'bright-contrast'
+                                    ? '#FFFFFF'
+                                    : '#FFFFFF' // black & white mode
+
+                        : isFocused && !isSelected // hover
+                            ? colorMode?.getActualMode()! === 'light'
+                                ? '#DEEBFF'
+                                : colorMode?.getActualMode()! === 'dark-contrast'
+                                    ? '#DEEBFF'
+                                    : colorMode?.getActualMode()! === 'bright-contrast'
+                                        ? '#DEEBFF'
+                                        : '#ededed' // black & white mode
+                            : isFocused && isSelected
+                                ? colorMode?.getActualMode()! === 'light'
+                                    ? "#DEEBFF"
+                                    : colorMode?.getActualMode()! === 'dark-contrast'
+                                        ? "#DEEBFF"
+                                        : colorMode?.getActualMode()! === 'bright-contrast'
+                                            ? "#DEEBFF"
+                                            : "#ededed" // black & white mode
+                                : colorMode?.getActualMode()! === 'light'
+                                    ? '#FFFFFF'
+                                    : colorMode?.getActualMode()! === 'dark-contrast'
+                                        ? '#2d2d2d'
+                                        : colorMode?.getActualMode()! === 'bright-contrast'
+                                            ? '#FFFFFF'
+                                            : '#FFFFFF',
+                ':active': {
+                    ...styles[':active'],
+                    backgroundColor: 'DEEBFF'
+                },
             };
         },
-        menu: (def: any) => ({ ...def, zIndex: 9999 }),
+        menu: (def: any) => ({
+            ...def,
+            zIndex: 9999,
+            backgroundColor:
+                colorMode.getActualMode()! === 'light'
+                    ? null
+                    : colorMode.getActualMode()! === 'bright-contrast'
+                        ? null
+                        : colorMode.getActualMode()! === 'dark-contrast'
+                            ? '#2d2d2d'
+                            : null // black & white mode
+        }),
 
         placeholder: (base: any) => ({
             ...base,
             fontSize: 'medium',
-            paddingLeft: 4,  
-            color: '#b2d0ec',
+            paddingLeft: 4,
+            color:
+                colorMode.getActualMode()! === 'light'
+                    ? '#053B7A'
+                    : colorMode.getActualMode()! === 'dark-contrast'
+                        ? '#b2d0ec'
+                        : colorMode.getActualMode()! === 'bright-contrast'
+                            ? '#6e86a2'
+                            : '#000000', // black & white mode
             fontWeight: 400,
+            position: 'absolute'
         }),
     };
 
@@ -255,25 +405,26 @@ const MultiSelect = (props: any) => {
                     onKeyDown={onKeyDown}
                     options={[allOption, ...props.options]}
                     onChange={handleChange}
-                    placeholder={'בחרו מיקום'}
+                    placeholder={open ? 'חיפוש..' : 'בחרו מיקום'}
                     components={{
                         Option: Option,
                         Input: Input,
                         ...props.components,
                         DropdownIndicator,
-                        IndicatorSeparator
+                        NoOptionsMessage,
                     }}
+
                     filterOption={customFilterOption}
                     menuPlacement={props.menuPlacement ?? "auto"}
-                    // borderColor: state.menuIsOpen ? 'grey' : 'red',
                     styles={customStyles}
-                    
                     isMulti
                     closeMenuOnSelect={false}
                     tabSelectsValue={false}
                     backspaceRemovesValue={false}
                     hideSelectedOptions={false}
                     blurInputOnSelect={false}
+                    onMenuOpen={() => setOpen(true)}
+                    onMenuClose={() => setOpen(false)}
                 />
 
             </>
