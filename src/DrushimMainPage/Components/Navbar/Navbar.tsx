@@ -8,17 +8,18 @@ export default function Navbar() {
     const colorMode = React.useContext(ColorModeContext);
     const [open, setOpen] = React.useState<boolean>(false);
     return (
-        <Box sx={{ position: "sticky",width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', top: 0, boxShadow: "0px 3px 10px #00000029;", zIndex: 20 }}>
+        <Box sx={{ position: "sticky", width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', top: 0, boxShadow: "0px 3px 10px #00000029;", zIndex: 20 }}>
             <Stack direction='row' justifyContent='space-between'
                 sx={{
                     height: '85px',
-                    backgroundColor: colorMode?.getActualMode()! === 'light'
-                        ? '#FFFFFF'
-                        : colorMode?.getActualMode()! === 'dark-contrast'
-                            ? '#000000'
-                            : colorMode?.getActualMode()! === 'bright-contrast'
-                                ? '#FFFFFF'
-                                : '#FFFFFF', // black & white
+                    backgroundColor:
+                        colorMode?.getActualMode()! === 'light'
+                            ? '#FFFFFF'
+                            : colorMode?.getActualMode()! === 'dark-contrast'
+                                ? '#000000'
+                                : colorMode?.getActualMode()! === 'bright-contrast'
+                                    ? '#FFFFFF'
+                                    : '#FFFFFF', // black & white
 
                     paddingLeft: 2,
                     paddingRight: 4,
@@ -305,10 +306,32 @@ export default function Navbar() {
                 </Stack>
             </Stack>
 
-            <Stack direction='column' justifyContent='center' sx={{ display: { xs: 'flex', sm: 'flex', md: 'none', } }}>
+            <Stack
+                direction='column'
+                justifyContent='center'
+                sx={{
+                    display: { xs: 'flex', sm: 'flex', md: 'none' },
+                    backgroundColor:
+                        colorMode?.getActualMode()! === 'light'
+                            ? '#FFFFFF'
+                            : colorMode?.getActualMode()! === 'dark-contrast'
+                                ? '#000000'
+                                : colorMode?.getActualMode()! === 'bright-contrast'
+                                    ? '#FFFFFF'
+                                    : '#FFFFFF' // black & white
+                }}>
                 <Collapse in={open}>
 
-                    <Stack direction='column' justifyContent='center' divider={<Divider sx={{ backgroundColor: 'primary.divider' }} />} marginTop={4} paddingBottom={2} spacing={2} width='100%' height='fit-content'>
+                    <Stack
+                        direction='column'
+                        justifyContent='center'
+                        divider={<Divider sx={{ backgroundColor: 'primary.divider' }} />}
+                        marginTop={4}
+                        paddingBottom={2}
+                        spacing={2}
+                        width='100%'
+                        height='fit-content'
+                    >
                         <Stack direction='row' justifyContent='center' width='100%'>
                             <Link style={{ display: 'flex', flexDirection: 'row', textDecoration: 'none' }} to={`https://www.gvanim.org.il/`} onClick={() => setOpen(false)}>
                                 <Box>
