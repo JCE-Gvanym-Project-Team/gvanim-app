@@ -5,8 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { ReactComponent as LocationSVG } from '../JobItem/Resources/icon-location1.svg';
 import { ReactComponent as ClockSVG } from '../JobItem/Resources/icon-clock1.svg';
 import { NavigateBefore, Place, WatchLater } from '@mui/icons-material';
-import { colorTokens } from '../../../theme';
+import { ColorModeContext, colorTokens } from '../../../theme';
 import { color } from 'highcharts';
+import React from 'react';
 
 
 
@@ -14,22 +15,23 @@ export default function JobItem(props: { job: any }) {
     const { job } = props;
 
     const navigate = useNavigate();
+    const colorMode = React.useContext(ColorModeContext);
 
-    
+
     return (
         <Stack direction='row-reverse'>
-            <Box borderTop={`5px solid`} id='JobCard' sx={{ 
+            <Box borderTop={`5px solid`} id='JobCard' sx={{
                 width: { xs: '100%', sm: '100%', md: '521px' },
                 borderRadius: '0px 0px 10px 10px',
                 // boxShadow: ' 0px 3px 10px #FFFFFF', //dark #7c7c7c
 
                 boxShadow: '0px 3px 10px',
                 color: 'primary.myBoxShadow',
-             
+
                 borderColor: 'background.JobTitle2',
                 // borderTop: '5px solid #053B7A',
                 textAlign: 'center',
-                }}>
+            }}>
 
                 <Box sx={{
                     mt: { xs: '28px', sm: '28px', md: '48px' },
@@ -83,16 +85,16 @@ export default function JobItem(props: { job: any }) {
                             <LocationSVG style={{ width: '16px', height: '16px' }} />
                         </Box> */}
 
-                
+
                         <Box display='flex' flexDirection='column' justifyContent='center'>
-                        <Place fontSize='inherit' sx={{color:'secondary.jobDetails'}}/>
+                            <Place fontSize='inherit' sx={{ color: colorMode?.getActualMode()! === 'bright-contrast' ? '#CC4584' : 'secondary.jobDetails' }} />
                         </Box>
 
                         <Stack direction='row' spacing={1} alignItems='center'>
                             <Typography display='block' variant='caption' sx={{
                                 textAlign: 'left',
                                 letterSpacing: '0px',
-                                color: 'secondary.jobDetails',
+                                color: colorMode?.getActualMode()! === 'bright-contrast' ? '#CC4584' : 'secondary.jobDetails',
                                 opacity: 1,
 
                             }}>מיקום:</Typography>
@@ -115,14 +117,14 @@ export default function JobItem(props: { job: any }) {
 
                         {/* WatchLater */}
                         <Box display='flex' flexDirection='column' justifyContent='center'>
-                        <WatchLater fontSize='inherit' sx={{padding: 0.15, color:'secondary.jobDetails'}}/>
+                            <WatchLater fontSize='inherit' sx={{ padding: 0.15, color: colorMode?.getActualMode()! === 'bright-contrast' ? '#CC4584' : 'secondary.jobDetails' }} />
                         </Box>
                         {/* WatchLater */}
                         <Stack direction='row' spacing={1} alignItems='center'>
                             <Typography display='block' variant='caption' sx={{
                                 textAlign: 'left',
                                 letterSpacing: '0px',
-                                color: 'secondary.jobDetails',
+                                color: colorMode?.getActualMode()! === 'bright-contrast' ? '#CC4584' : 'secondary.jobDetails',
                                 opacity: 1,
                             }}>היקף משרה:</Typography>
                             <Typography display='block' variant='caption' sx={{
@@ -165,9 +167,7 @@ export default function JobItem(props: { job: any }) {
                             <Box>
                                 <Typography display='block' variant='caption' id="element1" sx={{
                                     textAlign: 'left',
-                                     color: 'primary.visitJobButton',
-                                         // #d9ddbd
-                                        //  color: '#d9ddbd', hover: '#e8ead7'
+                                    color: 'primary.visitJobButton',
                                     opacity: 1,
                                     textDecorationLine: 'underline',
                                     letterSpacing: '0px',
@@ -197,7 +197,7 @@ export default function JobItem(props: { job: any }) {
                     <Typography display='block' variant='caption' sx={{
                         textAlign: 'left',
                         letterSpacing: '0px',
-                        color: 'secondary.jobDetails',
+                        color: colorMode?.getActualMode()! === 'bright-contrast' ? '#CC4584' : 'secondary.jobDetails',
                         opacity: 1,
                     }}>משרה מספר:</Typography>
                     <Typography display='block' variant='caption' sx={{

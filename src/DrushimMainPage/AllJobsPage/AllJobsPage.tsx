@@ -15,10 +15,11 @@ import { Close, FilterListRounded, Place, SupervisorAccount, WatchLater } from '
 import MyLoading from '../../Components/MyLoading/MyLoading';
 import { Option } from "./Components/CustomSelectLocationsDropMenu/CustomSelectLocationsDropMenu";
 import { theme } from 'highcharts';
+import { ColorModeContext } from '../theme';
 
 export default function AllJobsPage() {
 
-    const theme = useTheme();
+    const colorMode = React.useContext(ColorModeContext);
     const [loading, setLoading] = React.useState(true);
 
     const [jobs, setJobs] = React.useState<Job[]>([]);
@@ -99,9 +100,17 @@ export default function AllJobsPage() {
                                 maxWidth: '600px',
                                 mr: 'auto',
                                 ml: 'auto',
-                                background: '#FFFFFF',
+                                background:
+                                    colorMode?.getActualMode()! === 'light'
+                                        ? '#FFFFFF'
+                                        : colorMode?.getActualMode()! === 'dark-contrast'
+                                            ? '#000000'
+                                            : colorMode?.getActualMode()! === 'bright-contrast'
+                                                ? '#FFFFFF'
+                                                : '#FFFFFF', // black & white
+
                                 boxShadow: '0px 3px 6px',
-                                color: '#FFFFFF', // light: #00000029 dark: 
+                                color: 'secondary.drushimTitleContainer', // light: #00000029 dark: #e5e5e9
                                 borderRadius: '15px',
                                 opacity: 1,
                                 display: { xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' },
@@ -111,7 +120,8 @@ export default function AllJobsPage() {
                             }}>
                                 <Stack direction='row' justifyContent='center' width='100%'>
                                     <Typography sx={{
-                                        color: '#053B7A',
+                                        // color: '#053B7A',
+                                        color: 'secondary.drushimTitle',
                                         fontFamily: 'Rubik',
                                         fontWeight: 'bold',
                                         fontSize: '36px',
@@ -122,7 +132,8 @@ export default function AllJobsPage() {
                                         גְּ
                                     </Typography>
                                     <Typography sx={{
-                                        color: '#41C2F0',
+                                        // color: '#41C2F0',
+                                        color: 'primary.drushimTitle',
                                         fontFamily: 'Rubik',
                                         fontWeight: 'bold',
                                         fontSize: '36px',
@@ -133,7 +144,8 @@ export default function AllJobsPage() {
                                         וָו
                                     </Typography>
                                     <Typography sx={{
-                                        color: '#053B7A',
+                                        // color: '#053B7A',
+                                        color: 'secondary.drushimTitle',
                                         fontFamily: 'Rubik',
                                         fontWeight: 'bold',
                                         fontSize: '36px',
@@ -144,7 +156,8 @@ export default function AllJobsPage() {
                                         נִים
                                     </Typography>
                                     <Typography sx={{
-                                        color: '#41C2F0',
+                                        // color: '#41C2F0',
+                                        color: 'primary.drushimTitle',
                                         fontFamily: 'Rubik',
                                         fontWeight: 'bold',
                                         fontSize: '36px',
@@ -156,7 +169,8 @@ export default function AllJobsPage() {
                                     </Typography>
                                     <Typography sx={{
                                         ml: 1,
-                                        color: '#41C2F0',
+                                        // color: '#41C2F0',
+                                        color: 'primary.drushimTitle',
                                         fontFamily: 'Rubik',
                                         fontWeight: 'bold',
                                         fontSize: '36px',
@@ -170,7 +184,8 @@ export default function AllJobsPage() {
 
                                 <Typography sx={{
                                     mt: 1,
-                                    color: '#053B7A',
+                                    // color: '#053B7A',
+                                    color: 'secondary.drushimTitle',
                                     font: 'normal normal normal 19px Rubik',
                                     opacity: 1,
                                     letterSpacing: 0
@@ -182,7 +197,8 @@ export default function AllJobsPage() {
 
                                 <Stack direction='row' justifyContent='center' width='100%'>
                                     <Typography sx={{
-                                        color: '#053B7A',
+                                        // color: '#053B7A',
+                                        color: 'secondary.drushimTitle',
                                         fontFamily: 'Rubik',
                                         fontWeight: 'bold',
                                         fontSize: '32px',
@@ -193,7 +209,8 @@ export default function AllJobsPage() {
                                         גְּ
                                     </Typography>
                                     <Typography sx={{
-                                        color: '#41C2F0',
+                                        // color: '#41C2F0',
+                                        color: 'primary.drushimTitle',
                                         fontFamily: 'Rubik',
                                         fontWeight: 'bold',
                                         fontSize: '32px',
@@ -204,7 +221,8 @@ export default function AllJobsPage() {
                                         וָו
                                     </Typography>
                                     <Typography sx={{
-                                        color: '#053B7A',
+                                        // color: '#053B7A',
+                                        color: 'secondary.drushimTitle',
                                         fontFamily: 'Rubik',
                                         fontWeight: 'bold',
                                         fontSize: '32px',
@@ -215,7 +233,8 @@ export default function AllJobsPage() {
                                         נִים
                                     </Typography>
                                     <Typography sx={{
-                                        color: '#41C2F0',
+                                        // color: '#41C2F0',
+                                        color: 'primary.drushimTitle',
                                         fontFamily: 'Rubik',
                                         fontWeight: 'bold',
                                         fontSize: '32px',
@@ -227,7 +246,8 @@ export default function AllJobsPage() {
                                     </Typography>
                                     <Typography sx={{
                                         ml: 1,
-                                        color: '#41C2F0',
+                                        // color: '#41C2F0',
+                                        color: 'primary.drushimTitle',
                                         fontFamily: 'Rubik',
                                         fontWeight: 'bold',
                                         fontSize: '32px',
@@ -241,7 +261,8 @@ export default function AllJobsPage() {
                                 <Typography sx={{
                                     mt: 1,
                                     textAlign: 'center',
-                                    color: '#053B7A',
+                                    // color: '#053B7A',
+                                    color: 'secondary.drushimTitle',
                                     font: 'normal normal normal 19px Rubik',
                                     opacity: 1,
                                     letterSpacing: 0
@@ -257,12 +278,12 @@ export default function AllJobsPage() {
                                 <Box sx={{ width: '25%', mr: '20px' }}>
                                     <Stack direction='row' spacing={1} justifyContent='start' sx={{ paddingLeft: 2 }}>
 
-                                        <FilterListRounded sx={{ color: 'background.JobTitle2' }} />
+                                        <FilterListRounded sx={{ color: colorMode?.getActualMode()! === 'bright-contrast' ? '#6e86a2' : 'background.JobTitle2' }} />
 
 
                                         <Stack direction='row' spacing={1} >
                                             <Typography variant='h2' sx={{
-                                                color: 'background.JobTitle2',
+                                                color: colorMode?.getActualMode()! === 'bright-contrast' ? '#6e86a2' : 'background.JobTitle2',
                                             }}>סינון</Typography>
 
                                         </Stack>
@@ -276,7 +297,7 @@ export default function AllJobsPage() {
                                 <Box sx={{ borderRadius: '10px', backgroundColor: 'primary.filterBar', paddingBottom: 2 }}>
                                     <Box sx={{ paddingLeft: 4, paddingTop: 2 }}>
                                         <Typography variant='subtitle2' sx={{
-                                            color: 'background.JobTitle2',
+                                            color: colorMode?.getActualMode()! === 'bright-contrast' ? '#6e86a2' : 'background.JobTitle2',
                                         }}>חיפוש לפי מילה חופשית:</Typography>
                                         <SearchBar text={text} setText={setText} />
                                     </Box>
@@ -285,13 +306,13 @@ export default function AllJobsPage() {
                                     {/* ################# Location FILTER #################### */}
                                     <Box>
                                         <Stack direction='row' spacing={2} justifyContent='start' sx={{ mt: 4, paddingLeft: 4 }}>
-                                 
-                                 
-                                                <Place fontSize='small' sx={{ color: 'background.JobTitle2',mb:0.6 }} />
-                                            
+
+
+                                            <Place fontSize='small' sx={{ color: colorMode?.getActualMode()! === 'bright-contrast' ? '#6e86a2' : 'background.JobTitle2', mb: 0.6 }} />
+
                                             <Stack direction='row' spacing={1} alignItems='end'>
                                                 <Typography variant='subtitle2' sx={{
-                                                    color: 'background.JobTitle2',
+                                                    color: colorMode?.getActualMode()! === 'bright-contrast' ? '#6e86a2' : 'background.JobTitle2',
                                                 }}>חיפוש לפי מיקום:</Typography>
 
                                             </Stack>
@@ -307,37 +328,29 @@ export default function AllJobsPage() {
                                     {/* ################# Scope FILTER #################### */}
                                     <Box>
                                         <Stack direction='row' spacing={2} justifyContent='start' sx={{ mt: 4, paddingLeft: 4 }}>
-                             
-                                        <WatchLater fontSize='small' sx={{ color: 'background.JobTitle2',padding: 0.20, mt: -0.4 }} />
+
+                                            <WatchLater fontSize='small' sx={{ color: colorMode?.getActualMode()! === 'bright-contrast' ? '#6e86a2' : 'background.JobTitle2', padding: 0.20, mt: -0.4 }} />
                                             <Stack direction='row' spacing={1.2} >
-                                                <Typography variant='subtitle2' alignItems='end' sx={{ color: 'background.JobTitle2' }}>
+                                                <Typography variant='subtitle2' alignItems='end' sx={{ color: colorMode?.getActualMode()! === 'bright-contrast' ? '#6e86a2' : 'background.JobTitle2' }}>
                                                     בחרו היקף משרה:
                                                 </Typography>
 
                                             </Stack>
                                         </Stack>
                                         <Stack direction='row' spacing={2.5} sx={{ mt: 2.5, paddingLeft: 4.5, paddingRight: 4.5 }}>
-                                            <Button  onClick={() => { setFullScope(true); setHalfScope(false); }} sx={{
+                                            <Button onClick={() => { setFullScope(true); setHalfScope(false); }} sx={{
                                                 width: '100%',
-                                   
+
                                                 fontSize: 'medium',
                                                 padding: 1.2,
-                                                backgroundColor: fullScope ? 'background.JobTitle2' : 'primary.jobScopeButton',
-                                                color: (fullScope ? 'primary.JobTitle2' : 'background.JobTitle2'),
+                                                backgroundColor: fullScope ? (colorMode?.getActualMode()! === 'bright-contrast' ? '#6e86a2' : 'background.JobTitle2') : 'primary.jobScopeButton',
+                                                color: (fullScope ? (colorMode?.getActualMode()! === 'bright-contrast' ? '#FFFFFF' : 'primary.JobTitle2') : (colorMode?.getActualMode()! === 'bright-contrast' ? '#6e86a2' : 'background.JobTitle2')),
                                                 borderRadius: '4px',
                                                 opacity: 1,
 
                                                 ':hover': {
-                                                    backgroundColor: fullScope ? 'background.JobTitle2' : 'secondary.jobScopeButton'
+                                                    backgroundColor: fullScope ? (colorMode?.getActualMode()! === 'bright-contrast' ? '#6e86a2' : 'background.JobTitle2') : 'secondary.jobScopeButton'
                                                 },
-                                                // ':active': {
-                                                //     backgroundColor: 'background.JobTitle2',
-                                                //     color: 'primary.JobTitle2'
-                                                // },
-                                                // ':focus': {
-                                                //     background: '#053B7A 0% 0% no-repeat padding-box',
-                                                //     color: '#FFFFFF'
-                                                // }
                                             }}>
                                                 משרה מלאה
                                             </Button>
@@ -345,22 +358,15 @@ export default function AllJobsPage() {
                                                 width: '100%',
                                                 fontSize: 'medium',
                                                 padding: 1.2,
-                                                backgroundColor: halfScope ? 'background.JobTitle2' : 'primary.jobScopeButton',
-                                                color: (halfScope ? 'primary.JobTitle2' : 'background.JobTitle2'),
-                                                
+                                                backgroundColor: halfScope ? (colorMode?.getActualMode()! === 'bright-contrast' ? '#6e86a2' : 'background.JobTitle2') : 'primary.jobScopeButton',
+                                                color: (halfScope ? (colorMode?.getActualMode()! === 'bright-contrast' ? '#FFFFFF' : 'primary.JobTitle2') : (colorMode?.getActualMode()! === 'bright-contrast' ? '#6e86a2' : 'background.JobTitle2')),
+
                                                 borderRadius: '4px',
                                                 opacity: 1,
                                                 ':hover': {
-                                                    backgroundColor: halfScope ? 'background.JobTitle2' : 'secondary.jobScopeButton'
+                                                    backgroundColor: halfScope ? (colorMode?.getActualMode()! === 'bright-contrast' ? '#6e86a2' : 'background.JobTitle2') : 'secondary.jobScopeButton'
                                                 },
-                                                // ':active': {
-                                                //     background: '#053B7A 0% 0% no-repeat padding-box',
-                                                //     color: '#FFFFFF'
-                                                // },
-                                                // ':focus': {
-                                                //     background: '#053B7A 0% 0% no-repeat padding-box',
-                                                //     color: '#FFFFFF'
-                                                // }
+
                                             }}>חצי משרה</Button>
                                         </Stack>
                                     </Box>
@@ -371,11 +377,11 @@ export default function AllJobsPage() {
                                     {/* ################# Role FILTER #################### */}
                                     <Box>
                                         <Stack direction='row' spacing={2} justifyContent='start' sx={{ mt: 4, paddingLeft: 4 }}>
-                                         
-                                            <SupervisorAccount sx={{ color: 'background.JobTitle2' }} />
-                                            
+
+                                            <SupervisorAccount sx={{ color: colorMode?.getActualMode()! === 'bright-contrast' ? '#6e86a2' : 'background.JobTitle2' }} />
+
                                             <Stack direction='row' spacing={1} alignItems='end'>
-                                                <Typography variant='subtitle2' sx={{ color: 'background.JobTitle2' }}>חיפוש לפי תפקיד:</Typography>
+                                                <Typography variant='subtitle2' sx={{ color: colorMode?.getActualMode()! === 'bright-contrast' ? '#6e86a2' : 'background.JobTitle2' }}>חיפוש לפי תפקיד:</Typography>
 
                                             </Stack>
                                         </Stack>
@@ -405,34 +411,33 @@ export default function AllJobsPage() {
 
 
                             <Grid container width='100%' maxWidth={{ xs: '100%', sm: '100%', md: '100%', lg: '75%', xl: '75%' }} spacing={{ xs: 0, sm: 0, md: 4, lg: 4, xl: 4 }} columns={{ xs: 12, sm: 8, md: 8, lg: 8, xl: 8 }} sx={{ padding: { xs: 0, sm: 0, md: 2 } }}>
-                                <Box display={{ xs: 'flex', sm: 'flex', md: 'none' }} borderTop='2px solid #D3D3D3' borderBottom='2px solid #D3D3D3' sx={{ width: '100%', paddingTop: 1.5, paddingBottom: 1.5, mb: 5, mt: 5, }}>
+                                <Box display={{ xs: 'flex', sm: 'flex', md: 'none' }} borderTop='2px solid' borderBottom='2px solid' color='primary.divider' sx={{ width: '100%', paddingTop: 1.5, paddingBottom: 1.5, mb: 5, mt: 5, }}>
                                     <Box display='flex' flexDirection='column' justifyContent='center'
                                         sx={{
-                                            backgroundColor: '#FAFAFA',
+                                            backgroundColor: 'primary.filterBar',
                                             borderRadius: '10px',
                                             minHeight: '60px',
                                             width: '100%',
 
                                         }}>
 
-                                        <Button disableRipple sx={{ display: 'flex', justifyContent: 'start', ":hover": { backgroundColor: '#FAFAFA' } }} onClick={() => setFilterMobile(!filterMobile)}>
+                                        <Button disableRipple sx={{ display: 'flex', justifyContent: 'start', ":hover": { backgroundColor: 'primary.filterBar' } }} onClick={() => setFilterMobile(!filterMobile)}>
                                             <Stack direction='row' spacing={filterMobile ? 1.5 : 2} justifyContent='start' sx={{ paddingLeft: filterMobile ? 0 : 2 }}>
                                                 <Box sx={{ display: filterMobile ? 'none' : 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                                                    <FilterSVG style={{ width: '25px', height: '25px' }} />
+                                                <FilterListRounded sx={{ color: colorMode?.getActualMode()! === 'bright-contrast' ? '#6e86a2' : 'background.JobTitle2' }} />
                                                 </Box>
 
                                                 <Box sx={{ display: filterMobile ? 'flex' : 'none', flexDirection: 'column', justifyContent: 'center', paddingTop: filterMobile ? 1.5 : 0 }}>
-                                                    <Close style={{ width: '30px', height: '30px', color: '#053B7A' }} />
+                                                    <Close sx={{color: colorMode?.getActualMode()! === 'bright-contrast' ? '#6e86a2' : 'background.JobTitle2'}} />
                                                 </Box>
 
                                                 <Stack direction='row' spacing={1} sx={{ paddingTop: filterMobile ? 1.5 : 0 }} >
                                                     <Typography sx={{
                                                         textAlign: 'left',
-                                                        fontSize: '22px',
                                                         fontWeight: 'bold',
                                                         fontFamily: 'Rubik',
                                                         letterSpacing: '0px',
-                                                        color: '#053B7A',
+                                                        color: colorMode?.getActualMode()! === 'bright-contrast' ? '#6e86a2' : 'background.JobTitle2',
                                                         opacity: 1,
                                                     }}>סינון</Typography>
 
@@ -443,32 +448,28 @@ export default function AllJobsPage() {
                                         <Collapse in={filterMobile}>
                                             <Box sx={{ width: '100%', height: 'fit-content' }}>
 
-                                                <Box sx={{ background: '#D3D3D3 0% 0% no-repeat padding-box', height: '1px', width: '100%', mt: 1.5, mb: 2, mr: 'auto', ml: 'auto' }} />
+                                                <Box sx={{ backgroundColor: 'primary.divider', height: '1px', width: '100%', mt: 1.5, mb: 2, mr: 'auto', ml: 'auto' }} />
 
-                                                <Box sx={{ borderRadius: '10px', background: '#FAFAFA 0% 0% no-repeat padding-box', paddingBottom: 2 }}>
+                                                <Box sx={{ borderRadius: '10px', backgroundColor:'primary.filterBar', paddingBottom: 2 }}>
+
                                                     <Box sx={{ paddingLeft: 4, paddingTop: 2 }}>
-                                                        <Typography sx={{
-                                                            font: 'normal normal normal 18px Rubik',
-                                                            color: '#053B7A',
+                                                        <Typography variant='subtitle2' sx={{
+                                                            color: colorMode?.getActualMode()! === 'bright-contrast' ? '#6e86a2' : 'background.JobTitle2',
                                                         }}>חיפוש לפי מילה חופשית:</Typography>
                                                         <SearchBar text={text} setText={setText} />
                                                     </Box>
-                                                    <Divider sx={{ mt: 3, mb: 3, backgroundColor: 'primary.filterDivider' }} />
+                                                    <Divider sx={{ mt: 3.5, mb: 3, backgroundColor: 'primary.filterDivider', borderRadius: 1 }} />
 
                                                     {/* ################# Location FILTER #################### */}
                                                     <Box>
                                                         <Stack direction='row' spacing={2} justifyContent='start' sx={{ mt: 4, paddingLeft: 4 }}>
-                                                            <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                                                                <LocationSVG style={{ width: '20px', height: '20px' }} />
-                                                            </Box>
+
+
+                                                            <Place fontSize='small' sx={{ color: colorMode?.getActualMode()! === 'bright-contrast' ? '#6e86a2' : 'background.JobTitle2', mb: 0.6 }} />
 
                                                             <Stack direction='row' spacing={1} alignItems='end'>
-                                                                <Typography sx={{
-                                                                    textAlign: 'left',
-                                                                    font: 'normal normal normal 18px Rubik',
-                                                                    letterSpacing: '0px',
-                                                                    color: '#053B7A',
-                                                                    opacity: 1,
+                                                                <Typography variant='subtitle2' sx={{
+                                                                    color: colorMode?.getActualMode()! === 'bright-contrast' ? '#6e86a2' : 'background.JobTitle2',
                                                                 }}>חיפוש לפי מיקום:</Typography>
 
                                                             </Stack>
@@ -484,66 +485,45 @@ export default function AllJobsPage() {
                                                     {/* ################# Scope FILTER #################### */}
                                                     <Box>
                                                         <Stack direction='row' spacing={2} justifyContent='start' sx={{ mt: 4, paddingLeft: 4 }}>
-                                                            <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                                                                <ScopeSVG style={{ width: '18px', height: '18px' }} />
-                                                            </Box>
 
-                                                            <Stack direction='row' spacing={1} >
-                                                                <Typography sx={{
-
-                                                                    textAlign: 'left',
-                                                                    font: 'normal normal normal 18px Rubik',
-                                                                    letterSpacing: '0px',
-                                                                    color: '#053B7A',
-                                                                    opacity: 1,
-                                                                }}>בחרו היקף משרה:</Typography>
+                                                            <WatchLater fontSize='small' sx={{ color: colorMode?.getActualMode()! === 'bright-contrast' ? '#6e86a2' : 'background.JobTitle2', padding: 0.20, mt: -0.4 }} />
+                                                            <Stack direction='row' spacing={1.2} >
+                                                                <Typography variant='subtitle2' alignItems='end' sx={{ color: colorMode?.getActualMode()! === 'bright-contrast' ? '#6e86a2' : 'background.JobTitle2' }}>
+                                                                    בחרו היקף משרה:
+                                                                </Typography>
 
                                                             </Stack>
                                                         </Stack>
-                                                        <Stack direction='row' spacing={3} sx={{ mt: 2.5, paddingLeft: 4.5, paddingRight: 4.5 }}>
+                                                        <Stack direction='row' spacing={2.5} sx={{ mt: 2.5, paddingLeft: 4.5, paddingRight: 4.5 }}>
                                                             <Button onClick={() => { setFullScope(true); setHalfScope(false); }} sx={{
                                                                 width: '100%',
-                                                                fontFamily: 'Rubik',
-                                                                fontSize: '0.7em',
-                                                                height: '47px',
-                                                                background: fullScope ? '#053B7A 0% 0% no-repeat padding-box' : '#EDEDED 0% 0% no-repeat padding-box',
-                                                                color: fullScope ? '#FFFFFF' : '#053B7A',
+
+                                                                fontSize: 'medium',
+                                                                padding: 1.2,
+                                                                backgroundColor: fullScope ? (colorMode?.getActualMode()! === 'bright-contrast' ? '#6e86a2' : 'background.JobTitle2') : 'primary.jobScopeButton',
+                                                                color: (fullScope ? (colorMode?.getActualMode()! === 'bright-contrast' ? '#FFFFFF' : 'primary.JobTitle2') : (colorMode?.getActualMode()! === 'bright-contrast' ? '#6e86a2' : 'background.JobTitle2')),
                                                                 borderRadius: '4px',
                                                                 opacity: 1,
 
                                                                 ':hover': {
-                                                                    background: fullScope ? '#053B7A 0% 0% no-repeat padding-box' : '#D5D5D5 0% 0% no-repeat padding-box'
+                                                                    backgroundColor: fullScope ? (colorMode?.getActualMode()! === 'bright-contrast' ? '#6e86a2' : 'background.JobTitle2') : 'secondary.jobScopeButton'
                                                                 },
-                                                                ':active': {
-                                                                    background: '#053B7A 0% 0% no-repeat padding-box',
-                                                                    color: '#FFFFFF'
-                                                                },
-                                                                ':focus': {
-                                                                    background: '#053B7A 0% 0% no-repeat padding-box',
-                                                                    color: '#FFFFFF'
-                                                                }
                                                             }}>
                                                                 משרה מלאה
                                                             </Button>
                                                             <Button onClick={() => { setHalfScope(true); setFullScope(false); }} sx={{
                                                                 width: '100%',
-                                                                font: 'normal normal normal 0.7em Rubik',
-                                                                background: halfScope ? '#053B7A 0% 0% no-repeat padding-box' : '#EDEDED 0% 0% no-repeat padding-box',
-                                                                color: halfScope ? '#FFFFFF' : '#053B7A',
-                                                                height: '47px',
+                                                                fontSize: 'medium',
+                                                                padding: 1.2,
+                                                                backgroundColor: halfScope ? (colorMode?.getActualMode()! === 'bright-contrast' ? '#6e86a2' : 'background.JobTitle2') : 'primary.jobScopeButton',
+                                                                color: (halfScope ? (colorMode?.getActualMode()! === 'bright-contrast' ? '#FFFFFF' : 'primary.JobTitle2') : (colorMode?.getActualMode()! === 'bright-contrast' ? '#6e86a2' : 'background.JobTitle2')),
+
                                                                 borderRadius: '4px',
                                                                 opacity: 1,
                                                                 ':hover': {
-                                                                    background: halfScope ? '#053B7A 0% 0% no-repeat padding-box' : '#D5D5D5 0% 0% no-repeat padding-box'
+                                                                    backgroundColor: halfScope ? (colorMode?.getActualMode()! === 'bright-contrast' ? '#6e86a2' : 'background.JobTitle2') : 'secondary.jobScopeButton'
                                                                 },
-                                                                ':active': {
-                                                                    background: '#053B7A 0% 0% no-repeat padding-box',
-                                                                    color: '#FFFFFF'
-                                                                },
-                                                                ':focus': {
-                                                                    background: '#053B7A 0% 0% no-repeat padding-box',
-                                                                    color: '#FFFFFF'
-                                                                }
+
                                                             }}>חצי משרה</Button>
                                                         </Stack>
                                                     </Box>
@@ -554,18 +534,11 @@ export default function AllJobsPage() {
                                                     {/* ################# Role FILTER #################### */}
                                                     <Box>
                                                         <Stack direction='row' spacing={2} justifyContent='start' sx={{ mt: 4, paddingLeft: 4 }}>
-                                                            <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                                                                <RoleSVG style={{ width: '18px', height: '18px' }} />
-                                                            </Box>
+
+                                                            <SupervisorAccount sx={{ color: colorMode?.getActualMode()! === 'bright-contrast' ? '#6e86a2' : 'background.JobTitle2' }} />
 
                                                             <Stack direction='row' spacing={1} alignItems='end'>
-                                                                <Typography sx={{
-                                                                    textAlign: 'left',
-                                                                    font: 'normal normal normal 18px Rubik',
-                                                                    letterSpacing: '0px',
-                                                                    color: '#053B7A',
-                                                                    opacity: 1,
-                                                                }}>חיפוש לפי תפקיד:</Typography>
+                                                                <Typography variant='subtitle2' sx={{ color: colorMode?.getActualMode()! === 'bright-contrast' ? '#6e86a2' : 'background.JobTitle2' }}>חיפוש לפי תפקיד:</Typography>
 
                                                             </Stack>
                                                         </Stack>
@@ -578,13 +551,13 @@ export default function AllJobsPage() {
                                                         <Button onClick={handleFilter} sx={{
                                                             width: '185px',
                                                             height: '40px',
-                                                            background: '#91A749 0% 0% no-repeat padding-box',
-                                                            color: '#FFFFFF',
+                                                            fontWeight: 500,
+                                                            backgroundColor: 'primary.filterButton',
+                                                            color: 'primary.JobTitle2',
                                                             opacity: 1,
                                                             borderRadius: '30px',
-                                                            font: 'normal normal normal 18px Rubik',
                                                             ':hover': {
-                                                                background: '#B4CC64 0% 0% no-repeat padding-box'
+                                                                backgroundColor: 'secondary.filterButton',
                                                             },
                                                         }}>
                                                             החל סינון
@@ -597,7 +570,7 @@ export default function AllJobsPage() {
                                     </Box>
 
                                 </Box>
-                                <Box display={{ xs: 'none', sm: 'none', md: 'flex' }} sx={{ backgroundColor: 'primary.divider', height: '2px', width: { xs: '100%', sm: '100%', md: '96.7%' }, mt: 2, mb: 2, ml: 'auto', borderRadius: 1 }} />
+                                <Box display={{ xs: 'none', sm: 'none', md: 'flex' }} sx={{ backgroundColor: 'primary.divider', height: '2px', width: { xs: '100%', sm: '100%', md: '95%' }, mt: 2, mb: 2, ml: 'auto', borderRadius: 1 }} />
 
 
                                 {

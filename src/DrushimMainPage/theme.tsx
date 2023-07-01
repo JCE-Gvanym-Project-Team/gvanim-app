@@ -5,10 +5,8 @@ const MAX_FONT_SIZE = 40;
 const MIN_FONT_SIZE = 12;
 
 // colors based on mode
-export const colorTokens = (mode) =>
-{
-    if (mode === "light")
-    {
+export const colorTokens = (mode) => {
+    if (mode === "light") {
         return {
             primary: {
                 main: "#000000",
@@ -25,6 +23,8 @@ export const colorTokens = (mode) =>
                 filterBar: '#FAFAFA',  // new (author: omer)
                 filterButton: '#91A749', // author: omer, hover: 'secondary'
                 jobScopeButton: '#EDEDED', // author: omer, hover: 'secondary'
+                drushimTitle: '#41C2F0', // author: omer
+                drushimTitleContainer: '#FFFFFF' // author: omer
             },
 
             secondary: {
@@ -38,7 +38,9 @@ export const colorTokens = (mode) =>
                 addRecommenderButtonHover: "#BFD37E",
                 visitJobButton: '#72C3CE', // author: omer
                 filterButton: '#B4CC64', // hover (author: omer)
-                jobScopeButton: '#D5D5D5' // hover (author: omer)
+                jobScopeButton: '#D5D5D5', // hover (author: omer)
+                drushimTitle: '#053B7A', // author: omer
+                drushimTitleContainer: '#00000029' // BoxShadowColor
 
             },
             background: {
@@ -68,8 +70,7 @@ export const colorTokens = (mode) =>
             }
         }
 
-    } else if (mode === "bright-contrast")
-    {
+    } else if (mode === "bright-contrast") {
         return {
             primary: {
                 main: "#000000",
@@ -77,9 +78,18 @@ export const colorTokens = (mode) =>
                 faded: "#333333",
                 jobTitle: "#010c18",
                 descAndReqTitle: "#122022",
+                myCardText: '#767676', // author: omer
                 addRecommenderButton: "#1d210f",
-                visitJobButton: '#122022',
-                JobTitle2: "#FFFFFF", // author: omer
+                myBoxShadow: '#00000029',
+                jobScopeButton: '#EDEDED', // author: omer, hover: 'secondary'
+                JobTitle2: "#000000", // author: omer
+                drushimTitle: '#41C2F0', // author: omer
+                divider: '#D5D5D5', // author: omer
+                filterBar: '#FAFAFA', // author: omer
+                filterButton: '#EDDBBB', // author: omer
+                visitJobButton: '#86bac0', // author: omer, hover: 'secondary'
+                // drushimTitleContainer: ''
+                // jobDetails: '#485564',
             },
 
             secondary: {
@@ -90,7 +100,13 @@ export const colorTokens = (mode) =>
                 jobDetails: "#220915",
                 labelText: "#010c18",
                 addRecommendersTextHover: "#122c2f",
-                addRecommenderButtonHover: "#2a3211"
+                addRecommenderButtonHover: "#2a3211",
+                drushimTitleContainer: '#00000029',
+                jobScopeButton: '#D5D5D5', // hover (author: omer)
+                visitJobButton: '#afd1d5', // hover (author: omer)
+                filterButton: '#f4e7d1', // hover (author: omer)
+                drushimTitle: '#053B7A', // author: omer
+
 
             },
             background: {
@@ -110,7 +126,7 @@ export const colorTokens = (mode) =>
                 recommendersBox: "rgba(91, 161, 170, 0.14)",
                 footer: "#a9d1ff",
                 successHover: "#009900",
-                JobTitle2: "#b5d6fc", // new (author: omer)
+                JobTitle2: "#a9d1ff", // author: omer
             },
             error: {
                 main: "#FF0000"
@@ -119,8 +135,7 @@ export const colorTokens = (mode) =>
                 main: "#00FF00"
             }
         }
-    } else if (mode === "dark-contrast")
-    {
+    } else if (mode === "dark-contrast") {
         return {
             primary: {
                 main: "#FFFFFF",
@@ -138,6 +153,8 @@ export const colorTokens = (mode) =>
                 filterDivider: '#3f3f3f', // new (author: omer)
                 filterButton: '#bfc87a', // new (author: omer) hover: secondary
                 jobScopeButton: '#2d2d2d', // author: omer, hover: 'secondary'
+                drushimTitle: '#b2d0ec', // author: omer
+                drushimTitleContainer: '#000000', // background color
             },
 
             secondary: {
@@ -149,9 +166,13 @@ export const colorTokens = (mode) =>
                 labelText: "#6cadf9",
                 addRecommendersTextHover: "#cae7eb",
                 addRecommenderButtonHover: "#e5edcb",
-                visitJobButton: '#d9ddbd', // new (author: omer)
+                visitJobButton: '#e8ead7', // new (author: omer)
                 filterButton: '#e1e8ab', // new (author: omer)
                 jobScopeButton: '#424242', // hover (author: omer)
+                drushimTitle: '#366294', // author: omer
+                drushimTitleContainer: '#666666' // BoxShadowColor
+
+
 
             },
             background: {
@@ -180,8 +201,7 @@ export const colorTokens = (mode) =>
                 main: "#00FF00"
             }
         }
-    } else
-    {
+    } else {
         // black and white
         return {
             primary: {
@@ -192,9 +212,12 @@ export const colorTokens = (mode) =>
                 descAndReqTitle: colorToGrayscale("#5BA1AA"),
                 addRecommenderButton: colorToGrayscale("#91A749"),
                 visitJobButton: colorToGrayscale("#5BA1AA"),
+                jobScopeButton: '#EDEDED', // author: omer, hover: 'secondary'
                 JobTitle2: colorToGrayscale("#FFFFFF"), // author: omer
                 filterButton: '#323232', // new (author: omer)
                 filterBar: '#FAFAFA',  // new (author: omer)
+                drushimTitle: '#b2b2b2', // author: omer 
+                divider: '#D3D3D3', // new (author: omer)
             },
 
             secondary: {
@@ -207,6 +230,9 @@ export const colorTokens = (mode) =>
                 addRecommendersTextHover: colorToGrayscale("#7BC3CC"),
                 addRecommenderButtonHover: colorToGrayscale("#BFD37E"),
                 filterButton: '#5a5a5a', // new (author: omer)
+                drushimTitle: '#5b5b5b', // author: omer 
+                jobScopeButton: '#D5D5D5', // hover
+                visitJobButton: '#666666', // hover
 
             },
             background: {
@@ -238,8 +264,7 @@ export const colorTokens = (mode) =>
     }
 }
 
-export const themeSettings = (mode, actualMode, fontSize, fontFamily) =>
-{
+export const themeSettings = (mode, actualMode, fontSize, fontFamily) => {
     const colors = colorTokens(actualMode);
     return {
         palette: {
@@ -259,7 +284,9 @@ export const themeSettings = (mode, actualMode, fontSize, fontFamily) =>
                 filterBar: colors.primary?.filterBar, // new (author: omer)
                 filterDivider: colors.primary?.filterDivider, // new (author: omer)
                 filterButton: colors.primary?.filterButton,  // new (author: omer)
-                jobScopeButton: colors.primary?.jobScopeButton //(author: omer)
+                jobScopeButton: colors.primary?.jobScopeButton, //(author: omer)
+                drushimTitle: colors.primary?.drushimTitle, //(author: omer)
+                drushimTitleContainer: colors.primary?.drushimTitleContainer, // background color
             },
             secondary: {
                 main: colors.secondary?.main!,
@@ -272,8 +299,9 @@ export const themeSettings = (mode, actualMode, fontSize, fontFamily) =>
                 addRecommenderButtonHover: colors.secondary?.addRecommenderButtonHover,
                 visitJobButton: colors.secondary.visitJobButton!, // new (author: omer)
                 filterButton: colors.secondary?.filterButton,  // new (author: omer)
-                jobScopeButton: colors.secondary?.jobScopeButton //(author: omer)
-
+                jobScopeButton: colors.secondary?.jobScopeButton, //(author: omer) 
+                drushimTitle: colors.secondary?.drushimTitle, //(author: omer)
+                drushimTitleContainer: colors.secondary?.drushimTitleContainer, //BoxShadow Color
             },
             background: {
                 main: colors.background?.globalBackground,
@@ -357,8 +385,7 @@ export const FontContext = createContext({
     changeFontFamily: (fontFamily) => { },
 });
 
-export const useMode = () =>
-{
+export const useMode = () => {
     // default is light
     const [mode, setMode] = useState("light");
     const [fontSize, setFontSize] = useState(20);
@@ -368,13 +395,11 @@ export const useMode = () =>
 
     const colorMode = useMemo(() =>
     ({
-        toggleColorMode: (mode) =>
-        {
+        toggleColorMode: (mode) => {
             setActualMode(mode);
         },
 
-        getActualMode: () =>
-        {
+        getActualMode: () => {
             return actualMode;
         }
     }), [actualMode]);
@@ -382,23 +407,19 @@ export const useMode = () =>
 
     const fontMode = useMemo(() =>
     ({
-        increaseFontSize: (increaseBy) =>
-        {
+        increaseFontSize: (increaseBy) => {
             setFontSize(fontSize + increaseBy > MAX_FONT_SIZE ? fontSize : fontSize + increaseBy);
         },
 
-        decreaseFontSize: (decreaseBy) =>
-        {
+        decreaseFontSize: (decreaseBy) => {
             setFontSize(fontSize - decreaseBy < MIN_FONT_SIZE ? fontSize : fontSize - decreaseBy);
         },
 
-        changeFontFamily: (fontFamily) =>
-        {
+        changeFontFamily: (fontFamily) => {
             setFontFamily(fontFamily);
         },
 
-        changeFontSize: (fontSize) =>
-        {
+        changeFontSize: (fontSize) => {
             setFontSize(fontSize);
         }
     }), [fontSize, fontFamily]);
@@ -414,8 +435,7 @@ export const useMode = () =>
 }
 
 // helper function for black and white theme
-function colorToGrayscale(color)
-{
+function colorToGrayscale(color) {
     color = color.replace('#', '');
     const red = parseInt(color.substring(0, 2), 16);
     const green = parseInt(color.substring(2, 4), 16);
@@ -438,8 +458,7 @@ function colorToGrayscale(color)
 }
 
 // helper function for bright contrast 
-function getContrastingColor(hexColor)
-{
+function getContrastingColor(hexColor) {
     const hex = hexColor.replace("#", "");
     const r = parseInt(hex.substring(0, 2), 16);
     const g = parseInt(hex.substring(2, 4), 16);
@@ -452,8 +471,7 @@ function getContrastingColor(hexColor)
     return contrastingColor;
 }
 
-function getDarkContrastingColor(hexColor)
-{
+function getDarkContrastingColor(hexColor) {
     // Convert hexadecimal color to RGB
     const hex = hexColor.replace("#", "");
     const r = parseInt(hex.substring(0, 2), 16);
