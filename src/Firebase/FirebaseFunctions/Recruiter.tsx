@@ -3,6 +3,7 @@ import { realtimeDB } from "../FirebaseConfig/firebase";
 import { appendToDatabase, getFirebaseIdsAtPath, getObjectAtPath, removeObjectAtPath, replaceData } from "./DBfuncs";
 import { deleteUserAccount } from "./Authentication";
 import { Sector, getAllSectors } from "./Sector";
+import axios from "axios";
 const auth = getAuth();
 
 
@@ -18,7 +19,7 @@ export class Recruiter {
 		this._firstName = firstName;
 		this._lastName = lastName;
 		this._sectors = sectors;
-		this._id = email.replace('.', '_');
+		this._id = email.replaceAll('.', '_');
 	}
 	/**
 	 * Gets the path of the current recruiter in the The realtime DB.
@@ -47,7 +48,7 @@ export class Recruiter {
 				sec.removeRecruiter(this);
 			}
 			await removeObjectAtPath("/Recruiters/" + this._id);
-			await removeObjectAtPath("/RecUid" + this._id);
+			await removeObjectAtPath("/RecUid/" + this._id);
 			await deleteUserAccount(this._email);
 			return 0;
 		}
@@ -63,26 +64,30 @@ export class Recruiter {
 			return 1;
 		}
 		if (password.length > 0) {
-			const userCredential = await createUserWithEmailAndPassword(auth, this._email, password);
-			const userUid = userCredential.user.uid;
-			await auth.signOut();
-			const user = process.env.REACT_APP_ADMIN_MAIL;
-			const pass = process.env.REACT_APP_ADMIN_PASS;
-			if (user != null && pass != null) {
-				await signInWithEmailAndPassword(auth, user, pass);
-				for (let i = 0; i < this._sectors.length; i++) {
-					let sec = new Sector(this._sectors[i], true);
-					sec.addRecruiter(this);
-				}
-			}
-			await appendToDatabase(userUid, "/RecUid", this._id);
-			await appendToDatabase(this, '/Recruiters',this._id);
-			if(userCredential)
-				return 0;
-			else
+			const uid = await this.createUser(password);
+			if(!uid)
 				return -1;
+			await appendToDatabase(uid, "/RecUid", this._id);
+			await appendToDatabase(this, '/Recruiters',this._id);
+			return 0;
 		}
 		await appendToDatabase(this, "/Recruiters", this._id);
+	}
+	private async createUser(pass: string): Promise<string> {
+		return new Promise<string>((resolve, reject) => {
+			axios.post('https://europe-west1-gvanim-app.cloudfunctions.net/createUser', {
+				mail: this._email,
+				password :pass
+			})
+				.then(response => {
+					const uid = response.data;
+					resolve(uid);
+				})
+				.catch(error => {
+					console.error('Error calling the Cloud Function:', error);
+					reject(error);
+				});
+		});
 	}
 	public async edit(firstName: string = this._firstName, lastName: string = this._lastName) {
 		this._firstName = firstName;
