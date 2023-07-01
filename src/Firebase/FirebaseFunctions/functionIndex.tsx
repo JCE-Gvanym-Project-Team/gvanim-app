@@ -5,7 +5,7 @@ import { Recomendation } from "./Recomendation";
 import { Role, getAllRoles, getOpenRoles, getClosedRoles } from "./Role";
 import { Stage, getAllStages, getOpenStages, getClosedStages } from "./Stage";
 import { Sector, getAllSectors, getOpenSectors, getClosedSectors } from "./Sector";
-import { updateConnectedRecruiterPassword, updateLinkRecruiterPassword, loginAdmin, loginRecruiter, getConnectedUser, sendResetMail, isConnected,loguotRecruiter } from './Authentication';
+import { updateConnectedRecruiterPassword, updateLinkRecruiterPassword, loginRecruiter, getConnectedUser, sendResetMail, isConnected,loguotRecruiter } from './Authentication';
 export {
     Job,
     getFilteredJobs,
@@ -30,7 +30,6 @@ export {
     getAllSectors,
     getOpenSectors,
     getClosedSectors,
-    loginAdmin,
     loginRecruiter,
     getConnectedUser,
     sendResetMail,

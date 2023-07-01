@@ -3,42 +3,55 @@ import { Job, getFilteredCandidateJobStatuses, getFilteredCandidates, getFiltere
 import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
 
+
 export default async function CandidatesByFilters(status: string, timeOnStatus: string,
   sector: string, role: string, selectGarde: string, selectInterviewDate: string, startDate: Date, endDate: Date): Promise<any[]> {
+  let attributes: string[] = [];
+  let values: string[] = [];
 
-  let _candidatesJobStatuses;
-
-  if (status == 'בחר כל הסטטוסים') {
-    _candidatesJobStatuses = await getFilteredCandidateJobStatuses();
-  } else {
-    _candidatesJobStatuses = await getFilteredCandidateJobStatuses(['status'], [status]);
+  if (role != "כל התפקידים") {
+    attributes.push("role");
+    values.push(role);
+  }
+  
+  if (sector !== "כל האשכולות") {
+    attributes.push("sector");
+    values.push(sector);
   }
 
+  if (status !== 'בחר כל הסטטוסים') {
+    attributes.push("status");
+    values.push(status);
+  }
+  
+  let _candidatesJobStatuses = await getFilteredCandidateJobStatuses(attributes, values);
   // Create an array to store candidates with the specified rejection cause
   const promises: Promise<any>[] = [];
-
+  
   for (let i = 0; i < _candidatesJobStatuses.length; i++) {
     let candidate_job_status = _candidatesJobStatuses[i];
-    if (
-      dayjs(candidate_job_status._applyDate).isBetween(dayjs(startDate), dayjs(endDate), null, '[]')
-    ) {
-      let job = (
-        await getFilteredJobs(['jobNumber'], [candidate_job_status._jobNumber.toString()])
-      ).at(0);
+    
+    const creationDate = new Date(candidate_job_status._applyDate);
+    const startTimestamp = startDate.getTime();
+    const endTimestamp = endDate.getTime();
+    const checkTimestamp = creationDate.getTime();
+    const oneDayInMilliseconds = 24 * 60 * 60 * 1000;
 
-      if (
-        job != undefined &&
-        (job._role === role || role === 'כל התפקידים') &&
-        (job._sector === sector || sector === 'כל הארץ')
-      ) {
-        const lastUpdate = new Date(candidate_job_status._lastUpdate); // המניע יהיה אינדקס בסדרת המועמדים
-        const currentTimestamp = new Date(2023, 6, 5); // תאריך הנוכחי
-        const differenceInMilliseconds = Math.abs(
-          currentTimestamp.getTime() - lastUpdate.getTime()
-        );
+    if (checkTimestamp >= startTimestamp && checkTimestamp <= endTimestamp + oneDayInMilliseconds) 
+    {
+      let job = (await getFilteredJobs(['jobNumber'], [candidate_job_status._jobNumber.toString()])).at(0);
+      if (job === undefined)
+         continue;
 
-        const millisecondsInWeek = 7 * 24 * 60 * 60 * 1000; // מילישניות בשבוע
-        const millisecondsInMonth = 30 * 24 * 60 * 60 * 1000; // מילישניות בחודש
+      const isSectorMatch = (job) => job._sector === sector || sector === 'כל האשכולות';
+      const isRoleMatch = (job) => job._role === role || role === 'כל התפקידים';
+
+      if (isSectorMatch(job) && isRoleMatch(job)) {
+        const lastUpdate = new Date(candidate_job_status._lastUpdate);
+        const currentTimestamp = new Date(2023, 6, 5);
+        const differenceInMilliseconds = Math.abs(currentTimestamp.getTime() - lastUpdate.getTime());
+        const millisecondsInWeek = 7 * 24 * 60 * 60 * 1000;
+        const millisecondsInMonth = 30 * 24 * 60 * 60 * 1000;
 
         let promise = helperFilteredCandidate(candidate_job_status, job, role, sector, status, differenceInMilliseconds, selectGarde, selectInterviewDate);
 
@@ -60,7 +73,6 @@ export default async function CandidatesByFilters(status: string, timeOnStatus: 
 
 export async function helperFilteredCandidate(candidate_job_status: CandidateJobStatus, job: Job, role: string, sector: string, status: string,
   timeOnStatus: number, selectGarde: string, selectInterviewDate: string) {
-
   let candidate = (
     await getFilteredCandidates(['id'], [candidate_job_status._candidateId.toString()])
   ).at(0);
@@ -104,9 +116,3 @@ export async function helperFilteredCandidate(candidate_job_status: CandidateJob
 
   return filteredCandidate;
 }
-
-
-
-
-
-

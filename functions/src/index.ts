@@ -735,3 +735,32 @@ exports.deleteRecruiter = functions
       response.status(500).send("error occurred while executing the function.");
     }
   });
+export const createUser =
+  functions
+    .region("europe-west1")
+    .https
+    .onRequest(async (request, response) => {
+      response.set("Access-Control-Allow-Origin", "*");
+      response.set("Access-Control-Allow-Methods", "GET, POST");
+      response.set("Access-Control-Allow-Headers", "Content-Type");
+      if (request.method === "OPTIONS") {
+        // Handle the preflight OPTIONS request
+        response.status(204).send("");
+        return;
+      }
+      try {
+        const {mail, password} = request.body;
+        const user =
+        await admin.auth().createUser({
+          email: mail,
+          emailVerified: false,
+          password: password,
+          disabled: false,
+        });
+        response.json(user.uid);
+      } catch (error) {
+        console.error("Error executing getFilteredcandidatesJobStatus:", error);
+        response.status(500).send(
+          "error occurred while executing the function.");
+      }
+    });

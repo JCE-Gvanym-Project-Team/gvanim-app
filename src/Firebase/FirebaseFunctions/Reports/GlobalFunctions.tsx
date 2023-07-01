@@ -1,8 +1,4 @@
-import { Candidate } from "../Candidate";
-import { CandidateJobStatus } from "../CandidateJobStatus";
-import { Job, loginAdmin, getFilteredCandidateJobStatuses, generateJobNumber, getFilteredJobs, loginRecruiter } from "../functionIndex";
 import * as XLSX from 'xlsx';
-
 
 export async function exportToExcel(tableResule: any[], reportName: string) {
     // Convert the result data to the Excel format
