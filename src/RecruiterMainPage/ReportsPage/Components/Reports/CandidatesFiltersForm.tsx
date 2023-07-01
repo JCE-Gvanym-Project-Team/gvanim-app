@@ -11,7 +11,7 @@ import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import CandidatesByFilters from '../../../../Firebase/FirebaseFunctions/Reports/CandidatesFilters';
 import { exportToExcel } from '../../../../Firebase/FirebaseFunctions/Reports/GlobalFunctions';
-import { getAllRoles, getAllSectors, getFilteredCandidateJobStatuses, loginAdmin } from '../../../../Firebase/FirebaseFunctions/functionIndex';
+import { getAllRoles, getAllSectors } from '../../../../Firebase/FirebaseFunctions/functionIndex';
 import { BoxGradientSx, MyPaperSx } from '../../../ManageJobsPage/Components/NewJobPage/NewJobStyle';
 import { designReturnButton } from '../../../ManageJobsPage/ManageJobsPageStyle';
 import { MyReportStyle, radioStyle } from '../../ReportPageStyle';
@@ -24,9 +24,9 @@ interface typeMyData {
 export default function CandidateFiltersForm() {
     const [status, setSelectStatus] = React.useState('');
     const [timeOnStatus, setTimeOnStatus] = React.useState('');
-    const [roles, setRoles] =  React.useState<typeMyData[]>([]);
+    const [roles, setRoles] = React.useState<typeMyData[]>([]);
     const [sectors, setSectors] = React.useState<typeMyData[]>([]);
-    const [selectedRole, setSelectedRole] =  React.useState<string>();
+    const [selectedRole, setSelectedRole] = React.useState<string>();
     const [selectedSector, setSelectedSector] = React.useState<string>();
     const [includeGrade, setSelectGarde] = React.useState('yes');
     const [includeInterviewDate, setSelectInterviewDate] = React.useState('yes');
@@ -36,8 +36,7 @@ export default function CandidateFiltersForm() {
 
     React.useEffect(() => {
         const fileData = async () => {
-            // --- sectors 
-            
+            // --- sectors         
             let i = 20;
             const sectorsFromDb = await getAllSectors();
             let updatedSectors = [{ id: 10, name: 'כל האשכולות' }];
@@ -49,14 +48,11 @@ export default function CandidateFiltersForm() {
                     return sectorObj;
                 })
             );
-
             setSectors(updatedSectors);
-
 
             // ---- roles
             const rolesFromDb = await getAllRoles();
             i = 20;
-
             let updatedRoles = [{ id: 10, name: "כל התפקידים" }];
 
             updatedRoles = updatedRoles.concat(
@@ -68,31 +64,20 @@ export default function CandidateFiltersForm() {
             );
 
             setRoles(updatedRoles);
-
         };
-
-        
         fileData();
     }, []);
-
 
     const createReport = (statusName, timeOnStatus, sectorName, roleName, selectGarde, selectInterviewDate, startDate, endDate) => {
         // checking if the user select all the buttons
         const isDateSelected = startDate && endDate;
 
-        if (!statusName || !timeOnStatus || !sectorName || !roleName|| !selectGarde || !isDateSelected) {
+        if (!statusName || !timeOnStatus || !sectorName || !roleName || !selectGarde || !isDateSelected) {
             // displaying an error message or indicating to the user that the parameters are mandatory
             alert('יש למלא את כל השדות');
             return;
         }
-
-        // const statusChiseArr = ["הוגשה מועמדות", "זומן לראיון ראשון", "עבר ראיון ראשון", "זומן לראיון שני", "עבר ראיון שני", "התקבל", "הועבר למשרה אחרת", "נדחה", "אינו מעוניין במשרה", "בחר כל הסטטוסים"];
-        //const timeThatOnCurrentStatusArr = ["שבוע", "חודש", "כל זמן"];
-        // const regionArr = ["מרכז", "צפון", "דרום", "כל הארץ"];
-        // const roleArr = ["מנהל", "עובד סוציאלי", "מתנדב", "כל התפקידים"];
         const choice = ["כן", "לא"];
-
-        // const timeOnStatus = timeThatOnCurrentStatusArr[Math.floor(timeOnStatus_ind / 10) - 1];
         const formattedStartDate = startDate.toDate();
         const formattedEndDate = endDate.toDate();
 
@@ -111,9 +96,6 @@ export default function CandidateFiltersForm() {
                 console.log(error);
             });
     }
-
-
-    
 
     // handls
     function handleChangeStatus(event: SelectChangeEvent<string>, child: React.ReactNode): void {
@@ -156,9 +138,7 @@ export default function CandidateFiltersForm() {
 
     return (
         <>
-
             <Box sx={BoxGradientSx}>
-
                 <Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
                     right: '2%',
                     left: 'auto',
@@ -258,7 +238,6 @@ export default function CandidateFiltersForm() {
 
                         </Stack>
 
-
                         <Typography sx={{ opacity: 0.6, width: '100%', textAlign: 'center', color: '#fff', fontSize: '16px', fontFamily: "'Noto Sans Hebrew', sans-serif", mt: 1 }} variant='subtitle1'>
                             הפקת דוחות על מועמדים לפי מס' קטגוריות
                         </Typography>
@@ -268,16 +247,13 @@ export default function CandidateFiltersForm() {
                 </Box>
             </Box>
 
-
             <Box sx={MyPaperSx}>
 
                 <Box sx={MyReportStyle}>
                     <Container>
                         <Box >
-
                             <Box className="col-md-12">
                                 <Box className="section-title"></Box>
-
                                 <FormControl>
                                     {/* select the status */}
                                     <FormControl fullWidth>
@@ -289,6 +265,7 @@ export default function CandidateFiltersForm() {
                                             label="selectStatus"
                                             onChange={handleChangeStatus}
                                         >
+                                            <MenuItem value={"בחר כל הסטטוסים"}>בחר כל הסטטוסים</MenuItem>
                                             <MenuItem value={'הוגשה מועמדות'}>הוגשה מועמדות</MenuItem>
                                             <MenuItem value={"זומן לראיון ראשון"}>זומן לראיון ראשון</MenuItem>
                                             <MenuItem value={"עבר ראיון ראשון"}>עבר ראיון ראשון</MenuItem>
@@ -298,8 +275,6 @@ export default function CandidateFiltersForm() {
                                             <MenuItem value={"הועבר למשרה אחרת"}>הועבר למשרה אחרת</MenuItem>
                                             <MenuItem value={"נדחה"}>נדחה</MenuItem>
                                             <MenuItem value={"אינו מעוניין במשרה"}>אינו מעוניין במשרה</MenuItem>
-                                            <MenuItem value={"בחר כל הסטטוסים"}>בחר כל הסטטוסים</MenuItem>
-
                                         </Select>
                                     </FormControl>
 
@@ -328,8 +303,8 @@ export default function CandidateFiltersForm() {
                                         <Select
                                             labelId="demo-simple-select-label"
                                             id="demo-simple-select"
-                                            value={selectedSector} 
-                                            label="sector" 
+                                            value={selectedSector}
+                                            label="sector"
                                             onChange={handleChangeSector}
                                         >
                                             {sectors.map((sector) => (
@@ -341,7 +316,6 @@ export default function CandidateFiltersForm() {
                                     </FormControl>
 
                                     <br />
-
                                     {/* select role */}
                                     <FormControl fullWidth>
                                         <InputLabel id="demo-simple-select-label">בחר תפקיד</InputLabel>
@@ -357,7 +331,7 @@ export default function CandidateFiltersForm() {
                                                     {role.name}
                                                 </MenuItem>
                                             ))}
-                                            </Select>
+                                        </Select>
                                     </FormControl>
                                     <br />
 
@@ -387,6 +361,7 @@ export default function CandidateFiltersForm() {
                                             <FormControlLabel value="no" control={<Radio />} label="אל תכלול" />
                                         </div>
                                     </RadioGroup>
+
                                     <br />
                                     {/* select time */}
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -403,22 +378,16 @@ export default function CandidateFiltersForm() {
                                             />
                                         </DemoContainer>
                                     </LocalizationProvider>
-
                                     <br />
+
                                     {/* create report */}
-
                                     <button onClick={() => createReport(status, timeOnStatus, selectedSector, selectedRole, includeGrade, includeInterviewDate, startDate, endDate)}>צור דוח</button>
-
-                                    {/* <button onClick={() => main()}>add data</button> */}
-
-
                                 </FormControl>
                             </Box>
                         </Box>
                     </Container>
                 </Box >
             </Box>
-
 
             <Box style={{ position: 'absolute', top: '100px', right: '50px' }}>
                 <Button
@@ -429,52 +398,47 @@ export default function CandidateFiltersForm() {
                     חזור
                 </Button>
             </Box>
-
-
         </>
-
     );
 }
 
 
 
 export async function main() {
-    loginAdmin().then(async () => {
-        // 
-        // let jobstatus1 = new CandidateJobStatus(109, "28", "נדחה",  "לא מתאים לגוונים בגלל..", 1,  new Date(2023, 4, 1),new Date(2023, 5, 1), new Date(0, 0, 0), ["ded", "ded"], [], "פערים על היקף משרה"  );
-        // let jobstatus2 = new CandidateJobStatus(102, "28", "עבר ראיון ראשון",  "בחור מצוין", 4,  new Date(2023, 4, 1), new Date(2023, 4, 5), new Date(2023, 6, 25), ["ed", "ed"], [], "" );
-        // let jobstatus3 = new CandidateJobStatus(94, "53", "התקבל",  "בחור מצוין", 5,  new Date(2023, 4, 1), new Date(2023, 8, 1), new Date(2023, 6, 25), ["ed", "ed"], [], "" );
-        // let jobstatus4 = new CandidateJobStatus(91, "66", "הודשה מועמדות",  "בחור מצוין", 4,  new Date(2023, 4, 1), new Date(2023, 4, 17), new Date(2023, 6, 25), ["ed", "ed"], [], "" );
-        //let jobstatus5 = new CandidateJobStatus(76, "28", "זומן לראיון ראשון", "", 0, new Date(), new Date(2023, 5, 1), new Date(0, 0, 0), ["ed", "ed"], [], "");
-        //await jobstatus5.add();
-        // await jobstatus5.remove();
-        // jobstatus2.add();
-        // jobstatus3.add();
-        // jobstatus4.add();
+    // loginAdmin().then(async () => {
+    //     // 
+    //     // let jobstatus1 = new CandidateJobStatus(109, "28", "נדחה",  "לא מתאים לגוונים בגלל..", 1,  new Date(2023, 4, 1),new Date(2023, 5, 1), new Date(0, 0, 0), ["ded", "ded"], [], "פערים על היקף משרה"  );
+    //     // let jobstatus2 = new CandidateJobStatus(102, "28", "עבר ראיון ראשון",  "בחור מצוין", 4,  new Date(2023, 4, 1), new Date(2023, 4, 5), new Date(2023, 6, 25), ["ed", "ed"], [], "" );
+    //     // let jobstatus3 = new CandidateJobStatus(94, "53", "התקבל",  "בחור מצוין", 5,  new Date(2023, 4, 1), new Date(2023, 8, 1), new Date(2023, 6, 25), ["ed", "ed"], [], "" );
+    //     // let jobstatus4 = new CandidateJobStatus(91, "66", "הודשה מועמדות",  "בחור מצוין", 4,  new Date(2023, 4, 1), new Date(2023, 4, 17), new Date(2023, 6, 25), ["ed", "ed"], [], "" );
+    //     //let jobstatus5 = new CandidateJobStatus(76, "28", "זומן לראיון ראשון", "", 0, new Date(), new Date(2023, 5, 1), new Date(0, 0, 0), ["ed", "ed"], [], "");
+    //     //await jobstatus5.add();
+    //     // await jobstatus5.remove();
+    //     // jobstatus2.add();
+    //     // jobstatus3.add();
+    //     // jobstatus4.add();
 
-        // const viewsPerPlatform = new Map<string, number>();
-        // viewsPerPlatform.set("פייסבוק", 23);
-        // viewsPerPlatform.set("ווצאפ", 12);
-        // viewsPerPlatform.set("דרושים", 90);
-        // const applyPerPlatform = new Map<string, number>();
-        // applyPerPlatform.set("פייסבוק", 12);
-        // applyPerPlatform.set("ווצאפ", 12);
-        // applyPerPlatform.set("דרושים", 12);
-        // const job = new Job(23,"","",[0,0],"","",[""],"",true,false,new Map<string, number>(),new Map<string, number>(),new Date(2022,1,1));
-        // job.add(); 
-        //  let job1 = new Job(await generateJobNumber(), "דרוש מנהל", "מנהל", [0,100], "שדרות", "דרום", [""], "", true, true,viewsPerPlatform,applyPerPlatform, new Date(2023, 4, 1) );
-        //  let job2 = new Job(await generateJobNumber(), "דרוש עובד סוצאלי", "עובד סוציאלי", [0,100], "חיפה", "צפון",  [""], "", true, true,viewsPerPlatform,applyPerPlatform, new Date(2023, 4, 1));
-        //  let job3 = new Job(await generateJobNumber(), "דרושה מנהלת ", "מנהלת", [0,100], "ירושלים", "מרכז",  [""], "", true, true,viewsPerPlatform,applyPerPlatform, new Date(2023, 4, 1));
-        //  let job4 = new Job(await generateJobNumber(), "דרוש עובד סוצאלי ", "עובד סוציאלי", [0,100], "רמת גן", "מרכז", [""], "", true, true,viewsPerPlatform,applyPerPlatform, new Date(2023, 4, 1));
-        //  let job5 = new Job(await generateJobNumber(), "דרוש מתנדב ", "מתנדב", [0,100], "מודיעין", "מרכז" , [""], "", true, true,viewsPerPlatform,applyPerPlatform, new Date(2023, 4, 1));
-        //  job1.add();
-        //  job2.add();
-        //  job3.add();
-        //  job4.add();
-        //  job5.add();
-        await console.log((await getFilteredCandidateJobStatuses()));
-    });
-
-
+    //     // const viewsPerPlatform = new Map<string, number>();
+    //     // viewsPerPlatform.set("פייסבוק", 23);
+    //     // viewsPerPlatform.set("ווצאפ", 12);
+    //     // viewsPerPlatform.set("דרושים", 90);
+    //     // const applyPerPlatform = new Map<string, number>();
+    //     // applyPerPlatform.set("פייסבוק", 12);
+    //     // applyPerPlatform.set("ווצאפ", 12);
+    //     // applyPerPlatform.set("דרושים", 12);
+    //     // const job = new Job(23,"","",[0,0],"","",[""],"",true,false,new Map<string, number>(),new Map<string, number>(),new Date(2022,1,1));
+    //     // job.add(); 
+    //     //  let job1 = new Job(await generateJobNumber(), "דרוש מנהל", "מנהל", [0,100], "שדרות", "דרום", [""], "", true, true,viewsPerPlatform,applyPerPlatform, new Date(2023, 4, 1) );
+    //     //  let job2 = new Job(await generateJobNumber(), "דרוש עובד סוצאלי", "עובד סוציאלי", [0,100], "חיפה", "צפון",  [""], "", true, true,viewsPerPlatform,applyPerPlatform, new Date(2023, 4, 1));
+    //     //  let job3 = new Job(await generateJobNumber(), "דרושה מנהלת ", "מנהלת", [0,100], "ירושלים", "מרכז",  [""], "", true, true,viewsPerPlatform,applyPerPlatform, new Date(2023, 4, 1));
+    //     //  let job4 = new Job(await generateJobNumber(), "דרוש עובד סוצאלי ", "עובד סוציאלי", [0,100], "רמת גן", "מרכז", [""], "", true, true,viewsPerPlatform,applyPerPlatform, new Date(2023, 4, 1));
+    //     //  let job5 = new Job(await generateJobNumber(), "דרוש מתנדב ", "מתנדב", [0,100], "מודיעין", "מרכז" , [""], "", true, true,viewsPerPlatform,applyPerPlatform, new Date(2023, 4, 1));
+    //     //  job1.add();
+    //     //  job2.add();
+    //     //  job3.add();
+    //     //  job4.add();
+    //     //  job5.add();
+    //     await console.log((await getFilteredCandidateJobStatuses()));
+    // });
 }
 

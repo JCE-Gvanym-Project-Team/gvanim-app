@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import MyLoading from '../../Components/MyLoading/MyLoading';
 import { Job, getFilteredJobs } from '../../Firebase/FirebaseFunctions/Job';
 import { Recomendation } from '../../Firebase/FirebaseFunctions/Recomendation';
-import { Candidate, generateCandidateId, getFilteredCandidateJobStatuses, getFilteredCandidates } from '../../Firebase/FirebaseFunctions/functionIndex';
+import { Candidate, CandidateJobStatus, generateCandidateId, getFilteredCandidateJobStatuses, getFilteredCandidates } from '../../Firebase/FirebaseFunctions/functionIndex';
 import { ColorModeContext, colorTokens } from '../theme';
 import AreYouSureDialog from './Components/AreYouSureDialog/AreYouSureDialog';
 import ErrorDialog from './Components/ErrorDialog/ErrorDialog';
@@ -280,40 +280,72 @@ export default function OneJobPage()
             ""
         );
         // add candidate, or get existing candidate
-        if (!await newCandidate.add())
+        if (await newCandidate.exists())
         {
             newCandidate = (await getFilteredCandidates(["eMail", "phone"], [candidateEmail, candidatePhone]))[0];
             newCandidateId = newCandidate._id;
-        }
-
-        // apply 
-        if (!await newCandidate.apply(job?._jobNumber!, aboutText))
+        } else
         {
-            setLoading(false);
-            setErrorDialogOpen(true);
-            return;
+            await newCandidate.add();
         }
 
+        // old but gold
+        // if (recommendersListOpen)
+        // {
+        //     let candidateJobStatus = (await getFilteredCandidateJobStatuses(["jobNumber", "candidateId"], [job?._jobNumber.toString()!, newCandidateId]))[0];
+        //     await candidateJobStatus.updateAbout(aboutText);
+        //     recommendersList?.forEach(async (recommender) =>
+        //     {
+        //         const recommenderInfo = recommender[0];
+        //         const file = recommender[1];
+        //         if (recommenderInfo)
+        //         {
+        //             if (!file)
+        //             {
+        //                 await candidateJobStatus.addRecomendation(recommenderInfo._fullName, recommenderInfo._phone, recommenderInfo._eMail, new File([''], ''));
+        //             } else
+        //             {
+        //                 await candidateJobStatus.addRecomendation(recommenderInfo._fullName, recommenderInfo._phone, recommenderInfo._eMail, file);
+        //             }
+        //         }
+        //     })
+        // }
+
+        // // apply 
+        // if ((await newCandidate.apply(job?._jobNumber!, aboutText)) === -1)
+        // {
+        //     setLoading(false);
+        //     setErrorDialogOpen(true);
+        //     return;
+        // }
+
+        let recommendersOnlyList: Recomendation[] = []
+        let recommendersFilesOnlyList: File[] = []
         if (recommendersListOpen)
         {
-            // add recommenders and CV
-            let candidateJobStatus = (await getFilteredCandidateJobStatuses(["jobNumber", "candidateId"], [job?._jobNumber.toString()!, newCandidateId]))[0];
-            await candidateJobStatus.updateAbout(aboutText);
             recommendersList?.forEach(async (recommender) =>
             {
                 const recommenderInfo = recommender[0];
                 const file = recommender[1];
                 if (recommenderInfo)
                 {
+                    recommendersOnlyList.push(recommenderInfo);
                     if (!file)
                     {
-                        await candidateJobStatus.addRecomendation(recommenderInfo._fullName, recommenderInfo._phone, recommenderInfo._eMail, new File([''], ''));
+                        recommendersFilesOnlyList.push(new File([''], ''));
                     } else
                     {
-                        await candidateJobStatus.addRecomendation(recommenderInfo._fullName, recommenderInfo._phone, recommenderInfo._eMail, file);
+                        recommendersFilesOnlyList.push(file);
                     }
                 }
             })
+        }
+
+        if ((await newCandidate.apply(job?._jobNumber!, aboutText, recommendersOnlyList, recommendersFilesOnlyList)) === -1)
+        {
+            setLoading(false);
+            setErrorDialogOpen(true);
+            return;
         }
 
         newCandidate.uploadCv(cvFile);

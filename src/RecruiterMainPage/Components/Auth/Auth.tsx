@@ -9,14 +9,13 @@ import MyLoading from "../../../Components/MyLoading/MyLoading";
 
 export default function Auth() {
   const [loading, setLoading] = useState(true);
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [user, setUser] = useState('');
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const [hasAccount, setHasAccount] = useState(false);
-  const [validated, setValidated] = useState(false);
+  const [validated, setValidated] = useState(true);
   const [alertHidden, setAlertHidden] = useState(true);
 
 
@@ -28,25 +27,6 @@ export default function Auth() {
     setEmailError(false);
     setPasswordError(false);
   };
-
-  const handleSignup = () => {
-    clearErrors();
-    firebase.auth().createUserWithEmailAndPassword(email, password)
-      .then((userCredential) => {
-        // Signed in 
-        const user1 = userCredential.user;
-        console.log(user1);
-        alert("Successfully created an account");
-        // ...
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        // const errorMessage = error.message;
-        alert(errorCode);
-        // ..
-      });
-  };
-
 
   const handleLogin = async (event) => {
     clearInputs();
@@ -64,7 +44,13 @@ export default function Auth() {
       setPasswordError(true);
     }
     else {
-      await loginRecruiter(email, password);
+      try{
+        await loginRecruiter(email, password);
+      }
+      catch{
+        setValidated(false);
+        return;
+      }
     }
 
   };
@@ -112,11 +98,11 @@ export default function Auth() {
                 password={password}
                 setPassword={setPassword}
                 handleLogin={handleLogin}
-                handleSignup={handleSignup}
                 hasAccount={hasAccount}
                 setHasAccount={setHasAccount}
                 emailError={emailError}
                 passwordError={passwordError}
+                setValidated ={setValidated}
                 validated={validated}
                 alertHidden={alertHidden}
               />

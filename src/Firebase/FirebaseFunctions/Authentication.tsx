@@ -27,20 +27,7 @@ export async function loguotRecruiter() {
 	//await signOut(auth);
 	await auth.signOut();
 }
-/**
- * Logs in as an admin using the credentials stored in the environment variables.
- * use while devlopment only
- * @returns None
- */
-export async function loginAdmin(): Promise<object> {
-	const user = process.env.REACT_APP_ADMIN_MAIL;
-	const pass = process.env.REACT_APP_ADMIN_PASS;
-	let connectedUser;
-	if (user != null && pass != null && !(await isConnected())) {
-		return await loginRecruiter(user, pass);
-	}
-	return {};
-}
+
 export async function isConnected(): Promise<boolean> {
 	const user = getAuth().currentUser;
 	if (user)
