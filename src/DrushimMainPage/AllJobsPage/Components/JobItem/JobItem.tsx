@@ -1,6 +1,6 @@
 import { Box, Chip, Link, Stack, Typography } from '@mui/material';
 import { useNavigate } from "react-router-dom";
-import { NavigateBefore, Place, WatchLater } from '@mui/icons-material';
+import { NavigateBefore, NewReleases, NewReleasesRounded, NewReleasesTwoTone, Place, PriorityHigh, WatchLater } from '@mui/icons-material';
 import { ColorModeContext } from '../../../theme';
 import React from 'react';
 
@@ -23,20 +23,54 @@ export default function JobItem(props: { job: any }) {
                 borderColor: 'background.JobTitle2',
                 textAlign: 'center',
             }}>
-                <Stack direction='row' justifyContent='end' display={{xs: 'none', sm: job?._highPriority ? 'flex' : 'none'}}>
-                    <Box padding={1} sx={{position: 'absolute'}}>
-                        <Chip label={'משרה חמה'} sx={{borderRadius: 2, fontSize: 'small', height: 'fit-content',paddingTop: 0.2,paddingBottom: 0.2,
-                        backgroundColor: 
-                        colorMode?.getActualMode()! === 'bright-contrast' 
-                        ? '#B2C17F' 
-                        : 'primary.filterButton',
-                        color: colorMode?.getActualMode()! === 'dark-contrast' ? '#000000' : '#FFFFFF',
-                        }}/>
+                <Stack direction='row' justifyContent='end' display={{ xs: 'none', sm: job?._highPriority ? 'flex' : 'none' }}>
+                    <Box paddingTop={2.5} paddingRight={1} sx={{ position: 'absolute' }}>
+                        <Stack spacing={0.5} direction='row' justifyContent='center' alignItems='center'
+                            sx={{
+                                borderRadius: 0.5,
+                                height: 'fit-content',
+                                paddingRight: 0.5,
+                                paddingLeft: 0.5,
+                                paddingTop: 0.2,
+                                paddingBottom: 0.2,
+                                backgroundColor: 
+                                colorMode?.getActualMode()! === 'bright-contrast'
+                                ? '#ddbb7f'
+                                : 'primary.filterButton'
+
+                                // warning: 'rgb(237, 108, 2)' 
+                                //primary:  'rgb(25, 118, 210)' 
+
+                                // colorMode?.getActualMode()! === 'bright-contrast'
+                                //     ? '#B2C17F'
+                                //     : 'primary.filterButton'
+                                ,
+                                transform: 'rotate(-20deg)',
+
+                            }} >
+
+                            <Typography fontSize={12} sx={{
+                                color:
+                                    colorMode?.getActualMode()! === 'dark-contrast'
+                                        ? '#000000'
+                                        : '#FFFFFF'
+                            }}>
+                                משרה חמה
+                            </Typography>
+
+                            <NewReleases sx={{
+                                fontSize: 14,
+                                color:
+                                    colorMode?.getActualMode()! === 'dark-contrast'
+                                        ? '#000000'
+                                        : '#FFFFFF'
+                            }} />
+                        </Stack>
                     </Box>
                 </Stack>
 
                 <Box sx={{
-                    mt: {xs: '28px', sm: '28px', md: '48px'} ,
+                    mt: { xs: '28px', sm: '28px', md: '48px' },
                     backgroundColor: 'background.JobTitle2',
                     direction: 'column',
                     paddingTop: 0.5,

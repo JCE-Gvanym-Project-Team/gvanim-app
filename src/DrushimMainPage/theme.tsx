@@ -86,7 +86,7 @@ export const colorTokens = (mode) => {
                 drushimTitle: '#41C2F0', // author: omer
                 divider: '#D5D5D5', // author: omer
                 filterBar: '#FAFAFA', // author: omer
-                filterButton: '#EDDBBB', // author: omer
+                filterButton: '#DDBB7F', // author: omer
                 visitJobButton: '#86bac0', // author: omer, hover: 'secondary'
                 // drushimTitleContainer: ''
                 // jobDetails: '#485564',
@@ -104,7 +104,7 @@ export const colorTokens = (mode) => {
                 drushimTitleContainer: '#00000029',
                 jobScopeButton: '#D5D5D5', // hover (author: omer)
                 visitJobButton: '#afd1d5', // hover (author: omer)
-                filterButton: '#f4e7d1', // hover (author: omer)
+                filterButton: '#EDDBBB', // hover (author: omer)
                 drushimTitle: '#053B7A', // author: omer
 
 
