@@ -1,42 +1,43 @@
 import { experimentalStyled as styled, useTheme } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
-import { Box, Stack, Typography } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Box, Icon, Link, ListItemIcon, Stack, Typography } from '@mui/material';
+import { useNavigate } from "react-router-dom";
 import { ReactComponent as LocationSVG } from '../JobItem/Resources/icon-location1.svg';
 import { ReactComponent as ClockSVG } from '../JobItem/Resources/icon-clock1.svg';
-import './JobItem.css'
-import { NavigateBefore } from '@mui/icons-material';
+import { NavigateBefore, Place, WatchLater } from '@mui/icons-material';
+import { ColorModeContext, colorTokens } from '../../../theme';
+import { color } from 'highcharts';
+import React from 'react';
 
-
-
-
-
-const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-    ...theme.typography.body2,
-    width: '521px',
-    borderTop: '5px solid #053B7A',
-    borderRadius: '0px 0px 10px 10px',
-    background: '#FFFFFF 0% 0% no-repeat padding-box',
-    boxShadow: ' 0px 3px 10px #00000029',
-    textAlign: 'center',
-
-}));
 
 
 export default function JobItem(props: { job: any }) {
     const { job } = props;
 
-    const theme = useTheme();
+    const navigate = useNavigate();
+    const colorMode = React.useContext(ColorModeContext);
+
 
     return (
         <Stack direction='row-reverse'>
-            <Item id='JobCard'>
+            <Box borderTop={`5px solid`} id='JobCard' sx={{
+                width: { xs: '100%', sm: '100%', md: '521px' },
+                borderRadius: '0px 0px 10px 10px',
+                // boxShadow: ' 0px 3px 10px #FFFFFF', //dark #7c7c7c
+
+                boxShadow: '0px 3px 10px',
+                color: 'primary.myBoxShadow',
+
+                borderColor: 'background.JobTitle2',
+                // borderTop: '5px solid #053B7A',
+                textAlign: 'center',
+            }}>
 
                 <Box sx={{
-                    top: '48px',
-                 
-                    background: '#053B7A 0% 0% no-repeat padding-box',
+                    mt: { xs: '28px', sm: '28px', md: '48px' },
+
+                    // backgroundColor: '#9FC5E8',
+                    backgroundColor: 'background.JobTitle2',
                     direction: 'column',
                     paddingTop: 0.5,
                     paddingBottom: 0.5,
@@ -44,22 +45,20 @@ export default function JobItem(props: { job: any }) {
                     borderRadius: '0px 31px 31px 0px',
                     opacity: 1,
                     marginTop: '48px',
-                    ml: '-20px',
-                    mr: '100px',
+                    ml: { xs: 0, sm: 0, md: '-10px', lg: '-15px' },
+                    mr: { xs: '50px', sm: '50px', md: '100px' },
                     width: 'fit-content'
 
                 }}>
 
-                    <Typography sx={{
+                    <Typography variant='body1' sx={{
                         textAlign: 'left',
-                        fontFamily: "'Rubik'",
-                        fontWeight: 'medium',
-                        fontSize: '25px',
+                        fontWeight: 600,
                         letterSpacing: '0px',
-                        color: '#FFFFFF',
+                        color: 'primary.JobTitle2',
                         opacity: 1,
                         maxWidth: '80%',
-                        ml: '47px',
+                        ml: { xs: '20px', sm: '20px', md: '32px', lg: '39px' },
                         mr: '40px',
 
                     }}>
@@ -68,37 +67,41 @@ export default function JobItem(props: { job: any }) {
                 </Box>
 
 
-                <Box sx={{ width: '100%', paddingLeft: '26px', paddingRight: '26px', paddingTop: '10px', mt: 1 }}>
-                    <Typography sx={{
+                <Box sx={{ width: '100%', paddingLeft: { xs: 2.5, sm: 2.5, md: '26px' }, paddingRight: '26px', paddingTop: '10px', mt: 1 }}>
+                    <Typography variant='h5' display='block' sx={{
                         textAlign: 'left',
-                        font: 'normal normal normal 19px Rubik',
                         letterSpacing: '0px',
-                        color: '#767676',
+                        // color: 'secondary.descAndReqText',
+                        color: 'primary.myCardText',
                         opacity: 1,
+                        ml: 0.25
                     }}
                     >
-                   {job?._requirements}
+                        {job?._requirements}
                     </Typography>
 
-                    <Stack direction='row' spacing={2} justifyContent='start' sx={{ mt: 4 }}>
-                        <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                            <LocationSVG />
+                    <Stack direction='row' spacing={1.5} justifyContent='start' sx={{ mt: 4 }}>
+                        {/* <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                            <LocationSVG style={{ width: '16px', height: '16px' }} />
+                        </Box> */}
+
+
+                        <Box display='flex' flexDirection='column' justifyContent='center'>
+                            <Place fontSize='inherit' sx={{ color: colorMode?.getActualMode()! === 'bright-contrast' ? '#CC4584' : 'secondary.jobDetails' }} />
                         </Box>
 
                         <Stack direction='row' spacing={1} alignItems='center'>
-                            <Typography sx={{
-
+                            <Typography display='block' variant='caption' sx={{
                                 textAlign: 'left',
-                                font: 'normal normal normal 18px Rubik',
                                 letterSpacing: '0px',
-                                color: '#AC2F69',
+                                color: colorMode?.getActualMode()! === 'bright-contrast' ? '#CC4584' : 'secondary.jobDetails',
                                 opacity: 1,
+
                             }}>מיקום:</Typography>
-                            <Typography sx={{
+                            <Typography display='block' variant='caption' sx={{
                                 textAlign: 'left',
-                                font: 'normal normal normal 18px Rubik',
                                 letterSpacing: '0px',
-                                color: '#767676',
+                                color: 'primary.myCardText',
                                 opacity: 1,
                             }}>
                                 {job?._region}
@@ -107,25 +110,27 @@ export default function JobItem(props: { job: any }) {
 
                     </Stack>
 
-                    <Stack direction='row' spacing={1.8} justifyContent='start' sx={{ mt: 2 }}>
-                        <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                            <ClockSVG />
-                        </Box>
+                    <Stack direction='row' spacing={1.5} justifyContent='start' sx={{ mt: 1.5 }}>
+                        {/* <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                            <ClockSVG style={{ width: '13px', height: '13px' }} />
+                        </Box> */}
 
+                        {/* WatchLater */}
+                        <Box display='flex' flexDirection='column' justifyContent='center'>
+                            <WatchLater fontSize='inherit' sx={{ padding: 0.15, color: colorMode?.getActualMode()! === 'bright-contrast' ? '#CC4584' : 'secondary.jobDetails' }} />
+                        </Box>
+                        {/* WatchLater */}
                         <Stack direction='row' spacing={1} alignItems='center'>
-                            <Typography sx={{
+                            <Typography display='block' variant='caption' sx={{
                                 textAlign: 'left',
-                                font: 'normal normal normal 18px Rubik',
                                 letterSpacing: '0px',
-                                color: '#AC2F69',
+                                color: colorMode?.getActualMode()! === 'bright-contrast' ? '#CC4584' : 'secondary.jobDetails',
                                 opacity: 1,
                             }}>היקף משרה:</Typography>
-                            <Typography sx={{
-
+                            <Typography display='block' variant='caption' sx={{
                                 textAlign: 'left',
-                                font: 'normal normal normal 18px Rubik',
                                 letterSpacing: '0px',
-                                color: '#767676',
+                                color: 'primary.myCardText',
                                 opacity: 1,
                             }}>
 
@@ -135,59 +140,78 @@ export default function JobItem(props: { job: any }) {
 
                     </Stack>
 
-                    <Stack direction='row' spacing={1.8} justifyContent='start' sx={{ mt: 5 }}>
-                        <Link id="mylink" style={{display: 'flex', flexDirection: 'row', textDecoration: 'none'}} to={`${job?._jobNumber}`}    
-                                         
-                            >
+                    <Stack direction='row' className='mylink' spacing={1.8} justifyContent='start' sx={{ mt: 5 }}>
+                        <Link onClick={() => navigate(`${job?._jobNumber}`)}
+                            sx={{
+                                cursor: 'pointer',
+                                display: 'flex',
+                                flexDirection: 'row',
+                                textDecoration: 'none',
+                                ":hover > #arrow": {
+                                    transition: 'all .3s cubic-bezier(.34,1.61,.7,1.3)',
+                                    transform: 'translateX(5px)',
+                                    color: 'secondary.visitJobButton'
+                                },
+                                ":hover #element1": {
+                                    color: 'secondary.visitJobButton',
+                                },
+                                ":hover #element2": {
+                                    backgroundColor: 'secondary.visitJobButton',
+                                },
+                                ":hover": {
+                                    color: 'secondary.visitJobButton'
+                                },
+                            }}
+                        >
+                            {/* to={`${job?._jobNumber}`} */}
+                            <Box>
+                                <Typography display='block' variant='caption' id="element1" sx={{
+                                    textAlign: 'left',
+                                    color: 'primary.visitJobButton',
+                                    opacity: 1,
+                                    textDecorationLine: 'underline',
+                                    letterSpacing: '0px',
+                                    mb: 0,
+                                    ':hover': { color: 'secondary.visitJobButton' }
+                                }}>
+                                    צפייה במשרה והגשת מועמדות
+                                </Typography>
 
-                          <Box>
-                          <Typography sx={{color: '#5BA1AA',font: 'normal normal normal 18px Rubik',  opacity: 1, letterSpacing: '0px',mb: 0}}>
-                            צפייה במשרה והגשת מועמדות
-                            </Typography>
-
-                            <Box sx={{
-                                mt: 0,
-                                background: '#5BA1AA 0% 0% no-repeat padding-box',
-                                height: '1.5px',
-                                borderRadius: '1px',
-                            }} />
-                          </Box>
+                            </Box>
 
                             <NavigateBefore id="arrow" sx={{
-                                color: '#5BA1AA',
-                               fontSize: 22,
-                               alignSelf: 'center'
+                                color: 'primary.visitJobButton',
+                                fontSize: 21.5,
+                                alignSelf: 'center',
+                                mt: 0.3
 
                             }} />
                         </Link>
 
                     </Stack>
 
-                    
+
                 </Box>
 
-                <Stack direction='row' justifyContent='end' spacing={1} sx={{ mt: 2, paddingBottom: 1, paddingRight: 2}}>
-                            <Typography sx={{
-                                textAlign: 'left',
-                                font: 'normal normal normal 18px Rubik',
-                                letterSpacing: '0px',
-                                color: '#AC2F69',
-                                opacity: 1,
-                            }}>משרה מספר:</Typography>
-                            <Typography sx={{
+                <Stack direction='row' justifyContent={{ xs: 'start', sm: 'start', md: 'end' }} spacing={1} sx={{ mt: { xs: 5, sm: 5, md: 2 }, paddingBottom: 2, paddingRight: 2.5, paddingLeft: 2.5, paddingTop: 2.5 }}>
+                    <Typography display='block' variant='caption' sx={{
+                        textAlign: 'left',
+                        letterSpacing: '0px',
+                        color: colorMode?.getActualMode()! === 'bright-contrast' ? '#CC4584' : 'secondary.jobDetails',
+                        opacity: 1,
+                    }}>משרה מספר:</Typography>
+                    <Typography display='block' variant='caption' sx={{
+                        textAlign: 'left',
+                        letterSpacing: '0px',
+                        color: 'primary.myCardText',
+                        opacity: 1,
+                    }}>
 
-                                textAlign: 'left',
-                                font: 'normal normal normal 18px Rubik',
-                                letterSpacing: '0px',
-                                color: '#767676',
-                                opacity: 1,
-                            }}>
+                        {job?._jobNumber}
+                    </Typography>
+                </Stack>
 
-                              {job?._jobNumber}
-                            </Typography>
-                        </Stack>
-
-            </Item>
+            </Box>
         </Stack>
 
 
