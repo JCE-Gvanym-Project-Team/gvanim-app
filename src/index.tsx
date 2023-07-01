@@ -10,6 +10,7 @@ import { CacheProvider } from '@emotion/react';
 import { BrowserRouter } from 'react-router-dom';
 import { prefixer } from 'stylis';
 import rtlPlugin from 'stylis-plugin-rtl';
+import ScrollToTop from './Components/ScrollToTop/ScrollToTop';
 
 // take care of RTL stuff
 const cacheRtl = createCache({
@@ -25,6 +26,7 @@ root.render(
   <React.StrictMode>
     <CacheProvider value={cacheRtl}>
       <BrowserRouter >
+        <ScrollToTop />
         <App />
       </BrowserRouter>
     </CacheProvider>
