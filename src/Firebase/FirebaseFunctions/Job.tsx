@@ -1,5 +1,5 @@
 import { realtimeDB } from "../FirebaseConfig/firebase";
-import { Candidate, getFilteredCandidates, getCandidatesByIds } from "./Candidate";
+import { Candidate, getCandidatesByIds } from "./Candidate";
 import { CandidateJobStatus, getFilteredCandidateJobStatuses } from "./CandidateJobStatus";
 import { appendToDatabase, getFirebaseIdsAtPath, removeObjectAtPath, replaceData } from "./DBfuncs";
 import { getOpenRoles } from "./Role";
