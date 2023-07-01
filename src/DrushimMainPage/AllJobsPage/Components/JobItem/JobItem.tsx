@@ -1,12 +1,7 @@
-import { experimentalStyled as styled, useTheme } from '@mui/material/styles';
-import Paper from '@mui/material/Paper';
-import { Box, Icon, Link, ListItemIcon, Stack, Typography } from '@mui/material';
+import { Box, Chip, Link, Stack, Typography } from '@mui/material';
 import { useNavigate } from "react-router-dom";
-import { ReactComponent as LocationSVG } from '../JobItem/Resources/icon-location1.svg';
-import { ReactComponent as ClockSVG } from '../JobItem/Resources/icon-clock1.svg';
 import { NavigateBefore, Place, WatchLater } from '@mui/icons-material';
-import { ColorModeContext, colorTokens } from '../../../theme';
-import { color } from 'highcharts';
+import { ColorModeContext } from '../../../theme';
 import React from 'react';
 
 
@@ -23,20 +18,25 @@ export default function JobItem(props: { job: any }) {
             <Box borderTop={`5px solid`} id='JobCard' sx={{
                 width: { xs: '100%', sm: '100%', md: '521px' },
                 borderRadius: '0px 0px 10px 10px',
-                // boxShadow: ' 0px 3px 10px #FFFFFF', //dark #7c7c7c
-
                 boxShadow: '0px 3px 10px',
                 color: 'primary.myBoxShadow',
-
                 borderColor: 'background.JobTitle2',
-                // borderTop: '5px solid #053B7A',
                 textAlign: 'center',
             }}>
+                <Stack direction='row' justifyContent='end' display={{xs: 'none', sm: job?._highPriority ? 'flex' : 'none'}}>
+                    <Box padding={1} sx={{position: 'absolute'}}>
+                        <Chip label={'משרה חמה'} sx={{borderRadius: 2, fontSize: 'small', height: 'fit-content',paddingTop: 0.2,paddingBottom: 0.2,
+                        backgroundColor: 
+                        colorMode?.getActualMode()! === 'bright-contrast' 
+                        ? '#B2C17F' 
+                        : 'primary.filterButton',
+                        color: colorMode?.getActualMode()! === 'dark-contrast' ? '#000000' : '#FFFFFF',
+                        }}/>
+                    </Box>
+                </Stack>
 
                 <Box sx={{
-                    mt: { xs: '28px', sm: '28px', md: '48px' },
-
-                    // backgroundColor: '#9FC5E8',
+                    mt: {xs: '28px', sm: '28px', md: '48px'} ,
                     backgroundColor: 'background.JobTitle2',
                     direction: 'column',
                     paddingTop: 0.5,
@@ -71,7 +71,6 @@ export default function JobItem(props: { job: any }) {
                     <Typography variant='h5' display='block' sx={{
                         textAlign: 'left',
                         letterSpacing: '0px',
-                        // color: 'secondary.descAndReqText',
                         color: 'primary.myCardText',
                         opacity: 1,
                         ml: 0.25
@@ -81,10 +80,6 @@ export default function JobItem(props: { job: any }) {
                     </Typography>
 
                     <Stack direction='row' spacing={1.5} justifyContent='start' sx={{ mt: 4 }}>
-                        {/* <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                            <LocationSVG style={{ width: '16px', height: '16px' }} />
-                        </Box> */}
-
 
                         <Box display='flex' flexDirection='column' justifyContent='center'>
                             <Place fontSize='inherit' sx={{ color: colorMode?.getActualMode()! === 'bright-contrast' ? '#CC4584' : 'secondary.jobDetails' }} />
@@ -111,15 +106,11 @@ export default function JobItem(props: { job: any }) {
                     </Stack>
 
                     <Stack direction='row' spacing={1.5} justifyContent='start' sx={{ mt: 1.5 }}>
-                        {/* <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                            <ClockSVG style={{ width: '13px', height: '13px' }} />
-                        </Box> */}
 
-                        {/* WatchLater */}
                         <Box display='flex' flexDirection='column' justifyContent='center'>
                             <WatchLater fontSize='inherit' sx={{ padding: 0.15, color: colorMode?.getActualMode()! === 'bright-contrast' ? '#CC4584' : 'secondary.jobDetails' }} />
                         </Box>
-                        {/* WatchLater */}
+
                         <Stack direction='row' spacing={1} alignItems='center'>
                             <Typography display='block' variant='caption' sx={{
                                 textAlign: 'left',
@@ -163,7 +154,7 @@ export default function JobItem(props: { job: any }) {
                                 },
                             }}
                         >
-                            {/* to={`${job?._jobNumber}`} */}
+
                             <Box>
                                 <Typography display='block' variant='caption' id="element1" sx={{
                                     textAlign: 'left',

@@ -43,14 +43,14 @@ export default function Navbar() {
                                     <Box>
                                         <Typography
                                             sx={{
-                                                color: 
-                                                colorMode?.getActualMode()! === 'light'
-                                                ? '#053B7A'
-                                                : colorMode?.getActualMode()! === 'dark-contrast'
-                                                    ? '#b2d0ec'
-                                                    : colorMode?.getActualMode()! === 'bright-contrast'
+                                                color:
+                                                    colorMode?.getActualMode()! === 'light'
                                                         ? '#053B7A'
-                                                        : '#000000', // black & white
+                                                        : colorMode?.getActualMode()! === 'dark-contrast'
+                                                            ? '#b2d0ec'
+                                                            : colorMode?.getActualMode()! === 'bright-contrast'
+                                                                ? '#053B7A'
+                                                                : '#000000', // black & white
                                                 font: 'normal normal normal 20px Rubik',
                                                 opacity: 1,
                                                 letterSpacing: '0px',
@@ -62,13 +62,13 @@ export default function Navbar() {
                                         <Box sx={{
                                             mt: 0,
                                             background:
-                                            colorMode?.getActualMode()! === 'light'
-                                            ? '#053B7A'
-                                            : colorMode?.getActualMode()! === 'dark-contrast'
-                                                ? '#b2d0ec'
-                                                : colorMode?.getActualMode()! === 'bright-contrast'
+                                                colorMode?.getActualMode()! === 'light'
                                                     ? '#053B7A'
-                                                    : '#000000', // black & white
+                                                    : colorMode?.getActualMode()! === 'dark-contrast'
+                                                        ? '#b2d0ec'
+                                                        : colorMode?.getActualMode()! === 'bright-contrast'
+                                                            ? '#053B7A'
+                                                            : '#000000', // black & white
                                             height: '1px',
                                             borderRadius: '1px',
                                         }} />
@@ -79,33 +79,33 @@ export default function Navbar() {
                             <Box>
                                 <Link style={{ display: 'flex', flexDirection: 'row', textDecoration: 'none' }} to={`/career/jobs`}>
                                     <Box>
-                                        <Typography sx={{ 
-                                            color: 
-                                            colorMode?.getActualMode()! === 'light'
-                                            ? '#053B7A'
-                                            : colorMode?.getActualMode()! === 'dark-contrast'
-                                                ? '#b2d0ec'
-                                                : colorMode?.getActualMode()! === 'bright-contrast'
+                                        <Typography sx={{
+                                            color:
+                                                colorMode?.getActualMode()! === 'light'
                                                     ? '#053B7A'
-                                                    : '#000000', // black & white
-                                             font: 'normal normal normal 20px Rubik',
-                                              opacity: 1,
-                                               letterSpacing: '0px',
-                                                mb: 0 
-                                                }}>
+                                                    : colorMode?.getActualMode()! === 'dark-contrast'
+                                                        ? '#b2d0ec'
+                                                        : colorMode?.getActualMode()! === 'bright-contrast'
+                                                            ? '#053B7A'
+                                                            : '#000000', // black & white
+                                            font: 'normal normal normal 20px Rubik',
+                                            opacity: 1,
+                                            letterSpacing: '0px',
+                                            mb: 0
+                                        }}>
                                             משרות
                                         </Typography>
 
                                         <Box sx={{
                                             mt: 0,
-                                            background: 
-                                            colorMode?.getActualMode()! === 'light'
-                                            ? '#053B7A'
-                                            : colorMode?.getActualMode()! === 'dark-contrast'
-                                                ? '#b2d0ec'
-                                                : colorMode?.getActualMode()! === 'bright-contrast'
+                                            background:
+                                                colorMode?.getActualMode()! === 'light'
                                                     ? '#053B7A'
-                                                    : '#000000', // black & white
+                                                    : colorMode?.getActualMode()! === 'dark-contrast'
+                                                        ? '#b2d0ec'
+                                                        : colorMode?.getActualMode()! === 'bright-contrast'
+                                                            ? '#053B7A'
+                                                            : '#000000', // black & white
                                             height: '1px',
                                             borderRadius: '1px',
                                         }} />
@@ -115,33 +115,33 @@ export default function Navbar() {
                             <Box>
                                 <Link style={{ display: 'flex', flexDirection: 'row', textDecoration: 'none' }} to={`https://www.gvanim.org.il/index.php/he/node/4`}>
                                     <Box>
-                                        <Typography sx={{ 
-                                            color: 
-                                            colorMode?.getActualMode()! === 'light'
-                                            ? '#053B7A'
-                                            : colorMode?.getActualMode()! === 'dark-contrast'
-                                                ? '#b2d0ec'
-                                                : colorMode?.getActualMode()! === 'bright-contrast'
+                                        <Typography sx={{
+                                            color:
+                                                colorMode?.getActualMode()! === 'light'
                                                     ? '#053B7A'
-                                                    : '#000000', // black & white
-                                             font: 'normal normal normal 20px Rubik',
-                                              opacity: 1,
-                                               letterSpacing: '0px',
-                                                mb: 0
-                                                 }}>
+                                                    : colorMode?.getActualMode()! === 'dark-contrast'
+                                                        ? '#b2d0ec'
+                                                        : colorMode?.getActualMode()! === 'bright-contrast'
+                                                            ? '#053B7A'
+                                                            : '#000000', // black & white
+                                            font: 'normal normal normal 20px Rubik',
+                                            opacity: 1,
+                                            letterSpacing: '0px',
+                                            mb: 0
+                                        }}>
                                             אודות
                                         </Typography>
 
                                         <Box sx={{
                                             mt: 0,
-                                            background: 
-                                            colorMode?.getActualMode()! === 'light'
-                                            ? '#053B7A'
-                                            : colorMode?.getActualMode()! === 'dark-contrast'
-                                                ? '#b2d0ec'
-                                                : colorMode?.getActualMode()! === 'bright-contrast'
+                                            background:
+                                                colorMode?.getActualMode()! === 'light'
                                                     ? '#053B7A'
-                                                    : '#000000', // black & white
+                                                    : colorMode?.getActualMode()! === 'dark-contrast'
+                                                        ? '#b2d0ec'
+                                                        : colorMode?.getActualMode()! === 'bright-contrast'
+                                                            ? '#053B7A'
+                                                            : '#000000', // black & white
                                             height: '1px',
                                             borderRadius: '1px',
                                         }} />
@@ -161,13 +161,13 @@ export default function Navbar() {
                                 //#c3c6aa
                                 // color: '#91A749',
                                 color:
-                                colorMode?.getActualMode()! === 'light'
-                                ? '#91A749'
-                                : colorMode?.getActualMode()! === 'dark-contrast'
-                                    ? '#c3c6aa' 
-                                    : colorMode?.getActualMode()! === 'bright-contrast'
+                                    colorMode?.getActualMode()! === 'light'
                                         ? '#91A749'
-                                        : 'gray', // black & white
+                                        : colorMode?.getActualMode()! === 'dark-contrast'
+                                            ? '#c3c6aa'
+                                            : colorMode?.getActualMode()! === 'bright-contrast'
+                                                ? '#91A749'
+                                                : 'gray', // black & white
                                 letterSpacing: 0,
                                 opacity: 1,
                             }}>צריכים עזרה? דברו איתנו
@@ -175,14 +175,14 @@ export default function Navbar() {
 
                             <Box sx={{
                                 mt: 0,
-                                background: 
-                                colorMode?.getActualMode()! === 'light'
-                                ? '#91A749'
-                                : colorMode?.getActualMode()! === 'dark-contrast'
-                                    ? '#c3c6aa'
-                                    : colorMode?.getActualMode()! === 'bright-contrast'
+                                background:
+                                    colorMode?.getActualMode()! === 'light'
                                         ? '#91A749'
-                                        : 'gray', // black & white
+                                        : colorMode?.getActualMode()! === 'dark-contrast'
+                                            ? '#c3c6aa'
+                                            : colorMode?.getActualMode()! === 'bright-contrast'
+                                                ? '#91A749'
+                                                : 'gray', // black & white
                                 height: '1.5px',
                                 borderRadius: '1px',
                             }} />
@@ -191,14 +191,14 @@ export default function Navbar() {
 
                         <Typography sx={{
                             font: 'normal normal normal 18px Rubik',
-                            color: 
-                            colorMode?.getActualMode()! === 'light'
-                            ? '#5BA1AA'
-                            : colorMode?.getActualMode()! === 'dark-contrast'
-                                ? '#b2d0ec'
-                                : colorMode?.getActualMode()! === 'bright-contrast'
+                            color:
+                                colorMode?.getActualMode()! === 'light'
                                     ? '#5BA1AA'
-                                    : '#000000', // black & white
+                                    : colorMode?.getActualMode()! === 'dark-contrast'
+                                        ? '#b2d0ec'
+                                        : colorMode?.getActualMode()! === 'bright-contrast'
+                                            ? '#5BA1AA'
+                                            : '#000000', // black & white
 
                             letterSpacing: 0,
                             opacity: 1,
@@ -221,15 +221,15 @@ export default function Navbar() {
                                     width: '22px',
                                     height: '1px',
                                     borderRadius: '1px',
-                                    background: 
-                                    colorMode?.getActualMode()! === 'light'
-                                    ? '#053B7A'
-                                    : colorMode?.getActualMode()! === 'dark-contrast'
-                                        ? '#b2d0ec'
-                                        : colorMode?.getActualMode()! === 'bright-contrast'
+                                    background:
+                                        colorMode?.getActualMode()! === 'light'
                                             ? '#053B7A'
-                                            : '#000000', // black & white
-        
+                                            : colorMode?.getActualMode()! === 'dark-contrast'
+                                                ? '#b2d0ec'
+                                                : colorMode?.getActualMode()! === 'bright-contrast'
+                                                    ? '#053B7A'
+                                                    : '#000000', // black & white
+
                                     transition: 'all .2s',
                                     margin: '0 auto'
                                 }} />
@@ -239,15 +239,15 @@ export default function Navbar() {
                                     width: '22px',
                                     height: '1px',
                                     borderRadius: '1px',
-                                    background: 
-                                    colorMode?.getActualMode()! === 'light'
-                                    ? '#053B7A'
-                                    : colorMode?.getActualMode()! === 'dark-contrast'
-                                        ? '#b2d0ec'
-                                        : colorMode?.getActualMode()! === 'bright-contrast'
+                                    background:
+                                        colorMode?.getActualMode()! === 'light'
                                             ? '#053B7A'
-                                            : '#000000', // black & white
-        
+                                            : colorMode?.getActualMode()! === 'dark-contrast'
+                                                ? '#b2d0ec'
+                                                : colorMode?.getActualMode()! === 'bright-contrast'
+                                                    ? '#053B7A'
+                                                    : '#000000', // black & white
+
                                     transition: 'all .2s',
                                     margin: '0 auto',
 
@@ -261,15 +261,15 @@ export default function Navbar() {
                                     width: '22px',
                                     height: '1px',
                                     borderRadius: '1px',
-                                    background: 
-                                    colorMode?.getActualMode()! === 'light'
-                                    ? '#053B7A'
-                                    : colorMode?.getActualMode()! === 'dark-contrast'
-                                        ? '#b2d0ec'
-                                        : colorMode?.getActualMode()! === 'bright-contrast'
+                                    background:
+                                        colorMode?.getActualMode()! === 'light'
                                             ? '#053B7A'
-                                            : '#000000', // black & white
-        
+                                            : colorMode?.getActualMode()! === 'dark-contrast'
+                                                ? '#b2d0ec'
+                                                : colorMode?.getActualMode()! === 'bright-contrast'
+                                                    ? '#053B7A'
+                                                    : '#000000', // black & white
+
                                     transition: 'all .2s',
                                     margin: '0 auto',
 
@@ -286,14 +286,14 @@ export default function Navbar() {
                     <Box display='flex' flexDirection='column' justifyContent='center'>
                         <Typography sx={{
                             font: 'normal normal normal 18px Rubik',
-                            color: 
-                            colorMode?.getActualMode()! === 'light'
-                            ? '#5BA1AA'
-                            : colorMode?.getActualMode()! === 'dark-contrast'
-                                ? '#b2d0ec'
-                                : colorMode?.getActualMode()! === 'bright-contrast'
+                            color:
+                                colorMode?.getActualMode()! === 'light'
                                     ? '#5BA1AA'
-                                    : '#000000', // black & white
+                                    : colorMode?.getActualMode()! === 'dark-contrast'
+                                        ? '#b2d0ec'
+                                        : colorMode?.getActualMode()! === 'bright-contrast'
+                                            ? '#5BA1AA'
+                                            : '#000000', // black & white
 
                             letterSpacing: 0,
                             opacity: 1,
@@ -305,126 +305,127 @@ export default function Navbar() {
                 </Stack>
             </Stack>
 
-            <Collapse in={open} sx={{ display: { xs: 'flex', sm: 'flex', md: 'none', } }}>
+            <Stack direction='column' justifyContent='center' sx={{ display: { xs: 'flex', sm: 'flex', md: 'none', } }}>
+                <Collapse in={open}>
 
-                <Stack direction='column' justifyContent='center' divider={<Divider sx={{backgroundColor: 'primary.divider'}} />} marginTop={4} paddingBottom={2} spacing={2} width='100%' height='fit-content'>
-                    <Stack direction='row' justifyContent='center' width='100%'>
-                        <Link style={{ display: 'flex', flexDirection: 'row', textDecoration: 'none' }} to={`https://www.gvanim.org.il/`} onClick={() => setOpen(false)}>
-                            <Box>
-                                <Typography
-                                sx={{ 
-                                    color: 
-                                    colorMode?.getActualMode()! === 'light'
-                                    ? '#053B7A'
-                                    : colorMode?.getActualMode()! === 'dark-contrast'
-                                        ? '#b2d0ec'
-                                        : colorMode?.getActualMode()! === 'bright-contrast'
-                                            ? '#053B7A'
-                                            : '#000000', // black & white
-                                     font: 'normal normal normal 20px Rubik',
-                                      opacity: 1,
-                                       letterSpacing: '0px',
-                                        mb: 0 
+                    <Stack direction='column' justifyContent='center' divider={<Divider sx={{ backgroundColor: 'primary.divider' }} />} marginTop={4} paddingBottom={2} spacing={2} width='100%' height='fit-content'>
+                        <Stack direction='row' justifyContent='center' width='100%'>
+                            <Link style={{ display: 'flex', flexDirection: 'row', textDecoration: 'none' }} to={`https://www.gvanim.org.il/`} onClick={() => setOpen(false)}>
+                                <Box>
+                                    <Typography
+                                        sx={{
+                                            color:
+                                                colorMode?.getActualMode()! === 'light'
+                                                    ? '#053B7A'
+                                                    : colorMode?.getActualMode()! === 'dark-contrast'
+                                                        ? '#b2d0ec'
+                                                        : colorMode?.getActualMode()! === 'bright-contrast'
+                                                            ? '#053B7A'
+                                                            : '#000000', // black & white
+                                            font: 'normal normal normal 20px Rubik',
+                                            opacity: 1,
+                                            letterSpacing: '0px',
+                                            mb: 0
                                         }}>
-                                    ראשי
-                                </Typography>
+                                        ראשי
+                                    </Typography>
 
-                                <Box sx={{
-                                    mt: 0,
-                                    background: 
-                                    colorMode?.getActualMode()! === 'light'
-                                    ? '#053B7A'
-                                    : colorMode?.getActualMode()! === 'dark-contrast'
-                                        ? '#b2d0ec'
-                                        : colorMode?.getActualMode()! === 'bright-contrast'
-                                            ? '#053B7A'
-                                            : '#000000', // black & white
-                                    height: '1px',
-                                    borderRadius: '1px',
-                                }} />
-                            </Box>
-                        </Link>
+                                    <Box sx={{
+                                        mt: 0,
+                                        background:
+                                            colorMode?.getActualMode()! === 'light'
+                                                ? '#053B7A'
+                                                : colorMode?.getActualMode()! === 'dark-contrast'
+                                                    ? '#b2d0ec'
+                                                    : colorMode?.getActualMode()! === 'bright-contrast'
+                                                        ? '#053B7A'
+                                                        : '#000000', // black & white
+                                        height: '1px',
+                                        borderRadius: '1px',
+                                    }} />
+                                </Box>
+                            </Link>
+                        </Stack>
+
+                        <Stack direction='row' justifyContent='center' width='100%'>
+                            <Link style={{ display: 'flex', flexDirection: 'row', textDecoration: 'none' }} to={`/career/jobs`} onClick={() => setOpen(false)}>
+                                <Box>
+                                    <Typography
+                                        sx={{
+                                            color:
+                                                colorMode?.getActualMode()! === 'light'
+                                                    ? '#053B7A'
+                                                    : colorMode?.getActualMode()! === 'dark-contrast'
+                                                        ? '#b2d0ec'
+                                                        : colorMode?.getActualMode()! === 'bright-contrast'
+                                                            ? '#053B7A'
+                                                            : '#000000', // black & white
+                                            font: 'normal normal normal 20px Rubik',
+                                            opacity: 1,
+                                            letterSpacing: '0px',
+                                            mb: 0
+                                        }}>
+                                        משרות
+                                    </Typography>
+
+                                    <Box sx={{
+                                        mt: 0,
+                                        background:
+                                            colorMode?.getActualMode()! === 'light'
+                                                ? '#053B7A'
+                                                : colorMode?.getActualMode()! === 'dark-contrast'
+                                                    ? '#b2d0ec'
+                                                    : colorMode?.getActualMode()! === 'bright-contrast'
+                                                        ? '#053B7A'
+                                                        : '#000000', // black & white
+                                        height: '1px',
+                                        borderRadius: '1px',
+                                    }} />
+                                </Box>
+                            </Link>
+                        </Stack>
+
+                        <Stack direction='row' justifyContent='center' width='100%'>
+                            <Link style={{ display: 'flex', flexDirection: 'row', textDecoration: 'none' }} to={`https://www.gvanim.org.il/index.php/he/node/4`} onClick={() => setOpen(false)}>
+                                <Box>
+                                    <Typography
+                                        sx={{
+                                            color:
+                                                colorMode?.getActualMode()! === 'light'
+                                                    ? '#053B7A'
+                                                    : colorMode?.getActualMode()! === 'dark-contrast'
+                                                        ? '#b2d0ec'
+                                                        : colorMode?.getActualMode()! === 'bright-contrast'
+                                                            ? '#053B7A'
+                                                            : '#000000', // black & white
+                                            font: 'normal normal normal 20px Rubik',
+                                            opacity: 1,
+                                            letterSpacing: '0px',
+                                            mb: 0
+                                        }}>
+                                        אודות
+                                    </Typography>
+
+                                    <Box sx={{
+                                        mt: 0,
+                                        background:
+                                            colorMode?.getActualMode()! === 'light'
+                                                ? '#053B7A'
+                                                : colorMode?.getActualMode()! === 'dark-contrast'
+                                                    ? '#b2d0ec'
+                                                    : colorMode?.getActualMode()! === 'bright-contrast'
+                                                        ? '#053B7A'
+                                                        : '#000000', // black & white
+                                        height: '1px',
+                                        borderRadius: '1px',
+                                    }} />
+                                </Box>
+                            </Link>
+                        </Stack>
                     </Stack>
 
-                    <Stack direction='row' justifyContent='center' width='100%'>
-                        <Link style={{ display: 'flex', flexDirection: 'row', textDecoration: 'none' }} to={`/career/jobs`} onClick={() => setOpen(false)}>
-                            <Box>
-                                <Typography 
-                                sx={{ 
-                                    color: 
-                                    colorMode?.getActualMode()! === 'light'
-                                    ? '#053B7A'
-                                    : colorMode?.getActualMode()! === 'dark-contrast'
-                                        ? '#b2d0ec'
-                                        : colorMode?.getActualMode()! === 'bright-contrast'
-                                            ? '#053B7A'
-                                            : '#000000', // black & white
-                                     font: 'normal normal normal 20px Rubik',
-                                      opacity: 1,
-                                       letterSpacing: '0px',
-                                        mb: 0 
-                                        }}>
-                                    משרות
-                                </Typography>
-
-                                <Box sx={{
-                                    mt: 0,
-                                    background: 
-                                    colorMode?.getActualMode()! === 'light'
-                                    ? '#053B7A'
-                                    : colorMode?.getActualMode()! === 'dark-contrast'
-                                        ? '#b2d0ec'
-                                        : colorMode?.getActualMode()! === 'bright-contrast'
-                                            ? '#053B7A'
-                                            : '#000000', // black & white
-                                    height: '1px',
-                                    borderRadius: '1px',
-                                }} />
-                            </Box>
-                        </Link>
-                    </Stack>
-
-                    <Stack direction='row' justifyContent='center' width='100%'>
-                        <Link style={{ display: 'flex', flexDirection: 'row', textDecoration: 'none' }} to={`https://www.gvanim.org.il/index.php/he/node/4`} onClick={() => setOpen(false)}>
-                            <Box>
-                                <Typography 
-                                sx={{ 
-                                    color: 
-                                    colorMode?.getActualMode()! === 'light'
-                                    ? '#053B7A'
-                                    : colorMode?.getActualMode()! === 'dark-contrast'
-                                        ? '#b2d0ec'
-                                        : colorMode?.getActualMode()! === 'bright-contrast'
-                                            ? '#053B7A'
-                                            : '#000000', // black & white
-                                     font: 'normal normal normal 20px Rubik',
-                                      opacity: 1,
-                                       letterSpacing: '0px',
-                                        mb: 0 
-                                        }}>
-                                    אודות
-                                </Typography>
-
-                                <Box sx={{
-                                    mt: 0,
-                                    background: 
-                                    colorMode?.getActualMode()! === 'light'
-                                    ? '#053B7A'
-                                    : colorMode?.getActualMode()! === 'dark-contrast'
-                                        ? '#b2d0ec'
-                                        : colorMode?.getActualMode()! === 'bright-contrast'
-                                            ? '#053B7A'
-                                            : '#000000', // black & white
-                                    height: '1px',
-                                    borderRadius: '1px',
-                                }} />
-                            </Box>
-                        </Link>
-                    </Stack>
-                </Stack>
-
-
-            </Collapse>
+                </Collapse>
+            </Stack>
         </Box>
 
     )
