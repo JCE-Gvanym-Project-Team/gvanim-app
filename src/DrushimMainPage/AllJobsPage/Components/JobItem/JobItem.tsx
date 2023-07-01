@@ -23,8 +23,8 @@ export default function JobItem(props: { job: any }) {
                 borderColor: 'background.JobTitle2',
                 textAlign: 'center',
             }}>
-                <Stack direction='row' justifyContent='end' display={{ xs: 'none', sm: job?._highPriority ? 'flex' : 'none' }}>
-                    <Box paddingTop={2.5} paddingRight={1} sx={{ position: 'absolute' }}>
+                <Stack direction='row' justifyContent='end' display={{ xs: job?._highPriority ? 'flex' : 'none' }}>
+                    <Box paddingTop={{xs: 2 ,sm: 2.5}} paddingRight={1} sx={{ position: 'absolute' }}>
                         <Stack spacing={0.5} direction='row' justifyContent='center' alignItems='center'
                             sx={{
                                 borderRadius: 0.5,
@@ -36,20 +36,12 @@ export default function JobItem(props: { job: any }) {
                                 backgroundColor: 
                                 colorMode?.getActualMode()! === 'bright-contrast'
                                 ? '#ddbb7f'
-                                : 'primary.filterButton'
-
-                                // warning: 'rgb(237, 108, 2)' 
-                                //primary:  'rgb(25, 118, 210)' 
-
-                                // colorMode?.getActualMode()! === 'bright-contrast'
-                                //     ? '#B2C17F'
-                                //     : 'primary.filterButton'
-                                ,
+                                : 'primary.filterButton',
                                 transform: 'rotate(-20deg)',
 
                             }} >
 
-                            <Typography fontSize={12} sx={{
+                            <Typography fontSize={{xs: 11, sm: 12}} sx={{
                                 color:
                                     colorMode?.getActualMode()! === 'dark-contrast'
                                         ? '#000000'
@@ -70,7 +62,7 @@ export default function JobItem(props: { job: any }) {
                 </Stack>
 
                 <Box sx={{
-                    mt: { xs: '28px', sm: '28px', md: '48px' },
+                    mt: { xs: '38px', sm: '28px', md: '48px' },
                     backgroundColor: 'background.JobTitle2',
                     direction: 'column',
                     paddingTop: 0.5,
