@@ -602,7 +602,10 @@ export default function AllJobsPage() {
 
                                         );
                                     }).
-                                        map((job: Job, index: any) => (
+                                        sort((job2: Job) => {
+                                            return job2?._highPriority ? -1 : 1
+                                        })
+                                        .map((job: Job, index: any) => (
 
                                             <Grid item xs={12} sm={8} md={4} lg={4} xl={4} key={index} sx={{ mb: { xs: 3, sm: 3, md: 0 } }} >
 
@@ -613,7 +616,6 @@ export default function AllJobsPage() {
                                 }
 
                             </Grid>
-
                         </Stack>
                     </>
                 )}
