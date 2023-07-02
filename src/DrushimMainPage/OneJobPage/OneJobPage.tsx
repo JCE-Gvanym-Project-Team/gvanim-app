@@ -98,10 +98,10 @@ export default function OneJobPage()
     const [recommendersListOpen, setRecommendersListOpen] = useState(false);
     const [recommendersErrors, setRecommendersErrors] = useState<boolean[][]>
         ([
-            // index 0 = phone error. index 1 = email error
-            [false, false],
-            [false, false],
-            [false, false]
+            // index 0 = phone error. index 1 = email error. index 2 = file error
+            [false, false, false],
+            [false, false, false],
+            [false, false, false]
         ]);
 
     // changes recommendersList at the given index
@@ -289,36 +289,6 @@ export default function OneJobPage()
             await newCandidate.add();
         }
 
-        // old but gold
-        // if (recommendersListOpen)
-        // {
-        //     let candidateJobStatus = (await getFilteredCandidateJobStatuses(["jobNumber", "candidateId"], [job?._jobNumber.toString()!, newCandidateId]))[0];
-        //     await candidateJobStatus.updateAbout(aboutText);
-        //     recommendersList?.forEach(async (recommender) =>
-        //     {
-        //         const recommenderInfo = recommender[0];
-        //         const file = recommender[1];
-        //         if (recommenderInfo)
-        //         {
-        //             if (!file)
-        //             {
-        //                 await candidateJobStatus.addRecomendation(recommenderInfo._fullName, recommenderInfo._phone, recommenderInfo._eMail, new File([''], ''));
-        //             } else
-        //             {
-        //                 await candidateJobStatus.addRecomendation(recommenderInfo._fullName, recommenderInfo._phone, recommenderInfo._eMail, file);
-        //             }
-        //         }
-        //     })
-        // }
-
-        // // apply 
-        // if ((await newCandidate.apply(job?._jobNumber!, aboutText)) === -1)
-        // {
-        //     setLoading(false);
-        //     setErrorDialogOpen(true);
-        //     return;
-        // }
-
         let recommendersOnlyList: Recomendation[] = []
         let recommendersFilesOnlyList: File[] = []
         if (recommendersListOpen)
@@ -367,6 +337,11 @@ export default function OneJobPage()
         return /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email);
     }
 
+    const isFileValid = (file: File | null) =>
+    {
+        return file && file.type === "application/pdf" && file.size <= 5 * 1024 * 1024;
+    }
+
     const setDefaults = () =>
     {
         // reset cv file
@@ -383,7 +358,7 @@ export default function OneJobPage()
         setRecommendersErrors(
             recommendersErrors.map(() =>
             {
-                return [false, false]
+                return [false, false, false]
             })
         );
 
@@ -412,17 +387,18 @@ export default function OneJobPage()
             {
                 let emailValid = isEmailValid(recommenderInfo?._eMail!);
                 let phoneValid = isPhoneValid(recommenderInfo?._phone!);
-                if (!emailValid || !phoneValid)
+                let fileValid = isFileValid(file);
+                if (!emailValid || !phoneValid || !fileValid)
                 {
                     // set errors for appropriate index
                     recommendersErrorsResult = recommendersErrorsResult.map((recommenderError, errorIndex) =>
                     {
                         if (errorIndex === index)
                         {
-                            return [!phoneValid, !emailValid];
+                            return [!phoneValid, !emailValid, !fileValid];
                         } else
                         {
-                            return [recommenderError[0], recommenderError[1]];
+                            return [recommenderError[0], recommenderError[1], recommenderError[2]];
                         }
                     });
                     result = result && false;
@@ -999,6 +975,11 @@ export default function OneJobPage()
                                         setCvFile(files[0]);
                                         setCvFileError(false);
                                     }
+                                    if (files && files[0] && files[0].size > 5 * 1024 * 1024)
+                                    {
+                                        setCvFile(null);
+                                        setCvFileError(true);
+                                    }
                                 }}
                             />
                             <Button
@@ -1060,7 +1041,7 @@ export default function OneJobPage()
                                 <ErrorOutlineRounded sx={{ fontSize: "24px", color: "error.main" }} />
 
                                 <Typography variant='h4' color={"error.main"}>
-                                    שדה זה הוא חובה
+                                    אנא צרפו קובץ PDF שלא עולה על 5GB
                                 </Typography>
                             </Box>
                         </Box>
@@ -1318,10 +1299,10 @@ export default function OneJobPage()
                                                                         {
                                                                             if (index === ind)
                                                                             {
-                                                                                return [false, recommenderError[1]];
+                                                                                return [false, recommenderError[1], recommenderError[2]];
                                                                             } else
                                                                             {
-                                                                                return [recommenderError[0], recommenderError[1]];
+                                                                                return [recommenderError[0], recommenderError[1], recommenderError[2]];
                                                                             }
                                                                         })
                                                                     );
@@ -1333,7 +1314,7 @@ export default function OneJobPage()
                                                                 alignItems: "center",
                                                                 position: "absolute"
                                                             }}>
-                                                                <ErrorOutlineRounded sx={{ fontSize: "24px", color: "error.main" }} />
+                                                                <ErrorOutlineRounded sx={{color: "error.main" }} />
 
                                                                 <Typography variant='h4' color={"error.main"}>
                                                                     שדה זה שגוי
@@ -1384,10 +1365,10 @@ export default function OneJobPage()
                                                                         {
                                                                             if (index === ind)
                                                                             {
-                                                                                return [recommenderError[0], false];
+                                                                                return [recommenderError[0], false, recommenderError[2]];
                                                                             } else
                                                                             {
-                                                                                return [recommenderError[0], recommenderError[1]];
+                                                                                return [recommenderError[0], recommenderError[1], recommenderError[2]];
                                                                             }
                                                                         })
                                                                     );
@@ -1407,7 +1388,7 @@ export default function OneJobPage()
                                                             </Box>
                                                         </Box>
                                                         {/* Attach recommender file button */}
-                                                        <Box sx={{ display: "flex", flexDirection: "column", alignSelf: { xs: "center", md: "end" }, marginTop: "49px" }}>
+                                                        <Box sx={{ display: "flex", flexDirection: "column", alignSelf: { xs: "center", md: "end" }, marginTop: "40px" }}>
                                                             {/* display filename to the user */}
                                                             <Box sx={{ position: "absolute", marginTop: "-20px", marginLeft: "20px" }}>
                                                                 <Typography variant='h5' sx={{ alignSelf: "center" }}>
@@ -1416,10 +1397,24 @@ export default function OneJobPage()
                                                                     {recommendersList[index][1] ? recommendersList[index][1]?.name.slice(0, 12) : ""}
                                                                 </Typography>
                                                             </Box>
+                                                            <Box sx={{
+                                                                display: recommendersErrors[index][2] ? "flex" : "flex",
+                                                                flexDirection: "row",
+                                                                alignItems: "center",
+                                                                position: "absolute",
+                                                                marginTop: "72px",
+                                                                marginLeft: "10px"
+                                                            }}>
+                                                                <ErrorOutlineRounded sx={{ color: "error.main" }} />
+
+                                                                <Typography variant='h4' color={"error.main"}>
+                                                                    שדה זה הוא חובה
+                                                                </Typography>
+                                                            </Box>
                                                             <Box
                                                                 sx={{
                                                                     display: "flex",
-                                                                    flexDirection: "row",
+                                                                    flexDirection: "column",
                                                                     alignSelf: "end"
                                                                 }}
                                                             >
@@ -1439,6 +1434,21 @@ export default function OneJobPage()
                                                                         if (files && files.length > 0 && files[0] && files[0].type === "application/pdf")
                                                                         {
                                                                             updateRecommendersListAtIndex(recommendersList[index][0], files[0], index);
+                                                                        }
+                                                                        if (files && files.length > 0 && files[0] && files[0].size <= 5 * 1024 * 1024 && files[0].type === "application/pdf")
+                                                                        {
+                                                                            setRecommendersErrors(
+                                                                                recommendersErrors.map((recommenderError, ind) =>
+                                                                                {
+                                                                                    if (index === ind)
+                                                                                    {
+                                                                                        return [recommenderError[0], recommenderError[1], false];
+                                                                                    } else
+                                                                                    {
+                                                                                        return [recommenderError[0], recommenderError[1], recommenderError[2]];
+                                                                                    }
+                                                                                })
+                                                                            );
                                                                         }
                                                                     }}
                                                                 />
@@ -1489,9 +1499,9 @@ export default function OneJobPage()
                                                                             צירוף קובץ
                                                                         </Typography>
 
+
                                                                     </Box>
                                                                 </Button>
-
                                                             </Box>
                                                         </Box>
                                                     </Box>
