@@ -1408,7 +1408,7 @@ export default function OneJobPage()
                                                                 <ErrorOutlineRounded sx={{ color: "error.main" }} />
 
                                                                 <Typography variant='h4' color={"error.main"}>
-                                                                    שדה זה הוא חובה
+                                                                    שדה זה שגוי
                                                                 </Typography>
                                                             </Box>
                                                             <Box
