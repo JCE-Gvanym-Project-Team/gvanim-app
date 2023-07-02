@@ -5,21 +5,21 @@ import { CandidateJobStatus, getFilteredCandidateJobStatuses } from '../../../..
 import { ManageCandidatesPageGlobalStyle } from '../../../../PageStyles';
 import { dialogContentStyle, dialogContentSx, dialogSx, dialogTitleSx, dialogTopAreaSx } from './RecommendersDialogStyle';
 
-export default function RecommendersDialog(props: { open, onClose, jobId: string, candidateId: string, setLoading})
+export default function RecommendersDialog(props: { open, onClose, jobId: string, candidateId: string, setLoading })
 {
-    const { open, onClose, jobId, candidateId,setLoading } = props;
+    const { open, onClose, jobId, candidateId, setLoading } = props;
 
     const [recommendersLinks, setRecommendersLinks] = useState<string[] | undefined>();
     const [candidateJobStatus, setCandidateJobStatus] = useState<CandidateJobStatus | null>(null);
-    
+
 
     const getRecommendationsURLs = async function ()
     {
-        const candJobStatus = (await getFilteredCandidateJobStatuses(["jobNumber", "candidateId"], [jobId, candidateId]))[0]
+        const candJobStatus = (await getFilteredCandidateJobStatuses(["jobNumber", "candidateId"], [jobId?.toString(), candidateId?.toString()]))[0]
         setCandidateJobStatus(candJobStatus);
         setRecommendersLinks(await candJobStatus?.getRecomendationsUrl());
     }
-    
+
     useEffect(() =>
     {
         getRecommendationsURLs();
@@ -97,7 +97,7 @@ export default function RecommendersDialog(props: { open, onClose, jobId: string
                                     </Box>
 
                                     <Button
-                                    sx={{marginLeft: "1rem"}}
+                                        sx={{ marginLeft: "1rem" }}
                                         variant='outlined'
                                         onClick={() =>
                                         {
