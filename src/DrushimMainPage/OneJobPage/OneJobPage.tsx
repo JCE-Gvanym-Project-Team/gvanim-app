@@ -1398,7 +1398,7 @@ export default function OneJobPage()
                                                                 </Typography>
                                                             </Box>
                                                             <Box sx={{
-                                                                display: recommendersErrors[index][2] ? "flex" : "flex",
+                                                                display: recommendersErrors[index][2] ? "flex" : "none",
                                                                 flexDirection: "row",
                                                                 alignItems: "center",
                                                                 position: "absolute",
