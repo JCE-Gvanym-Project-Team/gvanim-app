@@ -354,7 +354,6 @@ const columns: GridColDef[] = [
     headerName: "אימייל",
     headerAlign: "center",
     width: 400,
-    resizable: true,
     align: "center",
     sortable: true,
     sortComparator: (v1, v2, _cellParams1, _cellParams2) =>
