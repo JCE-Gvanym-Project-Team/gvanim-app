@@ -1,6 +1,6 @@
 import { ArticleOutlined } from "@mui/icons-material";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { Box, Button, Container, FormControlLabel, MenuItem, Radio, RadioGroup, Select, SelectChangeEvent, Stack, Typography } from '@mui/material';
+import { Box, Button, Container, FormControlLabel, MenuItem, Radio, RadioGroup, Select, SelectChangeEvent, Stack, TextField, Typography } from '@mui/material';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -11,10 +11,12 @@ import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import CandidatesByFilters from '../../../../Firebase/FirebaseFunctions/Reports/CandidatesFilters';
 import { exportToExcel } from '../../../../Firebase/FirebaseFunctions/Reports/GlobalFunctions';
-import { getAllRoles, getAllSectors } from '../../../../Firebase/FirebaseFunctions/functionIndex';
+import { Candidate, getAllRoles, getAllSectors, getFilteredCandidateJobStatuses, getFilteredCandidates } from '../../../../Firebase/FirebaseFunctions/functionIndex';
 import { BoxGradientSx, MyPaperSx } from '../../../ManageJobsPage/Components/NewJobPage/NewJobStyle';
 import { designReturnButton } from '../../../ManageJobsPage/ManageJobsPageStyle';
 import { MyReportStyle, radioStyle } from '../../ReportPageStyle';
+import dayjs from "dayjs";
+import MyLoading from "../../../../Components/MyLoading/MyLoading";
 
 interface typeMyData {
     id: number;
@@ -32,11 +34,12 @@ export default function CandidateFiltersForm() {
     const [includeInterviewDate, setSelectInterviewDate] = React.useState('yes');
     const [startDate, setStartDate] = React.useState(null);
     const [endDate, setEndDate] = React.useState(null);
+    const [loading, setLoading] = React.useState(false);
 
 
     React.useEffect(() => {
         const fileData = async () => {
-            // --- sectors         
+            // ---update sectors         
             let i = 20;
             const sectorsFromDb = await getAllSectors();
             let updatedSectors = [{ id: 10, name: 'כל האשכולות' }];
@@ -50,7 +53,7 @@ export default function CandidateFiltersForm() {
             );
             setSectors(updatedSectors);
 
-            // ---- roles
+            // ----update roles
             const rolesFromDb = await getAllRoles();
             i = 20;
             let updatedRoles = [{ id: 10, name: "כל התפקידים" }];
@@ -80,9 +83,11 @@ export default function CandidateFiltersForm() {
         const choice = ["כן", "לא"];
         const formattedStartDate = startDate.toDate();
         const formattedEndDate = endDate.toDate();
+        setLoading(true);
 
         const result = CandidatesByFilters(statusName, timeOnStatus, sectorName, roleName, selectGarde, selectInterviewDate, formattedStartDate, formattedEndDate)
             .then((result) => {
+                setLoading(false);
                 if (result.length === 0) {
                     alert('אין נתונים להצגה');
                     return;
@@ -92,7 +97,7 @@ export default function CandidateFiltersForm() {
                 }
             })
             .catch((error) => {
-
+                setLoading(false);
             });
     }
 
@@ -101,7 +106,7 @@ export default function CandidateFiltersForm() {
         setSelectStatus(event.target.value);
     }
 
-    function handleChangeTimeInStatus(event: SelectChangeEvent<string>, child: React.ReactNode): void {
+    async function handleChangeTimeInStatus(event: SelectChangeEvent<string>, child: React.ReactNode): Promise<void> {
         setTimeOnStatus(event.target.value);
     }
 
@@ -109,7 +114,7 @@ export default function CandidateFiltersForm() {
         setSelectedSector(event.target.value);
     };
 
-    const handleChangeRole = (event) => {
+    const handleChangeRole = async (event) => {
         setSelectedRole(event.target.value);
     };
 
@@ -137,114 +142,120 @@ export default function CandidateFiltersForm() {
 
     return (
         <>
-            <Box sx={BoxGradientSx}>
-                <Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
-                    right: '2%',
-                    left: 'auto',
-                    top: '15%',
-                    bottom: 'auto',
-                    backgroundColor: 'hsla(0,0%,100%,.1)',
-                    background: 'hsla(0,0%,100%,.1)',
-                    width: '100px',
-                    height: '100px',
-                    borderRadius: '50%',
-                    position: 'absolute',
-                }} />
+           {loading ? (
+                <MyLoading loading={loading} setLoading={setLoading} />
+            ) :
+                (
+                    <>
+                <Stack >
+                <Box sx = { BoxGradientSx }>
+                <Box display = {{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
+                right: '2%',
+                left: 'auto',
+                top: '15%',
+                bottom: 'auto',
+                backgroundColor: 'hsla(0,0%,100%,.1)',
+                background: 'hsla(0,0%,100%,.1)',
+                width: '100px',
+                height: '100px',
+                borderRadius: '50%',
+                position: 'absolute',
+            }} />
 
-                <Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
-                    right: '10%',
-                    left: 'auto',
-                    top: '0%',
-                    backgroundColor: 'hsla(0,0%,100%,.1)',
-                    background: 'hsla(0,0%,100%,.1)',
-                    width: '170px',
-                    height: '170px',
-                    borderRadius: '50%',
-                    position: 'absolute',
-                }} />
+            <Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
+                right: '10%',
+                left: 'auto',
+                top: '0%',
+                backgroundColor: 'hsla(0,0%,100%,.1)',
+                background: 'hsla(0,0%,100%,.1)',
+                width: '170px',
+                height: '170px',
+                borderRadius: '50%',
+                position: 'absolute',
+            }} />
 
-                <Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
-                    left: '40%',
-                    top: '-1%',
-                    right: 'auto',
-                    bottom: 'auto',
-                    backgroundColor: 'hsla(0,0%,100%,.1)',
-                    background: 'hsla(0,0%,100%,.1)',
-                    width: '60px',
-                    height: '60px',
-                    borderRadius: '50%',
-                    position: 'absolute',
-                }} />
+            <Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
+                left: '40%',
+                top: '-1%',
+                right: 'auto',
+                bottom: 'auto',
+                backgroundColor: 'hsla(0,0%,100%,.1)',
+                background: 'hsla(0,0%,100%,.1)',
+                width: '60px',
+                height: '60px',
+                borderRadius: '50%',
+                position: 'absolute',
+            }} />
 
 
-                <Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
-                    left: 'auto',
-                    top: '16%',
-                    bottom: 'auto',
-                    backgroundColor: 'hsla(0,0%,100%,.1)',
-                    background: 'hsla(0,0%,100%,.1)',
-                    width: '30px',
-                    height: '30px',
-                    borderRadius: '50%',
-                    position: 'absolute',
-                }} />
+            <Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
+                left: 'auto',
+                top: '16%',
+                bottom: 'auto',
+                backgroundColor: 'hsla(0,0%,100%,.1)',
+                background: 'hsla(0,0%,100%,.1)',
+                width: '30px',
+                height: '30px',
+                borderRadius: '50%',
+                position: 'absolute',
+            }} />
 
-                <Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
-                    left: '-2%',
-                    top: '12%',
-                    bottom: 'auto',
-                    backgroundColor: 'hsla(0,0%,100%,.1)',
-                    background: 'hsla(0,0%,100%,.1)',
-                    width: '120px',
-                    height: '120px',
-                    borderRadius: '50%',
-                    position: 'absolute',
-                }} />
+            <Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
+                left: '-2%',
+                top: '12%',
+                bottom: 'auto',
+                backgroundColor: 'hsla(0,0%,100%,.1)',
+                background: 'hsla(0,0%,100%,.1)',
+                width: '120px',
+                height: '120px',
+                borderRadius: '50%',
+                position: 'absolute',
+            }} />
 
-                <Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
-                    left: '4%',
-                    top: '8%',
-                    bottom: 'auto',
-                    backgroundColor: 'hsla(0,0%,100%,.1)',
-                    background: 'hsla(0,0%,100%,.1)',
-                    width: '80px',
-                    height: '80px',
-                    borderRadius: '50%',
-                    position: 'absolute',
-                }} />
+            <Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
+                left: '4%',
+                top: '8%',
+                bottom: 'auto',
+                backgroundColor: 'hsla(0,0%,100%,.1)',
+                background: 'hsla(0,0%,100%,.1)',
+                width: '80px',
+                height: '80px',
+                borderRadius: '50%',
+                position: 'absolute',
+            }} />
 
-                <Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
-                    left: '25%',
-                    top: '12%',
-                    bottom: 'auto',
-                    backgroundColor: 'hsla(0,0%,100%,.1)',
-                    background: 'hsla(0,0%,100%,.1)',
-                    width: '60px',
-                    height: '60px',
-                    borderRadius: '50%',
-                    position: 'absolute',
-                }} />
-                <Box sx={{ display: 'flex', flexDirection: 'column', top: "165px", position: "absolute" }}>
-                    <Stack direction='column'>
-                        <Stack direction='row' justifyContent='center' spacing={1}>
+            <Box display={{ xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex' }} sx={{
+                left: '25%',
+                top: '12%',
+                bottom: 'auto',
+                backgroundColor: 'hsla(0,0%,100%,.1)',
+                background: 'hsla(0,0%,100%,.1)',
+                width: '60px',
+                height: '60px',
+                borderRadius: '50%',
+                position: 'absolute',
+            }} />
+            <Box sx={{ display: 'flex', flexDirection: 'column', top: "165px", position: "absolute" }}>
+                <Stack direction='column'>
+                    <Stack direction='row' justifyContent='center' spacing={1}>
 
-                            <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                                <ArticleOutlined sx={{ color: '#fff' }} />
-                            </Box>
-                            <Typography sx={{ fontFamily: "'Noto Sans Hebrew', sans-serif", color: '#fff', textAlign: 'center' }} variant='h4'>
-                                דו"ח מועמדים
-                            </Typography>
-
-                        </Stack>
-
-                        <Typography sx={{ opacity: 0.6, width: '100%', textAlign: 'center', color: '#fff', fontSize: '16px', fontFamily: "'Noto Sans Hebrew', sans-serif", mt: 1 }} variant='subtitle1'>
-                            הפקת דוחות על מועמדים לפי מס' קטגוריות
+                        <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                            <ArticleOutlined sx={{ color: '#fff' }} />
+                        </Box>
+                        <Typography sx={{ fontFamily: "'Noto Sans Hebrew', sans-serif", color: '#fff', textAlign: 'center' }} variant='h4'>
+                            דו"ח מועמדים
                         </Typography>
-                        <Box sx={{ background: 'linear-gradient(90deg,hsla(0,0%,100%,0),#fff,hsla(0,0%,100%,0))', padding: 0.05, width: '100%', mt: 2 }} />
+
                     </Stack>
 
-                </Box>
+                    <Typography sx={{ opacity: 0.6, width: '100%', textAlign: 'center', color: '#fff', fontSize: '16px', fontFamily: "'Noto Sans Hebrew', sans-serif", mt: 1 }} variant='subtitle1'>
+                        הפקת דוחות על מועמדים לפי מס' קטגוריות
+                    </Typography>
+                    <Box sx={{ background: 'linear-gradient(90deg,hsla(0,0%,100%,0),#fff,hsla(0,0%,100%,0))', padding: 0.05, width: '100%', mt: 2 }} />
+                </Stack>
+
             </Box>
+        </Box >
 
             <Box sx={MyPaperSx}>
 
@@ -278,9 +289,10 @@ export default function CandidateFiltersForm() {
                                     </FormControl>
 
                                     <br />
-                                    {/* זמן שהוא על הסטטוס הנוכחי*/}
+
+                                    {/* time on status*/}
                                     <FormControl fullWidth>
-                                        <InputLabel id="demo-simple-select-label">בחירת הזמן שהוא על הסטטוס הנוכחי</InputLabel>
+                                        <InputLabel id="demo-simple-select-label">מועמדים שתקועים על הסטטוס שלהם במשך:</InputLabel>
                                         <Select
                                             labelId="demo-simple-select-label"
                                             id="demo-simple-select"
@@ -288,15 +300,15 @@ export default function CandidateFiltersForm() {
                                             label="timeOnStatus"
                                             onChange={handleChangeTimeInStatus}
                                         >
-                                            <MenuItem value={'עד שבוע'}>עד שבוע</MenuItem>
-                                            <MenuItem value={'עד חודש'}>עד חודש</MenuItem>
-                                            <MenuItem value={'כל זמן'}>כל זמן</MenuItem>
+                                            <MenuItem value={'עד שבוע'}>לא השתנה עד שבוע</MenuItem>
+                                            <MenuItem value={'עד חודש'}> לא השתנה שבוע עד חודש</MenuItem>
+                                            <MenuItem value={'כל זמן'}>לא משנה לי, תכלול את כולם</MenuItem>
                                         </Select>
                                     </FormControl>
 
                                     <br />
 
-                                    {/* אשכול*/}
+                                    {/* sector*/}
                                     <FormControl fullWidth>
                                         <InputLabel id="demo-simple-select-label">בחירת אשכול</InputLabel>
                                         <Select
@@ -321,8 +333,8 @@ export default function CandidateFiltersForm() {
                                         <Select
                                             labelId="demo-simple-select-label"
                                             id="demo-simple-select"
-                                            value={selectedRole} // שנה את הערך של value ל-rejectionCause
-                                            label="rejectionCause" // שנה את הערך של label ל-rejectionCause
+                                            value={selectedRole}
+                                            label="rejectionCause"
                                             onChange={handleChangeRole}
                                         >
                                             {roles.map((role) => (
@@ -363,7 +375,7 @@ export default function CandidateFiltersForm() {
 
                                     <br />
                                     {/* select time */}
-                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DemoContainer components={['DatePicker', 'DatePicker']}>
                                             <DatePicker
                                                 label="מתאריך"
@@ -376,7 +388,7 @@ export default function CandidateFiltersForm() {
                                                 onChange={handleChangeEndDate}
                                             />
                                         </DemoContainer>
-                                    </LocalizationProvider>
+                                    </LocalizationProvider> 
                                     <br />
 
                                     {/* create report */}
@@ -396,14 +408,12 @@ export default function CandidateFiltersForm() {
                     <ArrowForwardIosIcon></ArrowForwardIosIcon>
                     חזור
                 </Button>
+
             </Box>
+            </Stack >
+            </>
+                )}
         </>
     );
-}
-
-
-
-export async function main() {
-
 }
 
