@@ -52,7 +52,7 @@ export class Job {
         this._viewsPerPlatform = viewsPerPlatform;
         this._applyPerPlatform = applyPerPlatform;
         const defaultDate = new Date(0, 0, 0);
-        if (creationDate === defaultDate)
+        if (creationDate.getFullYear() === defaultDate.getFullYear())
             this._creationDate = (new Date()).toString();
         else
             this._creationDate = creationDate.toString();
