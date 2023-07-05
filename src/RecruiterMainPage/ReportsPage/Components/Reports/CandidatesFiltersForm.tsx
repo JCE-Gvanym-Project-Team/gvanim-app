@@ -92,8 +92,7 @@ export default function CandidateFiltersForm() {
                 }
             })
             .catch((error) => {
-                // handle the error
-                console.log(error);
+
             });
     }
 
@@ -405,40 +404,6 @@ export default function CandidateFiltersForm() {
 
 
 export async function main() {
-    // loginAdmin().then(async () => {
-    //     // 
-    //     // let jobstatus1 = new CandidateJobStatus(109, "28", "נדחה",  "לא מתאים לגוונים בגלל..", 1,  new Date(2023, 4, 1),new Date(2023, 5, 1), new Date(0, 0, 0), ["ded", "ded"], [], "פערים על היקף משרה"  );
-    //     // let jobstatus2 = new CandidateJobStatus(102, "28", "עבר ראיון ראשון",  "בחור מצוין", 4,  new Date(2023, 4, 1), new Date(2023, 4, 5), new Date(2023, 6, 25), ["ed", "ed"], [], "" );
-    //     // let jobstatus3 = new CandidateJobStatus(94, "53", "התקבל",  "בחור מצוין", 5,  new Date(2023, 4, 1), new Date(2023, 8, 1), new Date(2023, 6, 25), ["ed", "ed"], [], "" );
-    //     // let jobstatus4 = new CandidateJobStatus(91, "66", "הודשה מועמדות",  "בחור מצוין", 4,  new Date(2023, 4, 1), new Date(2023, 4, 17), new Date(2023, 6, 25), ["ed", "ed"], [], "" );
-    //     //let jobstatus5 = new CandidateJobStatus(76, "28", "זומן לראיון ראשון", "", 0, new Date(), new Date(2023, 5, 1), new Date(0, 0, 0), ["ed", "ed"], [], "");
-    //     //await jobstatus5.add();
-    //     // await jobstatus5.remove();
-    //     // jobstatus2.add();
-    //     // jobstatus3.add();
-    //     // jobstatus4.add();
 
-    //     // const viewsPerPlatform = new Map<string, number>();
-    //     // viewsPerPlatform.set("פייסבוק", 23);
-    //     // viewsPerPlatform.set("ווצאפ", 12);
-    //     // viewsPerPlatform.set("דרושים", 90);
-    //     // const applyPerPlatform = new Map<string, number>();
-    //     // applyPerPlatform.set("פייסבוק", 12);
-    //     // applyPerPlatform.set("ווצאפ", 12);
-    //     // applyPerPlatform.set("דרושים", 12);
-    //     // const job = new Job(23,"","",[0,0],"","",[""],"",true,false,new Map<string, number>(),new Map<string, number>(),new Date(2022,1,1));
-    //     // job.add(); 
-    //     //  let job1 = new Job(await generateJobNumber(), "דרוש מנהל", "מנהל", [0,100], "שדרות", "דרום", [""], "", true, true,viewsPerPlatform,applyPerPlatform, new Date(2023, 4, 1) );
-    //     //  let job2 = new Job(await generateJobNumber(), "דרוש עובד סוצאלי", "עובד סוציאלי", [0,100], "חיפה", "צפון",  [""], "", true, true,viewsPerPlatform,applyPerPlatform, new Date(2023, 4, 1));
-    //     //  let job3 = new Job(await generateJobNumber(), "דרושה מנהלת ", "מנהלת", [0,100], "ירושלים", "מרכז",  [""], "", true, true,viewsPerPlatform,applyPerPlatform, new Date(2023, 4, 1));
-    //     //  let job4 = new Job(await generateJobNumber(), "דרוש עובד סוצאלי ", "עובד סוציאלי", [0,100], "רמת גן", "מרכז", [""], "", true, true,viewsPerPlatform,applyPerPlatform, new Date(2023, 4, 1));
-    //     //  let job5 = new Job(await generateJobNumber(), "דרוש מתנדב ", "מתנדב", [0,100], "מודיעין", "מרכז" , [""], "", true, true,viewsPerPlatform,applyPerPlatform, new Date(2023, 4, 1));
-    //     //  job1.add();
-    //     //  job2.add();
-    //     //  job3.add();
-    //     //  job4.add();
-    //     //  job5.add();
-    //     await console.log((await getFilteredCandidateJobStatuses()));
-    // });
 }
 

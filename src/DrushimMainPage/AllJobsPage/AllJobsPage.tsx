@@ -391,7 +391,7 @@ export default function AllJobsPage() {
                                             <Typography variant='subtitle2' sx={{
                                                 color: colorMode?.getActualMode()! === 'bright-contrast' ? '#6e86a2' : 'background.JobTitle2',
                                             }}>חיפוש לפי מילה חופשית:</Typography>
-                                            <SearchBar text={text} setText={setText} />
+                                            <SearchBar text={text} setText={setText} handleFilter={handleFilter}/>
                                         </Box>
                                         <Divider sx={{ mt: 3.5, mb: 3, backgroundColor: 'primary.filterDivider', borderRadius: 1 }} />
 
@@ -569,7 +569,7 @@ export default function AllJobsPage() {
                                                             <Typography variant='subtitle2' sx={{
                                                                 color: colorMode?.getActualMode()! === 'bright-contrast' ? '#6e86a2' : 'background.JobTitle2',
                                                             }}>חיפוש לפי מילה חופשית:</Typography>
-                                                            <SearchBar text={text} setText={setText} />
+                                                            <SearchBar text={text} setText={setText} handleFilter={handleFilter}/>
                                                         </Box>
                                                         <Divider sx={{ mt: 3.5, mb: 3, backgroundColor: 'primary.filterDivider', borderRadius: 1 }} />
 

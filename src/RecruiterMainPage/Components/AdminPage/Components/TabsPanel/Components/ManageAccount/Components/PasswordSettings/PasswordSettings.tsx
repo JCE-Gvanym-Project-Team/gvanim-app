@@ -55,15 +55,15 @@ export default function PasswordSettings(props: { passwordEdit: any }) {
                 setConfirmPasswordError(true);
             } else { // if sucsess
                 const urlParams = new URLSearchParams(window.location.search);
-                console.log(urlParams);
+
                 const token = urlParams.get('oobCode') || '';
-                console.log(token); 
+
                 if (token.length > 0) { // the user is not connected
-                    console.log("is NOTconnected");
+
                     updateLinkRecruiterPassword(newPassword, token);
                 }
                 else { // the user is connected
-                    console.log("is connected");
+ 
                     updateConnectedRecruiterPassword(newPassword);
                 }
                 setConfirmPasswordError(false);

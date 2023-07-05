@@ -86,6 +86,18 @@ export async function getFirebaseIdsAtPath(path: string): Promise<string[]> {
 export async function getSectors(): Promise<string[]> {
 	return getFirebaseIdsAtPath("/Sectors");
 }
-
+export async function getFirebaseIdsAtPathPerm(path: string): Promise<string[]> {
+	try {
+	  const snapshot = await database.ref(path).once("value");
+	  const values = snapshot.val();
+	  return values ? Object.keys(values) : [];
+	} catch (error: any) {
+	  // Handle the permission denied error
+	  if (error.code === "PERMISSION_DENIED") {
+		return [];
+	  }
+	  throw error; // Throw other errors for further handling
+	}
+  }
 export async function main() {	//for debugging dont use
 }	

@@ -15,8 +15,8 @@ export class Sector {
      * @returns {Promise<string>} - The path of the current stage in the Firebase database.
      */
     public async getPath() {
-        if ((await getFirebaseIdsAtPath('/Sectors')).includes(this._name))
-            return "/Sectors/" + this._name;
+        if ((await getFirebaseIdsAtPath('/Sectors')).includes(this._name.replace('/', '_')))
+            return "/Sectors/" + this._name.replace('/', '_');
         return "";
     }
     /**
@@ -40,7 +40,7 @@ export class Sector {
         recs = recs.filter((rec) => rec._sectors.includes(this._name));
         for (let i = 0; i < recs.length; i++)
             recs.at(i)?.removeSector(this._name);
-        removeObjectAtPath("/Sectors/" + this._name);
+        removeObjectAtPath(await this.getPath());
         return 0;
 
     }
@@ -54,7 +54,8 @@ export class Sector {
         this._name = name;
         this._open = open;
         if ((await this.exists())) {
-            replaceData((await this.getPath()), this);
+            replaceData(`${await this.getPath()}/_name`, this._name);
+            replaceData(`${await this.getPath()}/_open`, this._open);
             return 0;
         }
         return -1;
@@ -65,7 +66,7 @@ export class Sector {
      */
     public async add() {
         if (!(await this.exists())) {
-            appendToDatabase(this, "/Sectors", this._name);
+            appendToDatabase(this, "/Sectors", this._name.replace('/', '_'));
             return 0;
         }
         return 1;
@@ -73,17 +74,20 @@ export class Sector {
     public async addRecruiter(recruiter: Recruiter) {
         if (await this.exists()) {
             this._recruitersUid.push(await recruiter.getUid());
-            await replaceData((await this.getPath()), this);
-            await appendToDatabase(recruiter._email, await this.getPath(),await recruiter.getUid());
+            replaceData(`${await this.getPath()}/_recruitersUid`, this._recruitersUid);
+            await appendToDatabase(recruiter._email, await this.getPath(), await recruiter.getUid());
             return 0;
         }
         return -1;
     }
-    public async removeRecruiter(recruiter: Recruiter) {
+    public async removeRecruiter(recruiter: Recruiter, recUid: string) {
         if (await this.exists()) {
-            this._recruitersUid = this._recruitersUid.filter(async (uid) => uid !== (await recruiter.getUid()))
-            replaceData(`/Sectors/${this._name}`, this);
-            await removeObjectAtPath(await this.getPath() + '/' + await recruiter.getUid());
+            const i = this._recruitersUid.indexOf(recUid);
+            if(i>=0)
+                this._recruitersUid = this._recruitersUid.splice(i,i);
+            replaceData(`${await this.getPath()}/_recruitersUid`, this._recruitersUid);
+            if (recUid.length > 0)
+                await removeObjectAtPath(await this.getPath() + '/' + recUid);
             return 0;
         }
         return -1;

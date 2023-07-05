@@ -187,10 +187,10 @@ export class Candidate {
         if (!(await this.exists())) {
             return -1;
         }
-        let candidatuers = new CandidateJobStatus(jobNumber, this._id, "הוגשה מועמדות", about, -1, new Date(), new Date());
+        let stat = new CandidateJobStatus(jobNumber, this._id, "הוגשה מועמדות", about, -1, new Date(), new Date());
+        await stat.add();
         for (let i = 0; i < recsFiles.length; i++)
-            candidatuers.addRecomendation(recomendation[i]._fullName, recomendation[i]._phone, recomendation[i]._eMail, recsFiles[i]);
-        candidatuers.add();
+            stat.addRecomendation(recomendation[i]._fullName, recomendation[i]._phone, recomendation[i]._eMail, recsFiles[i]);
         return 0;
     }
     /**

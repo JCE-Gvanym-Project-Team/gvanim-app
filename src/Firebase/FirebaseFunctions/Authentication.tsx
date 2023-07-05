@@ -1,6 +1,7 @@
 import 'firebase/auth';
 import { User, getAuth, sendPasswordResetEmail, signInWithEmailAndPassword, updatePassword, confirmPasswordReset } from "firebase/auth";
 import axios from 'axios';
+import { getFirebaseIdsAtPathPerm } from './DBfuncs';
 const auth = getAuth();
 
 /**
@@ -74,4 +75,10 @@ export async function deleteUserAccount(mail: string) {
 				reject(error);
 			});
 	});
+}
+export async function isAdmin(uid: string) {
+	const adminUids: string[] = await getFirebaseIdsAtPathPerm('/Admins');
+	if (adminUids.includes(uid))
+		return true;
+	return false;
 }

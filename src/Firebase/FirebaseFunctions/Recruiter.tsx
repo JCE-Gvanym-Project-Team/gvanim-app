@@ -41,11 +41,13 @@ export class Recruiter {
 	 */
 	public async remove() {
 		if (await this.exists()) {
+			const uid = await this.getUid();
+
 			let secs = await getAllSectors();
 			secs = secs.filter((sec) => this._sectors.includes(sec._name));
 			for (let i = 0; i < secs.length; i++) {
 				let sec = new Sector(secs[i]._name, secs[i]._open, secs[i]._recruitersUid);
-				sec.removeRecruiter(this);
+				sec.removeRecruiter(this, uid);
 			}
 			await removeObjectAtPath("/Recruiters/" + this._id);
 			await removeObjectAtPath("/RecUid/" + this._id);
@@ -65,19 +67,20 @@ export class Recruiter {
 		}
 		if (password.length > 0) {
 			const uid = await this.createUser(password);
-			if(!uid)
+			if (!uid)
 				return -1;
 			await appendToDatabase(uid, "/RecUid", this._id);
-			await appendToDatabase(this, '/Recruiters',this._id);
-			return 0;
+			await appendToDatabase(this, '/Recruiters', this._id);
 		}
 		await appendToDatabase(this, "/Recruiters", this._id);
+		this._sectors.forEach((sec) => this.addSector(sec));
+		return 0;
 	}
 	private async createUser(pass: string): Promise<string> {
 		return new Promise<string>((resolve, reject) => {
 			axios.post('https://europe-west1-gvanim-app.cloudfunctions.net/createUser', {
 				mail: this._email,
-				password :pass
+				password: pass
 			})
 				.then(response => {
 					const uid = response.data;
@@ -100,14 +103,14 @@ export class Recruiter {
 	 * @returns None
 	 */
 	public async addSector(sector: string) {
+		if (!(await this.exists()))
+			return -1;
 		let sectObj = new Sector(sector, true);
 		if (!(await sectObj.exists())) {
 			return -1;
 		}
 		if (!this._sectors.includes(sector))
 			this._sectors.push(sector);
-		else
-			return 1;
 		replaceData(await this.getPath(), this);
 		const sectors = await getAllSectors();
 		for (let i = 0; i < sectors.length; i++) {
@@ -128,8 +131,11 @@ export class Recruiter {
 			this._sectors = this._sectors.filter((val) => val !== sector);
 		else
 			return 1;
-		replaceData(await this.getPath(),this);
+		replaceData(await this.getPath(), this);
 		const uid = await this.getUid();
+		const sec = new Sector(sector, true);
+		if(await sec.exists())
+			sec.removeRecruiter(this, uid);
 		removeObjectAtPath(`Sectors/${sector}/${uid}`);
 		return 0;
 	}

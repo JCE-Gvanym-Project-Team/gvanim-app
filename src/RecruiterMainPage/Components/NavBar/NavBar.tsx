@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { NavBarSx } from './NavBarStyle';
 import MyDrawer from './Components/MyDrawer/MyDrawer';
 import MyLogoutDialog from './Components/LogoutDialog';
-import { getConnectedUser } from '../../../Firebase/FirebaseFunctions/Authentication';
+import { getConnectedUser, isAdmin } from '../../../Firebase/FirebaseFunctions/Authentication';
 import { Recruiter, getRecruitersFromDatabase } from '../../../Firebase/FirebaseFunctions/Recruiter';
 
 export default function NavBar(props: { handlelogout: any })
@@ -18,7 +18,7 @@ export default function NavBar(props: { handlelogout: any })
         (async () =>
         {
             const user = await getConnectedUser();
-            if (user?.email === "admin@gmail.com"){
+            if (await isAdmin(user?.uid!)){
                 setAdming('admin');
             }
             const recruiters = await getRecruitersFromDatabase();

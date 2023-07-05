@@ -1,5 +1,5 @@
 import { realtimeDB } from "../FirebaseConfig/firebase";
-import { Candidate, getFilteredCandidates, getCandidatesByIds } from "./Candidate";
+import { Candidate, getCandidatesByIds } from "./Candidate";
 import { CandidateJobStatus, getFilteredCandidateJobStatuses } from "./CandidateJobStatus";
 import { appendToDatabase, getFirebaseIdsAtPath, removeObjectAtPath, replaceData } from "./DBfuncs";
 import { getOpenRoles } from "./Role";
@@ -52,7 +52,7 @@ export class Job {
         this._viewsPerPlatform = viewsPerPlatform;
         this._applyPerPlatform = applyPerPlatform;
         const defaultDate = new Date(0, 0, 0);
-        if (creationDate === defaultDate)
+        if (creationDate.getFullYear() === defaultDate.getFullYear())
             this._creationDate = (new Date()).toString();
         else
             this._creationDate = creationDate.toString();
