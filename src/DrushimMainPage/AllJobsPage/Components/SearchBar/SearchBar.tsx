@@ -4,14 +4,14 @@ import { SearchRounded } from '@mui/icons-material';
 import React from 'react';
 import { ColorModeContext } from '../../../theme';
 
-export default function SearchBar(props: { text: string, setText: any, handleFilter }) {
+export default function SearchBar(props: { text: string, setText: any, handleFilter })
+{
   const { text, setText, handleFilter } = props;
 
   const colorMode = React.useContext(ColorModeContext);
 
-  const handleText = (event) => {
-    event.preventDefault();
-    handleFilter(event.target.value);
+  const handleText = (event) =>
+  {
     setText(event.target.value);
   };
 
@@ -43,7 +43,14 @@ export default function SearchBar(props: { text: string, setText: any, handleFil
                 },
               },
             }}
-            onKeyDown={e => e.key === 'Enter' && e.preventDefault()}
+            onKeyDown={e =>
+            {
+              if (e.key === 'Enter')
+              {
+                e.preventDefault();
+                handleFilter(text);
+              }
+            }}
             placeholder='כתבו כאן...'
             inputProps={{ 'aria-label': 'search' }}
             value={text}
