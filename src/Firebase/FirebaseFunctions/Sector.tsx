@@ -54,7 +54,8 @@ export class Sector {
         this._name = name;
         this._open = open;
         if ((await this.exists())) {
-            replaceData((await this.getPath()), this);
+            replaceData(`${await this.getPath()}/_name`, this._name);
+            replaceData(`${await this.getPath()}/_open`, this._open);
             return 0;
         }
         return -1;
@@ -73,18 +74,20 @@ export class Sector {
     public async addRecruiter(recruiter: Recruiter) {
         if (await this.exists()) {
             this._recruitersUid.push(await recruiter.getUid());
-            await replaceData((await this.getPath()), this);
-            await appendToDatabase(recruiter._email, await this.getPath(),await recruiter.getUid());
+            replaceData(`${await this.getPath()}/_recruitersUid`, this._recruitersUid);
+            await appendToDatabase(recruiter._email, await this.getPath(), await recruiter.getUid());
             return 0;
         }
         return -1;
     }
-    public async removeRecruiter(recruiter: Recruiter) {
+    public async removeRecruiter(recruiter: Recruiter, recUid: string) {
         if (await this.exists()) {
-            const recUid = await recruiter.getUid();
-            this._recruitersUid = this._recruitersUid.filter(async (uid) => uid !== recUid)
-            replaceData(await this.getPath(), this);
-            await removeObjectAtPath(await this.getPath() + '/' + await recruiter.getUid());
+            const i = this._recruitersUid.indexOf(recUid);
+            if(i>=0)
+                this._recruitersUid = this._recruitersUid.splice(i,i);
+            replaceData(`${await this.getPath()}/_recruitersUid`, this._recruitersUid);
+            if (recUid.length > 0)
+                await removeObjectAtPath(await this.getPath() + '/' + recUid);
             return 0;
         }
         return -1;
