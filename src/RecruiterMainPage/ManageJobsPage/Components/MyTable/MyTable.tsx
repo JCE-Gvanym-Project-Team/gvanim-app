@@ -1,26 +1,25 @@
 import { Box, Button, Chip, LinearProgress, Stack, SxProps, Theme, Typography, alpha, styled, useTheme } from '@mui/material';
-import
-	{
-		DataGrid,
-		GridColDef,
-		GridColumnHeaders,
-		GridRow,
-		GridToolbarColumnsButton,
-		GridToolbarContainer,
-		GridToolbarDensitySelector,
-		GridToolbarFilterButton,
-		GridToolbarQuickFilter,
-		gridClasses,
-		gridPageCountSelector,
-		gridPageSelector,
-		heIL,
-		useGridApiContext,
-		useGridSelector,
-	} from '@mui/x-data-grid';
+import {
+	DataGrid,
+	GridColDef,
+	GridColumnHeaders,
+	GridRow,
+	GridToolbarColumnsButton,
+	GridToolbarContainer,
+	GridToolbarDensitySelector,
+	GridToolbarFilterButton,
+	GridToolbarQuickFilter,
+	gridClasses,
+	gridPageCountSelector,
+	gridPageSelector,
+	heIL,
+	useGridApiContext,
+	useGridSelector,
+} from '@mui/x-data-grid';
 import * as React from 'react';
 import MyDropMenu from '../MyDropMenu/MyDropMenu';
 
-import { Lock, LockOpen } from '@mui/icons-material';
+import { Lock, LockOpen, ToggleOff, ToggleOn } from '@mui/icons-material';
 import Pagination from '@mui/material/Pagination';
 import PaginationItem from '@mui/material/PaginationItem';
 import { unstable_useForkRef as useForkRef } from '@mui/utils';
@@ -33,25 +32,21 @@ import { MyButtonSx } from './MyTableStyle';
 
 
 // -------------------Use Memorie for better performance----------------------------------------------------
-const TraceUpdates = React.forwardRef<any, any>((props, ref) =>
-{
+const TraceUpdates = React.forwardRef<any, any>((props, ref) => {
 	const { Component, ...other } = props;
 	const rootRef = React.useRef<HTMLElement>();
 	const handleRef = useForkRef(rootRef, ref);
 
-	React.useEffect(() =>
-	{
+	React.useEffect(() => {
 		const root = rootRef.current;
 		root!.classList.add('updating');
 		root!.classList.add('updated');
 
-		const timer = setTimeout(() =>
-		{
+		const timer = setTimeout(() => {
 			root!.classList.remove('updating');
 		}, 360);
 
-		return () =>
-		{
+		return () => {
 			clearTimeout(timer);
 		};
 	});
@@ -59,13 +54,11 @@ const TraceUpdates = React.forwardRef<any, any>((props, ref) =>
 	return <Component ref={handleRef} {...other} />;
 });
 
-const RowWithTracer = React.forwardRef((props, ref) =>
-{
+const RowWithTracer = React.forwardRef((props, ref) => {
 	return <TraceUpdates ref={ref} Component={GridRow} {...props} />;
 });
 
-const ColumnHeadersWithTracer = React.forwardRef((props, ref) =>
-{
+const ColumnHeadersWithTracer = React.forwardRef((props, ref) => {
 	return <TraceUpdates ref={ref} Component={GridColumnHeaders} {...props} />;
 });
 
@@ -193,8 +186,7 @@ const StyledGridOverlay = styled('div')(({ theme }) => ({
 	},
 }));
 
-function CustomNoRowsOverlay()
-{
+function CustomNoRowsOverlay() {
 	return (
 		<StyledGridOverlay>
 			<svg
@@ -342,12 +334,13 @@ const columns: GridColDef[] = [
 	},
 ];
 
-const GridCustomToolbar = () =>
-{
+const GridCustomToolbar = (props: { jobsStatusIsOpen, setJobsStatusIsOpen }) => {
+
+	const { jobsStatusIsOpen, setJobsStatusIsOpen } = props;
+
 	const navigate = useNavigate();
 
-	const handleCreatejob = () =>
-	{
+	const handleCreatejob = () => {
 		navigate("/management/createJob", { state: null });
 	}
 
@@ -364,9 +357,36 @@ const GridCustomToolbar = () =>
 						'& .muirtl-ptiqhd-MuiSvgIcon-root': {
 							color: 'rgba(0, 0, 0, 0.23)'
 						},
-					}} 
+					}}
 					/>
 				</Box>
+				<Box sx={{ display: 'flex', flexDirection: 'row-reverse', width: '100%', justifyContent: "center", alignItems: "center" }}>
+					<Box>
+						<Button onClick={() => {
+							setJobsStatusIsOpen(!jobsStatusIsOpen)
+						}} disableRipple sx={MyButtonSx} style={{
+							justifyContent: "center",
+							alignContent: "center"
+						}}>
+							{jobsStatusIsOpen ?
+								<>
+									<ToggleOn />
+									<Typography sx={{ font: '12px Roboto, Helvetica,Arial, sans-serif', margin: '0px 0px 2px 0px', fontWeight: 600 }}>פתוחות</Typography>
+								</>
+								:
+								<>
+									<ToggleOff />
+									<Typography sx={{ font: '12px Roboto, Helvetica,Arial, sans-serif', margin: '0px 0px 2px 0px', fontWeight: 600 }}>סגורות</Typography>
+								</>
+							}
+						</Button>
+
+					</Box>
+					<Typography>
+						צפייה במשרות:
+					</Typography>
+				</Box>
+
 				<Box sx={{ display: 'flex', flexDirection: 'row-reverse', width: '100%' }}>
 					<Box>
 						<Button onClick={handleCreatejob} disableRipple sx={MyButtonSx}>
@@ -391,15 +411,13 @@ const GridCustomToolbar = () =>
 	);
 };
 
-function getScopeFormated(scope: number[] | null)
-{
+function getScopeFormated(scope: number[] | null) {
 
 	return scope === null ? '0-100' : scope[0].toString() === scope[1].toString() ? scope[0].toString() + '%' : scope[1].toString() + '% - ' + scope[0].toString() + '%';
 
 }
 
-const CustomPaginationAndFooter = () =>
-{
+const CustomPaginationAndFooter = () => {
 	const apiRef = useGridApiContext();
 	const page = useGridSelector(apiRef, gridPageSelector);
 	const pageCount = useGridSelector(apiRef, gridPageCountSelector);
@@ -446,19 +464,34 @@ export default function MyTable() {
 	const [dataloading, setDataLoading] = React.useState(true);
 	const [rows, setRows] = React.useState<Job[]>([]);
 
+	const [jobsStatusIsOpen, setJobsStatusIsOpen] = React.useState(true);
+
 	const navigate = useNavigate();
 
-	const fetchAllJobs = async () =>
-	{
+	const fetchAllJobs = async () => {
 		setDataLoading(true);
 
-		setRows(await getFilteredJobs());
+		if (jobsStatusIsOpen) {
+
+			setRows(await getFilteredJobs(["open"], ["true"]));
+		} else {
+			setRows(await getFilteredJobs(["open"], ["false"]));
+		}
 
 		setDataLoading(false);
 	};
 
-	React.useEffect(() =>
-	{
+	React.useEffect(() => {
+		(async () => {
+			if (jobsStatusIsOpen) {
+				setRows(await getFilteredJobs(["open"], ["true"]));
+			} else {
+				setRows(await getFilteredJobs(["open"], ["false"]));
+			}
+		})()
+	}, [jobsStatusIsOpen]);
+
+	React.useEffect(() => {
 		setPageLoading(false);
 		fetchAllJobs();
 	}, []);
@@ -493,6 +526,9 @@ export default function MyTable() {
 							loadingOverlay: LinearProgress,
 							row: MemoizedRow,
 							columnHeaders: MemoizedColumnHeaders,
+						}}
+						slotProps={{
+							toolbar: { jobsStatusIsOpen: jobsStatusIsOpen, setJobsStatusIsOpen }
 						}}
 					/>
 
