@@ -45,20 +45,6 @@ export default function TabsPane() {
 	const [isAdminUser, setIsAdminUser] = React.useState(false);
 	const [userEmail, setUserEmail] = React.useState('');
 
-	// React.useEffect(() => {
-	// const currentUser = getConnectedUser()
-	// .then((userCredential) => {
-	// if (userCredential?.email != null)
-	// setUserEmail(userCredential?.email);
-	// console.log(userEmail);
-	// if (process.env.REACT_APP_ADMIN_MAIL === userEmail)
-	// setIsAdminUser(true);
-	// })
-	// .catch((error) => {
-	// console.log(error);
-	// });
-	// }, []);
-
 	React.useEffect(() => {
 		const loadUserasync = async () => {
 			const currentUser = getConnectedUser()
@@ -84,10 +70,6 @@ export default function TabsPane() {
 	React.useEffect(() => {
 		setLoading(false);
 	}, []);
-
-
-	// console.log(userEmail);
-	// console.log(isAdminUser);
 
 	return (
 		<>

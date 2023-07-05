@@ -161,7 +161,7 @@ export default function ScheduleInterviewDialog(props: {
         // send whatsapp message
         const link = await candidateJobStatus?.getWhatsappUrl(whatsappMessage);
 
-        console.log(link);
+
 
         window.open(link);
 

@@ -74,7 +74,7 @@ export default function MyTable()
         };
 
         const id = params.row.id;
-        console.log(id);
+
         const action = actions[id];
 
         if (action)

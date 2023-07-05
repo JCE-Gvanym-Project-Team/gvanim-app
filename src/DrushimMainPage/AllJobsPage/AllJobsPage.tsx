@@ -51,24 +51,20 @@ export default function AllJobsPage() {
     }, []);
 
 
-    const handleFilter = async () => {
+    const handleFilter = async (text) => {
+            
         setLoading(true);
 
         setSearch(text);
-        console.log("SearchField: " + text);
-        console.log("LocationField: ");
         locationSelected?.forEach((loc) => console.log(loc?.label));
 
         setLocationFilter(locationSelected);
 
         if (halfScope === true) {
             setScope(50);
-            console.log('half');
         }
-        else { console.log('full'); setScope(100); }
-        console.log("roleField: ");
-
-        roleSelected?.forEach((role) => console.log(role?.label));
+        else { setScope(100); }
+        
         setRoleFilter(roleSelected);
 
         setLoading(false);
@@ -299,7 +295,7 @@ export default function AllJobsPage() {
                                         <Typography variant='subtitle2' sx={{
                                             color: colorMode?.getActualMode()! === 'bright-contrast' ? '#6e86a2' : 'background.JobTitle2',
                                         }}>חיפוש לפי מילה חופשית:</Typography>
-                                        <SearchBar text={text} setText={setText} />
+                                        <SearchBar text={text} setText={setText} handleFilter={handleFilter} />
                                     </Box>
                                     <Divider sx={{ mt: 3.5, mb: 3, backgroundColor: 'primary.filterDivider', borderRadius: 1 }} />
 
@@ -391,7 +387,7 @@ export default function AllJobsPage() {
                                     </Box>
                                     {/* ############################################## */}
                                     <Box sx={{ display: 'flex', justifyContent: 'center', mt: 5, mb: 2 }}>
-                                        <Button onClick={handleFilter} sx={{
+                                        <Button onClick={(event) => handleFilter(text)} sx={{
                                             width: '185px',
                                             height: '40px',
                                             fontWeight: 500,
@@ -456,7 +452,7 @@ export default function AllJobsPage() {
                                                         <Typography variant='subtitle2' sx={{
                                                             color: colorMode?.getActualMode()! === 'bright-contrast' ? '#6e86a2' : 'background.JobTitle2',
                                                         }}>חיפוש לפי מילה חופשית:</Typography>
-                                                        <SearchBar text={text} setText={setText} />
+                                                        <SearchBar text={text} setText={setText} handleFilter={handleFilter}/>
                                                     </Box>
                                                     <Divider sx={{ mt: 3.5, mb: 3, backgroundColor: 'primary.filterDivider', borderRadius: 1 }} />
 
@@ -548,7 +544,7 @@ export default function AllJobsPage() {
                                                     </Box>
                                                     {/* ############################################## */}
                                                     <Box sx={{ display: 'flex', justifyContent: 'center', mt: 5, mb: 2 }}>
-                                                        <Button onClick={handleFilter} sx={{
+                                                        <Button onClick={(event) => handleFilter(text)} sx={{
                                                             width: '185px',
                                                             height: '40px',
                                                             fontWeight: 500,

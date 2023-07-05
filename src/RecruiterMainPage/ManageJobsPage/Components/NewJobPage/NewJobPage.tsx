@@ -70,7 +70,7 @@ const NewJobPage = () =>
 
         if ((state?.job?._scope?.length === 2) && (typeof state?.job?._scope[0] === 'number') && (typeof state?.job?._scope[1] === 'number')) { setJobScope(state?.job?._scope); }
 
-        if (typeof state?.job?._open === 'boolean') { console.log('YES'); setJobOpen(state?.job?._open); }
+        if (typeof state?.job?._open === 'boolean') { setJobOpen(state?.job?._open); }
 
         if (typeof state?.job?._highPriority === 'boolean') { setJobPriority(state?.job?._highPriority); }
 

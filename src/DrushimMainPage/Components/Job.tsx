@@ -11,7 +11,6 @@ const SingleJob = (props: { id: any }) => {
 
     const jobs = await getFilteredJobs();
     let myJob = jobs.filter(job => job._jobNumber === id);
-    console.log(myJob[0]._title);
     setJob(myJob[0]);
   };
 
