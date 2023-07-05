@@ -81,7 +81,8 @@ export class Sector {
     }
     public async removeRecruiter(recruiter: Recruiter) {
         if (await this.exists()) {
-            this._recruitersUid = this._recruitersUid.filter(async (uid) => uid !== (await recruiter.getUid()))
+            const recUid = await recruiter.getUid();
+            this._recruitersUid = this._recruitersUid.filter(async (uid) => uid !== recUid)
             replaceData(await this.getPath(), this);
             await removeObjectAtPath(await this.getPath() + '/' + await recruiter.getUid());
             return 0;
