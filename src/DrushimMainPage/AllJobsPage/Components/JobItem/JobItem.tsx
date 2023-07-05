@@ -1,6 +1,6 @@
-import { Box, Chip, Link, Stack, Typography } from '@mui/material';
+import { Box, Link, Stack, Typography } from '@mui/material';
 import { useNavigate } from "react-router-dom";
-import { NavigateBefore, NewReleases, NewReleasesRounded, NewReleasesTwoTone, Place, PriorityHigh, WatchLater } from '@mui/icons-material';
+import { NavigateBefore, NewReleases,Place, WatchLater } from '@mui/icons-material';
 import { ColorModeContext } from '../../../theme';
 import React from 'react';
 
@@ -16,7 +16,7 @@ export default function JobItem(props: { job: any }) {
     return (
         <Stack direction='row-reverse'>
             <Box borderTop={`5px solid`} id='JobCard' sx={{
-                width: { xs: '100%', sm: '100%', md: '521px' },
+                width: '100%',
                 borderRadius: '0px 0px 10px 10px',
                 boxShadow: '0px 3px 10px',
                 color: 'primary.myBoxShadow',
@@ -73,8 +73,8 @@ export default function JobItem(props: { job: any }) {
                     marginTop: '48px',
                     ml: { xs: 0, sm: 0, md: '-10px', lg: '-15px' },
                     mr: { xs: '50px', sm: '50px', md: '100px' },
-                    width: 'fit-content'
-
+                    width: 'fit-content',
+                    maxWidth: '90%'
                 }}>
 
                     <Typography variant='body1' sx={{
