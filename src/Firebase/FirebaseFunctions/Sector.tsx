@@ -15,8 +15,8 @@ export class Sector {
      * @returns {Promise<string>} - The path of the current stage in the Firebase database.
      */
     public async getPath() {
-        if ((await getFirebaseIdsAtPath('/Sectors')).includes(this._name))
-            return "/Sectors/" + this._name;
+        if ((await getFirebaseIdsAtPath('/Sectors')).includes(this._name.replace('/', '_')))
+            return "/Sectors/" + this._name.replace('/', '_');
         return "";
     }
     /**
@@ -40,7 +40,7 @@ export class Sector {
         recs = recs.filter((rec) => rec._sectors.includes(this._name));
         for (let i = 0; i < recs.length; i++)
             recs.at(i)?.removeSector(this._name);
-        removeObjectAtPath("/Sectors/" + this._name);
+        removeObjectAtPath(await this.getPath());
         return 0;
 
     }
@@ -65,7 +65,7 @@ export class Sector {
      */
     public async add() {
         if (!(await this.exists())) {
-            appendToDatabase(this, "/Sectors", this._name);
+            appendToDatabase(this, "/Sectors", this._name.replace('/', '_'));
             return 0;
         }
         return 1;
@@ -82,7 +82,7 @@ export class Sector {
     public async removeRecruiter(recruiter: Recruiter) {
         if (await this.exists()) {
             this._recruitersUid = this._recruitersUid.filter(async (uid) => uid !== (await recruiter.getUid()))
-            replaceData(`/Sectors/${this._name}`, this);
+            replaceData(await this.getPath(), this);
             await removeObjectAtPath(await this.getPath() + '/' + await recruiter.getUid());
             return 0;
         }
