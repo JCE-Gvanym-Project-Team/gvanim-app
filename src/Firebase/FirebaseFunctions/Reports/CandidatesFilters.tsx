@@ -55,10 +55,14 @@ export default async function CandidatesByFilters(status: string, timeOnStatus: 
         const millisecondsInWeek = 7 * 24 * 60 * 60 * 1000;
         const millisecondsInMonth = 30 * 24 * 60 * 60 * 1000;
 
+        console.log(differenceInMilliseconds);
+        console.log(millisecondsInWeek);
+        console.log(timeOnStatus);
+
         let promise = helperFilteredCandidate(candidate_job_status, job, role, sector, status, differenceInMilliseconds, selectGarde, selectInterviewDate);
-        if (timeOnStatus === 'שבוע' && differenceInMilliseconds <= millisecondsInWeek)
+        if (timeOnStatus === 'עד שבוע' && differenceInMilliseconds <= millisecondsInWeek)
           promises.push(promise);
-        else if (timeOnStatus === 'חודש' && differenceInMilliseconds <= millisecondsInMonth && differenceInMilliseconds >= millisecondsInWeek)
+        else if (timeOnStatus === 'עד חודש' && differenceInMilliseconds <= millisecondsInMonth && differenceInMilliseconds >= millisecondsInWeek)
           promises.push(promise);
         else if (timeOnStatus == 'כל זמן')
           promises.push(promise);
