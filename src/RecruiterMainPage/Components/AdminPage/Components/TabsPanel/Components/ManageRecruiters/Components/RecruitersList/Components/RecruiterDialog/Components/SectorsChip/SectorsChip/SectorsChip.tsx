@@ -25,13 +25,7 @@ export default function SectorChips(props: {
 }) {
   const { allSectors, setListToShow, listToShow, setSaveButton } = props;
   const [selectNow, setSelectNow] = React.useState<string[]>([]);
-  // const [listToShow, setListToShow] = React.useState<string[]>([]);
-// 
-  // React.useEffect(() => {
-    // setListToShow(recruiterCurentSectors);
-  // }, []);
-// 
-  // console.log("listToShow: " + listToShow);
+
 
 
   const handleChange = async (event: SelectChangeEvent<typeof allSectors>) => {

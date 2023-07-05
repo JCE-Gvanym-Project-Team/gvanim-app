@@ -4,12 +4,14 @@ import { SearchRounded } from '@mui/icons-material';
 import React from 'react';
 import { ColorModeContext } from '../../../theme';
 
-export default function SearchBar(props: { text: string, setText: any }) {
-  const { text, setText } = props;
+export default function SearchBar(props: { text: string, setText: any, handleFilter }) {
+  const { text, setText, handleFilter } = props;
 
   const colorMode = React.useContext(ColorModeContext);
 
   const handleText = (event) => {
+    event.preventDefault();
+    handleFilter(event.target.value);
     setText(event.target.value);
   };
 
@@ -29,7 +31,7 @@ export default function SearchBar(props: { text: string, setText: any }) {
 
 
           <InputBase
-          
+
             sx={{
               fontSize: 'large',
               flex: 1, ml: 1.5, color: colorMode?.getActualMode()! === 'bright-contrast' ? '#6e86a2' : 'background.JobTitle2',
@@ -41,6 +43,7 @@ export default function SearchBar(props: { text: string, setText: any }) {
                 },
               },
             }}
+            onKeyDown={e => e.key === 'Enter' && e.preventDefault()}
             placeholder='כתבו כאן...'
             inputProps={{ 'aria-label': 'search' }}
             value={text}
@@ -54,7 +57,7 @@ export default function SearchBar(props: { text: string, setText: any }) {
           height: '1.5px',
           borderRadius: 2,
           opacity: 1,
-          
+
         }} />
       </Box>
 
