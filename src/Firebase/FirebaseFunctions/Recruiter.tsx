@@ -72,6 +72,7 @@ export class Recruiter {
 			return 0;
 		}
 		await appendToDatabase(this, "/Recruiters", this._id);
+		this._sectors.forEach((sec)=> this.addSector(sec));
 	}
 	private async createUser(pass: string): Promise<string> {
 		return new Promise<string>((resolve, reject) => {
