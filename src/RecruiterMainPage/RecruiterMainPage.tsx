@@ -1,7 +1,7 @@
 import { CssBaseline } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Link, Route, Routes } from "react-router-dom";
-import SingleJob from "../DrushimMainPage/Components/Job";
+
 import
   {
     Candidate,
@@ -52,13 +52,6 @@ function RecruiterMainPage({ handlelogout }) {
         <Link key={job.id} to={"/management/jobs/" + job.id} />
       ))}
       <Routes>
-        {allJobs.map((job) => (
-          <Route
-            path={`jobs/${job.id}`}
-            key={job.id}
-            element={<SingleJob id={job.id}></SingleJob>}
-          />
-        ))}
 
         <Route path="" element={<WelcomePage />} />
         {/* Jobs Routes */}

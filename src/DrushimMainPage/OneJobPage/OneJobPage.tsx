@@ -52,7 +52,6 @@ export default function OneJobPage()
     {
         if ((reason && reason !== "backdropClick" && reason !== "clickaway") || reason === undefined)
         {
-            console.log(sendDataToAllJobsPage);
             if (sendDataToAllJobsPage)
             {
                 const state = {
@@ -186,7 +185,6 @@ export default function OneJobPage()
         if (platform)
         {
             job?.incrementViews(platform);
-            console.log(job?._viewsPerPlatform!);
         }
     }, [window.location.href])
 

@@ -59,8 +59,7 @@ export default function MultipleSectorSelect(props: {recruiterSectors: string[],
 
   React.useEffect(() => {
     // fetchSectors();
-    console.log('here');
-    console.log(recruiterSectors);
+
   }, []);
 
   return (

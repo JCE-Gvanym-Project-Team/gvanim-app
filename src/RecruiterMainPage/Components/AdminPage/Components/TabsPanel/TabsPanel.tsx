@@ -12,15 +12,13 @@ import RessetPassword from '../TabsPanel/Components/ResetPassword/ResetPassword'
 import ManageFields from './Components/ManageFields/ManageFields';
 import Temp from './Components/ManageRecruiters/Components/RecruitersList/Temp';
 
-interface TabPanelProps
-{
+interface TabPanelProps {
 	children?: React.ReactNode;
 	index: number;
 	value: number;
 }
 
-const TabPanel: React.FC<TabPanelProps> = ({ children, value, index }) =>
-{
+const TabPanel: React.FC<TabPanelProps> = ({ children, value, index }) => {
 	return (
 		<div
 			role="tabpanel"
@@ -34,71 +32,44 @@ const TabPanel: React.FC<TabPanelProps> = ({ children, value, index }) =>
 	);
 };
 
-function a11yProps(index: number)
-{
+function a11yProps(index: number) {
 	return {
 		id: `simple-tab-${index}`,
 		'aria-controls': `simple-tabpanel-${index}`,
 	};
 }
 
-export default function TabsPane()
-{
+export default function TabsPane() {
 	const [loading, setLoading] = React.useState(true);
 	const [value, setValue] = React.useState(0);
 	const [isAdminUser, setIsAdminUser] = React.useState(false);
 	const [userEmail, setUserEmail] = React.useState('');
 
-	// React.useEffect(() => {
-	// const currentUser = getConnectedUser()
-	// .then((userCredential) => {
-	// if (userCredential?.email != null)
-	// setUserEmail(userCredential?.email);
-	// console.log(userEmail);
-	// if (process.env.REACT_APP_ADMIN_MAIL === userEmail)
-	// setIsAdminUser(true);
-	// })
-	// .catch((error) => {
-	// console.log(error);
-	// });
-	// }, []);
-
-	React.useEffect(() =>
-	{
-		const loadUserasync = async () =>
-		{
+	React.useEffect(() => {
+		const loadUserasync = async () => {
 			const currentUser = getConnectedUser()
-				.then(async (userCredential) =>
-				{
+				.then(async (userCredential) => {
 					if (userCredential?.email != null)
 						setUserEmail(userCredential?.email);
 
-					if (await isAdmin(userCredential?.uid!))
-					{
+					if (await isAdmin(userCredential?.uid!)) {
 						setIsAdminUser(true);
 					}
 				})
-				.catch((error) =>
-				{
+				.catch((error) => {
 					console.log(error);
 				});
 		}
 		loadUserasync();
 	}, [userEmail]);
 
-	const handleChange = (event: React.SyntheticEvent, newValue: number) =>
-	{
+	const handleChange = (event: React.SyntheticEvent, newValue: number) => {
 		setValue(newValue);
 	};
 
-	React.useEffect(() =>
-	{
+	React.useEffect(() => {
 		setLoading(false);
 	}, []);
-
-
-	// console.log(userEmail);
-	// console.log(isAdminUser);
 
 	return (
 		<>
@@ -123,12 +94,12 @@ export default function TabsPane()
 									<Tab disableRipple icon={<PeopleAltOutlined />} {...a11yProps(1)} />
 								</Tooltip>
 
-								<Tooltip title={'אשכולות ותפקידים'}>
-									<Tab disableRipple icon={<AccountTree />} {...a11yProps(2)} />
-								</Tooltip>
 
 							</Box>
 						)}
+						<Tooltip title={'אשכולות ותפקידים'}>
+							<Tab disableRipple icon={<AccountTree />} {...a11yProps(2)} />
+						</Tooltip>
 
 					</Tabs>
 
@@ -145,10 +116,8 @@ export default function TabsPane()
 							<Tab disableRipple label="ניהול מגייסים" value={1} {...a11yProps(1)} />
 
 						)}
-
-						{isAdminUser && (
-							<Tab disableRipple label="אשכולות ותפקידים" value={2} {...a11yProps(2)} />
-						)}
+						
+						<Tab disableRipple label="אשכולות ותפקידים" value={2} {...a11yProps(2)} />
 					</Tabs>
 
 					<TabPanel value={value} index={0}>

@@ -98,7 +98,6 @@ export default function CandidateFiltersForm() {
             })
             .catch((error) => {
                 setLoading(false);
-                console.log(error);
             });
     }
 

@@ -52,10 +52,10 @@ export class Job {
         this._viewsPerPlatform = viewsPerPlatform;
         this._applyPerPlatform = applyPerPlatform;
         const defaultDate = new Date(0, 0, 0);
-        if (creationDate === defaultDate)
+        if (creationDate.getFullYear() === defaultDate.getFullYear())
             this._creationDate = (new Date()).toString();
         else
-            this._creationDate = creationDate.toString();
+            this._creationDate = creationDate.toString();   
         this._jobNumber = jobNumber;
         this._startOn = startOn;
     }
@@ -310,7 +310,7 @@ export async function getFilteredJobs(attributes: string[] = [], values: string[
                     job._highPriority,
                     job._viewsPerPlatform,
                     job._applyPerPlatform,
-                    job._creationDate,
+                    new Date(job._creationDate),
                     job._startOn
                 )));
             })

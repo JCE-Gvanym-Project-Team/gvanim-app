@@ -132,7 +132,7 @@ export default function JobsFiltersForm() {
             alert('יש למלא את כל השדות');
             return;
         }
-        console.log("sectorName: " + sectorName);
+
         const scopeArr = [[0, 25], [25, 50], [50, 75], [100, 100], [1]]; // [1] mean evry scope of jobs
         const choice = ["true", "false"];
         const scope = scopeArr[Math.floor(scope_ind / 10) - 1];

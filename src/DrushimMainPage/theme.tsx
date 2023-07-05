@@ -1,7 +1,7 @@
 import { createTheme } from "@mui/material/styles";
 import { createContext, useMemo, useState } from "react";
 
-const MAX_FONT_SIZE = 40;
+const MAX_FONT_SIZE = 35;
 const MIN_FONT_SIZE = 12;
 
 // colors based on mode
@@ -86,7 +86,7 @@ export const colorTokens = (mode) => {
                 drushimTitle: '#41C2F0', // author: omer
                 divider: '#D5D5D5', // author: omer
                 filterBar: '#FAFAFA', // author: omer
-                filterButton: '#EDDBBB', // author: omer
+                filterButton: '#DDBB7F', // author: omer
                 visitJobButton: '#86bac0', // author: omer, hover: 'secondary'
                 // drushimTitleContainer: ''
                 // jobDetails: '#485564',
@@ -104,7 +104,7 @@ export const colorTokens = (mode) => {
                 drushimTitleContainer: '#00000029',
                 jobScopeButton: '#D5D5D5', // hover (author: omer)
                 visitJobButton: '#afd1d5', // hover (author: omer)
-                filterButton: '#f4e7d1', // hover (author: omer)
+                filterButton: '#EDDBBB', // hover (author: omer)
                 drushimTitle: '#053B7A', // author: omer
 
 
@@ -139,7 +139,7 @@ export const colorTokens = (mode) => {
         return {
             primary: {
                 main: "#FFFFFF",
-                textBright: "#FFFFFF",
+                textBright: "#b2d0ec",
                 faded: "#ffffff",
                 jobTitle: "#6cadf9",
                 descAndReqTitle: "#bdd9dd",
@@ -334,7 +334,7 @@ export const themeSettings = (mode, actualMode, fontSize, fontFamily) => {
             h1: {
                 fontWeight: "Medium",
                 fontFamily: fontFamily,
-                fontSize: fontSize + 30
+                fontSize: fontSize + 16
             },
             h2: {
                 fontWeight: "Medium",
@@ -367,6 +367,7 @@ export const themeSettings = (mode, actualMode, fontSize, fontFamily) => {
                 fontFamily: fontFamily,
                 fontSize: fontSize - 2
             }
+
         }
     }
 }

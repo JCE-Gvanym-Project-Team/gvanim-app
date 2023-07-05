@@ -264,7 +264,7 @@ export class CandidateJobStatus {
         const cand = (await getFilteredCandidates(["id"], [this._candidateId])).at(0);
         if (cand) {
             if (text.length > 0)
-                return `https://api.whatsapp.com/send?phone=972${cand._phone}&text=${text.replace(' ','%20').replace('\n','%0A')}`;
+                return `https://api.whatsapp.com/send?phone=972${cand._phone}&text=${text.replaceAll(' ','%20').replaceAll('\n','%0A')}`;
         }
         return "";
     }
@@ -273,21 +273,10 @@ export class CandidateJobStatus {
 //["הוגשה מועמדות","זומן לראיון ראשון","עבר ראיון ראשון","זומן לראיון שני","עבר ראיון שני","התקבל","הועבר למשרה אחרת","נדחה","הפסיק את התהליך"];
 //       8               7                  6         5          4                      3                  2                  1                  0
 export function getMessage(cand: Candidate, job: Job, rec: Recruiter, status: string, interviewDate: Date = new Date(0, 0, 0), place: string = "") {
-    if (!allStatus.includes(status) || status === allStatus[0] || status === allStatus[2] || status === allStatus[4] || status === allStatus[8])
-        return "";
-    let message = `${cand._firstName} `;
-    message += 'שלום';
-    message += '\n';
-    message += 'שמי';
-    message += ' ';
-    message += `${rec._firstName}`;
-    message += ", ";
-    message += "מעמותת גוונים";
-    message += "."
-    message += '\n';
-    message += "ברצוני לעדכן אותך על מועמדותך למשרה: ";
-    message += `${job._title}\n`;
+    if(status === allStatus[7])
+        return `שלום ${cand._firstName},\nבהמשך לראיון שערכנו עמך, אנו רוצים להודות לך על הזמן שהקדשת.\nהתרשמנו ממך ומכישוריך, אך בסופו של דבר הוחלט להתקדם עם מועמדים אחרים.\nאנו מאחלים לך הצלחה רבה!\nצוות עמותת גוונים`
     if (interviewDate !== (new Date(0, 0, 0)) && (status === allStatus[1] || status === allStatus[3])) {
+        let message = `שלום ${cand._firstName},\n התרשמנו מקורות החיים שהגשת למשרה: ${job._title}.\n`
         message += "נשמח לקבוע עמך ראיון בתאריך ";
         message += `${interviewDate.getDate()}/${interviewDate.getMonth() + 1}\n`;
         message += "בשעה:";
@@ -296,17 +285,9 @@ export function getMessage(cand: Candidate, job: Job, rec: Recruiter, status: st
         message += "שייתקיים ב";
         message += `${place}.\n`;
         message += `אנא אשר הגעתך לראיון`;
+        return message;
     }
-    if (status === allStatus[5]) {
-        message += "עמותת גוונים שמחה להודיע לך על קבלתך למשרה"
-    }
-    if (status === allStatus[7]) {
-        message += "לצערנו לא נמשיך עמך בתהליך הגיוס";
-    }
-    if (status === allStatus[6]) {
-        message += "לאחר בחינת קורות החיים שלך ואת תהליך הגיוס שעברת הוחלט לנתב אותך למשרה אחרת, נשלח פרטים נוספים בקרוב.";
-    }
-    return message;
+    return "";
 }
 export async function getAllRejectCause() {
     return Array.from(new Set((await getFilteredCandidateJobStatuses()).map((s)=>s._rejectCause)));

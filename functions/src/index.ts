@@ -54,6 +54,9 @@ async function getFilteredJobs(
     return [];
   }
   const jobsSnapshot = await admin.database().ref("Jobs/").once("value");
+  if (!(await jobsSnapshot.exists())) {
+    return [];
+  }
   const jobsData = jobsSnapshot.val();
 
   let jobs: Job[] = Object.values(jobsData).map((job: any) => ({
@@ -310,8 +313,10 @@ async function getFilteredCandidates(
   }
   const candidatesSnapshot =
   await admin.database().ref("Candidates/").once("value");
+  if (!(await candidatesSnapshot.exists())) {
+    return [];
+  }
   const candsData = candidatesSnapshot.val();
-
   let candidates: Candidate[] = Object.values(candsData).map((cand: any) => ({
     _id: cand._id,
     _firstName: cand._firstName,
@@ -460,6 +465,9 @@ async function getCandidatesByIds(
   : Promise<Candidate[]> {
   const candidatesSnapshot =
   await admin.database().ref("Candidates/").once("value");
+  if (!(await candidatesSnapshot.exists())) {
+    return [];
+  }
   const candsData = candidatesSnapshot.val();
 
   const candidates: Candidate[] = Object.values(candsData).map((cand: any) => ({
@@ -524,6 +532,9 @@ async function getFilteredCandidatesJobStatus(
   }
   const candidatesJobStatusSnapshot =
   await admin.database().ref("/CandidatesJobStatus").once("value");
+  if (!(await candidatesJobStatusSnapshot.exists())) {
+    return [];
+  }
   const candsStatusData = candidatesJobStatusSnapshot.val();
 
   let cjs: CandidateJobStatus[] = Object.
