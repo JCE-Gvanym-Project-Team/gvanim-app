@@ -69,10 +69,10 @@ export class Recruiter {
 				return -1;
 			await appendToDatabase(uid, "/RecUid", this._id);
 			await appendToDatabase(this, '/Recruiters',this._id);
-			return 0;
 		}
 		await appendToDatabase(this, "/Recruiters", this._id);
 		this._sectors.forEach((sec)=> this.addSector(sec));
+		return 0;
 	}
 	private async createUser(pass: string): Promise<string> {
 		return new Promise<string>((resolve, reject) => {
@@ -101,14 +101,14 @@ export class Recruiter {
 	 * @returns None
 	 */
 	public async addSector(sector: string) {
+		if(!(await this.exists()))
+			return -1;
 		let sectObj = new Sector(sector, true);
 		if (!(await sectObj.exists())) {
 			return -1;
 		}
 		if (!this._sectors.includes(sector))
 			this._sectors.push(sector);
-		else
-			return 1;
 		replaceData(await this.getPath(), this);
 		const sectors = await getAllSectors();
 		for (let i = 0; i < sectors.length; i++) {
