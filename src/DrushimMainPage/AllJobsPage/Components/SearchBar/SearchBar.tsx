@@ -43,6 +43,7 @@ export default function SearchBar(props: { text: string, setText: any, handleFil
                 },
               },
             }}
+            onKeyDown={e => e.key === 'Enter' && e.preventDefault()}
             placeholder='כתבו כאן...'
             inputProps={{ 'aria-label': 'search' }}
             value={text}
