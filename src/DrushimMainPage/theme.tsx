@@ -1,7 +1,7 @@
 import { createTheme } from "@mui/material/styles";
 import { createContext, useMemo, useState } from "react";
 
-const MAX_FONT_SIZE = 40;
+const MAX_FONT_SIZE = 35;
 const MIN_FONT_SIZE = 12;
 
 // colors based on mode
@@ -139,7 +139,7 @@ export const colorTokens = (mode) => {
         return {
             primary: {
                 main: "#FFFFFF",
-                textBright: "#FFFFFF",
+                textBright: "#b2d0ec",
                 faded: "#ffffff",
                 jobTitle: "#6cadf9",
                 descAndReqTitle: "#bdd9dd",
@@ -334,7 +334,7 @@ export const themeSettings = (mode, actualMode, fontSize, fontFamily) => {
             h1: {
                 fontWeight: "Medium",
                 fontFamily: fontFamily,
-                fontSize: fontSize + 30
+                fontSize: fontSize + 16
             },
             h2: {
                 fontWeight: "Medium",
@@ -367,6 +367,7 @@ export const themeSettings = (mode, actualMode, fontSize, fontFamily) => {
                 fontFamily: fontFamily,
                 fontSize: fontSize - 2
             }
+
         }
     }
 }
