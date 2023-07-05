@@ -11,7 +11,7 @@ import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import CandidatesByFilters from '../../../../Firebase/FirebaseFunctions/Reports/CandidatesFilters';
 import { exportToExcel } from '../../../../Firebase/FirebaseFunctions/Reports/GlobalFunctions';
-import { getAllRoles, getAllSectors } from '../../../../Firebase/FirebaseFunctions/functionIndex';
+import { Candidate, getAllRoles, getAllSectors, getFilteredCandidateJobStatuses, getFilteredCandidates } from '../../../../Firebase/FirebaseFunctions/functionIndex';
 import { BoxGradientSx, MyPaperSx } from '../../../ManageJobsPage/Components/NewJobPage/NewJobStyle';
 import { designReturnButton } from '../../../ManageJobsPage/ManageJobsPageStyle';
 import { MyReportStyle, radioStyle } from '../../ReportPageStyle';
@@ -36,7 +36,7 @@ export default function CandidateFiltersForm() {
 
     React.useEffect(() => {
         const fileData = async () => {
-            // --- sectors         
+            // ---update sectors         
             let i = 20;
             const sectorsFromDb = await getAllSectors();
             let updatedSectors = [{ id: 10, name: 'כל האשכולות' }];
@@ -50,7 +50,7 @@ export default function CandidateFiltersForm() {
             );
             setSectors(updatedSectors);
 
-            // ---- roles
+            // ----update roles
             const rolesFromDb = await getAllRoles();
             i = 20;
             let updatedRoles = [{ id: 10, name: "כל התפקידים" }];
@@ -102,7 +102,7 @@ export default function CandidateFiltersForm() {
         setSelectStatus(event.target.value);
     }
 
-    function handleChangeTimeInStatus(event: SelectChangeEvent<string>, child: React.ReactNode): void {
+    async function handleChangeTimeInStatus(event: SelectChangeEvent<string>, child: React.ReactNode): Promise<void> {
         setTimeOnStatus(event.target.value);
     }
 
@@ -125,13 +125,13 @@ export default function CandidateFiltersForm() {
     const handleChangeStartDate = (date) => {
         setStartDate(date);
     };
-
+    
     const handleChangeEndDate = (date) => {
         setEndDate(date);
     };
-
+    
     const navigate = useNavigate();
-
+    
     const handleClick = () => {
         navigate("/management/reports");
     };
@@ -279,9 +279,10 @@ export default function CandidateFiltersForm() {
                                     </FormControl>
 
                                     <br />
-                                    {/* זמן שהוא על הסטטוס הנוכחי*/}
+
+                                    {/* time on status*/}
                                     <FormControl fullWidth>
-                                        <InputLabel id="demo-simple-select-label">בחירת הזמן שהוא על הסטטוס הנוכחי</InputLabel>
+                                        <InputLabel id="demo-simple-select-label">מועמדים שתקועים על הסטטוס שלהם במשך:</InputLabel>
                                         <Select
                                             labelId="demo-simple-select-label"
                                             id="demo-simple-select"
@@ -289,15 +290,15 @@ export default function CandidateFiltersForm() {
                                             label="timeOnStatus"
                                             onChange={handleChangeTimeInStatus}
                                         >
-                                            <MenuItem value={'עד שבוע'}>עד שבוע</MenuItem>
-                                            <MenuItem value={'עד חודש'}>עד חודש</MenuItem>
-                                            <MenuItem value={'כל זמן'}>כל זמן</MenuItem>
+                                            <MenuItem value={'עד שבוע'}>לא השתנה עד יום עד שבוע</MenuItem>
+                                            <MenuItem value={'עד חודש'}> לא השתנה משבוע עד חודש</MenuItem>
+                                            <MenuItem value={'כל זמן'}>לא משנה לי, תכלול את כולם</MenuItem>
                                         </Select>
                                     </FormControl>
 
                                     <br />
 
-                                    {/* אשכול*/}
+                                    {/* sector*/}
                                     <FormControl fullWidth>
                                         <InputLabel id="demo-simple-select-label">בחירת אשכול</InputLabel>
                                         <Select
@@ -322,8 +323,8 @@ export default function CandidateFiltersForm() {
                                         <Select
                                             labelId="demo-simple-select-label"
                                             id="demo-simple-select"
-                                            value={selectedRole} // שנה את הערך של value ל-rejectionCause
-                                            label="rejectionCause" // שנה את הערך של label ל-rejectionCause
+                                            value={selectedRole} 
+                                            label="rejectionCause" 
                                             onChange={handleChangeRole}
                                         >
                                             {roles.map((role) => (
@@ -397,48 +398,9 @@ export default function CandidateFiltersForm() {
                     <ArrowForwardIosIcon></ArrowForwardIosIcon>
                     חזור
                 </Button>
+
             </Box>
         </>
     );
-}
-
-
-
-export async function main() {
-    // loginAdmin().then(async () => {
-    //     // 
-    //     // let jobstatus1 = new CandidateJobStatus(109, "28", "נדחה",  "לא מתאים לגוונים בגלל..", 1,  new Date(2023, 4, 1),new Date(2023, 5, 1), new Date(0, 0, 0), ["ded", "ded"], [], "פערים על היקף משרה"  );
-    //     // let jobstatus2 = new CandidateJobStatus(102, "28", "עבר ראיון ראשון",  "בחור מצוין", 4,  new Date(2023, 4, 1), new Date(2023, 4, 5), new Date(2023, 6, 25), ["ed", "ed"], [], "" );
-    //     // let jobstatus3 = new CandidateJobStatus(94, "53", "התקבל",  "בחור מצוין", 5,  new Date(2023, 4, 1), new Date(2023, 8, 1), new Date(2023, 6, 25), ["ed", "ed"], [], "" );
-    //     // let jobstatus4 = new CandidateJobStatus(91, "66", "הודשה מועמדות",  "בחור מצוין", 4,  new Date(2023, 4, 1), new Date(2023, 4, 17), new Date(2023, 6, 25), ["ed", "ed"], [], "" );
-    //     //let jobstatus5 = new CandidateJobStatus(76, "28", "זומן לראיון ראשון", "", 0, new Date(), new Date(2023, 5, 1), new Date(0, 0, 0), ["ed", "ed"], [], "");
-    //     //await jobstatus5.add();
-    //     // await jobstatus5.remove();
-    //     // jobstatus2.add();
-    //     // jobstatus3.add();
-    //     // jobstatus4.add();
-
-    //     // const viewsPerPlatform = new Map<string, number>();
-    //     // viewsPerPlatform.set("פייסבוק", 23);
-    //     // viewsPerPlatform.set("ווצאפ", 12);
-    //     // viewsPerPlatform.set("דרושים", 90);
-    //     // const applyPerPlatform = new Map<string, number>();
-    //     // applyPerPlatform.set("פייסבוק", 12);
-    //     // applyPerPlatform.set("ווצאפ", 12);
-    //     // applyPerPlatform.set("דרושים", 12);
-    //     // const job = new Job(23,"","",[0,0],"","",[""],"",true,false,new Map<string, number>(),new Map<string, number>(),new Date(2022,1,1));
-    //     // job.add(); 
-    //     //  let job1 = new Job(await generateJobNumber(), "דרוש מנהל", "מנהל", [0,100], "שדרות", "דרום", [""], "", true, true,viewsPerPlatform,applyPerPlatform, new Date(2023, 4, 1) );
-    //     //  let job2 = new Job(await generateJobNumber(), "דרוש עובד סוצאלי", "עובד סוציאלי", [0,100], "חיפה", "צפון",  [""], "", true, true,viewsPerPlatform,applyPerPlatform, new Date(2023, 4, 1));
-    //     //  let job3 = new Job(await generateJobNumber(), "דרושה מנהלת ", "מנהלת", [0,100], "ירושלים", "מרכז",  [""], "", true, true,viewsPerPlatform,applyPerPlatform, new Date(2023, 4, 1));
-    //     //  let job4 = new Job(await generateJobNumber(), "דרוש עובד סוצאלי ", "עובד סוציאלי", [0,100], "רמת גן", "מרכז", [""], "", true, true,viewsPerPlatform,applyPerPlatform, new Date(2023, 4, 1));
-    //     //  let job5 = new Job(await generateJobNumber(), "דרוש מתנדב ", "מתנדב", [0,100], "מודיעין", "מרכז" , [""], "", true, true,viewsPerPlatform,applyPerPlatform, new Date(2023, 4, 1));
-    //     //  job1.add();
-    //     //  job2.add();
-    //     //  job3.add();
-    //     //  job4.add();
-    //     //  job5.add();
-    //     await console.log((await getFilteredCandidateJobStatuses()));
-    // });
 }
 
