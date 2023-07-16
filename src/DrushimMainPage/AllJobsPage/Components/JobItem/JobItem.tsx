@@ -102,7 +102,7 @@ export default function JobItem(props: { job: any }) {
                         ml: 0.25
                     }}
                     >
-                        {job?._requirements}
+                        {job?._description}
                     </Typography>
 
                     <Stack direction='row' spacing={1.5} justifyContent='start' sx={{ mt: 4 }}>
