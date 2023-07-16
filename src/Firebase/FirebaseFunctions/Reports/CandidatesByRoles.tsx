@@ -12,7 +12,6 @@ const Chart = () => {
   useEffect(() => {
     async function fetchData() {
       const filteredJobs = await getFilteredJobs(['open'], ['true']);
-      
       const candidatesByRole: { [role: string]: number } = {};
 
       for (let i = 0; i < filteredJobs.length; i++) {
