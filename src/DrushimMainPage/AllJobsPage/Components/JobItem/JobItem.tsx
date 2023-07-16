@@ -1,12 +1,14 @@
 import { Box, Link, Stack, Typography } from '@mui/material';
 import { useNavigate } from "react-router-dom";
-import { NavigateBefore, NewReleases,Place, WatchLater } from '@mui/icons-material';
+import { NavigateBefore, NewReleases, Place, WatchLater } from '@mui/icons-material';
 import { ColorModeContext } from '../../../theme';
 import React from 'react';
+import { Job } from '../../../../Firebase/FirebaseFunctions/Job';
 
 
 
-export default function JobItem(props: { job: any }) {
+export default function JobItem(props: { job: Job })
+{
     const { job } = props;
 
     const navigate = useNavigate();
@@ -24,7 +26,7 @@ export default function JobItem(props: { job: any }) {
                 textAlign: 'center',
             }}>
                 <Stack direction='row' justifyContent='end' display={{ xs: job?._highPriority ? 'flex' : 'none' }}>
-                    <Box paddingTop={{xs: 2 ,sm: 2.5}} paddingRight={1} sx={{ position: 'absolute' }}>
+                    <Box paddingTop={{ xs: 2, sm: 2.5 }} paddingRight={1} sx={{ position: 'absolute' }}>
                         <Stack spacing={0.5} direction='row' justifyContent='center' alignItems='center'
                             sx={{
                                 borderRadius: 0.5,
@@ -33,15 +35,15 @@ export default function JobItem(props: { job: any }) {
                                 paddingLeft: 0.5,
                                 paddingTop: 0.2,
                                 paddingBottom: 0.2,
-                                backgroundColor: 
-                                colorMode?.getActualMode()! === 'bright-contrast'
-                                ? '#ddbb7f'
-                                : 'primary.filterButton',
+                                backgroundColor:
+                                    colorMode?.getActualMode()! === 'bright-contrast'
+                                        ? '#ddbb7f'
+                                        : 'primary.filterButton',
                                 transform: 'rotate(-20deg)',
 
                             }} >
 
-                            <Typography fontSize={{xs: 11, sm: 12}} sx={{
+                            <Typography fontSize={{ xs: 11, sm: 12 }} sx={{
                                 color:
                                     colorMode?.getActualMode()! === 'dark-contrast'
                                         ? '#000000'
@@ -102,7 +104,17 @@ export default function JobItem(props: { job: any }) {
                         ml: 0.25
                     }}
                     >
-                        {job?._description}
+                        {
+                            job?._description[0].split("\n").map((word) =>
+                            {
+                                return (
+                                    <>
+                                        {word}
+                                        <br />
+                                    </>
+                                )
+                            })
+                        }
                     </Typography>
 
                     <Stack direction='row' spacing={1.5} justifyContent='start' sx={{ mt: 4 }}>
