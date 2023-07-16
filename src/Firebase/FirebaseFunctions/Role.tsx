@@ -12,8 +12,8 @@ import { appendToDatabase, getFirebaseIdsAtPath, removeObjectAtPath, replaceData
      * @returns {Promise<string>} - The path of the current job in the Firebase database.
      */
     public async getPath() {
-        if ((await getFirebaseIdsAtPath('/Roles')).includes(this._name.replace('/','_')))
-            return "/Roles/" + this._name.replace('/', '_');
+        if ((await getFirebaseIdsAtPath('/Roles')).includes(this._name.replaceAll('/','_')))
+            return "/Roles/" + this._name.replaceAll('/', '_');
         return "";
     }
     /**
@@ -54,7 +54,7 @@ import { appendToDatabase, getFirebaseIdsAtPath, removeObjectAtPath, replaceData
      */
     public async add() {
         if (!(await this.exists())){
-            appendToDatabase(this, "/Roles", this._name.replace('/', '_'));
+            appendToDatabase(this, "/Roles", this._name.replaceAll('/', '_'));
             return 0;
         }
         return 1;
