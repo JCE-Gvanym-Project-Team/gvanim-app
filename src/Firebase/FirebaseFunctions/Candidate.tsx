@@ -183,12 +183,15 @@ export class Candidate {
      */
     public async apply(jobNumber: number, about: string, recomendation: Recomendation[] = [], recsFiles: File[] = []) {
         if (recomendation.length !== recsFiles.length || recomendation.length > 3 || recsFiles.length > 3)
-            return -1;// bad argumnets
-        if (!(await this.exists())) {
-            return -1;
+            return -3; // bad argumnets
+        
+        if(!this.exists()){
+            return -2
         }
         let stat = new CandidateJobStatus(jobNumber, this._id, "הוגשה מועמדות", about, -1, new Date(), new Date());
-        await stat.add();
+        if (await stat.add() === 1){
+            return -1;
+        }
         for (let i = 0; i < recsFiles.length; i++)
             stat.addRecomendation(recomendation[i]._fullName, recomendation[i]._phone, recomendation[i]._eMail, recsFiles[i]);
         return 0;

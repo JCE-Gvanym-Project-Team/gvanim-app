@@ -170,7 +170,7 @@ export default function OneJobPage()
         setCandidatePhone(location.state?.candidatePhone);
         setCandidateEmail(location.state?.candidateEmail);
         setAboutText(location.state?.candidateAboutText);
-        setAboutNumChars(location.state?.candidateAboutText.length);
+        setAboutNumChars(location.state?.candidateAboutText?.length);
 
         updateRecommendersListAtIndex(new Recomendation("", "", ""), null, 0);
         setNumRecommenders(1);
@@ -277,10 +277,11 @@ export default function OneJobPage()
             -1,
             ""
         );
+        const existingCandidate = (await getFilteredCandidates(["eMail", "phone"], [newCandidate._eMail, newCandidate._phone]))
         // add candidate, or get existing candidate
-        if (await newCandidate.exists())
+        if (existingCandidate.length !== 0)
         {
-            newCandidate = (await getFilteredCandidates(["eMail", "phone"], [candidateEmail, candidatePhone]))[0];
+            newCandidate = existingCandidate[0]
             newCandidateId = newCandidate._id;
         } else
         {
@@ -309,7 +310,8 @@ export default function OneJobPage()
             })
         }
 
-        if ((await newCandidate.apply(job?._jobNumber!, aboutText, recommendersOnlyList, recommendersFilesOnlyList)) === -1)
+        const errorCode = (await newCandidate.apply(job?._jobNumber!, aboutText, recommendersOnlyList, recommendersFilesOnlyList));
+        if (errorCode === - 1)
         {
             setLoading(false);
             setErrorDialogOpen(true);
@@ -1039,7 +1041,7 @@ export default function OneJobPage()
                                 <ErrorOutlineRounded sx={{ fontSize: "24px", color: "error.main" }} />
 
                                 <Typography variant='h4' color={"error.main"}>
-                                    אנא צרפו קובץ PDF שלא עולה על 5GB
+                                    אנא צרפו קובץ PDF שלא עולה על 5MB
                                 </Typography>
                             </Box>
                         </Box>
@@ -1312,7 +1314,7 @@ export default function OneJobPage()
                                                                 alignItems: "center",
                                                                 position: "absolute"
                                                             }}>
-                                                                <ErrorOutlineRounded sx={{color: "error.main" }} />
+                                                                <ErrorOutlineRounded sx={{ color: "error.main" }} />
 
                                                                 <Typography variant='h4' color={"error.main"}>
                                                                     שדה זה שגוי

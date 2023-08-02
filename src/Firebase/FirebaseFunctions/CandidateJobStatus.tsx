@@ -18,7 +18,8 @@ export const allStatus = [
     "נדחה",
     "אינו מעוניין במשרה"];
 
-export class CandidateJobStatus {
+export class CandidateJobStatus
+{
     public _jobNumber: number;
     public _candidateId: string;
     public _status: string;
@@ -38,11 +39,12 @@ export class CandidateJobStatus {
         about: string = "",
         matchingRate: number = -1,
         applyDate: Date = new Date(),
-        lastUpdate: Date = new Date(0, 0, 0), 
+        lastUpdate: Date = new Date(0, 0, 0),
         interviewDate: Date = new Date(0, 0, 0),
         interviewsSummery: Array<string> = ["", ""],
         recomendations: Array<Recomendation> = new Array<Recomendation>(),
-        rejectCause = "") {
+        rejectCause = "")
+    {
         this._jobNumber = jobNumber;
         this._candidateId = candidateId;
         this._status = status;
@@ -63,7 +65,8 @@ export class CandidateJobStatus {
      * @param {File} recomendation - The file containing the recommendation.
      * @returns None
      */
-    public async addRecomendation(fullName: string, phone: string, eMail: string, recomendation: File ) {
+    public async addRecomendation(fullName: string, phone: string, eMail: string, recomendation: File)
+    {
         if (this._recomendations.length >= 3)
             return -1;
         if (this._recomendations.map((rec) => rec._phone).includes(phone))
@@ -74,46 +77,56 @@ export class CandidateJobStatus {
         replaceData((await this.getPath()), this);
         return 0;
     }
-    public async updateAbout(about: string) {
-        if (await this.exists()) {
+    public async updateAbout(about: string)
+    {
+        if (await this.exists())
+        {
             this._about = about;
             replaceData((await this.getPath()), this);
             return 0;
         }
         return -1;
     }
-    public async updateMatchingRate(matchingRate: number) {
-        if (await this.exists()) {
+    public async updateMatchingRate(matchingRate: number)
+    {
+        if (await this.exists())
+        {
             this._matchingRate = matchingRate;
             replaceData((await this.getPath()), this);
-             return 0;
+            return 0;
         }
         return -1;
     }
 
-    public async updateInterviewDate(interviewDate: Date) {
-        if (await this.exists()) {
+    public async updateInterviewDate(interviewDate: Date)
+    {
+        if (await this.exists())
+        {
             this._interviewDate = interviewDate.toString();
             replaceData((await this.getPath()), this);
-             return 0;
+            return 0;
         }
         return -1;
     }
 
-    public async updateInterviewsSummery(interviewsSummery: Array<string>) {
-        if (await this.exists()) {
+    public async updateInterviewsSummery(interviewsSummery: Array<string>)
+    {
+        if (await this.exists())
+        {
             this._interviewsSummery = interviewsSummery;
             replaceData((await this.getPath()), this);
-             return 0;
+            return 0;
         }
         return -1;
     }
 
-    public async updateRejectCause(rejectCause: string) {
-        if (await this.exists()) {
+    public async updateRejectCause(rejectCause: string)
+    {
+        if (await this.exists())
+        {
             this._rejectCause = rejectCause;
             replaceData((await this.getPath()), this);
-             return 0;
+            return 0;
         }
         return -1;
     }
@@ -121,15 +134,17 @@ export class CandidateJobStatus {
      * Retrieves the URLs of the recommendation files for the current candidate.
      * @returns {Promise<string[]>} - An array of URLs for the recommendation files.
      */
-    public async getRecomendationsUrl(): Promise<string[]> {
+    public async getRecomendationsUrl(): Promise<string[]>
+    {
         let urls: string[] = [];
         const extentions = await getFileExtensionsInFolder(`CandidatesFiles/${this._candidateId}/rec`);
         const phones = this._recomendations.map((rec) => rec._phone);
         for (let i = 0; i < phones.length; i++)
             for (let j = 0; j < extentions.length; j++)
-                if ((await fileExists(`CandidatesFiles/${this._candidateId}/rec/${phones[i]}_${this._jobNumber}_REC.${extentions[j]}`))) {
+                if ((await fileExists(`CandidatesFiles/${this._candidateId}/rec/${phones[i]}_${this._jobNumber}_REC.${extentions[j]}`)))
+                {
                     let url = await getDownloadUrlFromFirestorePath(`CandidatesFiles/${this._candidateId}/rec/${phones[i]}_${this._jobNumber}_REC.${extentions[j]}`);
-                    if(!urls.includes(url))
+                    if (!urls.includes(url))
                         urls.push(url);
                 }
         return urls;
@@ -138,12 +153,14 @@ export class CandidateJobStatus {
      * Deletes all recommendations files for the current CandidateJobStatus.
      * @returns None
      */
-    private async deleteAllRecomendations() {
+    private async deleteAllRecomendations()
+    {
         const extentions = await getFileExtensionsInFolder(`CandidatesFiles/rec/${this._candidateId}`);
         const phones = this._recomendations.map((rec) => rec._phone);
         for (let i = 0; i < phones.length; i++)
             for (let j = 0; j < extentions.length; j++)
-                if ((await fileExists(`CandidatesFiles/${this._candidateId}/rec/${phones[i]}_${this._jobNumber}_REC.${extentions[j]}`))) {
+                if ((await fileExists(`CandidatesFiles/${this._candidateId}/rec/${phones[i]}_${this._jobNumber}_REC.${extentions[j]}`)))
+                {
                     let path = await getDownloadUrlFromFirestorePath(`CandidatesFiles/${this._candidateId}/rec/${phones[i]}_${this._jobNumber}_REC.${extentions[j]}`);
                     deleteFile(path);
                 }
@@ -152,7 +169,8 @@ export class CandidateJobStatus {
      * Returns the number of interviews in the interviews summary array.
      * @returns {number} - The number of interviews in the interviews summary array.
      */
-    public getNumOfInterviews() {
+    public getNumOfInterviews()
+    {
         return this._interviewsSummery.length;
     }
     /**
@@ -162,7 +180,8 @@ export class CandidateJobStatus {
      * @param {number} index - The index of the summary to replace.
      * @returns None
      */
-    public editInterviewSummery(summery: string, index: number) {
+    public editInterviewSummery(summery: string, index: number)
+    {
         if (index > this.getNumOfInterviews())
             this._interviewsSummery.push(summery);
         else
@@ -177,8 +196,9 @@ export class CandidateJobStatus {
      * @param {string} [candidateId=this._candidateId] - The new candidate ID to set, dont use this paarmeter.
      * @returns None
      */
-    public async edit(matchingRate: number = this._matchingRate, about: string = this._about, interviewDate: Date = new Date(this._interviewDate), rejectCause: string = this._rejectCause) {
-        if(!(await this.exists()))
+    public async edit(matchingRate: number = this._matchingRate, about: string = this._about, interviewDate: Date = new Date(this._interviewDate), rejectCause: string = this._rejectCause)
+    {
+        if (!(await this.exists()))
             return -1;
         this._matchingRate = matchingRate;
         this._interviewDate = interviewDate.toString();
@@ -192,12 +212,15 @@ export class CandidateJobStatus {
      * current candidate and job number.
      * @returns {Promise<string>} - A promise that resolves to the path of the object.
      */
-    private async getPath() {
+    private async getPath()
+    {
         let firebaseId = "";
         let ids = await getFirebaseIdsAtPath("/CandidatesJobStatus");
-        for (let i = 0; i < ids.length; i++) {
+        for (let i = 0; i < ids.length; i++)
+        {
             let stat = await getObjectAtPath("/CandidatesJobStatus/" + ids[i]);
-            if (stat._candidateId === this._candidateId && stat._jobNumber === this._jobNumber) {
+            if (stat._candidateId === this._candidateId && stat._jobNumber === this._jobNumber)
+            {
                 firebaseId = ids[i];
                 break;
             }
@@ -210,7 +233,8 @@ export class CandidateJobStatus {
      * Checks if the object exists in realtime DB.
      * @returns {Promise<boolean>} - A promise that resolves to true if the object exists, false otherwise.
      */
-    public async exists() {
+    public async exists()
+    {
         if ((await this.getPath()).length > 0)
             return true;
         return false;
@@ -221,10 +245,12 @@ export class CandidateJobStatus {
      * realtime DB.
      * @returns None
      */
-    public async remove() {
+    public async remove()
+    {
         this.deleteAllRecomendations();
         let candidateIds = await getFirebaseIdsAtPath("/CandidatesJobStatus");
-        candidateIds.forEach(async (id) => {
+        candidateIds.forEach(async (id) =>
+        {
             if (((await getObjectAtPath("/CandidatesJobStatus/" + id))._candidateId === this._candidateId) &&
                 ((await getObjectAtPath("/CandidatesJobStatus/" + id))._jobNumber === this._jobNumber))
                 removeObjectAtPath("/CandidatesJobStatus/" + id);
@@ -235,12 +261,15 @@ export class CandidateJobStatus {
      * Adds the current object to the realtime DB. 
      * @returns None
      */
-    public async add() {
-        if (!(await this.exists())){
+    public async add()
+    {
+        if (!(await this.exists()))
+        {
             await appendToDatabase(this, "/CandidatesJobStatus");
             return 0;
         }
-        else{
+        else
+        {
             return 1;
 
         }
@@ -250,21 +279,25 @@ export class CandidateJobStatus {
      * @param {string} newStatus - The new status to update the candidate job application to.
      * @param {Date} [interviewDate=this._interviewDate] - The interview date for the candidate job application leave empty if the new satatus not require interview.
      */
-    public async updateStatus(newStatus: string, interviewDate: Date = new Date(this._interviewDate)): Promise<number> {
-        if (!(await this.exists())) {
+    public async updateStatus(newStatus: string, interviewDate: Date = new Date(this._interviewDate)): Promise<number>
+    {
+        if (!(await this.exists()))
+        {
             return -1;
         }
         this._status = newStatus;
         this._interviewDate = interviewDate.toString();
         this._lastUpdate = (new Date()).toString();
         replaceData((await this.getPath()), this);
-            return 0;
+        return 0;
     }
-    public async getWhatsappUrl(text: string): Promise<string> {
+    public async getWhatsappUrl(text: string): Promise<string>
+    {
         const cand = (await getFilteredCandidates(["id"], [this._candidateId])).at(0);
-        if (cand) {
+        if (cand)
+        {
             if (text.length > 0)
-                return `https://api.whatsapp.com/send?phone=972${cand._phone}&text=${text.replaceAll(' ','%20').replaceAll('\n','%0A')}`;
+                return `https://api.whatsapp.com/send?phone=972${cand._phone}&text=${text.replaceAll(' ', '%20').replaceAll('\n', '%0A')}`;
         }
         return "";
     }
@@ -272,11 +305,13 @@ export class CandidateJobStatus {
 
 //["הוגשה מועמדות","זומן לראיון ראשון","עבר ראיון ראשון","זומן לראיון שני","עבר ראיון שני","התקבל","הועבר למשרה אחרת","נדחה","הפסיק את התהליך"];
 //       8               7                  6         5          4                      3                  2                  1                  0
-export function getMessage(cand: Candidate, job: Job, rec: Recruiter, status: string, interviewDate: Date = new Date(0, 0, 0), place: string = "") {
-    if(status === allStatus[7])
+export function getMessage(cand: Candidate, job: Job, rec: Recruiter, status: string, interviewDate: Date = new Date(0, 0, 0), place: string = "")
+{
+    if (status === allStatus[7])
         return `שלום ${cand._firstName},\nבהמשך לראיון שערכנו עמך, אנו רוצים להודות לך על הזמן שהקדשת.\nהתרשמנו ממך ומכישוריך, אך בסופו של דבר הוחלט להתקדם עם מועמדים אחרים.\nאנו מאחלים לך הצלחה רבה!\nצוות עמותת גוונים`
-    if (interviewDate !== (new Date(0, 0, 0)) && (status === allStatus[1] || status === allStatus[3])) {
-        let message = `שלום ${cand._firstName},\n התרשמנו מקורות החיים שהגשת למשרה: ${job._title}.\n`
+    if (interviewDate !== (new Date(0, 0, 0)) && status === allStatus[1])
+    {
+        let message = `שלום ${cand._firstName},\nהתרשמנו מקורות החיים שהגשת למשרה: ${job._title}.\n`
         message += "נשמח לקבוע עמך ראיון בתאריך ";
         message += `${interviewDate.getDate()}/${interviewDate.getMonth() + 1}\n`;
         message += "בשעה:";
@@ -287,10 +322,25 @@ export function getMessage(cand: Candidate, job: Job, rec: Recruiter, status: st
         message += `אנא אשר הגעתך לראיון`;
         return message;
     }
+    if (interviewDate !== (new Date(0, 0, 0)) && status === allStatus[3])
+    {
+        let message = `שלום ${cand._firstName},\nהתרשמנו ממך בראיון למשרה: ${job._title}.\n`
+        message += "נשמח לקבוע עמך ראיון נוסף בתאריך ";
+        message += `${interviewDate.getDate()}/${interviewDate.getMonth() + 1}\n`;
+        message += "בשעה:";
+        message += ' ';
+        message += `${interviewDate.getHours()}:${interviewDate.getMinutes()}\n`
+        message += "שייתקיים ב";
+        message += `${place}.\n`;
+        message += `אנא אשר הגעתך לראיון`;
+        return message;
+    }
+
     return "";
 }
-export async function getAllRejectCause() {
-    return Array.from(new Set((await getFilteredCandidateJobStatuses()).map((s)=>s._rejectCause)));
+export async function getAllRejectCause()
+{
+    return Array.from(new Set((await getFilteredCandidateJobStatuses()).map((s) => s._rejectCause)));
 }
 /**
  * Retrieves candidate job statuses from the database and filters them based on the given attributes and values.
@@ -299,14 +349,17 @@ export async function getAllRejectCause() {
  * @param {string} [sortBy=""] - The attribute to sort the results by.
  * @returns {Promise<CandidateJobStatus[]>} - A promise that resolves to an array of filtered candidate job statuses.
  */
-export async function getFilteredCandidateJobStatuses(attributes: string[] = [], values: string[] = [], sortBy: string = "") {
-    return new Promise<CandidateJobStatus[]>((resolve, reject) => {
+export async function getFilteredCandidateJobStatuses(attributes: string[] = [], values: string[] = [], sortBy: string = "")
+{
+    return new Promise<CandidateJobStatus[]>((resolve, reject) =>
+    {
         axios.post('https://europe-west1-gvanim-app.cloudfunctions.net/getFilteredCandidatesJobStatusCloudFunction', {
             attributes: attributes,
             values: values,
             sortBy: sortBy
         })
-            .then(response => {
+            .then(response =>
+            {
                 const cjs = response.data;
                 resolve(cjs.map(s => new CandidateJobStatus(
                     s._jobNumber,
@@ -322,7 +375,8 @@ export async function getFilteredCandidateJobStatuses(attributes: string[] = [],
                     s._rejectCause
                 )));
             })
-            .catch(error => {
+            .catch(error =>
+            {
                 console.error('Error calling the Cloud Function:', error);
                 reject(error);
             });
