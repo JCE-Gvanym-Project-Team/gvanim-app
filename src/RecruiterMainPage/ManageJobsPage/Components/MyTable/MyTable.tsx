@@ -296,9 +296,16 @@ const columns: GridColDef[] = [
 	{
 		field: '_role',
 		headerName: 'תפקיד',
-		width: 350,
+		width: 250,
 		headerAlign: 'center',
 		align: 'center',
+	},
+	{
+		field: '_title',
+		headerName: 'כותרת המשרה',
+		width: 350,
+		headerAlign: 'center',
+		align: 'center'
 	},
 	{
 		field: '_sector',
