@@ -255,7 +255,7 @@ const columns: GridColDef[] = [
 	{
 		field: '_jobNumber',
 		headerName: "מס' משרה",
-		width: 110,
+		width: 80,
 		headerAlign: 'center',
 		align: 'center',
 		// renderCell: (job) => { return <strong>{job?.row?._jobNumber}</strong> }
@@ -286,7 +286,7 @@ const columns: GridColDef[] = [
 	{
 		field: '_region',
 		headerName: 'איזור',
-		width: 200,
+		width: 170,
 		editable: false,
 		headerAlign: 'center',
 		align: 'center',
@@ -296,21 +296,21 @@ const columns: GridColDef[] = [
 	{
 		field: '_role',
 		headerName: 'תפקיד',
-		width: 250,
+		width: 150,
 		headerAlign: 'center',
 		align: 'center',
 	},
 	{
 		field: '_title',
 		headerName: 'כותרת המשרה',
-		width: 350,
+		width: 280,
 		headerAlign: 'center',
 		align: 'center'
 	},
 	{
 		field: '_sector',
 		headerName: 'אשכול',
-		width: 250,
+		width: 150,
 		headerAlign: 'center',
 		align: 'center',
 		renderCell: (job) => { return <>{job?.row?._sector}</> }
@@ -318,7 +318,7 @@ const columns: GridColDef[] = [
 	{
 		field: '_scope',
 		headerName: 'אחוז משרה',
-		width: 150,
+		width: 100,
 		headerAlign: 'center',
 		align: 'center',
 		renderCell: (job) => { return getScopeFormated(job?.row._scope); }
