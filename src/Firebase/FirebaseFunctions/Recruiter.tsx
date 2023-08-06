@@ -78,7 +78,7 @@ export class Recruiter {
 	}
 	private async createUser(pass: string): Promise<string> {
 		return new Promise<string>((resolve, reject) => {
-			axios.post('https://europe-west1-gvanim-app.cloudfunctions.net/createUser', {
+			axios.post('https://europe-west1-gvanim-demo.cloudfunctions.net/createUser', {
 				mail: this._email,
 				password: pass
 			})

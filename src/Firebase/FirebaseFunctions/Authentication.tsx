@@ -63,7 +63,7 @@ export async function updateConnectedRecruiterPassword(newPass: string) {
 }
 export async function deleteUserAccount(mail: string) {
 	return new Promise<Boolean>((resolve, reject) => {
-		axios.post('https://europe-west1-gvanim-app.cloudfunctions.net/deleteRecruiter', {
+		axios.post('https://europe-west1-gvanim-demo.cloudfunctions.net/deleteRecruiter', {
 			mail: mail,
 		})
 			.then(response => {

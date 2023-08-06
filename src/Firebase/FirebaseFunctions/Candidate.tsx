@@ -261,7 +261,7 @@ export async function generateCandidateId(): Promise<string> {
  */
 export async function getFilteredCandidates(attributes: string[] = [], values: string[] = [], sortBy: string = ""): Promise<Candidate[]> {
     return new Promise<Candidate[]>((resolve, reject) => {
-        axios.post('https://europe-west1-gvanim-app.cloudfunctions.net/getFilteredCandidatesCloudFunction', {
+        axios.post('https://europe-west1-gvanim-demo.cloudfunctions.net/getFilteredCandidatesCloudFunction', {
             attributes: attributes,
             values: values,
             sortBy: sortBy
@@ -286,7 +286,7 @@ export async function getFilteredCandidates(attributes: string[] = [], values: s
 }
 export async function getCandidatesByIds(ids: string[]): Promise<Candidate[]> {
     return new Promise<Candidate[]>((resolve, reject) => {
-        axios.post('https://europe-west1-gvanim-app.cloudfunctions.net/getCandidatesByIdsFromCloud', {
+        axios.post('https://europe-west1-gvanim-demo.cloudfunctions.net/getCandidatesByIdsFromCloud', {
             ids: ids
         })
             .then(response => {

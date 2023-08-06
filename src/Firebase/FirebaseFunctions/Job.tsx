@@ -290,7 +290,7 @@ export async function generateJobNumber(): Promise<number> {
 
 export async function getFilteredJobs(attributes: string[] = [], values: string[] = [], sortBy: string = ""): Promise<Job[]> {
     return new Promise<Job[]>((resolve, reject) => {
-        axios.post('https://europe-west1-gvanim-app.cloudfunctions.net/getFilteredJobsCloudFunction', {
+        axios.post('https://europe-west1-gvanim-demo.cloudfunctions.net/getFilteredJobsCloudFunction', {
             attributes: attributes,
             values: values,
             sortBy: sortBy

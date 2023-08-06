@@ -353,7 +353,7 @@ export async function getFilteredCandidateJobStatuses(attributes: string[] = [],
 {
     return new Promise<CandidateJobStatus[]>((resolve, reject) =>
     {
-        axios.post('https://europe-west1-gvanim-app.cloudfunctions.net/getFilteredCandidatesJobStatusCloudFunction', {
+        axios.post('https://europe-west1-gvanim-demo.cloudfunctions.net/getFilteredCandidatesJobStatusCloudFunction', {
             attributes: attributes,
             values: values,
             sortBy: sortBy
