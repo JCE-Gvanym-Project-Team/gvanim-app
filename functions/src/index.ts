@@ -1,7 +1,8 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import {Job, Candidate, CandidateJobStatus, allStatus} from "./interfaces";
-
+import * as cors from "cors";
+const corsMiddleware = cors({origin: "*"});
 
 admin.initializeApp(); // Initialize the Firebase Admin SDK
 
@@ -13,22 +14,25 @@ export const getFilteredJobsCloudFunction = functions
   .region("europe-west1")
   .https
   .onRequest(async (request, response) => {
-    response.set("Access-Control-Allow-Origin", "*");
-    response.set("Access-Control-Allow-Methods", "GET, POST");
-    response.set("Access-Control-Allow-Headers", "Content-Type");
-    if (request.method === "OPTIONS") {
-      // Handle the preflight OPTIONS request
-      response.status(204).send("");
-      return;
-    }
-    try {
-      const {attributes, values, sortBy} = request.body;
-      const filteredJobs = await getFilteredJobs(attributes, values, sortBy);
-      response.json(filteredJobs);
-    } catch (error) {
-      console.error("Error executing getFilteredJobs:", error);
-      response.status(500).send("error occurred while executing the function.");
-    }
+    corsMiddleware(request, response, async () => {
+      response.set("Access-Control-Allow-Origin", "*");
+      response.set("Access-Control-Allow-Methods", "GET, POST");
+      response.set("Access-Control-Allow-Headers", "Content-Type");
+      if (request.method === "OPTIONS") {
+        // Handle the preflight OPTIONS request
+        response.status(204).send("");
+        return;
+      }
+      try {
+        const {attributes, values, sortBy} = request.body;
+        const filteredJobs = await getFilteredJobs(attributes, values, sortBy);
+        response.json(filteredJobs);
+      } catch (error) {
+        console.error("Error executing getFilteredJobs:", error);
+        response.status(500)
+          .send("error occurred while executing the function.");
+      }
+    });
   });
 /**
  * Filters the list of jobs based on the given attributes and values,
@@ -270,23 +274,26 @@ export const getFilteredCandidatesCloudFunction = functions
   .region("europe-west1")
   .https
   .onRequest(async (request, response) => {
-    response.set("Access-Control-Allow-Origin", "*");
-    response.set("Access-Control-Allow-Methods", "GET, POST");
-    response.set("Access-Control-Allow-Headers", "Content-Type");
-    if (request.method === "OPTIONS") {
-      // Handle the preflight OPTIONS request
-      response.status(204).send("");
-      return;
-    }
-    try {
-      const {attributes, values, sortBy} = request.body;
-      const filteredCandidates =
-      await getFilteredCandidates(attributes, values, sortBy);
-      response.json(filteredCandidates);
-    } catch (error) {
-      console.error("Error executing getFilteredcandidates:", error);
-      response.status(500).send("error occurred while executing the function.");
-    }
+    corsMiddleware(request, response, async () => {
+      response.set("Access-Control-Allow-Origin", "*");
+      response.set("Access-Control-Allow-Methods", "GET, POST");
+      response.set("Access-Control-Allow-Headers", "Content-Type");
+      if (request.method === "OPTIONS") {
+        // Handle the preflight OPTIONS request
+        response.status(204).send("");
+        return;
+      }
+      try {
+        const {attributes, values, sortBy} = request.body;
+        const filteredCandidates =
+        await getFilteredCandidates(attributes, values, sortBy);
+        response.json(filteredCandidates);
+      } catch (error) {
+        console.error("Error executing getFilteredcandidates:", error);
+        response.status(500)
+          .send("error occurred while executing the function.");
+      }
+    });
   });
 /**
  * Filters the list of candidates based on the given attributes and values,
@@ -433,23 +440,26 @@ export const getCandidatesByIdsFromCloud = functions
   .region("europe-west1")
   .https
   .onRequest(async (request, response) => {
-    response.set("Access-Control-Allow-Origin", "*");
-    response.set("Access-Control-Allow-Methods", "GET, POST");
-    response.set("Access-Control-Allow-Headers", "Content-Type");
-    if (request.method === "OPTIONS") {
-      // Handle the preflight OPTIONS request
-      response.status(204).send("");
-      return;
-    }
-    try {
-      const {ids} = request.body;
-      const filteredCandidates =
-      await getCandidatesByIds(ids);
-      response.json(filteredCandidates);
-    } catch (error) {
-      console.error("Error executing getFilteredcandidates:", error);
-      response.status(500).send("error occurred while executing the function.");
-    }
+    corsMiddleware(request, response, async () => {
+      response.set("Access-Control-Allow-Origin", "*");
+      response.set("Access-Control-Allow-Methods", "GET, POST");
+      response.set("Access-Control-Allow-Headers", "Content-Type");
+      if (request.method === "OPTIONS") {
+        // Handle the preflight OPTIONS request
+        response.status(204).send("");
+        return;
+      }
+      try {
+        const {ids} = request.body;
+        const filteredCandidates =
+        await getCandidatesByIds(ids);
+        response.json(filteredCandidates);
+      } catch (error) {
+        console.error("Error executing getFilteredcandidates:", error);
+        response.status(500)
+          .send("error occurred while executing the function.");
+      }
+    });
   });
 /**
  * Filters the list of candidates based on the given attributes and values,
@@ -488,23 +498,26 @@ functions
   .region("europe-west1")
   .https
   .onRequest(async (request, response) => {
-    response.set("Access-Control-Allow-Origin", "*");
-    response.set("Access-Control-Allow-Methods", "GET, POST");
-    response.set("Access-Control-Allow-Headers", "Content-Type");
-    if (request.method === "OPTIONS") {
-      // Handle the preflight OPTIONS request
-      response.status(204).send("");
-      return;
-    }
-    try {
-      const {attributes, values, sortBy} = request.body;
-      const filteredCandidatesJobStatus =
-      await getFilteredCandidatesJobStatus(attributes, values, sortBy);
-      response.json(filteredCandidatesJobStatus);
-    } catch (error) {
-      console.error("Error executing getFilteredcandidatesJobStatus:", error);
-      response.status(500).send("error occurred while executing the function.");
-    }
+    corsMiddleware(request, response, async () => {
+      response.set("Access-Control-Allow-Origin", "*");
+      response.set("Access-Control-Allow-Methods", "GET, POST");
+      response.set("Access-Control-Allow-Headers", "Content-Type");
+      if (request.method === "OPTIONS") {
+        // Handle the preflight OPTIONS request
+        response.status(204).send("");
+        return;
+      }
+      try {
+        const {attributes, values, sortBy} = request.body;
+        const filteredCandidatesJobStatus =
+        await getFilteredCandidatesJobStatus(attributes, values, sortBy);
+        response.json(filteredCandidatesJobStatus);
+      } catch (error) {
+        console.error("Error executing getFilteredcandidatesJobStatus:", error);
+        response.status(500)
+          .send("error occurred while executing the function.");
+      }
+    });
   });
 /**
  * Filters the list of candidatesJobstatus
@@ -729,28 +742,7 @@ exports.deleteRecruiter = functions
   .region("europe-west1")
   .https
   .onRequest(async (request, response) => {
-    response.set("Access-Control-Allow-Origin", "*");
-    response.set("Access-Control-Allow-Methods", "GET, POST");
-    response.set("Access-Control-Allow-Headers", "Content-Type");
-    if (request.method === "OPTIONS") {
-      // Handle the preflight OPTIONS request
-      response.status(204).send("");
-      return;
-    }
-    try {
-      const {mail} = request.body;
-      const status = await deleteUserByEmail(mail);
-      response.json(status);
-    } catch (error) {
-      console.error("Error executing deleteRecruiter:", error);
-      response.status(500).send("error occurred while executing the function.");
-    }
-  });
-export const createUser =
-  functions
-    .region("europe-west1")
-    .https
-    .onRequest(async (request, response) => {
+    corsMiddleware(request, response, async () => {
       response.set("Access-Control-Allow-Origin", "*");
       response.set("Access-Control-Allow-Methods", "GET, POST");
       response.set("Access-Control-Allow-Headers", "Content-Type");
@@ -760,18 +752,46 @@ export const createUser =
         return;
       }
       try {
-        const {mail, password} = request.body;
-        const user =
-        await admin.auth().createUser({
-          email: mail,
-          emailVerified: false,
-          password: password,
-          disabled: false,
-        });
-        response.json(user.uid);
+        const {mail} = request.body;
+        const status = await deleteUserByEmail(mail);
+        response.json(status);
       } catch (error) {
-        console.error("Error executing getFilteredcandidatesJobStatus:", error);
-        response.status(500).send(
-          "error occurred while executing the function.");
+        console
+          .error("Error executing deleteRecruiter:", error);
+        response.status(500)
+          .send("error occurred while executing the function.");
       }
+    });
+  });
+export const createUser =
+  functions
+    .region("europe-west1")
+    .https
+    .onRequest(async (request, response) => {
+      corsMiddleware(request, response, async () => {
+        response.set("Access-Control-Allow-Origin", "*");
+        response.set("Access-Control-Allow-Methods", "GET, POST");
+        response.set("Access-Control-Allow-Headers", "Content-Type");
+        if (request.method === "OPTIONS") {
+          // Handle the preflight OPTIONS request
+          response.status(204).send("");
+          return;
+        }
+        try {
+          const {mail, password} = request.body;
+          const user =
+          await admin.auth().createUser({
+            email: mail,
+            emailVerified: false,
+            password: password,
+            disabled: false,
+          });
+          response.json(user.uid);
+        } catch (error) {
+          console
+            .error("Error executing getFilteredcandidatesJobStatus:", error);
+          response.status(500).send(
+            "error occurred while executing the function.");
+        }
+      });
     });
